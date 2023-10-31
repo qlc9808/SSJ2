@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BgController {
 	
+	// test
+	
 	private final BkService bs;
 
 	@ResponseBody
@@ -53,7 +55,7 @@ public class BgController {
 		int insertresult = 0;
 		
 		try {
-//			insertresult = bs.insertCertBoard(content);	// 나중에 작업 예정
+//			insertresult = bs.insertCertBoard(content);	// ing
 			result.put("status", "OK");
 		} catch (Exception e) {
 			System.out.println("BgController writeCertBoard e.getMessage() -> "+e.getMessage());
