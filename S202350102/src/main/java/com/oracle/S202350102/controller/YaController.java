@@ -59,6 +59,7 @@ public class YaController {
 		model.addAttribute("userNick", userNick);
 		return "ya/writeFormCommunity";
 		
+	//hi
 	
 	}
 }
