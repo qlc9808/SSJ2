@@ -90,7 +90,7 @@
                 <div class="col-lg-9">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="/index">Home</a></li>
+                            <li class="active"><a href="/">Home</a></li>
                             <li><a href="/listChallenge">챌린지</a></li>
                             <li><a href="/nearbySharing">내주변 쉐어</a></li>
                            
