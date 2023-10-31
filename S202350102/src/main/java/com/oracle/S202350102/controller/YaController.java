@@ -49,7 +49,7 @@ public class YaController {
 	}
 	
 	
-	//커뮤니티 게시글 작성폼 이동(회원번호 가지고,  닉네임 띄우면서 다시 생각 필요함!!)
+	//커뮤니티 게시글 작성폼 이동(회원번호 가지고,  닉네임 띄우면서)
 	@RequestMapping(value="/writeFormCommunity")
 	public String writeFormCommunity(Integer user_num, Model model ) {
 		System.out.println("YaController writeFormCommunity Start... ");
