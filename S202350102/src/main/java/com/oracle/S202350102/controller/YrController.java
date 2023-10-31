@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class YrController {
+	// test
+	
 	@RequestMapping(value = "checkBoard")
 	public String checkBoard() {
 		System.out.println("YrController index Start...");
