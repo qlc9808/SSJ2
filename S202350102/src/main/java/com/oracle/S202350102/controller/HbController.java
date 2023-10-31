@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HbController {
 	private final QBoardService qbs;
 	
-	
+	//ddd
 	@RequestMapping("qBoardList")
 	public String callInfo(Board board, Model model) {
 		System.out.println("controller start..");
