@@ -16,6 +16,7 @@ public class JkController {
 		System.out.println("JkController mypage Start... ");
 		
 		return "mypage";
+		//hi
 
 }
 	}
