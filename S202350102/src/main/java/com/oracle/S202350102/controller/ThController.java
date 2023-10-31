@@ -66,4 +66,6 @@ public class ThController {
 		session.invalidate();
 		return "home";
 	}
+	
+	// 안녕하세요
 }
