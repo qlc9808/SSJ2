@@ -2,6 +2,8 @@ package com.oracle.S202350102.controller;
 
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkUserService;
 
 
@@ -24,9 +28,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JkController {
-	private final JkUserService jus;
 	
+	private final JkUserService jus;
+	private final JkBoardService jbs;
+	
+	//쉐어링 게시글 전체조회
+	@RequestMapping(value="/Sharing")
+	public String Sharing(Board board, Model model) {
+		System.out.println("JkController Sharing start...");
+		List<Board> Sharing = jbs.Sharing(board);
+		System.out.println("JkController list Sharing.size()?"+Sharing.size());
 		
+		model.addAttribute("Sharing", Sharing);
+		
+		return "Sharing";
+		}
+	
 	@RequestMapping(value="/challengeManagement")
 	public String challengeManagement(Integer user_num, Model model ) {
 		System.out.println("JkController challengeManagement Start... ");
@@ -34,10 +51,10 @@ public class JkController {
 		return "jk/challengeManagement";	
 	}
 	
-	
-	 @GetMapping("/userDetail")
-	    public String userUpdate(Model model, HttpSession session) {
-	        log.info("JkController userDetail start...");
+	// 회원정보 조회
+	@GetMapping("/userDetail")
+	public String userUpdate(Model model, HttpSession session) {
+	     System.out.println("JkController userDetail start...");
 	        String user_id = (String) session.getAttribute("user_id");
 
 	        if (user_id != null) {
@@ -49,10 +66,10 @@ public class JkController {
 	            return "redirect:/loginForm";
 	        }
 	 }
-
+	// 회원정보 수정
 	 @PostMapping("/updateUser1")
 	 public String updateUser(User1 user1, Model model) {
-	     log.info("JkController updateUser start...");
+		 System.out.println("JkController updateUser start...");
 
 	     int updateResult = jus.updateUser1(user1);
 	     model.addAttribute("updateResult", updateResult);
