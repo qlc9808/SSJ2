@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class ThController {
-
+	// 태현 작업
 	private final ThUser1Service us1;
 	
 	@PostMapping(value = "/writeUser1")
