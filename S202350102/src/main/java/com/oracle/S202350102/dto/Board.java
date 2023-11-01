@@ -1,7 +1,5 @@
 package com.oracle.S202350102.dto;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data
