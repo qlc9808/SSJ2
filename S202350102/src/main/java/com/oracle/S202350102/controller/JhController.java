@@ -2,6 +2,8 @@ package com.oracle.S202350102.controller;
 
 import org.springframework.stereotype.Controller;
 
+import com.oracle.S202350102.service.jhService.JhCallengeService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JhController {
-//테스트
-	//테스트2
+
+	private final JhCallengeService jhCService;
+	
 }
