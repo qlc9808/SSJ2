@@ -9,8 +9,8 @@ public class Board {
 	private int 	brd_num; 		// 寃뚯떆臾쇰벑濡앸쾲�샇
 	private int 	chg_id; 		// 泥쇰┛吏��벑濡앸쾲�샇 
 	private int 	user_num;		// �쉶�썝踰덊샇
-	private int 	brd_lg;		// 遺꾨쪟踰덊샇(��遺꾨쪟)
-	private int 	brd_md;		// 遺꾨쪟踰덊샇(以묐텇瑜�)
+	private int 	brd_lg;			// 遺꾨쪟踰덊샇(��遺꾨쪟)
+	private int 	brd_md;			// 遺꾨쪟踰덊샇(以묐텇瑜�)
 	private String 	title;			// 寃뚯떆湲� �젣紐�
 	private String 	conts;			// 寃뚯떆湲��궡�슜
 	private String 	img;			// 寃뚯떆湲� 泥⑤��뙆�씪

@@ -23,15 +23,11 @@ public class User1ServiceImpl implements User1Service {
 
 	
 	@Override
-	public boolean login(User1 user1) {
+	public User1 login(User1 user1) {
 		System.out.println("User1ServiceImpl login start...");
 		User1 loginUser = ud1.login(user1);
-		System.out.println("User1ServiceImpl loginUser -- >" + loginUser);
-		if (loginUser != null) {
-			return true;	
-		} else {
-			return false;
-		}
+		System.out.println("User1ServiceImpl loginUser --> " + loginUser);
+		return loginUser;
 	}
 
 }
