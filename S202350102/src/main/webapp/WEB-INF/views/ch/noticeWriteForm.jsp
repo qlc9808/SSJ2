@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>    
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ include file="../header.jsp" %>   
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +20,7 @@
 			</tr>
 			<tr>
 				<td>작성자</td>
-				<td><input type="hidden" name="user_num"  value="${user_num }">${user_num }</td>
+				<td><input type="hidden" name="user_num"  value="${user_num }">${user_nick }</td>
 			</tr>
 			<tr>
 				<td>내용</td>

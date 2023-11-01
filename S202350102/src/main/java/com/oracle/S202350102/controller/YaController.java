@@ -60,6 +60,6 @@ public class YaController {
 		return "ya/writeFormCommunity";
 		
 	//hi
-	
+	//안녕
 	}
 }
