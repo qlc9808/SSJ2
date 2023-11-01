@@ -12,8 +12,8 @@
 	<select id="chgResult" parameterType="java.lang.String" resultType="Challenge">
 		Select 	*
 		From  	Challenge
-		Where 	title 	  like '%' || #{keyword} || '%'
-		Or	  	chg_conts like '%' || #{keyword} || '%'	
+		Where 	title 	  like '%' || #{srch_word} || '%'
+		Or	  	chg_conts like '%' || #{srch_word} || '%'	
 		Order By reg_date DESC
 	</select>
 	
