@@ -13,16 +13,25 @@
 	<div id="container">
 		<table border="1">
 			<thead>
-				<tr><td>번호</td><td>제목</td><td>조회수</td><td>작성자</td><td>작성일</td></tr>
-				<c:forEach var="board" items="${qBoardList }">
-					<tr>
-						<td>${board.brd_num }</td>
-						<td><a href="qBoardDetail?brd_num=${brd_num }">${board.title }</a></td>
-						<td>${board.view_cnt }</td>
-						<td>${board.nick }</td>
-						<td>${board.reg_date }</td>
-				</c:forEach>
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>조회수</th>
+					<th>작성자</th>
+					<th>작성일</th>
+				</tr>
 			</thead>
+			<c:forEach var="board" items="${qBoardList}">
+				<c:if test="${board.user_num == user1.user_num || user1.status_md == 102 }">	
+					<tr>
+						<td>${board.brd_num}</td>
+						<td><a href="qBoardDetail?brd_num=${board.brd_num}">${board.title}</a></td>
+						<td>${board.view_cnt}</td>
+						<td>${board.nick}</td>
+						<td>${board.reg_date}</td>
+					</tr>
+				</c:if>		
+			</c:forEach>
 		</table>
 		<a href="qBoardWrite" class="btn">글쓰기</a>
 	</div>

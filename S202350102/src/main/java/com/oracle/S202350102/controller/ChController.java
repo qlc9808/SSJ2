@@ -68,10 +68,10 @@ public class ChController {
 		model.addAttribute("brd_md", brd_md);
 		// 권한 확인 
 		if(user_id != null) {
-			//관리자가 맞으면 
-			if((int) session.getAttribute("status_md") == 102) {
+			User1 user1 = userService.userSelect(user_id);
+			if(user1.getStatus_md() == 102) {
 				//user id에 맞는 값 가지고 가기
-				model.addAttribute("user1","");
+				model.addAttribute("user1",user1);
 				return "/ch/noticeWriteForm";
 			}
 		}

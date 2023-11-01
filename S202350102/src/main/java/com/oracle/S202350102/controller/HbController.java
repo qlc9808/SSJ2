@@ -39,26 +39,24 @@ public class HbController {
 		System.out.println("controller start..");
 		
 		List<Board> qBoardList = qbs.qBoardList(board);
-		
-		// 유저정보필요
-		
 		String user_id = (String) session.getAttribute("user_id");
+		User1 user1 = us.userSelect(user_id);
 		
-		
+		model.addAttribute("user1", user1);	
 		model.addAttribute("qBoardList", qBoardList);
-		
 		
 		return "hb/qBoardList";
 	}
 	
 	@RequestMapping("qBoardDetail")
-	public String qBoardDetail(int brd_num, Model model) {
-		System.out.println("");
-		
+	public String qBoardDetail(int brd_num, Model model, HttpSession session) {
+		System.out.println("qBoardDetail controller start..");
 		int readCnt = qbs.readCnt(brd_num);
 		Board board = qbs.qBoardSelect(brd_num);
-		// 유저정보필요
+		String user_id = (String) session.getAttribute("user_id");
+		User1 user1 = us.userSelect(user_id);
 		
+		model.addAttribute("user1", user1);
 		model.addAttribute("board", board);
 		
 		return "hb/qBoardDetail";

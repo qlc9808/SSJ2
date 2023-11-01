@@ -14,16 +14,20 @@ public class UserDaoImpl implements UserDao {
 	
 	@Override
 	public User1 userSelect(String user_id) {
-		User1 user = new User1();
-		try {
-			System.out.println("user_id->"+user_id);
-			user = session.selectOne("userSelect",user_id);
-			System.out.println("user->"+user);
-		} catch (Exception e) {
-			System.out.println("UserDaoImpl userSelect exception->"+e.getMessage());
+
+		if (user_id != null) {
+			User1 user = new User1();
+			try {
+				System.out.println("user_id->"+user_id);
+				user = session.selectOne("userSelect",user_id);
+				System.out.println("user->"+user);
+			} catch (Exception e) {
+				System.out.println("UserDaoImpl userSelect exception->"+e.getMessage());
+			}
+			return user;
+		} else {
+			return null;
 		}
-		
-		return user;
 	}
 	
 

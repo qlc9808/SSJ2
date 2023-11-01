@@ -15,7 +15,10 @@
 	</select>
 	
 	<select id="qBoardSelect" parameterType="int" resultType="Board">
-		SELECT * FROM Board WHERE brd_num = #{brd_num }
+		 SELECT  b.title, u.nick, b.reg_date, b.conts, b.view_cnt
+    	 FROM board b, user1 u
+    	 Where brd_num =#{brd_num}
+    	 AND b.user_num = u.user_num
 	</select>
 	
 	<insert id="qBoardInsert" parameterType="int">
@@ -28,6 +31,6 @@
 	</delete>
 	
 	<update id="qReadCount" parameterType="int">
-		UPDATE Board SET counts = counts+1 WHERE brd_num = #{brd_num}
+		UPDATE Board SET view_cnt = view_cnt+1 WHERE brd_num = #{brd_num}
 	</update>
 </mapper>
