@@ -2,7 +2,7 @@ package com.oracle.S202350102.service.thService;
 
 import org.springframework.stereotype.Service;
 
-import com.oracle.S202350102.dao.thDao.User1Dao;
+import com.oracle.S202350102.dao.thDao.ThUser1Dao;
 import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ThUser1ServiceImpl implements ThUser1Service {
 	
-	private final User1Dao ud1;
+	private final ThUser1Dao ud1;
 	
 	@Override
 	public int insertUser1(User1 user1) {

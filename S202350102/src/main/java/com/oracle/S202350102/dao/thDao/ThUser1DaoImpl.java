@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class User1DaoImpl implements User1Dao {
+public class ThUser1DaoImpl implements ThUser1Dao {
 	// Mybatis DB 연동
 	private final SqlSession session;
 
