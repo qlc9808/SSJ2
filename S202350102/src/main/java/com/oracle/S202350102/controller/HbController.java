@@ -11,14 +11,18 @@ import java.net.URL;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.QBoardService;
+import com.oracle.S202350102.service.main.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +32,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HbController {
 	private final QBoardService qbs;
+	private final UserService   us;
 	
-	//ddd
 	@RequestMapping("qBoardList")
-	public String callInfo(Board board, Model model, String currentPage) {
+	public String callInfo(Board board, Model model, String currentPage, HttpSession session) {
 		System.out.println("controller start..");
 		
 		List<Board> qBoardList = qbs.qBoardList(board);
+		
 		// 유저정보필요
 		
+		String user_id = (String) session.getAttribute("user_id");
+		
+		
 		model.addAttribute("qBoardList", qBoardList);
+		
 		
 		return "hb/qBoardList";
 	}
@@ -46,6 +55,7 @@ public class HbController {
 	public String qBoardDetail(int brd_num, Model model) {
 		System.out.println("");
 		
+		int readCnt = qbs.readCnt(brd_num);
 		Board board = qbs.qBoardSelect(brd_num);
 		// 유저정보필요
 		
