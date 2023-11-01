@@ -24,8 +24,8 @@
 	
 	
 	<input type="submit" value="수정완료">	
-	<input type="button" value="취소">
-	<input type="button" value="회원탈퇴">
+	<input type="button" value="취소" onclick="location.href='/mypage'">
+	<input type="button" value="탈퇴" onclick="location.href='/deleteUser1Form'"><p>
 	</fieldset>
 </form>
 
