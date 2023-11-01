@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkUserService;
-import com.oracle.S202350102.service.thService.User1Service;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,15 +89,15 @@ public class JkController {
 	@GetMapping("/mypage")
     public String mypage(HttpSession session, Model model) {
 		System.out.println("JkController mypage start...");
-        // 세션에서 로그인 상태 확인
+        
 		System.out.println("session.getAttribute(\"user_id\") --> " + session.getAttribute("user_id"));
 		String user_id = (String) session.getAttribute("user_id");
 
 	    if (user_id != null) {
-	        // 사용자가 로그인한 경우 마이페이지로 이동
+	        
 	        return "mypage";
 	    } else {
-	        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+	        
 	        return "redirect:/loginForm";
         }
 	}
