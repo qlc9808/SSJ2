@@ -2,16 +2,16 @@ package com.oracle.S202350102.service.thService;
 
 import org.springframework.stereotype.Service;
 
-import com.oracle.S202350102.dao.thDao.User1Dao;
+import com.oracle.S202350102.dao.thDao.ThUser1Dao;
 import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class User1ServiceImpl implements User1Service {
+public class ThUser1ServiceImpl implements ThUser1Service {
 	
-	private final User1Dao ud1;
+	private final ThUser1Dao ud1;
 	
 	@Override
 	public int insertUser1(User1 user1) {
@@ -28,6 +28,15 @@ public class User1ServiceImpl implements User1Service {
 		User1 loginUser = ud1.login(user1);
 		System.out.println("User1ServiceImpl loginUser --> " + loginUser);
 		return loginUser;
+	}
+
+
+	@Override
+	public int deleteUser(User1 user1) {
+		System.out.println("User1ServiceImpl deleteUser start... ");
+		int deleteUserCnt = ud1.deleteUser(user1);
+		System.out.println("User1ServiceImpl deleteUserCnt result --> " + deleteUserCnt);
+		return deleteUserCnt;
 	}
 
 }
