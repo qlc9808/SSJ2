@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class BgController {
-	
+	//작업 보경
 	private final BkService bs;
 
 	@ResponseBody
