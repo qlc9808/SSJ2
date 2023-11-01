@@ -12,6 +12,7 @@
 </script>
 </head>
 <body>
+<p>${sessionScope.status_md }</p>
 <h2>로그아웃하시겠습니까?</h2>
 <form action="/logout">
 	<input type="submit" value="네">
@@ -20,3 +21,4 @@
 
 </body>
 </html>
+
