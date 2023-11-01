@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class User1ServiceImpl implements User1Service {
+public class ThUser1ServiceImpl implements ThUser1Service {
 	
 	private final User1Dao ud1;
 	
@@ -28,6 +28,15 @@ public class User1ServiceImpl implements User1Service {
 		User1 loginUser = ud1.login(user1);
 		System.out.println("User1ServiceImpl loginUser --> " + loginUser);
 		return loginUser;
+	}
+
+
+	@Override
+	public int deleteUser(User1 user1) {
+		System.out.println("User1ServiceImpl deleteUser start... ");
+		int deleteUserCnt = ud1.deleteUser(user1);
+		System.out.println("User1ServiceImpl deleteUserCnt result --> " + deleteUserCnt);
+		return deleteUserCnt;
 	}
 
 }
