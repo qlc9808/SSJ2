@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -94,7 +95,7 @@
 				<section data-role="챌린지-게시판-글쓰기">
 				
 				</section>
-				<!-- Ajax로 가져온 데이터를 표시할 테이블 -->
+				Ajax로 가져온 데이터를 표시할 테이블
 				<input type="button" onclick="certBoard()" value="후기 게시판">
 				<input type="text" id="content" placeholder="글을 작성해주세요">
 				<input type="button" onclick="writeCertBoard()" value="글쓰기 등록">
@@ -106,6 +107,15 @@
 				</table>
 				
 			</section>
+		</div>
+		
+		
+		<!-- Nav -->
+		<div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
+			<a class="nav-link active" data-bs-toggle="tab" href="/challengeDetail">챌린지 상세</a>
+			<a class="nav-link" data-bs-toggle="tab" href="/checkBoard">인증게시판</a>
+			<a class="nav-link" data-bs-toggle="tab" href="#sizeTab">소세지들</a>		  
+			<a class="nav-link" data-bs-toggle="tab" href="#shippingTab">후기게시판</a>
 		</div>
 	
 	</body>
