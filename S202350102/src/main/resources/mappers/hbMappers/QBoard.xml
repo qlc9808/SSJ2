@@ -4,7 +4,13 @@
 
 <mapper namespace="com.oracle.S202350102.QBoardMapper">
 	<select id="qBoardList" parameterType="Board" resultType="Board">
-		SELECT * FROM Board WHERE brd_lg = 400
+		SELECT rownum, a.* 
+		FROM
+		(
+			SELECT * FROM Board WHERE brd_lg = 400
+		) a
+		WHERE rownum BETWEEN 1 AND 5
+		
 	</select>
 	
 	<select id="qBoardSelect" parameterType="int" resultType="Board">

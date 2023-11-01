@@ -31,7 +31,7 @@ public class HbController {
 	
 	//ddd
 	@RequestMapping("qBoardList")
-	public String callInfo(Board board, Model model) {
+	public String callInfo(Board board, Model model, String currentPage) {
 		System.out.println("controller start..");
 		
 		List<Board> qBoardList = qbs.qBoardList(board);
