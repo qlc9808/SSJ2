@@ -22,9 +22,11 @@ public class JhController {
 	
 	
 	@RequestMapping(value = "/jhChgDetail")
-	public String jhChgDetail(HttpSession session, Challenge chg_id, Model model ) {
+	public String jhChgDetail(HttpSession session, int chg_id, Model model ) {
 		
 		System.out.println("JhController jhChgDetail Start...");
+		System.out.println("JhController jhChgDetail  chg_id -> "+ chg_id);
+
 		
 		Challenge chg = jhCService.jhChgDetail(chg_id);
 		
