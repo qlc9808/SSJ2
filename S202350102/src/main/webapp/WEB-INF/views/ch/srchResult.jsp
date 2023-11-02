@@ -20,21 +20,32 @@
 		</form>
 	</div>
 	<h2>${srch_word }에 대한 검색결과 입니다.</h2>
-	
+	<h4>챌린지</h4>
+	<c:if test="${empty srch_chgResult }">
+		<h6>검색결과가 없습니다.</h6>
+	</c:if>
 	<table>
 		<c:forEach items="${srch_chgResult }" var="chResultList">
 			<tr>
-				<td><a href="challengeDetail?chg_id=${chResultList.chg_id }">${chResultList.title }</td>
+				<td>
+					<a href="challengeDetail?chg_id=${chResultList.chg_id }">${chResultList.title }</a>
+				</td>
 				<td><fmt:formatDate value="${chResultList.reg_date }" pattern="yyyy-MM-dd"/></td>
 				<td>${chResultList.nick }</td>
 			</tr>
 		</c:forEach>
 	</table>
 	<hr>
+	<h3>커뮤니티</h3>
+	<c:if test="${empty srch_brdResult }">
+		<h6>검색결과가 없습니다.</h6>
+	</c:if>
 	<table>
 		<c:forEach items="${srch_brdResult }" var="brdResultList">
 			<tr>
-				<td><a href="detailCommunity?user_num=${brdResultList.user_num}&brd_num=${brdResultList.brd_num}">${brdResultList.title }</td>
+				<td>
+					<a href="detailCommunity?user_num=${brdResultList.user_num}&brd_num=${brdResultList.brd_num}">${brdResultList.title }</a>
+				</td>
 				<td><fmt:formatDate value="${brdResultList.reg_date }" pattern="yyyy-MM-dd"/></td>
 				<td>${brdResultList.nick }</td>
 			</tr>
