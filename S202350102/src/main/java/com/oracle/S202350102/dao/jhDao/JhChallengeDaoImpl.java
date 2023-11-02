@@ -16,10 +16,10 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	@Override
 	public Challenge jhChgDetail(int chg_id) {
 		System.out.println("JhChallengeDaoImpl jhChgDetail Start...");
+		System.out.println("JhChallengeDaoImpl jhChgDetail  chg_id -> "+ chg_id);
 
 		Challenge chg = null;
 		
-		System.out.println("JhChallengeDaoImpl jhChgDetail  chg_id -> "+ chg_id);
 		
 		try {
 			
@@ -33,6 +33,39 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		}
 		
 		return chg;
+	}
+
+	@Override
+	public String jhChgCtn(Challenge chg) {
+		
+		System.out.println("JhChallengeDaoImpl jhChgCtn Start...");
+		
+		String ctn = null;
+		
+		try {
+			
+			ctn = session.selectOne("JhChgCtn", chg);
+			
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl jhChgCtn e.getMessage() -> "+ e.getMessage());
+		}
+
+		return ctn;
+	}
+
+	@Override
+	public String jhChgCreator(Challenge chg) {
+		System.out.println("JhChallengeDaoImpl jhChgCreator Start...");
+		
+		String creator = null;
+		
+		try {
+			creator = session.selectOne("jhChgCreator", chg);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl jhChgCreator e.getMessage() -> "+ e.getMessage());
+		}
+		
+		return creator;
 	}
 
 }

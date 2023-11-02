@@ -13,6 +13,7 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	
 	private final JhChallengeDao jhChgDao;
 	
+	//챌린지 정보 조회
 	@Override
 	public Challenge jhChgDetail(int chg_id) {
 		System.out.println("JhCallengeServiceImpl jhChgDetail Start...");
@@ -23,6 +24,26 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		
 		
 		return chg;
+	}
+
+	//챌린지 카테고리명 조회
+	@Override
+	public String jhChgCtn(Challenge chg) {
+		System.out.println("JhCallengeServiceImpl jhChgCtn Start...");
+
+		String ctn = jhChgDao.jhChgCtn(chg);
+		
+		
+		return ctn;
+	}
+
+	
+	@Override
+	public String jhChgCreator(Challenge chg) {
+		System.out.println("JhCallengeServiceImpl jhChgCreator Start...");
+		
+		String creator = jhChgDao.jhChgCreator(chg);
+		return creator;
 	}
 	
 

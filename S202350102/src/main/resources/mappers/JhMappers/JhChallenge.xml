@@ -9,4 +9,23 @@
 		WHERE chg_id = #{chg_id}
 	</select>
 	
+	<select id="JhChgCtn" parameterType="Challenge" resultType="java.lang.String">
+		SELECT c.ctn
+		FROM   comm c 
+		INNER JOIN challenge ch
+		        ON c.md = ch.chg_md
+		WHERE  c.md = #{chg_md}
+		AND    c.lg = 200
+		AND    ch.chg_id = #{chg_id}
+	</select>
+	
+	<select id="jhChgCreator" parameterType="Challenge" resultType="java.lang.String">
+		SELECT u.nick
+		FROM   user1 u 
+		INNER JOIN challenge ch
+		        ON u.user_num = ch.user_num
+		WHERE  u.user_num = #{user_num}
+		AND    ch.chg_id = #{chg_id}
+	</select>
+	
 </mapper> 

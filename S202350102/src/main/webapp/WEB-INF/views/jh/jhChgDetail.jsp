@@ -68,15 +68,9 @@
 
 
 
-<!-- src="${thumb || img/chgDfaultImg.png}"로 교체 예정  -->
                     <!-- Item -->
-                      <img src="img/chgDfaultImg.png" alt="챌린지 이미지" class="card-img-top" onerror="img/chgDfaultImg.png">
-
-<div class="avatar avatar-xxl">
-	<img alt="챌린지 이미지" src="img/chgDfaultImg.png" onerror="img/chgDfaultImg.png" class="avatar-img rounded">
-<%-- <img alt="챌린지 이미지" src="${thumb || img/chgDfaultImg.png}" onerror="img/chgDfaultImg.png"> --%>
-	<span>${title}</span>
-</div>                    
+                      <img src="assets/img/chgDfaultImg.png" alt="${chg.title }" class="card-img-top" onerror="assets/img/chgDfaultImg.png">
+             <!--썸네일 처리 해야 함 파일 위치랑 null일 때 뜨게 할 것  -->
 
 
 
