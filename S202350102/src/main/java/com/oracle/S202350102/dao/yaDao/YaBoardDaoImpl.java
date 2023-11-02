@@ -57,7 +57,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		
 	}
 	
-	//userid를 통해 usernum 가져옴
+	//로그인 userid를 통해 회
 	@Override
 	public int getuserNum(String userId) {	
 		return session.selectOne("YaBoardGetUserNum",userId);

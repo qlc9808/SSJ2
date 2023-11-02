@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,34 +41,56 @@ public class YaController {
 		return "listCommunity";
 	}
 	
-	//게시글 제목을 누르면 자세히 보기 
-	// 로그인한 회원만 detailCommunity에서 수정/삭제 버튼 생김 추가
 	
+	//게시글 제목을 누르면 자세히 보기 
+	// 로그인한 회원 중 회원번호를 가지고 게시글 작성자에 한하여 detailCommunity에서 수정/삭제 버튼 생김 추가
 	@GetMapping(value="detailCommunity")
 	public String detailCommunity(int brd_num, Model model, HttpSession session) {
 		System.out.println("YaController Start detailCommunity start...");
 		
+	    // 게시글 상세 정보 확인
 		Board board = ycs.detailCommunity(brd_num);
-		
-		int upViewCnt = 0;
-		ycs.upViewCnt(brd_num);
-		System.out.println("upViewCOunt?"+upViewCnt);
-		
-		model.addAttribute("board", board);
-		model.addAttribute("upViewCnt", upViewCnt);
 		
 		//로그인 상태 확인 
 		String userId = (String) session.getAttribute("user_id");
-		model.addAttribute("loggedIn", userId != null);
+		
+		/*
+		 * int userNum = ycs.getuserNum(userId); board.setUser_num(userNum);
+		 */
+		
+		
+		//조회수 증가
+		int upViewCnt = 0;
+		ycs.upViewCnt(brd_num);
+		
+		
+		model.addAttribute("board", board);
+		model.addAttribute("upViewCnt", upViewCnt);	
+	    model.addAttribute("loggedIn", userId != null);
+		
+		
+	
+		// 게시글 작성자 아이디, 회원번호 확인용
+		/* System.out.println("user1.user_num: " + user1.user_num()); */
+		/* System.out.println("int userNum: " + userNum); */
+	    System.out.println("nick: " + board.getNick());
+	    System.out.println("userName:"+board.getUser_name());
+	    System.out.println("user_num:"+board.getUser_num());
+	    System.out.println("user_id:"+board.getUser_id());
+	    System.out.println("sessionScope.userId: " + session.getAttribute("user_id"));
+		
+	    
+	 
+	
 		return"ya/detailCommunity";
 	}
 	
-	
-	
-	//로그인한 사용자만 회원번호를 가지고 커뮤니티 게시글 작성폼으로 이동, 폼에서 회원 닉네임 띄움
+
+	//로그인한 사용자  회원번호를 가지고 커뮤니티 게시글 작성폼으로 이동
 		@RequestMapping(value="/writeFormCommunity")
 		public String writeFormCommunity(HttpSession session, Model model ) {
 			System.out.println("YaController writeFormCommunity Start... ");
+		
 			String userId = (String) session.getAttribute("user_id");
 			System.out.println("userId?"+userId);
 			if (userId == null) {
@@ -88,7 +111,7 @@ public class YaController {
 
 			}
 
-	 // 게시글 작성,
+	 // 게시글 작성
 	
 		@PostMapping(value="/writeCommunity") 
 		public String insertCommunity(HttpSession session, @ModelAttribute Board board, Model model) {

@@ -13,7 +13,6 @@ public interface YaCommunityService {
 	void         upViewCnt(int brd_num);
 	//userID를 통해 userNum 가져옴
 	int          getuserNum(String userId);
-
 	// 로그인만 회원만 게시글 작성
 	int         insertCommunity(Board board);
 	

@@ -35,4 +35,6 @@ public class Board {
 	
 	//join_listCommunity
 	private String 	nick;			// 유저닉네임
+	private String user_name;
+	private String user_id;
 }
