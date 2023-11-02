@@ -14,7 +14,6 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		
 	private final SqlSession session;
 
-	
 	@Override
 	public List<Board> listCommunity(Board board) {
 		
@@ -57,7 +56,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		
 	}
 	
-	//로그인 userid를 통해 회
+	
 	@Override
 	public int getuserNum(String userId) {	
 		return session.selectOne("YaBoardGetUserNum",userId);
@@ -72,13 +71,38 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		try {
 			insertResult = 	session.insert("YaBoardInsert", board);
 		} catch (Exception e) {
-			System.out.println("YaBoarDaoImpl void upViewCnt e.getMessage)?"+e.getMessage());
+			System.out.println("YaBoarDaoImpl void upViewCnt e.getMessage?"+e.getMessage());
 		}
 		return insertResult;
+
 		
+	}
+
+	@Override
+	public int updateCommunity(Board board) {
+		int updateCommunity =0;
+		System.out.println("YaBoardDaoImpl updateCommunity start...");
 		
-	
+		try {
+			updateCommunity = session.update("YaBoardUpdate", board);
+			
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl updateCommunity e.getMessage?"+e.getMessage());
+		}
+		return updateCommunity;
+	}
+
+	@Override
+	public int deleteCommunity(int brd_num) {
+		int deleteResult=0;
+		System.out.println("YaBoardDaoImpl deleteCommunity start...");
 		
+		try {
+			deleteResult = session.delete("YaBoardDelete", brd_num);
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl deleteCommunity e.getMessage?"+e.getMessage());
+		}
+		return deleteResult;
 	}
 
 	

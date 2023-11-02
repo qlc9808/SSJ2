@@ -34,8 +34,16 @@
 	
     <insert id="YaBoardInsert" parameterType="Board">
     	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, reg_Date, brd_group)
-    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},700, 103, #{title},#{conts},sysdate,BRD_NUM_SEQ.nextval)
+    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},700, 103, #{title},#{conts}, sysdate, BRD_NUM_SEQ.nextval)
     </insert>
     
+    <update id="YaBoardUpdate" parameterType="Board">
+    	UPDATE board SET title=#{title}, conts=#{conts}
+    	WHERE  brd_num = #{brd_num}
+    </update>
+    
+    <delete id="YaBoardDelete" parameterType="int">
+    	DELETE FROM board WHERE brd_num = #{brd_num} 
+    </delete>
   
 </mapper>

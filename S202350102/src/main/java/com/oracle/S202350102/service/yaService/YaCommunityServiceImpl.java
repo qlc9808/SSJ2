@@ -53,6 +53,22 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return insertResult;
 	}
 
+	@Override
+	public int updateCommunity(Board board) {
+		int updateCommunity =0;
+		System.out.println("YaCommunityServiceImpl update Board start...");
+		updateCommunity = ybd.updateCommunity(board);
+		return updateCommunity;
+	}
+	//게시글 삭제
+	@Override
+	public int deleteCommunity(int brd_num) {
+		int deleteResult =0;
+		System.out.println("YaCommunityServiceImpl delte start....");
+		deleteResult = ybd.deleteCommunity(brd_num);
+		return deleteResult;
+	}
+
 	
 	
 	

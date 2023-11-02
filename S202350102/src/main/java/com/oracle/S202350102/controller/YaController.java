@@ -43,7 +43,6 @@ public class YaController {
 	
 	
 	//게시글 제목을 누르면 자세히 보기 
-	// 로그인한 회원 중 회원번호를 가지고 게시글 작성자에 한하여 detailCommunity에서 수정/삭제 버튼 생김 추가
 	@GetMapping(value="detailCommunity")
 	public String detailCommunity(int brd_num, Model model, HttpSession session) {
 		System.out.println("YaController Start detailCommunity start...");
@@ -53,11 +52,7 @@ public class YaController {
 		
 		//로그인 상태 확인 
 		String userId = (String) session.getAttribute("user_id");
-		
-		/*
-		 * int userNum = ycs.getuserNum(userId); board.setUser_num(userNum);
-		 */
-		
+
 		
 		//조회수 증가
 		int upViewCnt = 0;
@@ -69,10 +64,6 @@ public class YaController {
 	    model.addAttribute("loggedIn", userId != null);
 		
 		
-	
-		// 게시글 작성자 아이디, 회원번호 확인용
-		/* System.out.println("user1.user_num: " + user1.user_num()); */
-		/* System.out.println("int userNum: " + userNum); */
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
 	    System.out.println("user_num:"+board.getUser_num());
@@ -118,10 +109,6 @@ public class YaController {
 			System.out.println("YaController start insertCommunity... "); 
 			String userId = (String) session.getAttribute("user_id");
 
-		    if (userId == null) {
-		        return "redirect:/loginForm";
-		    }
-
 		    int userNum = ycs.getuserNum(userId);
 		    board.setUser_num(userNum);
 		    	     
@@ -136,9 +123,47 @@ public class YaController {
 			 return "forward:writeCommunity"; 
 		 }
 		
-
+		// 게시글 수정폼이동
+		@GetMapping(value="/updateCommunityForm")
+		public String updateCommunity(int brd_num, Model model) {
+			System.out.println("YaController updaetCommunityForm start...");
+			
+			Board board = ycs.detailCommunity(brd_num);
+			// 정전
+			System.out.println("title :"+board.getTitle());
+			System.out.println("conts :"+board.getConts());
+			
+			model.addAttribute("board", board);
+			
+			return "ya/updateCommunityForm";
+		}
 		
+		// 게시글 수정
+		@GetMapping(value="/updateCommunity")
+		public String updateCommunity(Board board, Model model) {
+	
+			
+			int updateCommunity = ycs.updateCommunity(board);
+			
+			System.out.println("YaController ycs.updateCommunity updateBoard updateCommunity?"+updateCommunity);
+			model.addAttribute("updateCommunity", updateCommunity);
+			//수정후
+			System.out.println("title update:"+board.getTitle());
+			System.out.println("conts update:"+board.getConts());
+			
+			return "forward:listCommunity";
+		}
 		
+		//게시글 삭제
+		@GetMapping(value="/deleteCommunity")
+		public String deleteCommuinty(int brd_num, Model model) {
+			
+			int deleteResult = ycs.deleteCommunity(brd_num);
+			System.out.println("YaController ycs.deleteCommunity start....");
+		
+			return "redirect:listCommunity";
+			
+		}
 		
 
 }
