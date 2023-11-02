@@ -4,17 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8" />
-	    <meta name="viewport" content="width=device-width, initial-scale=1" />
-	
-	    <!-- Favicon -->
-	    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-	
-	    <!-- Libs CSS -->
-	    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-	
-	    <!-- Theme CSS -->
-	    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+		<meta charset="utf-8">
 	
 	    <!-- Title -->
 	    <title>챌린지 상세</title>
@@ -106,6 +96,7 @@
 		</script>
 	</head>
 	<body>
+	<c:import url="/WEB-INF/views/header3.jsp"/>
 	<h1>챌린지 상세</h1>
 		<div>
 			<section data-role="챌린지-상세-게시판">
@@ -127,6 +118,6 @@
 				
 			</section>
 		</div>
-	
+	<c:import url="/WEB-INF/views/footer.jsp"/>
 	</body>
 </html>
