@@ -68,6 +68,7 @@
         FROM board b
         JOIN user1 ON b.user_num = user1.user_num
         WHERE b.brd_md BETWEEN 100 AND 103
+        AND	  b.brd_Group = b.brd_num
         AND   (b.title like '%' || #{srch_word} || '%' 
         	Or b.conts like '%' || #{srch_word} || '%')
         ORDER BY b.reg_date DESC
