@@ -64,9 +64,18 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	@Override
 	public int deleteCommunity(int brd_num) {
 		int deleteResult =0;
-		System.out.println("YaCommunityServiceImpl delte start....");
+		System.out.println("YaCommunityServiceImpl delete start....");
 		deleteResult = ybd.deleteCommunity(brd_num);
 		return deleteResult;
+	}
+
+	@Override
+	public List<Board> listSearchBoard(Board board) {
+		List<Board> boardSearchList = null;
+		System.out.println("YaCommunityServiceImpl listSearchBoard start...");
+		boardSearchList = ybd.boardSearchList(board);
+		System.out.println("YaCommunityServiceImpl listSearchBoard boardSearchList.size()?"+boardSearchList.size());
+		return boardSearchList;
 	}
 
 	

@@ -105,6 +105,20 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		return deleteResult;
 	}
 
+	@Override
+	public List<Board> boardSearchList(Board board) {
+		List<Board> boardSearchList = null;
+		System.out.println("YaBoardDaoImpl boardSearchList start....");
+		
+		try {
+			boardSearchList = session.selectList("YaBoardSearhList",board);
+			
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl boardSearchList e.getMessage?"+e.getMessage());
+		}
+		return null;
+	}
+
 	
 	
 

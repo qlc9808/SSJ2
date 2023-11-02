@@ -165,5 +165,18 @@ public class YaController {
 			
 		}
 		
+		//자유게시판 게시글 조건(이름,제목)검색
+		@RequestMapping(value="listBoardSearch")
+		public String listBoardSearch(Board board, Model model) {
+			System.out.println("YaController Start listCommunitySearch...");
+			
+			List<Board> listSerachBoard = ycs.listSearchBoard(board);
+			System.out.println("YaController listSearchBoard.size?"+listSerachBoard.size());
+			
+			model.addAttribute("listSearchBoard", listSerachBoard);
+			return "listCommunity";
+			
+		}
+		
 
 }

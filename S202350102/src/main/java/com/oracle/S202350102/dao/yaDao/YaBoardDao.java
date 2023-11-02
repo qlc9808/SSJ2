@@ -13,6 +13,7 @@ public interface YaBoardDao {
 	int          insertCommunity(Board board);
 	int          updateCommunity(Board board);
 	int          deleteCommunity(int brd_num);
+	List<Board>  boardSearchList(Board board);
 
 	
 

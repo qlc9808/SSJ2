@@ -45,5 +45,19 @@
     <delete id="YaBoardDelete" parameterType="int">
     	DELETE FROM board WHERE brd_num = #{brd_num} 
     </delete>
+    
+    <select id="YaBoardSearhList" parameterType="Board" resultType="Board">
+    	SELECT *
+    	FROM board
+    	WHERE
+    	<choose>
+    		<when test="search == 'title' ">
+    			 title LIKE'%' || #{keyword} || '%'  
+    		</when>
+    		<when test="search == 'nick' ">
+    			 nick LIKE '%' || #{keyword} || '%'  
+    		</when>
+    	</choose>
+    </select>
   
 </mapper>
