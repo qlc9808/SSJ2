@@ -13,6 +13,7 @@ public interface YaCommunityService {
 	int          insertCommunity(Board board);
 	int          updateCommunity(Board board);
 	int          deleteCommunity(int brd_num);
+	List<Board>  listSearchBoard(Board board);
 	
 	
 }
