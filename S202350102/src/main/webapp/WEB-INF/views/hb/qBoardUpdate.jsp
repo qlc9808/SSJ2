@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,7 @@
 </script>
 </head>
 <body>
+<c:import url="/WEB-INF/views/header4.jsp"/>
 	<form action="qBoardUpdate" method="post">
 		<input type="hidden" value="${board.brd_num  }" name="brd_num">
 		<input type="hidden" value="${board.brd_md  }" name="brd_md">
@@ -51,10 +53,11 @@
 			<tr>
 				<td colspan="2">
 					<input type="submit" value="확인" id="submit">
-					<input type="button" value="취소" onclick="location.href='board?brd_num=${board.brd_num}'">
+					<input type="button" value="취소" onclick="location.href='qBoardDetail?brd_num=${board.brd_num}'">
 				</td>
 			</tr>
 		</table>
 	</form>
+<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>

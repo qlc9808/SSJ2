@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ include file="../header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<c:import url="/WEB-INF/views/header4.jsp"/>
 	<h1>문의게시판</h1>
 	<div id="container">
 		<table border="1">
@@ -37,5 +37,6 @@
 			<a href="qBoardWriteForm">글쓰기</a>
 		</c:if>
 	</div>
+<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>

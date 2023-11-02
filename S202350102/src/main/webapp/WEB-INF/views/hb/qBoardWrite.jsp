@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ include file="../header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +12,7 @@
 </script>
 </head>
 <body>
+<c:import url="/WEB-INF/views/header4.jsp"/>
 	<h2>문의게시판 글쓰기폼</h2>
 	<form action="qBoardWrite">
 		<table>
@@ -42,5 +42,6 @@
 			</tr>
 		</table>
 	</form>
+	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>
