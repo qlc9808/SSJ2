@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
@@ -205,25 +206,47 @@ public class ChController {
 	public String searching(String srch_word, HttpSession session, Model model) {
 		System.out.println("ChController searching Start...");
 		int user_num = 0;
-		
-		if(session.getAttribute("user_num") != null) {
-			user_num = (int) session.getAttribute("user_num");
-			User1 user1 = userService.userSelect(user_num);
-			SearchHistory sh = new SearchHistory();
-			sh.setSrch_word(srch_word);
-			sh.setUser_num(user1.getUser_num());
-			chSearchService.saveWord(sh);
+		List<Challenge> srch_chgResult = null; // chg 검색 결과 List
+		List<Board> srch_brdResult = null; // brd 검색 결과 List 
+		if(srch_word != "" && srch_word != null) { // 검색어가 null이 아니면 
+			if(session.getAttribute("user_num") != null) {
+				if(srch_word != null) {
+					user_num = (int) session.getAttribute("user_num");
+					User1 user1 = userService.userSelect(user_num);
+					SearchHistory sh = new SearchHistory();
+					sh.setSrch_word(srch_word);
+					sh.setUser_num(user1.getUser_num());
+					int result = chSearchService.saveWord(sh);
+					if(result == 0) {
+						chSearchService.updateHistory(sh);
+					}
+				}
+			}
+			// 입력된 키워드에 따라 검색 
+			srch_chgResult = chSearchService.chgSearching(srch_word);
+			srch_brdResult = chSearchService.brdSearching(srch_word); //100~103
 		}
-		// 입력된 키워드에 따라 검색 
-		List<Challenge> srch_chgResult = chSearchService.chgSearching(srch_word);
-		List<Board> srch_brdResult = chSearchService.brdSearching(srch_word); //100~103
-		
 		model.addAttribute("srch_word",srch_word);
 		model.addAttribute("srch_chgResult",srch_chgResult);
 		model.addAttribute("srch_brdResult",srch_brdResult);
 		
 		
 		return "/ch/srchResult";
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "sHistoryList")
+	public List<SearchHistory> sHistoryList(HttpSession session) {
+		System.out.println("session.user_num->"+session.getAttribute("user_num"));
+		int user_num = 0;
+		List<SearchHistory> sHList = null;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			sHList = chSearchService.sHistoryList(user_num);
+		}
+		
+		
+		return sHList;
 	}
 	
 }
