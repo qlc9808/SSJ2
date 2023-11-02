@@ -3,29 +3,16 @@
 
 <mapper namespace="com.oracle.S202350102.JhChallengMapper">
 
-	<select id="JhChgDetail" parameterType="int" resultType="Challenge">
-		SELECT *
-		FROM challenge
-		WHERE chg_id = #{chg_id}
+	<select id="jhChgDetail" parameterType="int" resultType="Challenge">
+		SELECT u.nick, c1.ctn ctn, c2.ctn stateCtn, ch.*
+		FROM challenge ch 
+		INNER JOIN user1 u ON ch.user_num = u.user_num
+		INNER JOIN comm c1 ON ch.chg_lg   = c1.lg   AND ch.chg_md = c1.md
+		INNER JOIN comm c2 ON ch.state_lg = c2.lg   AND ch.state_md = c2.md
+
+		WHERE ch.chg_id = #{chg_id}
 	</select>
 	
-	<select id="JhChgCtn" parameterType="Challenge" resultType="java.lang.String">
-		SELECT c.ctn
-		FROM   comm c 
-		INNER JOIN challenge ch
-		        ON c.md = ch.chg_md
-		WHERE  c.md = #{chg_md}
-		AND    c.lg = 200
-		AND    ch.chg_id = #{chg_id}
-	</select>
 	
-	<select id="jhChgCreator" parameterType="Challenge" resultType="java.lang.String">
-		SELECT u.nick
-		FROM   user1 u 
-		INNER JOIN challenge ch
-		        ON u.user_num = ch.user_num
-		WHERE  u.user_num = #{user_num}
-		AND    ch.chg_id = #{chg_id}
-	</select>
 	
 </mapper> 

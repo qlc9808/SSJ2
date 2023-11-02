@@ -37,26 +37,19 @@ public class JhController {
 		Challenge chg = jhCService.jhChgDetail(chg_id);
 		System.out.println("JhController jhChgDetail chg -> " + chg);
 		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController jhChgDetail userNum -> " + userNum);
+		}
+		
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
-//		String userId = session.getId();
-//		User1 user = userService.userSelect(userId); 
-//		int userNum = user.getUser_num();
-//		System.out.println("JhController jhChgDetail userNum -> " + userNum);
-		
-		//조인으로 comm테이블에서 카테고리명 가져오기
-		String ctn = jhCService.jhChgCtn(chg);
-		chg.setCtn(ctn);
-		System.out.println("JhController jhChgDetail ctn -> " + ctn);
-		
-		//조인으로 user1테이블에서 개설자 nick가져오기
-		String creator = jhCService.jhChgCreator(chg);
-		chg.setNick(creator);
-		System.out.println("JhController jhChgDetail creator -> " + creator);
-		
-		System.out.println("JhController jhChgDetail chg2 -> " + chg);
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController jhChgDetail userNum -> " + user);
 		
 		model.addAttribute("chg", chg);
-//		model.addAttribute("user", user);
+		model.addAttribute("user", user);
 		
 		
 		return "jh/jhChgDetail";

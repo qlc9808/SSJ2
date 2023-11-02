@@ -6,8 +6,4 @@ public interface JhChallengeDao {
 
 	Challenge jhChgDetail(int chg_id);
 
-	String jhChgCtn(Challenge chg);
-
-	String jhChgCreator(Challenge chg);
-
 }

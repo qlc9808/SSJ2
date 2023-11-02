@@ -6,9 +6,6 @@ public interface JhCallengeService {
 
 	Challenge jhChgDetail(int chg_id);
 
-	String jhChgCtn(Challenge chg);
-
-	String jhChgCreator(Challenge chg);
 
 
 }

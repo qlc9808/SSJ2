@@ -26,25 +26,7 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return chg;
 	}
 
-	//챌린지 카테고리명 조회
-	@Override
-	public String jhChgCtn(Challenge chg) {
-		System.out.println("JhCallengeServiceImpl jhChgCtn Start...");
 
-		String ctn = jhChgDao.jhChgCtn(chg);
-		
-		
-		return ctn;
-	}
-
-	
-	@Override
-	public String jhChgCreator(Challenge chg) {
-		System.out.println("JhCallengeServiceImpl jhChgCreator Start...");
-		
-		String creator = jhChgDao.jhChgCreator(chg);
-		return creator;
-	}
 	
 
 	
