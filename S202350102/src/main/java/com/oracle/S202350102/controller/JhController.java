@@ -81,14 +81,14 @@ public class JhController {
 		
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		String userId = session.getId();
-		User1 user = userService.userSelect(userId); 
-		int userNum = user.getUser_num();
-		System.out.println("JhController jhChgDetail userNum -> " + userNum);
+//		User1 user = userService.userSelect(userId); 
+//		int userNum = user.getUser_num();
+//		System.out.println("JhController jhChgDetail userNum -> " + userNum);
 		
 		//조인으로 comm테이블에서 카테고리명 가져오기
 		 
 		model.addAttribute("chg", chg);
-		model.addAttribute("user", user);
+//		model.addAttribute("user", user);
 		
 		
 		return "jh/jhChgDetail";
