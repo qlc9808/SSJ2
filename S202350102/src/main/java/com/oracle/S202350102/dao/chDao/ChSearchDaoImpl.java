@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class ChSearchImpl implements ChSearchDao {
+public class ChSearchDaoImpl implements ChSearchDao {
 	
 	private final SqlSession session;
 
@@ -65,6 +65,37 @@ public class ChSearchImpl implements ChSearchDao {
 		}
 		
 		return srch_brdResult;
+	}
+
+
+	@Override
+	public List<SearchHistory> sHistoryList(int user_num) {
+		System.out.println("ChSearchImpl sHistoryList Start...");
+		List<SearchHistory> sHistoryList = null;
+		
+		try {
+			sHistoryList = session.selectList("shList",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChSearchImpl sHistoryList e.getMessage()->" + e.getMessage());
+		}
+		
+		return sHistoryList;
+	}
+
+
+	@Override
+	public int upDateHistory(SearchHistory sh) {
+		System.out.println("ChSearchImpl upDateHistory Start...");
+		int result = 0;
+		
+		try {
+			result = session.update("updateHis", sh);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChSearchImpl sHistoryList e.getMessage()->" + e.getMessage());
+		}
+		return result;
 	}
 
 }
