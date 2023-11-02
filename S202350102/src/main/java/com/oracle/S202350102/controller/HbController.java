@@ -26,6 +26,7 @@ import com.oracle.S202350102.service.main.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import oracle.net.aso.l;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,10 +40,15 @@ public class HbController {
 		System.out.println("controller start..");
 		
 		List<Board> qBoardList = qbs.qBoardList(board);
-		String user_id = (String) session.getAttribute("user_id");
-		User1 user1 = us.userSelect(user_id);
 		
-		model.addAttribute("user1", user1);	
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		User1 user1 = us.userSelect(user_num);
+		
+		model.addAttribute("user1", user1);
 		model.addAttribute("qBoardList", qBoardList);
 		
 		return "hb/qBoardList";
@@ -53,20 +59,18 @@ public class HbController {
 		System.out.println("qBoardDetail controller start..");
 		int readCnt = qbs.readCnt(brd_num);
 		Board board = qbs.qBoardSelect(brd_num);
-		String user_id = (String) session.getAttribute("user_id");
-		User1 user1 = us.userSelect(user_id);
+		
+		int user_num = 0;
+		if (session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		User1 user1 = us.userSelect(user_num);
 		
 		model.addAttribute("user1", user1);
 		model.addAttribute("board", board);
 		
 		return "hb/qBoardDetail";
-	}
-	
-	@RequestMapping("qBoardInsertForm")
-	public String qBoardInsertForm() {
-		
-		
-		return "hb/qBoardInsertForm";
 	}
 	
 	@RequestMapping("qBoardWrite")
@@ -78,6 +82,7 @@ public class HbController {
 		
 		return "forward:hb/qBoardList";
 	}
+	
 	
 	@RequestMapping("qBoardDelete")
 	public String qBoardDelete(int brd_num, Model model) {
