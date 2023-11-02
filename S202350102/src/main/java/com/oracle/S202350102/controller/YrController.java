@@ -23,6 +23,7 @@ public class YrController {
 //		System.out.println("YrController index Start...");
 //		return "yr/checkBoard";
 //	}
+//	test
 	
 	@RequestMapping(value = "ssjFriends")
 	public String listSsj(int chg_id, Model model) {
