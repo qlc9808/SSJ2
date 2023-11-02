@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<%@ include file="header.jsp" %>
+<%@ include file="header4.jsp" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -16,4 +16,5 @@
     <input type="button" value="쉐어링 관리" class="btn" onclick="location.href='/sharingManagement'"><p>
     <input type="button" value="회원정보수정" class="btn" onclick="location.href='/userDetail'"><p>
 </body>
+<%@ include file="footer.jsp" %>
 </html>
