@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script type="text/javascript">
+	function join(p_num, p_id) {
+		alert(p_num);
+
+		// chg_id parameter 받는 코딩 추가 필요
+		alert(p_id);
+		location.href = "join?user_num=" + p_num + "&chg_id=" + p_id;
+	}
+</script>
+
 <!-- header -->
 <c:import url="/WEB-INF/views/header4.jsp"/>
 
@@ -21,7 +31,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-						<button type="button" class="btn btn-primary" onclick="join()">참여하기</button>
+						<button type="button" class="btn btn-primary" onclick="join(${user_num}, ${chg_id})">참여하기</button>
 					</div>
 				</div>
 			</div>
