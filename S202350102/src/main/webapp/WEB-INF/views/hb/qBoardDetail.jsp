@@ -11,9 +11,9 @@
 	<h2>문의게시판 디테일</h2>
 	<div id="qboard_title">
 		<p>${board.title }
-			<a href="qBoardInsertForm?brd_num=${board.brd_num }">수정</a>
+			<a href="qBoardUpdateForm?brd_num=${board.brd_num }">수정</a>
 			<a href="qBoardDelete?brd_num=${board.brd_num }">삭제</a>
-			<a href="">목록</a></p>
+			<a href="qBoardList?board=${board }">목록</a></p>
 	</div>
 	<hr width="100%">
 	<div id="qboard_content">

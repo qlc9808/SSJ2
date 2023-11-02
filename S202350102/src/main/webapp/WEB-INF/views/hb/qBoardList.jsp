@@ -24,7 +24,7 @@
 			<c:forEach var="board" items="${qBoardList}">
 				<c:if test="${board.user_num == user1.user_num || user1.status_md == 102 }">	
 					<tr>
-						<td>${board.brd_num}</td>
+						<td>${num}</td>
 						<td><a href="qBoardDetail?brd_num=${board.brd_num}">${board.title}</a></td>
 						<td>${board.view_cnt}</td>
 						<td>${board.nick}</td>
@@ -33,7 +33,9 @@
 				</c:if>		
 			</c:forEach>
 		</table>
-		<a href="qBoardWrite" class="btn">글쓰기</a>
+		<c:if test="${user1.user_id != null }">
+			<a href="qBoardWriteForm">글쓰기</a>
+		</c:if>
 	</div>
 </body>
 </html>
