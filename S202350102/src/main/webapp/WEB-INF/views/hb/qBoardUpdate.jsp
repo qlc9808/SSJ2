@@ -7,10 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>문의게시판 글쓰기폼</h2>
-	<form action="qBoardInsert">
 	
-		<input type="submit" value="확인">
-	</form>
 </body>
 </html>

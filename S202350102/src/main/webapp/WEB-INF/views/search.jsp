@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +10,7 @@
 </head>
 <body>
 <h1>검색</h1>
-	
+	<c:import url="/WEB-INF/views/header4.jsp"/>
 	<div id="searchVar">
 		<form action="searching">
 			<table>
@@ -31,8 +32,8 @@
 				<tr>
 					<td><a href="chg?chg_id=${popchg.chg_id }">${popchg.title }</a></td>
 					<td>${popchg.user_num }</td>
-					<td>${popchg.reg_date }</td>
-					<td>${popchg.start_date }</td>
+					<td><fmt:formatDate value="${popchg.reg_date }" pattern="yyyy-MM-dd" /></td>
+					<td><fmt:formatDate value="${popchg.start_date }" pattern="yyyy-MM-dd" /></td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -48,13 +49,13 @@
 			<c:forEach var="popBoard" items="${popBoardList }">
 				<tr>
 					<td><a href="commu?brd_num=${popBoard.brd_num }">${popBoard.title }</a></td>
-					<td>${popBoard.user_num }</td>
+					<td>${popBoard.nick }</td>
 					<td>${popBoard.like_cnt }</td>
-					<td>${popBoard.reg_date }</td>
+					<td><fmt:formatDate value="${popBoard.reg_date }" pattern="yyyy-MM-dd" /></td>
 				</tr>
 			</c:forEach>
 		</table>
 	</div>
-
+	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>

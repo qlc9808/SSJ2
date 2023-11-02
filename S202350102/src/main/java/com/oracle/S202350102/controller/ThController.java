@@ -46,6 +46,8 @@ public class ThController {
 			session = request.getSession();
 			session.setAttribute("user_id", loginResult.getUser_id());
 			session.setAttribute("status_md", loginResult.getStatus_md());
+			session.setAttribute("user_num", loginResult.getUser_num());
+			
 			System.out.println("session -->" + session);
 			System.out.println("session.getAttribute(\"user_id\") -->" + session.getAttribute("user_id"));
 			System.out.println("session.getAttribute(\"status_md\") -->" + session.getAttribute("status_md"));
