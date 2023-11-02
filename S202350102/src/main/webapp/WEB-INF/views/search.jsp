@@ -7,19 +7,45 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+	#shList {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            list-style:none;
+        }
+</style>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+	function sh(){
+		
+	}
+	
+	
+</script>
 </head>
 <body>
 <h1>검색</h1>
 	<c:import url="/WEB-INF/views/header4.jsp"/>
+	
 	<div id="searchVar">
 		<form action="searching">
 			<table>
 				<tr><td><label for="srch_word">검색</label></td>
-					<td><input type="text" name="srch_word" id="srch_word">
+					<td><input type="text" name="srch_word" id="srch_word" onclick="sh()">
 					<button type="submit">검색</button></td></tr>
 			</table>
 		</form>
 	</div>
+	<c:if test="">
+		<div style="display: none;">
+			<ul id="shList"  >
+			
+			</ul>
+		</div>
+	</c:if>
 	
 	<hr>
 	
