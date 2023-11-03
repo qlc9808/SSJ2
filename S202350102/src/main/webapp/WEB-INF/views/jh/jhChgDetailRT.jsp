@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,18 +22,18 @@
     }
 </style>
 <title>Insert title here</title>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	$(document).ready(function() {
 		var activeTab = '${activeTab}';
 		
 		if(activeTab) {
-			$('.nav-link.active').removeClass('active'); // 기존 활성 탭 비활성화
-	        $('a#reviewTab').addClass('active'); // 새로운 탭 활성화
+			$('.nav-link active').removeClass('active'); // 기존 활성 탭 비활성화
+	        $('a#reviewTab').addClass('activeTab'); // 새로운 탭 활성화
 	    }
 	});
 
 
-</script> 
+</script> -->
 </head>
 <body>
 
@@ -191,8 +191,6 @@
               <a class="nav-link" data-bs-toggle="tab" href="/ssjFriends?chg_id="+"${chg.chg_id }">
                              소세지들
               </a>
-              
-              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
               <a class="nav-link" data-bs-toggle="tab"onclick="location.href='/reviewTab?chg_id=${chg.chg_id }'">
                              후기 게시판
               </a>
@@ -234,12 +232,15 @@
                       <table class="table table-bordered table-sm table-hover">
                         <thead>
                           <tr>
-                            <th>${test }</th>
-                            <th>Delivery Time</th>
-                            <th>Price</th>
+                            <th>글번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>조회수</th>
+                            <th>작성일</th>
                           </tr>
                         </thead>
                         <tbody>
+                          <c:forEach var="review" items=""></c:forEach>
                           <tr>
                             <td>Standard Shipping</td>
                             <td>Delivery in 5 - 7 working days</td>
