@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
@@ -29,7 +30,7 @@ public class JhController {
 	private final YrChallengerService ycs;
 	
 	
-	@RequestMapping(value = "/jhChgDetail")
+	@RequestMapping(value = "jhChgDetail")
 	public String jhChgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model ) {
 		
 
@@ -61,5 +62,21 @@ public class JhController {
 		
 		
 		return "jh/jhChgDetail";
+	}
+	
+	
+	@RequestMapping(value = "reviewTab")
+	public String jhReviewTab(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
+		System.out.println("JhController jhReviewTab Start...");
+		System.out.println("JhController jhReviewTab chg_id -> " + chg_id);
+
+		String test = "테스트";
+		String reviewTab = "reviewTab";
+		Board chgBrdList = jhCService.jhChgBrdList(chg_id);
+		
+		model.addAttribute("test", test);
+		model.addAttribute("activeTab", reviewTab);
+		
+		return "forward:jhChgDetail";
 	}
 }

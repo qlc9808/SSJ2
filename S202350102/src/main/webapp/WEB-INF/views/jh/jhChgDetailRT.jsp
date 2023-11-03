@@ -1,39 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+    
+    <!-- Libs CSS -->
+    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+    
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <style>
     .list-group-horizontal-sm .list-group-item {
         border: none; /* 테두리 없애기 */
     }
 </style>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript">
-	function cJoinTest() {
-		var sendData = $('#cJoinForm').serialize();
-		location.href="chgJoinPro?"+sendData;
-	}
-</script>
 <title>Insert title here</title>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	$(document).ready(function() {
 		var activeTab = '${activeTab}';
 		
 		if(activeTab) {
-			$('.nav-link.active').removeClass('active'); // 기존 활성 탭 비활성화
-	        $('a#reviewTab').addClass('active'); // 새로운 탭 활성화
+			$('.nav-link active').removeClass('active'); // 기존 활성 탭 비활성화
+	        $('a#reviewTab').addClass('activeTab'); // 새로운 탭 활성화
 	    }
 	});
 
 
-</script> 
+</script> -->
 </head>
 <body>
+
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -95,105 +98,45 @@
                 
                 <div class="col-12 col-md-6">
 
-
-                  <ul class="list-group list-group-horizontal-sm">
-                    <li class="list-group-item">개설자</li>
-                    <li class="list-group-item">${chg.nick }</li>
-                  </ul>
-                  <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item">참여 인원</li>
-                    <li class="list-group-item">${chgrParti } / ${chg.chg_capacity }</li>
-                  </ul>
-                  <ul class="list-group list-group-horizontal-sm">
-                    <li class="list-group-item">진행 기간</li>
-                    <li class="list-group-item"><fmt:formatDate value="${chg.start_date }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"/> </li>
-                  </ul>
-                  <ul class="list-group list-group-horizontal-sm">
-                    <li class="list-group-item">진행 상태</li>
-                    <li class="list-group-item">${chg.stateCtn }</li>
-                  </ul>
-                  <ul class="list-group list-group-horizontal-sm">
-                    <li class="list-group-item">인증 빈도</li>
-                    <li class="list-group-item">${chg.freq }</li>
-                  </ul>
-                  <ul class="list-group list-group-horizontal-sm">
-                    <li class="list-group-item">챌린지 찜</li>
-                    <li class="list-group-item">${chg.pick_cnt }</li>
-                  </ul> 
+                
+              	<ul class="list-group list-group-horizontal-sm">
+			  	  <li class="list-group-item">개설자</li>
+			  	  <li class="list-group-item">${chg.nick }</li>
+				</ul>
+				<ul class="list-group list-group-horizontal-sm">
+			  	  <li class="list-group-item">참여 인원</li>
+			 	  <li class="list-group-item">${chg.now_parti } / ${chg.chg_capacity }</li>
+				</ul>
+				<ul class="list-group list-group-horizontal-sm">
+				  <li class="list-group-item">진행 기간</li>
+				  <li class="list-group-item"><fmt:formatDate value="${chg.start_date }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"/> </li>
+				</ul>
+				<ul class="list-group list-group-horizontal-sm">
+				  <li class="list-group-item">진행 상태</li>
+				  <li class="list-group-item">${chg.stateCtn }</li>
+				</ul>
+				<ul class="list-group list-group-horizontal-sm">
+				  <li class="list-group-item">인증 빈도</li>
+				  <li class="list-group-item">${chg.freq }</li>
+				</ul>
+				<ul class="list-group list-group-horizontal-sm">
+				  <li class="list-group-item">챌린지 찜</li>
+				  <li class="list-group-item">${chg.pick_cnt }</li>
+				</ul> 
                
                
                   <div class="form-group">
+
                     <div class="row gx-5 mb-7">
+                     
                       <div class="col-12 col-lg">
-                        <!-- 참여하기 -->
-                        <!-- YR 작업 중 -->
-                        <c:choose>
-                        
-                          <c:when test="${sessionScope.user_num != null}">
-                            <!-- 로그인 한 상태 -->
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                              참여하기
-                            </button>
-                        
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <c:choose>
-                        
-                                  <c:when test="${chg.chg_capacity } > ${chgrParti }">
-                                    <div class="modal-content">
-                                      <div class="modal-body">
-                                        <p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
-                                        <p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-                                        <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
-                                        <form id="cJoinForm">
-                                          <input type="hidden" name="user_num" value="${user.user_num}">
-                                          <input type="hidden" name="chg_id" value="${chg.chg_id}">
-                                        </form>
-                                      </div>
-                                    </div>
-                                  </c:when>
-                        
-                                  <c:otherwise>
-                                    <div class="modal-content">
-                                      <div class="modal-body">
-                                        <p>참여인원이 마감되었습니다</p>
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-                                      </div>
-                                    </div>
-                                  </c:otherwise>
-                        
-                                </c:choose>
-                              </div>
-                            </div>
-                        
-                          </c:when>
-                        
-                          <c:when test="${sessionScope.user_num == null}">
-                            <!-- 로그인 안 한 상태 -->
-                            <button type="button" class="btn btn-danger" onclick="location.href='/loginForm'">
-                              참여하기
-                            </button>
-                          </c:when>
-                        
-                        </c:choose>
-                        
-                        
-                        
-                        
-                        
-                        
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn w-100 btn-dark mb-2">
+                          	참여하기 
+                        </button>
 
                       </div>
-
-
-
-
-                      <!-- 찜하기 -->
                       <div class="col-12 col-lg-auto">
 
                         <!-- Wishlist -->
@@ -248,8 +191,6 @@
               <a class="nav-link" data-bs-toggle="tab" href="/ssjFriends?chg_id="+"${chg.chg_id }">
                              소세지들
               </a>
-              
-              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
               <a class="nav-link" data-bs-toggle="tab"onclick="location.href='/reviewTab?chg_id=${chg.chg_id }'">
                              후기 게시판
               </a>
@@ -291,12 +232,15 @@
                       <table class="table table-bordered table-sm table-hover">
                         <thead>
                           <tr>
-                            <th>${test }</th>
-                            <th>Delivery Time</th>
-                            <th>Price</th>
+                            <th>글번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>조회수</th>
+                            <th>작성일</th>
                           </tr>
                         </thead>
                         <tbody>
+                          <c:forEach var="review" items=""></c:forEach>
                           <tr>
                             <td>Standard Shipping</td>
                             <td>Delivery in 5 - 7 working days</td>
