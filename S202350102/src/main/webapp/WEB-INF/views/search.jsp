@@ -9,16 +9,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	#shList {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-     .td2{
-     	padding-left: 200px;
-     }
+	
 </style>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
@@ -30,20 +21,16 @@
 		    
 		}
 	}
-	
-	
-	
-	
-	
+
 </script>
 </head>
 <body>
 <h1>검색</h1>
 
-	<div id="searchVar">
+	<div id="searchVar" class="mb-3">
 		<form action="searching">
 			<label for="srch_word">검색</label>
-			<input type="text" name="srch_word" id="srch_word" list="wordList">
+			<input type="text" name="srch_word" id="srch_word" list="wordList" class="form-control form-control-sm">
 			<c:if test="${user_num != 0 }">
 				<datalist id="wordList">
 					<c:forEach items="${hisList }" var="hsList">
@@ -51,7 +38,7 @@
 					</c:forEach>
 				</datalist>
 			</c:if>
-			<button type="submit">검색</button>			
+			<button type="submit">검색</button>				
 		</form>
 	</div>
 	
