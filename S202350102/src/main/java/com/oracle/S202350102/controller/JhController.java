@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.main.UserServiceImpl;
+import com.oracle.S202350102.service.yrService.YrChallengerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,8 @@ public class JhController {
 
 	private final JhCallengeService jhCService;
 	private final UserService userService;
-	
+	// challenger 테이블값 가져오기용
+	private final YrChallengerService ycs;
 	
 	
 	@RequestMapping(value = "/jhChgDetail")
@@ -48,8 +51,13 @@ public class JhController {
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController jhChgDetail userNum -> " + user);
 		
+		// yr 작성
+		// challenger 테이블에서 참여인원 가져오기용
+		int chgrParti = ycs.selectChgrParti(chg_id);
+		System.out.println("chgrParti -> " + chgrParti);
 		model.addAttribute("chg", chg);
 		model.addAttribute("user", user);
+		model.addAttribute("chgrParti", chgrParti);
 		
 		
 		return "jh/jhChgDetail";

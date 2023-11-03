@@ -7,4 +7,9 @@
 		INSERT INTO challenger VALUES (#{user_num}, #{chg_id}, 600, 101)
 	</insert>
 	
+	<select id="yrChgrParti" resultType="int">
+		select count(*)
+		FROM challenger
+		where chg_id = #{chg_id}
+	</select>
 </mapper>

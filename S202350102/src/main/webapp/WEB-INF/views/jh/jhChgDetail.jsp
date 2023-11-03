@@ -100,7 +100,7 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                       <li class="list-group-item">참여 인원</li>
-                    <li class="list-group-item">${chg.now_parti } / ${chg.chg_capacity }</li>
+                    <li class="list-group-item">${chgrParti } / ${chg.chg_capacity }</li>
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">진행 기간</li>
@@ -126,41 +126,58 @@
                         <!-- 참여하기 -->
                         <!-- YR 작업 중 -->
                         <c:choose>
+                        
                           <c:when test="${sessionScope.user_num != null}">
                             <!-- 로그인 한 상태 -->
-                            <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                               참여하기
                             </button>
                         
-                            <!-- Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-body">
-                                    <p>현재 참여 인원 : ${chg.now_parti } / 참여 정원 : ${chg.chg_capacity}</p>
-                                    <p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-                                    <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
-                                    <form id="cJoinForm">
-                                      <input type="hidden" name="user_num" value="${user.user_num}">
-                                      <input type="hidden" name="chg_id" value="${chg.chg_id}">
-                                    </form>
-                                  </div>
-                                </div>
+                                <c:choose>
+                        
+                                  <c:when test="${chg.chg_capacity } > ${chgrParti }">
+                                    <div class="modal-content">
+                                      <div class="modal-body">
+                                        <p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
+                                        <p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+                                        <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
+                                        <form id="cJoinForm">
+                                          <input type="hidden" name="user_num" value="${user.user_num}">
+                                          <input type="hidden" name="chg_id" value="${chg.chg_id}">
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </c:when>
+                        
+                                  <c:otherwise>
+                                    <div class="modal-content">
+                                      <div class="modal-body">
+                                        <p>참여인원이 마감되었습니다</p>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+                                      </div>
+                                    </div>
+                                  </c:otherwise>
+                        
+                                </c:choose>
                               </div>
                             </div>
+                        
                           </c:when>
-
+                        
                           <c:when test="${sessionScope.user_num == null}">
                             <!-- 로그인 안 한 상태 -->
-                            <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" onclick="location.href='/loginForm'">
                               참여하기
                             </button>
                           </c:when>
+                        
                         </c:choose>
                         
                         
