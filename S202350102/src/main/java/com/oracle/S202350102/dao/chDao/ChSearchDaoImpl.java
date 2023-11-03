@@ -66,6 +66,24 @@ public class ChSearchDaoImpl implements ChSearchDao {
 		
 		return srch_brdResult;
 	}
+	
+	@Override
+	public List<Board> shareSearching(String srch_word) {
+		System.out.println("ChSearchImpl shareSearching Start..");
+		
+		List<Board> shrResult = null;
+		
+		
+		try {
+			shrResult = session.selectList("shrResult",srch_word);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChSearchImpl chgSearching e.getMessage()->" + e.getMessage());
+		}
+		
+		return shrResult;
+	}
+	
 
 
 	@Override
@@ -97,5 +115,24 @@ public class ChSearchDaoImpl implements ChSearchDao {
 		}
 		return result;
 	}
+
+
+	@Override
+	public int deleteHis(SearchHistory sh) {
+		System.out.println("ChSearchImpl deleteHis Start...");
+		int result = 0;
+		
+		try {
+			result = session.delete("deleteHis", sh);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChSearchImpl deleteHis e.getMessage()->" + e.getMessage());
+		}
+		
+		return result;
+	}
+
+
+	
 
 }
