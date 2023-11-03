@@ -9,5 +9,6 @@ public interface YrChallengerDao {
 	List<User1> 	listSsj(int chg_id);
 	int 			insertChgr(Challenger chgr);
 	int 			selectChgrParti(int chg_id);
+	int 			selectChgrJoinYN(Challenger chgr);
 
 }

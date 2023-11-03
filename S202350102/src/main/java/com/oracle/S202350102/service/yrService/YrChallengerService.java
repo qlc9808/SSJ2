@@ -9,5 +9,6 @@ public interface YrChallengerService {
 	List<User1> 	getListSsj(int chg_id);
 	int 			insertChgr(Challenger chgr);
 	int 			selectChgrParti(int chg_id);
+	int 			selectChgrJoinYN(Challenger chgr);
 
 }

@@ -1,5 +1,7 @@
 package com.oracle.S202350102.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ public class JhController {
 
 	private final JhCallengeService jhCService;
 	private final UserService userService;
+	// yr 작성
 	// challenger 테이블값 가져오기용
 	private final YrChallengerService ycs;
 	
@@ -52,13 +55,18 @@ public class JhController {
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController jhChgDetail userNum -> " + user);
 		
+		model.addAttribute("chg", chg);
+		model.addAttribute("user", user);
+		
 		// yr 작성
 		// challenger 테이블에서 참여인원 가져오기용
 		int chgrParti = ycs.selectChgrParti(chg_id);
-		System.out.println("chgrParti -> " + chgrParti);
-		model.addAttribute("chg", chg);
-		model.addAttribute("user", user);
+		Challenger chgr = new Challenger();
+		chgr.setUser_num(userNum);
+		chgr.setChg_id(chg_id);
+		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
 		model.addAttribute("chgrParti", chgrParti);
+		model.addAttribute("chgrYN", chgrJoinYN);
 		
 		
 		return "jh/jhChgDetail";

@@ -49,15 +49,9 @@ public class YrController {
 	public String chgJoinPro(Challenger chgr, Model model) {
 		System.out.println("YrController chgJoinPro Start...");
 		int insertResult = ycs.insertChgr(chgr);
-		if(insertResult > 0) {
-			System.out.println("YrController Insert Success...");
-			
-			return "redirect:jhChgDetail?chg_id=" + chgr.getChg_id();
-		} else {
-			System.out.println("YrController Insert False...");
-			model.addAttribute("msg", "이미 참여한 챌린지입니다");
-			return "forward:jhChgDetail?chg_id=" + chgr.getChg_id();			
-		}
-		
+		System.out.println("YrController Insert Success...");
+//		String stringResult = Long.toString(insertResult);
+		model.addAttribute("result", insertResult);
+		return "redirect:jhChgDetail?chg_id=" + chgr.getChg_id();
 	}
 }

@@ -36,4 +36,11 @@ public class YrChallengerServiceImpl implements YrChallengerService {
 		return selectChgrParti;
 	}
 
+	@Override
+	public int selectChgrJoinYN(Challenger chgr) {
+		System.out.println("YrChallengerServiceImpl selectChgrJoinYN Start...");
+		int selectChgrJoinYN = ycd.selectChgrJoinYN(chgr);
+		return selectChgrJoinYN;
+	}
+
 }

@@ -12,15 +12,43 @@
         border: none; /* 테두리 없애기 */
     }
 </style>
+<title>Insert title here</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+	// yr 작성
 	function cJoinTest() {
-		var sendData = $('#cJoinForm').serialize();
-		location.href="chgJoinPro?"+sendData;
+		
+//	function cJoinTest(p_num, p_id) {
+	
+		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
+		location.href="chgJoinPro?" + sendData;
+		
+		alert("신청완료");
+		/* if(${result} > 0) {
+			alert("이게 되나?");
+		} */
+
+/*   $.ajax(
+      {
+    	alert("아작스가 아작이 나쓰");
+    	
+        url: "/chgJoinPro",
+        data: {user_num : p_num, chg_id : p_id},
+        dataType: 'text',
+        success: function (data) {
+          alert('chgJoinPro data -> ' + data);
+          if (data == '1') {
+            alert('신청 완료');
+            location.href = "jhChgDetail?chg_id=" + chg_id;
+            $('#o_status').load(location.href + ' #o_status');
+          }
+        }
+      }
+    ) 
+	} */
 	}
-</script>
-<title>Insert title here</title>
-<script type="text/javascript">
+	
+	
 	$(document).ready(function() {
 		var activeTab = '${activeTab}';
 		
@@ -137,26 +165,11 @@
                         
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
+                        
                                 <c:choose>
                         
-                                  <c:when test="${chg.chg_capacity } > ${chgrParti }">
-                                    <div class="modal-content">
-                                      <div class="modal-body">
-                                        <p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
-                                        <p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-                                        <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
-                                        <form id="cJoinForm">
-                                          <input type="hidden" name="user_num" value="${user.user_num}">
-                                          <input type="hidden" name="chg_id" value="${chg.chg_id}">
-                                        </form>
-                                      </div>
-                                    </div>
-                                  </c:when>
-                        
-                                  <c:otherwise>
+                                  <c:when test="${chg.chg_capacity == chgrParti }">
+                                    <!-- 참여 정원 = 참가 인원 -->
                                     <div class="modal-content">
                                       <div class="modal-body">
                                         <p>참여인원이 마감되었습니다</p>
@@ -165,6 +178,47 @@
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
                                       </div>
                                     </div>
+                        
+                                  </c:when>
+                        
+                                  
+                                  <c:otherwise>
+
+                                    <c:choose>
+
+                                      <c:when test="${chgrYN == 1 }">
+                                        <!-- 이미 챌린지 참여함 -->
+                                        <div class="modal-content">
+                                          <div class="modal-body">
+                                            <p>이미 참여한 챌린지입니다</p>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+                                          </div>
+                                        </div>
+                                      </c:when>
+                                      
+                                      
+                                      <c:otherwise>
+                                        <!-- 챌린지 참가 -->
+                                        <div class="modal-content">
+                                          <div class="modal-body">
+                                            <p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
+                                            <p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+									<%--    <button type="button" class="btn btn-danger" onclick="cJoinTest(${user.user_num}, ${chg.chg_id})">참여하기</button> --%>
+                                            <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
+                                            <form id="cJoinForm">
+                                              <input type="hidden" name="user_num" value="${user.user_num}">
+                                              <input type="hidden" name="chg_id" value="${chg.chg_id}">
+                                            </form> 
+                                          </div>
+                                        </div>
+                                      
+                                      </c:otherwise>
+                                    </c:choose>
                                   </c:otherwise>
                         
                                 </c:choose>

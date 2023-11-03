@@ -46,11 +46,24 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		int selectChgrParti = 0;
 		System.out.println("YrChallengerDaoImpl selectChgrParti Start...");
 		try {
-			selectChgrParti = session.selectOne("yrChgrParti", chg_id);
+			selectChgrParti = session.selectOne("yrChgrSelectParti", chg_id);
+			System.out.println("YrChallengerDaoImpl selectChgrParti -> " + selectChgrParti);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		return selectChgrParti;
+	}
+
+	@Override
+	public int selectChgrJoinYN(Challenger chgr) {
+		int selectChgrJoinYN = 0;
+		System.out.println("YrChallengerDaoImpl selectChgrJoinYN Start...");
+		try {
+			selectChgrJoinYN = session.selectOne("yrChgrYN", chgr);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return selectChgrJoinYN;
 	}
 
 }
