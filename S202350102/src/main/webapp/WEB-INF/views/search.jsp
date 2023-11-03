@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="header4.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,32 +39,21 @@
 </head>
 <body>
 <h1>검색</h1>
-	<c:import url="/WEB-INF/views/header4.jsp"/>
+
 	<div id="searchVar">
 		<form action="searching">
-			<table>
-				<tr><td><label for="srch_word">검색</label></td>
-					<td><input type="text" name="srch_word" id="srch_word" onclick="sh()">
-					<button type="submit">검색</button></td></tr>
-			</table>
+			<label for="srch_word">검색</label>
+			<input type="text" name="srch_word" id="srch_word" list="wordList">
+			<c:if test="${user_num != 0 }">
+				<datalist id="wordList">
+					<c:forEach items="${hisList }" var="hsList">
+						<option value="${hsList.srch_word }"/>						
+					</c:forEach>
+				</datalist>
+			</c:if>
+			<button type="submit">검색</button>			
 		</form>
 	</div>
-	<c:if test="${user_num != 0 }"> 
-		<div style="display: none;" id="shList">
-			<table>
-				<c:forEach items="${hisList }" var="hsList">
-					<tr>
-						<td>
-							<a href="searching?srch_word=${hsList.srch_word }">${hsList.srch_word }</a>
-						</td>
-						<td class="td2">
-							<input type="button" onclick="location.href='deleteHis?srch_word=${hsList.srch_word}'" value="삭제">
-						</td>
-					</tr>
-				</c:forEach>
-			</table>
-		</div>
-	</c:if> 
 	
 	<hr>
 	
@@ -122,6 +112,6 @@
 	</div>
 	
 	
-	<c:import url="/WEB-INF/views/footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
