@@ -36,7 +36,26 @@
 		</c:forEach>
 	</table>
 	<hr>
-	<h3>커뮤니티</h3>
+	
+	<h3>쉐어링</h3>
+	<c:if test="${empty srch_shareResult }">
+		<h6>검색결과가 없습니다.</h6>
+	</c:if>
+	<table>
+		<c:forEach items="${srch_shareResult }" var="shrResultList">
+			<tr>
+				<td>
+					<a href="detailCommunity?user_num=${shrResultList.user_num}&brd_num=${shrResultList.brd_num}">${shrResultList.title }</a>
+				</td>
+				<td><fmt:formatDate value="${shrResultList.reg_date }" pattern="yyyy-MM-dd"/></td>
+				<td>${shrResultList.nick }</td>
+			</tr>
+		</c:forEach>
+	</table>
+	
+	<hr>
+	
+	<h3>자유게시판</h3>
 	<c:if test="${empty srch_brdResult }">
 		<h6>검색결과가 없습니다.</h6>
 	</c:if>

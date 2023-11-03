@@ -14,14 +14,24 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            list-style:none;
         }
+     .td2{
+     	padding-left: 200px;
+     }
 </style>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
 	function sh(){
-		
+		if($("#shList").css("display") == "none" || $("#shList").css("display") == ""){
+		    $("#shList").show();
+		} else {
+		    $("#shList").hide();
+		    
+		}
 	}
+	
+	
+	
 	
 	
 </script>
@@ -29,7 +39,6 @@
 <body>
 <h1>검색</h1>
 	<c:import url="/WEB-INF/views/header4.jsp"/>
-	
 	<div id="searchVar">
 		<form action="searching">
 			<table>
@@ -39,17 +48,27 @@
 			</table>
 		</form>
 	</div>
-	<c:if test="">
-		<div style="display: none;">
-			<ul id="shList"  >
-			
-			</ul>
+	<c:if test="${user_num != 0 }"> 
+		<div style="display: none;" id="shList">
+			<table>
+				<c:forEach items="${hisList }" var="hsList">
+					<tr>
+						<td>
+							<a href="searching?srch_word=${hsList.srch_word }">${hsList.srch_word }</a>
+						</td>
+						<td class="td2">
+							<input type="button" onclick="location.href='deleteHis?srch_word=${hsList.srch_word}'" value="삭제">
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
 		</div>
-	</c:if>
+	</c:if> 
 	
 	<hr>
 	
 	<div id="popchg">
+		<h3>인기 챌린지</h3>
 		<table>
 			<tr>
 				<td>제목</td><td>신청자</td><td>신청일</td><td>시작일</td>
@@ -66,8 +85,27 @@
 	</div>
 	
 	<hr>
+	<div id="popcommu">
+		<h4>인기 쉐어링</h4>
+		<table>
+			<tr>
+				<td>제목</td><td>작성자</td><td>좋아요</td><td>등록일</td>
+			</tr>
+			<c:forEach var="popShare" items="${popShareList }">
+				<tr>
+					<td><a href="detailCommunity?user_num=${popShare.user_num }&brd_num=${popShare.brd_num }">${popShare.title }</a></td>
+					<td>${popShare.nick }</td>
+					<td>${popShare.like_cnt }</td>
+					<td><fmt:formatDate value="${popShare.reg_date }" pattern="yyyy-MM-dd" /></td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
+	
+	<hr>
 	
 	<div id="popcommu">
+		<h4>인기자유글</h4>
 		<table>
 			<tr>
 				<td>제목</td><td>작성자</td><td>좋아요</td><td>등록일</td>
@@ -82,6 +120,8 @@
 			</c:forEach>
 		</table>
 	</div>
+	
+	
 	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>
