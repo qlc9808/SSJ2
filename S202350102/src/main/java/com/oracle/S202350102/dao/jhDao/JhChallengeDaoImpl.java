@@ -18,37 +18,37 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 
 	//챌린지 정보 조회
 	@Override
-	public Challenge jhChgDetail(int chg_id) {
-		System.out.println("JhChallengeDaoImpl jhChgDetail Start...");
-		System.out.println("JhChallengeDaoImpl jhChgDetail  chg_id -> "+ chg_id);
+	public Challenge chgDetail(int chg_id) {
+		System.out.println("JhChallengeDaoImpl chgDetail Start...");
+		System.out.println("JhChallengeDaoImpl chgDetail  chg_id -> "+ chg_id);
 		
 		Challenge chgDetail = null;
 		try {
 			
 			chgDetail = session.selectOne("jhChgDetail", chg_id);
-			System.out.println("JhChallengeDaoImpl jhChgDetail  chg -> "+ chgDetail);
+			System.out.println("JhChallengeDaoImpl chgDetail  chg -> "+ chgDetail);
 			
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl jhChgDetail e.getMessage() -> "+ e.getMessage());
+			System.out.println("JhChallengeDaoImpl chgDetail e.getMessage() -> "+ e.getMessage());
 		}
 		
 		return chgDetail;
 	}
 
 	@Override
-	public List<Board> jhReviewList(int chg_id) {
-		System.out.println("JhChallengeDaoImpl jhReviewList Start...");
-		System.out.println("JhChallengeDaoImpl jhReviewList  chg_id -> "+ chg_id);
+	public List<Board> chgReviewList(int chg_id) {
+		System.out.println("JhChallengeDaoImpl chgReviewList Start...");
+		System.out.println("JhChallengeDaoImpl chgReviewList  chg_id -> "+ chg_id);
 		List<Board> chgReviewList = null;
 		
 		try {
 			
 			chgReviewList = session.selectList("jhChgReviewList", chg_id);
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl jhReviewList e.getMessage() -> "+ e.getMessage());
+			System.out.println("JhChallengeDaoImpl chgReviewList e.getMessage() -> "+ e.getMessage());
 		}
 		
-		System.out.println("JhChallengeDaoImpl jhReviewList  chgReviewList.size() -> "+ chgReviewList.size());
+		System.out.println("JhChallengeDaoImpl chgReviewList  chgReviewList.size() -> "+ chgReviewList.size());
 
 		return chgReviewList;
 	}

@@ -32,31 +32,28 @@ public class JhController {
 	// challenger 테이블값 가져오기용
 	private final YrChallengerService ycs;
 	
-	
-	@RequestMapping(value = "jhChgDetail")
-	public String jhChgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model ) {
-		
-
-		System.out.println("JhController jhChgDetail Start...");
-		System.out.println("JhController jhChgDetail  chg_id -> "+ chg_id);
-
-		//챌린지 상세정보 조회
-		Challenge chgDetail = jhCService.jhChgDetail(chg_id);
-		System.out.println("JhController jhChgDetail chg -> " + chgDetail);
+	//챌린지 상세정보 조회
+	@RequestMapping(value = "chgDetail")
+	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model ) {
+		System.out.println("JhController chgDetail Start...");
+		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
 		
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
-			System.out.println("JhController jhChgDetail userNum -> " + userNum);
+			System.out.println("JhController chgDetail userNum -> " + userNum);
 		}
 		
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController jhChgDetail userNum -> " + user);
-		
-		model.addAttribute("chg", chgDetail);
+		System.out.println("JhController chgDetail userNum -> " + user);
 		model.addAttribute("user", user);
+		
+		//챌린지 상세정보 조회
+		Challenge chgDetail = jhCService.chgDetail(chg_id);
+		System.out.println("JhController chgDetail chg -> " + chgDetail);
+		model.addAttribute("chg", chgDetail);
 		
 		// yr 작성
 		// challenger 테이블에서 참여인원 가져오기용
@@ -73,17 +70,80 @@ public class JhController {
 	}
 	
 	
+	//챌린지 후기목록 조회
 	@RequestMapping(value = "reviewTab")
-	public String jhReviewList(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
-		System.out.println("JhController jhReviewTab Start...");
-		System.out.println("JhController jhReviewTab chg_id -> " + chg_id);
-		System.out.println("JhController jhReviewTab user_num -> " + session.getAttribute("user_num"));
-
-
-		List<Board> chgReviewList = jhCService.jhReviewList(chg_id);
+	public String chgReviewList(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
+		System.out.println("JhController reviewList Start...");
+		System.out.println("JhController reviewList chg_id -> " + chg_id);
+		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
 		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		}
+		
+		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
 		model.addAttribute("chgReviewList", chgReviewList);
 		
 		return "jh/test";
 	}
+	
+	
+	//챌린지 신청 페이지로 이동
+	@RequestMapping(value = "chgApplicationPage")
+	public String chgApplication (HttpSession session, Model model) {
+		System.out.println("JhController chgApplication Start...");
+		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
+		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		}
+		
+		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+		
+		return "jh/chgApplicationPage";
+	}
+	
+	
+	//챌린지 신청 등록
+	@RequestMapping(value = "chgApplication")
+	public String chgApplication (Challenge chg, HttpSession session, Model model) {
+		System.out.println("JhController chgApplication Start...");
+		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		}
+		
+		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+	
+		//임시로 챌린지 목록으로 이동하게 함
+		//나중에 내가 신청한 챌린지 목록으로 이동할 것
+		return "listChallenge";
+		
+	}
+	
+	
+	
+	
 }

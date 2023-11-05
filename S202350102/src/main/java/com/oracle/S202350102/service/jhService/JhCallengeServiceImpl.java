@@ -18,22 +18,22 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	
 	//챌린지 정보 조회
 	@Override
-	public Challenge jhChgDetail(int chg_id) {
-		System.out.println("JhCallengeServiceImpl jhChgDetail Start...");
+	public Challenge chgDetail(int chg_id) {
+		System.out.println("JhCallengeServiceImpl chgDetail Start...");
 
-		System.out.println("JhCallengeServiceImpl jhChgDetail  chg_id -> "+ chg_id);
+		System.out.println("JhCallengeServiceImpl chgDetail  chg_id -> "+ chg_id);
 
-		Challenge chgDetail = jhChgDao.jhChgDetail(chg_id);
+		Challenge chgDetail = jhChgDao.chgDetail(chg_id);
 		
 		
 		return chgDetail;
 	}
 
 	@Override
-	public List<Board> jhReviewList(int chg_id) {
-		System.out.println("JhCallengeServiceImpl jhReviewList Start...");
+	public List<Board> chgReviewList(int chg_id) {
+		System.out.println("JhCallengeServiceImpl chgReviewList Start...");
 		
-		List<Board> chgReviewList = jhChgDao.jhReviewList(chg_id);
+		List<Board> chgReviewList = jhChgDao.chgReviewList(chg_id);
 		
 		return chgReviewList;
 	}
