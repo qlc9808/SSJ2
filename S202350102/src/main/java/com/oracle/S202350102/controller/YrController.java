@@ -52,6 +52,6 @@ public class YrController {
 		System.out.println("YrController Insert Success...");
 //		String stringResult = Long.toString(insertResult);
 		model.addAttribute("result", insertResult);
-		return "redirect:jhChgDetail?chg_id=" + chgr.getChg_id();
+		return "forward:jhChgDetail?chg_id=" + chgr.getChg_id();
 	}
 }
