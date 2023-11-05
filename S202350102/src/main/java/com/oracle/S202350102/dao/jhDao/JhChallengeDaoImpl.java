@@ -1,8 +1,11 @@
 package com.oracle.S202350102.dao.jhDao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 
 import lombok.RequiredArgsConstructor;
@@ -18,17 +21,36 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	public Challenge jhChgDetail(int chg_id) {
 		System.out.println("JhChallengeDaoImpl jhChgDetail Start...");
 		System.out.println("JhChallengeDaoImpl jhChgDetail  chg_id -> "+ chg_id);
-		Challenge chg = null;
+		
+		Challenge chgDetail = null;
 		try {
 			
-			chg = session.selectOne("jhChgDetail", chg_id);
-			System.out.println("JhChallengeDaoImpl jhChgDetail  chg -> "+ chg);
+			chgDetail = session.selectOne("jhChgDetail", chg_id);
+			System.out.println("JhChallengeDaoImpl jhChgDetail  chg -> "+ chgDetail);
 			
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl jhChgDetail e.getMessage() -> "+ e.getMessage());
 		}
 		
-		return chg;
+		return chgDetail;
+	}
+
+	@Override
+	public List<Board> jhReviewList(int chg_id) {
+		System.out.println("JhChallengeDaoImpl jhReviewList Start...");
+		System.out.println("JhChallengeDaoImpl jhReviewList  chg_id -> "+ chg_id);
+		List<Board> chgReviewList = null;
+		
+		try {
+			
+			chgReviewList = session.selectList("jhChgReviewList", chg_id);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl jhReviewList e.getMessage() -> "+ e.getMessage());
+		}
+		
+		System.out.println("JhChallengeDaoImpl jhReviewList  chgReviewList.size() -> "+ chgReviewList.size());
+
+		return chgReviewList;
 	}
 
 

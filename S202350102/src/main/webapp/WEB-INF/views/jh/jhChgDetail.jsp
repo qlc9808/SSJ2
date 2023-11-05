@@ -345,35 +345,23 @@
                       <table class="table table-bordered table-sm table-hover">
                         <thead>
                           <tr>
-                            <th>${test }</th>
-                            <th>Delivery Time</th>
-                            <th>Price</th>
+                            <th>글번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>조회수</th>
+                            <th>작성일</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>Standard Shipping</td>
-                            <td>Delivery in 5 - 7 working days</td>
-                            <td>$8.00</td>
-                          </tr>
-                          <tr>
-                            <td>Express Shipping</td>
-                            <td>Delivery in 3 - 5 working days</td>
-                            <td>$12.00</td>
-                          </tr>
-                          <tr>
-                            <td>1 - 2 day Shipping</td>
-                            <td>Delivery in 1 - 2 working days</td>
-                            <td>$12.00</td>
-                          </tr>
-                          <tr>
-                            <td>Free Shipping</td>
-                            <td>
-                              Living won't the He one every subdue meat replenish
-                              face was you morning firmament darkness.
-                            </td>
-                            <td>$0.00</td>
-                          </tr>
+                          <c:forEach var="review" items="${chgReviewList}">
+	                          <tr>
+	                            <td>${review.rn }</td>
+	                            <td>${review.title }</td>
+	                            <td>${review.nick }</td>
+	                            <td>${review.view_cnt }</td>
+	                            <td>${review.reg_date }</td>
+	                          </tr>
+                          </c:forEach>
                         </tbody>
                       </table>
                     </div>

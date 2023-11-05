@@ -39,4 +39,7 @@ public class Board {
 	private String nick;			// 유저닉네임
 	private String user_name;
 	private String user_id;
+	
+	//후기 게시판 조회용
+	private int rn; //글번호 rownum 
 }

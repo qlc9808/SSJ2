@@ -41,8 +41,8 @@ public class JhController {
 		System.out.println("JhController jhChgDetail  chg_id -> "+ chg_id);
 
 		//챌린지 상세정보 조회
-		Challenge chg = jhCService.jhChgDetail(chg_id);
-		System.out.println("JhController jhChgDetail chg -> " + chg);
+		Challenge chgDetail = jhCService.jhChgDetail(chg_id);
+		System.out.println("JhController jhChgDetail chg -> " + chgDetail);
 		
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
@@ -55,7 +55,7 @@ public class JhController {
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController jhChgDetail userNum -> " + user);
 		
-		model.addAttribute("chg", chg);
+		model.addAttribute("chg", chgDetail);
 		model.addAttribute("user", user);
 		
 		// yr 작성
@@ -74,17 +74,16 @@ public class JhController {
 	
 	
 	@RequestMapping(value = "reviewTab")
-	public String jhReviewTab(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
+	public String jhReviewList(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
 		System.out.println("JhController jhReviewTab Start...");
 		System.out.println("JhController jhReviewTab chg_id -> " + chg_id);
+		System.out.println("JhController jhReviewTab user_num -> " + session.getAttribute("user_num"));
 
-		String test = "테스트";
-		String reviewTab = "reviewTab";
-		Board chgBrdList = jhCService.jhChgBrdList(chg_id);
+
+		List<Board> chgReviewList = jhCService.jhReviewList(chg_id);
 		
-		model.addAttribute("test", test);
-		model.addAttribute("activeTab", reviewTab);
+		model.addAttribute("chgReviewList", chgReviewList);
 		
-		return "forward:jhChgDetail";
+		return "jh/test";
 	}
 }
