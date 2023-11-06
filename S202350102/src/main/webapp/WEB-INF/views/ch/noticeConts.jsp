@@ -37,7 +37,8 @@
 			</tr>
 			<tr>
 				<td>내용</td>
-				<td>${noticeConts.conts }</td>
+				<td><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}"><p>
+				${noticeConts.conts }</td>
 			</tr>
 			<tr>
 				<td colspan="2">

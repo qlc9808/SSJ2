@@ -85,10 +85,11 @@
 					<td>${brdResultList.nick }</td>
 				</tr>
 				<c:set var="num" value="${num+1 }"/>
-			</c:if>
+			</c:if>			
 		</c:forEach>
 		
 	</table>
+	<a href="srchcommunity?srch_word=${srch_word }">더보기</a>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 
 </body>
