@@ -227,7 +227,7 @@ $(document).ready(function () {
         <!-- 게시판 검색 (옵션 제목, 작성자), 글작성 -->
     
         <div id="searchBox">
-            <input type="text" id="keyword" placeholder="검색어 입력">
+            <input type="text" id="keyword" placeholder="검색어 입력" value="${srch_word }">
             <button id="searchButton">검색</button>
         </div>
 
