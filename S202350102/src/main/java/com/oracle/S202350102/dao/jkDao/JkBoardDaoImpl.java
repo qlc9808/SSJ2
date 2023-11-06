@@ -64,7 +64,7 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	@Override
 	public int writeFormSharing(Board board) {
 	    System.out.println("JkBoardDaoImpl writeFormSharing start...");
-	    
+	   
 	    int insertResult=0;
 	    try {
 	        insertResult = session.insert("writeFormSharing", board);

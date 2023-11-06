@@ -2,11 +2,19 @@ package com.oracle.S202350102.controller;
 
 
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +25,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
@@ -32,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JkController {
-	
+	private static final Logger logger = LoggerFactory.getLogger(JkController.class);
 	private final JkUserService jus;
 	private final JkBoardService jbs;
 	
@@ -93,21 +103,57 @@ public class JkController {
 		
 		return "Sharing";
 		}
-	//쉐어링 게시물 등록
-	
-	@RequestMapping("/writeShare")
-	public String writeFormSharing(Board board, Model model, HttpSession session) {
-	    System.out.println("JkController writeFormSharing start...");
-	    
-	    int user_num = 0;
-	    if (session.getAttribute("user_num") != null) {
-	        user_num = (int) session.getAttribute("user_num");
-	     }
-	    int updateResult = jbs.writeFormSharing(board);
-	    model.addAttribute("updateResult", updateResult);
-	    model.addAttribute("user_num", user_num);
-	    
-	    return "jk/writeFormSharing";
+	@PostMapping("/sharingUpload")
+	public ResponseEntity<String> handleImageUpload(@RequestParam("file") MultipartFile file) {
+		logger.info("handleImageUpload method is called.");
+		System.out.println("upload start...");
+	    if (file.isEmpty()) {
+	        return new ResponseEntity<>("이미지를 선택해주세요", HttpStatus.BAD_REQUEST);
+	    }
+
+	    try {
+	        String uploadRootDir = System.getProperty("user.dir") + "/src/main/resources/static/images/b_upload";
+	        System.out.println("Upload Root Directory: " + uploadRootDir);
+
+	        // 파일 이름 생성
+	        Path filePath = Paths.get(uploadRootDir, file.getOriginalFilename());
+	        System.out.println("File Path: " + filePath);
+
+	        // 이미지 업로드 처리
+	        if (!Files.exists(filePath)) {
+	            try (InputStream inputStream = file.getInputStream()) {
+	                Files.copy(inputStream, filePath);
+	                String imageURL = "b_upload/" + file.getOriginalFilename();
+	                System.out.println("Image URL: " + imageURL);
+	                return new ResponseEntity<>(imageURL, HttpStatus.OK);
+	            }
+	        } else {
+	            return new ResponseEntity<>("동일한 이름의 파일이 이미 존재합니다", HttpStatus.CONFLICT);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>("이미지 업로드 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
+	@PostMapping("/writeShare")
+	public String writeShare(@RequestParam("file") MultipartFile file, Board board) {
+		logger.info("writeShare method is called.");
+		System.out.println("writeshare start..");
+	    ResponseEntity<String> imageResponse = handleImageUpload(file);
+
+	    if (imageResponse.getStatusCode().is2xxSuccessful()) {
+	        String imageURL = imageResponse.getBody(); // 이미지 업로드 후 반환된 URL 사용
+	        System.out.println("Image URL: " + imageURL); // Add this line for logging
+	        board.setImg(imageURL);
+	    } else {
+	        // 이미지 업로드 실패 시의 처리
+	    }
+
+
+	    jbs.writeFormSharing(board);
+
+	    return "jk/writeFormSharing"; // 이미지가 성공적으로 업로드되었을 때의 뷰 페이지
 	}
 
 	
