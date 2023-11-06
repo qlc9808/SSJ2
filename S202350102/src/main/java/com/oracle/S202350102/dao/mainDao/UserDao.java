@@ -5,5 +5,7 @@ import com.oracle.S202350102.dto.User1;
 public interface UserDao {
 
 	User1 userSelect(int user_num);
+	void  userLevelUp(int user_num);
+	void  userExpUp(User1 user1);
 
 }

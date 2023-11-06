@@ -15,23 +15,33 @@
 	</select>
 	
 	<select id="jhChgReviewList" parameterType="int" resultType="Board">
-		SELECT ROWNUM AS rn, chgbrdrn.* 
+		SELECT *
 		FROM (
-		        SELECT * 
+		        SELECT ROWNUM AS rn, chgbrdrn.* 
 		        FROM (
-		                SELECT b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date
-		                FROM board b
-		                INNER JOIN user1 u      ON b.user_num = u.user_num
-		                INNER JOIN challenge ch ON b.chg_id   = ch.chg_id
-		                WHERE ch.chg_id = #{chg_id}
-		                AND brd_lg     = 700
-		                AND brd_md     = 101
-		                AND b.brd_step = 0
-		             ) chgbrd
-		        ORDER BY chgbrd.reg_date DESC
-		     ) chgbrdrn
+		                SELECT * 
+		                FROM (
+		                        SELECT b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date
+		                        FROM board b
+		                        INNER JOIN user1 u      ON b.user_num = u.user_num
+		                        INNER JOIN challenge ch ON b.chg_id   = ch.chg_id
+		                        WHERE ch.chg_id = #{chg_id}
+		                        AND brd_lg     = 700
+		                        AND brd_md     = 101
+		                        AND b.brd_step = 0
+		                     ) chgbrd
+		                ORDER BY chgbrd.reg_date 
+		             ) chgbrdrn
+		        ) rnd
+		ORDER BY rnd.rn DESC
 	</select>
 	
+	<select id="jhUserStatus" parameterType="int" resultType="java.lang.String">
+		SELECT c.ctn
+		FROM user1 u
+		INNER JOIN comm c ON u.status_lg = c.lg AND  u.status_md = c.md
+		WHERE u.user_num = #{user_num}
+	</select>
 
 
 	

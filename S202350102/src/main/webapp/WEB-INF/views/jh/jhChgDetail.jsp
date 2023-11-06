@@ -14,54 +14,34 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	// yr 작성
-	function cJoinTest() {
-		
-//	function cJoinTest(p_num, p_id) {
-	
-		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
-		location.href="chgJoinPro?" + sendData;
-		
-		alert("신청완료");
-		/* if(${result} > 0) {
-			alert("이게 되나?");
-		} */
+  // 챌린지 신청 완료 후 body onload 실행
+	function chgResultModalClickTest() {
+		document.getElementById("chgResultModalClick").click();
+	}
 
-/*   $.ajax(
-      {
-    	alert("아작스가 아작이 나쓰");
-    	
-        url: "/chgJoinPro",
-        data: {user_num : p_num, chg_id : p_id},
-        dataType: 'text',
-        success: function (data) {
-          alert('chgJoinPro data -> ' + data);
-          if (data == '1') {
-            alert('신청 완료');
-            location.href = "jhChgDetail?chg_id=" + chg_id;
-            $('#o_status').load(location.href + ' #o_status');
-          }
-        }
-      }
-    ) 
-	} */
+  // 챌린지 신청 시 작동
+	function cJoin() {
+		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
+		location.href="chgJoinPro?" + sendData;     // YrController에서 작동됨
 	}
 	
 	
-	
-	
-	$(document).ready(function() {
-		var activeTab = '${activeTab}';
+/* 	$(document).ready(function() {
 		
-		if(activeTab) {
-			$('.nav-link.active').removeClass('active'); // 기존 활성 탭 비활성화
-	        $('a#reviewTab').addClass('active'); // 새로운 탭 활성화
-	    }
+			$('#description').removeClass('active'); // 기존 활성 탭 비활성화
+	        $('#review').addClass('active'); // 새로운 탭 활성화
+	        
+			$('#descriptionTab').removeClass('show active'); // 기존 활성 탭 비활성화
+	        $('#reviewTab').addClass('show active'); // 새로운 탭 활성화
+	        
+			const offset = $("#reviewTab").offset();
+			$('html, body').animate({scrollTop: offset.top}, 0); 
 	});
-
+ */
 
 </script> 
 </head>
-<body>
+<body onload="chgResultModalClickTest()">  <!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -152,9 +132,9 @@
                
                   <div class="form-group">
                     <div class="row gx-5 mb-7">
+                      <!-- 참여하기 -->
+                      <!-- YR 작업 중 -->
                       <div class="col-12 col-lg">
-                        <!-- 참여하기 -->
-                        <!-- YR 작업 중 -->
                         <c:choose>
                         
                           <c:when test="${sessionScope.user_num != null}">
@@ -208,8 +188,7 @@
                                           </div>
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-									<%--    <button type="button" class="btn btn-danger" onclick="cJoinTest(${user.user_num}, ${chg.chg_id})">참여하기</button> --%>
-                                            <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
+                                            <button type="button" class="btn btn-danger" onclick="cJoin()">참여하기</button>
                                             <form id="cJoinForm">
                                               <input type="hidden" name="user_num" value="${user.user_num}">
                                               <input type="hidden" name="chg_id" value="${chg.chg_id}">
@@ -218,10 +197,13 @@
                                         </div>
                                       
                                       </c:otherwise>
+                                      
                                     </c:choose>
+                                    
                                   </c:otherwise>
                         
                                 </c:choose>
+                                
                               </div>
                             </div>
                         
@@ -236,28 +218,41 @@
                         
                         </c:choose>
                         
-                        
-                        
-                        
-                        
-                        
-
-                      </div>
-
-
-
-
-                      <!-- 찜하기 -->
-                      <div class="col-12 col-lg-auto">
-
-                        <!-- Wishlist -->
-                        <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button">
-                          	챌린지 찜 <i class="fe fe-heart ms-2"></i>
+                        <!-- 참여완료 YN -->
+                        <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
+                          참여완료
                         </button>
 
+                        <!-- 챌린지 참여 성공 -->
+                        <c:if test="${insertResult > 0}">
+                          <div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  <p>챌린지 참여가 완료되었습니다</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </c:if>
+
+                      </div>
+                      
+                        
+                      <!-- 찜하기 -->
+                      <div class="col-12 col-lg-auto">
+                      
+                        <!-- Wishlist -->
+                        <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button">
+                          챌린지 찜 <i class="fe fe-heart ms-2"></i>
+                        </button>
+                      
                       </div>
                     </div>
-
+                  </div>
 
                     <!-- Share -->
                     <p class="mb-0">
@@ -303,12 +298,13 @@
                              소세지들
               </a>
               
-              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
-              <a class="nav-link" data-bs-toggle="tab"onclick="location.href='/reviewTab?chg_id=${chg.chg_id }'">
-                             후기 게시판
-              </a>
-            </div>
-
+              <c:if test="${chg.stateCtn == '종료'}">
+	              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
+	              <a class="nav-link" data-bs-toggle="tab" href="#reviewTab">
+	                             후기 게시판
+	              </a>
+	              </div>
+			        </c:if>
             <!-- Content -->
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
@@ -335,41 +331,164 @@
               
               
               
-              
-              <div class="tab-pane fade" id="reviewTab">
-                <div class="row justify-content-center py-9">
-                  <div class="col-12 col-lg-10 col-xl-8">
-
-                    <!-- Table -->
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-sm table-hover">
-                        <thead>
-                          <tr>
-                            <th>글번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>조회수</th>
-                            <th>작성일</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <c:forEach var="review" items="${chgReviewList}">
-	                          <tr>
-	                            <td>${review.rn }</td>
-	                            <td>${review.title }</td>
-	                            <td>${review.nick }</td>
-	                            <td>${review.view_cnt }</td>
-	                            <td>${review.reg_date }</td>
-	                          </tr>
-                          </c:forEach>
-                        </tbody>
-                      </table>
-                    </div>
-
+            <c:if test="${chg.stateCtn == '종료'}">
+   	              <div class="tab-pane fade" id="reviewTab">
+	                <div class="row justify-content-center py-9">
+	                  <div class="col-12 col-lg-10 col-xl-8">
+	                  	 <!-- Heading -->
+				            <h4 class="mb-10 text-center">후기 게시판</h4>
+				
+				            <!-- Header -->
+				            <div class="row align-items-center">
+				              <div class="col-12 col-md-auto">
+				
+				                <strong class="fs-sm ms-2">유저 아이디</strong>
+				               		
+				              </div>
+				              <div class="col-12 col-md text-md-center">
+				
+				              
+				
+				                <!-- Count -->
+				                <strong class="fs-sm ms-2">총 리뷰수</strong>
+				
+				              </div>
+				              <div class="col-12 col-md-auto">
+				
+				                <!-- Button -->
+				                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
+				                  Write Review
+				                </a>
+				
+				              </div>
+				            </div>
+				
+				            <!-- New Review -->
+				            <div class="collapse" id="reviewForm">
+				
+				              <!-- Divider -->
+				              <hr class="my-8">
+				
+				              <!-- Form -->
+				              <form>
+				                <div class="row">
+				                  <div class="col-12 mb-6 text-center">
+				
+				                    <!-- Text -->
+				                    <p class="mb-1 fs-xs">
+				                      Score:
+				                    </p>
+				
+				                    <!-- Rating form -->
+				                    <div class="rating-form">
+				
+				                      <!-- Input -->
+				                      <input class="rating-input" type="range" min="1" max="5" value="5">
+				
+				                      <!-- Rating -->
+				                      <div class="rating h5 text-dark" data-value="5">
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                      </div>
+				
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12 col-md-6">
+				
+				                    <!-- Name -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewName">Your Name:</label>
+				                      <input class="form-control form-control-sm" id="reviewName" type="text" placeholder="Your Name *" required>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12 col-md-6">
+				
+				                    <!-- Email -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewEmail">Your Email:</label>
+				                      <input class="form-control form-control-sm" id="reviewEmail" type="email" placeholder="Your Email *" required>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12">
+				
+				                    <!-- Name -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+				                      <input class="form-control form-control-sm" id="reviewTitle" type="text" placeholder="Review Title *" required>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12">
+				
+				                    <!-- Name -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewText">Review:</label>
+				                      <textarea class="form-control form-control-sm" id="reviewText" rows="5" placeholder="Review *" required></textarea>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12 text-center">
+				
+				                    <!-- Button -->
+				                    <button class="btn btn-outline-dark" type="submit">
+				                      Post Review
+				                    </button>
+				
+				                  </div>
+				                </div>
+				              </form>
+				
+				            </div>
+	                  	
+	                    <!-- Table -->
+	                    <div class="table-responsive">            
+							<!-- 글번호인 ROWNUM rn을 역순으로 출력하고 싶은데 어떻게? -->
+							<table class="table table-bordered table-sm table-hover" border="1">
+							       <thead>
+							         <tr>
+							           <th>글번호</th>
+							           <th>제목</th>
+							           <th>작성자</th>
+							           <th>조회수</th>
+							           <th>작성일</th>
+							         </tr>
+							       </thead>
+							       <tbody>
+							         <c:forEach var="review" items="${chgReviewList}">
+							          <tr>
+							            <td>${review.rn }</td>
+							            <td>${review.title }</td>
+							            <td>${review.nick }</td>
+							            <td>${review.view_cnt }</td>
+							            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
+							          </tr>
+							         </c:forEach>
+							       </tbody>
+						     </table>
+	                    </div>
 
                   </div>
                 </div>
               </div>
+            
+			</c:if>	
+					
             </div>
 
           </div>

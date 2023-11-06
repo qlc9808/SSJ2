@@ -1,20 +1,27 @@
 package com.oracle.S202350102.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
@@ -94,16 +101,23 @@ public class ChController {
 	
 	// notice 작성	
 	@PostMapping("noticeWrite")
-	public String noticeWrite(Board board, Model model, HttpServletRequest request, HttpSession session) {
-		
+	public String noticeWrite(Board board, Model model, HttpServletRequest request, MultipartFile file1) throws IOException {
 		System.out.println("ChController noticeWrite Start...");
+		
+	
+		
+		
 		System.out.println("brd_md->"+ board.getBrd_md());
 		int result = chBoardService.noticeWrite(board);
-		System.out.println("Insert result->" + result);
+		System.out.println("Insert result->" + result);	
+
 		request.setAttribute("brd_md", board.getBrd_md());
 		
-		return "forward:notice";
+		return "forward:notice";		
+		
 	}
+	
+	
 	// notice 조회
 	@GetMapping("noticeConts")
 	public String noticeConts(int brd_num, Model model,HttpSession session) {
@@ -255,6 +269,23 @@ public class ChController {
 		return "/ch/srchResult";
 	}
 	
+	@RequestMapping(value = "srchcommunity")
+	public String srchcommunity(String srch_word,Model model) {
+		System.out.println("ChController srchcommunity Start...");
+		if(srch_word == null || srch_word=="") {
+			return "redirect:searching";
+		}
+		List<Board> srch_brdResult = chSearchService.brdSearching(srch_word); // 자유게시판
+		
+		model.addAttribute("listCommunity",srch_brdResult);
+		model.addAttribute("srch_word",srch_word);
+		
+		return "listCommunity";
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "deleteHis")
 	public String deleteHis(String srch_word, HttpSession session) {
 		System.out.println("ChController deleteHis Start...");
@@ -266,5 +297,32 @@ public class ChController {
 		
 		return "redirect:search";
 	}
+	
+	
+	
+	
+	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
+		UUID uid = UUID.randomUUID();  // universally unique identifier 국제 유일 식별자, 해당 객체를 사용한다면 같은 파일을 올려도 서로 다른 이름을 갖는다. 
+		// requestPath = requestPath + "/resources/image";
+		System.out.println("uploadPath->" + uploadPath);
+		//Directory 생성, jsp는 폴더가 없을 때 수동으로 폴더를 만들어주지만 spring boot는 없을경우 자동으로 만들 수 있음 
+		File fileDirectory = new File(uploadPath);  
+		if (!fileDirectory.exists()) { // 해당 경로에 폴더가 없다면 신규폴더를 생성 
+			//신규 폴더 생성 
+			fileDirectory.mkdirs(); // 해당 메서드를 사용하면 자동으로 디렉토리(폴더)를 만들 수 있음 
+			System.out.println("시스템 업로드용 폴더 생성 :" + uploadPath);			
+		}
+		
+		String savedName = uid.toString() + "_" + originalName;
+		log.info("saveName : " + savedName); 
+		File target = new File(uploadPath, savedName);
+		//file target = new file(requestPath, savedName
+		// file UpLoad ----> uploadPath / UUID + _ + originalname
+		FileCopyUtils.copy(fileData, target);  // import org.springframework.util.FileCopyUtils;
+		// 용량, target을 넣으면 내부적으로 업로드
+		// 만든 타겟을 카피하면 업로드, 시스템적으로 떨어져 있더라도 업로드 시킨다.
+		return savedName;
+	}
+	
 	
 }
