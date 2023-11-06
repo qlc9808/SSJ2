@@ -15,7 +15,6 @@ import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
-import com.oracle.S202350102.service.main.UserServiceImpl;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,10 +33,12 @@ public class JhController {
 	
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model ) {
+	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr) {
+		//																						  yr작성(챌린지 신청 후 결과 값 불러오기)
+
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
-		
+
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
@@ -55,16 +56,31 @@ public class JhController {
 		System.out.println("JhController chgDetail chg -> " + chgDetail);
 		model.addAttribute("chg", chgDetail);
 		
+		
 		// yr 작성
 		// challenger 테이블에서 참여인원 가져오기용
 		int chgrParti = ycs.selectChgrParti(chg_id);
+		System.out.println("JhController chgDetail chgrParti -> " + chgrParti);
+		model.addAttribute("chgrParti", chgrParti);
+		
+		// challenger 참여 유무 판단용
 		Challenger chgr = new Challenger();
 		chgr.setUser_num(userNum);
 		chgr.setChg_id(chg_id);
 		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
-		model.addAttribute("chgrParti", chgrParti);
+		System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
 		model.addAttribute("chgrYN", chgrJoinYN);
 		
+		// 챌린지 신청 완료 유무 판단용
+		int insertResult = 0;
+		if(insertResultStr != null) insertResult = Integer.parseInt(insertResultStr);
+		System.out.println("JhController chgDetail insertResult -> " + insertResult);
+		model.addAttribute("insertResult", insertResult);
+		
+		// 소세지들 출력용
+		List<User1> listSsj = ycs.getListSsj(chg_id);
+		System.out.println("JhController chgDetail listSsj -> " + listSsj);
+		model.addAttribute("listSsj", listSsj);
 		
 		return "jh/jhChgDetail";
 	}

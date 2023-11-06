@@ -14,39 +14,16 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	// yr 작성
-	function cJoinTest() {
-		
-//	function cJoinTest(p_num, p_id) {
-	
-		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
-		location.href="chgJoinPro?" + sendData;
-		
-		alert("신청완료");
-		/* if(${result} > 0) {
-			alert("이게 되나?");
-		} */
-
-/*   $.ajax(
-      {
-    	alert("아작스가 아작이 나쓰");
-    	
-        url: "/chgJoinPro",
-        data: {user_num : p_num, chg_id : p_id},
-        dataType: 'text',
-        success: function (data) {
-          alert('chgJoinPro data -> ' + data);
-          if (data == '1') {
-            alert('신청 완료');
-            location.href = "jhChgDetail?chg_id=" + chg_id;
-            $('#o_status').load(location.href + ' #o_status');
-          }
-        }
-      }
-    ) 
-	} */
+  // 챌린지 신청 완료 후 body onload 실행
+	function chgResultModalClickTest() {
+		document.getElementById("chgResultModalClick").click();
 	}
-	
-	
+
+  // 챌린지 신청 시 작동
+	function cJoin() {
+		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
+		location.href="chgJoinPro?" + sendData;     // YrController에서 작동됨
+	}
 	
 	
 	$(document).ready(function() {
@@ -61,7 +38,7 @@
 
 </script> 
 </head>
-<body>
+<body onload="chgResultModalClickTest()">  <!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -152,9 +129,9 @@
                
                   <div class="form-group">
                     <div class="row gx-5 mb-7">
+                      <!-- 참여하기 -->
+                      <!-- YR 작업 중 -->
                       <div class="col-12 col-lg">
-                        <!-- 참여하기 -->
-                        <!-- YR 작업 중 -->
                         <c:choose>
                         
                           <c:when test="${sessionScope.user_num != null}">
@@ -208,8 +185,7 @@
                                           </div>
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-									<%--    <button type="button" class="btn btn-danger" onclick="cJoinTest(${user.user_num}, ${chg.chg_id})">참여하기</button> --%>
-                                            <button type="button" class="btn btn-danger" onclick="cJoinTest()">참여하기</button>
+                                            <button type="button" class="btn btn-danger" onclick="cJoin()">참여하기</button>
                                             <form id="cJoinForm">
                                               <input type="hidden" name="user_num" value="${user.user_num}">
                                               <input type="hidden" name="chg_id" value="${chg.chg_id}">
@@ -218,10 +194,13 @@
                                         </div>
                                       
                                       </c:otherwise>
+                                      
                                     </c:choose>
+                                    
                                   </c:otherwise>
                         
                                 </c:choose>
+                                
                               </div>
                             </div>
                         
@@ -235,17 +214,30 @@
                           </c:when>
                         
                         </c:choose>
-                        
-                        
-                        
-                        
-                        
-                        
 
                       </div>
-
-
-
+                      
+                      <!-- 참여완료 YN -->
+                      <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
+                        참여완료
+                      </button>
+                      
+                      <!-- 챌린지 참여 성공 -->
+                      <c:if test="${insertResult > 0}">
+                        <div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                                <p>챌린지 참여가 완료되었습니다</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </c:if>
+                        
 
                       <!-- 찜하기 -->
                       <div class="col-12 col-lg-auto">

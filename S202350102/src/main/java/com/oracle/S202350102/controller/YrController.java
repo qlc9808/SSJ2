@@ -27,14 +27,14 @@ public class YrController {
 //	}
 //	test
 	
-	@RequestMapping(value = "ssjFriends")
-	public String listSsj(int chg_id, Model model) {
-		System.out.println("YrController listSsj Start...");
-		List<User1> listSsj = ycs.getListSsj(chg_id);
-		
-		model.addAttribute("listSsj", listSsj);
-		return "yr/ssjFriends";
-	}
+//	@RequestMapping(value = "ssjFriends")
+//	public String listSsj(int chg_id, Model model) {
+//		System.out.println("YrController listSsj Start...");
+//		List<User1> listSsj = ycs.getListSsj(chg_id);
+//		
+//		model.addAttribute("listSsj", listSsj);
+//		return "yr/ssjFriends";
+//	}
 	
 	// jhChgDetail로 합침
 	// 일단 작업 중지
@@ -45,13 +45,13 @@ public class YrController {
 		return "yr/chgJoin";
 	}
 	
+	// chgDetail로 출력됨
 	@RequestMapping(value = "chgJoinPro")
 	public String chgJoinPro(Challenger chgr, Model model) {
 		System.out.println("YrController chgJoinPro Start...");
 		int insertResult = ycs.insertChgr(chgr);
 		System.out.println("YrController Insert Success...");
-//		String stringResult = Long.toString(insertResult);
-		model.addAttribute("result", insertResult);
-		return "forward:jhChgDetail?chg_id=" + chgr.getChg_id();
+		model.addAttribute("insertResult", insertResult);
+		return "forward:chgDetail?chg_id=" + chgr.getChg_id() + "&insertResultStr=" + insertResult;
 	}
 }
