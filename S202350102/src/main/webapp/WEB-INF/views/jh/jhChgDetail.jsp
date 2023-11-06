@@ -224,7 +224,6 @@
                       <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
                         참여완료
                       </button>
-                      
                       <!-- 챌린지 참여 성공 -->
                       <c:if test="${insertResult > 0}">
                         <div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
