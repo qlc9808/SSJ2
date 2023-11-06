@@ -89,9 +89,9 @@ public class JhController {
 		model.addAttribute("insertResult", insertResult);
 		
 		// 소세지들 출력용
-		List<User1> listSsj = ycs.getListSsj(chg_id);
-		System.out.println("JhController chgDetail listSsj -> " + listSsj);
-		model.addAttribute("listSsj", listSsj);
+//		List<User1> listSsj = ycs.getListSsj(chg_id);
+//		System.out.println("JhController chgDetail listSsj -> " + listSsj);
+//		model.addAttribute("listSsj", listSsj);
 		
 		return "jh/jhChgDetail";
 	}

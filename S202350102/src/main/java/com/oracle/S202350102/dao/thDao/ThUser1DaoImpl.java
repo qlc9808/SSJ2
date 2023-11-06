@@ -44,6 +44,20 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 		
 		return deleteUserCnt;
 	}
+
+	@Override
+	public int updateUserPrem(int user_num) {
+		System.out.println("User1DaoImpl updateUserPrem Start...");
+		System.out.println("User1DaoImpl updateUserPrem user_num --> " + user_num);
+		int updateCount = 0;
+		try {
+			updateCount = session.update("thUser1PremUpdate", user_num);
+		} catch (Exception e) {
+			System.out.println("User1DaoImpl updateUserPrem Exception --> " + e.getMessage());
+		}
+		
+		return updateCount;
+	}
 	
 	
 }
