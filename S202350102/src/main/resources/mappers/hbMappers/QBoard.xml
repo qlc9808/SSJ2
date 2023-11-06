@@ -12,7 +12,7 @@
 	      AND brd_lg = 400
 	      order by b.reg_date desc
 	    ) a 
-	    WHERE rn BETWEEN 1 AND 5
+	    WHERE rn BETWEEN 1 AND 20
 	</select>
 	
 	<select id="qBoardSelect" parameterType="int" resultType="Board">
