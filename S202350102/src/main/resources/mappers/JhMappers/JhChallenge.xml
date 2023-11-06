@@ -43,7 +43,12 @@
 		WHERE u.user_num = #{user_num}
 	</select>
 
-
+	<select id="jhReviewContent" parameterType="int" resultType="Board">
+		SELECT b.brd_num, b.title, b.conts, b.reg_date, u.nick, b.view_cnt
+		FROM board b
+		INNER JOIN user1 u ON b.user_num = u.user_num
+		WHERE brd_num = #{brd_num}
+	</select>
 	
 	
 </mapper> 

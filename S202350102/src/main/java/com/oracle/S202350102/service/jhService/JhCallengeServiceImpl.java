@@ -47,6 +47,14 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return userStatus;
 	}
 
+	@Override
+	public Board reviewContent(int brd_num) {
+		System.out.println("JhCallengeServiceImpl reviewContent Start...");
+		Board reviewContent = jhChgDao.reviewContent(brd_num);
+		
+		return reviewContent;
+	}
+
 
 	
 	

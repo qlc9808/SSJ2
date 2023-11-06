@@ -298,13 +298,12 @@
                              소세지들
               </a>
               
-              <c:if test="${chg.stateCtn == '종료'}">
-	              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
-	              <a class="nav-link" data-bs-toggle="tab" href="#reviewTab">
-	                             후기 게시판
-	              </a>
-	            </div>
-			</c:if>
+              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
+              <a class="nav-link" data-bs-toggle="tab" href="#reviewTab">
+                             후기 게시판
+              </a>
+            </div>
+			
             <!-- Content -->
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
@@ -330,8 +329,8 @@
               </div>
               
               
-              
-            <c:if test="${chg.stateCtn == '종료'}">
+            <c:choose>
+            	<c:when test="${chg.stateCtn == '종료'}">
    	              <div class="tab-pane fade" id="reviewTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
@@ -456,38 +455,49 @@
 				
 				            </div>
 	                  	
-	                    <!-- Table -->
-	                    <div class="table-responsive">            
-							<!-- 글번호인 ROWNUM rn을 역순으로 출력하고 싶은데 어떻게? -->
-							<table class="table table-bordered table-sm table-hover" border="1">
-							       <thead>
-							         <tr>
-							           <th>글번호</th>
-							           <th>제목</th>
-							           <th>작성자</th>
-							           <th>조회수</th>
-							           <th>작성일</th>
-							         </tr>
-							       </thead>
-							       <tbody>
-							         <c:forEach var="review" items="${chgReviewList}">
-							          <tr>
-							            <td>${review.rn }</td>
-							            <td>${review.title }</td>
-							            <td>${review.nick }</td>
-							            <td>${review.view_cnt }</td>
-							            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
-							          </tr>
-							         </c:forEach>
-							       </tbody>
-						     </table>
-	                    </div>
+		                    <!-- Table -->
+		                    <div class="table-responsive">            
+								<!-- 글번호인 ROWNUM rn을 역순으로 출력하고 싶은데 어떻게? -->
+								<table class="table table-bordered table-sm table-hover" border="1">
+								       <thead>
+								         <tr>
+								           <th>글번호</th>
+								           <th>제목</th>
+								           <th>작성자</th>
+								           <th>조회수</th>
+								           <th>작성일</th>
+								         </tr>
+								       </thead>
+								       <tbody>
+								         <c:forEach var="review" items="${chgReviewList}">
+								          <tr>
+								            <td>${review.rn }</td>
+								            <td><a href='reviewContent?brd_num=${review.brd_num}'>${review.title }</a></td>
+								            <td>${review.nick }</td>
+								            <td>${review.view_cnt }</td>
+								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
+								          </tr>
+								         </c:forEach>
+								       </tbody>
+							     </table>
+	                    	</div>
 
-                  </div>
-                </div>
-              </div>
+                  			</div>
+               			</div>
+              		</div>
+           		</c:when>
             
-			</c:if>	
+            	<c:otherwise>
+            	<div class="tab-pane fade" id="reviewTab">
+	                <div class="row justify-content-center py-9" >
+	                  <div class="col-12 col-lg-10 col-xl-8">
+            			<h5>챌린지가 종료된 후 후기를 써주세요</h5>
+            		  </div>
+            		</div>
+            	</div>
+            	</c:otherwise>
+            </c:choose>
+            
 					
             </div>
 

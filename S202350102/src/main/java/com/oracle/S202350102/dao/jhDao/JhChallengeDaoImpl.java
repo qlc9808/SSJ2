@@ -70,6 +70,21 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return userStatus;
 	}
 
+	@Override
+	public Board reviewContent(int brd_num) {
+		System.out.println("JhChallengeDaoImpl reviewContent Start...");
+		Board reviewContent = null;
+		
+		try {
+			reviewContent = session.selectOne("jhReviewContent" ,brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewContent e.getMessage() -> " + e.getMessage());
+		}
+		System.out.println("JhChallengeDaoImpl chgReviewList  reviewContent -> " + reviewContent);
+		
+		return reviewContent;
+	}
+
 
 
 }

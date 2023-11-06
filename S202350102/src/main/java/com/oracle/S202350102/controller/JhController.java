@@ -97,32 +97,49 @@ public class JhController {
 	}
 	
 	
-	//챌린지 후기목록 조회
-	@RequestMapping(value = "reviewTab")
-	public String chgReviewList(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
-		System.out.println("JhController reviewList Start...");
-		System.out.println("JhController reviewList chg_id -> " + chg_id);
-		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
-		
-		//세션에서 회원번호 가져옴
-		int userNum = 0;
-		if(session.getAttribute("user_num") != null) {
-			userNum = (int) session.getAttribute("user_num");
-			System.out.println("JhController chgDetail userNum -> " + userNum);
-		}
-		
-		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
-		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController chgDetail userNum -> " + user);
-		
-		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
-		model.addAttribute("chgReviewList", chgReviewList);
-		
-		model.addAttribute("user", user);
-		
-		return "jh/test3";
-	}
+	//챌린지 후기목록 조회 -> chgDetail로 합침
+//	@RequestMapping(value = "reviewTab")
+//	public String chgReviewList(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
+//		System.out.println("JhController reviewList Start...");
+//		System.out.println("JhController reviewList chg_id -> " + chg_id);
+//		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
+//		
+//		//세션에서 회원번호 가져옴
+//		int userNum = 0;
+//		if(session.getAttribute("user_num") != null) {
+//			userNum = (int) session.getAttribute("user_num");
+//			System.out.println("JhController chgDetail userNum -> " + userNum);
+//		}
+//		
+//		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+//		User1 user = userService.userSelect(userNum);
+//		System.out.println("JhController chgDetail userNum -> " + user);
+//		
+//		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
+//		model.addAttribute("chgReviewList", chgReviewList);
+//		
+//		model.addAttribute("user", user);
+//		
+//		return "jh/test3";
+//	}
+//	
 	
+	//챌린지 글 내용 조회
+	@RequestMapping(value = "reviewContent")
+	public String reviewContent(@RequestParam int brd_num, HttpSession session, Model model) {
+		System.out.println("JhController reviewContent Start...");
+		System.out.println("JhController reviewContent brd_num -> " + brd_num);
+		
+		//챌린지 글 내용 조회
+		Board reviewContent = jhCService.reviewContent(brd_num);
+		
+		//챌린지 해당 글에 대한 댓글 조회
+//		Board reviewReply = jhCService.reviewReply(brd_num);
+		
+		System.out.println("JhController reviewContent reviewContent -> " + reviewContent);
+		model.addAttribute("reviewContent", reviewContent);
+		return "jh/jhReviewContent";
+	}
 	
 	
 	

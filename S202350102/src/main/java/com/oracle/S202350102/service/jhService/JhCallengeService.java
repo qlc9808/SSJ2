@@ -14,7 +14,10 @@ public interface JhCallengeService {
 
 
 	String 			userStatus(int userNum);
- 
+
+
+	Board 			reviewContent(int brd_num);
+  
 
 
 }
