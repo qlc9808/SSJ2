@@ -19,5 +19,11 @@
 		WHERE  	user_id   = #{user_id}
 		AND		user_pswd = #{user_pswd}	
 	</update>
+	
+	<update id="thUser1PremUpdate" parameterType="int">
+		UPDATE 	user1
+		SET	   	status_md = 101
+		WHERE  	user_num   = #{user_num}
+	</update>
 </mapper>
 

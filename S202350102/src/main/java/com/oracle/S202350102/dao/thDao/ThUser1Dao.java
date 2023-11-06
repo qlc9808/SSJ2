@@ -7,5 +7,6 @@ public interface ThUser1Dao {
 	int 			insertUser1(User1 user1);
 	User1			login(User1 user1);
 	int 			deleteUser(User1 user1);
+	int 			updateUserPrem(int user_num);
 
 }

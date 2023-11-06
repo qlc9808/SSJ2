@@ -39,4 +39,13 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 		return deleteUserCnt;
 	}
 
+
+	@Override
+	public int updateUserPrem(int user_num) {
+		System.out.println("ThUser1ServiceImpl updateUserPrem Start...");
+		int updateCount = ud1.updateUserPrem(user_num);
+		System.out.println("ThUser1ServiceImpl updateUserPrem result --> " + updateCount);
+		return updateCount;
+	}
+
 }
