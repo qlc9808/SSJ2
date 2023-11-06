@@ -13,11 +13,16 @@ public interface YaCommunityService {
 	int          insertCommunity(Board board);
 	int          updateCommunity(Board board);
 	int          deleteCommunity(int brd_num);
+	
 	List<Board>  listSearchBoard(String keyword);
 	List<Board>  listBoardSort(String sort);
 	User1        userSelect(int user_num);
 	List<Board>  listComment(int brd_num);
-	void          commentWrite(Board board);
+	
+	void         commentWrite(Board board);
+	Board        commentSelect(int brd_num);
+	void		 commentUpdate(Board board);
+	void         commentDelete(Board board);
 
 	
 	

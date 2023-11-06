@@ -68,25 +68,19 @@ public class YaController {
 		}
 		
 	
-		
 		//조회수 증가
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
-		
-		
+			
 		model.addAttribute("board", board);
 		model.addAttribute("upViewCnt", upViewCnt);	
 	    model.addAttribute("loggedIn", user_num!= 0);
-		
-		
+			
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
 	    System.out.println("user_num:"+board.getUser_num());
 	    System.out.println("user_id:"+board.getUser_id());
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
-		
-	    
-	 
 	
 		return"ya/detailCommunity";
 	}
@@ -97,13 +91,12 @@ public class YaController {
 			System.out.println("YaController writeFormCommunity Start... ");
 		
 			if(session.getAttribute("user_num") != null) {
+				
 				return "ya/writeFormCommunity"; 
 			}
 			System.out.println("user_num?"+ session.getAttribute("user_num"));
-		
-			return "redirect:/loginForm";
+				return "redirect:/loginForm";
 				
-
 			}
 
 	 // 게시글 작성
@@ -117,18 +110,21 @@ public class YaController {
 				user_num = (int) session.getAttribute("user_num");
 			}
 			board.setUser_num(user_num);
-			
+	
 			int insertResult = ycs.insertCommunity(board);
 			board.setUser_num(user_num);
 			
+			System.out.println("brd_lg :"+board.getBrd_lg());
+			System.out.println("brd_md :"+board.getBrd_md());
+
 			if (insertResult >0) 
-				return "redirect:listCommunity";
-				
+				return "redirect:listCommunity";			
 				else {
 					 model.addAttribute("msg", "작성 실패, 확인해보세요");
 				 }
 			return "forward:writeCommunity";
 		 }
+		
 		
 		// 게시글 수정폼이동
 		@GetMapping(value="/updateCommunityForm")
@@ -144,6 +140,7 @@ public class YaController {
 			
 			return "ya/updateCommunityForm";
 		}
+		
 		
 		// 게시글 수정
 		@GetMapping(value="/updateCommunity")
@@ -196,37 +193,101 @@ public class YaController {
 		    return listSortedBoard;
 		}
 		
-		//상세 게시글 답글 조회
-		@RequestMapping("/listComment")
+		//상세 게시글 댓글  조회
+		@RequestMapping(value="/listComment", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Board> listComment(@RequestParam int brd_num) {
+		public List<Board> listComment(@RequestParam("brd_num") int brd_num) {
 			System.out.println("YaController ycs.listComment start....");
+			
+			//부모글(본글)의 brd_num을 사용하여 댓글조회  부모글 brd_num = 댓글 brd_group = 부모글 brd_group
+			
 			List<Board> listComment = ycs.listComment(brd_num);
+			System.out.println("YaController listComment size?" + listComment.size());
+	
 			return listComment; 
 		}
 		
-		//게시글 답글 잙성
+		//게시글 답글 작성
 		@RequestMapping("/commentWrite")
 		@ResponseBody
-		public Map<String, Object> commentWrite(@RequestBody Board board, HttpSession session){
+		public Map<String, String> commentWrite(HttpSession session, HttpServletRequest request, @ModelAttribute Board board) {
+		    Map<String, String> response = new HashMap<>();
+
+		    try {
+		        System.out.println("YaController ycs.commentWrite start....");
+
+		        int user_num = 0;
+		        if (session.getAttribute("user_num") != null) {
+		            user_num = (int) session.getAttribute("user_num");
+		            board.setUser_num(user_num);
+		              try {
+		    	            int brd_num = Integer.parseInt(request.getParameter("brd_num"));
+				            board.setBrd_num(brd_num);
+		                } catch (NumberFormatException e) {
+		                    // 숫자로 변환할 수 없는 경우에 대한 예외 처리
+		                    response.put("result", "failure");
+		                    response.put("error", "Invalid brd_num format");
+		                    return response;
+		                }
+		            
+		            ycs.commentWrite(board);
+		            // 값이 담기는지 확인
+		            System.out.println("board user_num?" + board.getUser_num());
+		            System.out.println("board conts?" + board.getConts());
+		            System.out.println("board brd_num?" + board.getBrd_num());
+
+		            // 성공한 경우, 상세 페이지로 리다이렉트
+		            response.put("result", "success");
+		            response.put("redirectUrl", "/ya/detailCommunity?brd_num=" + board.getBrd_num());
+		        } else {
+		            // 사용자가 로그인되지 않은 경우
+		            response.put("result", "failure");
+		            response.put("error", "User not logged in");
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        // 실패한 경우
+		        response.put("result", "failure");
+		        response.put("error", "An error occurred");
+		    }
+
+		    return response;
+		}
+		// 게시글 댓글 수정 전 값 불러오기
+		@GetMapping(value="/commentSelect")
+		public String commentSelect(int brd_num, Model model) {
+			System.out.println("YaController commentSelect start...");
+			
+			Board board = ycs.commentSelect(brd_num);	
+			model.addAttribute("Board", board);
+			System.out.println("board 댓글 수정 전 conts?"+board.getConts());
+			return "/ya/detailCommunity";
+			
+		}	
+		// 게시글 수정
+		@PostMapping(value="/commentUpdate")
+		public Map<String, Object> commentUpdate(@RequestParam("brd_num")int brd_num, @RequestParam("conts") String conts){
 			Map<String, Object> map = new HashMap<String, Object>();
 			try {
-				System.out.println("YaController ycs.commentWrite start....");
+				Board board = new Board();
+				board.setBrd_num(brd_num);
+				board.setConts(conts);
+				ycs.commentUpdate(board);
 				
-				int user_num = 0;
-				if (session.getAttribute("user_num") != null) {
-					user_num = (int) session.getAttribute("user_num");
-					board.setUser_num(user_num);
-					ycs.commentWrite(board);
-					map.put("result", "success");
+				System.out.println("board 댓글 수정후 conts?"+board.getConts());
 				
-				} else {
-		            map.put("result", "fail");
-		        }
-		   } catch (Exception e) {
-		        e.printStackTrace();
-		        map.put("result", "fail");
-		   }
-		   return map;
+				map.put("result", "success");
+				
+			} catch (Exception e) {
+				System.out.println("YaController commentUpdate e.getmessage?"+e.getMessage());
+				map.put("result", "fail");
+				map.put("error", "An error occurred");
+			}
+			return map;
 		}
-}
+	
+		
+		
+		
+}		
