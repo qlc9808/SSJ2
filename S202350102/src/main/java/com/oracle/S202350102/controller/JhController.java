@@ -1,11 +1,13 @@
 package com.oracle.S202350102.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -49,12 +51,10 @@ public class JhController {
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
-		model.addAttribute("user", user);
 		
 		//챌린지 상세정보 조회
 		Challenge chgDetail = jhCService.chgDetail(chg_id);
 		System.out.println("JhController chgDetail chg -> " + chgDetail);
-		model.addAttribute("chg", chgDetail);
 		
 		
 		// yr 작성
@@ -69,6 +69,9 @@ public class JhController {
 		chgr.setChg_id(chg_id);
 		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
 		System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
+		model.addAttribute("chg", chgDetail);
+		model.addAttribute("user", user);
+		model.addAttribute("chgrParti", chgrParti);
 		model.addAttribute("chgrYN", chgrJoinYN);
 		
 		// 챌린지 신청 완료 유무 판단용
@@ -103,13 +106,22 @@ public class JhController {
 		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
-		model.addAttribute("user", user);
 		
 		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
 		model.addAttribute("chgReviewList", chgReviewList);
 		
-		return "jh/test";
+		model.addAttribute("user", user);
+		
+		return "forward:chgDetail";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//챌린지 신청 페이지로 이동
@@ -128,7 +140,12 @@ public class JhController {
 		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
+		
+		//유저의 회원상태 가져옴
+		String userStatus = jhCService.userStatus(userNum);
+		
 		model.addAttribute("user", user);
+		model.addAttribute("userStatus", userStatus);
 		
 		
 		return "jh/chgApplicationPage";
@@ -137,20 +154,13 @@ public class JhController {
 	
 	//챌린지 신청 등록
 	@RequestMapping(value = "chgApplication")
-	public String chgApplication (Challenge chg, HttpSession session, Model model) {
+	public String chgApplication (@ModelAttribute Challenge chg, @ModelAttribute User1 user, @RequestParam String userStatus,  Model model) {
 		System.out.println("JhController chgApplication Start...");
+		System.out.println("JhController chgApplication chg -> " + chg);		
 		
-		//세션에서 회원번호 가져옴
-		int userNum = 0;
-		if(session.getAttribute("user_num") != null) {
-			userNum = (int) session.getAttribute("user_num");
-			System.out.println("JhController chgDetail userNum -> " + userNum);
-		}
+		Date start_date = chg.getStart_date();
+		Date end_date = chg.getEnd_date();
 		
-		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
-		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController chgDetail userNum -> " + user);
-		model.addAttribute("user", user);
 		
 	
 		//임시로 챌린지 목록으로 이동하게 함

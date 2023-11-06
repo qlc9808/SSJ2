@@ -26,15 +26,18 @@
 	}
 	
 	
-	$(document).ready(function() {
-		var activeTab = '${activeTab}';
+/* 	$(document).ready(function() {
 		
-		if(activeTab) {
-			$('.nav-link.active').removeClass('active'); // 기존 활성 탭 비활성화
-	        $('a#reviewTab').addClass('active'); // 새로운 탭 활성화
-	    }
+			$('#description').removeClass('active'); // 기존 활성 탭 비활성화
+	        $('#review').addClass('active'); // 새로운 탭 활성화
+	        
+			$('#descriptionTab').removeClass('show active'); // 기존 활성 탭 비활성화
+	        $('#reviewTab').addClass('show active'); // 새로운 탭 활성화
+	        
+			const offset = $("#reviewTab").offset();
+			$('html, body').animate({scrollTop: offset.top}, 0); 
 	});
-
+ */
 
 </script> 
 </head>
@@ -285,7 +288,7 @@
 
             <!-- Nav -->
             <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
-              <a class="nav-link active" data-bs-toggle="tab" href="#descriptionTab">
+              <a id="description" class="nav-link active" data-bs-toggle="tab" href="#descriptionTab">
                	 챌린지 소개
               </a>
               <a class="nav-link" data-bs-toggle="tab" href="/certBoard?chg_id="+"${chg.chg_id }">
@@ -295,12 +298,13 @@
                              소세지들
               </a>
               
-              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
-              <a class="nav-link" data-bs-toggle="tab"onclick="location.href='/reviewTab?chg_id=${chg.chg_id }'">
-                             후기 게시판
-              </a>
-            </div>
-
+              <c:if test="${chg.stateCtn == '종료'}">
+	              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
+	              <a id="review" class="nav-link" data-bs-toggle="tab" onclick="location.href='/reviewTab?chg_id=${chg.chg_id }'">
+	                             후기 게시판
+	              </a>
+	            </div>
+			</c:if>
             <!-- Content -->
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
@@ -327,41 +331,164 @@
               
               
               
-              
-              <div class="tab-pane fade" id="reviewTab">
-                <div class="row justify-content-center py-9">
-                  <div class="col-12 col-lg-10 col-xl-8">
-
-                    <!-- Table -->
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-sm table-hover">
-                        <thead>
-                          <tr>
-                            <th>글번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>조회수</th>
-                            <th>작성일</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <c:forEach var="review" items="${chgReviewList}">
-	                          <tr>
-	                            <td>${review.rn }</td>
-	                            <td>${review.title }</td>
-	                            <td>${review.nick }</td>
-	                            <td>${review.view_cnt }</td>
-	                            <td>${review.reg_date }</td>
-	                          </tr>
-                          </c:forEach>
-                        </tbody>
-                      </table>
-                    </div>
-
+            <c:if test="${chg.stateCtn == '종료'}">
+   	              <div class="tab-pane fade" id="reviewTab">
+	                <div class="row justify-content-center py-9">
+	                  <div class="col-12 col-lg-10 col-xl-8">
+	                  	 <!-- Heading -->
+				            <h4 class="mb-10 text-center">후기 게시판</h4>
+				
+				            <!-- Header -->
+				            <div class="row align-items-center">
+				              <div class="col-12 col-md-auto">
+				
+				                <strong class="fs-sm ms-2">유저 아이디</strong>
+				               		
+				              </div>
+				              <div class="col-12 col-md text-md-center">
+				
+				              
+				
+				                <!-- Count -->
+				                <strong class="fs-sm ms-2">총 리뷰수</strong>
+				
+				              </div>
+				              <div class="col-12 col-md-auto">
+				
+				                <!-- Button -->
+				                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
+				                  Write Review
+				                </a>
+				
+				              </div>
+				            </div>
+				
+				            <!-- New Review -->
+				            <div class="collapse" id="reviewForm">
+				
+				              <!-- Divider -->
+				              <hr class="my-8">
+				
+				              <!-- Form -->
+				              <form>
+				                <div class="row">
+				                  <div class="col-12 mb-6 text-center">
+				
+				                    <!-- Text -->
+				                    <p class="mb-1 fs-xs">
+				                      Score:
+				                    </p>
+				
+				                    <!-- Rating form -->
+				                    <div class="rating-form">
+				
+				                      <!-- Input -->
+				                      <input class="rating-input" type="range" min="1" max="5" value="5">
+				
+				                      <!-- Rating -->
+				                      <div class="rating h5 text-dark" data-value="5">
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                        <div class="rating-item">
+				                          <i class="fas fa-star"></i>
+				                        </div>
+				                      </div>
+				
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12 col-md-6">
+				
+				                    <!-- Name -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewName">Your Name:</label>
+				                      <input class="form-control form-control-sm" id="reviewName" type="text" placeholder="Your Name *" required>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12 col-md-6">
+				
+				                    <!-- Email -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewEmail">Your Email:</label>
+				                      <input class="form-control form-control-sm" id="reviewEmail" type="email" placeholder="Your Email *" required>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12">
+				
+				                    <!-- Name -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+				                      <input class="form-control form-control-sm" id="reviewTitle" type="text" placeholder="Review Title *" required>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12">
+				
+				                    <!-- Name -->
+				                    <div class="form-group">
+				                      <label class="visually-hidden" for="reviewText">Review:</label>
+				                      <textarea class="form-control form-control-sm" id="reviewText" rows="5" placeholder="Review *" required></textarea>
+				                    </div>
+				
+				                  </div>
+				                  <div class="col-12 text-center">
+				
+				                    <!-- Button -->
+				                    <button class="btn btn-outline-dark" type="submit">
+				                      Post Review
+				                    </button>
+				
+				                  </div>
+				                </div>
+				              </form>
+				
+				            </div>
+	                  	
+	                    <!-- Table -->
+	                    <div class="table-responsive">            
+							<!-- 글번호인 ROWNUM rn을 역순으로 출력하고 싶은데 어떻게? -->
+							<table class="table table-bordered table-sm table-hover" border="1">
+							       <thead>
+							         <tr>
+							           <th>글번호</th>
+							           <th>제목</th>
+							           <th>작성자</th>
+							           <th>조회수</th>
+							           <th>작성일</th>
+							         </tr>
+							       </thead>
+							       <tbody>
+							         <c:forEach var="review" items="${chgReviewList}">
+							          <tr>
+							            <td>${review.rn }</td>
+							            <td>${review.title }</td>
+							            <td>${review.nick }</td>
+							            <td>${review.view_cnt }</td>
+							            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
+							          </tr>
+							         </c:forEach>
+							       </tbody>
+						     </table>
+	                    </div>
 
                   </div>
                 </div>
               </div>
+            
+			</c:if>	
+					
             </div>
 
           </div>

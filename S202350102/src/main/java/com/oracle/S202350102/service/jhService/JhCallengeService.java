@@ -13,5 +13,8 @@ public interface JhCallengeService {
 	List<Board> 	chgReviewList(int chg_id);
 
 
+	String 			userStatus(int userNum);
+ 
+
 
 }
