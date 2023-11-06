@@ -19,11 +19,21 @@ public class Level1DaoImpl implements Level1Dao {
 		List<Level1> levelList = null;
 		try {
 			levelList = session.selectList("level1List",level1);
-			System.out.println("levelList size->"+levelList.size());
 		} catch (Exception e) {
 			System.out.println("level1List sql exception->"+e.getMessage());
 		}
 		return levelList;
+	}
+
+	@Override
+	public Level1 level1Select(int level) {
+		Level1 level1 = new Level1();
+		try {
+			level1 = session.selectOne("level1Select",level);
+		} catch (Exception e) {
+			System.out.println("level1Select sql exception->"+level1);
+		}
+		return level1;
 	}
 
 
