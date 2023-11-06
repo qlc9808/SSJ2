@@ -13,5 +13,8 @@
 
 <a href="/jhChgDetail">jh 챌린지 상세</a><p>
 
+<a href="/bgChgDetail">bg 챌린지 상세</a><p>
+
+
 </body>
 </html>

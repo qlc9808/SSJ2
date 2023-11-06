@@ -87,7 +87,6 @@ public class ChController {
 			}
 		}
 		
-		
 		return "forward:notice";
 		
 		
