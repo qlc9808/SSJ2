@@ -288,7 +288,7 @@
 
             <!-- Nav -->
             <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
-              <a id="description" class="nav-link active" data-bs-toggle="tab" href="#descriptionTab">
+              <a class="nav-link active" data-bs-toggle="tab" href="#descriptionTab">
                	 챌린지 소개
               </a>
               <a class="nav-link" data-bs-toggle="tab" href="/certBoard?chg_id="+"${chg.chg_id }">
@@ -300,7 +300,7 @@
               
               <c:if test="${chg.stateCtn == '종료'}">
 	              <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
-	              <a id="review" class="nav-link" data-bs-toggle="tab" onclick="location.href='/reviewTab?chg_id=${chg.chg_id }'">
+	              <a class="nav-link" data-bs-toggle="tab" href="#reviewTab">
 	                             후기 게시판
 	              </a>
 	            </div>
