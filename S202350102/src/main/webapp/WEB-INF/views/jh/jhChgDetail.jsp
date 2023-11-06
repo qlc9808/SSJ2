@@ -217,41 +217,42 @@
                           </c:when>
                         
                         </c:choose>
+                        
+                        <!-- 참여완료 YN -->
+                        <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
+                          참여완료
+                        </button>
 
-                      </div>
-                      
-                      <!-- 참여완료 YN -->
-                      <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
-                        참여완료
-                      </button>
-                      <!-- 챌린지 참여 성공 -->
-                      <c:if test="${insertResult > 0}">
-                        <div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-body">
-                                <p>챌린지 참여가 완료되었습니다</p>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                        <!-- 챌린지 참여 성공 -->
+                        <c:if test="${insertResult > 0}">
+                          <div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  <p>챌린지 참여가 완료되었습니다</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </c:if>
-                        
-
-                      <!-- 찜하기 -->
-                      <div class="col-12 col-lg-auto">
-
-                        <!-- Wishlist -->
-                        <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button">
-                          	챌린지 찜 <i class="fe fe-heart ms-2"></i>
-                        </button>
+                        </c:if>
 
                       </div>
+                      
+                        
+                      <!-- 찜하기 -->
+                      <div class="col-12 col-lg-auto">
+                      
+                        <!-- Wishlist -->
+                        <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button">
+                          챌린지 찜 <i class="fe fe-heart ms-2"></i>
+                        </button>
+                      
+                      </div>
                     </div>
-
+                  </div>
 
                     <!-- Share -->
                     <p class="mb-0">
@@ -302,8 +303,8 @@
 	              <a class="nav-link" data-bs-toggle="tab" href="#reviewTab">
 	                             후기 게시판
 	              </a>
-	            </div>
-			</c:if>
+	              </div>
+			        </c:if>
             <!-- Content -->
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
