@@ -16,14 +16,35 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User1 userSelect(int user_num) {
 
-			User1 user = new User1();
-			try {
-				System.out.println("user_id->"+user_num);
-				user = session.selectOne("userSelect",user_num);
-				System.out.println("user->"+user);
-			} catch (Exception e) {
-				System.out.println("UserDaoImpl userSelect exception->"+e.getMessage());
-			}
-			return user;
+		User1 user = new User1();
+		try {
+			System.out.println("user_id->"+user_num);
+			user = session.selectOne("userSelect",user_num);
+			System.out.println("user->"+user);
+		} catch (Exception e) {
+			System.out.println("UserDaoImpl userSelect exception->"+e.getMessage());
+		}
+		return user;
+	}
+
+
+	@Override
+	public void userLevelUp(int user_num) {
+		try {
+			session.update("userLevelUpdate",user_num);
+		} catch (Exception e) {
+			System.out.println("userLevelUp dao sql exception->"+e.getMessage());
+		}
+		
+	}
+
+
+	@Override
+	public void userExpUp(User1 user1) {
+		try {
+			session.update("userExpUpdate",user1);
+		} catch (Exception e) {
+			System.out.println("userExpUp dao sql exception->"+e.getMessage());
 		}
 	}
+}

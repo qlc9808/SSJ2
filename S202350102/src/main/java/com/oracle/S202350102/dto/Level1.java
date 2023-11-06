@@ -9,6 +9,4 @@ public class Level1 {
 	private int 	tot_exp;	// 경험치총량
 	private String 	lv_name;	// 레벨명
 	
-	
-	private String userImage;
 }
