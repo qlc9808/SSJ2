@@ -47,16 +47,25 @@ public class JhController {
 			userNum = (int) session.getAttribute("user_num");
 			System.out.println("JhController chgDetail userNum -> " + userNum);
 		}
-		
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
 		model.addAttribute("user", user);
 		
+		
+		
+		//jh 작성
 		//챌린지 상세정보 조회
 		Challenge chgDetail = jhCService.chgDetail(chg_id);
 		System.out.println("JhController chgDetail chg -> " + chgDetail);
 		model.addAttribute("chg", chgDetail);
+		
+		//jh 작성
+		//후기 목록 조회
+		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
+		model.addAttribute("chgReviewList", chgReviewList);
+		
+		
 		
 		
 		// yr 작성
@@ -111,7 +120,7 @@ public class JhController {
 		
 		model.addAttribute("user", user);
 		
-		return "forward:chgDetail";
+		return "jh/test3";
 	}
 	
 	
