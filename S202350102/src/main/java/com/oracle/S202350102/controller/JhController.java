@@ -51,10 +51,12 @@ public class JhController {
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
 		
 		//챌린지 상세정보 조회
 		Challenge chgDetail = jhCService.chgDetail(chg_id);
 		System.out.println("JhController chgDetail chg -> " + chgDetail);
+		model.addAttribute("chg", chgDetail);
 		
 		
 		// yr 작성
@@ -69,9 +71,6 @@ public class JhController {
 		chgr.setChg_id(chg_id);
 		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
 		System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
-		model.addAttribute("chg", chgDetail);
-		model.addAttribute("user", user);
-		model.addAttribute("chgrParti", chgrParti);
 		model.addAttribute("chgrYN", chgrJoinYN);
 		
 		// 챌린지 신청 완료 유무 판단용
