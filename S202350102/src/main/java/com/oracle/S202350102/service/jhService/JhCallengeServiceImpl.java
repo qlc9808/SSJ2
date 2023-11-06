@@ -38,6 +38,15 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return chgReviewList;
 	}
 
+	@Override
+	public String userStatus(int userNum) {
+		System.out.println("JhCallengeServiceImpl userStatus Start...");
+		
+		String userStatus = jhChgDao.userStatus(userNum);
+		
+		return userStatus;
+	}
+
 
 	
 	

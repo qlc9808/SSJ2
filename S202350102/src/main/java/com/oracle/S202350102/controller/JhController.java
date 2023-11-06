@@ -114,6 +114,11 @@ public class JhController {
 		System.out.println("JhController chgDetail userNum -> " + user);
 		model.addAttribute("user", user);
 		
+		//유저의 회원상태 가져옴
+		String userStatus = jhCService.userStatus(userNum);
+		model.addAttribute("userStatus", userStatus);
+		
+		
 		
 		return "jh/chgApplicationPage";
 	}

@@ -11,4 +11,7 @@ public interface JhChallengeDao {
 
 	List<Board> 	chgReviewList(int chg_id);
 
+	String 			userStatus(int userNum);
+
 }
+ 
