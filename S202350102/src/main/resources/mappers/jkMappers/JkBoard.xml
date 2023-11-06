@@ -25,7 +25,16 @@
 	    WHERE b.user_num = u.user_num
 	    AND b.brd_num = #{brd_num}
 	</select>
-   
+  
+  
+	<insert id="writeFormSharing" parameterType="Board">
+	    INSERT INTO board (brd_num, user_num, brd_lg, brd_md, title, conts, price, reg_date, bank_info, bank_duedate, addr, applicants, user_tel, brd_group)
+	    VALUES (BRD_NUM_SEQ.nextval, #{user_num}, 700, 102, #{title}, #{conts}, #{price}, sysdate, #{bank_info}, #{bank_duedate}, #{addr}, #{applicants}, #{user_tel}, BRD_NUM_SEQ.nextval)
+	  
+	</insert>
+
+
+
     
 </mapper>
 

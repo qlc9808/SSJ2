@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.Level1;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.QBoardService;
+import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ import oracle.net.aso.l;
 public class HbController {
 	private final QBoardService qbs;
 	private final UserService   us;
+	private final Level1Service ls;
 	
 	@RequestMapping("qBoardList")
 	public String callInfo(Board board, Model model, String currentPage, HttpSession session) {
@@ -147,11 +150,14 @@ public class HbController {
 		return "forward:qBoardList";
 	}
 	
-	
-	
-	
-	
-	
+	@RequestMapping("level")
+	public String levelView(Level1 level1, Model model) {
+		
+		List<Level1> level1List = ls.level1List(level1);
+		model.addAttribute("level1List", level1List);
+		
+		return "hb/level";
+	}
 	
 	
 	
@@ -185,7 +191,7 @@ public class HbController {
 					+ "&total_amount=2200"
 					+ "&vat_amount=200"
 					+ "&tax_free_amount=0"
-					+ "&approval_url=http://localhost/success"
+					+ "&approval_url=http://localhost:8222/success"
 					+ "&fail_url=http://localhost/fail"
 					+ "&cancel_url=http://localhost/cancel";
 			OutputStream outputStream = conn.getOutputStream();

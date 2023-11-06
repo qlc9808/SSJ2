@@ -26,14 +26,19 @@ public class JkUserDaoImpl implements JkUser1Dao {
 	}
 
 	@Override
-	public User1 getUserDetails(String user_id) {
-		  return session.selectOne("getUserDetails", user_id);
+	public User1 getUserDetails(int user_num) {
+		  return session.selectOne("getUserDetails", user_num);
 	}
 
 	@Override
 	public User1 userSelect(int user_num) {
 		 return session.selectOne("userSelect", user_num);
 			}
+
+	@Override
+	public int writeFormSharing(int user_num) {
+		 return session.selectOne("writeFormSharing", user_num);
+	}
 	}
 
 	

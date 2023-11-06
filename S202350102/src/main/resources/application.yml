@@ -7,7 +7,8 @@ spring:
   #File Size
   servlet:
     multipart:
-      max-file-size: 10MB
+      enabled: true
+      max-file-size: 30MB
       max-request-size: 10MB
 
   datasource:

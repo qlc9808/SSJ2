@@ -11,5 +11,6 @@ public interface JkBoardService {
 	User1 			userSelect(int user_num);
 	Board 			likeService(int brd_num);
 	void 			updateLikeStatus(int brd_num);
+	int 			writeFormSharing(Board board);
 
 }

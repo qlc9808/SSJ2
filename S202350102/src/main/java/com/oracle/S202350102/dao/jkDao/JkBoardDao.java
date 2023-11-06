@@ -11,6 +11,7 @@ public interface JkBoardDao {
 	Board 				getboardBybrd_num(int brd_num);
 	boolean 			getLikeStatus(int brd_num);
 	void 				updateLikeStatus(int brd_num);
+	int 				writeFormSharing(Board board);
 
 
 	

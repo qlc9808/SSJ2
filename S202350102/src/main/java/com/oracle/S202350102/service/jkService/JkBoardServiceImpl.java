@@ -56,4 +56,23 @@ public class JkBoardServiceImpl implements JkBoardService {
 	        jbd.updateLikeStatus(brd_num);
 		
 	}
+
+	@Override
+	public int writeFormSharing(Board board) {
+	    System.out.println("BoardServiceImpl writeFormSharing start...");
+
+	    try {
+	        int rowsInserted = jbd.writeFormSharing(board); 
+
+	        if (rowsInserted > 0) {
+	            return rowsInserted; // 삽입된 행의 수를 반환
+	        } else {
+	            return 0; // 삽입된 행이 없을 때 0 반환
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Error while writing the new sharing: " + e.getMessage());
+	        return 0; // 에러 발생 시 0 반환
+	    }
+	}
+
 }

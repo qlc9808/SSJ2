@@ -53,6 +53,25 @@ public class JkController {
 	    return new ResponseEntity<>("Updated like status of Board with brd_num " + brd_num, HttpStatus.OK);
 	}
 
+	//쉐어링 게시글 유저 정보조회
+	@RequestMapping(value="/sharingUserDetail")
+	public String sharingUserDetail(Board board, Model model, HttpSession session) {
+		System.out.println("JkController sharingUserDetail start...");
+		List<Board> Sharing = jbs.Sharing(board);
+		System.out.println("JkController list Sharing.size()?"+Sharing.size());
+		
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		User1 user1 = jbs.userSelect(user_num);
+		
+		model.addAttribute("user1", user1);
+		model.addAttribute("Sharing", Sharing);
+		
+		return "jk/writeFormSharing";
+		}
 	
 	
 	//쉐어링 게시글 전체조회
@@ -74,6 +93,24 @@ public class JkController {
 		
 		return "Sharing";
 		}
+	//쉐어링 게시물 등록
+	
+	@RequestMapping("/writeShare")
+	public String writeFormSharing(Board board, Model model, HttpSession session) {
+	    System.out.println("JkController writeFormSharing start...");
+	    
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	     }
+	    int updateResult = jbs.writeFormSharing(board);
+	    model.addAttribute("updateResult", updateResult);
+	    model.addAttribute("user_num", user_num);
+	    
+	    return "jk/writeFormSharing";
+	}
+
+	
 	
 	@RequestMapping(value="/challengeManagement")
 	public String challengeManagement(Integer user_num, Model model ) {
@@ -85,18 +122,22 @@ public class JkController {
 	// 회원정보 조회
 	@GetMapping("/userDetail")
 	public String userUpdate(Model model, HttpSession session) {
-	     System.out.println("JkController userDetail start...");
-	        String user_id = (String) session.getAttribute("user_id");
+	    System.out.println("JkController userDetail start...");
 
-	        if (user_id != null) {
-	            User1 user1 = jus.getUserDetails(user_id);
-	            model.addAttribute("user1", user1);
-	            return "jk/userUpdate";
-	        } else {
-	            // 사용자가 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-	            return "redirect:/loginForm";
-	        }
-	 }
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	    }
+
+	    if (user_num != 0) {
+	        User1 user1 = jbs.userSelect(user_num);
+	        model.addAttribute("user1", user1);
+	        return "jk/userUpdate";
+	    } else {
+	        return "redirect:/loginForm";
+	    }
+	}
+
 	// 회원정보 수정
 	 @PostMapping("/updateUser1")
 	 public String updateUser(User1 user1, Model model) {
@@ -135,19 +176,18 @@ public class JkController {
 	}
 	
 	@GetMapping("/mypage")
-    public String mypage(HttpSession session, Model model) {
-		System.out.println("JkController mypage start...");
-        
-		System.out.println("session.getAttribute(\"user_id\") --> " + session.getAttribute("user_id"));
-		String user_id = (String) session.getAttribute("user_id");
+	public String mypage(HttpSession session, Model model) {
+	    System.out.println("JkController mypage start...");
 
-	    if (user_id != null) {
-	        
-	        return "mypage";
-	    } else {
-	        
-	        return "redirect:/loginForm";
-        }
+	    System.out.println("session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	    }
+
+	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
 	}
+
+	
 }   
 	

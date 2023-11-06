@@ -60,4 +60,19 @@ public class JkBoardDaoImpl implements JkBoardDao {
         System.out.println("MyBatisBoardRepository updateLikeStatus start..." + brd_num);
         session.update("updateLikeStatus", brd_num);
 	}
+
+	@Override
+	public int writeFormSharing(Board board) {
+	    System.out.println("JkBoardDaoImpl writeFormSharing start...");
+	    
+	    int insertResult=0;
+	    try {
+	        insertResult = session.insert("writeFormSharing", board);
+	    } catch (Exception e) {
+	    	System.out.println("jkBoarDaoImpl void upViewCnt e.getMessage?"+e.getMessage());
+		}
+	        return insertResult;
+	    }
+	
+
 }
