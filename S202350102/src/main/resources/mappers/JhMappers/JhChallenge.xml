@@ -32,6 +32,12 @@
 		     ) chgbrdrn
 	</select>
 	
+	<select id="jhUserStatus" parameterType="int" resultType="java.lang.String">
+		SELECT c.ctn
+		FROM user1 u
+		INNER JOIN comm c ON u.status_lg = c.lg AND  u.status_md = c.md
+		WHERE u.user_num = #{user_num}
+	</select>
 
 
 	
