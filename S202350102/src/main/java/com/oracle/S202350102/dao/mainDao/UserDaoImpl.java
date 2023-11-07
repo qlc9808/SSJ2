@@ -1,9 +1,12 @@
 package com.oracle.S202350102.dao.mainDao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.dto.UserLevel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,5 +49,31 @@ public class UserDaoImpl implements UserDao {
 		} catch (Exception e) {
 			System.out.println("userExpUp dao sql exception->"+e.getMessage());
 		}
+	}
+
+
+	@Override
+	public UserLevel userLevelInfo(int user_num) {
+		UserLevel userLevelInfo = null;
+		try {
+			userLevelInfo = session.selectOne("userLevelInfo",user_num);
+			System.out.println(userLevelInfo);
+		} catch (Exception e) {
+			System.out.println("userIcon dao sql exception->"+e.getMessage());
+		}
+		
+		return userLevelInfo;
+	}
+
+
+	@Override
+	public List<UserLevel> userLevelInfoList() {
+		List<UserLevel> userLevelInfoList = null;
+		try {
+			userLevelInfoList = session.selectList("userLevelInfoList");
+		} catch (Exception e) {
+			System.out.println("userLevelInfoList dao sql exception->"+e.getMessage());
+		}
+		return userLevelInfoList;
 	}
 }

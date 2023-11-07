@@ -24,12 +24,12 @@ public class JkBoardServiceImpl implements JkBoardService {
 
 	
 	@Override
-	public List<Board> Sharing(Board board) {
-		List<Board> Sharing = null;
+	public List<Board> sharing(Board board) {
+		List<Board> sharing = null;
 		System.out.println("JkCommunityServiceImpl start...");
-		Sharing = jbd.Sharing(board);
-		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+Sharing.size());
-		return Sharing ;
+		sharing = jbd.sharing(board);
+		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+sharing.size());
+		return sharing ;
 	}
 
 	@Override
@@ -79,6 +79,15 @@ public class JkBoardServiceImpl implements JkBoardService {
 	        System.out.println("Error while writing the new sharing: " + e.getMessage());
 	        return 0; // 에러 발생 시 0 반환
 	    }
+	}
+
+	@Override
+	public Board detailSharing(int brd_num) {
+		System.out.println("JkBoardServiceImpl detailSharing start...");
+		Board board = null;
+		board = jbd.detailSharing(brd_num);
+		
+		return board;
 	}
 
 	

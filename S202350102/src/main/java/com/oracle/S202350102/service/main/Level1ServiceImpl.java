@@ -30,7 +30,7 @@ public class Level1ServiceImpl implements Level1Service {
 
 	/*
 	 * 강한빛 
-	 * userLevelUp method를 위해 필요함
+	 * 해당 레벨에 대한 정보
 	 */
 	@Override
 	public Level1 level1Select(int level) {
@@ -41,7 +41,8 @@ public class Level1ServiceImpl implements Level1Service {
 	/*
 	 * 강한빛 
 	 * 유저의 레벨과 경험치를 받아서 조건에 맞으면 레벨을 올리는 메소드
-	 */	@Override
+	 */	
+	@Override
 	public void userLevelCheck(int user_num) {
 		User1 user1 = ud.userSelect(user_num);
 		
@@ -58,7 +59,7 @@ public class Level1ServiceImpl implements Level1Service {
 		Level1 level1 = new Level1();
 		List<Level1> level1List = ld.level1List(level1);
 		
-		if ( user_exp >=  nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
+		if ( user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
 			user_level += 1;
 			nextLevelInfo = ld.level1Select(user_level+1);
 			if( user_exp >=  nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
@@ -75,11 +76,11 @@ public class Level1ServiceImpl implements Level1Service {
 	@Override
 	public void userExp(int user_num, int lg, int md) {
 		User1 user1 = ud.userSelect(user_num);
+		
 		int user_exp = user1.getUser_exp();
 		String combineValue = lg+"-"+md;
-		System.out.println(user1.getStatus_md());
-		System.out.println(combineValue);
-		if ( user1.getStatus_md() == 100 ) {
+		
+		if ( user1.getStatus_md() == 100 ) { // 일반회원
 		    if (combineValue.startsWith("200-")) {
 				user1.setUser_exp(user_exp+10);
 				ud.userExpUp(user1);
@@ -102,9 +103,7 @@ public class Level1ServiceImpl implements Level1Service {
 //		    	System.out.println(user1.getUser_exp());
 //		    	ud.userExpUp(user1);
 //			}
-		    
-
-		} else if ( user1.getStatus_md() == 101 ) {
+		} else if ( user1.getStatus_md() == 101 ) { // 프리미엄회원
 		    if (combineValue.startsWith("200-")) {
 				user1.setUser_exp(user_exp+(10*3));
 				ud.userExpUp(user1);
@@ -125,9 +124,6 @@ public class Level1ServiceImpl implements Level1Service {
 
 	}
 	
-
-	
-
 
 
 }

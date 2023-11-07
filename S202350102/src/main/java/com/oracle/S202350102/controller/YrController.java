@@ -35,14 +35,15 @@ public class YrController {
 		return "yr/chgJoin";
 	}
 	
-	@RequestMapping(value = "ssjFriends")
-	public String listSsj(int chg_id, Model model) {
-		System.out.println("YrController listSsj Start...");
-		List<User1> listSsj = ycs.getListSsj(chg_id);
+	// JhController로 합침
+	// @RequestMapping(value = "ssjFriends")
+	// public String listSsj(int chg_id, Model model) {
+	// 	System.out.println("YrController listSsj Start...");
+	// 	List<User1> listSsj = ycs.getListSsj(chg_id);
 		
-		model.addAttribute("listSsj", listSsj);
-		return "yr/ssjFriends";
-	}
+	// 	model.addAttribute("listSsj", listSsj);
+	// 	return "yr/ssjFriends";
+	// }
 	
 	// chgDetail로 출력됨
 	@RequestMapping(value = "chgJoinPro")

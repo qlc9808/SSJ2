@@ -103,9 +103,11 @@ public class JhController {
 		model.addAttribute("insertResult", insertResult);
 		
 		// 소세지들 출력용
-//		List<User1> listSsj = ycs.getListSsj(chg_id);
-//		System.out.println("JhController chgDetail listSsj -> " + listSsj);
-//		model.addAttribute("listSsj", listSsj);
+		List<User1> listSsj = ycs.getListSsj(chg_id);
+		model.addAttribute("listSsj", listSsj);
+		
+		String boardRegDate = ycs.getBoardRegDate(chg_id);
+		model.addAttribute("brdRegDate", boardRegDate);
 		
 		
 		//작성자 이름옆에 레벨아이콘이 나오게 하기 위한 것 추후 추가할 것!! 카톡 게시글 231107에 등록된 글 확인
