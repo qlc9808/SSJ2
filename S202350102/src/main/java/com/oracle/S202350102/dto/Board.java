@@ -37,6 +37,10 @@ public class Board {
 	
 	//파일 업로드
 	
+	// 게시판 유저 정보 조회
+	private String icon;
+	private int user_level;
+	private int user_exp;
 	
 	//join
 	private String nick;			// 유저닉네임

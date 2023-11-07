@@ -98,4 +98,11 @@
         ORDER BY b.reg_date DESC
 	</select>
 	
+	<select id="alarmchk" parameterType="int" resultType="int">
+		Select count(*)
+		From   board_re_chk
+		where  send_date= 1
+		and    user_num = #{user_num}		
+	</select>
+	
 </mapper>

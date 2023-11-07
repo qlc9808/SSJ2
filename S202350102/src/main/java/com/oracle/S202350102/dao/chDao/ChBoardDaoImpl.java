@@ -157,6 +157,23 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		return popShareList;
 	}
 
+
+
+	@Override
+	public int alarmchk(int user_num) {
+		System.out.println("chBoardDaoImpl popShareList Start...");
+		int result = 0;
+		
+		try {
+			result = session.selectOne("alarmchk",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl alarmchk e.getMessage->" + e.getMessage());
+		}
+		System.out.println("chBoardDaoImpl alarmchk result->" + result);
+		return result;
+	}
+
 	
 
 

@@ -14,4 +14,5 @@ public interface ChBoardService {
 	List<Board> popBoardList();
 	int 		noticeCount(int brd_md);
 	List<Board> popShareList();
+	int 		alarmchk(int user_num);
 }
