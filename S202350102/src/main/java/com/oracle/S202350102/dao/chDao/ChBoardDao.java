@@ -14,5 +14,6 @@ public interface ChBoardDao {
 	List<Board> popBoardList();
 	int         noticeCount(int brd_md);
 	List<Board> popShareList();
+	int		 	alarmchk(int user_num);
 	
 }

@@ -107,6 +107,17 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return popShareList;
 	}
 
+	@Override
+	public int alarmchk(int user_num) {
+		System.out.println("chBoardServiceImpl popBoardList Start...");
+		int result = 0;
+		
+		result = chBoardDao.alarmchk(user_num);
+		
+		System.out.println("chBoardServiceImpl popBoardList result->" + result);
+		return result;
+	}
+
 
 	
 
