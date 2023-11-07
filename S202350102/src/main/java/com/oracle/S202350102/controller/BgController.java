@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -81,6 +82,7 @@ public class BgController {
 	  }
 	 
 
+	  
 	// bgChgDetail 에 user랑 chg 정보 넣을 생각 못하고 만든 코드
 	@RequestMapping(value = "/bgChgDetail2")
 	public String boardCert(Board board, String currentPage, Model model) {
@@ -103,6 +105,8 @@ public class BgController {
 
 	}
 
+	
+	
 	// ajax 로 시도했을 때 만든 코드
 	@ResponseBody
 	@RequestMapping(value = "certBoardd")
@@ -124,6 +128,8 @@ public class BgController {
 		return result;
 	}
 
+	
+	
 	// 인증 글쓰기! mapper key: insertCertBrd		 ajax 로 시도했을 때 만든 코드
 	@ResponseBody
 	@RequestMapping(value = "writeCertBoard")
@@ -168,5 +174,15 @@ public class BgController {
 
 		return rtnStr;
 	}
+	
+	
+	
+	// Ajax 글 수정 모달창 눌렀을 때 화면에 certBoard 정보 뜨도록
+//	@RequestMapping(value = "/fetchCertBoardInfo", method = RequestMethod.GET)
+//	@ResponseBody
+//	public Map<String, Object> fetchCertBoardInfo() {
+//		// 인증 게시판 정보를 가져오는 로직을 작성합니다
+//		
+//	}
 
 }

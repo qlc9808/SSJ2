@@ -24,6 +24,9 @@
 		<!-- jQuery 라이브러리를 불러옵니다. -->
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript">
+		
+			
+			
 			function writeCertBoard() {
 				
 				alert("writeCertBoard Start");
@@ -44,7 +47,7 @@
 				alert("paramData $('#title').val() ->"+$('#title').val());
 				alert("paramData $('#conts').val() ->"+$('#conts').val());
 				alert("paramData chg_id ->"+chg_id);
-				alert("paramData user_num ->"+user_num);
+				alert("paramData user_num ->"+user_num); 
 				
 				// 서버로 데이터 전송
 				$.ajax({
@@ -64,13 +67,41 @@
 			}
 			
 			
-			document.addEventListener("DOMContentLoaded", function() {
-				// '더보기' 버튼 클릭 시 모달 창 열기
-				document.getElementById("showModalButton").addEventListener("click", function() {
-					// 모달 창 표시
-					$('#modalProduct').modal('show');
-				});
-			});
+			
+			//  '더보기' 버튼 클릭 시    ->   글 수정용 모달 창 열기
+			function modalCall(index) {
+				
+				// alert("modalCall Start...");
+				
+				// 모달창에 넘겨줄 값을 저장 
+				var nick =   	$("#nick"+index).val();  		
+				var reg_date =	$("#reg_date"+index).val();  
+				var title =		$("#title"+index).val();  
+				var conts =		$("#conts"+index).val();  
+				/*
+ 				 alert("modalCall nick -> "+nick);
+				 alert("modalCall reg_date -> "+reg_date);
+				 alert("modalCall title -> "+title);
+				 alert("modalCall conts -> "+conts); 
+				 */
+				 
+				//   모달창 안의 태그 input Tag selTitle 
+				$('#editNick').text(nick);     
+				$('#reg_date').text(reg_date);     
+				$('#editTitle').val(title);     
+				$('#editConts').val(conts);     
+				
+				// 모달 창 표시
+				$('#modalProduct').modal('show');
+			}
+			
+			
+			
+			function updateCertBoard() {
+				
+			}
+			
+
 		
 		</script>
 		
@@ -193,37 +224,36 @@
 	            <div class="mt-8">
 	
 	              <!-- Review 여기부터 첫번째 인증글 -->
-	              <c:forEach var="certBoard" items="${certBoard }">
+	              <c:forEach var="certBoard" items="${certBoard }" varStatus="status">
 	              
 		              <div class="review">
 		                <div class="review-body">
-		                  <div class="row">
+		                  <div class="row" id="certBoard${status.index}">
+		                  	<input type="hidden" id="nick${status.index}" value="${certBoard.nick }">
+		                  	<input type="hidden" id="reg_date${status.index}" value="${certBoard.reg_date }">
+		                  	<input type="hidden" id="title${status.index}" value="${certBoard.title }">
+		                  	<input type="hidden" id="conts${status.index}" value="${certBoard.conts }">
+		                  
+		                  
+		                  
 		                    <div class="col-12 col-md-auto">
-		
 		                      <!-- Avatar -->
 		                      <div class="avatar avatar-xxl mb-6 mb-md-0">
 		                        <span class="avatar-title rounded-circle">
 		                          <i class="fa fa-user"></i>
 		                        </span>
 		                      </div>
-		
 		                    </div>
+		                    
 		                    <div class="col-12 col-md">
-		
+		                    
 		                      <!-- Header -->
 		                      <div class="row mb-6">
 		                        <div class="col-12">
-		
-		                          
-		
-		                        </div>
-		                        <div class="col-12">
-		
 		                          <!-- Time -->
 		                          <span class="fs-xs text-muted">
 		                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
 		                          </span>
-		
 		                        </div>
 		                      </div>
 		
@@ -239,11 +269,10 @@
 		
 		                      <!-- Footer -->
 		                      <div class="row align-items-center">
+		                      
 		                        <div class="col-auto d-none d-lg-block">
-		
 		                          <!-- Text -->
 		                          <p class="mb-0 fs-sm">좋아요</p>
-		
 		                        </div>
 		                        
 		                        <div class="col-auto me-auto">
@@ -255,29 +284,32 @@
 		                          </div>
 		                        </div>
 		                        
-
-		                        
 		                        <div class="col-auto d-none d-lg-block">
 		                          <!-- Text -->
 		                          <p class="mb-0 fs-sm">Comments (0)</p>
 		                        </div>
 		                        
+		                        
 		                        <div class="col-auto">
+		                        
 		                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
-		                          <a class="btn btn-xs btn-outline-border" href="#!" id="showModalButton">
+		                          <a class="btn btn-xs btn-outline-border" 
+		                          	 href="#!" 
+		                          	 id="showModalButton"
+		                          	 onclick="modalCall(${status.index})"
+		                          >
 									더보기
 		                          </a>
-		                          
-		                          
 		                          
 		                          <!-- Button -->
 		                          <a class="btn btn-xs btn-outline-border" href="#!">
 									삭제
 		                          </a>
+		                          
 		                        </div>
 		                        
+		                        
 		                      </div>
-		
 		                    </div>
 		                  </div>
 		                </div>
@@ -288,9 +320,9 @@
 	            </div>
 	            
 	            <!-- 더보기 Product -->
-			    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-hidden="true">
-			      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-			        <div class="modal-content">
+			    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+			      <div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
+			        <div class="modal-content"><!--  -->
 			    
 			          <!-- Close -->
 			          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -298,9 +330,9 @@
 			          </button>
 			    
 			          <!-- Content -->
-			          <div class="container-fluid px-xl-0">
-			            <div class="row align-items-center mx-xl-0">
-			              <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0">
+			          <div class="container-fluid px-xl-0"><!--  -->
+			            <div class="row align-items-center mx-xl-0"><!--  -->
+			              <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"><!--  -->
 			    
 			                <!-- Image -->
 			                <img class="img-fluid" src="./assets/img/products/product-7.jpg" alt="...">
@@ -310,174 +342,85 @@
 			                  More Product Info <i class="fe fe-info ms-2"></i>
 			                </a>
 			    
-			              </div>
-			              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9">
+			              </div><!-- <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"> -->
+			              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"><!--  -->
 			    
-			                <!-- Heading -->
-			                <h4 class="mb-3">Leather Sneakers</h4>
-			    
-			                <!-- Price -->
-			                <div class="mb-7">
-			                  <span class="h5">$85.00</span>
-			                  <span class="fs-sm">(In Stock)</span>
-			                </div>
-			    
-			                <!-- Form -->
-			                <form>
-			                  <div class="form-group">
-			    
-			                    <!-- Label -->
-			                    <p>
-			                      Color: <strong id="modalProductColorCaption">White</strong>
-			                    </p>
-			                    
-		                    	<div class="col-12 col-md-6">
-			                    <!-- 유저 닉네임 표시하는 란 Name -->
-			                    <div class="form-group">
-				                      <p class="mb-2 fs-lg fw-bold">
-				                        ${user1.nick }
-				                      </p>
-			                    </div>
-			                  </div>
-			                    
-								
-								<div class="col-12">
-			                    <!-- 제목 입력란  Name -->
-			                    <div class="form-group">
-			                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
-			                      <input class="form-control form-control-sm" id="title" type="text" placeholder="제목을 작성해주세요 *" required>
-			                    </div>
-			                  </div>
-			                  
-			                  <div class="col-12">
-			                    <!-- 인증글 입력란 Name -->
-			                    <div class="form-group">
-			                      <label class="visually-hidden" for="reviewText">Review:</label>
-			                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="인증글을 작성해주세요 *" required></textarea>
-			                    </div>
-			                  </div>
-			    
-			                    <!-- Radio -->
-			                    <div class="mb-8 ms-n1">
-			                      <div class="form-check form-check-inline form-check-img">
-			                        <input type="radio" class="form-check-input" id="modalProductColorOne" name="modalProductColor" data-toggle="form-caption" data-target="#modalProductColorCaption" value="White" style="background-image: url(./assets/img/products/product-7.jpg);" checked>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-img">
-			                        <input type="radio" class="form-check-input" id="modalProductColorTwo" name="modalProductColor" data-toggle="form-caption" data-target="#modalProductColorCaption" value="Black" style="background-image: url(./assets/img/products/product-49.jpg);">
-			                      </div>
-			                    </div>
-			    
-			                  </div>
-			                  <div class="form-group">
-			    
-			                    <!-- Label -->
-			                    <p>
-			                      Size: <strong><span id="modalProductSizeCaption">7.5</span> US</strong>
-			                    </p>
-			    
-			                    <!-- Radio -->
-			                    <div class="mb-2">
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeOne" value="6" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeOne">6</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeTwo" value="6.5" data-toggle="form-caption" data-target="#modalProductSizeCaption" disabled>
-			                        <label class="form-check-label" for="modalProductSizeTwo">6.5</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeThree" value="7" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeThree">7</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeFour" value="7.5" data-toggle="form-caption" data-target="#modalProductSizeCaption" checked>
-			                        <label class="form-check-label" for="modalProductSizeFour">7.5</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeFive" value="8" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeFive">8</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeSix" value="8.5" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeSix">8.5</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeSeven" value="9" data-toggle="form-caption" data-target="#modalProductSizeCaption" disabled>
-			                        <label class="form-check-label" for="modalProductSizeSeven">9</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeEight" value="9.5" data-toggle="form-caption" data-target="#modalProductSizeCaption" disabled>
-			                        <label class="form-check-label" for="modalProductSizeEight">9.5</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeNine" value="10" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeNine">10</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeTen" value="10.5" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeTen">10.5</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeEleven" value="11" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeEleven">11</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeTwelve" value="12" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeTwelve">12</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeThirteen" value="13" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeThirteen">13</label>
-			                      </div>
-			                      <div class="form-check form-check-inline form-check-size mb-2">
-			                        <input type="radio" class="form-check-input" name="modalProductSize" id="modalProductSizeFourteen" value="14" data-toggle="form-caption" data-target="#modalProductSizeCaption">
-			                        <label class="form-check-label" for="modalProductSizeFourteen">14</label>
-			                      </div>
-			                    </div>
-			    
-			                  </div>
-			                  <div class="form-group mb-0">
-			                    <div class="row gx-5">
-			                      <div class="col-12 col-lg-auto">
-			    
-			                        <!-- Quantity -->
-			                        <select class="form-select mb-2">
-			                          <option value="1" selected>1</option>
-			                          <option value="2">2</option>
-			                          <option value="3">3</option>
-			                          <option value="4">4</option>
-			                          <option value="5">5</option>
-			                        </select>
-			    
-			                      </div>
-			                      <div class="col-12 col-lg">
-			    
-			                        <!-- Submit -->
-			                        <button type="submit" class="btn w-100 btn-dark mb-2">
-			                          Add to Cart <i class="fe fe-shopping-cart ms-2"></i>
-			                        </button>
-			    
-			                      </div>
-			                      <div class="col-12 col-lg-auto">
-			    
-			                        <!-- Wishlist -->
-			                        <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button">
-			                          Wishlist <i class="fe fe-heart ms-2"></i>
-			                        </button>
-			    
-			                      </div>
-			                    </div>
-			                  </div>
-			                </form>
-			    
-			              </div>
-			            </div>
-			          </div>
-			    
-			        </div>
-			      </div>
-			    </div>
+                  
+
+
+			                
+			                <!-- 수정 Form -->
+					            <form>
+					              
+					                
+									<div class="avatar avatar-xl">
+									  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+									</div>
+				                      
+				                      
+					                <div class="col-12 col-md-6"><!--  -->
+				                    <!-- 유저 닉네임 표시하는 란 Name -->
+				                    <div class="form-group"><!--  -->
+					                      <p class="mb-2 fs-lg fw-bold" id="editNick">
+					                      </p>
+				                    </div>
+					                </div>
+		                    
+			                      <!-- Header -->
+				                      <div class="row mb-6"><!--  -->
+				                        <div class="col-12"><!--  -->
+				                          <!-- Time -->
+				                          <span class="fs-xs text-muted">
+				                            <time datetime="2019-07-25" id="reg_date"></time>
+				                          </span>
+				                        </div>
+				                      </div>
+					                
+
+		        					<div class="col-12"><!--  -->
+					                  <!-- Email -->
+					                  <div class="form-group"><!--  -->
+					                    <label class="form-label" for="accountEmail">
+					                     	 제목 *
+					                    </label>
+					                      <input class="form-control form-control-sm" id="editTitle" type="text" placeholder="제목을 작성해주세요 *" required>
+					                  </div>
+					                </div>
 	
+					                <div class="col-12">
+					                  <!-- Email -->
+					                  <div class="form-group">
+					                    <label class="form-label" for="accountEmail">
+					                     	 인증글 *
+					                    </label>
+					                      <textarea class="form-control form-control-sm" id="editConts" rows="4" placeholder="인증글을 작성해주세요 *" required></textarea>
+					                  </div>
+					                </div>
+					                
+					            </form>
+						
+					              <!-- 인증 글쓰기에서 가져온 글 수정 Form  -->
+					              <form id="certForm">
+					                <div class="row">
+					                  <div class="col-12 text-center">
+					                    <!-- 등록 Button -->
+					                    <button class="btn btn-outline-dark" type="submit" onclick="updateCertBoard()">
+					                      	수정하기
+					                    </button>
+					                  </div>
+					                </div>
+					              </form>
+						
+			    
+			              </div><!-- <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"> -->
+			            </div><!-- <div class="row align-items-center mx-xl-0"> -->
+			          </div><!-- <div class="container-fluid px-xl-0"> -->
+			    
+			        </div><!-- <div class="modal-content"> -->
+			      </div><!-- <div class="modal-dialog modal-dialog-centered modal-xl" role="document"> -->
+			    </div><!-- <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-hidden="true"> -->
+			    
+			    
 	            <!-- Pagination -->
 	            <nav class="d-flex justify-content-center mt-9">
 	              <ul class="pagination pagination-sm text-gray-400">
