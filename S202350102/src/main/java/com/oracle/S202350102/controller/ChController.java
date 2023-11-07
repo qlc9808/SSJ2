@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -101,12 +102,19 @@ public class ChController {
 	
 	// notice 작성	
 	@PostMapping("noticeWrite")
-	public String noticeWrite(Board board, Model model, HttpServletRequest request, MultipartFile file1) throws IOException {
+	public String noticeWrite(Board board, HttpServletRequest request,@RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 		System.out.println("ChController noticeWrite Start...");
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");  // 저장경로 생성
+//		ServletContext servletContext = request.getSession().getServletContext();
+//		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath" + uploadPath);
+		log.info("originalName : " + file1.getOriginalFilename());
+//		log.info("size: " + file1.getSize());
+//		log.info("contentType: " + file1.getContentType());
+//		log.info("uploadPath: " + realPath);  // 저장 경로 확인 
+		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);  // 진짜 저장
 		
-	
-		
-		
+		board.setImg(saveName);
 		System.out.println("brd_md->"+ board.getBrd_md());
 		int result = chBoardService.noticeWrite(board);
 		System.out.println("Insert result->" + result);	
@@ -298,7 +306,19 @@ public class ChController {
 		return "redirect:search";
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "rechk")
+	public int alarmchk(HttpSession session) {
+		System.out.println("ChController alarmchk Start...");
+		int result = 0;
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			
+			result = chBoardService.alarmchk(user_num);
+		}
+		
+		return result;
+	}
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {

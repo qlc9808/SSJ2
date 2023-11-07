@@ -26,6 +26,7 @@
 		<typeAlias alias="Report"   	 type="com.oracle.S202350102.dto.Report"/> 
 		<typeAlias alias="SearchHistory" type="com.oracle.S202350102.dto.SearchHistory"/> 
 		<typeAlias alias="SharingList"   type="com.oracle.S202350102.dto.SharingList"/> 
-		<typeAlias alias="User1"   	     type="com.oracle.S202350102.dto.User1"/> 
+		<typeAlias alias="User1"   	     type="com.oracle.S202350102.dto.User1"/>
+		<typeAlias alias="UserLevel"   	 type="com.oracle.S202350102.dto.UserLevel"/>
 	</typeAliases>
 </configuration>
