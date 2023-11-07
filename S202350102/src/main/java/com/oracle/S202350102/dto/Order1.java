@@ -17,4 +17,6 @@ public class Order1 {
 	private String 	billing_key;  // 빌링키
 	private String 	rslt_status;  // 결과상태
 	private String 	rslt_message; // 결과메세지
+	
+	
 }

@@ -27,38 +27,7 @@
 					<div class="col-12 col-md-auto">	
 						<div class="avatar avatar-xxl mb-6 mb-md-0">
 							<span class="avatar-title rounded-circle">
-								<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle" data-bs-toggle="modal">
-
-
-
-
-
-								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-									modal
-								</button>
-								
-								<!-- Modal -->
-								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-body">
-												${ssj.nick}
-											</div>
-											
-											<div class="modal-footer">
-												<button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
-												<button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
-											</div>
-										</div>
-									</div>
-								</div>
-
-
-
-
-
-
+								<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
 							</span>
 						</div>
 					</div>
@@ -71,6 +40,33 @@
 							</div>
 						</div>
 					</div>
+
+
+
+
+					<!-- Button trigger modal -->
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+						modal
+					</button>
+
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-body">
+									${ssj.nick}
+								</div>
+								
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
+									<button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
 
 					<!-- reg_date & fork -->
 					<div class="col-12 col-md">

@@ -14,6 +14,7 @@
 
 <a href="/chgDetail">jh 챌린지 상세</a><p>
 <a href="/chgApplicationPage">jh 챌린지 신청</a><p>
+<a href="/reviewTab">jh 챌린지 후기 목록</a><p>
 
 <a href="/bgChgDetail">bg 챌린지 상세</a><p>
 

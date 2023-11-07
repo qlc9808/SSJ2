@@ -48,7 +48,7 @@
 						<td>${num}</td>
 						<td><a href="noticeConts?brd_num=${noticeList.brd_num}">${noticeList.title}</a></td>
 						<td>${noticeList.nick}</td>
-						<td><fmt:formatDate value="${noticeList.reg_date }" pattern="yyyy-MM-dd"/></td>				
+						<td><fmt:formatDate value="${noticeList.reg_date }" pattern="yy-MM-dd"/></td>				
 						<td>${noticeList.view_cnt}</td>
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>

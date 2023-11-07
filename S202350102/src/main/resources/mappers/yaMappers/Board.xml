@@ -31,7 +31,7 @@
 	
     <insert id="YaBoardInsert" parameterType="Board">
     	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, reg_Date, brd_group, brd_step)
-    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},700, 103, #{title},#{conts}, sysdate, BRD_NUM_SEQ.nextval,0)
+    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},#{brd_lg}, #{brd_md}, #{title},#{conts}, sysdate, BRD_NUM_SEQ.nextval,0)
     </insert>
     
     <update id="YaBoardUpdate" parameterType="Board">
@@ -51,6 +51,7 @@
         AND b.brd_md = 103
         AND   (b.title like '%' || #{keyword} || '%' 
         	Or u.nick  like '%' || #{keyword} || '%')
+        AND b.brd_step > 0
         ORDER BY b.reg_date DESC	    
     </select>
     
@@ -60,6 +61,7 @@
 	    WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
         AND b.brd_md = 103
+        AND b.brd_step>0
 	    ORDER BY b.view_cnt DESC
 	</select>
 	
@@ -69,22 +71,44 @@
 	    WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
         AND b.brd_md = 103
+        AND b.brd_step>0
 	    ORDER BY b.reg_date DESC
 	</select>
 	
 	<select id="listComment" resultType="Board" parameterType="int">
-		SELECT b.brd_num, b.conts, u.nick, b.reg_date, b.brd_step
+		SELECT b.brd_num, b.conts, u.nick, b.reg_date, b.brd_step, b.brd_group
 		FROM board b, user1 u
-		Where b.brd_group =#{brd_num}
+		Where b.brd_group = #{brd_num}
+		AND b.user_num = u.user_num
 		AND b.brd_lg = 700
 		AND b.brd_md = 103
 		AND b.brd_step>0
 		ORDER BY b.reg_date DESC
 	</select>
-    
-  	<insert id="YacommentWrite" parameterType="Board">
-  		INSERT INTO board (brd_num,user_num,brd_lg, brd_md,  conts, reg_Date, brd_group, brd_step)
-  		VALUES ( BRD_NUM_SEQ.nextval,#{user_num},700,103, #{conts}, sysdate, #{brd_num},
-  		   (SELECT COALESCE(MAX(brd_step), 0) + 1 FROM board WHERE brd_group = #{brd_num})
-  	</insert>
+  	
+	<insert id="YacommentWrite" parameterType="Board">
+	    INSERT INTO board (brd_num,   user_num, brd_lg, brd_md, conts,   reg_date,  brd_group, brd_step)
+	    VALUES (BRD_NUM_SEQ.nextval, #{user_num}, 700,   103,    #{conts}, sysdate, #{brd_num}, 
+	           (SELECT COALESCE(MAX(brd_step), 0) + 1 FROM board WHERE brd_group = #{brd_num}))
+	</insert>
+	
+	<select id="YaCommentSelect" resultType="Board">
+		SELECT  brd_num, user_num, brd_lg, brd_md, conts, reg_date, brd_group, brd_step
+		FROM    Board
+		WHERE   brd_num =#{brd_num}
+    	AND     b.user_num = u.user_num
+	</select>
+	
+	<update id="YaCommentUpdate" parameterType="Board">
+		UPDATE board SET conts=#{conts}
+		WHERE  brd_num = #{brd_num} 
+	</update>
+	
+	<delete id="YaCommentDelete" parameterType="Board">
+		DELETE FROM board
+		WHERE brd_num = #{brd_num} 
+	
+	</delete>
+	
+
 </mapper>

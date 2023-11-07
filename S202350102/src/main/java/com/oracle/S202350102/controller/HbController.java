@@ -18,6 +18,7 @@ import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -129,12 +130,16 @@ public class HbController {
 		int user_num = 0;
 		if (session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
+			ls.userExp(user_num, board.getBrd_lg(), board.getBrd_md());
+			ls.userLevelCheck(user_num);
+			
 		}
 		board.setUser_num(user_num);
 		int result = qbs.qBoardInsert(board);
 		User1 user1 = us.userSelect(user_num);
 		board.setNick(user1.getNick());
 		request.setAttribute("board", board);
+		System.out.println("user exp ->" + user1.getUser_exp());
 		
 		return "redirect:qBoardList";
 	}
@@ -154,11 +159,17 @@ public class HbController {
 	public String levelView(Level1 level1, Model model) {
 		
 		List<Level1> level1List = ls.level1List(level1);
+		
 		model.addAttribute("level1List", level1List);
 		
 		return "hb/level";
 	}
 	
+	@RequestMapping(value = "forExp", method = RequestMethod.GET)
+	@ResponseBody
+	public void expUp(Board board, Model model, HttpSession session) {
+		
+	}
 	
 	
 	

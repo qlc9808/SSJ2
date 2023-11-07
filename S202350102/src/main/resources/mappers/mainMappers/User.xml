@@ -6,5 +6,12 @@
 	<select id="userSelect" parameterType="int" resultType="User1">
 		SELECT * FROM user1 WHERE user_num = #{user_num}
 	</select>
-
+	
+	<update id="userLevelUpdate" parameterType="int">
+		UPDATE user1 SET user_level = user_level+1 WHERE user_num = #{user_num}
+	</update>
+	
+	<update id="userExpUpdate" parameterType="User1">
+		UPDATE user1 SET user_exp = #{user_exp} WHERE user_num = #{user_num}
+	</update>
 </mapper>

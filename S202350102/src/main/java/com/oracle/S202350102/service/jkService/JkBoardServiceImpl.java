@@ -1,8 +1,14 @@
 package com.oracle.S202350102.service.jkService;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dao.jkDao.JkBoardDao;
 import com.oracle.S202350102.dto.Board;
@@ -75,4 +81,8 @@ public class JkBoardServiceImpl implements JkBoardService {
 	    }
 	}
 
+	
+
+	
+		
 }

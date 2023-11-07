@@ -13,12 +13,18 @@ public interface YaBoardDao {
 	int          insertCommunity(Board board);
 	int          updateCommunity(Board board);
 	int          deleteCommunity(int brd_num);
+	// 검색관련
 	List<Board>  boardSearchList(String keyword);
 	List<Board>  sortByViewCnt();
 	List<Board>  sortByRegDate();
 	User1        userSelect(int user_num);
 	List<Board>  listComment(int brd_num);
+	// 댓글관련
 	void         commentWrite(Board board);
+	Board        commentSelect(int brd_num);
+	void		 commentUpdate(Board board);
+	void         commentDelete(Board board);
+	
 
 
 	

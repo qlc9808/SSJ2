@@ -13,7 +13,7 @@
 	
 	<c:if test="${brd_md == 105 }">공지</c:if>
 	<c:if test="${brd_md == 106 }">이벤트</c:if>
-	<form action="noticeWrite" method="post">
+	<form action="noticeWrite" method="post" enctype="multipart/form-data">
 		<input type="hidden" value="${brd_md }" name="brd_md">
 		<table>
 			<tr>
@@ -28,6 +28,12 @@
 				<td>내용</td>
 				<td>
 					<textarea rows="30" cols="30" name="conts" required="required"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>이미지</td>
+				<td>
+					<input type="file" name="file">
 				</td>
 			</tr>
 			<tr>

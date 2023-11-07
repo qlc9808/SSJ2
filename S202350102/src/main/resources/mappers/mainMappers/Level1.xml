@@ -6,4 +6,9 @@
 	<select id="level1List" parameterType="Level1" resultType="Level1">
 		SELECT * FROM level1
 	</select>
+	
+	<select id="level1Select" parameterType="int" resultType="Level1">
+		SELECT * FROM level1 WHERE user_level = #{user_level}
+	</select>
+
 </mapper>

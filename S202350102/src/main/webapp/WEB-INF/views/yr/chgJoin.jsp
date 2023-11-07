@@ -2,6 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<!-- chgDetail로 합침 -->
+<!-- 삭제예정 -->
+
 <!-- header -->
 <c:import url="/WEB-INF/views/header4.jsp"/>
 

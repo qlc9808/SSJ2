@@ -20,16 +20,16 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	@Override
 	public Challenge chgDetail(int chg_id) {
 		System.out.println("JhChallengeDaoImpl chgDetail Start...");
-		System.out.println("JhChallengeDaoImpl chgDetail  chg_id -> "+ chg_id);
+		System.out.println("JhChallengeDaoImpl chgDetail  chg_id -> " + chg_id);
 		
 		Challenge chgDetail = null;
 		try {
 			
 			chgDetail = session.selectOne("jhChgDetail", chg_id);
-			System.out.println("JhChallengeDaoImpl chgDetail  chg -> "+ chgDetail);
+			System.out.println("JhChallengeDaoImpl chgDetail  chg -> " + chgDetail);
 			
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl chgDetail e.getMessage() -> "+ e.getMessage());
+			System.out.println("JhChallengeDaoImpl chgDetail e.getMessage() -> " + e.getMessage());
 		}
 		
 		return chgDetail;
@@ -38,7 +38,7 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	@Override
 	public List<Board> chgReviewList(int chg_id) {
 		System.out.println("JhChallengeDaoImpl chgReviewList Start...");
-		System.out.println("JhChallengeDaoImpl chgReviewList  chg_id -> "+ chg_id);
+		System.out.println("JhChallengeDaoImpl chgReviewList  chg_id -> " + chg_id);
 		List<Board> chgReviewList = null;
 		
 		try {
@@ -48,9 +48,41 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 			System.out.println("JhChallengeDaoImpl chgReviewList e.getMessage() -> "+ e.getMessage());
 		}
 		
-		System.out.println("JhChallengeDaoImpl chgReviewList  chgReviewList.size() -> "+ chgReviewList.size());
+		System.out.println("JhChallengeDaoImpl chgReviewList  chgReviewList.size() -> " + chgReviewList.size());
 
 		return chgReviewList;
+	}
+
+	@Override
+	public String userStatus(int userNum) {
+		System.out.println("JhChallengeDaoImpl userStatus Start...");
+		System.out.println("JhChallengeDaoImpl userNum -> " + userNum);
+		
+		String userStatus = null;
+		
+		try {
+			userStatus = session.selectOne("jhUserStatus", userNum);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl userStatus e.getMessage() -> " + e.getMessage());
+		}
+		
+		System.out.println("JhChallengeDaoImpl userStatus -> " + userStatus);
+		return userStatus;
+	}
+
+	@Override
+	public Board reviewContent(int brd_num) {
+		System.out.println("JhChallengeDaoImpl reviewContent Start...");
+		Board reviewContent = null;
+		
+		try {
+			reviewContent = session.selectOne("jhReviewContent" ,brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewContent e.getMessage() -> " + e.getMessage());
+		}
+		System.out.println("JhChallengeDaoImpl chgReviewList  reviewContent -> " + reviewContent);
+		
+		return reviewContent;
 	}
 
 
