@@ -15,6 +15,7 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
@@ -35,7 +36,7 @@ public class JhController {
 	
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr) {
+	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr, String currentPage, Board board) {
 		//																						  yr작성(챌린지 신청 후 결과 값 불러오기)
 
 		System.out.println("JhController chgDetail Start...");
@@ -61,8 +62,21 @@ public class JhController {
 		model.addAttribute("chg", chgDetail);
 		
 		//jh 작성
+		//후기 총 개수
+		int reviewTotal = jhCService.reviewTotal(chg_id);
+		model.addAttribute("reviewTotal", reviewTotal);
+		System.out.println("JhController chgDetail  reviewTotal -> "+ reviewTotal);
+		
+		//페이지네이션
+		Paging reviewPage = new Paging(reviewTotal, currentPage);
+		board.setStart(reviewPage.getStart());
+		board.setEnd(reviewPage.getEnd());
+		model.addAttribute("reviewPage",reviewPage);
+		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ reviewPage.getStart());
+		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
+		
 		//후기 목록 조회
-		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
+		List<Board> chgReviewList = jhCService.chgReviewList(board);
 		model.addAttribute("chgReviewList", chgReviewList);
 		
 		
@@ -130,14 +144,29 @@ public class JhController {
 		System.out.println("JhController reviewContent Start...");
 		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		}
+		
+		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
 		//챌린지 글 내용 조회
 		Board reviewContent = jhCService.reviewContent(brd_num);
 		
 		//챌린지 해당 글에 대한 댓글 조회
-//		Board reviewReply = jhCService.reviewReply(brd_num);
+		List<Board> reviewReply = jhCService.reviewReply(brd_num);
 		
 		System.out.println("JhController reviewContent reviewContent -> " + reviewContent);
+		System.out.println("JhController reviewContent reviewReply -> " + reviewReply);
 		model.addAttribute("reviewContent", reviewContent);
+		model.addAttribute("reviewReply", reviewReply);
+		
 		return "jh/jhReviewContent";
 	}
 	

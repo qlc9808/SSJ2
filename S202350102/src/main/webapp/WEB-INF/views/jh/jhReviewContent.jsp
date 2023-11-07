@@ -8,31 +8,142 @@
 <title>Insert title here</title>
 <style>
   /* 테이블을 가운데 정렬하고 화면 너비의 80%를 차지하도록 설정합니다. */
-  .centered-table {
+  .card {
     margin: 0 auto;
     width: 80%;
   }
 </style>
 </head>
 <body>
-<h3>${reviewContent.title }</h3>
+<!-- 추후에 삭제 예정 -->
+<%-- <h3>${reviewContent.title }</h3>
+<p>${reviewContent.reg_date }</p>
+<p>${reviewContent.view_cnt }</p>
+<p>${reviewContent.nick }</p>
+<p>${reviewContent.conts }</p>
+
+
 	<table class="centered-table"  border="1">
 	    <tr>
-	      <td colspan="2">타이틀</td>
+	      <th colspan="2">${reviewContent.title }</td>
 	    </tr>
 	    <tr>
-	      <td colspan="2">날짜</td>
+	      <td colspan="2"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></td>
 	    </tr>
 	    <tr>
-	      <td>닉네임</td>
-	      <td>댓글 수</td>
+	      <td>${reviewContent.nick }</td>
+	      <td>조회수 : ${reviewContent.view_cnt }</td>
+	      <td>댓글수 : ${reviewContent.view_cnt }</td>
 	    </tr>
 	    <tr>
-	      <td colspan="2">글 내용</td>
+	      <td colspan="2">${reviewContent.conts }</td>
 	    </tr>
-	</table>
+	</table> --%>
 
+	<!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
+	<c:if test="${user.nick == reviewContent.nick }">
+		<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num${reviewContent.brd_num}'" value="수정">
+		<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num${reviewContent.brd_num}'" value="삭제">
+	</c:if>
 
+<div class="card mb-3">
+
+	<!-- 후기 글 내용 -->
+	<c:if test="${reviewContent.img != null} ">
+  		<img src="${reviewContent.img}" class="card-img-top" alt="">
+  	</c:if>
+	<div class="card-body">
+	  <h3 class="card-title">${reviewContent.title }</h3>
+	  <h6 class="card-subtitle mb-2 text-muted">${reviewContent.nick }</h6>
+	  <p class="card-text">${reviewContent.conts }</p>
+	  <p class="card-text"><small class="text-muted"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></small></p>
+	  <p class="card-text"><small class="text-muted">조회수 : ${reviewContent.view_cnt }</small><p class="card-text"><small class="text-muted">댓글수 : ${reviewContent.view_cnt }</small>
+	 </div>
+	
+     <!-- 댓글 쓰기 -->
+     <div class="modal-body py-9">
+
+       <!-- Form -->
+       <form>
+         <div class="row gx-5">
+           <div class="col">
+
+             <!-- Input -->
+             <input class="form-control form-control-sm" id="reviewReply" type="email" placeholder="댓글을 남겨주세요">
+
+           </div>
+           <div class="col-auto">
+
+             <!-- Button -->
+             <button class="btn btn-sm btn-dark" type="submit">
+               	댓글 쓰기
+             </button>
+
+           </div>
+         </div>
+       </form>
+
+     </div>
+     
+     <!-- 후기 댓글 -->
+     <c:forEach var="reply" items="${reviewReply }">
+     <div class="review">
+
+	  <!-- 댓글 Body -->
+	  <div class="review-body">
+	    <div class="row">
+	      <div class="col-12 col-md-auto">
+	
+	        <!-- 프로필 사진 -->
+	        <div class="avatar avatar-xxl mb-6 mb-md-0">
+	          <span class="avatar-title rounded-circle">
+	            <i class="fa fa-user"></i>
+	          </span>
+	        </div>
+	
+	      </div>
+	      <div class="col-12 col-md">
+	      
+	        <!-- 닉네임 -->
+	        <p class="mb-2 fs-lg fw-bold">
+			${reply.nick }
+	        </p>
+	        
+	        <!-- 댓글 쓴 날짜 및 시간 -->
+	        <div class="row mb-6">
+	          <div class="col-12">
+	            <span class="fs-xs text-muted">
+	              <fmt:formatDate value="${reply.reg_date }" pattern="yyyy-MM-dd"/>
+	            </span>
+	
+	          </div>
+	        </div>
+	
+
+	
+	        <!-- 댓글 내용 -->
+	        <p class="text-gray-500">
+				${reply.conts }
+	        </p>
+	
+
+	          <div class="col-auto">
+	
+            <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
+			  <c:if test="${user.nick == reply.nick }">
+				<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='replyUpdate?brd_num${reply.brd_num}'" value="수정">
+				<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='replyDelete?brd_num${reply.brd_num}'" value="삭제">
+			  </c:if>
+			  
+	          </div>
+	        </div>
+	
+	      </div>
+	    </div>
+	  </div>
+     </c:forEach>
+	     
+</div>
 
 
 

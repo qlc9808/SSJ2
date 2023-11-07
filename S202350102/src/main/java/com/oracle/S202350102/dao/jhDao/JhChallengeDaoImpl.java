@@ -36,14 +36,13 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	}
 
 	@Override
-	public List<Board> chgReviewList(int chg_id) {
+	public List<Board> chgReviewList(Board board) {
 		System.out.println("JhChallengeDaoImpl chgReviewList Start...");
-		System.out.println("JhChallengeDaoImpl chgReviewList  chg_id -> " + chg_id);
 		List<Board> chgReviewList = null;
 		
 		try {
 			
-			chgReviewList = session.selectList("jhChgReviewList", chg_id);
+			chgReviewList = session.selectList("jhChgReviewList", board);
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl chgReviewList e.getMessage() -> "+ e.getMessage());
 		}
@@ -83,6 +82,39 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		System.out.println("JhChallengeDaoImpl chgReviewList  reviewContent -> " + reviewContent);
 		
 		return reviewContent;
+	}
+
+	@Override
+	public List<Board> reviewReply(int brd_num) {
+		System.out.println("JhChallengeDaoImpl reviewReply Start...");
+		
+		List<Board> reviewReply = null;
+		
+		try {
+			reviewReply = session.selectList("jhReviewReply", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewContent e.getMessage() -> " + e.getMessage());
+		}
+		
+		System.out.println("JhChallengeDaoImpl chgReviewList  reviewReply.size() -> " + reviewReply.size());
+		
+		return reviewReply;
+	}
+
+	@Override
+	public int reviewTotal(int chg_id) {
+		System.out.println("JhChallengeDaoImpl reviewTotal Start...");
+		int reviewTotal = 0;
+		
+		try {
+			reviewTotal = session.selectOne("jhReviewTotal", chg_id);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewTotal e.getMessage() -> " + e.getMessage());
+		}
+		System.out.println("JhChallengeDaoImpl chgReviewList  reviewTotal -> " + reviewTotal);
+		
+		
+		return reviewTotal;
 	}
 
 

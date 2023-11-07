@@ -349,7 +349,7 @@
 				              
 				
 				                <!-- Count -->
-				                <strong class="fs-sm ms-2">총 리뷰수</strong>
+				                <strong class="fs-sm ms-2">총 리뷰수 : ${reviewTotal }</strong>
 				
 				              </div>
 				              <div class="col-12 col-md-auto">
@@ -456,8 +456,8 @@
 				            </div>
 	                  	
 		                    <!-- Table -->
-		                    <div class="table-responsive">            
-								<!-- 글번호인 ROWNUM rn을 역순으로 출력하고 싶은데 어떻게? -->
+		                    <div class="table-responsive">     
+                    			<c:set var="num" value="${reviewPage.total-reviewPage.start+1 }"></c:set>
 								<table class="table table-bordered table-sm table-hover" border="1">
 								       <thead>
 								         <tr>
@@ -471,16 +471,42 @@
 								       <tbody>
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
-								            <td>${review.rn }</td>
+								            <td>${num }</td>
 								            <td><a href='reviewContent?brd_num=${review.brd_num}'>${review.title }</a></td>
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
 								          </tr>
-								         </c:forEach>
+			          					<c:set var="num" value="${num -1 }"></c:set>
+								        </c:forEach>
 								       </tbody>
 							     </table>
 	                    	</div>
+	                    	
+	   		            		<!-- Pagination -->
+								<nav class="d-flex justify-content-center mt-9">
+								  <ul class="pagination pagination-sm text-gray-400">
+								  <c:if test="${reviewPage.startPage > reviewPage.pageBlock}">
+								    <li class="page-item">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }">
+								        <i class="fa fa-caret-left"></i>
+								      </a>
+					              </c:if>
+								    </li>
+						          <c:forEach var="i" begin="${reviewPage.startPage }" end="${reviewPage.endPage }">
+								    <li class="page-item active">
+								      <a class="page-link" href="chgDetail?currentPage=${i}">${i}</a>
+								    </li>
+						          </c:forEach>
+						          <c:if test="${reviewPage.endPage < reviewPage.totalPage }">
+								    <li class="page-item">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage+reviewPage.pageBlock }">
+								        <i class="fa fa-caret-right"></i>
+								      </a>
+								    </li>
+						          </c:if>
+								  </ul>
+								</nav>
 
                   			</div>
                			</div>
