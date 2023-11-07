@@ -199,10 +199,10 @@
 				{
 				type:"GET",
 				url: "rechk",
-				dataType:"text",
+				dataType:"text", 
 				success:function(data){
-					if(data > 0 ){
-						var str = "<span data-cart-items='!'></span>";
+					if(data >0 ){
+						var str = "<span data-cart-items='"+data+"'></span>";
 						$(".alarmAjax").html(str);
 					}
 				}
