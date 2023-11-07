@@ -39,7 +39,7 @@
                   <div class="card-body">
                     <ul class="list-styled fs-sm">
                       <li class="list-styled-item">
-                        <a class="list-styled-link" href="/Sharing">쉐어링</a>
+                        <a class="list-styled-link" href="/sharing">쉐어링</a>
                       </li>
                       <li class="list-styled-item">
                         <a class="list-styled-link" href="/listCommunity">자유게시판</a>

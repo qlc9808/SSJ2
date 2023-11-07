@@ -19,18 +19,18 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	private final SqlSession session;
 
 	@Override
-	public List<Board> Sharing(Board board) {
+	public List<Board> sharing(Board board) {
 		// board 테이블 쉐어링게시판조회
-		List<Board> Sharing = null;
+		List<Board> sharing = null;
 		System.out.println("JkBoardDaoImpl Sharing start...");
 		try {
-			Sharing = session.selectList("Sharing", board);
-			System.out.println("JkBoardDaoImpl Sharing.size()-->"+Sharing.size());
+			sharing = session.selectList("sharing", board);
+			System.out.println("JkBoardDaoImpl Sharing.size()-->"+sharing.size());
 		} catch (Exception e) {
 			System.out.println("JkBoardDaoImpl Sharing e.getMessage()?"+e.getMessage());
 		}
 		
-		return Sharing;
+		return sharing;
 	}
 
 	@Override
@@ -73,6 +73,19 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		}
 	        return insertResult;
 	    }
+
+	@Override
+	public Board detailSharing(int brd_num) {
+		System.out.println("JkBoardDaoImpl detailSharing start...");
+		Board board = new Board();
+		try {
+			board = session.selectOne("detailSharing", brd_num);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl dtailSHaring e.getMessage)?"+e.getMessage());
+		}
+		return board;
+	}
+		
 	
 
 }

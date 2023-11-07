@@ -20,20 +20,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkUserService;
-
+import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +45,7 @@ public class JkController {
 	private static final Logger logger = LoggerFactory.getLogger(JkController.class);
 	private final JkUserService jus;
 	private final JkBoardService jbs;
+	private final YaCommunityService ycs;
 	
 	//좋아요 기능 컨트롤러
 	//좋아요 상태 가져오는 메소드
@@ -67,8 +68,8 @@ public class JkController {
 	@RequestMapping(value="/sharingUserDetail")
 	public String sharingUserDetail(Board board, Model model, HttpSession session) {
 		System.out.println("JkController sharingUserDetail start...");
-		List<Board> Sharing = jbs.Sharing(board);
-		System.out.println("JkController list Sharing.size()?"+Sharing.size());
+		List<Board> sharing = jbs.sharing(board);
+		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
@@ -78,18 +79,18 @@ public class JkController {
 		User1 user1 = jbs.userSelect(user_num);
 		
 		model.addAttribute("user1", user1);
-		model.addAttribute("Sharing", Sharing);
+		model.addAttribute("Sharing", sharing);
 		
 		return "jk/writeFormSharing";
 		}
 	
 	
 	//쉐어링 게시글 전체조회
-	@RequestMapping(value="/Sharing")
+	@RequestMapping(value="/sharing")
 	public String Sharing(Board board, Model model, HttpSession session) {
 		System.out.println("JkController Sharing start...");
-		List<Board> Sharing = jbs.Sharing(board);
-		System.out.println("JkController list Sharing.size()?"+Sharing.size());
+		List<Board> sharing = jbs.sharing(board);
+		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
@@ -99,10 +100,42 @@ public class JkController {
 		User1 user1 = jbs.userSelect(user_num);
 		
 		model.addAttribute("user1", user1);
-		model.addAttribute("Sharing", Sharing);
+		model.addAttribute("sharing", sharing);
 		
-		return "Sharing";
+		return "sharing";
 		}
+	
+	//쉐어링 게시글 상세조회
+	@GetMapping(value="/detailSharing")
+	public String detailSharing(int brd_num, Model model, HttpSession session) {
+		System.out.println("JkController detailSharing Start...");
+		System.out.println("brd_num->"+brd_num);
+		
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		Board board = jbs.detailSharing(brd_num);
+		
+		int upViewCnt = 0;
+		ycs.upViewCnt(brd_num);
+			
+		model.addAttribute("board", board);
+		model.addAttribute("upbiewCnt", upViewCnt);
+		model.addAttribute("loggedIn", user_num!=0);
+		
+		System.out.println("nick: " + board.getNick());
+	    System.out.println("userName:"+board.getUser_name());
+	    System.out.println("user_num:"+board.getUser_num());
+	    System.out.println("user_id:"+board.getUser_id());
+	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
+	
+		return"jk/detailSharing";
+				
+	}
+	
+	
 	@PostMapping("/sharingUpload")
 	public ResponseEntity<String> handleImageUpload(@RequestParam("file") MultipartFile file) {
 		logger.info("handleImageUpload method is called.");
