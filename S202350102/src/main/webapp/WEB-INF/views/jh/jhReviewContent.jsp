@@ -12,7 +12,20 @@
     margin: 0 auto;
     width: 80%;
   }
+  
+
 </style>
+<script type="text/javascript">
+	function chk(){
+		if(${chgrYN == 1 }){
+			return true;
+		} else{
+			alert("챌린지 참가자만 댓글을 남길 수 있습니다!")
+			return false;
+		}
+		
+	}
+</script>
 </head>
 <body>
 <!-- 추후에 삭제 예정 -->
@@ -64,22 +77,36 @@
      <div class="modal-body py-9">
 
        <!-- Form -->
-       <form>
+       <form action="/replyInsert" method="post">
          <div class="row gx-5">
-           <div class="col">
-
-             <!-- Input -->
-             <input class="form-control form-control-sm" id="reviewReply" type="email" placeholder="댓글을 남겨주세요">
-
-           </div>
-           <div class="col-auto">
-
-             <!-- Button -->
-             <button class="btn btn-sm btn-dark" type="submit">
-               	댓글 쓰기
-             </button>
-
-           </div>
+         	<c:choose>
+         	<c:when test="${chgrYN == 1 }">
+	            <!-- 참여자일 경우 -->
+	   			<div class="col">
+	   				<input type="hidden" name="chg_id" value="${chg_id}">
+	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
+	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text" placeholder="댓글을 남겨주세요">
+	 			</div>
+	            <div class="col-auto">
+					<!-- Button -->
+					<button class="btn btn-sm btn-dark" type="submit" id="replyInsertBtn" onclick="return chk()">
+					  	댓글 쓰기
+					</button>
+	            </div>
+         	</c:when>
+         	
+         	<c:otherwise>
+	   			<div class="col">
+	   				<input class="form-control form-control-sm" id="reviewReply" type="text" placeholder="챌린지 참가자만 댓글을 남길 수 있습니다" disabled="disabled">
+	 			</div>
+	            <div class="col-auto">
+					<!-- Button -->
+					<button class="btn btn-sm btn-dark" type="submit" id="replyInsertBtn" onclick="return chk()" disabled="disabled">
+					  	댓글 쓰기
+					</button>
+	            </div>
+         	</c:otherwise>
+         	</c:choose>
          </div>
        </form>
 

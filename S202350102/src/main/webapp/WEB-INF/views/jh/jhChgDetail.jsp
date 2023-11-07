@@ -222,7 +222,7 @@
                       
                       <!-- 참여완료 YN -->
                       <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
-                        참여완료
+                       	참여완료
                       </button>
                       
                       <!-- 챌린지 참여 성공 -->
@@ -472,7 +472,7 @@
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
 								            <td>${num }</td>
-								            <td><a href='reviewContent?brd_num=${review.brd_num}'>${review.title }</a></td>
+								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title }</a></td>
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
