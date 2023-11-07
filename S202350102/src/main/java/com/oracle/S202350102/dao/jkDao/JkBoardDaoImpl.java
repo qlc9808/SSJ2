@@ -85,6 +85,22 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		}
 		return board;
 	}
+
+	@Override
+	public List<Board> mySharing(Board board) {
+	    System.out.println("JkBoardDaoImpl mySharing start...");
+
+	    List<Board> mySharing = null;
+	    try {
+	        mySharing = session.selectList("mySharingList", board);
+	        System.out.println("JkBoardDaoImpl Sharing.size()-->" + mySharing.size());
+	    } catch (Exception e) {
+	        System.out.println("JkBoardDaoImpl Sharing e.getMessage()?" + e.getMessage());
+	    }
+
+	    return mySharing;
+	}
+
 		
 	
 

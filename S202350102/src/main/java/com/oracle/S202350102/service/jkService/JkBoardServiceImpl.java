@@ -90,6 +90,17 @@ public class JkBoardServiceImpl implements JkBoardService {
 		return board;
 	}
 
+	@Override
+	public List<Board> mySharing(Board board) {
+	    System.out.println("JkBoardServiceImpl mySharing start...");
+	   
+	    List<Board> mySharing = jbd.mySharing(board);
+	    System.out.println("JkBoardServiceImpl mySharing.size()-->" + mySharing.size());
+
+	    return mySharing;
+	}
+
+		
 	
 
 	
