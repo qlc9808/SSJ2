@@ -113,6 +113,19 @@ public class JkController {
 		return "sharing";
 		}
 	
+	//쉐어링 조회 필터
+	@GetMapping("/loadSortedPosts")
+    public String loadSortedPosts(Board board, @RequestParam String sortType, Model model) {
+        List<Board> sortedPosts;
+        if (sortType.equals("popular")) {
+            sortedPosts = jbs.getPopularPosts(board); // jkService에서 인기 게시물을 불러오는 메서드 호출
+        } else {
+            sortedPosts = jbs.getRecentPosts(board); // jkService에서 최근 게시물을 불러오는 메서드 호출
+        }
+        model.addAttribute("sharing", sortedPosts);
+        return "yourPageName"; // 해당 페이지로 다시 돌려줘야 함
+    }
+
 	//쉐어링 게시글 상세조회
 	@GetMapping(value="/detailSharing")
 	public String detailSharing(int brd_num, Model model, HttpSession session) {
@@ -221,20 +234,43 @@ public class JkController {
 	
 	//쉐어링 수정(쓰기)
 		@PostMapping("/updateSharing2")
-		public String updateSharing2(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+		public String updateSharing2(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1, HttpSession session) throws IOException {
 		    System.out.println("JkController updateSharing2 start...");
+		    String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		    System.out.println("실제 경로" + uploadPath);
 
+		    int user_num = 0;
+		    if (session.getAttribute("user_num") != null) {
+		        user_num = (int) session.getAttribute("user_num");
+		    }
+		    
+		    // 파일이 업로드되었을 경우 처리
 		    if (file1 != null && !file1.isEmpty()) {
-		        String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");  
 		        log.info("originalName : " + file1.getOriginalFilename());
 		        String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
-		        board.setImg(saveName); // 이미지 경로를 Board 객체에 설정
+		        board.setImg(saveName); // 업로드된 파일명을 게시글의 이미지로 설정
 		    }
 
-		    int updateSharing = jbs.updateSharing(board);
-		    System.out.println("JkController jbs.updateSharing updateBoard " + updateSharing);
+		    // user_num에 해당하는 사용자의 게시글 가져오기
+		    Board existingBoard = jbs.detailSharing(board.getBrd_num());
 
-		    return "forward:mySharing";
+		    // user_num과 게시글의 작성자 번호를 비교하여 권한 확인
+		    if (existingBoard != null && existingBoard.getUser_num() == user_num) {
+		        // 게시글의 작성자와 현재 로그인된 사용자가 일치하는 경우에만 업데이트 진행
+		        // 여기서는 board의 내용을 기존 게시글의 내용으로 교체
+		        existingBoard.setTitle(board.getTitle());
+		        existingBoard.setConts(board.getConts());
+		        existingBoard.setImg(board.getImg());
+
+		        // 업데이트된 게시글 정보를 DB에 업데이트
+		        int updateSharing = jbs.updateSharing(existingBoard);
+		        System.out.println("JkController jbs.updateSharing updateBoard " + updateSharing);
+		        
+		        return "forward:mySharing"; // 수정 후에 mySharing 페이지로 이동
+		    } else {
+		        // 권한이 없거나 게시글이 없는 경우에 대한 처리
+		        return "redirect:/error"; // 에러 페이지로 리다이렉트
+		    }
 		}
 
 		

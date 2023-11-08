@@ -15,6 +15,8 @@ public interface JkBoardDao {
 	Board 				detailSharing(int brd_num);
 	int 				updateSharing(Board board);
 	int					deleteSharing(int brd_num);
+	List<Board> 		getPopularPosts(Board board);
+	List<Board> 		getRecentPosts(Board board);
 	
 
 	

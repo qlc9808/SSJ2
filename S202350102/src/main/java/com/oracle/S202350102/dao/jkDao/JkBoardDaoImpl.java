@@ -114,6 +114,36 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		return 0;
 	}
 
+	@Override
+	public List<Board> getPopularPosts(Board board) {
+	    System.out.println("JkBoardDaoImpl getPopularPosts start...");
+	    List<Board> popularPosts = null;
+	    try {
+	        popularPosts = session.selectList("getPopularPosts", board); // 매개변수는 필요에 따라 null 또는 다른 값으로 설정
+	    } catch (Exception e) {
+	        System.out.println("JkBoardDaoImpl getPopularPosts Exception: " + e.getMessage());
+	        e.printStackTrace();
+	        // 예외 처리 로직
+	    }
+	    return popularPosts; // 가져온 인기 있는 게시물 목록 반환
+	}
+
+	@Override
+	public List<Board> getRecentPosts(Board board) {
+	    System.out.println("JkBoardDaoImpl getRecentPosts start...");
+	    List<Board> recentPosts = null;
+	    try {
+	        recentPosts = session.selectList("getRecentPosts", board); // 매개변수는 필요에 따라 null 또는 다른 값으로 설정
+	    } catch (Exception e) {
+	        System.out.println("JkBoardDaoImpl getRecentPosts Exception: " + e.getMessage());
+	        e.printStackTrace();
+	        // 예외 처리 로직
+	    }
+	    return recentPosts; // 최근 게시물 목록 반환
+	}
+
+
+
 
 		
 	
