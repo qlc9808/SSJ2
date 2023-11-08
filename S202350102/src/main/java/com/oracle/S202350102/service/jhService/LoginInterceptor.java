@@ -7,8 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-
-public class Interceptor implements HandlerInterceptor {
+public class LoginInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -38,6 +37,7 @@ public class Interceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		System.out.println("SampleInterceptor Interceptor PostHandle Start.....");
-		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+	
+//		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 }

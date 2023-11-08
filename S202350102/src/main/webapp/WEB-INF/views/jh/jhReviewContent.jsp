@@ -28,36 +28,13 @@
 </script>
 </head>
 <body>
-<!-- 추후에 삭제 예정 -->
-<%-- <h3>${reviewContent.title }</h3>
-<p>${reviewContent.reg_date }</p>
-<p>${reviewContent.view_cnt }</p>
-<p>${reviewContent.nick }</p>
-<p>${reviewContent.conts }</p>
 
 
-	<table class="centered-table"  border="1">
-	    <tr>
-	      <th colspan="2">${reviewContent.title }</td>
-	    </tr>
-	    <tr>
-	      <td colspan="2"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></td>
-	    </tr>
-	    <tr>
-	      <td>${reviewContent.nick }</td>
-	      <td>조회수 : ${reviewContent.view_cnt }</td>
-	      <td>댓글수 : ${reviewContent.view_cnt }</td>
-	    </tr>
-	    <tr>
-	      <td colspan="2">${reviewContent.conts }</td>
-	    </tr>
-	</table> --%>
-
-	<!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
-	<c:if test="${user.nick == reviewContent.nick }">
-		<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num${reviewContent.brd_num}'" value="수정">
-		<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num${reviewContent.brd_num}'" value="삭제">
-	</c:if>
+<!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
+<c:if test="${user.nick == reviewContent.nick }">
+	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num${reviewContent.brd_num}'" value="수정">
+	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num${reviewContent.brd_num}'" value="삭제">
+</c:if>
 
 <div class="card mb-3">
 
@@ -110,6 +87,7 @@
          	</c:when>
          	
          	<c:otherwise>
+         	<!-- 로그인 했지만 참가자 아닌 경우  -->
 	   			<div class="col">
 	   				<input class="form-control form-control-sm" id="reviewReply" type="text" placeholder="챌린지 참가자만 댓글을 남길 수 있습니다!" disabled="disabled">
 	 			</div>
