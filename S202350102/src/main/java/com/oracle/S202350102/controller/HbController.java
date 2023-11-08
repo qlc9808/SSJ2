@@ -69,23 +69,7 @@ public class HbController {
 		User1 user1 = us.userSelect(user_num);
 		
 		// 게시판 유저 정보 BoardList에 저장하기
-		List<UserLevel> userLevelInfoList = us.userLevelInfoList();
-		String icon = "";
-		int user_level = 0;
-		int user_exp = 0;
-		for (int i = 0; i < qBoardList.size(); i++) {
-			user_num = qBoardList.get(i).getUser_num();
-			for (int j = 0; j < userLevelInfoList.size(); j++) {
-				if ( user_num == userLevelInfoList.get(j).getUser_num() ) {
-				icon = userLevelInfoList.get(j).getLv_name();
-				user_level = userLevelInfoList.get(j).getUser_level();
-				user_exp = userLevelInfoList.get(j).getUser_exp();
-				qBoardList.get(i).setIcon(icon);
-				qBoardList.get(i).setUser_level(user_level);
-				qBoardList.get(i).setUser_exp(user_exp);
-				}
-			}
-		}
+		qBoardList = us.boardWriterLevelInfo(qBoardList);
 		
 		model.addAttribute("total", total);
 		model.addAttribute("page", page);		
@@ -190,9 +174,9 @@ public class HbController {
 	}
 	
 	@RequestMapping("level")
-	public String levelView(Level1 level1, Model model) {
+	public String levelView(Model model) {
 		
-		List<Level1> level1List = ls.level1List(level1);
+		List<Level1> level1List = ls.level1List();
 		
 		model.addAttribute("level1List", level1List);
 		

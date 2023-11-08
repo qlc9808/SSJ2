@@ -36,14 +36,14 @@
 	                <!-- https://java119.tistory.com/84 -->
 	              </tr>
 	          </thead>
-	          <tbody>
+	          <tbody id="search-list">
 				<c:forEach var="board" items="${qBoardList}">
 					<c:if test="${board.user_num == user1.user_num || user1.status_md == 102 }">	
 						<tr>
 							<td>${num}</td>
 							<td><a href="qBoardDetail?brd_num=${board.brd_num}">${board.title}</a></td>
 							<td>
-								<img title="Lv.${board.user_level } | exp.${board.user_exp}" class="Select" src="/images/level/${board.icon}.gif">${board.nick}
+								<img title="Lv.${board.user_level } | exp.${board.user_exp}(${board.percentage }%)" class="Select" src="/images/level/${board.icon}.gif">${board.nick}
 							</td>
 							<td><fmt:formatDate value="${board.reg_date }" pattern="yy-MM-dd"/></td>
 							<td>${board.view_cnt}</td>
@@ -64,13 +64,32 @@
 					<a href="qBoardList?currentPage=${page.startPage+page.pageBlock}">[다음]</a>
 				</c:if>
 			</div>
+			<div class="search">
+				<div >
+					<c:if test="${user1.status_md == 102 }">
+						<input class="search-form" id="searchValue" onkeyup="searchFunction()" type="text" size="20">
+					</c:if>				
+				</div>
+				<div>
+					<c:if test="${user1.status_md == 102 }">
+						<button class="search-btn" onclick="searchFunction()" type="button">검색</button>
+					</c:if>	
+				</div>
+			</div>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	<c:import url="/WEB-INF/views/footer.jsp"/>
 	<script type="text/javascript">
-	
+		function searchFunction() {
+			var sv = $('searchValue').val();
+			$.ajax(
+					{
+						
+					}
+			);
+		}
 	
 	</script>
 	
