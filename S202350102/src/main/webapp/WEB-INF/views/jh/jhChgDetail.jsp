@@ -222,7 +222,7 @@
                       
                       <!-- 참여완료 YN -->
                       <button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
-                        참여완료
+                       	참여완료
                       </button>
                       
                       <!-- 챌린지 참여 성공 -->
@@ -294,7 +294,7 @@
               <a class="nav-link" data-bs-toggle="tab" href="/certBoard?chg_id="+"${chg.chg_id }">
                              인증 게시판
               </a>
-              <a class="nav-link" data-bs-toggle="tab" href="/ssjFriends?chg_id="+"${chg.chg_id }">
+              <a class="nav-link" data-bs-toggle="tab" href="#ssjFriendsTab">
                              소세지들
               </a>
               
@@ -328,6 +328,129 @@
                 </div>
               </div>
               
+            
+            
+            
+
+              <div class="tab-pane fade" id="ssjFriendsTab">
+
+
+                <div class="row justify-content-center py-9">
+                  <div class="col-12 col-lg-10 col-xl-8">
+                    <div class="row">
+                      <div class="col-12">
+
+                        <!-- content -->
+                        <div class="review">
+                          <!-- Body -->
+                          <c:forEach var="ssj" items="${listSsj}" varStatus="status">
+                            <div class="review-body">
+                              <div class="row">
+                                <!-- profile -->
+                                <div class="col-12 col-md-auto">   
+                                  <div class="avatar avatar-xxl mb-6 mb-md-0">
+                                    <span class="avatar-title rounded-circle">
+                                      <img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <!-- nick -->
+                                <div class="col-12 col-md">
+                                  <div class="row mb-6">
+                                    <div class="col-12">
+                                      <a href="#" data-bs-toggle="modal" data-bs-target="#userModal"><span>${ssj.nick}</span></a>
+                                      <!-- 색깔 빨간색으로 나옴. 나중에 색 변경해야함 -->
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-body">
+                                        <div class="col-12 col-md-auto">   
+                                          <div class="avatar avatar-xxl mb-6 mb-md-0">
+                                            <span class="avatar-title rounded-circle">
+                                              <img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div class="col-12 col-md">
+                                          <div class="row mb-6">
+                                            <div class="col-12">
+                                              <span>${ssj.nick}</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
+                                        <button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+
+
+                                <!-- reg_date & fork -->
+                                <div class="col-12 col-md">
+                                  <!-- reg_date -->
+                                  <div class="row mb-6">
+                                    <div class="col-12">
+                                      <span></span>
+                                      <!-- 1일전 이런식으로 나오게 수정할 예정 -->
+                                    </div>
+                                  </div>
+
+                                  <c:choose>
+                                    <c:when test="${sessionScope.user_num != null}">
+                                      <!-- 로그인 한 상태 -->
+                                      <!-- fork -->
+                                      <div class="row align-items-center">
+                                        <div class="col-auto">
+                                          <!-- Button -->
+                                          <a class="btn btn-xs btn-outline-border" href="user_num=${ssj.user_num}">FORK</a>
+                                        </div>
+                                      </div>
+                                    </c:when>
+
+                                    <c:when test="${sessionScope.user_num == null}">
+                                      <!-- 로그인 안 한 상태 -->
+                                      <!-- loginForm으로 이동 -->
+                                      <div class="row align-items-center">
+                                        <div class="col-auto">
+                                          <!-- Button -->
+                                          <a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
+                                        </div>
+                                      </div>
+                                    </c:when>
+                                  </c:choose>
+                                </div>
+
+                              </div>
+                              
+                            </div>
+
+                          </c:forEach>
+                          
+                        </div>
+
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            
+            
+            
               
             <c:choose>
             	<c:when test="${chg.stateCtn == '종료'}">
@@ -349,7 +472,7 @@
 				              
 				
 				                <!-- Count -->
-				                <strong class="fs-sm ms-2">총 리뷰수</strong>
+				                <strong class="fs-sm ms-2">총 리뷰수 : ${reviewTotal }</strong>
 				
 				              </div>
 				              <div class="col-12 col-md-auto">
@@ -456,8 +579,8 @@
 				            </div>
 	                  	
 		                    <!-- Table -->
-		                    <div class="table-responsive">            
-								<!-- 글번호인 ROWNUM rn을 역순으로 출력하고 싶은데 어떻게? -->
+		                    <div class="table-responsive">     
+                    			<c:set var="num" value="${reviewPage.total-reviewPage.start+1 }"></c:set>
 								<table class="table table-bordered table-sm table-hover" border="1">
 								       <thead>
 								         <tr>
@@ -471,16 +594,42 @@
 								       <tbody>
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
-								            <td>${review.rn }</td>
-								            <td><a href='reviewContent?brd_num=${review.brd_num}'>${review.title }</a></td>
+								            <td>${num }</td>
+								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title }</a></td>
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
 								          </tr>
-								         </c:forEach>
+			          					<c:set var="num" value="${num -1 }"></c:set>
+								        </c:forEach>
 								       </tbody>
 							     </table>
 	                    	</div>
+	                    	
+	   		            		<!-- Pagination -->
+								<nav class="d-flex justify-content-center mt-9">
+								  <ul class="pagination pagination-sm text-gray-400">
+								  <c:if test="${reviewPage.startPage > reviewPage.pageBlock}">
+								    <li class="page-item">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }">
+								        <i class="fa fa-caret-left"></i>
+								      </a>
+					              </c:if>
+								    </li>
+						          <c:forEach var="i" begin="${reviewPage.startPage }" end="${reviewPage.endPage }">
+								    <li class="page-item active">
+								      <a class="page-link" href="chgDetail?currentPage=${i}">${i}</a>
+								    </li>
+						          </c:forEach>
+						          <c:if test="${reviewPage.endPage < reviewPage.totalPage }">
+								    <li class="page-item">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage+reviewPage.pageBlock }">
+								        <i class="fa fa-caret-right"></i>
+								      </a>
+								    </li>
+						          </c:if>
+								  </ul>
+								</nav>
 
                   			</div>
                			</div>

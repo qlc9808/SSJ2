@@ -12,7 +12,6 @@ public class Challenge {
 	private int 	chg_md;			// 종류(중분류)
 	private String 	title;			// 챌린지명
 	private int 	chg_capacity;	// 참여정원
-	private int 	now_parti;		// 현재참여인원
 	private String 	chg_conts;		// 챌린지소개
 	private int 	state_lg;		// 진행상태(대분류)
 	private int 	state_md;		// 진행상태(중분류)

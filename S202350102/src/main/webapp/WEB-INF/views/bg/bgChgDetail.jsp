@@ -29,32 +29,47 @@
 			
 			function writeCertBoard() {
 				
-				alert("writeCertBoard Start");
+				//alert("writeCertBoard Start");
 				
 				// EL값을 JavaScript 변수에 저장
 				var user_num = ${user1.user_num};
 				// chg_id 챌린지 페이지 아직 없어서 임시용으로 변수에 저장함
 				var chg_id = 1;
 				
-				// 사용자가 입력한 내용 가져오기
-				var paramData = {
-									"title"	:	$('#title').val(),
-									"conts"	:	$('#conts').val(),
-									"chg_id":	chg_id,
-									"user_num":	user_num
-				};
+				// 이미지 파일 선택
+				var screenshot = $("#screenshot")[0].files[0];
 				
-				alert("paramData $('#title').val() ->"+$('#title').val());
-				alert("paramData $('#conts').val() ->"+$('#conts').val());
-				alert("paramData chg_id ->"+chg_id);
-				alert("paramData user_num ->"+user_num); 
+				
+				// 이미지 파일, 제목, 내용을 FormData 에 추가
+				var formData = new FormData();
+				formData.append("title", $('title').val());
+				formData.append("conts", $('conts').val());
+				formData.append("chg_id", chg_id);
+				formData.append("user_num", user_num);
+				formData.append("screenshot", screenshot);
+				
+				
+				// 사용자가 입력한 내용 가져오기 -> ver.1:  이미지도 전달해야 해서 보류
+				//var paramData = {
+				//					"title"	:	$('#title').val(),
+				//					"conts"	:	$('#conts').val(),
+				//					"chg_id":	chg_id,
+				//					"user_num":	user_num
+				//};
+				
+				// alert("paramData $('#title').val() ->"+$('#title').val());
+				// alert("paramData $('#conts').val() ->"+$('#conts').val());
+				// alert("paramData chg_id ->"+chg_id);
+				// alert("paramData user_num ->"+user_num); 
 				
 				// 서버로 데이터 전송
 				$.ajax({
 					url	:	"/writeCertBoard",
 					type:	"POST",
-					data:	paramData,
+					data:	formData,
 					dataType:	"text",
+					processData: false,		// 이미지 파일 처리를 위해 false로 설정
+					contentType: false,		// 이미지 파일 처리를 위해 false로 설정
 					success	:	function(rtnStr) {
 						alert("success ajax Data -> "+rtnStr);
 						// 서버 응답을 처리하는 코드
@@ -68,46 +83,70 @@
 			
 			
 			
-			//  '더보기' 버튼 클릭 시    ->   글 수정용 모달 창 열기
-			function modalCall(index) {
+			//  '수정' 버튼 클릭 시    ->   글 수정용 모달 창 열기
+			function updateModalCall(index) {
 				
-				// alert("modalCall Start...");
+				// alert("updateModalCall Start...");
 				
 				// 모달창에 넘겨줄 값을 저장 
+				var brd_num =   $("#brd_num"+index).val();  		
 				var nick =   	$("#nick"+index).val();  		
 				var reg_date =	$("#reg_date"+index).val();  
 				var title =		$("#title"+index).val();  
 				var conts =		$("#conts"+index).val();  
 				/*
- 				 alert("modalCall nick -> "+nick);
-				 alert("modalCall reg_date -> "+reg_date);
-				 alert("modalCall title -> "+title);
-				 alert("modalCall conts -> "+conts); 
+ 				 alert("updateModalCall nick -> "+nick);
+				 alert("updateModalCall reg_date -> "+reg_date);
+				 alert("updateModalCall title -> "+title);
+				 alert("updateModalCall conts -> "+conts); 
 				 */
 				 
-				//   모달창 안의 태그 input Tag selTitle 
-				$('#editNick').text(nick);     
-				$('#reg_date').text(reg_date);     
+				//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
+				$('#displayNick').text(nick);     
+				$('#displayReg_date').text(reg_date); 
+				
+				//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
+				$('#editBrd_num').val(brd_num);     
+				$('#editNick').val(nick);     
 				$('#editTitle').val(title);     
 				$('#editConts').val(conts);     
 				
 				// 모달 창 표시
-				$('#modalProduct').modal('show');
+				$('#updateCertBrdForm').modal('show');
 			}
 			
 			
 			
-			function updateCertBoard() {
+			// '삭제' 버튼 클릭 시
+			function deleteCertBrd(index) {
 				
+				var brd_num = $("#brd_num"+index).val();
+				
+				$.ajax({
+					url:"/brdNumDelete",
+					data:{brd_num : brd_num},
+					dataType:'text',
+					
+					success:function(data){
+						alert(".ajax deleteCertBrd data -> "+data);
+						if (data == '1') {
+							// id 가 review +index 성공하면 아래 라인 수행
+							$('#review'+index).remove();		/* Delete Tag */
+							
+						}
+					}
+				});
 			}
+			
 			
 
-		
 		</script>
 		
 		
 	</head>
 	<body>
+		
+		
 		
 		<!-- Nav -->
 	            <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
@@ -124,6 +163,7 @@
 					후기 게시판
 	              </a>
 	            </div>
+	      
 	      
 	
 	    <!-- REVIEWS -->
@@ -180,6 +220,8 @@
 	              <!-- Divider -->
 	              <hr class="my-8">
 	
+	
+	
 	              <!-- 인증 글쓰기 Form -->
 	              <form id="certForm">
 	                <div class="row">
@@ -209,6 +251,12 @@
 	                    </div>
 	                  </div>
 	                  
+	                  <div class="mb-3">
+	                  	<!-- 인증샷 -->
+					  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+						<input class="form-control" type="file" id="screenshot" name="screenshot">
+					  </div>
+							                  
 	                  <div class="col-12 text-center">
 	                    <!-- 등록 Button -->
 	                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBoard()">
@@ -220,32 +268,37 @@
 	
 	            </div>
 	
+	
+	
 	            <!-- Reviews -->
 	            <div class="mt-8">
 	
 	              <!-- Review 여기부터 첫번째 인증글 -->
 	              <c:forEach var="certBoard" items="${certBoard }" varStatus="status">
 	              
-		              <div class="review">
+		              <div class="review" id="review${status.index}">
 		                <div class="review-body">
 		                  <div class="row" id="certBoard${status.index}">
+		                  	<input type="hidden" id="brd_num${status.index}" value="${certBoard.brd_num }">
 		                  	<input type="hidden" id="nick${status.index}" value="${certBoard.nick }">
 		                  	<input type="hidden" id="reg_date${status.index}" value="${certBoard.reg_date }">
 		                  	<input type="hidden" id="title${status.index}" value="${certBoard.title }">
 		                  	<input type="hidden" id="conts${status.index}" value="${certBoard.conts }">
-		                  
-		                  
-		                  
-		                    <div class="col-12 col-md-auto">
-		                      <!-- Avatar -->
-		                      <div class="avatar avatar-xxl mb-6 mb-md-0">
-		                        <span class="avatar-title rounded-circle">
-		                          <i class="fa fa-user"></i>
-		                        </span>
-		                      </div>
+		                  	
+		                  	
+		                  	<div class="col-5 col-md-3 col-xl-2">
+								<!-- 인증샷 Image -->
+		                    	<img src="assets/img/products/product-6.jpg" alt="..." class="img-fluid">
 		                    </div>
 		                    
+		                    
+		                    
 		                    <div class="col-12 col-md">
+		                    
+								<!-- Avatar -->
+		                    	<div class="avatar avatar-lg">
+								  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+								</div>
 		                    
 		                      <!-- Header -->
 		                      <div class="row mb-6">
@@ -256,6 +309,7 @@
 		                          </span>
 		                        </div>
 		                      </div>
+		                      
 		
 		                      <!-- Title -->
 		                      <p class="mb-2 fs-lg fw-bold">
@@ -266,9 +320,12 @@
 		                      <p class="text-gray-500">
 		                      	${certBoard.conts }
 		                      </p>
+		                      
 		
 		                      <!-- Footer -->
 		                      <div class="row align-items-center">
+		                      
+								
 		                      
 		                        <div class="col-auto d-none d-lg-block">
 		                          <!-- Text -->
@@ -284,29 +341,34 @@
 		                          </div>
 		                        </div>
 		                        
+		                        
 		                        <div class="col-auto d-none d-lg-block">
 		                          <!-- Text -->
 		                          <p class="mb-0 fs-sm">Comments (0)</p>
 		                        </div>
 		                        
 		                        
-		                        <div class="col-auto">
+		                        <c:if test="${user1.user_num eq certBoard.user_num }">
 		                        
-		                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
-		                          <a class="btn btn-xs btn-outline-border" 
-		                          	 href="#!" 
-		                          	 id="showModalButton"
-		                          	 onclick="modalCall(${status.index})"
-		                          >
-									더보기
-		                          </a>
-		                          
-		                          <!-- Button -->
-		                          <a class="btn btn-xs btn-outline-border" href="#!">
-									삭제
-		                          </a>
-		                          
-		                        </div>
+			                        <div class="col-auto">
+			                        
+			                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
+			                          <a class="btn btn-xs btn-outline-border" 
+			                          	 href="#!" 
+			                          	 id="showModalButton"
+			                          	 onclick="updateModalCall(${status.index})"
+			                          >
+										수정
+			                          </a>
+			                          
+			                          <!-- Button -->
+			                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
+										삭제
+			                          </a>
+			                          
+			                        </div>
+		                        
+		                        </c:if>
 		                        
 		                        
 		                      </div>
@@ -319,8 +381,10 @@
 	              
 	            </div>
 	            
-	            <!-- 더보기 Product -->
-			    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+	            
+	            
+	            <!-- 수정하기 모달 창 Product -->
+			    <div class="modal fade" id="updateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
 			      <div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
 			        <div class="modal-content"><!--  -->
 			    
@@ -347,11 +411,10 @@
 			    
                   
 
-
-			                
 			                <!-- 수정 Form -->
-					            <form>
-					              
+					            <form action="updateCertBrd" method="post">
+					              <input type="hidden" name="brd_num" id="editBrd_num">
+					              <input type="hidden" name="nick" id="editNick">
 					                
 									<div class="avatar avatar-xl">
 									  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
@@ -361,7 +424,7 @@
 					                <div class="col-12 col-md-6"><!--  -->
 				                    <!-- 유저 닉네임 표시하는 란 Name -->
 				                    <div class="form-group"><!--  -->
-					                      <p class="mb-2 fs-lg fw-bold" id="editNick">
+					                      <p class="mb-2 fs-lg fw-bold" id="displayNick">
 					                      </p>
 				                    </div>
 					                </div>
@@ -371,7 +434,7 @@
 				                        <div class="col-12"><!--  -->
 				                          <!-- Time -->
 				                          <span class="fs-xs text-muted">
-				                            <time datetime="2019-07-25" id="reg_date"></time>
+				                            <time datetime="2019-07-25" id="displayReg_date"></time>
 				                          </span>
 				                        </div>
 				                      </div>
@@ -383,7 +446,7 @@
 					                    <label class="form-label" for="accountEmail">
 					                     	 제목 *
 					                    </label>
-					                      <input class="form-control form-control-sm" id="editTitle" type="text" placeholder="제목을 작성해주세요 *" required>
+					                      <input class="form-control form-control-sm" id="editTitle" name="title" type="text" placeholder="제목을 작성해주세요 *" required>
 					                  </div>
 					                </div>
 	
@@ -393,23 +456,21 @@
 					                    <label class="form-label" for="accountEmail">
 					                     	 인증글 *
 					                    </label>
-					                      <textarea class="form-control form-control-sm" id="editConts" rows="4" placeholder="인증글을 작성해주세요 *" required></textarea>
+					                      <textarea class="form-control form-control-sm" id="editConts" name="conts" rows="4" placeholder="인증글을 작성해주세요 *" required></textarea>
 					                  </div>
 					                </div>
 					                
-					            </form>
-						
-					              <!-- 인증 글쓰기에서 가져온 글 수정 Form  -->
-					              <form id="certForm">
 					                <div class="row">
 					                  <div class="col-12 text-center">
-					                    <!-- 등록 Button -->
+					                    <!-- 인증 글쓰기에서 가져온 글 수정 Form 등록 Button -->
 					                    <button class="btn btn-outline-dark" type="submit" onclick="updateCertBoard()">
 					                      	수정하기
 					                    </button>
 					                  </div>
 					                </div>
-					              </form>
+					                
+					            </form>
+						
 						
 			    
 			              </div><!-- <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"> -->
@@ -418,7 +479,8 @@
 			    
 			        </div><!-- <div class="modal-content"> -->
 			      </div><!-- <div class="modal-dialog modal-dialog-centered modal-xl" role="document"> -->
-			    </div><!-- <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-hidden="true"> -->
+			    </div><!-- <div class="modal fade" id="updateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
+			    
 			    
 			    
 	            <!-- Pagination -->

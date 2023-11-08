@@ -15,6 +15,7 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
@@ -33,9 +34,10 @@ public class JhController {
 	// challenger 테이블값 가져오기용
 	private final YrChallengerService ycs;
 	
+	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr) {
+	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr, String currentPage, Board board) {
 		//																						  yr작성(챌린지 신청 후 결과 값 불러오기)
 
 		System.out.println("JhController chgDetail Start...");
@@ -53,7 +55,6 @@ public class JhController {
 		model.addAttribute("user", user);
 		
 		
-		
 		//jh 작성
 		//챌린지 상세정보 조회
 		Challenge chgDetail = jhCService.chgDetail(chg_id);
@@ -61,8 +62,21 @@ public class JhController {
 		model.addAttribute("chg", chgDetail);
 		
 		//jh 작성
+		//후기 총 개수
+		int reviewTotal = jhCService.reviewTotal(chg_id);
+		model.addAttribute("reviewTotal", reviewTotal);
+		System.out.println("JhController chgDetail  reviewTotal -> "+ reviewTotal);
+		
+		//페이지네이션
+		Paging reviewPage = new Paging(reviewTotal, currentPage);
+		board.setStart(reviewPage.getStart());
+		board.setEnd(reviewPage.getEnd());
+		model.addAttribute("reviewPage",reviewPage);
+		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ reviewPage.getStart());
+		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
+		
 		//후기 목록 조회
-		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
+		List<Board> chgReviewList = jhCService.chgReviewList(board);
 		model.addAttribute("chgReviewList", chgReviewList);
 		
 		
@@ -89,10 +103,32 @@ public class JhController {
 		model.addAttribute("insertResult", insertResult);
 		
 		// 소세지들 출력용
-//		List<User1> listSsj = ycs.getListSsj(chg_id);
-//		System.out.println("JhController chgDetail listSsj -> " + listSsj);
-//		model.addAttribute("listSsj", listSsj);
+		List<User1> listSsj = ycs.getListSsj(chg_id);
+		model.addAttribute("listSsj", listSsj);
 		
+		String boardRegDate = ycs.getBoardRegDate(chg_id);
+		model.addAttribute("brdRegDate", boardRegDate);
+		
+		
+		//작성자 이름옆에 레벨아이콘이 나오게 하기 위한 것 추후 추가할 것!! 카톡 게시글 231107에 등록된 글 확인
+//		//hb 
+//		List<UserLevel> userLevelInfoList = us.userLevelInfoList();
+//		String icon = "";
+//		int user_level = 0;
+//		int user_exp = 0;
+//		for (int i = 0; i < qBoardList.size(); i++) {
+//		     user_num = qBoardList.get(i).getUser_num();
+//		     for (int j = 0; j < userLevelInfoList.size(); j++) {
+//		        if ( user_num == userLevelInfoList.get(j).getUser_num() ) {
+//		        icon = userLevelInfoList.get(j).getLv_name();
+//		        user_level = userLevelInfoList.get(j).getUser_level();
+//		        user_exp = userLevelInfoList.get(j).getUser_exp();
+//		        qBoardList.get(i).setIcon(icon);
+//		        qBoardList.get(i).setUser_level(user_level);
+//		        qBoardList.get(i).setUser_exp(user_exp);
+//		        }
+//		     }
+//		}
 		return "jh/jhChgDetail";
 	}
 	
@@ -124,24 +160,47 @@ public class JhController {
 //	}
 //	
 	
-	//챌린지 글 내용 조회
+	//챌린지 후기글 내용 조회
 	@RequestMapping(value = "reviewContent")
-	public String reviewContent(@RequestParam int brd_num, HttpSession session, Model model) {
+	public String reviewContent(@RequestParam int brd_num, @RequestParam("chg_id") int chg_id, HttpSession session, Model model) {
 		System.out.println("JhController reviewContent Start...");
 		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		
-		//챌린지 글 내용 조회
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		}
+		
+		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+		//챌린지 후기글 내용 조회
 		Board reviewContent = jhCService.reviewContent(brd_num);
 		
 		//챌린지 해당 글에 대한 댓글 조회
-//		Board reviewReply = jhCService.reviewReply(brd_num);
+		List<Board> reviewReply = jhCService.reviewReply(brd_num);
+		
+		// challenger 참여 유무 판단용
+		Challenger chgr = new Challenger();
+		chgr.setUser_num(userNum);
+		chgr.setChg_id(chg_id);
+		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
+		System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
+		model.addAttribute("chgrYN", chgrJoinYN);
+		
 		
 		System.out.println("JhController reviewContent reviewContent -> " + reviewContent);
+		System.out.println("JhController reviewContent reviewReply -> " + reviewReply);
 		model.addAttribute("reviewContent", reviewContent);
+		model.addAttribute("reviewReply", reviewReply);
+		model.addAttribute("chg_id", chg_id);
+		
 		return "jh/jhReviewContent";
 	}
-	
-	
 	
 	
 	
@@ -195,6 +254,20 @@ public class JhController {
 	}
 	
 	
+	@RequestMapping(value = "replyInsert")
+	public String replyInsert(Board board, HttpSession session, Model model) {
+		System.out.println("JhController replyInsert Start...");
+		//넣어야 할 값 -> 프로시저 만들기?
+//		brd_num / chg_id / 히든으로 파라미터로 받기
+//		user_num //user객체에서빼기
+//		/ brd_lg / brd_md / 
+//		conts /파라미터값으로
+//		reg_date sysdate쓰기/ 
+//		brd_group / brd_num과 같음
+//		brd_step = 1 
+		
+		return "forward:reviewContent";
+	}
 	
 	
 }

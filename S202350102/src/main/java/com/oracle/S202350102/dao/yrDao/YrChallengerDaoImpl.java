@@ -15,19 +15,34 @@ import lombok.RequiredArgsConstructor;
 public class YrChallengerDaoImpl implements YrChallengerDao {
 	private final SqlSession session;
 	
+	// 소세지들 리스트 출력
 	@Override
-	public List<User1> listSsj(int chg_id) {
-		List<User1> listSsj = null; 
+	public List<User1> getListSsj(int chg_id) {
+		List<User1> userListSsj = null; 
 		System.out.println("YrChallengerDaoImpl listSsj Start...");
 		try {
-			listSsj = session.selectList("yrUser1ListSsj", chg_id);
-			System.out.println(listSsj);
+			userListSsj = session.selectList("yrUser1ListSsj", chg_id);
+			System.out.println(userListSsj);
 		} catch (Exception e) {
 			System.out.println("YrChallengerDaoImpl listSsj e.getMessage() -> " + e.getMessage());
 		}
-		return listSsj;
+		return userListSsj;
+	}
+	
+	// 인증 게시판 작성 일자 출력
+	@Override
+	public String getBoardRegDate(int chg_id) {
+		String boardRegDate = null;
+		System.out.println("YrChallengerDaoImpl selectChgrJoinYN Start...");
+		try {
+			boardRegDate = session.selectOne("yrBoardRegDate", chg_id);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return boardRegDate;
 	}
 
+	// 챌린지 참가자 insert
 	@Override
 	public int insertChgr(Challenger chgr) {
 		int insertChgr = 0;
@@ -41,6 +56,7 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		return insertChgr;
 	}
 
+	// 챌린지 참여인원 select
 	@Override
 	public int selectChgrParti(int chg_id) {
 		int selectChgrParti = 0;
@@ -54,6 +70,7 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		return selectChgrParti;
 	}
 
+	// 챌린지 참여 여부 판단
 	@Override
 	public int selectChgrJoinYN(Challenger chgr) {
 		int selectChgrJoinYN = 0;
@@ -65,5 +82,6 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		}
 		return selectChgrJoinYN;
 	}
+
 
 }

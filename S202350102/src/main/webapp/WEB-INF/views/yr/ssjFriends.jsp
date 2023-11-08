@@ -36,25 +36,31 @@
 					<div class="col-12 col-md">
 						<div class="row mb-6">
 							<div class="col-12">
-								<span>${ssj.nick}</span>
+								<a href="#" data-bs-toggle="modal" data-bs-target="#userModal"><span>${ssj.nick}</span></a>
+								<!-- 색깔 빨간색으로 나옴. 나중에 색 변경해야함 -->
 							</div>
 						</div>
 					</div>
 
-
-
-
-					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-						modal
-					</button>
-
 					<!-- Modal -->
-					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-body">
-									${ssj.nick}
+									<div class="col-12 col-md-auto">	
+										<div class="avatar avatar-xxl mb-6 mb-md-0">
+											<span class="avatar-title rounded-circle">
+												<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+											</span>
+										</div>
+									</div>
+									<div class="col-12 col-md">
+										<div class="row mb-6">
+											<div class="col-12">
+												<span>${ssj.nick}</span>
+											</div>
+										</div>
+									</div>
 								</div>
 								
 								<div class="modal-footer">
