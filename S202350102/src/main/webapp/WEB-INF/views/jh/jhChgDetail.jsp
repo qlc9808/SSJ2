@@ -27,6 +27,7 @@
   
   
   
+	// bg 작성
 	function writeCertBoard() {
 		
 		//alert("writeCertBoard Start");
@@ -431,7 +432,7 @@
               
             
 
-            
+            <!-- bg 인증 게시판 -->
             <div class="tab-pane fade" id="certBoardTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
