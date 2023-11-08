@@ -231,7 +231,26 @@ public class JkController {
 	         return "forward:/jk/mypage.jsp"; // 업데이트 실패 시의 뷰 페이지로 이동
 	     }
 	 }
-	 
+	@RequestMapping("/mySharing")
+	public String mySharing(Board board, Model model, HttpSession session) {
+		System.out.println("JkController mySharing start...");
+		
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		List<Board> mySharing = jbs.mySharing(board);
+		System.out.println("JkController list mySharing.size()?" + mySharing.size());
+		
+	
+		User1 user1 = jbs.userSelect(user_num);
+		System.out.println("usernum"+user_num);
+		model.addAttribute("user1", user1);
+		model.addAttribute("mySharing", mySharing);
+		
+			return "jk/mySharing";
+		}
 	
 	@RequestMapping("/followManagement")
 	public String challengeManagement() {

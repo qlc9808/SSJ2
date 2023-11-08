@@ -121,7 +121,7 @@
                                     </div>
                                 </div>
                                 <!-- Additional Text with Registration Link -->
-                                <span class="text-gray-500">마음에 드시는 물건이 있으신가요?<a class="text-reset text-decoration-underline" data-bs-toggle="modal" href="/loginForm"> 회원가입 후 이용하실 수 있습니다!</a></span>
+                                <span class="text-gray-500">마음에 드시는 물건이 있으신가요?<a class="text-reset text-decoration-underline" data-bs-toggle="modal" href="../loginForm"> 회원가입 후 이용하실 수 있습니다!</a></span>
                             </div>
                         </form>
                     </div>

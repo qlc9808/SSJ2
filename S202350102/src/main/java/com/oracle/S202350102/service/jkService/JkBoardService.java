@@ -15,6 +15,8 @@ public interface JkBoardService {
 	void 			updateLikeStatus(int brd_num);
 	int 			writeFormSharing(Board board);
 	Board 			detailSharing(int brd_num);
+	List<Board> 	mySharing(Board board);
+	
 	
 
 

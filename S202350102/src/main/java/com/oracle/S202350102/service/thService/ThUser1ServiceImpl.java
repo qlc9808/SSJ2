@@ -48,4 +48,14 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 		return updateCount;
 	}
 
+
+	@Override
+	public int user1IdCheck(String user_id) {
+		System.out.println("ThUser1ServiceImpl user1IdCheck Start...");
+		System.out.println("ThUser1ServiceImpl user1IdCheck user_id --> " + user_id);
+		int result = ud1.user1IdCheck(user_id);
+		System.out.println("ThUser1ServiceImpl user1IdCheck result --> " + result);
+		return result;
+	}
+
 }
