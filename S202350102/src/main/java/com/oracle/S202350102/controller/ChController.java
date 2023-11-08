@@ -243,7 +243,7 @@ public class ChController {
 		int user_num = 0;
 		List<Challenge> srch_chgResult = null; // chg 검색 결과 List
 		List<Board> srch_brdResult = null; // brd 검색 결과 List 
-		List<Board> srch_shareResult = null;
+		List<Board> srch_shareResult = null; // sharing 검색 결과 List
 		
 		if(srch_word != "" && srch_word != null) { // 검색어가 null이 아니면 
 			if(session.getAttribute("user_num") != null) {
@@ -309,7 +309,6 @@ public class ChController {
 	@ResponseBody
 	@RequestMapping(value = "rechk")
 	public int alarmchk(HttpSession session) {
-		System.out.println("ChController alarmchk Start...");
 		int result = 0;
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
