@@ -166,7 +166,7 @@
 	      
 	      
 	
-	    <!-- REVIEWS -->
+	    <!-- 인증 게시판 -->
 	    <section class="pt-9 pb-11" id="certBoard">
 	      <div class="container">
 	        <div class="row">

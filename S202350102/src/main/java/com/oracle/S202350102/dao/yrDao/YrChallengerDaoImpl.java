@@ -30,17 +30,17 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 	}
 	
 	// 인증 게시판 작성 일자 출력
-	@Override
-	public String getBoardRegDate(int chg_id) {
-		String boardRegDate = null;
-		System.out.println("YrChallengerDaoImpl selectChgrJoinYN Start...");
-		try {
-			boardRegDate = session.selectOne("yrBoardRegDate", chg_id);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return boardRegDate;
-	}
+//	@Override
+//	public String getBoardRegDate(int chg_id) {
+//		String boardRegDate = null;
+//		System.out.println("YrChallengerDaoImpl selectChgrJoinYN Start...");
+//		try {
+//			boardRegDate = session.selectOne("yrBoardRegDate", chg_id);
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		return boardRegDate;
+//	}
 
 	// 챌린지 참가자 insert
 	@Override

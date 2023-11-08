@@ -15,6 +15,7 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
@@ -33,12 +34,17 @@ public class JhController {
 	// yr 작성
 	// challenger 테이블값 가져오기용
 	private final YrChallengerService ycs;
+	private final BgService bs;
 	
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr, String currentPage, Board board) {
-		//																						  yr작성(챌린지 신청 후 결과 값 불러오기)
+	public String chgDetail(@RequestParam("chg_id") int chg_id
+						  , HttpSession session
+						  , Model model
+						  , String insertResultStr	// yr작성(챌린지 신청 후 결과 값 불러오기)
+						  , String currentPage
+						  , Board board) {
 
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
@@ -74,6 +80,8 @@ public class JhController {
 		model.addAttribute("reviewPage",reviewPage);
 		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ reviewPage.getStart());
 		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
+		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		
 		
 		//후기 목록 조회
 		List<Board> chgReviewList = jhCService.chgReviewList(board);
@@ -105,9 +113,37 @@ public class JhController {
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
 		model.addAttribute("listSsj", listSsj);
+//		String boardRegDate = ycs.getBoardRegDate(chg_id);
+//		model.addAttribute("brdRegDate", boardRegDate);
 		
-		String boardRegDate = ycs.getBoardRegDate(chg_id);
-		model.addAttribute("brdRegDate", boardRegDate);
+		
+		
+		// bg 작성
+		
+		// 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
+		board.setChg_id(chg_id);
+		  
+		// 페이징 작업 
+		int totalCert = bs.totalCert();
+		
+		Paging certBrdPage = new Paging(totalCert, currentPage);
+		board.setStart(certBrdPage.getStart()); 
+		board.setEnd(certBrdPage.getEnd());
+		model.addAttribute("totalCert", totalCert);
+		model.addAttribute("certBrdPage", certBrdPage);
+		  
+		  
+		// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
+		List<Board> certBoard = bs.certBoard(board);
+		System.out.println("BgController certBoard.size() -> "+certBoard.size());
+		model.addAttribute("certBoard", certBoard);
+		  
+		  
+		// bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
+		Challenge chg = bs.bgChgDetail(chg_id);
+		System.out.println("BgController bgChgDetail chg -> "+chg);
+		model.addAttribute("chg", chg);
+		
 		
 		
 		//작성자 이름옆에 레벨아이콘이 나오게 하기 위한 것 추후 추가할 것!! 카톡 게시글 231107에 등록된 글 확인
