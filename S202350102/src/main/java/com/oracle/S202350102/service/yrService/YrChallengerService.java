@@ -12,6 +12,6 @@ public interface YrChallengerService {
 	int 			insertChgr(Challenger chgr);
 	int 			selectChgrParti(int chg_id);
 	int 			selectChgrJoinYN(Challenger chgr);
-	String 			getBoardRegDate(int chg_id);
+//	String 			getBoardRegDate(int chg_id);
 
 }
