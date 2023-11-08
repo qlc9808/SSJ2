@@ -26,18 +26,7 @@
 	}
 	
 	
-/* 	$(document).ready(function() {
-		
-			$('#description').removeClass('active'); // 기존 활성 탭 비활성화
-	        $('#review').addClass('active'); // 새로운 탭 활성화
-	        
-			$('#descriptionTab').removeClass('show active'); // 기존 활성 탭 비활성화
-	        $('#reviewTab').addClass('show active'); // 새로운 탭 활성화
-	        
-			const offset = $("#reviewTab").offset();
-			$('html, body').animate({scrollTop: offset.top}, 0); 
-	});
- */
+
 
 </script> 
 </head>

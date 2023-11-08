@@ -39,7 +39,6 @@ public class JhController {
 	@RequestMapping(value = "chgDetail")
 	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr, String currentPage, Board board) {
 		//																						  yr작성(챌린지 신청 후 결과 값 불러오기)
-
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
 
@@ -74,6 +73,8 @@ public class JhController {
 		model.addAttribute("reviewPage",reviewPage);
 		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ reviewPage.getStart());
 		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
+		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		
 		
 		//후기 목록 조회
 		List<Board> chgReviewList = jhCService.chgReviewList(board);
