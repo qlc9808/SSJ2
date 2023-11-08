@@ -226,17 +226,18 @@ public class ChController {
 		// 로그인 회원이면
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
-			sHList = chSearchService.sHistoryList(user_num);
+			
 			
 		}
 		model.addAttribute("user_num", user_num);
 		model.addAttribute("popchgList", popchgList); 
 		model.addAttribute("popBoardList", popBoardList);
 		model.addAttribute("popShareList", popShareList);
-		model.addAttribute("hisList", sHList);
+		
 		
 		return "search";
 	}
+	
 	// 검색기능 
 	@GetMapping("searching")
 	public String searching(String srch_word, HttpSession session, Model model) {
@@ -293,7 +294,20 @@ public class ChController {
 		return "listCommunity";
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "srch_history")
+	public List<SearchHistory> srch_history(Model model, HttpSession session){
+		List<SearchHistory> srch_his = null;
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num =(int) session.getAttribute("user_num");
+			srch_his = chSearchService.sHistoryList(user_num);
+		}
+		
+		
+		
+		return srch_his;
+	}
 	
 	
 	@RequestMapping(value = "deleteHis")
