@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardReChk;
 
 import lombok.Data;
 
@@ -160,12 +161,12 @@ public class ChBoardDaoImpl implements ChBoardDao {
 
 
 	@Override
-	public int alarmchk(int user_num) {
+	public List<BoardReChk> alarmchk(int user_num) {
 		
-		int result = 0;
+		List<BoardReChk> result = null;
 		
 		try {
-			result = session.selectOne("alarmchk",user_num);
+			result = session.selectList("alarmchk",user_num);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl alarmchk e.getMessage->" + e.getMessage());
