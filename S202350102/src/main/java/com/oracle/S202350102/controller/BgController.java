@@ -43,23 +43,6 @@ public class BgController {
 	  System.out.println("BgController bgChgDetail Start...");
 	  System.out.println("BgController bgChgDetail chg_id -> "+chg_id);
 	  
-	  // 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
-	  board.setChg_id(chg_id);
-	  
-	  // 페이징 작업 
-	  int totalCert = bs.totalCert();
-
-	  Paging page = new Paging(totalCert, currentPage);
-	  board.setStart(page.getStart()); 
-	  board.setEnd(page.getEnd());
-	  
-	  // certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
-	  List<Board> certBoard = bs.certBoard(board);
-	  System.out.println("BgController certBoard.size() -> "+certBoard.size());
-	  
-	  // bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
-	  Challenge chg = bs.bgChgDetail(chg_id);
-	  System.out.println("BgController bgChgDetail chg -> "+chg);
 	  
 	  // 세션에서 회원 번호 가져옴 
 	  int userNum = 0; 
@@ -72,6 +55,28 @@ public class BgController {
 	  // userSelect: 해당 userNum 회원의 유저 정보(회원번호) 조회 		mapper 키: userSelect (User.xml)
 	  User1 user1 = userService.userSelect(userNum);
 	  System.out.println("BgController bgChgDetail userNum -> "+userNum);
+	  
+	  
+	  // 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
+	  board.setChg_id(chg_id);
+	  
+	  // 페이징 작업 
+	  int totalCert = bs.totalCert();
+
+	  Paging page = new Paging(totalCert, currentPage);
+	  board.setStart(page.getStart()); 
+	  board.setEnd(page.getEnd());
+	  
+	  
+	  // certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
+	  List<Board> certBoard = bs.certBoard(board);
+	  System.out.println("BgController certBoard.size() -> "+certBoard.size());
+	  
+	  
+	  // bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
+	  Challenge chg = bs.bgChgDetail(chg_id);
+	  System.out.println("BgController bgChgDetail chg -> "+chg);
+	  
 	  
 	  model.addAttribute("chg", chg); 
 	  model.addAttribute("user1", user1);
