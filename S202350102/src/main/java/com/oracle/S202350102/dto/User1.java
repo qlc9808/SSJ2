@@ -29,8 +29,4 @@ public class User1 {
 	private int 	report_cnt;		// 신고횟수
 	private int 	subs_amount;	// 결제금액
 	
-	// join 용(챌린지 상세 / 소세지들)
-	// board
-	private String 	brd_reg_date;		// 게시글 작성일자
-	
 }

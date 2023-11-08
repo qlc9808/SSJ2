@@ -9,11 +9,15 @@ public interface JhChallengeDao {
 
 	Challenge 		chgDetail(int chg_id);
 
-	List<Board> 	chgReviewList(int chg_id);
+	List<Board> 	chgReviewList(Board board);
 
 	String 			userStatus(int userNum);
 
 	Board 			reviewContent(int brd_num);
- 
-}
+
+	List<Board>		reviewReply(int brd_num);
+
+	int 			reviewTotal(int chg_id);
+  
+} 
  

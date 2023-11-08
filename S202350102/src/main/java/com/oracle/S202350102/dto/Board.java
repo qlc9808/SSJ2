@@ -37,11 +37,16 @@ public class Board {
 	
 	//파일 업로드
 	
+	// 게시판 유저 정보 조회
+	private String icon;
+	private int user_level;
+	private int user_exp;
 	
 	//join
-	private String nick;			// 유저닉네임
+	private String nick;			// 유저 닉네임
 	private String user_name;
 	private String user_id;
+	private String user_img;		// 유저 프로필사진
 	
 	//후기 게시판 조회용
 	private int rn; //글번호 rownum 
