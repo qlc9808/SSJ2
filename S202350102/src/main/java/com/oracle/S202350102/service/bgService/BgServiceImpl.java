@@ -63,6 +63,22 @@ public class BgServiceImpl implements BgService {
 		return result;
 	}
 
+	@Override
+	public int updateCertBrd(Board board) {
+		
+		System.out.println("BgServiceImpl update...");
+		int updateCount = bd.updateCertBrd(board);
+		
+		return updateCount;
+	}
+
+	@Override
+	public int deleteCertBrd(int brd_num) {
+		int result = bd.deleteCertBrd(brd_num);
+		System.out.println("BgServiceImpl delete Start...");
+		return result;
+	}
+
 
 
 

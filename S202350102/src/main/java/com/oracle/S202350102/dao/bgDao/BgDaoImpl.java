@@ -78,11 +78,39 @@ public class BgDaoImpl implements BgDao {
 		System.out.println("BgDaoImpl boardCert Start... ");
 		
 		try {
-			result = session.insert("insertCertBrd", board);
+			result = session.insert("bgInsertCertBrd", board);
 		} catch (Exception e) {
 			System.out.println("BgDaoImpl insertCertBrd e.getMessage() -> " + e.getMessage());
 		}
 		
+		return result;
+	}
+
+	@Override
+	public int updateCertBrd(Board board) {
+		
+		System.out.println("BgDaoImpl update Start...");
+		int updateCount = 0;
+		
+		try {
+			updateCount = session.update("bgCertBoardUpdate", board);
+		} catch (Exception e) {
+			System.out.println("BgDaoImpl updateCertBrd Exception -> "+e.getMessage());
+		}
+		return updateCount;
+	}
+
+	@Override
+	public int deleteCertBrd(int brd_num) {
+		System.out.println("BgDaoImpl delete Start...");
+		System.out.println("BgDaoImpl delete brd_num -> "+brd_num);
+		int result = 0;
+		try {
+			result = session.delete("bgDeleteCertBrd", brd_num);
+			System.out.println("BgDaoImpl delete result -> "+result);
+		} catch (Exception e) {
+			System.out.println("BgDaoImpl delete Exception -> "+e.getMessage());
+		}
 		return result;
 	}
 

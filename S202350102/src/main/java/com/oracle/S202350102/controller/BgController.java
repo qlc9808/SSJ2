@@ -9,11 +9,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
@@ -132,8 +134,10 @@ public class BgController {
 	
 	// 인증 글쓰기! mapper key: insertCertBrd		 ajax 로 시도했을 때 만든 코드
 	@ResponseBody
-	@RequestMapping(value = "writeCertBoard")
-	public String writeCertBoard(@RequestParam("chg_id") int chg_id, Board board, Model model, HttpSession session) {
+	@RequestMapping(value = "writeCertBoard", method = RequestMethod.POST)
+	public String writeCertBoard(@RequestParam("screenshot") MultipartFile screenshot, 
+								 @RequestParam("chg_id") int chg_id, 
+								 Board board, Model model, HttpSession session, HttpServletRequest request) {
 		System.out.println("BgController writeCertBoard Start...");
 		System.out.println("BgController writeCertBoard board.getConts() -> " + board.getConts());
 		System.out.println("BgController writeCertBoard board.getTitle() -> " + board.getTitle());
@@ -148,6 +152,13 @@ public class BgController {
 		}
 		
 		System.out.println("BgController writeCertBoard board.getUser_num() -> " + board.getUser_num());
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		log.info("originalName: "+screenshot.getOriginalFilename()); 	// 업로드 된 파일의 원본 이름
+		log.info("size: "+screenshot.getSize()); 						// 업로드 된 파일의 크기
+		log.info("contentType: "+screenshot.getContentType()); 			// 업로드 된 파일의 컨텐츠 타입
+		log.info("uploadPath: "+uploadPath);							// 파일이 업로드 된 경로
+		
 		
 		List<Board> boardList = null;
 		// Map<String, Object> result = new HashMap<String, Object>();
@@ -177,12 +188,38 @@ public class BgController {
 	
 	
 	
-	// Ajax 글 수정 모달창 눌렀을 때 화면에 certBoard 정보 뜨도록
-//	@RequestMapping(value = "/fetchCertBoardInfo", method = RequestMethod.GET)
-//	@ResponseBody
-//	public Map<String, Object> fetchCertBoardInfo() {
-//		// 인증 게시판 정보를 가져오는 로직을 작성합니다
-//		
-//	}
-
+	// bgCertBoardUpdate 인증 게시판 글 수정
+	@PostMapping(value = "updateCertBrd")
+	public String updateCertBrd(Board board, Model model) {
+		log.info("updateCertBrd Start...");
+		
+		int updateCount = bs.updateCertBrd(board);
+		System.out.println("BgController bs.updateCertBrd updateCount -> "+updateCount);
+		model.addAttribute("uptCnt", updateCount);
+		model.addAttribute("kk3", "Message Test");
+		
+		return "redirect:bgChgDetail";
+	}
+	
+	
+	
+	@RequestMapping(value = "deleteCertBrd")
+	public String deleteCertBrd(int brd_num, Model model) {
+		System.out.println("BgController Start delete...");
+		int result = bs.deleteCertBrd(brd_num);
+		return "redirect:bgChgDetail";
+	}
+	
+	
+	
+	// ajax로 인증 게시판 삭제하기
+	@ResponseBody
+	@RequestMapping(value = "/brdNumDelete")
+	public String brdNumDelete(Board board) {
+		System.out.println("BgController brdNumDelete Start");
+		System.out.println("BgController brdNumDelete board.getBrd_num() -> "+board.getBrd_num());
+		int delStatus = bs.deleteCertBrd(board.getBrd_num());
+		String delStatusStr = Integer.toString(delStatus);
+		return delStatusStr;
+	}
 }

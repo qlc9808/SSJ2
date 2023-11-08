@@ -171,6 +171,7 @@ $(document).ready(function() {
                                     </div>
                                 </div>
                             </div>
+                            
                             <!-- 주소 -->
                             <div class="form-group">
                                 <div class="col-12">
@@ -180,7 +181,6 @@ $(document).ready(function() {
                             </div>
                                                     
                              <!-- 이미지 업로드 -->
-					
 							<div class="form-group mb-7">
 							    <label class="form-label" for="img">이미지 *</label>
 							    <input class="form-control form-control-sm me-3" id="img" name="img" type="file" required>
@@ -197,8 +197,6 @@ $(document).ready(function() {
 
 
 
-
-                            
                             <!-- Button -->
                             <button class="btn btn-dark" type="submit">작성완료</button>
                         </div>
