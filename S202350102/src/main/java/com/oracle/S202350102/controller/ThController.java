@@ -1,14 +1,14 @@
 package com.oracle.S202350102.controller;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+//import java.io.BufferedReader;
+//import java.io.DataOutputStream;
+//import java.io.IOException;
+//import java.io.InputStream;
+//import java.io.InputStreamReader;
+//import java.io.OutputStream;
+//import java.net.HttpURLConnection;
+//import java.net.MalformedURLException;
+//import java.net.URL;
 
 import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.oracle.S202350102.dto.KakaoPayApprovalVO;
+//import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
-import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
+//import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
 import com.oracle.S202350102.service.thService.ThUser1Service;
 
@@ -177,7 +177,17 @@ public class ThController {
     	return "home2";
     }
 
-		 
+    // 아작스 아이디체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
+    // 중복확인 버튼클릭으로 넘어갈때는 Postmapping만 가능
+    @ResponseBody
+    @GetMapping(value = "/user1IdCheck")
+    public int user1IdCheck(String user_id) {
+    	System.out.println("ThController user1IdCheck Start...");
+    	System.out.println("ThController user_id --> " + user_id);
+    	int result = us1.user1IdCheck(user_id);
+    	System.out.println("ThController user1IdCheck result --> " + result);
+    	return result;
+    }
 		
 	
 }
