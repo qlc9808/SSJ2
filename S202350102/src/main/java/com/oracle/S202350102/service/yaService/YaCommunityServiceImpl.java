@@ -134,6 +134,14 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		ybd.commentDelete(board);
 	}
 
+	@Override
+	public int getLatestBrdStep(int brd_group) {
+		System.out.println("YaCommunityServiceImpl getLatestBrdStep start....");
+		int getLatestBrdStep = ybd.getLatestBrdStep(brd_group);
+		return getLatestBrdStep;
+		
+	}
+
 
 	
 	
