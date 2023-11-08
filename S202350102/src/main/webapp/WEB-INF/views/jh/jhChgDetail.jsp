@@ -25,6 +25,24 @@
 			location.href = "chgJoinPro?" + sendData;		// YrController에서 작동됨
 		}
 
+		// 유저 닉네임 클릭 시 modal 창 띄우기
+		function userInfoModal(index) {
+			// 모달창에 넘겨줄 값을 저장 
+			var user_num = $("#ssjUserNum" + index).val();
+			var user_nick = $("#ssjNick" + index).val();
+			var user_img = $("#ssjImg" + index).val();
+
+			//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
+			$('#displayUserNum').text(user_num);
+			$('#displayUserNick').text(user_nick);
+			$('#displayUserImg').text(user_img);
+
+			// 모달 창 표시
+			$('#userShowModal').modal('show');
+		}
+
+		
+
 
 	// bg 작성
 	function writeCertBoard() {
@@ -772,7 +790,7 @@
 			            </nav>
 			            </div>
 			            </div>
-			            </div>
+			    </div>
             
             
 				<!-- yr 소세지들 -->
@@ -788,7 +806,10 @@
 										<!-- Body -->
 										<c:forEach var="ssj" items="${listSsj}" varStatus="status">
 											<div class="review-body">
-												<div class="row">
+												<div class="row" id="ssj${status.index}">
+													<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
+													<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
+													<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
 													<!-- profile -->
 													<div class="col-12 col-md-auto">
 														<div class="avatar avatar-xxl mb-6 mb-md-0">
@@ -797,53 +818,17 @@
 															</span>
 														</div>
 													</div>
-				
+													
 													<!-- nick -->
 													<div class="col-12 col-md">
 														<div class="row mb-6">
 															<div class="col-12">
-																<a href="#" data-bs-toggle="modal"
-																	data-bs-target="#userModal"><span>${ssj.nick}</span></a>
-																<!-- 색깔 빨간색으로 나옴. 나중에 색 변경해야함 -->
+																<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
+																	<span>${ssj.nick}</span>
+																</a>
 															</div>
 														</div>
 													</div>
-				
-													<!-- Modal -->
-													<div class="modal fade" id="userModal" tabindex="-1"
-														aria-labelledby="exampleModalLabel" aria-hidden="true">
-														<div class="modal-dialog">
-															<div class="modal-content">
-																<div class="modal-body">
-																	<div class="col-12 col-md-auto">
-																		<div class="avatar avatar-xxl mb-6 mb-md-0">
-																			<span class="avatar-title rounded-circle">
-																				<img src="${ssj.img}" alt="profile"
-																					class="avatar-title rounded-circle">
-																			</span>
-																		</div>
-																	</div>
-																	<div class="col-12 col-md">
-																		<div class="row mb-6">
-																			<div class="col-12">
-																				<span>${ssj.nick}</span>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-				
-																<div class="modal-footer">
-																	<button type="button" class="btn btn-outline-primary"
-																		onclick="follow()">팔로우</button>
-																	<button type="button" class="btn btn-outline-success"
-																		onclick="sendMessage()">쪽지보내기</button>
-																</div>
-															</div>
-														</div>
-													</div>
-				
-				
-				
 				
 													<!-- reg_date & fork -->
 													<div class="col-12 col-md">
@@ -911,7 +896,36 @@
 											</div>
 				
 										</c:forEach>
-				
+
+										<!-- Modal -->
+										<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-body">
+														<div class="col-12 col-md-auto">
+															<div class="avatar avatar-xxl mb-6 mb-md-0">
+																<span class="avatar-title rounded-circle">
+																	<img src="" alt="profile" class="avatar-title rounded-circle" id="displayImg">
+																</span>
+															</div>
+														</div>
+														<div class="col-12 col-md">
+															<div class="row mb-6">
+																<div class="col-12">
+																	<p id="displayUserNick"></p>
+																</div>
+															</div>
+														</div>
+													</div>
+										
+													<div class="modal-footer">
+														<button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
+														<button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
+													</div>
+												</div>
+											</div>
+										</div>
+
 									</div>
 				
 								</div>
