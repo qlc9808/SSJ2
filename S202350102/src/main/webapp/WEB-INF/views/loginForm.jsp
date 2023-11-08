@@ -49,8 +49,8 @@
                 <!-- Form -->
                 <form action="login" method="post">
                   <div class="row">
+                    
                     <div class="col-12">
-
                       <!-- Email -->
                       <div class="form-group">
                         <label class="visually-hidden" for="loginEmail">
@@ -58,10 +58,9 @@
                         </label>
                         <input class="form-control form-control-sm" id="loginEmail" type="text"  name="user_id"  placeholder="ID *" required>
                       </div>
-
                     </div>
-                    <div class="col-12">
-
+                   
+					<div class="col-12">
                       <!-- Password -->
                       <div class="form-group">
                         <label class="visually-hidden" for="loginPassword">
@@ -69,10 +68,9 @@
                         </label>
                         <input class="form-control form-control-sm" id="loginPassword" type="password" name="user_pswd" placeholder="Password *" required>
                       </div>
-
                     </div>
+                   
                     <div class="col-12 col-md">
-
                       <!-- Remember -->
                       <div class="form-group">
                         <div class="form-check">
@@ -82,8 +80,8 @@
                           </label>
                         </div>
                       </div>
-
                     </div>
+                   
                     <div class="col-12 col-md-auto">
 
                       <!-- Link -->

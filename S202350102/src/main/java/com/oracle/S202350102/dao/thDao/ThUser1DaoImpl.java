@@ -28,13 +28,13 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 
 	@Override
 	public User1 login(User1 user1) {
-		System.out.println("User1DaoImpl loginstart...");
+		System.out.println("User1DaoImpl loginstart Start...");
 		return session.selectOne("thLogin", user1);
 	}
 
 	@Override
 	public int deleteUser(User1 user1) {
-		System.out.println("User1DaoImpl deleteUser...");
+		System.out.println("User1DaoImpl deleteUser Start...");
 		int deleteUserCnt = 0;
 		try {
 			deleteUserCnt = session.update("thDeleteUser1",user1);
@@ -57,6 +57,20 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 		}
 		
 		return updateCount;
+	}
+
+	@Override
+	public int user1IdCheck(String user_id) {
+		System.out.println("User1DaoImpl user1IdCheck Start...");
+		System.out.println("User1DaoImpl user1IdCheck user_id --> " + user_id);
+		int	result = 0;
+		try {
+			result = session.selectOne("user1IdCheck", user_id);
+		} catch (Exception e) {
+			System.out.println("User1DaoImpl user1IdCheck Exception --> " + e.getMessage());
+		}
+		
+		return result;
 	}
 	
 	

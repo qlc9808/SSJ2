@@ -8,5 +8,6 @@ public interface ThUser1Dao {
 	User1			login(User1 user1);
 	int 			deleteUser(User1 user1);
 	int 			updateUserPrem(int user_num);
+	int				user1IdCheck(String user_id);
 
 }
