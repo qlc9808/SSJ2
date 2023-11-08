@@ -775,7 +775,7 @@
 			            </div>
             
             
-
+			  <!-- 소세지들 -->
               <div class="tab-pane fade" id="ssjFriendsTab">
 
 
@@ -846,7 +846,12 @@
                                   <!-- reg_date -->
                                   <div class="row mb-6">
                                     <div class="col-12">
-                                      <span></span>
+                                      <c:set var="today" value="<%=new java.util.Date() %>" />
+                                      <fmt:formatDate value="${today }"/><br>
+                                      <fmt:formatDate value="${ssj.brd_reg_date }" pattern="yyyy.MM.dd"/>
+                                      <span>
+                                      	
+                                      </span>
                                       <!-- 1일전 이런식으로 나오게 수정할 예정 -->
                                     </div>
                                   </div>

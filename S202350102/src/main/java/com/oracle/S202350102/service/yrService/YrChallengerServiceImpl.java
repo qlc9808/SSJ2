@@ -15,34 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class YrChallengerServiceImpl implements YrChallengerService {
 	private final YrChallengerDao ycd;
 	
-	
-
 	// 소세지들 리스트 출력
-//	@Override
-//	public List<User1> getListSsj(int chg_id) {
-//		System.out.println("YrChallengerServiceImpl listSsj Start...");
-//		
-//		// user list 가져오기
-//		List<User1> userListSsj = ycd.getListSsj(chg_id);
-//		
-//		// 새로운 list 선언
-//		List<User1> listSsj = new ArrayList<>();
-//		
-//		for(User1 user1 : userListSsj) {
-//			List<Board> boardRegDate = ycd.getBoardRegDate(chg_id);
-//			
-//			User1 user = new User1();
-//			
-//		}
-//		
-//		
-//		
-//		return listSsj;
-//	}
-	
-	
-	
-	
 	@Override
 	public List<User1> getListSsj(int chg_id) {
 		System.out.println("YrChallengerServiceImpl listSsj Start...");
@@ -51,12 +24,12 @@ public class YrChallengerServiceImpl implements YrChallengerService {
 	}
 	
 	// 인증 게시판 작성 일자 출력
-	@Override
-	public String getBoardRegDate(int chg_id) {
-		System.out.println("YrChallengerServiceImpl listSsj Start...");
-		String boardRegDate = ycd.getBoardRegDate(chg_id);
-		return boardRegDate;
-	}
+//	@Override
+//	public String getBoardRegDate(int chg_id) {
+//		System.out.println("YrChallengerServiceImpl listSsj Start...");
+//		String boardRegDate = ycd.getBoardRegDate(chg_id);
+//		return boardRegDate;
+//	}
 
 	// 챌린지 참가자 insert
 	@Override
