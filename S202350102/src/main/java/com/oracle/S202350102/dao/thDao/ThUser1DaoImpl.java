@@ -65,9 +65,23 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 		System.out.println("User1DaoImpl user1IdCheck user_id --> " + user_id);
 		int	result = 0;
 		try {
-			result = session.selectOne("user1IdCheck", user_id);
+			result = session.selectOne("thUser1IdCheck", user_id);
 		} catch (Exception e) {
 			System.out.println("User1DaoImpl user1IdCheck Exception --> " + e.getMessage());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int user1NickCheck(String nick) {
+		System.out.println("User1DaoImpl user1NickCheck Start...");
+		System.out.println("User1DaoImpl user1NickCheck nick --> " + nick);
+		int	result = 0;
+		try {
+			result = session.selectOne("thUser1NickCheck", nick);
+		} catch (Exception e) {
+			System.out.println("User1DaoImpl user1NickCheck Exception --> " + e.getMessage());
 		}
 		
 		return result;

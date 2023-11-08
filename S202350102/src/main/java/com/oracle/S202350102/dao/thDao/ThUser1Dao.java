@@ -9,5 +9,6 @@ public interface ThUser1Dao {
 	int 			deleteUser(User1 user1);
 	int 			updateUserPrem(int user_num);
 	int				user1IdCheck(String user_id);
+	int 			user1NickCheck(String nick);
 
 }

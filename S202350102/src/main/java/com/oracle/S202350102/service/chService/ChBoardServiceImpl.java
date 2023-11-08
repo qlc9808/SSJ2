@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.oracle.S202350102.dao.chDao.ChBoardDao;
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardReChk;
 
 import lombok.Data;
 @Service
@@ -108,8 +109,8 @@ public class ChBoardServiceImpl implements ChBoardService {
 	}
 
 	@Override
-	public int alarmchk(int user_num) {
-		int result = 0;
+	public List<BoardReChk> alarmchk(int user_num) {
+		List<BoardReChk> result = null;
 		
 		result = chBoardDao.alarmchk(user_num);
 		

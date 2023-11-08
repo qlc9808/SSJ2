@@ -20,8 +20,11 @@
 			
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-      
+<script>
+
+</script>
+
+
 </head>
 <body>
    <section class="pt-7 pb-12">
@@ -57,15 +60,15 @@
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
 
              <!-- Form -->
-                    <form method="post" action="/writeShare" enctype="multipart/form-data">
-                       
+                    <form method="post" action="/updateSharing2" enctype="multipart/form-data">
+                        <div class="row">
                             <div class="col-12">
                                 <!-- 제목 -->
                                 <div class="form-group">
-                                <input class="form-control form-control-sm" id="user_num" name="user_num" type="hidden" value="${user1.user_num}" required>
+                                
                                 
                                     <label class="form-label" for="title">게시글 제목 *</label>
-                                    <input class="form-control form-control-sm" id="title" name="title" type="text" value="" required>
+                                    <input class="form-control form-control-sm" id="title" name="title" type="text" value="${board.title}" required>
                                 </div>
                             </div>
                             <!-- 작성자명 및 연락처 -->
@@ -73,11 +76,11 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="nick">닉네임 *</label>
-                                        <input class="form-control form-control-sm" id="nick" name="nick" type="text" value="${user1.nick}" readonly>
+                                        <input class="form-control form-control-sm" id="nick" name="nick" type="text" value="${board.nick}" readonly>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="user_tel">연락처 *</label>
-                                        <input class="form-control form-control-sm" id="user_tel" name="user_tel" type="text" value="" required>
+                                        <input class="form-control form-control-sm" id="user_tel" name="user_tel" type="text" value="${board.user_tel}" required>
                                     </div>
                                 </div>
                             </div>
@@ -86,11 +89,11 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="price">금액 *</label>
-                                        <input class="form-control form-control-sm" id="price" type="number" name="price" value="" required>
+                                        <input class="form-control form-control-sm" id="price" type="number" name="price" value="${board.price}" required>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="applicants">모집인원 *</label>
-                                        <input class="form-control form-control-sm" id="applicants" name="applicants" type="number" value="" required>
+                                        <input class="form-control form-control-sm" id="applicants" name="applicants" type="number" value="${board.applicants}" required>
                                     </div>
                                 </div>
                             </div>
@@ -99,61 +102,55 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="bank_info">계좌번호 *</label>
-                                        <input class="form-control form-control-sm" id="bank_info" name="bank_info" type="text" value="" required>
+                                        <input class="form-control form-control-sm" id="bank_info" name="bank_info" type="text" value="${board.bank_info}" required>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="bank_duedate">입금기한 *</label>
-                                        <input class="form-control form-control-sm" id="bank_duedate" name="bank_duedate" type="text" value="" required>
+                                        <input class="form-control form-control-sm" id="bank_duedate" name="bank_duedate" type="text" value="${board.bank_duedate}">
                                     </div>
                                 </div>
                             </div>
-                            
                             <!-- 주소 -->
                             <div class="form-group">
                                 <div class="col-12">
                                     <label class="form-label" for="addr">주소 *</label>
-                                    <input class="form-control form-control-sm" id="addr" name="addr" type="text" value="" required>
+                                    <input class="form-control form-control-sm" id="addr" name="addr" type="text" value="${board.addr}" required>
                                 </div>
                             </div>
                                                     
-                             <!-- 이미지 업로드 -->
+                           <!-- 이미지 미리보기 -->
 							<div class="form-group mb-7">
 							    <label class="form-label" for="file">이미지 *</label>
 							    <input class="form-control form-control-sm me-3" id="file" name="file" type="file" required>
 							    <img id="imgPreview" style="max-width: 200px; margin-top: 10px;" />
 							</div>
 
- 							<!-- 상세내용 -->
-<div class="form-group mb-7">
-    <label class="form-label" for="conts">상세내용 *</label>
-    <div class="d-flex align-items-start" style="margin-top: 10px;">
-        <textarea class="form-control form-control-sm" id="conts" name="conts" rows="8" required></textarea>
-    </div>
-</div>
 
-<!-- Button (input 요소로 submit) -->
-<div class="col-lg-6 mb-2">
-    <button type="submit" class="btn btn-outline-dark w-100">
-        작성완료
-    </button>
-                          
+
+ 							<!-- 상세내용 -->
+							<div class="form-group mb-7">
+							    <label class="form-label" for="conts">상세내용 *</label>
+							    <div class="d-flex align-items-start" style="margin-top: 10px;">
+							    
+							     <textarea class="form-control form-control-sm" id="conts" name="conts" rows="5" required>${board.conts}</textarea>
+							    </div>
+							</div>
+
+
+
+
+
+                            
+                            <!-- Button -->
+                            <button class="btn btn-dark" type="submit">작성완료</button>
                         </div>
-                  </form>
+                    </form>
                 </div>
             </div>
         </div>
     </section>
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-   
 </body>
 <%@ include file="../footer.jsp" %>
 </html>
