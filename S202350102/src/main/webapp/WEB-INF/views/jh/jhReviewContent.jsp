@@ -35,7 +35,7 @@
 	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num${reviewContent.brd_num}'" value="수정">
 	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num${reviewContent.brd_num}'" value="삭제">
 </c:if>
-
+<input type="button" value="목록" onclick="window.history.back()" >  
 <div class="card mb-3">
 
 	<!-- 후기 글 내용 -->
@@ -89,7 +89,7 @@
          	<c:otherwise>
          	<!-- 로그인 했지만 참가자 아닌 경우  -->
 	   			<div class="col">
-	   				<input class="form-control form-control-sm" id="reviewReply" type="text" placeholder="챌린지 참가자만 댓글을 남길 수 있습니다!" disabled="disabled">
+	   				<input class="form-control form-control-sm" id="reviewReply" type="text"  maxlength="100" placeholder="챌린지 참가자만 댓글을 남길 수 있습니다!" disabled="disabled">
 	 			</div>
 	            <div class="col-auto">
 					<!-- Button -->
@@ -161,7 +161,6 @@
 	    </div>
 	  </div>
      </c:forEach>
-	     
 </div>
 
 

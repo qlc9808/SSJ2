@@ -117,6 +117,38 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return reviewTotal;
 	}
 
+	@Override
+	public List<Challenge> challengeList() {
+		System.out.println("JhChallengeDaoImpl challengeList Start...");
+		List<Challenge> chgList = null;
+		
+		try {
+			chgList = session.selectList("jhChallengeList");
+			
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl challengeList e.getMessage() -> " + e.getMessage());
+		}
+		System.out.println("JhChallengeDaoImpl challengeList  chgList.size() -> " + chgList.size());
+		
+		
+		return chgList;
+	}
+
+	@Override
+	public int chgListTotal() {
+		System.out.println("JhChallengeDaoImpl chgListTotal Start...");
+		int chgListTotal = 0;
+		
+		try {
+			chgListTotal = session.selectOne("jhChgListTotal");
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl chgListTotal e.getMessage() -> " + e.getMessage());
+		}
+		
+		System.out.println("JhChallengeDaoImpl challengeList chgListTotal -> " + chgListTotal);
+		return chgListTotal;
+	}
+
 
 
 }

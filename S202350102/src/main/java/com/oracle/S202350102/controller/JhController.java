@@ -36,13 +36,31 @@ public class JhController {
 	private final YrChallengerService ycs;
 	private final BgService bs;
 	
+	
+	@RequestMapping(value = "challengeList")
+	public String challengeList(HttpSession session
+			  					, Model model 
+			  					, String currentPage) {
+		System.out.println("JhController challengeList Start...");
+		
+		List<Challenge> chgList = jhCService.challengeList();
+		
+		int chgListTotal = jhCService.chgListTotal();
+		Paging chgListPage = new Paging(chgListTotal, currentPage);
+		
+		model.addAttribute("chgList", chgList);
+		model.addAttribute("chgListPage", chgListPage);
+		
+		
+		return "jh/challengeList";
+	}
+	
+	
+	
+	
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-<<<<<<< Updated upstream
-	public String chgDetail(@RequestParam("chg_id") int chg_id, HttpSession session, Model model, String insertResultStr, String currentPage, Board board) {
-		//																						  yr작성(챌린지 신청 후 결과 값 불러오기)
-=======
 	public String chgDetail(@RequestParam("chg_id") int chg_id
 						  , HttpSession session
 						  , Model model
@@ -51,7 +69,6 @@ public class JhController {
 						  , Board board) {
 
 
->>>>>>> Stashed changes
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
 

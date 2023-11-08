@@ -143,7 +143,9 @@
 	
 </script> 
 </head>
-<body onload="chgResultModalClickTest()">  <!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+<body onload="chgResultModalClickTest()">  
+<!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+<input type="button" value="목록" onclick="location.href='/challengeList'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -901,7 +903,7 @@
             
             
             
-              
+            <!-- 지워야 할 태그들 많이 남음  -->  
             <c:choose>
             	<c:when test="${chg.stateCtn == '종료'}">
    	              <div class="tab-pane fade" id="reviewTab">

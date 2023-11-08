@@ -24,7 +24,13 @@ public interface JhCallengeService {
 
 	int 			reviewTotal(int chg_id);
 
- 
+
+	List<Challenge> challengeList();
+
+
+	int 			chgListTotal();
+
+   
    
  
 

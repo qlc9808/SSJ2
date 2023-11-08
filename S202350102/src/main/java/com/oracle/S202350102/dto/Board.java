@@ -48,6 +48,6 @@ public class Board {
 	private String user_id;
 	private String user_img;		// 유저 프로필사진
 	
-	//후기 게시판 조회용
-	private int rn; //글번호 rownum 
+	//후기 게시판 조회용 삭제 예정
+//	private int rn; //글번호 rownum 
 }
