@@ -11,4 +11,9 @@ public class BoardReChk {
 	private int 	user_num;	// 원글회원번호
 	private String	send_date; 	// 알림 발생 일시
 	private Date 	read_date; 	// 알림 확인 일시
+	
+	
+	
+	// 조회용
+	private String  title; // 글의 제목 조회
 }

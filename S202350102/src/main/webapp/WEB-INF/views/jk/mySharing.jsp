@@ -47,7 +47,7 @@
                 <a class="list-group-item list-group-item-action dropend-toggle " href="account-wishlist.html">
                  	찜한 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="account-wishlist.html">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
                  	내가 쓴 글
                 </a>
                <a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
@@ -72,19 +72,19 @@
             </div>
             </div>
   <div class="row">
-    <c:forEach var="board" items="${sharing}">
-  
+  	<c:set var="usernum" value="${sessionScope.user_num}" />
+	<c:set var="mySharingList" value="${mySharing}" />
+    <c:forEach var="board" items="${mySharing}">
+  	<c:if test = "${board.user_num eq usernum}">
         <div class="col-6 col-md-4">
             <div class="card mb-7">
                 <div class="card-img">
-                    <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
-                        <i class="fe fe-heart"></i>
-                    </button>
-                   <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
+                    
+                   <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='myDetailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
 				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 					</button>
 
-                  <img class="card-img-top" src="${board.img}" alt="..." style="width: 100%; height: 250;">
+                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
 					 </div>
                 <div class="card-body fw-bold text-center">
                     <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
@@ -99,7 +99,9 @@
 				 
             </div>
         </div>
+    </c:if>
     </c:forEach>
+    </div>
 </div>
 
 

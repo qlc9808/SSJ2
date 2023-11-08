@@ -87,19 +87,33 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	}
 
 	@Override
-	public List<Board> mySharing(Board board) {
-	    System.out.println("JkBoardDaoImpl mySharing start...");
-
-	    List<Board> mySharing = null;
-	    try {
-	        mySharing = session.selectList("mySharingList", board);
-	        System.out.println("JkBoardDaoImpl Sharing.size()-->" + mySharing.size());
-	    } catch (Exception e) {
-	        System.out.println("JkBoardDaoImpl Sharing e.getMessage()?" + e.getMessage());
-	    }
-
-	    return mySharing;
+	public int updateSharing(Board board) {
+		System.out.println("JkBoardDaoImpl updateSharing start...");
+		int updateResult = 0;
+		try {
+			updateResult = session.update("updateSharing", board);
+			System.out.println("updateresult"+updateResult);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl updateSharing e.getMessage"+e.getMessage());
+			e.printStackTrace();
+		}
+		return updateResult;
 	}
+
+	@Override
+	public int deleteSharing(int brd_num) {
+		System.out.println("JkBoardDaoImpl deleteSharing start...");
+		int deleteResult = 0;
+		try {
+			deleteResult = session.update("deleteSharing", brd_num);
+			System.out.println("deleteresult"+deleteResult);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl deleteSharing e.getMessage"+e.getMessage());
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 
 		
 	

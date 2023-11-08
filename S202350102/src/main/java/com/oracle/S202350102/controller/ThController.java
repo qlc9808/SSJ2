@@ -177,7 +177,7 @@ public class ThController {
     	return "home2";
     }
 
-    // 아작스 아이디체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
+    // 아작스 아이디 중복체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
     // 중복확인 버튼클릭으로 넘어갈때는 Postmapping만 가능
     @ResponseBody
     @GetMapping(value = "/user1IdCheck")
@@ -188,6 +188,16 @@ public class ThController {
     	System.out.println("ThController user1IdCheck result --> " + result);
     	return result;
     }
-		
+
+    // 닉네임 중복 체크
+    @ResponseBody
+    @GetMapping(value = "user1NickCheck")
+    public int user1NickCheck(String nick) {
+    	System.out.println("ThController user1NickCheck Start...");
+    	System.out.println("ThController nick --> " + nick);
+    	int result = us1.user1NickCheck(nick);
+    	System.out.println("ThController user1NickCheck result --> " + result);
+    	return result;
+    }
 	
 }

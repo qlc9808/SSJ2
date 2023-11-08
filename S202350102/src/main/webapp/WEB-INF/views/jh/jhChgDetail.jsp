@@ -13,20 +13,37 @@
 <title>Insert title here</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
-	// yr 작성
-  // 챌린지 신청 완료 후 body onload 실행
-	function chgResultModalClickTest() {
-		document.getElementById("chgResultModalClick").click();
-	}
+		// yr 작성
+		// 챌린지 신청 완료 후 body onload 실행
+		function chgResultModalClickTest() {
+			document.getElementById("chgResultModalClick").click();
+		}
 
-  // 챌린지 신청 시 작동
-	function cJoin() {
-		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
-		location.href="chgJoinPro?" + sendData;     // YrController에서 작동됨
-	}
-  
-  
-  
+		// 챌린지 신청 시 작동
+		function cJoin() {
+			var sendData = $('#cJoinForm').serialize();		// user_num=?&chg_id=?
+			location.href = "chgJoinPro?" + sendData;		// YrController에서 작동됨
+		}
+
+		// 유저 닉네임 클릭 시 modal 창 띄우기
+		function userInfoModal(index) {
+			// 모달창에 넘겨줄 값을 저장 
+			var user_num = $("#ssjUserNum" + index).val();
+			var user_nick = $("#ssjNick" + index).val();
+			var user_img = $("#ssjImg" + index).val();
+
+			//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
+			$('#displayUserNum').text(user_num);
+			$('#displayUserNick').text(user_nick);
+			$('#displayUserImg').text(user_img);
+
+			// 모달 창 표시
+			$('#userShowModal').modal('show');
+		}
+
+		
+
+
 	// bg 작성
 	function writeCertBoard() {
 		
@@ -434,8 +451,8 @@
               
             
 
-            <!-- bg 인증 게시판 -->
-            <div class="tab-pane fade" id="certBoardTab">
+				<!-- bg 인증 게시판 -->
+				<div class="tab-pane fade" id="certBoardTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
 	                  			            <!-- Heading -->
@@ -775,131 +792,152 @@
 			            </nav>
 			            </div>
 			            </div>
-			            </div>
+			    </div>
             
             
-			  <!-- 소세지들 -->
-              <div class="tab-pane fade" id="ssjFriendsTab">
+				<!-- yr 소세지들 -->
+				<div class="tab-pane fade" id="ssjFriendsTab">
+				
+					<div class="row justify-content-center py-9">
+						<div class="col-12 col-lg-10 col-xl-8">
+							<div class="row">
+								<div class="col-12">
+				
+									<!-- content -->
+									<div class="review">
+										<!-- Body -->
+										<c:forEach var="ssj" items="${listSsj}" varStatus="status">
+											<div class="review-body">
+												<div class="row" id="ssj${status.index}">
+													<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
+													<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
+													<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
+													<!-- profile -->
+													<div class="col-12 col-md-auto">
+														<div class="avatar avatar-xxl mb-6 mb-md-0">
+															<span class="avatar-title rounded-circle">
+																<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+															</span>
+														</div>
+													</div>
+													
+													<!-- nick -->
+													<div class="col-12 col-md">
+														<div class="row mb-6">
+															<div class="col-12">
+																<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
+																	<span>${ssj.nick}</span>
+																</a>
+															</div>
+														</div>
+													</div>
+				
+													<!-- reg_date & fork -->
+													<div class="col-12 col-md">
+														<!-- reg_date -->
+														<div class="row mb-6">
+															<div class="col-12">
+																
+																<!-- 오늘 날짜 -->
+																<jsp:useBean id="javaDate" class="java.util.Date" />
+																<fmt:formatDate var="nowDateFd" value="${javaDate }"
+																	pattern="yyyy-MM-dd" /><br>
+				
+																<!-- 마지막 인증 게시판 작성일자 -->
+																<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }"
+																	pattern="yyyy-MM-dd" /><br>
+																		
+																<c:if test="${ssj.brd_reg_date != null }">
+																	
+																	<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd"/>
+																	<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd"/>
+																	
+																	<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true"/>
+																	<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }" integerOnly="true"/>
+																	
+																	<c:set var="dDay" value="${nowDatePn - lastRegDatePn}"/>
+																
+																	<span>
+																		${dDay }일 전
+																	</span>
+																	<!-- 1일전 이런식으로 나오게 수정할 예정 -->
+																</c:if>
 
+															</div>
+														</div>
+				
+														<c:choose>
+															<c:when test="${sessionScope.user_num != null}">
+																<!-- 로그인 한 상태 -->
+																<!-- fork -->
+																<div class="row align-items-center">
+																	<div class="col-auto">
+																		<!-- Button -->
+																		<a class="btn btn-xs btn-outline-border"
+																			href="user_num=${ssj.user_num}">FORK</a>
+																	</div>
+																</div>
+															</c:when>
+				
+															<c:when test="${sessionScope.user_num == null}">
+																<!-- 로그인 안 한 상태 -->
+																<!-- loginForm으로 이동 -->
+																<div class="row align-items-center">
+																	<div class="col-auto">
+																		<!-- Button -->
+																		<a class="btn btn-xs btn-outline-border"
+																			href="/loginForm">FORK</a>
+																	</div>
+																</div>
+															</c:when>
+														</c:choose>
+													</div>
+				
+												</div>
+				
+											</div>
+				
+										</c:forEach>
 
-                <div class="row justify-content-center py-9">
-                  <div class="col-12 col-lg-10 col-xl-8">
-                    <div class="row">
-                      <div class="col-12">
+										<!-- Modal -->
+										<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-body">
+														<div class="col-12 col-md-auto">
+															<div class="avatar avatar-xxl mb-6 mb-md-0">
+																<span class="avatar-title rounded-circle">
+																	<img src="" alt="profile" class="avatar-title rounded-circle" id="displayImg">
+																</span>
+															</div>
+														</div>
+														<div class="col-12 col-md">
+															<div class="row mb-6">
+																<div class="col-12">
+																	<p id="displayUserNick"></p>
+																</div>
+															</div>
+														</div>
+													</div>
+										
+													<div class="modal-footer">
+														<button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
+														<button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
+													</div>
+												</div>
+											</div>
+										</div>
 
-                        <!-- content -->
-                        <div class="review">
-                          <!-- Body -->
-                          <c:forEach var="ssj" items="${listSsj}" varStatus="status">
-                            <div class="review-body">
-                              <div class="row">
-                                <!-- profile -->
-                                <div class="col-12 col-md-auto">   
-                                  <div class="avatar avatar-xxl mb-6 mb-md-0">
-                                    <span class="avatar-title rounded-circle">
-                                      <img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
-                                    </span>
-                                  </div>
-                                </div>
-
-                                <!-- nick -->
-                                <div class="col-12 col-md">
-                                  <div class="row mb-6">
-                                    <div class="col-12">
-                                      <a href="#" data-bs-toggle="modal" data-bs-target="#userModal"><span>${ssj.nick}</span></a>
-                                      <!-- 색깔 빨간색으로 나옴. 나중에 색 변경해야함 -->
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <div class="modal-body">
-                                        <div class="col-12 col-md-auto">   
-                                          <div class="avatar avatar-xxl mb-6 mb-md-0">
-                                            <span class="avatar-title rounded-circle">
-                                              <img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div class="col-12 col-md">
-                                          <div class="row mb-6">
-                                            <div class="col-12">
-                                              <span>${ssj.nick}</span>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
-                                        <button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-
-
-
-                                <!-- reg_date & fork -->
-                                <div class="col-12 col-md">
-                                  <!-- reg_date -->
-                                  <div class="row mb-6">
-                                    <div class="col-12">
-                                      <c:set var="today" value="<%=new java.util.Date() %>" />
-                                      <fmt:formatDate value="${today }"/><br>
-                                      <fmt:formatDate value="${ssj.brd_reg_date }" pattern="yyyy.MM.dd"/>
-                                      <span>
-                                      	
-                                      </span>
-                                      <!-- 1일전 이런식으로 나오게 수정할 예정 -->
-                                    </div>
-                                  </div>
-
-                                  <c:choose>
-                                    <c:when test="${sessionScope.user_num != null}">
-                                      <!-- 로그인 한 상태 -->
-                                      <!-- fork -->
-                                      <div class="row align-items-center">
-                                        <div class="col-auto">
-                                          <!-- Button -->
-                                          <a class="btn btn-xs btn-outline-border" href="user_num=${ssj.user_num}">FORK</a>
-                                        </div>
-                                      </div>
-                                    </c:when>
-
-                                    <c:when test="${sessionScope.user_num == null}">
-                                      <!-- 로그인 안 한 상태 -->
-                                      <!-- loginForm으로 이동 -->
-                                      <div class="row align-items-center">
-                                        <div class="col-auto">
-                                          <!-- Button -->
-                                          <a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
-                                        </div>
-                                      </div>
-                                    </c:when>
-                                  </c:choose>
-                                </div>
-
-                              </div>
-                              
-                            </div>
-
-                          </c:forEach>
-                          
-                        </div>
-
-                      </div>
-                      
-                    </div>
-                  </div>
-                </div>
-
-
-              </div>
+									</div>
+				
+								</div>
+				
+							</div>
+						</div>
+					</div>
+				
+				
+				</div>
             
             
             
