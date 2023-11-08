@@ -161,7 +161,7 @@ public class ChBoardDaoImpl implements ChBoardDao {
 
 	@Override
 	public int alarmchk(int user_num) {
-		System.out.println("chBoardDaoImpl popShareList Start...");
+		
 		int result = 0;
 		
 		try {
@@ -170,7 +170,7 @@ public class ChBoardDaoImpl implements ChBoardDao {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl alarmchk e.getMessage->" + e.getMessage());
 		}
-		System.out.println("chBoardDaoImpl alarmchk result->" + result);
+		
 		return result;
 	}
 
