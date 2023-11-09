@@ -55,4 +55,10 @@ public class QBoardServiceImpl implements QBoardService {
 		return total;
 	}
 
+	@Override
+	public List<Board> qboardListSearch(String keyword) {
+		return qbd.qboardListSearch(keyword);
+	}
+
+
 }

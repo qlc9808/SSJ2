@@ -77,6 +77,10 @@
             </li>
             
             <li class="nav-item">
+              <a class="nav-link" href="/qBoardList">문의</a>
+            </li>
+            
+            <li class="nav-item">
               <a class="nav-link" href="/introduce">서비스 소개</a>
             </li>
             
