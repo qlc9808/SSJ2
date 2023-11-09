@@ -78,7 +78,7 @@ public class BgDaoImpl implements BgDao {
 		System.out.println("BgDaoImpl boardCert Start... ");
 		
 		try {
-			result = session.insert("bgInsertCertBrd", board);
+			result = session.insert("insertCertBrd", board);
 		} catch (Exception e) {
 			System.out.println("BgDaoImpl insertCertBrd e.getMessage() -> " + e.getMessage());
 		}
@@ -93,7 +93,7 @@ public class BgDaoImpl implements BgDao {
 		int updateCount = 0;
 		
 		try {
-			updateCount = session.update("bgCertBoardUpdate", board);
+			updateCount = session.update("certBoardUpdate", board);
 		} catch (Exception e) {
 			System.out.println("BgDaoImpl updateCertBrd Exception -> "+e.getMessage());
 		}
@@ -106,7 +106,7 @@ public class BgDaoImpl implements BgDao {
 		System.out.println("BgDaoImpl delete brd_num -> "+brd_num);
 		int result = 0;
 		try {
-			result = session.delete("bgDeleteCertBrd", brd_num);
+			result = session.delete("deleteCertBrd", brd_num);
 			System.out.println("BgDaoImpl delete result -> "+result);
 		} catch (Exception e) {
 			System.out.println("BgDaoImpl delete Exception -> "+e.getMessage());

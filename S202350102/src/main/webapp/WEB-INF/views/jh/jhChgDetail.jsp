@@ -43,8 +43,8 @@
 		
 		// 이미지 파일, 제목, 내용을 FormData 에 추가
 		var formData = new FormData();
-		formData.append("title", $('title').val());
-		formData.append("conts", $('conts').val());
+		formData.append("title", $('#title').val());
+		formData.append("conts", $('#conts').val());
 		formData.append("chg_id", chg_id);
 		formData.append("user_num", user_num);
 		formData.append("screenshot", screenshot);
@@ -68,12 +68,15 @@
 			url	:	"/writeCertBoard",
 			type:	"POST",
 			data:	formData,
-			dataType:	"text",
+			dataType:'text',
 			processData: false,		// 이미지 파일 처리를 위해 false로 설정
 			contentType: false,		// 이미지 파일 처리를 위해 false로 설정
-			success	:	function(rtnStr) {
-				alert("success ajax Data -> "+rtnStr);
-				// 서버 응답을 처리하는 코드
+			success:function(data){
+				alert(".ajax writeCertBoard->"+data); 
+				if (data == '1') {
+					// 성공하면 아래라인 수행 
+					alert("입력성공");
+				}
 			},
 			error: function() {
 				// Ajax 요청 자체가 실패한 경우
@@ -95,12 +98,20 @@
 		var reg_date =	$("#reg_date"+index).val();  
 		var title =		$("#title"+index).val();  
 		var conts =		$("#conts"+index).val();  
+		var img =		$("#img"+index).val();  
+		
+		// alert("img -> " + img);
+		// alert("${pageContext.request.contextPath}/upload/"+img);
+		
 		/*
 			 alert("updateModalCall nick -> "+nick);
 		 alert("updateModalCall reg_date -> "+reg_date);
 		 alert("updateModalCall title -> "+title);
 		 alert("updateModalCall conts -> "+conts); 
 		 */
+		 
+		// 이미지 설정
+		$('#modalImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
 		 
 		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayNick').text(nick);     
@@ -432,7 +443,7 @@
               
             
 
-            <!-- bg 인증 게시판 -->
+            <!-- BG 인증 게시판 -->
             <div class="tab-pane fade" id="certBoardTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
@@ -548,11 +559,12 @@
 				                  	<input type="hidden" id="reg_date${status.index}" value="${certBoard.reg_date }">
 				                  	<input type="hidden" id="title${status.index}" value="${certBoard.title }">
 				                  	<input type="hidden" id="conts${status.index}" value="${certBoard.conts }">
+				                  	<input type="hidden" id="img${status.index}" value="${certBoard.img }">
 				                  	
 				                  	
 				                  	<div class="col-5 col-md-3 col-xl-2">
 										<!-- 인증샷 Image -->
-				                    	<img src="assets/img/products/product-6.jpg" alt="..." class="img-fluid">
+				                    	<img src="${pageContext.request.contextPath}/upload/${certBoard.img }" alt="인증샷" class="img-fluid">
 				                    </div>
 				                    
 				                    
@@ -625,7 +637,7 @@
 												수정
 					                          </a>
 					                          
-					                          <!-- Button -->
+					                          Button
 					                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
 												삭제
 					                          </a>
@@ -662,13 +674,13 @@
 					            <div class="row align-items-center mx-xl-0"><!--  -->
 					              <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"><!--  -->
 					    
-					                <!-- Image -->
-					                <img class="img-fluid" src="./assets/img/products/product-7.jpg" alt="...">
+					                <!-- Image 수정 모달창 인증샷 -->
+					                <img class="img-fluid" alt="수정 모달창 인증샷" id="modalImage">
 					    
 					                <!-- Button -->
-					                <a class="btn btn-sm w-100 btn-primary" href="./product.html">
+					                <!-- <a class="btn btn-sm w-100 btn-primary" href="./product.html">
 					                  More Product Info <i class="fe fe-info ms-2"></i>
-					                </a>
+					                </a> -->
 					    
 					              </div><!-- <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"> -->
 					              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"><!--  -->
@@ -864,10 +876,140 @@
                                       <div class="row align-items-center">
                                         <div class="col-auto">
                                           <!-- Button -->
-                                          <a class="btn btn-xs btn-outline-border" href="user_num=${ssj.user_num}">FORK</a>
+                                          <a class="btn btn-xs btn-outline-border" 
+                                          	 href="<%-- user_num=${ssj.user_num} --%>"
+                                          	 onclick="">FORK</a>
                                         </div>
                                       </div>
                                     </c:when>
+                                    
+                                    
+                                    
+                                    <!-- BG 찌르기 fork 기능 모달창	 Wait List -->
+									    <div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
+									      <div class="modal-dialog modal-dialog-centered" role="document">
+									        <div class="modal-content">
+									    
+									          <!-- Close -->
+									          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+									            <i class="fe fe-x" aria-hidden="true"></i>
+									          </button>
+									    
+									          <!-- Header-->
+									          <div class="modal-header lh-fixed fs-lg">
+									            <strong class="mx-auto">Wait List</strong>
+									          </div>
+									    
+									          <!-- Body -->
+									          <div class="modal-body">
+									            <div class="row mb-6">
+									              <div class="col-12 col-md-3">
+									    
+									                <!-- Image -->
+									                <a href="./product.html">
+									                  <img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
+									                </a>
+									    
+									              </div>
+									              <div class="col-12 col-md-9">
+									    
+									                <!-- Label -->
+									                <p>
+									                  <a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
+									                </p>
+									    
+									                <!-- Radio -->
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeOne" value="6" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeOne">3XS</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeTwo" value="6.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeTwo">2XS</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeThree" value="7" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeThree">XS</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeFour" value="7.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption" checked>
+									                  <label class="form-check-label" for="modalWaitListSizeFour">S</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeFive" value="8" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeFive">M</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeSix" value="8.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeSix">LG</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeSeven" value="9" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeSeven">XL</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeEight" value="9.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeEight">2XL</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeNine" value="10" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeNine">3XL</label>
+									                </div>
+									                <div class="form-check form-check-inline form-check-size mb-2">
+									                  <input type="radio" class="form-check-input" name="modalWaitListSize" id="modalWaitListSizeTen" value="10.5" data-toggle="form-caption" data-target="#modalWaitListSizeCaption">
+									                  <label class="form-check-label" for="modalWaitListSizeTen">4XL</label>
+									                </div>
+									    
+									              </div>
+									    
+									            </div>
+									            <div class="row">
+									              <div class="col-12">
+									    
+									                <!-- Text -->
+									                <p class="fs-sm text-center text-gray-500">
+									                  Justo ut diam erat hendrerit morbi porttitor,
+									                  per eu curabitur diam sociis.
+									                </p>
+									    
+									              </div>
+									            </div>
+									            <div class="row gx-5 mb-2">
+									              <div class="col-12 col-md-6">
+									    
+									                <!-- Form group -->
+									                <div class="form-group">
+									                  <label class="visually-hidden" for="listName">Your Name</label>
+									                  <input class="form-control" id="listName" type="text" placeholder="Your Name *" required>
+									                </div>
+									    
+									              </div>
+									              <div class="col-12 col-md-6">
+									    
+									                <!-- Form group -->
+									                <div class="form-group">
+									                  <label class="visually-hidden" for="listEmail">Your Name</label>
+									                  <input class="form-control" id="listEmail" type="email" placeholder="Your Email *" required>
+									                </div>
+									    
+									              </div>
+									            </div>
+									            <div class="row">
+									              <div class="col-12 text-center">
+									    
+									                <!-- Button -->
+									                <button class="btn btn-dark" type="submit">Subscribe</button>
+									    
+									              </div>
+									            </div>
+									          </div>
+									    
+									        </div>
+									    
+									      </div>
+									    </div>
+                                    
+
 
                                     <c:when test="${sessionScope.user_num == null}">
                                       <!-- 로그인 안 한 상태 -->

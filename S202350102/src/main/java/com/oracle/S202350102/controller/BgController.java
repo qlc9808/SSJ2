@@ -1,14 +1,19 @@
 package com.oracle.S202350102.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -140,14 +145,16 @@ public class BgController {
 	// 인증 글쓰기! mapper key: insertCertBrd		 ajax 로 시도했을 때 만든 코드
 	@ResponseBody
 	@RequestMapping(value = "writeCertBoard", method = RequestMethod.POST)
-	public String writeCertBoard(@RequestParam("screenshot") MultipartFile screenshot, 
-								 @RequestParam("chg_id") int chg_id, 
-								 Board board, Model model, HttpSession session, HttpServletRequest request) {
+	public String writeCertBoard(@RequestParam("chg_id") int chg_id,
+			                     @RequestParam("screenshot") MultipartFile screenshot, 
+								 Board board, Model model, HttpSession session, HttpServletRequest request) 
+										 throws IOException, Exception {
 		System.out.println("BgController writeCertBoard Start...");
 		System.out.println("BgController writeCertBoard board.getConts() -> " + board.getConts());
 		System.out.println("BgController writeCertBoard board.getTitle() -> " + board.getTitle());
 		System.out.println("BgController writeCertBoard board.getChg_Id() -> " + board.getChg_id());
-		
+		System.out.println("BgController writeCertBoard chg_id -> " +chg_id);
+		// chg_id = board.getChg_id();
 		  // 세션에서 회원 번호 가져옴 
 		int userNum = 0; 
 		if (session.getAttribute("user_num") != null) { 
@@ -157,6 +164,11 @@ public class BgController {
 		}
 		
 		System.out.println("BgController writeCertBoard board.getUser_num() -> " + board.getUser_num());
+		
+		
+		// 파일 업로드 경로를 설정
+		// 서블릿 컨텍스트에서 실제 경로를 가져오는 방법
+		// 여기서 이미지를 업로드하고, 업로드된 이미지의 파일 이름(savedName)을 얻어옵니다
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		
 		log.info("originalName: "+screenshot.getOriginalFilename()); 	// 업로드 된 파일의 원본 이름
@@ -164,21 +176,39 @@ public class BgController {
 		log.info("contentType: "+screenshot.getContentType()); 			// 업로드 된 파일의 컨텐츠 타입
 		log.info("uploadPath: "+uploadPath);							// 파일이 업로드 된 경로
 		
+		// 파일을 업로드 하고 실제 저장된 파일 이름을 받습니다
+		String savedName = uploadFile(screenshot.getOriginalFilename(), screenshot.getBytes(), uploadPath);
+		// 이미지를 Base64 문자열로 인코딩
+		
+		// ver1. 직접 이미지 업로드 후 Base64 변환 -> 
+		// 이미지가 크거나 많은 양의 이미지를 다뤄야 하는 경우 서버에 이미지 저장 후 필요할 때 로드(서버 디스크 공간 차지)
+		// String base64Image = Base64.getEncoder().encodeToString(screenshot.getBytes());
+		
+		// ver2. 업로드 없이 바로 Base64 변환 -> 이미지 크기가 작고 프로젝트가 서버 리소스에 큰 영향을 안 주는 경우
+		// 메모리에서 바로 Base64 문자열로 변환하여 저장
+		// String base64Image = encodeImageToBase64(savedName);
+		
+		board.setImg(savedName);
+		
+		log.info("Return savedName: "+savedName); 		// 저장된 파일 이름을 로그에 출력
+		model.addAttribute("saveName", savedName);		// 뷰에 저장된 파일 이름을 전달합니다
+		
 		
 		List<Board> boardList = null;
 		// Map<String, Object> result = new HashMap<String, Object>();
-		String rtnStr = "";
+		String rtnStr1 = "";
 		int insertResult = 0;
 
 		try {
+			System.out.println("BgController writeCertBoard board -> "+board);
 			insertResult = bs.insertCertBrd(board);
 			// if (insertResult > 0) boardList = bs.boardCert(board);
 
 			if (insertResult > 0) {
-				rtnStr = "입력 성공";
+				rtnStr1 = "1"; // 입력성공
 
 			} else {
-				rtnStr = "입력 실패";
+				rtnStr1 = "2";  // 입력실패
 			}
 
 		} catch (Exception e) {
@@ -186,14 +216,40 @@ public class BgController {
 		}
 
 		System.out.println("BgController writeCertBoard insertResult -> " + insertResult);
-		System.out.println("BgController writeCertBoard rtnStr -> " + rtnStr);
+		System.out.println("BgController writeCertBoard rtnStr -> " + rtnStr1);
 
-		return rtnStr;
+		return rtnStr1;
 	}
 	
 	
 	
-	// bgCertBoardUpdate 인증 게시판 글 수정
+	// 파일 업로드를 처리하는 Java 메소드
+	private String uploadFile(String originalName, byte[] fileDate, String uploadPath) throws IOException {
+		
+		// 고유한 파일 이름을 생성하기 위해 UUID를 사용합니다.
+		UUID uid = UUID.randomUUID();
+		
+		System.out.println("uploadPath: "+uploadPath); 		// 업로드 경로를 출력합니다
+		
+		// 업로드 할 디렉토리(Directory)를 생성합니다
+		File fileDirectory = new File(uploadPath);
+		if (!fileDirectory.exists()) {
+			// 신규 폴더 (Directory) 생성
+			fileDirectory.mkdirs();
+			System.out.println("업로드 용 폴더 생성: "+uploadPath);
+		}
+		
+		String savedName = uid.toString() + "_" + originalName;
+		log.info("savedName: "+savedName);
+		File target = new File(uploadPath, savedName);
+		FileCopyUtils.copy(fileDate, target); 	
+		
+		return savedName;
+	}
+	
+	
+	
+	// certBoardUpdate 인증 게시판 글 수정
 	@PostMapping(value = "updateCertBrd")
 	public String updateCertBrd(Board board, Model model) {
 		log.info("updateCertBrd Start...");
@@ -212,12 +268,13 @@ public class BgController {
 	public String deleteCertBrd(int brd_num, Model model) {
 		System.out.println("BgController Start delete...");
 		int result = bs.deleteCertBrd(brd_num);
+		
 		return "redirect:bgChgDetail";
 	}
 	
 	
 	
-	// ajax로 인증 게시판 삭제하기
+	// ajax로 인증 게시판 삭제하기		deleteCertBrd
 	@ResponseBody
 	@RequestMapping(value = "/brdNumDelete")
 	public String brdNumDelete(Board board) {
