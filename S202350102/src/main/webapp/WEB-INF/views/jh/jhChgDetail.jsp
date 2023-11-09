@@ -858,6 +858,7 @@
 													<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
 														<span>${ssj.nick}</span>
 													</a>
+													<!-- 글씨 빨간색으로 나옴 -> 검은색으로 나오게 수정해야함 -->
 												</div>
 											</div>
 										</div>
@@ -890,7 +891,6 @@
 														<span>
 															${dDay }일 전
 														</span>
-														<!-- 1일전 이런식으로 나오게 수정할 예정 -->
 													</c:if>
 						
 												</div>
@@ -939,6 +939,7 @@
 												<div class="avatar avatar-xxl mb-6 mb-md-0">
 													<span class="avatar-title rounded-circle">
 														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+														<!-- img 불러와지는지 확인해야함 -->
 													</span>
 												</div>
 											</div>
