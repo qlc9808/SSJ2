@@ -180,10 +180,12 @@ public class ChController {
 		ServletContext servletContext = request.getSession().getServletContext();
 		String realPath = servletContext.getRealPath("/upload/");
 		System.out.println("realPath->" + realPath);
+		if(file1 != null) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
+			
+			board.setImg(saveName);	
+		}
 		
-		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
-		
-		board.setImg(saveName);
 		
 		result = chBoardService.noticeUpdate(board);
 	
