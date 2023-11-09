@@ -32,19 +32,23 @@ public class UserServiceImpl implements UserService {
 		int tot_exp, req_exp, remain_exp, user_exp, percentage = 0;
 		float data1, data2, data3 = 0;
 		
-		for (int i = 0; i < userLevelInfoList.size(); i++) {
-			user_exp = user1.getUser_exp();
-			if( userLevelInfoList.get(i).getUser_level() == user1.getUser_level() ) {
-				tot_exp = userLevelInfoList.get(i).getTot_exp();
-				req_exp = userLevelInfoList.get(i).getReq_exp();
-				remain_exp = (req_exp+100)-(user_exp-tot_exp);
-				data1 = (float)(user_exp - tot_exp);
-				data2 = (float)(req_exp+100);
-				data3 = (float)(data1/data2);
-				percentage = (int)(data3*100);
-				user1.setPercentage(percentage);
-				user1.setRemain_exp(remain_exp);
+		if ( user_num != 0 ) {
+			for (int i = 0; i < userLevelInfoList.size(); i++) {
+				user_exp = user1.getUser_exp();
+				if( userLevelInfoList.get(i).getUser_level() == user1.getUser_level() ) {
+					tot_exp = userLevelInfoList.get(i).getTot_exp();
+					req_exp = userLevelInfoList.get(i).getReq_exp();
+					remain_exp = (req_exp+100)-(user_exp-tot_exp);
+					data1 = (float)(user_exp - tot_exp);
+					data2 = (float)(req_exp+100);
+					data3 = (float)(data1/data2);
+					percentage = (int)(data3*100);
+					user1.setPercentage(percentage);
+					user1.setRemain_exp(remain_exp);
+				}
 			}
+		} else {
+			return null;
 		}
 
 		return user1;
