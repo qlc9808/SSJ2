@@ -3,6 +3,7 @@ package com.oracle.S202350102.dao.chDao;
 import java.util.List;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardReChk;
 
 public interface ChBoardDao {
 	List<Board> noticeList(Board board);
@@ -14,6 +15,6 @@ public interface ChBoardDao {
 	List<Board> popBoardList();
 	int         noticeCount(int brd_md);
 	List<Board> popShareList();
-	int			alarmchk(int user_num);
+	List<BoardReChk> alarmchk(int user_num);
 	
 }

@@ -1,13 +1,17 @@
 package com.oracle.S202350102.service.jkService;
 
-import java.io.File;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dao.jkDao.JkBoardDao;
@@ -21,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class JkBoardServiceImpl implements JkBoardService {
 
 	private final JkBoardDao jbd;
-
+	
 	
 	@Override
 	public List<Board> sharing(Board board) {
@@ -91,18 +95,69 @@ public class JkBoardServiceImpl implements JkBoardService {
 	}
 
 	@Override
-	public List<Board> mySharing(Board board) {
-	    System.out.println("JkBoardServiceImpl mySharing start...");
-	   
-	    List<Board> mySharing = jbd.mySharing(board);
-	    System.out.println("JkBoardServiceImpl mySharing.size()-->" + mySharing.size());
-
-	    return mySharing;
+	public int updateSharing(Board board) {
+		System.out.println("JkBoardServiceImpl updateSharing start...");
+		int updateSharing = 0;
+		updateSharing = jbd.updateSharing(board);
+		
+		return updateSharing;
 	}
 
+	@Override
+	public int deleteSharing(int brd_num) {
+		System.out.println("JkBoardServiceImpl deleteSharing start...");
+		int deleteResult = 0;
+		deleteResult = jbd.deleteSharing(brd_num);
 		
+		return deleteResult;
+	}
+
+	public String uploadImage(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("이미지를 선택해주세요");
+        }
+
+        try {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String directory = "C:\\project\\backup\\SSJ2\\S202350102\\src\\main\\resources\\static\\images\\b_upload";
+            Path uploadPath = Paths.get(directory);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // Assign the input stream to a variable
+            InputStream inputStream = file.getInputStream();
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath);
+
+            // Close the input stream
+            inputStream.close();
+
+            return filePath.toString(); // 혹은 실제 저장된 이미지 URL을 반환합니다.
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 업로드 실패: " + e.getMessage());
+        }
+    }
+
+	@Override
+    public List<Board> getPopularPosts(Board board) {
+        System.out.println("JkBoardServiceImpl getPopularPosts start...");
+        List<Board> popularPosts = jbd.getPopularPosts(board); // Retrieving popular posts
+        return popularPosts;
+    }
+
+    @Override
+    public List<Board> getRecentPosts(Board board) {
+        System.out.println("JkBoardServiceImpl getRecentPosts start...");
+        List<Board> recentPosts = jbd.getRecentPosts(board); // Retrieving recent posts
+        return recentPosts;
+    }
+}
+
+
+
+			
 	
 
 	
-		
-}

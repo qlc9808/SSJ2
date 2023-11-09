@@ -18,6 +18,10 @@ public interface JhChallengeDao {
 	List<Board>		reviewReply(int brd_num);
 
 	int 			reviewTotal(int chg_id);
+
+	List<Challenge> challengeList();
+
+	int 			chgListTotal();  
   
 } 
  

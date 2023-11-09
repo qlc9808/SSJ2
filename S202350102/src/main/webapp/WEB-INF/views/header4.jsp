@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white" id="nav">
       <div class="container">
 
         <!-- Brand -->
@@ -23,7 +23,7 @@
           <ul class="navbar-nav mx-auto">
           
             <li class="nav-item">
-              <a class="nav-link" href="/listChallenge">챌린지</a>
+              <a class="nav-link" href=/challengeList>챌린지</a>
             </li>
             
             <li class="nav-item">
@@ -157,8 +157,20 @@
           </ul>
 		 
         </div>
-        
-	  	 
+       
+        <div id="alarmDiv">
+        	<div class="card" style="width: 18rem;" id="alarmPopText" >
+			  <div class="card-body">
+			    <ul id="test">
+			    	
+			    </ul>
+			    <a href="#" class="btn btn-primary">Go somewhere</a>
+			  </div>
+			</div>
+	  	</div>
+	  	
+	  	
+	  	
       </div>
     </nav>
 		
@@ -190,20 +202,48 @@
 <script src="./js/jquery.js"></script>
 
 
-
+<style>
+	#alarmPopText{
+		display: none;
+			
+	}
+	
+	#alarmDiv{
+		z-index: 999;
+		position: absolute;
+		right: 250px;
+		top: 80px;
+	}
+	
+</style>
 
 <script type="text/javascript">
+	function alarmText(data){
+		var str = "";
+		for(var i =0; i<data.reCount; i++){
+			str += "<li>'" + data.listBdRe[i].title +"'글에 댓글이 달렸습니다.</li>"
+		}
+		
+		return str;
+	}
+	
+	
 	function alarmchk(){
 		/* alert("test"); */
 		$.ajax(
 				{
 				type:"GET",
 				url: "rechk",
-				dataType:"text", 
+				dataType:"json", 
 				success:function(data){
-					if(data >0 ){
-						var str = "<span data-cart-items='"+data+"'></span>";
-						$(".alarmAjax").html(str);
+					
+					if(data.reCount > 0){
+						var str = "<span data-cart-items='"+data.reCount+"'></span>";
+						$(".alarmAjax").html(str); 
+						
+						var text = alarmText(data);
+						$("#test").html(text);
+						
 					}
 				}
 			}
@@ -215,10 +255,17 @@
 			var alarmPopText = document.getElementById("alarmPopText");
 			alarmpopup.addEventListener("click", clickalarm);
 			function clickalarm(){
-				alarmPopText.show();
+				if($("#alarmPopText").css("display") == "none"){
+					alarmPopText.style.display = "block";
+				} else {
+					$("#alarmPopText").hide();
+				}
+				
 			}
-		}
-	);
+		
+			
+	}	
+	)
 	
 </script>
 <body onload="alarmchk()"></body>

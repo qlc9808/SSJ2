@@ -87,19 +87,63 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	}
 
 	@Override
-	public List<Board> mySharing(Board board) {
-	    System.out.println("JkBoardDaoImpl mySharing start...");
-
-	    List<Board> mySharing = null;
-	    try {
-	        mySharing = session.selectList("mySharingList", board);
-	        System.out.println("JkBoardDaoImpl Sharing.size()-->" + mySharing.size());
-	    } catch (Exception e) {
-	        System.out.println("JkBoardDaoImpl Sharing e.getMessage()?" + e.getMessage());
-	    }
-
-	    return mySharing;
+	public int updateSharing(Board board) {
+		System.out.println("JkBoardDaoImpl updateSharing start...");
+		int updateResult = 0;
+		try {
+			updateResult = session.update("updateSharing", board);
+			System.out.println("updateresult"+updateResult);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl updateSharing e.getMessage"+e.getMessage());
+			e.printStackTrace();
+		}
+		return updateResult;
 	}
+
+	@Override
+	public int deleteSharing(int brd_num) {
+		System.out.println("JkBoardDaoImpl deleteSharing start...");
+		int deleteResult = 0;
+		try {
+			deleteResult = session.update("deleteSharing", brd_num);
+			System.out.println("deleteresult"+deleteResult);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl deleteSharing e.getMessage"+e.getMessage());
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Board> getPopularPosts(Board board) {
+	    System.out.println("JkBoardDaoImpl getPopularPosts start...");
+	    List<Board> popularPosts = null;
+	    try {
+	        popularPosts = session.selectList("getPopularPosts", board); // 매개변수는 필요에 따라 null 또는 다른 값으로 설정
+	    } catch (Exception e) {
+	        System.out.println("JkBoardDaoImpl getPopularPosts Exception: " + e.getMessage());
+	        e.printStackTrace();
+	        // 예외 처리 로직
+	    }
+	    return popularPosts; // 가져온 인기 있는 게시물 목록 반환
+	}
+
+	@Override
+	public List<Board> getRecentPosts(Board board) {
+	    System.out.println("JkBoardDaoImpl getRecentPosts start...");
+	    List<Board> recentPosts = null;
+	    try {
+	        recentPosts = session.selectList("getRecentPosts", board); // 매개변수는 필요에 따라 null 또는 다른 값으로 설정
+	    } catch (Exception e) {
+	        System.out.println("JkBoardDaoImpl getRecentPosts Exception: " + e.getMessage());
+	        e.printStackTrace();
+	        // 예외 처리 로직
+	    }
+	    return recentPosts; // 최근 게시물 목록 반환
+	}
+
+
+
 
 		
 	

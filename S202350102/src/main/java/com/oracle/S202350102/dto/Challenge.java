@@ -35,4 +35,8 @@ public class Challenge {
 	private String nick; //챌린지 개설자 닉네임
 	private String stateCtn; //챌린지 진행상태
 	
+	// 페이징 조회용    //검색타입						 //검색 내용
+	private String search;   	private String keyword;
+	private String pageNum;
+	private int start; 		 	private int end;
 }

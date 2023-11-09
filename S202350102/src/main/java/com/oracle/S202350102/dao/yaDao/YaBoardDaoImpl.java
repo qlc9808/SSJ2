@@ -207,6 +207,19 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		}
 			
 	}
+
+	@Override
+	public int getLatestBrdStep(int brd_group) {
+		System.out.println("YaBoardDaoImpl getLatestBrdStep start...");
+		int getLatestBrdStep = 0;
+		try {
+			session.selectOne("YaGetLatestBrdStep",brd_group);
+			
+		} catch (Exception e) {
+			System.out.println("YaBoarDaoImpl etLatestBrdStep e.getMessage)?"+e.getMessage());
+		}
+		return getLatestBrdStep;
+	}
 	
 
 	

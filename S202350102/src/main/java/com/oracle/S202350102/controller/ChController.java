@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardReChk;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
@@ -35,6 +37,7 @@ import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.UserService;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +50,6 @@ public class ChController {
 	private final ChBoardService 		chBoardService;
 	private final ChSearchService 		chSearchService;
 	private final ChChallengeService	chChallengeService;
-	private final ChUser1Service		chUser1Service;
 	private final UserService			userService;
 	
 	// notice List 조회 
@@ -224,17 +226,18 @@ public class ChController {
 		// 로그인 회원이면
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
-			sHList = chSearchService.sHistoryList(user_num);
+			
 			
 		}
 		model.addAttribute("user_num", user_num);
 		model.addAttribute("popchgList", popchgList); 
 		model.addAttribute("popBoardList", popBoardList);
 		model.addAttribute("popShareList", popShareList);
-		model.addAttribute("hisList", sHList);
+		
 		
 		return "search";
 	}
+	
 	// 검색기능 
 	@GetMapping("searching")
 	public String searching(String srch_word, HttpSession session, Model model) {
@@ -291,7 +294,20 @@ public class ChController {
 		return "listCommunity";
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "srch_history")
+	public List<SearchHistory> srch_history(Model model, HttpSession session){
+		List<SearchHistory> srch_his = null;
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num =(int) session.getAttribute("user_num");
+			srch_his = chSearchService.sHistoryList(user_num);
+		}
+		
+		
+		
+		return srch_his;
+	}
 	
 	
 	@RequestMapping(value = "deleteHis")
@@ -308,15 +324,24 @@ public class ChController {
 	
 	@ResponseBody
 	@RequestMapping(value = "rechk")
-	public int alarmchk(HttpSession session) {
+	public commReChk alarmchk(HttpSession session, ModelAndView mav) {
 		int result = 0;
+		List<BoardReChk> nochkList = null;
+		commReChk rechk = new commReChk();
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
 			
-			result = chBoardService.alarmchk(user_num);
+			nochkList = chBoardService.alarmchk(user_num);
+			result = nochkList.size();
+			System.out.println("nochkList.size()->" + nochkList.size());
+			rechk.setListBdRe(nochkList);
+			rechk.setReCount(result);
 		}
 		
-		return result;
+		
+		
+		
+		return rechk;
 	}
 	
 	
@@ -341,6 +366,13 @@ public class ChController {
 		// 용량, target을 넣으면 내부적으로 업로드
 		// 만든 타겟을 카피하면 업로드, 시스템적으로 떨어져 있더라도 업로드 시킨다.
 		return savedName;
+	}
+	
+	@Data
+	private class commReChk {
+		private List<?> listBdRe;
+		private Object reCount;
+		private ModelAndView mav;
 	}
 	
 	

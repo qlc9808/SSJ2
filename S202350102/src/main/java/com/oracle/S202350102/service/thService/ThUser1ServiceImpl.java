@@ -58,4 +58,14 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 		return result;
 	}
 
+
+	@Override
+	public int user1NickCheck(String nick) {
+		System.out.println("ThUser1ServiceImpl user1NickCheck Start...");
+		System.out.println("ThUser1ServiceImpl user1NickCheck nick --> " + nick);
+		int result = ud1.user1NickCheck(nick);
+		System.out.println("ThUser1ServiceImpl user1NickCheck result --> " + result);
+		return result;
+	}
+
 }
