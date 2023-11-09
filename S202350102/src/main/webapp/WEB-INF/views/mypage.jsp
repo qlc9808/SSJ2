@@ -17,6 +17,7 @@
     <button type="button" class="btn btn-primary" onclick="location.href='/subscriptionManagement'">구독 관리</button><p>
     <button type="button" class="btn btn-primary" onclick="location.href='/sharingManagement'">쉐어링 관리</button><p>
     <button type="button" class="btn btn-primary" onclick="location.href='/userDetail'">회원정보수정</button><p>
+    <button type="button" class="btn btn-primary" onclick="location.href='/chgCommManagement'">챌린지 카테고리 관리</button><p>
 </body>
 <%@ include file="footer.jsp" %>
 </html>
