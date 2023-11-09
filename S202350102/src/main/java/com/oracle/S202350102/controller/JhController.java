@@ -134,8 +134,7 @@ public class JhController {
 		model.addAttribute("listSsj", listSsj);
 //		String boardRegDate = ycs.getBoardRegDate(chg_id);
 //		model.addAttribute("brdRegDate", boardRegDate);
-		
-		
+
 		
 		// bg 작성
 		

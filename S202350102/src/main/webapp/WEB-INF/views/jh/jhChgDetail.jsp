@@ -36,9 +36,25 @@
 		$('#displayUserNum').text(user_num);
 		$('#displayUserNick').text(user_nick);
 		$('#displayUserImg').text(user_img);
+		
+		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
+		$('#inputUserNum1').val(user_num);	// follow()
+		$('#inputUserNum2').val(user_num);	// sendMessage()
 
 		// 모달 창 표시
 		$('#userShowModal').modal('show');
+	}
+
+	// 팔로우 하기 버튼
+	function follow() {
+		var sendData = $('#followForm').serialize();
+		alert("sendDate -> " + sendData);
+	}
+
+	// 쪽지보내기 버튼
+	function sendMessage() {
+		var sendData = $('#sendMessageForm').serialize();
+		alert("sendDate -> " + sendData);
 	}
   
   
@@ -169,7 +185,9 @@
 	
 </script> 
 </head>
-<body onload="chgResultModalClickTest()">  <!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+<body onload="chgResultModalClickTest()">  
+	<!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+	<input type="button" value="목록" onclick="location.href='/challengeList'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -804,6 +822,7 @@
             
             
 			  <!-- 소세지들 -->
+			  <!-- 스크롤 내릴 때 내용이 나중에 나타나는 모션? 추가할 예정 -->
               <div class="tab-pane fade" id="ssjFriendsTab">
 
 
@@ -908,7 +927,7 @@
 						
 							</c:forEach>
 						
-							
+
 							<!-- Modal -->
 							<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
@@ -917,7 +936,7 @@
 											<div class="col-12 col-md-auto">
 												<div class="avatar avatar-xxl mb-6 mb-md-0">
 													<span class="avatar-title rounded-circle">
-														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayImg">
+														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
 													</span>
 												</div>
 											</div>
@@ -931,8 +950,17 @@
 										</div>
 						
 										<div class="modal-footer">
-											<button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
-											<button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
+											
+											<button type="button" class="btn btn-outline-primary" onclick="follow(${status.index})">팔로우</button>
+											<form id="followForm">
+												<input type="hidden" id="inputUserNum1" name="user_num">
+											</form>
+											
+											<button type="button" class="btn btn-outline-success" onclick="sendMessage(${status.index})">쪽지보내기</button>
+											<form id="sendMessageForm">
+												<input type="hidden" id="inputUserNum2" name="user_num">
+											</form>
+
 										</div>
 									</div>
 								</div>
