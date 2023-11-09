@@ -9,20 +9,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	
+	#test{
+		width: 200px;
+	}
 </style>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
-	function hisList(data){
-		var str = "";
-		for(i=0; i< data.length; i++){
-			str += "<td><a href=searching?srch_word="+data[i].srch_word + ">" + data[i].srch_word + "</a></td>"
-				+  "<td><a href=searching?srch_word="+data[i].srch_word + ">삭제</a><td>"	
-					
-		}
-		
-		return str;
-	}
 	
 	
 	function sh(){
@@ -56,17 +48,31 @@
 		<form action="searching">
 			<label for="srch_word">검색</label>
 			<input type="text" name="srch_word" id="srch_word" list="wordList" class="form-control form-control-sm">
-			<c:if test="${user_num != 0 }">
-				<table id="wordList">
-					<tr id="listCont">
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
-					</tr>
-				</table>
-			</c:if>
+			
 			<button type="submit">검색</button>				
 		</form>
+		<div class="card">
+			<c:if test="${user_num != 0 }">
+				<div class="card-body">
+					<table>
+						<c:forEach items="${shList }" var="shList">
+							<tr>
+								<td>
+									<a href="searching?srch_word=${shList.srch_word }">${shList.srch_word }</a>
+								</td>
+								<td>
+									<a href="deleteHis?srch_word=${shList.srch_word }">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+										  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+										</svg>
+									</a>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</div>
+			</c:if>
+		</div>
 	</div>
 	
 	<hr>
@@ -80,7 +86,7 @@
 			<c:forEach var="popchg" items="${popchgList }">
 				<tr>
 					<td><a href="chg?chg_id=${popchg.chg_id }">${popchg.title }</a></td>
-					<td>${popchg.user_num }</td>
+					<td>${popchg.nick }</td>
 					<td><fmt:formatDate value="${popchg.reg_date }" pattern="yyyy-MM-dd" /></td>
 					<td><fmt:formatDate value="${popchg.start_date }" pattern="yyyy-MM-dd" /></td>
 				</tr>

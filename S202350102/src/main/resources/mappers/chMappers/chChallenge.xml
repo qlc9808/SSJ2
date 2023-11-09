@@ -3,9 +3,10 @@
 <mapper namespace="com.oracle.S202350102.chChallengeMapper">
 	<select id="popchgList" resultType="Challenge">
 		Select rownum, a.* 
-		From   (Select *
-        From challenge
-        ORDER BY pick_cnt DESC) a
+		From   (Select c.*, user1.nick 
+		        From   challenge c 
+		        Join   user1 On c.user_num = user1.user_num 
+		        ORDER BY pick_cnt DESC) a
 		Where rownum BETWEEN 1 and 5
 	</select>
 	
@@ -14,9 +15,15 @@
 		From  	Challenge c 
 		JOIN    user1 On c.user_num = user1.user_num 
 		Where 	(c.title 	  like '%' || #{srch_word} || '%'
-		Or	  	 c.chg_conts  like '%' || #{srch_word} || '%'
-		)	
+		Or	  	 c.chg_conts  like '%' || #{srch_word} || '%')
 		Order By c.reg_date DESC
+	</select>
+	
+	<select id="chgCommList" resultType="Comm">
+		Select *
+		From comm
+		Where lg =200
+		and md != 999
 	</select>
 	
 </mapper>
