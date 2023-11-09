@@ -31,5 +31,8 @@ public class User1 {
 	
 	// board 작성일자 출력용
 	private Date brd_reg_date;
-
+	
+	// 유저 경험치 정보 조회
+	private int remain_exp;
+	private int percentage;
 }

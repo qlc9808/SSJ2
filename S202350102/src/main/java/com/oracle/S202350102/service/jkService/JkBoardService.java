@@ -2,7 +2,7 @@ package com.oracle.S202350102.service.jkService;
 
 import java.util.List;
 
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
@@ -15,7 +15,12 @@ public interface JkBoardService {
 	void 			updateLikeStatus(int brd_num);
 	int 			writeFormSharing(Board board);
 	Board 			detailSharing(int brd_num);
-	List<Board> 	mySharing(Board board);
+	int 			updateSharing(Board board);
+	int 			deleteSharing(int brd_num);
+	String 			uploadImage(MultipartFile file);
+	List<Board> 	getPopularPosts(Board board);
+	List<Board> 	getRecentPosts(Board board);
+
 	
 	
 

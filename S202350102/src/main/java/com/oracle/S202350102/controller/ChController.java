@@ -23,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardReChk;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.chService.ChBoardService;
@@ -35,6 +38,7 @@ import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.UserService;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +51,6 @@ public class ChController {
 	private final ChBoardService 		chBoardService;
 	private final ChSearchService 		chSearchService;
 	private final ChChallengeService	chChallengeService;
-	private final ChUser1Service		chUser1Service;
 	private final UserService			userService;
 	
 	// notice List 조회 
@@ -171,9 +174,18 @@ public class ChController {
 	}
 	// notice Update
 	@PostMapping("noticeUpdate")
-	public String noticeUpdate(Board board, HttpServletRequest request) {
+	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
 		System.out.println("ChController noticeUpdate Start...");
 		int result = 0;
+		ServletContext servletContext = request.getSession().getServletContext();
+		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath->" + realPath);
+		if(file1 != null) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
+			
+			board.setImg(saveName);	
+		}
+		
 		
 		result = chBoardService.noticeUpdate(board);
 	
@@ -224,17 +236,19 @@ public class ChController {
 		// 로그인 회원이면
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
-			sHList = chSearchService.sHistoryList(user_num);
+			List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+			model.addAttribute("shList", sh);
 			
 		}
 		model.addAttribute("user_num", user_num);
 		model.addAttribute("popchgList", popchgList); 
 		model.addAttribute("popBoardList", popBoardList);
 		model.addAttribute("popShareList", popShareList);
-		model.addAttribute("hisList", sHList);
+		
 		
 		return "search";
 	}
+	
 	// 검색기능 
 	@GetMapping("searching")
 	public String searching(String srch_word, HttpSession session, Model model) {
@@ -256,6 +270,7 @@ public class ChController {
 					int result = chSearchService.saveWord(sh);
 					if(result == 0) {
 						chSearchService.updateHistory(sh);
+						
 					}
 				}
 				
@@ -280,18 +295,34 @@ public class ChController {
 	@RequestMapping(value = "srchcommunity")
 	public String srchcommunity(String srch_word,Model model) {
 		System.out.println("ChController srchcommunity Start...");
+		String searchTerm = srch_word.replace(" ", "");
+		
 		if(srch_word == null || srch_word=="") {
 			return "redirect:searching";
 		}
-		List<Board> srch_brdResult = chSearchService.brdSearching(srch_word); // 자유게시판
+		List<Board> srch_brdResult = chSearchService.brdSearching(searchTerm); // 자유게시판
 		
 		model.addAttribute("listCommunity",srch_brdResult);
-		model.addAttribute("srch_word",srch_word);
+		model.addAttribute("srch_word",searchTerm);
 		
 		return "listCommunity";
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "srch_history")
+	public List<SearchHistory> srch_history(Model model, HttpSession session){
+		
+		List<SearchHistory> srch_his = null;
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num =(int) session.getAttribute("user_num");
+			srch_his = chSearchService.sHistoryList(user_num);
+		}
+		
+		
+		
+		return srch_his;
+	}
 	
 	
 	@RequestMapping(value = "deleteHis")
@@ -308,16 +339,65 @@ public class ChController {
 	
 	@ResponseBody
 	@RequestMapping(value = "rechk")
-	public int alarmchk(HttpSession session) {
+	public commReChk alarmchk(HttpSession session, ModelAndView mav) {
 		int result = 0;
+		List<BoardReChk> nochkList = null;
+		commReChk rechk = new commReChk();
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
 			
-			result = chBoardService.alarmchk(user_num);
+			nochkList = chBoardService.alarmchk(user_num);
+			result = nochkList.size();
+			System.out.println("nochkList.size()->" + nochkList.size());
+			rechk.setListBdRe(nochkList);
+			rechk.setReCount(result);
 		}
 		
-		return result;
+		
+		
+		
+		return rechk;
 	}
+	
+	
+	@RequestMapping(value = "chgCommManagement")
+	public String chgCommManagement(HttpSession session, Model model) {
+		System.out.println("ChController chgCommManagement Start...");
+		List<Comm> chgCommList = null;
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			User1 user1 = userService.userSelect(user_num);
+			if(user1.getStatus_md() == 102) {
+				chgCommList = chChallengeService.chgCommList();
+			}
+			
+		}
+			
+		model.addAttribute("chgCommList", chgCommList);
+		
+		return "/ch/chgCommManage";
+	}
+	
+	@PostMapping(value = "insertChgComm")
+	public String insertChgComm(String ctn) {
+		System.out.println("ChController insertChgComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgInsertComm(ctn);
+		
+		return "redirect:chgCommManagement";
+	}
+	
+	@PostMapping(value = "deleteChgComm")
+	public String deleteChgComm(String[] ctn) {
+		System.out.println("ChController deleteChgComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgDeleteComm(ctn);
+		
+		return "redirect:chgCommManagement";
+	}
+	
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
@@ -341,6 +421,13 @@ public class ChController {
 		// 용량, target을 넣으면 내부적으로 업로드
 		// 만든 타겟을 카피하면 업로드, 시스템적으로 떨어져 있더라도 업로드 시킨다.
 		return savedName;
+	}
+	
+	@Data
+	private class commReChk {
+		private List<?> listBdRe;
+		private Object reCount;
+		private ModelAndView mav;
 	}
 	
 	

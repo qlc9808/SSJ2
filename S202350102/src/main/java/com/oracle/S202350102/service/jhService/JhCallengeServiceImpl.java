@@ -72,6 +72,21 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return reviewTotal;
 	}
 
+	@Override
+	public List<Challenge> challengeList() {
+		System.out.println("JhCallengeServiceImpl reviewTotal Start...");
+		List<Challenge> chgList = jhChgDao.challengeList();
+
+		return chgList;
+	}
+
+	@Override
+	public int chgListTotal() {
+		System.out.println("JhCallengeServiceImpl chgListTotal Start...");
+		int chgListTotal = jhChgDao.chgListTotal();
+		return chgListTotal;
+	}
+
 
 	
 	

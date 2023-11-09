@@ -35,7 +35,7 @@
                                 <!-- Slider -->
                                 <div class="flickity-nav flickity-vertical" data-flickity='{"asNavFor": "#productSlider", "draggable": false}'>
                                     <!-- Item -->
-                                    <div class="ratio ratio-1x1 bg-cover mb-4" style="background-image: url(${board.img});"></div>
+                                    <div class="ratio ratio-1x1 bg-cover mb-4" style="background-image: url(${pageContext.request.contextPath}/upload/${board.img});"></div>
                                 </div>
                             </div>
                             <div class="col-10">
@@ -48,8 +48,8 @@
                                     <!-- Slider -->
                                     <div data-flickity='{"draggable": false, "fade": true}' id="productSlider">
                                         <!-- Item -->
-                                        <a href="${board.img}">
-                                            <img src="${board.img}" alt="..." class="card-img-top">
+                                        <a href="${pageContext.request.contextPath}/upload/${board.img}">
+                                            <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top">
                                         </a>
                                         <!-- Other Items -->
                                         <!-- ... -->

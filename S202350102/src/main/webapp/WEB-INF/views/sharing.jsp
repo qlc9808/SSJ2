@@ -37,7 +37,21 @@ function likePost(brd_num) {
 	});
 }
 
+function sortPosts(sortType) {
+    $.ajax({
+        type: 'GET',
+        url: '/loadSortedPosts?sortType=' + sortType, // 정렬된 게시물을 불러오는 엔드포인트
+        success: function (response) {
+            // 서버로부터 받은 데이터를 이용하여 화면 업데이트
+            // 예를 들어, 받은 데이터를 화면의 특정 부분에 삽입
+        },
+        error: function (error) {
+            // 오류가 발생한 경우의 처리
+        }
+    });
+}
 </script>
+
 </head>
 <body>
    <section class="pt-7 pb-12">
@@ -80,10 +94,10 @@ function likePost(brd_num) {
                 <!-- 공간을 벌리기 위해 클래스 추가 -->
             </div>
             <div class="d-flex justify-content-end mb-3">
-              <select class="form-select form-select-xxs w-auto">
-                  <option value="1">최근 게시물</option>
-                  <option value="1">조회수 높은 순</option>
-              </select>
+			<select class="form-select form-select-xxs w-auto" onchange="sortPosts(this.value)">
+			    <option value="recent">최근 게시물</option>
+			    <option value="popular">조회수 높은 순</option>
+			</select>
             </div>
             </div>
   <div class="row">
@@ -99,7 +113,7 @@ function likePost(brd_num) {
 				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 					</button>
 
-                  <img class="card-img-top" src="${board.img}" alt="..." style="width: 100%; height: 250;">
+                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
 					 </div>
                 <div class="card-body fw-bold text-center">
                     <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">

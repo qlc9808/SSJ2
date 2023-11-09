@@ -13,8 +13,11 @@ public interface JkBoardDao {
 	void 				updateLikeStatus(int brd_num);
 	int 				writeFormSharing(Board board);
 	Board 				detailSharing(int brd_num);
-	List<Board> 		mySharing(Board board);
-
+	int 				updateSharing(Board board);
+	int					deleteSharing(int brd_num);
+	List<Board> 		getPopularPosts(Board board);
+	List<Board> 		getRecentPosts(Board board);
+	
 
 	
 }

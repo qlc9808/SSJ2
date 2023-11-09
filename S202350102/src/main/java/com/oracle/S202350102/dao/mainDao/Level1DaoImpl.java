@@ -15,10 +15,10 @@ public class Level1DaoImpl implements Level1Dao {
 	private final SqlSession session;
 
 	@Override
-	public List<Level1> level1List(Level1 level1) {
+	public List<Level1> level1List() {
 		List<Level1> levelList = null;
 		try {
-			levelList = session.selectList("level1List",level1);
+			levelList = session.selectList("level1List");
 		} catch (Exception e) {
 			System.out.println("level1List sql exception->"+e.getMessage());
 		}

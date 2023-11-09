@@ -13,19 +13,51 @@
 <title>Insert title here</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
-		// yr 작성
-		// 챌린지 신청 완료 후 body onload 실행
-		function chgResultModalClickTest() {
-			document.getElementById("chgResultModalClick").click();
-		}
+	// yr 작성
+	// 챌린지 신청 완료 후 body onload 실행
+	function chgResultModalClickTest() {
+		document.getElementById("chgResultModalClick").click();
+	}
 
-		// 챌린지 신청 시 작동
-		function cJoin() {
-			var sendData = $('#cJoinForm').serialize();		// user_num=?&chg_id=?
-			location.href = "chgJoinPro?" + sendData;		// YrController에서 작동됨
-		}
+	// 챌린지 신청 시 작동
+	function cJoin() {
+		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
+		location.href = "chgJoinPro?" + sendData;     // YrController에서 작동됨
+	}
 
+	// 유저 닉네임 클릭 시 modal 창 띄우기
+	function userInfoModal(index) {
+		// 모달창에 넘겨줄 값을 저장 
+		var user_num = $("#ssjUserNum" + index).val();
+		var user_nick = $("#ssjNick" + index).val();
+		var user_img = $("#ssjImg" + index).val();
 
+		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
+		$('#displayUserNum').text(user_num);
+		$('#displayUserNick').text(user_nick);
+		$('#displayUserImg').text(user_img);
+		
+		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
+		$('#inputUserNum1').val(user_num);	// follow()
+		$('#inputUserNum2').val(user_num);	// sendMessage()
+
+		// 모달 창 표시
+		$('#userShowModal').modal('show');
+	}
+
+	// 팔로우 하기 버튼
+	function follow() {
+		var sendData = $('#followForm').serialize();
+		alert("sendDate -> " + sendData);
+	}
+
+	// 쪽지보내기 버튼
+	function sendMessage() {
+		var sendData = $('#sendMessageForm').serialize();
+		alert("sendDate -> " + sendData);
+	}
+  
+  
 	// bg 작성
 	function writeCertBoard() {
 		
@@ -42,8 +74,8 @@
 		
 		// 이미지 파일, 제목, 내용을 FormData 에 추가
 		var formData = new FormData();
-		formData.append("title", $('title').val());
-		formData.append("conts", $('conts').val());
+		formData.append("title", $('#title').val());
+		formData.append("conts", $('#conts').val());
 		formData.append("chg_id", chg_id);
 		formData.append("user_num", user_num);
 		formData.append("screenshot", screenshot);
@@ -67,12 +99,15 @@
 			url	:	"/writeCertBoard",
 			type:	"POST",
 			data:	formData,
-			dataType:	"text",
+			dataType:'text',
 			processData: false,		// 이미지 파일 처리를 위해 false로 설정
 			contentType: false,		// 이미지 파일 처리를 위해 false로 설정
-			success	:	function(rtnStr) {
-				alert("success ajax Data -> "+rtnStr);
-				// 서버 응답을 처리하는 코드
+			success:function(data){
+				alert(".ajax writeCertBoard->"+data); 
+				if (data == '1') {
+					// 성공하면 아래라인 수행 
+					alert("입력성공");
+				}
 			},
 			error: function() {
 				// Ajax 요청 자체가 실패한 경우
@@ -94,12 +129,20 @@
 		var reg_date =	$("#reg_date"+index).val();  
 		var title =		$("#title"+index).val();  
 		var conts =		$("#conts"+index).val();  
+		var img =		$("#img"+index).val();  
+		
+		// alert("img -> " + img);
+		// alert("${pageContext.request.contextPath}/upload/"+img);
+		
 		/*
 			 alert("updateModalCall nick -> "+nick);
 		 alert("updateModalCall reg_date -> "+reg_date);
 		 alert("updateModalCall title -> "+title);
 		 alert("updateModalCall conts -> "+conts); 
 		 */
+		 
+		// 이미지 설정
+		$('#modalImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
 		 
 		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayNick').text(nick);     
@@ -142,7 +185,9 @@
 	
 </script> 
 </head>
-<body onload="chgResultModalClickTest()">  <!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+<body onload="chgResultModalClickTest()">  
+	<!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+	<input type="button" value="목록" onclick="location.href='/challengeList'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -431,8 +476,8 @@
               
             
 
-				<!-- bg 인증 게시판 -->
-				<div class="tab-pane fade" id="certBoardTab">
+            <!-- BG 인증 게시판 -->
+            <div class="tab-pane fade" id="certBoardTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
 	                  			            <!-- Heading -->
@@ -547,11 +592,12 @@
 				                  	<input type="hidden" id="reg_date${status.index}" value="${certBoard.reg_date }">
 				                  	<input type="hidden" id="title${status.index}" value="${certBoard.title }">
 				                  	<input type="hidden" id="conts${status.index}" value="${certBoard.conts }">
+				                  	<input type="hidden" id="img${status.index}" value="${certBoard.img }">
 				                  	
 				                  	
 				                  	<div class="col-5 col-md-3 col-xl-2">
 										<!-- 인증샷 Image -->
-				                    	<img src="assets/img/products/product-6.jpg" alt="..." class="img-fluid">
+				                    	<img src="${pageContext.request.contextPath}/upload/${certBoard.img }" alt="인증샷" class="img-fluid">
 				                    </div>
 				                    
 				                    
@@ -624,7 +670,7 @@
 												수정
 					                          </a>
 					                          
-					                          <!-- Button -->
+					                          Button
 					                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
 												삭제
 					                          </a>
@@ -661,13 +707,13 @@
 					            <div class="row align-items-center mx-xl-0"><!--  -->
 					              <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"><!--  -->
 					    
-					                <!-- Image -->
-					                <img class="img-fluid" src="./assets/img/products/product-7.jpg" alt="...">
+					                <!-- Image 수정 모달창 인증샷 -->
+					                <img class="img-fluid" alt="수정 모달창 인증샷" id="modalImage">
 					    
 					                <!-- Button -->
-					                <a class="btn btn-sm w-100 btn-primary" href="./product.html">
+					                <!-- <a class="btn btn-sm w-100 btn-primary" href="./product.html">
 					                  More Product Info <i class="fe fe-info ms-2"></i>
-					                </a>
+					                </a> -->
 					    
 					              </div><!-- <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"> -->
 					              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"><!--  -->
@@ -775,153 +821,308 @@
 			            </div>
             
             
-				<!-- yr 소세지들 -->
-				<div class="tab-pane fade" id="ssjFriendsTab">
-				
-					<div class="row justify-content-center py-9">
-						<div class="col-12 col-lg-10 col-xl-8">
-							<div class="row">
-								<div class="col-12">
-				
-									<!-- content -->
-									<div class="review">
-										<!-- Body -->
-										<c:forEach var="ssj" items="${listSsj}" varStatus="status">
-											<div class="review-body">
-												<div class="row">
-													<!-- profile -->
-													<div class="col-12 col-md-auto">
-														<div class="avatar avatar-xxl mb-6 mb-md-0">
-															<span class="avatar-title rounded-circle">
-																<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
-															</span>
-														</div>
-													</div>
-				
-													<!-- nick -->
-													<div class="col-12 col-md">
-														<div class="row mb-6">
-															<div class="col-12">
-																<a href="#" data-bs-toggle="modal"
-																	data-bs-target="#userModal"><span>${ssj.nick}</span></a>
-																<!-- 색깔 빨간색으로 나옴. 나중에 색 변경해야함 -->
-															</div>
-														</div>
-													</div>
-				
-													<!-- Modal -->
-													<div class="modal fade" id="userModal" tabindex="-1"
-														aria-labelledby="exampleModalLabel" aria-hidden="true">
-														<div class="modal-dialog">
-															<div class="modal-content">
-																<div class="modal-body">
-																	<div class="col-12 col-md-auto">
-																		<div class="avatar avatar-xxl mb-6 mb-md-0">
-																			<span class="avatar-title rounded-circle">
-																				<img src="${ssj.img}" alt="profile"
-																					class="avatar-title rounded-circle">
-																			</span>
-																		</div>
-																	</div>
-																	<div class="col-12 col-md">
-																		<div class="row mb-6">
-																			<div class="col-12">
-																				<span>${ssj.nick}</span>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-				
-																<div class="modal-footer">
-																	<button type="button" class="btn btn-outline-primary"
-																		onclick="follow()">팔로우</button>
-																	<button type="button" class="btn btn-outline-success"
-																		onclick="sendMessage()">쪽지보내기</button>
-																</div>
-															</div>
-														</div>
-													</div>
-				
-				
-				
-				
-													<!-- reg_date & fork -->
-													<div class="col-12 col-md">
-														<!-- reg_date -->
-														<div class="row mb-6">
-															<div class="col-12">
-																
-																<!-- 오늘 날짜 -->
-																<jsp:useBean id="javaDate" class="java.util.Date" />
-																<fmt:formatDate var="nowDateFd" value="${javaDate }"
-																	pattern="yyyy-MM-dd" /><br>
-				
-																<!-- 마지막 인증 게시판 작성일자 -->
-																<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }"
-																	pattern="yyyy-MM-dd" /><br>
-																		
-																<c:if test="${ssj.brd_reg_date != null }">
-																	
-																	<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd"/>
-																	<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd"/>
-																	
-																	<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true"/>
-																	<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }" integerOnly="true"/>
-																	
-																	<c:set var="dDay" value="${nowDatePn - lastRegDatePn}"/>
-																
-																	<span>
-																		${dDay }일 전
-																	</span>
-																	<!-- 1일전 이런식으로 나오게 수정할 예정 -->
-																</c:if>
+			  <!-- 소세지들 -->
+			  <!-- 스크롤 내릴 때 내용이 나중에 나타나는 모션? 추가할 예정 -->
+              <div class="tab-pane fade" id="ssjFriendsTab">
 
-															</div>
-														</div>
-				
-														<c:choose>
-															<c:when test="${sessionScope.user_num != null}">
-																<!-- 로그인 한 상태 -->
-																<!-- fork -->
-																<div class="row align-items-center">
-																	<div class="col-auto">
-																		<!-- Button -->
-																		<a class="btn btn-xs btn-outline-border"
-																			href="user_num=${ssj.user_num}">FORK</a>
-																	</div>
-																</div>
-															</c:when>
-				
-															<c:when test="${sessionScope.user_num == null}">
-																<!-- 로그인 안 한 상태 -->
-																<!-- loginForm으로 이동 -->
-																<div class="row align-items-center">
-																	<div class="col-auto">
-																		<!-- Button -->
-																		<a class="btn btn-xs btn-outline-border"
-																			href="/loginForm">FORK</a>
-																	</div>
-																</div>
-															</c:when>
-														</c:choose>
-													</div>
-				
-												</div>
-				
+
+                <div class="row justify-content-center py-9">
+                  <div class="col-12 col-lg-10 col-xl-8">
+                    <div class="row">
+                      <div class="col-12">
+
+                        <!-- content -->
+						<div class="review">
+							<!-- Body -->
+							<c:forEach var="ssj" items="${listSsj}" varStatus="status">
+								<div class="review-body">
+									<div class="row" id="ssj${status.index}">
+										<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
+										<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
+										<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
+										<!-- profile -->
+										<div class="col-12 col-md-auto">
+											<div class="avatar avatar-xxl mb-6 mb-md-0">
+												<span class="avatar-title rounded-circle">
+													<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+												</span>
 											</div>
-				
-										</c:forEach>
-				
+										</div>
+						
+										<!-- nick -->
+										<div class="col-12 col-md">
+											<div class="row mb-6">
+												<div class="col-12">
+													<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
+														<span>${ssj.nick}</span>
+													</a>
+												</div>
+											</div>
+										</div>
+						
+										<!-- reg_date & fork -->
+										<div class="col-12 col-md">
+											<!-- reg_date -->
+											<div class="row mb-6">
+												<div class="col-12">
+						
+													<!-- 오늘 날짜 -->
+													<jsp:useBean id="javaDate" class="java.util.Date" />
+													<fmt:formatDate var="nowDateFd" value="${javaDate }" pattern="yyyy-MM-dd" /><br>
+						
+													<!-- 마지막 인증 게시판 작성일자 -->
+													<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }" pattern="yyyy-MM-dd" /><br>
+						
+													<c:if test="${ssj.brd_reg_date != null }">
+						
+														<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd" />
+														<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd" />
+						
+														<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }"
+															integerOnly="true" />
+														<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }"
+															integerOnly="true" />
+						
+														<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
+						
+														<span>
+															${dDay }일 전
+														</span>
+														<!-- 1일전 이런식으로 나오게 수정할 예정 -->
+													</c:if>
+						
+												</div>
+											</div>
+						
+											<c:choose>
+												<c:when test="${sessionScope.user_num != null}">
+													<!-- 로그인 한 상태 -->
+													<!-- fork -->
+													<div class="row align-items-center">
+														<div class="col-auto">
+															<!-- Button -->
+															<a class="btn btn-xs btn-outline-border" href="<%-- user_num=${ssj.user_num} --%>"
+																onclick="">FORK</a>
+														</div>
+													</div>
+												</c:when>
+						
+												<c:when test="${sessionScope.user_num == null}">
+													<!-- 로그인 안 한 상태 -->
+													<!-- loginForm으로 이동 -->
+													<div class="row align-items-center">
+														<div class="col-auto">
+															<!-- Button -->
+															<a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
+														</div>
+													</div>
+												</c:when>
+						
+											</c:choose>
+										</div>
+						
 									</div>
-				
+						
 								</div>
-				
+						
+							</c:forEach>
+						
+
+							<!-- Modal -->
+							<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<div class="col-12 col-md-auto">
+												<div class="avatar avatar-xxl mb-6 mb-md-0">
+													<span class="avatar-title rounded-circle">
+														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+													</span>
+												</div>
+											</div>
+											<div class="col-12 col-md">
+												<div class="row mb-6">
+													<div class="col-12">
+														<p id="displayUserNick"></p>
+													</div>
+												</div>
+											</div>
+										</div>
+						
+										<div class="modal-footer">
+											
+											<button type="button" class="btn btn-outline-primary" onclick="follow(${status.index})">팔로우</button>
+											<form id="followForm">
+												<input type="hidden" id="inputUserNum1" name="user_num">
+											</form>
+											
+											<button type="button" class="btn btn-outline-success" onclick="sendMessage(${status.index})">쪽지보내기</button>
+											<form id="sendMessageForm">
+												<input type="hidden" id="inputUserNum2" name="user_num">
+											</form>
+
+										</div>
+									</div>
+								</div>
 							</div>
+						
+
+							<!-- BG 찌르기 fork 기능 모달창	 Wait List -->
+							<div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+						
+										<!-- Close -->
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<i class="fe fe-x" aria-hidden="true"></i>
+										</button>
+						
+										<!-- Header-->
+										<div class="modal-header lh-fixed fs-lg">
+											<strong class="mx-auto">Wait List</strong>
+										</div>
+						
+										<!-- Body -->
+										<div class="modal-body">
+											<div class="row mb-6">
+												<div class="col-12 col-md-3">
+						
+													<!-- Image -->
+													<a href="./product.html">
+														<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
+													</a>
+						
+												</div>
+												<div class="col-12 col-md-9">
+						
+													<!-- Label -->
+													<p>
+														<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
+													</p>
+						
+													<!-- Radio -->
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeOne" value="6" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeOne">3XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeTwo" value="6.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeTwo">2XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeThree" value="7" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeThree">XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeFour" value="7.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption" checked>
+														<label class="form-check-label" for="modalWaitListSizeFour">S</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeFive" value="8" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeFive">M</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeSix" value="8.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeSix">LG</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeSeven" value="9" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeSeven">XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeEight" value="9.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeEight">2XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeNine" value="10" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeNine">3XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeTen" value="10.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeTen">4XL</label>
+													</div>
+						
+												</div>
+						
+											</div>
+											<div class="row">
+												<div class="col-12">
+						
+													<!-- Text -->
+													<p class="fs-sm text-center text-gray-500">
+														Justo ut diam erat hendrerit morbi porttitor,
+														per eu curabitur diam sociis.
+													</p>
+						
+												</div>
+											</div>
+											<div class="row gx-5 mb-2">
+												<div class="col-12 col-md-6">
+						
+													<!-- Form group -->
+													<div class="form-group">
+														<label class="visually-hidden" for="listName">Your Name</label>
+														<input class="form-control" id="listName" type="text" placeholder="Your Name *"
+															required>
+													</div>
+						
+												</div>
+												<div class="col-12 col-md-6">
+						
+													<!-- Form group -->
+													<div class="form-group">
+														<label class="visually-hidden" for="listEmail">Your Name</label>
+														<input class="form-control" id="listEmail" type="email" placeholder="Your Email *"
+															required>
+													</div>
+						
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 text-center">
+						
+													<!-- Button -->
+													<button class="btn btn-dark" type="submit">Subscribe</button>
+						
+												</div>
+											</div>
+										</div>
+						
+									</div>
+						
+								</div>
+							</div>
+						
 						</div>
-					</div>
-				
-				
-				</div>
+
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
             
             
             

@@ -23,8 +23,8 @@ public class Level1ServiceImpl implements Level1Service {
 	 * 레벨 표 작성을 위함
 	 */
 	@Override
-	public List<Level1> level1List(Level1 level1) {
-		List<Level1> levelList = ld.level1List(level1);
+	public List<Level1> level1List() {
+		List<Level1> levelList = ld.level1List();
 		return levelList;
 	}
 
@@ -57,7 +57,7 @@ public class Level1ServiceImpl implements Level1Service {
 		Level1 nextLevelInfo = ld.level1Select(user_level+1);
 		
 		Level1 level1 = new Level1();
-		List<Level1> level1List = ld.level1List(level1);
+		List<Level1> level1List = ld.level1List();
 		
 		if ( user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
 			user_level += 1;
@@ -124,6 +124,5 @@ public class Level1ServiceImpl implements Level1Service {
 
 	}
 	
-
 
 }

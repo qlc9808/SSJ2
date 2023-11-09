@@ -3,10 +3,12 @@ package com.oracle.S202350102.controller;
 import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -60,26 +62,25 @@ public class YaController {
 		
 	    // 게시글 상세 정보 확인
 		Board board = ycs.detailCommunity(brd_num);
+		int brd_step=0;
 		
-		//로그인 상태 확인 
-		int user_num = 0;
-		if(session.getAttribute("user_num") != null) {
-			user_num = (int) session.getAttribute("user_num");
-		}
+		board.setBrd_step(brd_step);
+		board.setBrd_group(board.getBrd_num());
 		
-	
 		//조회수 증가
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upViewCnt", upViewCnt);	
-	    model.addAttribute("loggedIn", user_num!= 0);
+	
 			
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
 	    System.out.println("user_num:"+board.getUser_num());
 	    System.out.println("user_id:"+board.getUser_id());
+	    System.out.println("board_brd_step:"+board.getBrd_step());
+	    System.out.println("board_Brd_group:"+board.getBrd_group());
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
 	
 		return"ya/detailCommunity";
@@ -90,8 +91,12 @@ public class YaController {
 		public String writeFormCommunity(HttpSession session, Model model ) {
 			System.out.println("YaController writeFormCommunity Start... ");
 		
+			int user_num=0;
 			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
 				
+				User1 user1 = ycs.userSelect(user_num);
+				model.addAttribute("user1", user1);				
 				return "ya/writeFormCommunity"; 
 			}
 			System.out.println("user_num?"+ session.getAttribute("user_num"));
@@ -108,15 +113,25 @@ public class YaController {
 			int user_num = 0;
 			if (session.getAttribute("user_num") != null) {
 				user_num = (int) session.getAttribute("user_num");
-			}
-			board.setUser_num(user_num);
-	
-			int insertResult = ycs.insertCommunity(board);
-			board.setUser_num(user_num);
 			
-			System.out.println("brd_lg :"+board.getBrd_lg());
-			System.out.println("brd_md :"+board.getBrd_md());
-
+			}
+				board.setUser_num(user_num);
+			
+				// 게시글 작성 (본글 설정)
+				board.setBrd_group(board.getBrd_num());
+				board.setBrd_step(0);
+				board.setBrd_lg(700);
+				
+				User1 user1 = new User1();
+				user1.getNick();
+				
+				int insertResult = ycs.insertCommunity(board);
+				board.setUser_num(user_num);
+				
+				System.out.println("board brd_lg :"+board.getBrd_lg());
+				System.out.println("boardbrd_md :"+board.getBrd_md());
+				System.out.println("board nick :"+board.getNick());
+				
 			if (insertResult >0) 
 				return "redirect:listCommunity";			
 				else {
@@ -126,7 +141,7 @@ public class YaController {
 		 }
 		
 		
-		// 게시글 수정폼이동
+		// 게시글 수정폼이동 
 		@GetMapping(value="/updateCommunityForm")
 		public String updateCommunity(int brd_num, Model model) {
 			System.out.println("YaController updaetCommunityForm start...");
@@ -187,27 +202,35 @@ public class YaController {
 		@ResponseBody
 		public  List<Board> listBoardSort(HttpServletRequest request ) {
 			System.out.println("YaController ycs.listBoardSort start....");
-			String sort = request.getParameter("sort");
-			List<Board> listSortedBoard = ycs.listBoardSort(sort);
+			String sortOption = request.getParameter("sort");
+			List<Board> listSortedBoard = ycs.listBoardSort(sortOption);
 		
 		    return listSortedBoard;
 		}
 		
-		//상세 게시글 댓글  조회
+		//상세 게시글 댓글  조회 ( 아작스로 조회 할 경우 user_num과 brd_num이 게시글 본글이 아닌 댓글로 조회 할 수 있도록 설정해야 함)
 		@RequestMapping(value="/listComment", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Board> listComment(@RequestParam("brd_num") int brd_num) {
+		public List<Board> listComment(@RequestParam("brd_num") int brd_num, HttpSession session, Model model, Board board) {
 			System.out.println("YaController ycs.listComment start....");
+	
+			/*
+			 * int user_num = 0; if (session.getAttribute("user_num") != null) { user_num =
+			 * (int) session.getAttribute("user_num"); } board.setUser_num(user_num);
+			 */
 			
-			//부모글(본글)의 brd_num을 사용하여 댓글조회  부모글 brd_num = 댓글 brd_group = 부모글 brd_group
+			//부모글(본글)의 brd_num을 사용 부모글 brd_num = 댓글 brd_group = 부모글 brd_group
 			
 			List<Board> listComment = ycs.listComment(brd_num);
+			model.addAttribute(" listCommenty",  listComment);
+			board.setBrd_group(brd_num);
+			
 			System.out.println("YaController listComment size?" + listComment.size());
-	
+			System.out.println("YaController listComment brd_group?"+board.getBrd_group());
 			return listComment; 
 		}
 		
-		//게시글 답글 작성
+		//게시글 댓글  작성 (게시글 본글과 구분할 수 있어야 함, 댓글의 brd_num , brd_step, brd_group 확인)
 		@RequestMapping("/commentWrite")
 		@ResponseBody
 		public Map<String, String> commentWrite(HttpSession session, HttpServletRequest request, @ModelAttribute Board board) {
@@ -220,39 +243,56 @@ public class YaController {
 		        if (session.getAttribute("user_num") != null) {
 		            user_num = (int) session.getAttribute("user_num");
 		            board.setUser_num(user_num);
-		              try {
-		    	            int brd_num = Integer.parseInt(request.getParameter("brd_num"));
-				            board.setBrd_num(brd_num);
-		                } catch (NumberFormatException e) {
-		                    // 숫자로 변환할 수 없는 경우에 대한 예외 처리
-		                    response.put("result", "failure");
-		                    response.put("error", "Invalid brd_num format");
-		                    return response;
-		                }
 		            
-		            ycs.commentWrite(board);
-		            // 값이 담기는지 확인
-		            System.out.println("board user_num?" + board.getUser_num());
-		            System.out.println("board conts?" + board.getConts());
-		            System.out.println("board brd_num?" + board.getBrd_num());
+		            // 부모게시물의 brd num을 가져오기 
+		            int brd_num =Integer.parseInt(request.getParameter("brd_num")); 
+		            
+		            //부모 게시글의  brd_num을 댓글의 brd_group으로 설정
+		            board.setBrd_group(brd_num);
+		            
+				    board.setBrd_lg(700);
+				    
+				   // 부모 게시물의 댓글 중 가장 큰 brd_step을 가져와 1을 더해 새로운 댓글의 brd_step으로 설정       
+				   try {
+					    int brd_group = board.getBrd_num();
+						int latestBrdStep = ycs.getLatestBrdStep(brd_group);
+					    board.setBrd_step(latestBrdStep + 1);
+				   
+				   } catch (NumberFormatException e) {
+				        e.printStackTrace();
+				        // 실패한 경우
+				        response.put("result", "failure");
+				        response.put("error", "Invalid brd_num format");
+				    }		
+			            ycs.commentWrite(board);
+			        
+			            // 값이 잘  담기는지 확인
+						/*
+						 * System.out.println("board commnet int latestBrdStep :"+
+						 * ycs.getLatestBrdStep(brd_group));
+						 */
+			            System.out.println("board comment user_num?" + board.getUser_num());
+			            System.out.println("board comment conts?" + board.getConts());
+			            System.out.println("board comment brd_step?"+board.getBrd_step());
+			            System.out.println("board comment brd_group?"+board.getBrd_group());	
+		                System.out.println("session.getAttribute user_num?" + session.getAttribute("user_num"));
+			               
+		                // 성공한 경우, 상세 페이지로 리다이렉트
+			            response.put("result", "success");
+			            response.put("redirectUrl", "/ya/commentForm?brd_num=" + board.getBrd_num());
+			        } else {
+			            // 사용자가 로그인되지 않은 경우
+			            response.put("result", "failure");
+			            response.put("error", "User not logged in");
+			        	}	
+		    		} catch (Exception e) {
+				        e.printStackTrace();
+				        // 실패한 경우
+				        response.put("result", "failure");
+				        response.put("error", "An error occurred");
+				    }
 
-		            // 성공한 경우, 상세 페이지로 리다이렉트
-		            response.put("result", "success");
-		            response.put("redirectUrl", "/ya/detailCommunity?brd_num=" + board.getBrd_num());
-		        } else {
-		            // 사용자가 로그인되지 않은 경우
-		            response.put("result", "failure");
-		            response.put("error", "User not logged in");
-		        }
-
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		        // 실패한 경우
-		        response.put("result", "failure");
-		        response.put("error", "An error occurred");
-		    }
-
-		    return response;
+				    return response;
 		}
 		// 게시글 댓글 수정 전 값 불러오기
 		@GetMapping(value="/commentSelect")
@@ -262,32 +302,51 @@ public class YaController {
 			Board board = ycs.commentSelect(brd_num);	
 			model.addAttribute("Board", board);
 			System.out.println("board 댓글 수정 전 conts?"+board.getConts());
-			return "/ya/detailCommunity";
+			return "/ya/commentForm";
 			
 		}	
-		// 게시글 수정
+		// 게시글 댓글 수정
 		@PostMapping(value="/commentUpdate")
-		public Map<String, Object> commentUpdate(@RequestParam("brd_num")int brd_num, @RequestParam("conts") String conts){
-			Map<String, Object> map = new HashMap<String, Object>();
-			try {
-				Board board = new Board();
-				board.setBrd_num(brd_num);
-				board.setConts(conts);
-				ycs.commentUpdate(board);
-				
-				System.out.println("board 댓글 수정후 conts?"+board.getConts());
-				
-				map.put("result", "success");
-				
-			} catch (Exception e) {
-				System.out.println("YaController commentUpdate e.getmessage?"+e.getMessage());
-				map.put("result", "fail");
-				map.put("error", "An error occurred");
-			}
-			return map;
+		@ResponseBody
+		public Map<String, Object> commentUpdate(HttpSession session,
+			      @RequestParam("brd_num") int brd_num, @RequestParam("conts") String conts, @ModelAttribute Board board) {
+		    Map<String, Object> map = new HashMap<String, Object>();
+		    try {
+		        System.out.println("YaController ycs.commentUpdate start...");
+
+		        int user_num = 0;
+		        if (session.getAttribute("user_num") != null) {
+		            user_num = (int) session.getAttribute("user_num");
+		     
+		            board.setBrd_num(brd_num);
+		            board.setConts(conts);
+		            board.setUser_num(user_num);
+		            
+
+		            // 댓글 업데이트 메소드 호출
+		            ycs.commentUpdate(board);
+
+		            // 댓글 정보 확인
+		            System.out.println("session.getAttributeuser_num?"+session.getAttribute("user_num"));
+		            System.out.println("board 댓글 수정후 conts?" + board.getConts());
+		            System.out.println("board brd_num?" + board.getBrd_num());
+		            System.out.println("board user_num?" + board.getUser_num());
+		       
+
+		            map.put("result", "success");
+		        } else {
+		            // 사용자가 로그인되지 않은 경우
+		            map.put("result", "failure");
+		            map.put("error", "User not logged in");
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        // 실패한 경우
+		        map.put("result", "failure");
+		        map.put("error", "An error occurred");
+		    }
+
+		    return map;
 		}
-	
-		
-		
 		
 }		
