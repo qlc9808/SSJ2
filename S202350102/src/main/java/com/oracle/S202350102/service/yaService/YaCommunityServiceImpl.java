@@ -114,13 +114,6 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		ybd.commentWrite(board);
 	}
 
-	@Override
-	public Board commentSelect(int brd_num) {
-		Board board = null;
-		System.out.println("YaCommunityServiceImpl commentSelec start..");
-		board = ybd.commentSelect(brd_num);
-		return board;
-	}
 
 	@Override
 	public void commentUpdate(Board board) {

@@ -96,13 +96,6 @@
 		SELECT MAX(brd_step) FROM board WHERE brd_group = #{brd_group}
 	</select>
 	
-	<select id="YaCommentSelect" resultType="Board">
-		SELECT  brd_num, user_num, brd_lg, brd_md, conts, reg_date, brd_group, brd_step
-		FROM    Board
-		WHERE   brd_num =#{brd_num}
-    	AND     b.user_num = u.user_num
-	</select>
-	
 	<update id="YaCommentUpdate" parameterType="Board">
 		UPDATE board SET conts=#{conts}
 		WHERE  user_num = #{user_num} 
@@ -114,7 +107,8 @@
 	
 	<delete id="YaCommentDelete" parameterType="Board">
 		DELETE FROM board
-		WHERE brd_num = #{brd_num} 
+		WHERE user_num = #{user_num} 
+		AND brd_num #{brd_num}
 	</delete>
 	
 	

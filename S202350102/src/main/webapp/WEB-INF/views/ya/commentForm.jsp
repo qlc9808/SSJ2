@@ -37,14 +37,13 @@ $(document).ready(function(){
 
 function listcomment() {
     
-    // 본글이 아닌 댓글의 user_num을 가져와야 함
     var brd_num = ${board.brd_num}
     var user_num =  ${board.user_num};
     var sessionUserNum = ${sessionScope.user_num};
     $.ajax({
         url: "listComment?brd_num="+brd_num,
         type: "GET",
-        data: {  user_num: user_num,    //원래는 brd_num: brd_num;
+        data: {  user_num: user_num,   
           		  brd_num: brd_num,
         	 	 },
         dataType: "json",
@@ -59,14 +58,17 @@ function listcomment() {
                 listItem.append(" 댓글 번호 :"+ board.brd_num);
                 listItem.append("작성자: " + board.nick + " &nbsp;&nbsp;&nbsp;&nbsp;");
                 listItem.append("작성자 회원번호: " + board.user_num);
-                listItem.append("댓글 그룹: " + board.brd_group);
+                listItem.append("<br>댓글 그룹: " + board.brd_group);
                 listItem.append("댓글 순서: " + board.brd_step);
                 listItem.append("작성날짜: " + board.reg_date);
                 listItem.append("<br>댓글 내용: <span>" + board.conts + "</span><br>");         
-                /* listItem.append("<button type='button' class='btn btn-outline-success' id='commentupdateBtn' value='" + board.user_num + "'>댓글 수정</button>"); */ 
-                listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num + "'data-brd-num="+ board.brd_num + ">댓글 수정</button>");
-                listItem.append("<button type='button' class='btn btn-outline-success' id='commentdeleteBtn'  dvalue='" + board.user_num + "'>댓글 삭제</button>"); 
-
+           		
+                if (board.user_num == sessionUserNum) {
+                listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num 
+                																						+ "'data-brd-num="+ board.brd_num + ">댓글 수정</button>");
+                listItem.append("<button type='button' class='btn btn-outline-success comment-delete-btn' data-user-num='" + board.user_num 
+																										+ "'data-brd-num="+ board.brd_num + ">댓글 삭제</button>"); 
+                }
                 commentList.append(listItem);
             });
         },
@@ -143,7 +145,6 @@ function listcomment() {
 
             // 수정 버튼 클릭 시, '저장' 버튼에 data-value를 추가하여 댓글 번호를 저장
             var saveButton = $('<button type="button" class="btn btn-success save-comment-btn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
-            /* var cancelButton = $('<button type="button" class="btn btn-secondary cancel-comment-btn">취소</button>'); */
             var cancelButton = $('<button type="button" class="btn btn-secondary cancel-comment-btn" data-user-num="' + user_num + '">취소</button>');
             listItem.append(saveButton, cancelButton);
             var user_num = listItem.find('.user_num').val();
@@ -180,8 +181,13 @@ function listcomment() {
 
             // 수정된 내용을 가져와서 서버로 전송
             var newContent = listItem.find('input').val();
-            var user_num = listItem.find('.user_num').val();
+            var user_num = $(this).data('user-num');
             var brd_num = $(this).data('brd-num');
+            
+            // 댓글 번호와 사용자 번호를 data- 속성으로 추가
+            $(this).data('user-num', user_num);
+            $(this).data('brd-num', brd_num);
+            
             
             console.log("저장  버튼 클릭 brd_num: " + brd_num);
             console.log("저장 버튼 클릭 user_num : " + user_num );
@@ -214,14 +220,61 @@ function listcomment() {
             }
         });
     });
+    
+    /*삭제버튼 클릭 */
+	$(document).on('click', '.comment-delete-btn', function () {
+	    // 클릭한 삭제 버튼의 부모 엘리먼트 <li>
+	    var listItem = $(this).closest('li');
+	    var user_num = $(this).data('user-num');
+	    var brd_num = $(this).data('brd-num');
+	
+	    // 댓글 번호와 사용자 번호를 data- 속성으로 추가
+	    $(this).data('user-num', user_num);
+	    $(this).data('brd-num', brd_num);
+	
+	    console.log("삭제 버튼 클릭 brd_num: " + brd_num);
+	    console.log("삭제 버튼 클릭 user_num : " + user_num);
+	
+	    // 댓글 작성자와 로그인 사용자가 같은지 확인
+	    if (${sessionScope.user_num} === user_num) {
+	        if (confirm("정말로 댓글을 삭제하시겠습니까?")) {
+	            // 확인 버튼을 누른 경우 댓글 삭제를 서버로 전송
+	            $.ajax({
+	                url: "commentDelete",
+	                type: "POST",
+	                data: {
+	                    user_num: user_num,
+	                    brd_num: brd_num
+	                },
+	                dataType: "json",
+	                success: function (result) {
+	                    if (result.result === "success") {
+	                        // 삭제가 성공하면 댓글 목록을 다시 불러오기
+	                        listcomment();
+	                    } else {
+	                        alert("댓글 삭제에 실패했습니다.");
+	                    }
+	                },
+	                error: function (jqXHR, textStatus, errorThrown) {
+	                    console.log("Ajax 요청 실패: " + errorThrown);
+	                }
+	            });
+	        }
+	    } else {
+	        alert("댓글 작성자와 다른 사용자는 삭제할 수 없습니다.");
+	    }
+	});    
+    
+    
     </script>
 
  <!--댓글작성-->
 <c:choose>
     <c:when test="${empty sessionScope.user_num}">
-        <!-- 로그인되지 않은 사용자에게는 댓글 작성 폼을 표시하지 않음 -->
-        <p>댓글을 작성하실 분은 로그인을 해주세요!</p>
+        <p><p>
+        <h5>댓글을 작성하실 분은 로그인을 해주세요!</h5>
     </c:when>
+    
     <c:otherwise>
     <div class="card my-4">
        <h5 class="card-header">댓글 작성</h5>
@@ -237,14 +290,13 @@ function listcomment() {
            </form>
        </div>
    </div>
-    </c:otherwise>
+   </c:otherwise> 
 </c:choose> 
 
  <!-- 댓글 조회 확인 -->
 
 		<div class="container">
-		<ul class="list-group list-group-flush" id="commentList">
-     	 
+		<ul class="list-group list-group-flush" id="commentList"> 
 		</ul>
 		</div>
 
