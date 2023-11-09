@@ -813,251 +813,279 @@
                       <div class="col-12">
 
                         <!-- content -->
-                        <div class="review">
-                          <!-- Body -->
-                          <c:forEach var="ssj" items="${listSsj}" varStatus="status">
-                            <div class="review-body">
-								<div class="row" id="ssj${status.index}">
-									<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
-									<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
-									<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
-									<!-- profile -->
-									<div class="col-12 col-md-auto">
-										<div class="avatar avatar-xxl mb-6 mb-md-0">
-											<span class="avatar-title rounded-circle">
-												<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
-											</span>
-										</div>
-									</div>
-								
-									<!-- nick -->
-									<div class="col-12 col-md">
-										<div class="row mb-6">
-											<div class="col-12">
-												<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
-													<span>${ssj.nick}</span>
-												</a>
+						<div class="review">
+							<!-- Body -->
+							<c:forEach var="ssj" items="${listSsj}" varStatus="status">
+								<div class="review-body">
+									<div class="row" id="ssj${status.index}">
+										<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
+										<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
+										<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
+										<!-- profile -->
+										<div class="col-12 col-md-auto">
+											<div class="avatar avatar-xxl mb-6 mb-md-0">
+												<span class="avatar-title rounded-circle">
+													<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+												</span>
 											</div>
 										</div>
-									</div>
-								
-									<!-- reg_date & fork -->
-									<div class="col-12 col-md">
-										<!-- reg_date -->
-										<div class="row mb-6">
-											<div class="col-12">
-								
-												<!-- 오늘 날짜 -->
-												<jsp:useBean id="javaDate" class="java.util.Date" />
-												<fmt:formatDate var="nowDateFd" value="${javaDate }" pattern="yyyy-MM-dd" /><br>
-								
-												<!-- 마지막 인증 게시판 작성일자 -->
-												<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }" pattern="yyyy-MM-dd" /><br>
-								
-												<c:if test="${ssj.brd_reg_date != null }">
-								
-													<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd" />
-													<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd" />
-								
-													<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true" />
-													<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }"
-														integerOnly="true" />
-								
-													<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
-								
-													<span>
-														${dDay }일 전
-													</span>
-													<!-- 1일전 이런식으로 나오게 수정할 예정 -->
-												</c:if>
-								
-											</div>
-										</div>
-								
-									<c:choose>
-										<c:when test="${sessionScope.user_num != null}">
-											<!-- 로그인 한 상태 -->
-											<!-- fork -->
-											<div class="row align-items-center">
-												<div class="col-auto">
-													<!-- Button -->
-													<a class="btn btn-xs btn-outline-border" href="<%-- user_num=${ssj.user_num} --%>"
-														onclick="">FORK</a>
+						
+										<!-- nick -->
+										<div class="col-12 col-md">
+											<div class="row mb-6">
+												<div class="col-12">
+													<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
+														<span>${ssj.nick}</span>
+													</a>
 												</div>
 											</div>
-										</c:when>
-								
-								
-								
-										<!-- BG 찌르기 fork 기능 모달창	 Wait List -->
-										<div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
-											<div class="modal-dialog modal-dialog-centered" role="document">
-												<div class="modal-content">
-								
-													<!-- Close -->
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-														<i class="fe fe-x" aria-hidden="true"></i>
-													</button>
-								
-													<!-- Header-->
-													<div class="modal-header lh-fixed fs-lg">
-														<strong class="mx-auto">Wait List</strong>
-													</div>
-								
-													<!-- Body -->
-													<div class="modal-body">
-														<div class="row mb-6">
-															<div class="col-12 col-md-3">
-								
-																<!-- Image -->
-																<a href="./product.html">
-																	<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg"
-																		alt="...">
-																</a>
-								
-															</div>
-															<div class="col-12 col-md-9">
-								
-																<!-- Label -->
-																<p>
-																	<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
-																</p>
-								
-																<!-- Radio -->
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeOne" value="6" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeOne">3XS</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeTwo" value="6.5" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeTwo">2XS</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeThree" value="7" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeThree">XS</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeFour" value="7.5" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption" checked>
-																	<label class="form-check-label" for="modalWaitListSizeFour">S</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeFive" value="8" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeFive">M</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeSix" value="8.5" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeSix">LG</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeSeven" value="9" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeSeven">XL</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeEight" value="9.5" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeEight">2XL</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeNine" value="10" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeNine">3XL</label>
-																</div>
-																<div class="form-check form-check-inline form-check-size mb-2">
-																	<input type="radio" class="form-check-input" name="modalWaitListSize"
-																		id="modalWaitListSizeTen" value="10.5" data-toggle="form-caption"
-																		data-target="#modalWaitListSizeCaption">
-																	<label class="form-check-label" for="modalWaitListSizeTen">4XL</label>
-																</div>
-								
-															</div>
-								
-														</div>
-														<div class="row">
-															<div class="col-12">
-								
-																<!-- Text -->
-																<p class="fs-sm text-center text-gray-500">
-																	Justo ut diam erat hendrerit morbi porttitor,
-																	per eu curabitur diam sociis.
-																</p>
-								
-															</div>
-														</div>
-														<div class="row gx-5 mb-2">
-															<div class="col-12 col-md-6">
-								
-																<!-- Form group -->
-																<div class="form-group">
-																	<label class="visually-hidden" for="listName">Your Name</label>
-																	<input class="form-control" id="listName" type="text" placeholder="Your Name *"
-																		required>
-																</div>
-								
-															</div>
-															<div class="col-12 col-md-6">
-								
-																<!-- Form group -->
-																<div class="form-group">
-																	<label class="visually-hidden" for="listEmail">Your Name</label>
-																	<input class="form-control" id="listEmail" type="email" placeholder="Your Email *"
-																		required>
-																</div>
-								
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-12 text-center">
-								
-																<!-- Button -->
-																<button class="btn btn-dark" type="submit">Subscribe</button>
-								
-															</div>
+										</div>
+						
+										<!-- reg_date & fork -->
+										<div class="col-12 col-md">
+											<!-- reg_date -->
+											<div class="row mb-6">
+												<div class="col-12">
+						
+													<!-- 오늘 날짜 -->
+													<jsp:useBean id="javaDate" class="java.util.Date" />
+													<fmt:formatDate var="nowDateFd" value="${javaDate }" pattern="yyyy-MM-dd" /><br>
+						
+													<!-- 마지막 인증 게시판 작성일자 -->
+													<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }" pattern="yyyy-MM-dd" /><br>
+						
+													<c:if test="${ssj.brd_reg_date != null }">
+						
+														<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd" />
+														<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd" />
+						
+														<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }"
+															integerOnly="true" />
+														<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }"
+															integerOnly="true" />
+						
+														<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
+						
+														<span>
+															${dDay }일 전
+														</span>
+														<!-- 1일전 이런식으로 나오게 수정할 예정 -->
+													</c:if>
+						
+												</div>
+											</div>
+						
+											<c:choose>
+												<c:when test="${sessionScope.user_num != null}">
+													<!-- 로그인 한 상태 -->
+													<!-- fork -->
+													<div class="row align-items-center">
+														<div class="col-auto">
+															<!-- Button -->
+															<a class="btn btn-xs btn-outline-border" href="<%-- user_num=${ssj.user_num} --%>"
+																onclick="">FORK</a>
 														</div>
 													</div>
-								
-												</div>
-								
-											</div>
+												</c:when>
+						
+												<c:when test="${sessionScope.user_num == null}">
+													<!-- 로그인 안 한 상태 -->
+													<!-- loginForm으로 이동 -->
+													<div class="row align-items-center">
+														<div class="col-auto">
+															<!-- Button -->
+															<a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
+														</div>
+													</div>
+												</c:when>
+						
+											</c:choose>
 										</div>
-								
-								
-								
-										<c:when test="${sessionScope.user_num == null}">
-											<!-- 로그인 안 한 상태 -->
-											<!-- loginForm으로 이동 -->
-											<div class="row align-items-center">
-												<div class="col-auto">
-													<!-- Button -->
-													<a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
-												</div>
-											</div>
-										</c:when>
-									</c:choose>
+						
+									</div>
+						
 								</div>
+						
+							</c:forEach>
+						
+							
+							<!-- Modal -->
+							<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<div class="col-12 col-md-auto">
+												<div class="avatar avatar-xxl mb-6 mb-md-0">
+													<span class="avatar-title rounded-circle">
+														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayImg">
+													</span>
+												</div>
+											</div>
+											<div class="col-12 col-md">
+												<div class="row mb-6">
+													<div class="col-12">
+														<p id="displayUserNick"></p>
+													</div>
+												</div>
+											</div>
+										</div>
+						
+										<div class="modal-footer">
+											<button type="button" class="btn btn-outline-primary" onclick="follow()">팔로우</button>
+											<button type="button" class="btn btn-outline-success" onclick="sendMessage()">쪽지보내기</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						
 
-                              </div>
-                              
-                            </div>
-
-                          </c:forEach>
-                          
-                        </div>
+							<!-- BG 찌르기 fork 기능 모달창	 Wait List -->
+							<div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+						
+										<!-- Close -->
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<i class="fe fe-x" aria-hidden="true"></i>
+										</button>
+						
+										<!-- Header-->
+										<div class="modal-header lh-fixed fs-lg">
+											<strong class="mx-auto">Wait List</strong>
+										</div>
+						
+										<!-- Body -->
+										<div class="modal-body">
+											<div class="row mb-6">
+												<div class="col-12 col-md-3">
+						
+													<!-- Image -->
+													<a href="./product.html">
+														<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
+													</a>
+						
+												</div>
+												<div class="col-12 col-md-9">
+						
+													<!-- Label -->
+													<p>
+														<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
+													</p>
+						
+													<!-- Radio -->
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeOne" value="6" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeOne">3XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeTwo" value="6.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeTwo">2XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeThree" value="7" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeThree">XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeFour" value="7.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption" checked>
+														<label class="form-check-label" for="modalWaitListSizeFour">S</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeFive" value="8" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeFive">M</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeSix" value="8.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeSix">LG</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeSeven" value="9" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeSeven">XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeEight" value="9.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeEight">2XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeNine" value="10" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeNine">3XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeTen" value="10.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeTen">4XL</label>
+													</div>
+						
+												</div>
+						
+											</div>
+											<div class="row">
+												<div class="col-12">
+						
+													<!-- Text -->
+													<p class="fs-sm text-center text-gray-500">
+														Justo ut diam erat hendrerit morbi porttitor,
+														per eu curabitur diam sociis.
+													</p>
+						
+												</div>
+											</div>
+											<div class="row gx-5 mb-2">
+												<div class="col-12 col-md-6">
+						
+													<!-- Form group -->
+													<div class="form-group">
+														<label class="visually-hidden" for="listName">Your Name</label>
+														<input class="form-control" id="listName" type="text" placeholder="Your Name *"
+															required>
+													</div>
+						
+												</div>
+												<div class="col-12 col-md-6">
+						
+													<!-- Form group -->
+													<div class="form-group">
+														<label class="visually-hidden" for="listEmail">Your Name</label>
+														<input class="form-control" id="listEmail" type="email" placeholder="Your Email *"
+															required>
+													</div>
+						
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 text-center">
+						
+													<!-- Button -->
+													<button class="btn btn-dark" type="submit">Subscribe</button>
+						
+												</div>
+											</div>
+										</div>
+						
+									</div>
+						
+								</div>
+							</div>
+						
+						</div>
 
                       </div>
                       
