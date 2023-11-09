@@ -100,6 +100,18 @@ public class QBoardDaoImpl implements QBoardDao {
 		}
 		return total;
 	}
+
+
+	@Override
+	public List<Board> qboardListSearch(String keyword) {
+		List<Board> qboardListSearch = null;
+		try {
+			qboardListSearch = session.selectList("qboardListSearch",keyword);
+		} catch (Exception e) {
+			System.out.println("qboardListSearch dao sql exception->"+e.getMessage());
+		}
+		return qboardListSearch;
+	}
 	
 	
 

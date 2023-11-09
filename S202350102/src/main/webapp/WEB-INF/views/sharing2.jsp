@@ -37,14 +37,17 @@ function likePost(brd_num) {
 	});
 }
 
-//Select 변경 시
+// Select 변경 시
 function renderTable(data) {
     if (data && data.length > 0) {
-        var tableHTML = ''; // 초기화된 테이블 시작
+        var tableHTML = 'boardtable'; // 초기화된 테이블 시작
         for (var i = 0; i < data.length; i++) {
             var board = data[i];
             tableHTML += `
-            	  <div class="col-6 col-md-4">
+                <tr>
+            	board.brd_num
+   				board.view_cnt
+            	     <div class="col-6 col-md-4">
                 <div class="card mb-7">
                     <div class="card-img">
                         <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
@@ -54,14 +57,14 @@ function renderTable(data) {
     				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
     					</button>
 
-                      <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
+                      <img class="card-img-top" src="${board.img}" alt="..." style="width: 100%; height: 250;">
     					 </div>
                     <div class="card-body fw-bold text-center">
                         <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                             ${board.title}
                         </a><p>
                         <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                            	{board.price}원</a><p>
+                            ${board.price}원</a><p>
                         <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
                         						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
                         				
@@ -69,11 +72,11 @@ function renderTable(data) {
     				 
                 </div>
             </div>
-                   
+                   </tr>
             `;
         }
        
-        tableHTML += ''; // 테이블 닫기
+        tableHTML += '</table>'; // 테이블 닫기
         $('#boardtable').html(tableHTML); // boardtable에 새로운 데이터로 업데이트된 테이블 렌더링
     } else {
         $('#boardtable').html('<p>검색 결과가 없습니다.</p>');

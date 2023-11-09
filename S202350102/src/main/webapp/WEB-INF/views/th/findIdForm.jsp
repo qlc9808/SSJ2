@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,12 +17,13 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
     
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+   
     <!-- Title -->
     <title>Ssj</title>
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript">
-
-</script>
+<script type="text/javascript" src="js/th/findId.js"></script>
 </head>
 <body class="bg-light">
     <!-- NAVBAR -->
@@ -41,29 +43,33 @@
               <div class="card-body">
 
                 <!-- Heading -->
-                <h6 class="mb-7">로그인</h6>
+                <ul class="list-unstyled flex-row">
+	                <li><i class="bi bi-file-lock2" style="font-size: 1.7rem; color: cornflowerblue;"></i><b>아이디 찾기</b></li>
+										
+                </ul>
+                
 
                 <!-- Form -->
-                <form action="login" method="post">
+<!--                 <form action="/findIdForm" method="post"> -->
                   <div class="row">
                     
                     <div class="col-12">
                       <!-- Email -->
                       <div class="form-group">
-                        <label class="visually-hidden" for="loginEmail">
-                         ID *
+                        <label class="visually-hidden" for="user_name">
+                         	이름 *
                         </label>
-                        <input class="form-control form-control-sm" id="loginEmail" type="text"  name="user_id"  placeholder="ID *" required>
+                        <input class="form-control form-control-sm" id="user_name" type="text"  name="user_name"  placeholder="이름  *" required>
                       </div>
                     </div>
                    
 					<div class="col-12">
                       <!-- Password -->
                       <div class="form-group">
-                        <label class="visually-hidden" for="loginPassword">
-                          Password *
+                        <label class="visually-hidden" for="email">
+                          	이메일 *
                         </label>
-                        <input class="form-control form-control-sm" id="loginPassword" type="password" name="user_pswd" placeholder="Password *" required>
+                        <input class="form-control form-control-sm" id="email" type="email" name="email" placeholder="이메일 *" required>
                       </div>
                     </div>
                    
@@ -78,12 +84,13 @@
                         </div>
                       </div>
                     </div>
+                    
                    <!-- Link -->
                     <div class="col-12 col-md-auto">
                       <div class="form-group">
                       	<a class="fs-sm text-reset" href="/signUp">회원가입 </a>
                       	<small class="fs-sm text-reset"> | </small>
-                        <a class="fs-sm text-reset" href="/findIdForm">아이디 찾기 </a>
+                        <a class="fs-sm text-reset" href="/loginForm">로그인 </a>
                         <small class="fs-sm text-reset"> | </small>
                         <a class="fs-sm text-reset" href="/user1ResetPswd">비밀번호 찾기 </a>
                       </div>
@@ -91,12 +98,13 @@
                     
                     <div class="col-12">
                       <!-- Button -->
-                      <button class="btn btn-sm btn-dark" type="submit">
-                        	로그인
+                      <button class="btn btn-sm btn-dark" onclick="return findId_click()">
+                        	아이디찾기
                       </button>				  
                     </div>
+                 
                   </div>
-                </form>
+<!--                 </form> -->
 
               </div>
             </div>
@@ -113,6 +121,6 @@
     <!-- JAVASCRIPT -->
     {{> partials/scripts}}
 
-  </body>
-	
+</body>
+
 </html>

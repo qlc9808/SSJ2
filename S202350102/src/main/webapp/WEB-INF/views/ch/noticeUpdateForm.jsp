@@ -44,7 +44,7 @@
 			</tr>
 			<tr>
 				<td>등록일</td>
-				<td>${noticeConts.reg_date }</td>
+				<td><fmt:formatDate value="${noticeConts.reg_date }" pattern="yy-MM-dd"/></td>
 			</tr>
 			<tr>
 				<td>내용</td>

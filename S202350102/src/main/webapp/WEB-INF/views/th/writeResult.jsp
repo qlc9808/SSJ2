@@ -6,12 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+	function fn_alert() {
+		alert('회원가입이 완료 되었습니다')
+		location.href="/"
+	}
+</script>
 </head>
-<body>
-
-<c:import url="/WEB-INF/views/header4.jsp"/>
-<h1>회원가입 성공</h1>
-<c:import url="/WEB-INF/views/footer.jsp"/>
+<body onload="fn_alert()">
 
 </body>
 </html>

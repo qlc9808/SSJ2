@@ -26,4 +26,23 @@
 		and md != 999
 	</select>
 	
+	<insert id="chgInsert" parameterType="java.lang.String">
+		Insert Into comm
+		Values(200,
+			   (Select MAX(md)+1
+				From comm
+				Where lg =200
+				and md != 999),
+			   #{ctn})
+	</insert>
+	
+	<delete id="chgDeleteComm" parameterType="java.util.ArrayList">
+		 Delete comm
+	     Where lg = 200
+	     And <foreach collection="array" item="ctn" separator=" OR " index="index">
+	        ctn = #{ctn}
+	     </foreach>
+			
+	</delete>
+	
 </mapper>

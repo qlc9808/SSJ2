@@ -1,5 +1,7 @@
 package com.oracle.S202350102.service.thService;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.oracle.S202350102.dao.thDao.ThUser1Dao;
@@ -67,5 +69,17 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 		System.out.println("ThUser1ServiceImpl user1NickCheck result --> " + result);
 		return result;
 	}
+
+
+	@Override
+	public List<User1> findId(User1 user1) {
+		System.out.println("ThUser1ServiceImpl findId Start...");		
+		List<User1> user_id_list = ud1.findId(user1);
+		System.out.println("ThUser1ServiceImpl findId user_id_List --> " + user_id_list);
+		return user_id_list;
+	}
+
+
+	
 
 }

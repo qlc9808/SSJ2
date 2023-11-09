@@ -40,7 +40,7 @@ public class Level1ServiceImpl implements Level1Service {
 
 	/*
 	 * 강한빛 
-	 * 유저의 레벨과 경험치를 받아서 조건에 맞으면 레벨을 올리는 메소드
+	 * 유저의 레벨과 경험치를 받아서 조건에 맞으면 레벨을 올리기
 	 */	
 	@Override
 	public void userLevelCheck(int user_num) {
