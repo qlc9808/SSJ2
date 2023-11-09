@@ -183,14 +183,16 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	@Override
 	public int replyDelete(int brd_num) {
 		System.out.println("JhChallengeDaoImpl replyDelete Start...");
+		System.out.println("JhChallengeDaoImpl replyDelete brd_num -> "+ brd_num);
+		
 		int result = 0;
 		
 		try {
-			result = session.selectOne("jhReplyDelete", brd_num);
+			result = session.delete("jhReplyDelete", brd_num);
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl replyDelete e.getMessage() -> " + e.getMessage());
 		}
-		System.out.println("JhChallengeDaoImpl replyInsert result -> "+ result);
+		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
 		
 		return result;
 	}

@@ -15,14 +15,20 @@
   
 
 </style>
+<script type="text/javascript">
+	function replyUpdate(${reply.brd_num}){
+		/* 아작스 하는 중 함수형태랑 파라미터 이게 맞는지 확인하고 시작하기 */
+		
+	}
+</script>
 </head>
 <body>
 
 
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 <c:if test="${user.nick == reviewContent.nick }">
-	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num${reviewContent.brd_num}'" value="수정">
-	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num${reviewContent.brd_num}'" value="삭제">
+	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num=${reviewContent.brd_num}'" value="수정">
+	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" value="삭제">
 </c:if>
 
 <input type="button" value="목록" onclick="location.href='chgDetail?chg_id=8'" >  
@@ -141,8 +147,10 @@
 	             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 	             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
 				  <c:if test="${user.nick == reply.nick }">
-					<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='/replyUpdate?brd_num=${reply.brd_num}'" value="수정">
-					<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='/replyDelete?brd_num=${reply.brd_num}'" value="삭제" >
+					<input type="button"  onclick="replyUpdate(${reply.brd_num})" value="수정">
+<%-- 					<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='/replyUpdate?brd_num=${reply.brd_num}&chg_id=${chg_id }'" value="수정"> --%>
+					<input type="button"  onclick="location.href='/replyDelete?ori_brd_num=${reviewContent.brd_num}&rep_brd_num=${reply.brd_num}&chg_id=${chg_id }'" value="삭제" >
+<%-- 					<input type="button"  onclick="location.href='/replyDelete?brd_num=${reply.brd_num}&chg_id=${chg_id }'" value="삭제" > --%>
 				  </c:if>
 				  
 		          </div>

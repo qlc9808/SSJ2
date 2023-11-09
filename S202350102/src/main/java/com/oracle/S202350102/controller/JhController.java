@@ -378,18 +378,29 @@ public class JhController {
 		return "forward:reviewContent";
 	}
 	
-	@RequestMapping(value = "/replyDelete")
-	public String replyDelete(int brd_num, HttpSession session, Model model) {
+	//후기 댓글 삭제 근데 화면처리는 어떻게?
+	@RequestMapping(value = "replyDelete")
+	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, @RequestParam("rep_brd_num") String brd_num2, int chg_id, HttpSession session, Model model) {
 		System.out.println("JhController replyDelete Start...");
+		int brd_num2_reply = Integer.parseInt(brd_num2);
+		int brd_num_origin = Integer.parseInt(brd_num);
 		
 		System.out.println("JhController replyDelete brd_num -> " + brd_num);
+//		System.out.println("JhController replyDelete chg_id -> " + chg_id);
 		
-		int result = jhCService.replyDelete(brd_num);
+//		int result = jhCService.replyDelete(brd_num2);
+		int result = jhCService.replyDelete(brd_num2_reply);
 		
 		System.out.println("JhController replyDelete result -> " + result);
 		
-		model.addAttribute(result);
-		return "jh/test3";
+		model.addAttribute("brd_num", brd_num);
+		model.addAttribute("chg_id", chg_id);
+		model.addAttribute("result", result);
+		
+		
+		//forward할 때 파라미터를 꼭 줘야함
+//		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
+		return "forward:reviewContent?brd_num="+brd_num_origin+"&chg_id="+chg_id;
 	}
 	
 	
