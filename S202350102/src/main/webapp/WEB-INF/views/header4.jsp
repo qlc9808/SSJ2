@@ -106,7 +106,7 @@
 	                  <div class="card-body">
 	                    <ul class="list-styled fs-sm">
 	                      <li class="list-styled-item">
-	                        <a class="list-styled-link" href="/logoutForm">로그아웃</a>
+	                        <a class="list-styled-link" href="/logout">로그아웃</a>
 	                      </li>
 	                      <li class="list-styled-item">
 	                        <a class="list-styled-link" href="/mypage">마이페이지</a>

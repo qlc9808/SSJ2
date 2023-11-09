@@ -172,7 +172,6 @@
 	         }
 	}
 	
-//idCheck == 1 && pwdCheck == 1  && nameCheck == 1 && nickCheck == 1 && emailCheck == 1
 	function checkSignupbtn() {
 	   if(idCheck == 0 ) {
 		   alert("아이디를 형식에 맞게 입력해주세요");

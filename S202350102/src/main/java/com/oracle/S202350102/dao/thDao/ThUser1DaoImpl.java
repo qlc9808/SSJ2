@@ -1,5 +1,7 @@
 package com.oracle.S202350102.dao.thDao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -85,6 +87,20 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<User1> findId(User1 user1) {
+		System.out.println("User1DaoImpl findId Start...");
+		
+		List<User1>	user_id_list = null;
+		try {
+			user_id_list = session.selectList("thFindId", user1);
+		} catch (Exception e) {
+			System.out.println("User1DaoImpl findId Exception --> " + e.getMessage());
+		}
+		
+		return user_id_list;
 	}
 	
 	

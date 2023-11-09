@@ -31,4 +31,5 @@ public class User1 {
 	
 	// board 작성일자 출력용
 	private Date brd_reg_date;
+
 }

@@ -10,7 +10,11 @@
 	</insert>
 
 	<select id="thLogin" parameterType="User1" resultType="User1">
-		SELECT * FROM user1 WHERE user_id = #{user_id} AND user_pswd= #{user_pswd} 
+		SELECT 	* 
+		FROM 	user1 
+		WHERE 	user_id = #{user_id} 
+		AND 	user_pswd= #{user_pswd}
+		AND		delete_yn = 'N'
 	</select>
 	
 	<update id="thDeleteUser1" parameterType="User1">
@@ -36,6 +40,13 @@
 		SELECT 	Count(*)
 		FROM	User1
 		WHERE	nick	=	#{nick}
+	</select>
+	
+	<select id="thFindId" parameterType="User1" resultType="User1">
+		SELECT 	user_id
+		FROM	user1
+		WHERE	user_name	=	#{user_name}
+		AND		email		=	#{email}
 	</select>
 </mapper>
 
