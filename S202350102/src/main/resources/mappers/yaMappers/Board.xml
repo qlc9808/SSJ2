@@ -56,7 +56,7 @@
     </select>
     
 	 <select id="sortByViewCnt" parameterType="String" resultType="Board">
-	    SELECT b.brd_num, b.title, u.nick, b.reg_date, b.view_cnt  
+	    SELECT *
 	    FROM board b ,user1 u
 	    WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
@@ -66,7 +66,7 @@
 	</select>
 	
 	<select id="sortByRegDate" parameterType="String" resultType="Board">
-	    SELECT b.brd_num, b.title, u.nick, b.reg_date, b.view_cnt 
+	    SELECT *
 	    FROM board b ,user1 u
 	    WHERE b.user_num = u.user_num
         AND b.brd_lg = 700

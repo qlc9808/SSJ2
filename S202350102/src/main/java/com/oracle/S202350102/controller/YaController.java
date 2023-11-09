@@ -3,6 +3,7 @@ package com.oracle.S202350102.controller;
 import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,20 +67,13 @@ public class YaController {
 		board.setBrd_step(brd_step);
 		board.setBrd_group(board.getBrd_num());
 		
-		//로그인 상태 확인 
-		int user_num = 0;
-		if(session.getAttribute("user_num") != null) {
-			user_num = (int) session.getAttribute("user_num");
-		}
-		
-	
 		//조회수 증가
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upViewCnt", upViewCnt);	
-	    model.addAttribute("loggedIn", user_num!= 0);
+	
 			
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
@@ -97,8 +91,12 @@ public class YaController {
 		public String writeFormCommunity(HttpSession session, Model model ) {
 			System.out.println("YaController writeFormCommunity Start... ");
 		
+			int user_num=0;
 			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
 				
+				User1 user1 = ycs.userSelect(user_num);
+				model.addAttribute("user1", user1);				
 				return "ya/writeFormCommunity"; 
 			}
 			System.out.println("user_num?"+ session.getAttribute("user_num"));
@@ -115,20 +113,25 @@ public class YaController {
 			int user_num = 0;
 			if (session.getAttribute("user_num") != null) {
 				user_num = (int) session.getAttribute("user_num");
+			
 			}
-			board.setUser_num(user_num);
+				board.setUser_num(user_num);
 			
-			// 게시글 작성 (본글 설정)
-			board.setBrd_group(board.getBrd_num());
-			board.setBrd_step(0);
-			board.setBrd_lg(700);
-			
-			int insertResult = ycs.insertCommunity(board);
-			board.setUser_num(user_num);
-			
-			System.out.println("board brd_lg :"+board.getBrd_lg());
-			System.out.println("boardbrd_md :"+board.getBrd_md());
-			
+				// 게시글 작성 (본글 설정)
+				board.setBrd_group(board.getBrd_num());
+				board.setBrd_step(0);
+				board.setBrd_lg(700);
+				
+				User1 user1 = new User1();
+				user1.getNick();
+				
+				int insertResult = ycs.insertCommunity(board);
+				board.setUser_num(user_num);
+				
+				System.out.println("board brd_lg :"+board.getBrd_lg());
+				System.out.println("boardbrd_md :"+board.getBrd_md());
+				System.out.println("board nick :"+board.getNick());
+				
 			if (insertResult >0) 
 				return "redirect:listCommunity";			
 				else {
@@ -138,7 +141,7 @@ public class YaController {
 		 }
 		
 		
-		// 게시글 수정폼이동
+		// 게시글 수정폼이동 
 		@GetMapping(value="/updateCommunityForm")
 		public String updateCommunity(int brd_num, Model model) {
 			System.out.println("YaController updaetCommunityForm start...");
@@ -205,24 +208,23 @@ public class YaController {
 		    return listSortedBoard;
 		}
 		
-		//상세 게시글 댓글  조회
+		//상세 게시글 댓글  조회 ( 아작스로 조회 할 경우 user_num과 brd_num이 게시글 본글이 아닌 댓글로 조회 할 수 있도록 설정해야 함)
 		@RequestMapping(value="/listComment", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Board> listComment(@RequestParam("brd_num") int brd_num,HttpSession session, Model model, Board board) {
+		public List<Board> listComment(@RequestParam("brd_num") int brd_num, HttpSession session, Model model, Board board) {
 			System.out.println("YaController ycs.listComment start....");
 	
-			int user_num = 0;
-			if (session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
-			}
-			board.setUser_num(user_num);
-			
+			/*
+			 * int user_num = 0; if (session.getAttribute("user_num") != null) { user_num =
+			 * (int) session.getAttribute("user_num"); } board.setUser_num(user_num);
+			 */
 			
 			//부모글(본글)의 brd_num을 사용 부모글 brd_num = 댓글 brd_group = 부모글 brd_group
 			
 			List<Board> listComment = ycs.listComment(brd_num);
 			model.addAttribute(" listCommenty",  listComment);
 			board.setBrd_group(brd_num);
+			
 			System.out.println("YaController listComment size?" + listComment.size());
 			System.out.println("YaController listComment brd_group?"+board.getBrd_group());
 			return listComment; 

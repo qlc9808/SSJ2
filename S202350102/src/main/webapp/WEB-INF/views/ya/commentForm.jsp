@@ -5,15 +5,25 @@
 
 <html>
 <head>
-
-<meta charset="EUC-KR">
+<!-- CSS -->
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+    @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+    body {
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+</style>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 
-/*댓글 조회 아작스*/
+/*댓글 조회 아작스-- 게시글 부모글의 정보로 조회됨 */
 var brd_num = ${board.brd_num}; 
 var sessionUserNum = ${sessionScope.user_num};
 var user_num =  ${board.user_num};
@@ -26,9 +36,10 @@ $(document).ready(function(){
 });
 
 function listcomment() {
-    var brd_num =  ${board.brd_num};
-    // 본글이 아닌 댓글의 user_num을 
-     var user_num =  ${board.user_num};
+    
+    // 본글이 아닌 댓글의 user_num을 가져와야 함
+    var brd_num = ${board.brd_num}
+    var user_num =  ${board.user_num};
     var sessionUserNum = ${sessionScope.user_num};
     $.ajax({
         url: "listComment?brd_num="+brd_num,
@@ -40,18 +51,20 @@ function listcomment() {
         success: function(result) {
             var commentList = $("#commentList"); 
             commentList.empty();
-            console.log("brd_num: " + brd_num);
-            console.log(" list comment user_num: " + user_num);
-            console.log("sessionUserNum :" + sessionUserNum  )
+            console.log("listcomment brd_num: " + brd_num);
+            console.log("listcomment user_num: " + user_num);
+            console.log("listcomment sessionUserNum :" + sessionUserNum  )
             $.each(result, function(index, board) {
                 var listItem = $("<li class='list-group-item'></li>");
+                listItem.append(" 댓글 번호 :"+ board.brd_num);
                 listItem.append("작성자: " + board.nick + " &nbsp;&nbsp;&nbsp;&nbsp;");
                 listItem.append("작성자 회원번호: " + board.user_num);
                 listItem.append("댓글 그룹: " + board.brd_group);
                 listItem.append("댓글 순서: " + board.brd_step);
                 listItem.append("작성날짜: " + board.reg_date);
                 listItem.append("<br>댓글 내용: <span>" + board.conts + "</span><br>");         
-                listItem.append("<button type='button' class='btn btn-outline-success' id='commentupdateBtn' value='" + board.user_num + "'>댓글 수정</button>"); 
+                /* listItem.append("<button type='button' class='btn btn-outline-success' id='commentupdateBtn' value='" + board.user_num + "'>댓글 수정</button>"); */ 
+                listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num + "'>댓글 수정</button>");
                 listItem.append("<button type='button' class='btn btn-outline-success' id='commentdeleteBtn'  dvalue='" + board.user_num + "'>댓글 삭제</button>"); 
 
                 commentList.append(listItem);
@@ -105,57 +118,81 @@ function listcomment() {
     
     /*댓글 수정 (게시글 본글 댓글 작성자 = 로그인 유저) */
     $(document).ready(function () {
-        // 댓글 수정 버튼을 클릭
-        $(document).on('click', '#commentupdateBtn', function () {
-        	
+       
+    	// 댓글 수정 버튼을 클릭
+        $(document).on('click', '.comment-update-btn', function () {       	
             // 클릭한 수정 버튼의 부모 엘리먼트 <li>
             var listItem = $(this).closest('li');
-            // 댓글 작성자의 user_num 가져오기;
-             var user_num = $("#user_num").val();
+            //  li 요소에서 댓글 작성자의  user_num 가져오기  var user_num = $("#user_num").val(); 이러면 부모게시글꺼 가져옴
+            var user_num = $(this).data('user-num');
+            var brd_num = $(this).data('brd-num');
 			var sessionUserNum = ${sessionScope.user_num};
 			  console.log("user_num: " +user_num);
+			  console.log("brd_num: " + brd_num);
+		
 			if (user_num == sessionUserNum) {
-				// 권한이 있는 경우 수정 버튼 활성화
-			  console.log("user_num: " +user_num);
-			  console.log("sessionUserNum: " +sessionUserNum );
-            // 댓글 내용을 텍스트 필드로 교체
+		    // 권한이 있는 경우 수정 버튼 활성화
+			  console.log("수정 버튼 클릭 user_num: " +user_num);
+			  console.log("수정 버튼 클릭 brd_num: " + brd_num);
+			  console.log("수정 버튼 클릭 sessionUserNum: " +sessionUserNum );
+            
+			// 댓글 내용을 텍스트 필드로 교체           
             var originalContent = listItem.find('span').text();
             var inputField = $('<input type="text" class="form-control" value="' + originalContent + '">');
             listItem.find('span').replaceWith(inputField);
 
-           
-            
             // 수정 버튼 클릭 시, '저장' 버튼에 data-value를 추가하여 댓글 번호를 저장
-            var saveButton = $('<button type="button" class="btn btn-success save-comment-btn">저장</button>');
-            listItem.append(saveButton);
-            var user_num = $("#user_num").val();
-      /*       var user_num = $(this).data("user-num"); */
+            var saveButton = $('<button type="button" class="btn btn-success save-comment-btn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
+            /* var cancelButton = $('<button type="button" class="btn btn-secondary cancel-comment-btn">취소</button>'); */
+            var cancelButton = $('<button type="button" class="btn btn-secondary cancel-comment-btn" data-user-num="' + user_num + '">취소</button>');
+            listItem.append(saveButton, cancelButton);
+            var user_num = listItem.find('.user_num').val();
+  
             // 기존 수정 버튼을 비활성화
             $(this).prop('disabled', true);
-        } else {
+		}   else {
+			
             alert("게시글의 댓글 작성자와 다른 사용자는 수정할 수 없습니다.");
         }
+    	
+    	 // 취소 버튼 클릭 시
+    	 $(document).on('click', '.cancel-comment-btn', function () {
+    	        // 클릭한 취소 버튼의 부모 엘리먼트 <li>
+    	        var listItem = $(this).closest('li');
+    	        var user_num = $(this).data('user-num');
+    	        // 수정된 내용을 원래 내용으로 되돌리기
+    	        var originalContent = listItem.find('input').val();
+    	        listItem.find('input').replaceWith('<span>' + originalContent + '</span>');
+    	        
+    	        // 수정 버튼 다시 활성화
+    	        listItem.find('.comment-update-btn').prop('disabled', false);
+    	        
+    	        // 저장 버튼과 취소 버튼 제거
+    	        listItem.find('.save-comment-btn, .cancel-comment-btn').remove();
+    	 });   
+    	       
     });
 
-        // 수정 완료 버튼을 클릭
+        // 저장 버튼을 클릭
         $(document).on('click', '.save-comment-btn', function () {
-            // 클릭한 저장 버튼의 부모 엘리먼트 <li>
-           
+            // 클릭한 저장 버튼의 부모 엘리먼트 <li>      
            var listItem = $(this).closest('li');
 
             // 수정된 내용을 가져와서 서버로 전송
             var newContent = listItem.find('input').val();
-           /*  var user_num = listItem.find('#commentupdateBtn').data('board.user_num'); //수정함  */
-            var user_num = listItem.find('user_num').val();
-            console.log("brd_num: " + brd_num);
-            console.log("user_num : " + user_num );
+            var user_num = listItem.find('.user_num').val();
+            var brd_num = $(this).data('brd-num');
+            
+            console.log("저장  버튼 클릭 brd_num: " + brd_num);
+            console.log("저장 버튼 클릭 user_num : " + user_num );
+            
             // 댓글 작성자와 로그인 사용자가 같은지 확인
             if (${sessionScope.user_num}  === user_num) {
                 $.ajax({
                     url: "commentUpdate",
                     type: "POST",
                     data: {
-                        user_num: user_num, // 수정함
+                        user_num: user_num, 
                         brd_num: brd_num,
                         conts: newContent
                     },
@@ -196,7 +233,7 @@ function listcomment() {
                    <input type="hidden" name="brd_step" id="brd_step" value="${board.brd_step}">
                    <textarea name="conts" id="conts" class="form-control" rows="3" placeholder="댓글을 남겨주세요"></textarea>
                </div>
-               <button id="submit-comment" type="button" class="btn btn-primary">댓글 작성</button>
+                   <button id="submit-comment" type="button" class="btn btn-primary">댓글 작성</button>
            </form>
        </div>
    </div>
@@ -205,19 +242,19 @@ function listcomment() {
 
  <!-- 댓글 조회 확인 -->
 
- 
 		<div class="container">
 		<ul class="list-group list-group-flush" id="commentList">
      	 <c:forEach var="board" items="${listComment}">
         	<li class="list-group-item">
+        	   댓글 번호: ${board.brd_num }
                         댓글 작성자: ${board.nick} &nbsp;&nbsp;&nbsp;&nbsp;
                         댓글 작성자 회원번호 : ${board.user_num}
-                        댓글 그룹번호 :${board.brd_group}
+                        댓글 그룹번호 :${board.brd_group}             
                         댓글 step번호: ${board.brd_step}
                         작성날짜 : ${board.reg_date}
                         댓글 내용: <span>${board.conts}</span>
      		  <c:if test="${board.user_num == sessionScope.user_num}">
-           		  <button type='button' id='commentupdateBtn' value='${board.user_num}'>댓글 수정</button>
+           		  <button type='button' class='comment-update-btn' data-user-num='${comment.user_num}' data-brd-num='${comment.brd_num}'>댓글 수정</button>
            		  <button type='button' id='commentdeleteBtn' value='${board.user_num}'>댓글 삭제</button>
               </c:if>
              </li>
