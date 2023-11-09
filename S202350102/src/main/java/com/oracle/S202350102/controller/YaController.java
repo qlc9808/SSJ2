@@ -44,13 +44,19 @@ public class YaController {
 	
 	//커뮤니티 게시글 전체조회
 	@RequestMapping(value="/listCommunity")
-	public String listCommunity(Board board, Model model) {
+	public String listCommunity(@RequestParam("brd_num") int brd_num, Board board, Model model) {
 		System.out.println("YaController listCommunity start....");
 		List<Board> listCommunity = ycs.listCommunity(board);
 		System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
 		
 		model.addAttribute("listCommunity", listCommunity);
-		
+			
+		/*
+		 * //게시글 별 댓글 수 구하기 생각해보니 테이블에 컬럼이 추가되야 할것같음
+		 *  int replyCount = ycs.commentTotal(brd_num);
+		 * model.addAttribute("replyCount", replyCount);
+		 */
+	
 		return "listCommunity";
 	}
 	
@@ -67,13 +73,19 @@ public class YaController {
 		board.setBrd_step(brd_step);
 		board.setBrd_group(board.getBrd_num());
 		
+		//로그인 상태 확인 
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
 		//조회수 증가
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upViewCnt", upViewCnt);	
-	
+		model.addAttribute("loggedIn", user_num!= 0);
 			
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
@@ -211,7 +223,7 @@ public class YaController {
 		//상세 게시글 댓글  조회
 		@RequestMapping(value="/listComment", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Board> listComment(@RequestParam("brd_num") int brd_num, HttpSession session, Model model, Board board) {
+		public List<Board> listComment(@RequestParam("brd_num") int brd_num,  Model model, Board board) {
 			System.out.println("YaController ycs.listComment start....");
 	
 			
@@ -223,6 +235,7 @@ public class YaController {
 			System.out.println("YaController listComment brd_group?"+board.getBrd_group());
 			return listComment; 
 		}
+		
 		
 		//게시글 댓글  작성 
 		@RequestMapping("/commentWrite")

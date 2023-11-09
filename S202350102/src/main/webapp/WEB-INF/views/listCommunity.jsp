@@ -267,7 +267,7 @@ $(document).ready(function () {
                                 <td><a href="detailCommunity?user_num=${board.user_num}&brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td>${board.nick}</td>
                                 <td>${board.reg_date}</td>
-                                <td>${board.view_cnt}</td>
+                                <td>${board.replyCount}</td>
                                 <td></td>
                             </tr>
                         </c:forEach>

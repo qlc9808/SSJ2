@@ -39,7 +39,7 @@ function listcomment() {
     
     var brd_num = ${board.brd_num}
     var user_num =  ${board.user_num};
-    var sessionUserNum = ${sessionScope.user_num};
+
     $.ajax({
         url: "listComment?brd_num="+brd_num,
         type: "GET",
@@ -63,7 +63,7 @@ function listcomment() {
                 listItem.append("작성날짜: " + board.reg_date);
                 listItem.append("<br>댓글 내용: <span>" + board.conts + "</span><br>");         
            		
-                if (board.user_num == sessionUserNum) {
+                if (${sessionScope.user_num} === board.user_num) {
                 listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num 
                 																						+ "'data-brd-num="+ board.brd_num + ">댓글 수정</button>");
                 listItem.append("<button type='button' class='btn btn-outline-success comment-delete-btn' data-user-num='" + board.user_num 
@@ -77,6 +77,7 @@ function listcomment() {
         }
     });
 }
+
 
 /*댓글 작성 아작스 */
     $(document).ready(function () {
@@ -174,6 +175,7 @@ function listcomment() {
     	       
     });
 
+  });  	
         // 저장 버튼을 클릭
         $(document).on('click', '.save-comment-btn', function () {
             // 클릭한 저장 버튼의 부모 엘리먼트 <li>      
@@ -207,6 +209,8 @@ function listcomment() {
                         if (result.result === "success") {
                             // 수정이 성공하면 댓글 목록을 다시 불러오기
                             listcomment();
+                            
+                            alert("댓글이 수정되었습니다.")
                         } else {
                             alert("댓글 수정에 실패했습니다.");
                         }
@@ -219,8 +223,6 @@ function listcomment() {
                 alert("댓글 작성자와 다른 사용자는 수정할 수 없습니다.");
             }
         });
-    });
-    
     /*삭제버튼 클릭 */
 	$(document).on('click', '.comment-delete-btn', function () {
 	    // 클릭한 삭제 버튼의 부모 엘리먼트 <li>
@@ -237,35 +239,35 @@ function listcomment() {
 	
 	    // 댓글 작성자와 로그인 사용자가 같은지 확인
 	    if (${sessionScope.user_num} === user_num) {
-	        if (confirm("정말로 댓글을 삭제하시겠습니까?")) {
-	            // 확인 버튼을 누른 경우 댓글 삭제를 서버로 전송
-	            $.ajax({
-	                url: "commentDelete",
-	                type: "POST",
-	                data: {
-	                    user_num: user_num,
-	                    brd_num: brd_num
-	                },
-	                dataType: "json",
-	                success: function (result) {
-	                    if (result.result === "success") {
-	                        // 삭제가 성공하면 댓글 목록을 다시 불러오기
-	                        listcomment();
-	                    } else {
-	                        alert("댓글 삭제에 실패했습니다.");
-	                    }
-	                },
-	                error: function (jqXHR, textStatus, errorThrown) {
-	                    console.log("Ajax 요청 실패: " + errorThrown);
-	                }
-	            });
+	    	if (confirm("정말로 댓글을 삭제하시겠습니까?")) {
+	    	    // 확인 버튼을 누른 경우 댓글 삭제를 서버로 전송
+	    	    $.ajax({
+	    	        url: "commentDelete",
+	    	        type: "POST",
+	    	        data: {
+	    	            user_num: user_num,
+	    	            brd_num: brd_num
+	    	        },
+	    	        dataType: "json",
+	    	        success: function (result) {
+	    	            // 삭제가 성공하면 삭제 후의 댓글 목록을 다시 불러오기
+	    	            listcomment();
+	    	            if (result.result === "success") {
+	    	                alert("댓글 삭제되었습니다.");
+	    	                var deletedCommentElement = $('#commentList').find('li[data-brd-num="' + brd_num + '"]');
+	    	                if (deletedCommentElement.length > 0) {
+	    	                    deletedCommentElement.remove();
+	    	                } else {
+	    	                    console.log("삭제된 댓글을 찾을 수 없습니다.");
+	    	                }
+	    	            } else {
+	    	                alert("댓글 삭제되었습니다.");
+	    	            }
+	    	        }
+	    	    });
 	        }
-	    } else {
-	        alert("댓글 작성자와 다른 사용자는 삭제할 수 없습니다.");
 	    }
-	});    
-    
-    
+	    });
     </script>
 
  <!--댓글작성-->
@@ -293,7 +295,7 @@ function listcomment() {
    </c:otherwise> 
 </c:choose> 
 
- <!-- 댓글 조회 확인 -->
+ <!-- 댓글 목록이 나타날 창  -->
 
 		<div class="container">
 		<ul class="list-group list-group-flush" id="commentList"> 

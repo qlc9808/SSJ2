@@ -23,8 +23,8 @@ public interface YaBoardDao {
 	void         commentWrite(Board board);
 	void		 commentUpdate(Board board);
 	void         commentDelete(Board board);
-
-	int           getLatestBrdStep(int brd_group);
+	int          getLatestBrdStep(int brd_group);
+	//int          commentTotal(int brd_num);
 	
 
 

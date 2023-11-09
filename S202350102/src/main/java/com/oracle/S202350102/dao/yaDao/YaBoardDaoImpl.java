@@ -207,7 +207,15 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		}
 		return getLatestBrdStep;
 	}
-	
+
+	/*
+	 * @Override public int commentTotal(int brd_num) {
+	 * System.out.println("YaBoardDaoImpl commentTotal start..."); int commentTotal
+	 * = 0; try { session.selectOne("YaCommentTotal",brd_num); } catch (Exception e)
+	 * {
+	 * System.out.println("YaBoarDaoImpl commentTotal e.getMessage)?"+e.getMessage()
+	 * ); } return commentTotal; }
+	 */
 
 	
 }

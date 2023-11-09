@@ -134,9 +134,17 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return getLatestBrdStep;
 		
 	}
-
-
-	
-	
+	/*
+	 * // 게시글 댓글 수 구하기
+	 * 
+	 * @Override public int commentTotal(int brd_num) {
+	 * System.out.println("YaCommunityServiceImp lcommentTotal start...."); int
+	 * commentTotal = ybd.commentTotal(brd_num);
+	 * 
+	 * return commentTotal; }
+	 * 
+	 * 
+	 * 
+	 */
 	
 }

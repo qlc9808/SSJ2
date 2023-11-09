@@ -99,16 +99,23 @@
 	<update id="YaCommentUpdate" parameterType="Board">
 		UPDATE board SET conts=#{conts}
 		WHERE  user_num = #{user_num} 
+		AND    brd_num =#{brd_num}
 	</update>
 	
-	<update id="YaCommentCnt" parameterType="int">
-		update board set commentCnt = 
-	</update>
+	<!-- <select id="YaCommentTotal" parameterType="int" resultType="int">
+		SELECT count (*)
+		FROM  board
+		WHERE brd_group =#{brd_num}
+		AND brd_md = 103
+		aAND brd_lg = 700
+		ADND brd_step >0
+		AND brd_num = #{brd_num}
+	</select> -->
 	
 	<delete id="YaCommentDelete" parameterType="Board">
 		DELETE FROM board
 		WHERE user_num = #{user_num} 
-		AND brd_num #{brd_num}
+		AND brd_num = #{brd_num}
 	</delete>
 	
 	
