@@ -253,7 +253,7 @@ public class ChController {
 	@GetMapping("searching")
 	public String searching(String srch_word, HttpSession session, Model model) {
 		System.out.println("ChController searching Start...");
-		
+		String replSrch_word = srch_word.replace(" ", "");
 		int user_num = 0;
 		List<Challenge> srch_chgResult = null; // chg 검색 결과 List
 		List<Board> srch_brdResult = null; // brd 검색 결과 List 
@@ -265,7 +265,7 @@ public class ChController {
 					user_num = (int) session.getAttribute("user_num");
 					User1 user1 = userService.userSelect(user_num);
 					SearchHistory sh = new SearchHistory();
-					sh.setSrch_word(srch_word);
+					sh.setSrch_word(replSrch_word);
 					sh.setUser_num(user1.getUser_num());
 					int result = chSearchService.saveWord(sh);
 					if(result == 0) {
@@ -277,12 +277,12 @@ public class ChController {
 				
 			}
 			// 입력된 키워드에 따라 검색 
-			srch_chgResult = chSearchService.chgSearching(srch_word); // 챌린지
-			srch_brdResult = chSearchService.brdSearching(srch_word); // 자유게시판
-			srch_shareResult = chSearchService.shareSearching(srch_word);
+			srch_chgResult = chSearchService.chgSearching(replSrch_word); // 챌린지
+			srch_brdResult = chSearchService.brdSearching(replSrch_word); // 자유게시판
+			srch_shareResult = chSearchService.shareSearching(replSrch_word);
 		}
 		
-		model.addAttribute("srch_word",srch_word);
+		model.addAttribute("srch_word",replSrch_word);
 		model.addAttribute("srch_chgResult",srch_chgResult);
 		model.addAttribute("srch_brdResult",srch_brdResult);
 		model.addAttribute("srch_shareResult",srch_shareResult);
