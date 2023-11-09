@@ -242,7 +242,7 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">진행 기간</li>
-                    <li class="list-group-item"><fmt:formatDate value="${chg.start_date }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"/> </li>
+                    <li class="list-group-item"><fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"/> </li>
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">진행 상태</li>
@@ -1242,7 +1242,7 @@
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
 								            <td>${num }</td>
-								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title }</a></td>
+								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } []</a></td>
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>

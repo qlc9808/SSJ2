@@ -72,19 +72,41 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return reviewTotal;
 	}
 
-	@Override
-	public List<Challenge> challengeList() {
-		System.out.println("JhCallengeServiceImpl reviewTotal Start...");
-		List<Challenge> chgList = jhChgDao.challengeList();
 
-		return chgList;
+	@Override
+	public int ingChgListTotal() {
+		System.out.println("JhCallengeServiceImpl ingChgListTotal Start...");
+		int chgListTotal = jhChgDao.ingChgListTotal();
+		return chgListTotal;
 	}
 
 	@Override
-	public int chgListTotal() {
-		System.out.println("JhCallengeServiceImpl chgListTotal Start...");
-		int chgListTotal = jhChgDao.chgListTotal();
-		return chgListTotal;
+	public List<Challenge> ingChgRecentList(Challenge challenge) {
+		System.out.println("JhCallengeServiceImpl ingChgRecentList Start...");
+		List<Challenge> ingChgRecList = jhChgDao.ingChgRecentList(challenge);
+		return ingChgRecList;
+	}
+
+	@Override
+	public List<Challenge> ingChgPickList(Challenge challenge) {
+		System.out.println("JhCallengeServiceImpl ingChgPickList Start...");
+		List<Challenge> ingChgPicList = jhChgDao.ingChgPickList(challenge);
+		return ingChgPicList;
+	}
+
+	@Override
+	public void replyInsert(Board board) {
+		System.out.println("JhCallengeServiceImpl replyInsert Start...");
+		jhChgDao.replyInsert(board);
+		
+	}
+
+	@Override
+	public int replyDelete(int brd_num) {
+		System.out.println("JhCallengeServiceImpl replyDelete Start...");
+		int result = jhChgDao.replyDelete(brd_num);
+		
+		return result;
 	}
 
 
