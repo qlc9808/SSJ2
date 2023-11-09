@@ -1,9 +1,7 @@
 package com.oracle.S202350102.service.yrService;
 
-import java.util.Date;
 import java.util.List;
 
-import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.User1;
 

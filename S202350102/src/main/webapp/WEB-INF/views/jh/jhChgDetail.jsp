@@ -38,7 +38,7 @@
 		$('#displayUserImg').text(user_img);
 		
 		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
-		$('#inputUserNum1').val(user_num);	// follow()
+		$('#inputUserNum1').val(user_num);	// following()
 		$('#inputUserNum2').val(user_num);	// sendMessage()
 
 		// 모달 창 표시
@@ -46,14 +46,16 @@
 	}
 
 	// 팔로우 하기 버튼
-	function follow() {
-		var sendData = $('#followForm').serialize();
+	function following() {
+		var sendData = $('#followingForm').serialize();	// user_num=?
 		alert("sendDate -> " + sendData);
+		location.href = "followingPro?"+sendData;	// YrController에서 작동됨
+		
 	}
 
 	// 쪽지보내기 버튼
 	function sendMessage() {
-		var sendData = $('#sendMessageForm').serialize();
+		var sendData = $('#sendMessageForm').serialize();	// user_num=?
 		alert("sendDate -> " + sendData);
 	}
   
@@ -951,8 +953,8 @@
 						
 										<div class="modal-footer">
 											
-											<button type="button" class="btn btn-outline-primary" onclick="follow(${status.index})">팔로우</button>
-											<form id="followForm">
+											<button type="button" class="btn btn-outline-primary" onclick="following(${status.index})">팔로우</button>
+											<form id="followingForm">
 												<input type="hidden" id="inputUserNum1" name="user_num">
 											</form>
 											
