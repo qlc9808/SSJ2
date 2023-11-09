@@ -64,7 +64,7 @@ function listcomment() {
                 listItem.append("작성날짜: " + board.reg_date);
                 listItem.append("<br>댓글 내용: <span>" + board.conts + "</span><br>");         
                 /* listItem.append("<button type='button' class='btn btn-outline-success' id='commentupdateBtn' value='" + board.user_num + "'>댓글 수정</button>"); */ 
-                listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num + "'>댓글 수정</button>");
+                listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num + "'data-brd-num="+ board.brd_num + ">댓글 수정</button>");
                 listItem.append("<button type='button' class='btn btn-outline-success' id='commentdeleteBtn'  dvalue='" + board.user_num + "'>댓글 삭제</button>"); 
 
                 commentList.append(listItem);
@@ -244,21 +244,7 @@ function listcomment() {
 
 		<div class="container">
 		<ul class="list-group list-group-flush" id="commentList">
-     	 <c:forEach var="board" items="${listComment}">
-        	<li class="list-group-item">
-        	   댓글 번호: ${board.brd_num }
-                        댓글 작성자: ${board.nick} &nbsp;&nbsp;&nbsp;&nbsp;
-                        댓글 작성자 회원번호 : ${board.user_num}
-                        댓글 그룹번호 :${board.brd_group}             
-                        댓글 step번호: ${board.brd_step}
-                        작성날짜 : ${board.reg_date}
-                        댓글 내용: <span>${board.conts}</span>
-     		  <c:if test="${board.user_num == sessionScope.user_num}">
-           		  <button type='button' class='comment-update-btn' data-user-num='${comment.user_num}' data-brd-num='${comment.brd_num}'>댓글 수정</button>
-           		  <button type='button' id='commentdeleteBtn' value='${board.user_num}'>댓글 삭제</button>
-              </c:if>
-             </li>
-        </c:forEach>
+     	 
 		</ul>
 		</div>
 

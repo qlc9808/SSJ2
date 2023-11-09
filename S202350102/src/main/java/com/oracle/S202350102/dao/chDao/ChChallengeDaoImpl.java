@@ -45,4 +45,34 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 		return chgCommList;
 	}
 
+	@Override
+	public int chgInsertComm(String ctn) {
+		System.out.println("ChChallengeDaoImpl chgInsertComm Start...");
+		int result = 0;
+		
+		try {
+			result = session.insert("chgInsert", ctn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChChallengeDaoImpl chgInsertComm e.getMessage()->" + e.getMessage());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int chgDeleteChg(String[] ctn) {
+		System.out.println("ChChallengeDaoImpl chgInsertComm Start...");
+		int result = 0;
+		
+		try {
+			result = session.delete("chgDeleteComm", ctn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChChallengeDaoImpl chgDeleteChg e.getMessage()->" + e.getMessage());
+		}
+		
+		return result;
+	}
+
 }

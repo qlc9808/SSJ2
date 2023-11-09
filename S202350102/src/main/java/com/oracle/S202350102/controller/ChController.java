@@ -362,6 +362,7 @@ public class ChController {
 	
 	@RequestMapping(value = "chgCommManagement")
 	public String chgCommManagement(HttpSession session, Model model) {
+		System.out.println("ChController chgCommManagement Start...");
 		List<Comm> chgCommList = null;
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
@@ -376,6 +377,27 @@ public class ChController {
 		
 		return "/ch/chgCommManage";
 	}
+	
+	@PostMapping(value = "insertChgComm")
+	public String insertChgComm(String ctn) {
+		System.out.println("ChController insertChgComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgInsertComm(ctn);
+		
+		return "redirect:chgCommManagement";
+	}
+	
+	@PostMapping(value = "deleteChgComm")
+	public String deleteChgComm(String[] ctn) {
+		System.out.println("ChController deleteChgComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgDeleteComm(ctn);
+		
+		return "redirect:chgCommManagement";
+	}
+	
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {

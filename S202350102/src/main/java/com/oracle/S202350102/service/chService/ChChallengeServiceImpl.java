@@ -37,4 +37,28 @@ public class ChChallengeServiceImpl implements ChChallengeService {
 		return chgCommList;
 	}
 
+
+
+	@Override
+	public int chgInsertComm(String ctn) {
+		System.out.println("ChChallengeServiceImpl chgInsertComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgInsertComm(ctn);
+		
+		return result;
+	}
+
+
+
+	@Override
+	public int chgDeleteComm(String[] ctn) {
+		System.out.println("ChChallengeServiceImpl chgDeleteComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgDeleteChg(ctn);
+		
+		return result;
+	}
+
 }
