@@ -1,5 +1,7 @@
 package com.oracle.S202350102.controller;
 
+import java.util.List;
+
 //import java.io.BufferedReader;
 //import java.io.DataOutputStream;
 //import java.io.IOException;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -46,8 +49,11 @@ public class ThController {
 	private final ThOrder1Service os1;
 	
 	@PostMapping(value = "/writeUser1")
-	public String writeUser1(User1 user1, Model model) {
+	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail) {
 		System.out.println("ThController writeUser1 start...");
+		// 기존 주소에 상세 주소를 추가( 주소받는게 API에 2개로 나뉘어 있음)
+		String sumAddr	= user1.getAddr() + " " + addr_detail;
+		user1.setAddr(sumAddr);
 		
 		int insertResult = us1.insertUser1(user1);
 		model.addAttribute("insertResult",insertResult);
@@ -200,4 +206,18 @@ public class ThController {
     	return result;
     }
 	
+    @RequestMapping(value = "/findIdForm")
+    public String findIdForm(User1 user1 ) {
+    	System.out.println("ThController findId Start...");
+    	return "th/findIdForm";
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/findId")
+    public List<User1> findId(User1 user1 ) {
+    	System.out.println("ThController findId Start...");
+    	List<User1> user_id_List = us1.findId(user1);
+    	System.out.println("ThController user_id_List --> " + user_id_List);
+    	return user_id_List;
+    }
 }

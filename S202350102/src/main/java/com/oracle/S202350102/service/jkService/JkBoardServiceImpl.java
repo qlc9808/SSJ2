@@ -138,26 +138,19 @@ public class JkBoardServiceImpl implements JkBoardService {
         } catch (IOException e) {
             throw new RuntimeException("이미지 업로드 실패: " + e.getMessage());
         }
-    }
+	}
 
 	@Override
-    public List<Board> getPopularPosts(Board board) {
-        System.out.println("JkBoardServiceImpl getPopularPosts start...");
-        List<Board> popularPosts = jbd.getPopularPosts(board); // Retrieving popular posts
-        return popularPosts;
-    }
-
-    @Override
-    public List<Board> getRecentPosts(Board board) {
-        System.out.println("JkBoardServiceImpl getRecentPosts start...");
-        List<Board> recentPosts = jbd.getRecentPosts(board); // Retrieving recent posts
-        return recentPosts;
-    }
+	public List<Board> loadSortedPosts(String sort) {
+		List<Board> loadSortedPosts = null;
+		System.out.println("JkBoardServiceImpl loadSortedPosts start...");
+		
+		if("view_cnt".contentEquals(sort)) {
+			return jbd.getPopularPosts();
+		} else if ("reg_date".equals(sort)) {
+			return jbd.getRecentPosts();
+		} else {
+			return jbd.getRecentPosts();
+		}
+	}
 }
-
-
-
-			
-	
-
-	

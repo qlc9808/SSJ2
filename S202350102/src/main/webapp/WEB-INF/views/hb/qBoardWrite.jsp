@@ -22,9 +22,18 @@
 				<td><input type="text" name="title" required="required"></td>
 			</tr>
 			<tr>
-				<td>카테고리</td>					
+				<td>카테고리</td>
+				<td>
+					<select name="brd_md">
+						<option value="100" selected="selected">회원관련</option>
+						<option value="101">버그 리포트</option>
+						<option value="102">챌린지 관련</option>
+						<option value="103">쉐어링 관련</option>
+						<option value="104">팔로워 관련</option>
+						<option value="105">기타/건의</option>
+					</select> 
+				</td>
 				<td><input type="hidden" name="brd_md" value="102"></td>
-				<!-- 카테고리 수정해야됨 -->
 			</tr>
 			<tr>
 				<td>파일</td>
@@ -39,6 +48,7 @@
 			<tr>
 				<td colspan="2">
 					<input type="submit" value="확인">
+					<input type="button" onclick="location.href='qBoardList'" value="취소">
 				</td>
 			</tr>
 		</table>

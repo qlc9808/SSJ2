@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardReChk;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.chService.ChBoardService;
@@ -173,9 +174,18 @@ public class ChController {
 	}
 	// notice Update
 	@PostMapping("noticeUpdate")
-	public String noticeUpdate(Board board, HttpServletRequest request) {
+	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
 		System.out.println("ChController noticeUpdate Start...");
 		int result = 0;
+		ServletContext servletContext = request.getSession().getServletContext();
+		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath->" + realPath);
+		if(file1 != null) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
+			
+			board.setImg(saveName);	
+		}
+		
 		
 		result = chBoardService.noticeUpdate(board);
 	
@@ -226,7 +236,8 @@ public class ChController {
 		// 로그인 회원이면
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
-			
+			List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+			model.addAttribute("shList", sh);
 			
 		}
 		model.addAttribute("user_num", user_num);
@@ -242,7 +253,7 @@ public class ChController {
 	@GetMapping("searching")
 	public String searching(String srch_word, HttpSession session, Model model) {
 		System.out.println("ChController searching Start...");
-		
+		String replSrch_word = srch_word.replace(" ", "");
 		int user_num = 0;
 		List<Challenge> srch_chgResult = null; // chg 검색 결과 List
 		List<Board> srch_brdResult = null; // brd 검색 결과 List 
@@ -254,23 +265,24 @@ public class ChController {
 					user_num = (int) session.getAttribute("user_num");
 					User1 user1 = userService.userSelect(user_num);
 					SearchHistory sh = new SearchHistory();
-					sh.setSrch_word(srch_word);
+					sh.setSrch_word(replSrch_word);
 					sh.setUser_num(user1.getUser_num());
 					int result = chSearchService.saveWord(sh);
 					if(result == 0) {
 						chSearchService.updateHistory(sh);
+						
 					}
 				}
 				
 				
 			}
 			// 입력된 키워드에 따라 검색 
-			srch_chgResult = chSearchService.chgSearching(srch_word); // 챌린지
-			srch_brdResult = chSearchService.brdSearching(srch_word); // 자유게시판
-			srch_shareResult = chSearchService.shareSearching(srch_word);
+			srch_chgResult = chSearchService.chgSearching(replSrch_word); // 챌린지
+			srch_brdResult = chSearchService.brdSearching(replSrch_word); // 자유게시판
+			srch_shareResult = chSearchService.shareSearching(replSrch_word);
 		}
 		
-		model.addAttribute("srch_word",srch_word);
+		model.addAttribute("srch_word",replSrch_word);
 		model.addAttribute("srch_chgResult",srch_chgResult);
 		model.addAttribute("srch_brdResult",srch_brdResult);
 		model.addAttribute("srch_shareResult",srch_shareResult);
@@ -283,13 +295,15 @@ public class ChController {
 	@RequestMapping(value = "srchcommunity")
 	public String srchcommunity(String srch_word,Model model) {
 		System.out.println("ChController srchcommunity Start...");
+		String searchTerm = srch_word.replace(" ", "");
+		
 		if(srch_word == null || srch_word=="") {
 			return "redirect:searching";
 		}
-		List<Board> srch_brdResult = chSearchService.brdSearching(srch_word); // 자유게시판
+		List<Board> srch_brdResult = chSearchService.brdSearching(searchTerm); // 자유게시판
 		
 		model.addAttribute("listCommunity",srch_brdResult);
-		model.addAttribute("srch_word",srch_word);
+		model.addAttribute("srch_word",searchTerm);
 		
 		return "listCommunity";
 	}
@@ -297,6 +311,7 @@ public class ChController {
 	@ResponseBody
 	@RequestMapping(value = "srch_history")
 	public List<SearchHistory> srch_history(Model model, HttpSession session){
+		
 		List<SearchHistory> srch_his = null;
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
@@ -343,6 +358,46 @@ public class ChController {
 		
 		return rechk;
 	}
+	
+	
+	@RequestMapping(value = "chgCommManagement")
+	public String chgCommManagement(HttpSession session, Model model) {
+		System.out.println("ChController chgCommManagement Start...");
+		List<Comm> chgCommList = null;
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			User1 user1 = userService.userSelect(user_num);
+			if(user1.getStatus_md() == 102) {
+				chgCommList = chChallengeService.chgCommList();
+			}
+			
+		}
+			
+		model.addAttribute("chgCommList", chgCommList);
+		
+		return "/ch/chgCommManage";
+	}
+	
+	@PostMapping(value = "insertChgComm")
+	public String insertChgComm(String ctn) {
+		System.out.println("ChController insertChgComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgInsertComm(ctn);
+		
+		return "redirect:chgCommManagement";
+	}
+	
+	@PostMapping(value = "deleteChgComm")
+	public String deleteChgComm(String[] ctn) {
+		System.out.println("ChController deleteChgComm Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgDeleteComm(ctn);
+		
+		return "redirect:chgCommManagement";
+	}
+	
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {

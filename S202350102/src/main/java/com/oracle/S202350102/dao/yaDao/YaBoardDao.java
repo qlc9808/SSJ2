@@ -21,7 +21,6 @@ public interface YaBoardDao {
 	List<Board>  listComment(int brd_num);
 	// 댓글관련
 	void         commentWrite(Board board);
-	Board        commentSelect(int brd_num);
 	void		 commentUpdate(Board board);
 	void         commentDelete(Board board);
 

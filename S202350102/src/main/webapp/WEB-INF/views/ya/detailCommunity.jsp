@@ -1,87 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
-
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%> 
 <!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 <head>
-<style type="text/css">
-* 게시글 상세내용 페이지 스타일 */
-
-/* 제목 스타일 */
-h3 {
-    text-align: center;
-    font-size: 24px;
-    color: #0099cc;
-    margin-bottom: 20px;
-}
-
-/* 테이블 스타일 */
-table {
-    border-collapse: collapse;
-    width: 80%;
-    margin: 0 auto;
-}
-
-table, th, td {
-    border: 1px solid #ccc;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-/* 버튼 스타일 (수정, 삭제 버튼) */
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #0099cc;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-.btn-danger {
-    background-color: #ff0000;
-}
-
-.btn:hover {
-    background-color: #0077a8;
-}
-
-/* 버튼 컨테이너 스타일 */
-.button-container {
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* 내용 스타일 */
-#board-content {
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* 댓글 수정 폼 기본적으로 숨김 */
-.comment-edit-form {
-    display: none;
-}
-
-/* 수정 버튼 클릭 시 댓글 수정 폼 표시 */
-.comment-update-btn-clicked + .comment-edit-form {
-    display: block;
-}
-
-</style>
-
-
+<!-- CSS -->
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+    @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+    body {
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+</style>
 </head>
 
 <body>
@@ -128,7 +65,7 @@ th, td {
     </c:when>
 </c:choose>
 
-
 <%@ include file="./commentForm.jsp" %>
+<%@ include file="../footer.jsp" %>
 </body>
 </html>

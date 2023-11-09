@@ -60,4 +60,15 @@
 	<select id="totalQBoard" resultType="int">
 		SELECT count(*) FROM board where brd_lg = 400
 	</select>
+	
+	<select id="qboardListSearch" parameterType="String" resultType="Board">
+		SELECT *
+        FROM board b ,user1 u
+        WHERE b.user_num = u.user_num
+        AND b.brd_lg = 400
+        AND b.brd_md = 102
+        AND b.title like '%' || #{keyword} || '%' 
+        AND b.brd_step =0
+        ORDER BY b.reg_date DESC	
+	</select>
 </mapper>

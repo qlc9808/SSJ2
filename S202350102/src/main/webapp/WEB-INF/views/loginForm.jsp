@@ -4,9 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-
-<meta charset="UTF-8">
+ <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1" />
     
     <!-- Favicon -->
@@ -20,15 +18,14 @@
     
     <!-- Title -->
     <title>Ssj</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+
+</script>
 </head>
 <body class="bg-light">
- 	<c:import url="/WEB-INF/views/header4.jsp"/>
- 	
-    <!-- MODALS -->
-<!--     {{> partials/modals}} -->
-
     <!-- NAVBAR -->
-<!--     {{> navbars/navbar-topbar classList="bg-light"}} -->
+	<c:import url="/WEB-INF/views/header4.jsp"/>
 
     <!-- NAVBAR -->
 <!--     {{> navbars/navbar classList="bg-white"}} -->
@@ -81,22 +78,22 @@
                         </div>
                       </div>
                     </div>
-                   
+                   <!-- Link -->
                     <div class="col-12 col-md-auto">
-
-                      <!-- Link -->
                       <div class="form-group">
-                        <a class="fs-sm text-reset" data-bs-toggle="modal" href="#modalPasswordReset">Forgot Password?</a>
+                      	<a class="fs-sm text-reset" href="/signUp">회원가입 </a>
+                      	<small class="fs-sm text-reset"> | </small>
+                        <a class="fs-sm text-reset" href="/findIdForm">아이디 찾기 </a>
+                        <small class="fs-sm text-reset"> | </small>
+                        <a class="fs-sm text-reset" href="/user1ResetPswd">비밀번호 찾기 </a>
                       </div>
-
                     </div>
+                    
                     <div class="col-12">
-
                       <!-- Button -->
                       <button class="btn btn-sm btn-dark" type="submit">
                         	로그인
-                      </button>
-					  
+                      </button>				  
                     </div>
                   </div>
                 </form>

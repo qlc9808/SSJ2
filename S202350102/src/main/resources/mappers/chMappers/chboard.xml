@@ -36,7 +36,7 @@
 	
 	<update id="noticeUpdate" parameterType="Board">
 		Update board 
-		set title = #{title}, conts=#{conts}
+		set title = #{title}, conts=#{conts} <if test="img != null">,img = #{img}</if>
 		Where brd_num = #{brd_num}
 	</update>
 	
@@ -94,7 +94,7 @@
         WHERE b.brd_md = 102
         AND	  b.brd_Group = b.brd_num
         AND   (b.title like '%' || #{srch_word} || '%' 
-        	Or b.conts  like '%' || #{srch_word} || '%')
+        	Or user1.nick like '%' || #{srch_word} || '%')
         ORDER BY b.reg_date DESC
 	</select>
 	

@@ -3,6 +3,7 @@ package com.oracle.S202350102.controller;
 import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,20 +67,13 @@ public class YaController {
 		board.setBrd_step(brd_step);
 		board.setBrd_group(board.getBrd_num());
 		
-		//로그인 상태 확인 
-		int user_num = 0;
-		if(session.getAttribute("user_num") != null) {
-			user_num = (int) session.getAttribute("user_num");
-		}
-		
-	
 		//조회수 증가
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upViewCnt", upViewCnt);	
-	    model.addAttribute("loggedIn", user_num!= 0);
+	
 			
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
@@ -97,8 +91,12 @@ public class YaController {
 		public String writeFormCommunity(HttpSession session, Model model ) {
 			System.out.println("YaController writeFormCommunity Start... ");
 		
+			int user_num=0;
 			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
 				
+				User1 user1 = ycs.userSelect(user_num);
+				model.addAttribute("user1", user1);				
 				return "ya/writeFormCommunity"; 
 			}
 			System.out.println("user_num?"+ session.getAttribute("user_num"));
@@ -115,20 +113,25 @@ public class YaController {
 			int user_num = 0;
 			if (session.getAttribute("user_num") != null) {
 				user_num = (int) session.getAttribute("user_num");
+			
 			}
-			board.setUser_num(user_num);
+				board.setUser_num(user_num);
 			
-			// 게시글 작성 (본글 설정)
-			board.setBrd_group(board.getBrd_num());
-			board.setBrd_step(0);
-			board.setBrd_lg(700);
-			
-			int insertResult = ycs.insertCommunity(board);
-			board.setUser_num(user_num);
-			
-			System.out.println("board brd_lg :"+board.getBrd_lg());
-			System.out.println("boardbrd_md :"+board.getBrd_md());
-			
+				// 게시글 작성 (본글 설정)
+				board.setBrd_group(board.getBrd_num());
+				board.setBrd_step(0);
+				board.setBrd_lg(700);
+				/*
+				 * User1 user1 = new User1(); user1.getNick();
+				 */
+				
+				int insertResult = ycs.insertCommunity(board);
+				board.setUser_num(user_num);
+				
+				System.out.println("board brd_lg :"+board.getBrd_lg());
+				System.out.println("boardbrd_md :"+board.getBrd_md());
+				System.out.println("board nick :"+board.getNick());
+				
 			if (insertResult >0) 
 				return "redirect:listCommunity";			
 				else {
@@ -138,13 +141,13 @@ public class YaController {
 		 }
 		
 		
-		// 게시글 수정폼이동
+		// 게시글 수정폼이동 
 		@GetMapping(value="/updateCommunityForm")
 		public String updateCommunity(int brd_num, Model model) {
 			System.out.println("YaController updaetCommunityForm start...");
 			
 			Board board = ycs.detailCommunity(brd_num);
-			// 정전
+			// 수정전
 			System.out.println("title :"+board.getTitle());
 			System.out.println("conts :"+board.getConts());
 			
@@ -208,27 +211,20 @@ public class YaController {
 		//상세 게시글 댓글  조회
 		@RequestMapping(value="/listComment", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Board> listComment(@RequestParam("brd_num") int brd_num,HttpSession session, Model model, Board board) {
+		public List<Board> listComment(@RequestParam("brd_num") int brd_num, HttpSession session, Model model, Board board) {
 			System.out.println("YaController ycs.listComment start....");
 	
-			int user_num = 0;
-			if (session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
-			}
-			board.setUser_num(user_num);
-			
-			
-			//부모글(본글)의 brd_num을 사용 부모글 brd_num = 댓글 brd_group = 부모글 brd_group
 			
 			List<Board> listComment = ycs.listComment(brd_num);
 			model.addAttribute(" listCommenty",  listComment);
 			board.setBrd_group(brd_num);
+			
 			System.out.println("YaController listComment size?" + listComment.size());
 			System.out.println("YaController listComment brd_group?"+board.getBrd_group());
 			return listComment; 
 		}
 		
-		//게시글 댓글  작성 (게시글 본글과 구분할 수 있어야 함, 댓글의 brd_num , brd_step, brd_group 확인)
+		//게시글 댓글  작성 
 		@RequestMapping("/commentWrite")
 		@ResponseBody
 		public Map<String, String> commentWrite(HttpSession session, HttpServletRequest request, @ModelAttribute Board board) {
@@ -263,18 +259,7 @@ public class YaController {
 				        response.put("error", "Invalid brd_num format");
 				    }		
 			            ycs.commentWrite(board);
-			        
-			            // 값이 잘  담기는지 확인
-						/*
-						 * System.out.println("board commnet int latestBrdStep :"+
-						 * ycs.getLatestBrdStep(brd_group));
-						 */
-			            System.out.println("board comment user_num?" + board.getUser_num());
-			            System.out.println("board comment conts?" + board.getConts());
-			            System.out.println("board comment brd_step?"+board.getBrd_step());
-			            System.out.println("board comment brd_group?"+board.getBrd_group());	
-		                System.out.println("session.getAttribute user_num?" + session.getAttribute("user_num"));
-			               
+     
 		                // 성공한 경우, 상세 페이지로 리다이렉트
 			            response.put("result", "success");
 			            response.put("redirectUrl", "/ya/commentForm?brd_num=" + board.getBrd_num());
@@ -292,17 +277,7 @@ public class YaController {
 
 				    return response;
 		}
-		// 게시글 댓글 수정 전 값 불러오기
-		@GetMapping(value="/commentSelect")
-		public String commentSelect(int brd_num, Model model) {
-			System.out.println("YaController commentSelect start...");
-			
-			Board board = ycs.commentSelect(brd_num);	
-			model.addAttribute("Board", board);
-			System.out.println("board 댓글 수정 전 conts?"+board.getConts());
-			return "/ya/commentForm";
-			
-		}	
+
 		// 게시글 댓글 수정
 		@PostMapping(value="/commentUpdate")
 		@ResponseBody
@@ -315,12 +290,11 @@ public class YaController {
 		        int user_num = 0;
 		        if (session.getAttribute("user_num") != null) {
 		            user_num = (int) session.getAttribute("user_num");
-		     
+		            
+		            board.setUser_num(user_num);
 		            board.setBrd_num(brd_num);
 		            board.setConts(conts);
-		            board.setUser_num(user_num);
-		            
-
+		     
 		            // 댓글 업데이트 메소드 호출
 		            ycs.commentUpdate(board);
 
@@ -330,21 +304,51 @@ public class YaController {
 		            System.out.println("board brd_num?" + board.getBrd_num());
 		            System.out.println("board user_num?" + board.getUser_num());
 		       
-
 		            map.put("result", "success");
+		            
 		        } else {
 		            // 사용자가 로그인되지 않은 경우
 		            map.put("result", "failure");
 		            map.put("error", "User not logged in");
 		        }
 		    } catch (Exception e) {
-		        e.printStackTrace();
+		        System.out.println("YaController commentUpdate e.getMessage()"+e.getMessage());
 		        // 실패한 경우
 		        map.put("result", "failure");
 		        map.put("error", "An error occurred");
 		    }
 
 		    return map;
+		}
+		
+		// 게시글 댓글 삭제
+		@PostMapping(value="/commentDelete")
+		@ResponseBody
+		public Map<String, Object> commentDelete(HttpSession session,
+				@RequestParam("brd_num") int brd_num,  @ModelAttribute Board board){
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			try {
+				System.out.println("YaController ycs.commentDelete start...");
+				
+				int user_num = 0;
+				if(session.getAttribute("user_num")!=null) {
+					 user_num = (int) session.getAttribute("user_num");				 
+					 board.setUser_num(user_num);
+					 
+					 ycs.commentDelete(board);
+					 
+					 System.out.println("YaController commentDelete  board brd_num?"+board.getBrd_num());
+					 System.out.println("YaController commentDelete board user_num?"+board.getUser_num());
+				}
+				
+			} catch (Exception e) {
+				 System.out.println("YaControllercommentDelete e.getMessage()"+e.getMessage());
+			}
+			
+			
+			return map;
+			
 		}
 		
 }		

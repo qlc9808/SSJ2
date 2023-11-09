@@ -21,7 +21,7 @@
     </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
+$(document).ready(function() {
 function likePost(brd_num) {
   
 	$.ajax({
@@ -37,19 +37,67 @@ function likePost(brd_num) {
 	});
 }
 
-function sortPosts(sortType) {
+//Select 변경 시
+function renderTable(data) {
+    if (data && data.length > 0) {
+        var tableHTML = ''; // 초기화된 테이블 시작
+        for (var i = 0; i < data.length; i++) {
+            var board = data[i];
+            tableHTML += `
+            	  <div class="col-6 col-md-4">
+                <div class="card mb-7">
+                    <div class="card-img">
+                        <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
+                            <i class="fe fe-heart"></i>
+                        </button>
+                       <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
+    				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
+    					</button>
+
+                      <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
+    					 </div>
+                    <div class="card-body fw-bold text-center">
+                        <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                            ${board.title}
+                        </a><p>
+                        <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                            	{board.price}원</a><p>
+                        <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
+                        						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
+                        				
+    				</div>
+    				 
+                </div>
+            </div>
+                   
+            `;
+        }
+       
+        tableHTML += ''; // 테이블 닫기
+        $('#boardtable').html(tableHTML); // boardtable에 새로운 데이터로 업데이트된 테이블 렌더링
+    } else {
+        $('#boardtable').html('<p>검색 결과가 없습니다.</p>');
+    }
+}
+
+$("#sortOption").change(function() {
+    var sortOption = $("#sortOption").val();
+
     $.ajax({
-        type: 'GET',
-        url: '/loadSortedPosts?sortType=' + sortType, // 정렬된 게시물을 불러오는 엔드포인트
-        success: function (response) {
-            // 서버로부터 받은 데이터를 이용하여 화면 업데이트
-            // 예를 들어, 받은 데이터를 화면의 특정 부분에 삽입
+        type: "GET",
+        url: "loadSortedPosts",
+        data: { sort: sortOption },
+        dataType: "json",
+        success: function(data) {
+            console.log("응답 데이터: ", data);
+            renderTable(data); // 테이블 렌더링 함수 호출
         },
-        error: function (error) {
-            // 오류가 발생한 경우의 처리
+        error: function(xhr, status, error) {
+            console.log("정렬 아작스 호출 실패: " + error);
         }
     });
-}
+});
+});
 </script>
 
 </head>
@@ -94,13 +142,18 @@ function sortPosts(sortType) {
                 <!-- 공간을 벌리기 위해 클래스 추가 -->
             </div>
             <div class="d-flex justify-content-end mb-3">
-			<select class="form-select form-select-xxs w-auto" onchange="sortPosts(this.value)">
-			    <option value="recent">최근 게시물</option>
-			    <option value="popular">조회수 높은 순</option>
-			</select>
+			<!-- <select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
+			    <option value="reg_date">최근 게시물</option>
+			    <option value="view_cnt">조회수 높은 순</option>
+			</select> -->
+			
+			  <select id="sortOption" name="sortOption">
+                     <option value="view_cnt">조회수 높은순</option>
+            	     <option value="reg_date">최근 등록일 순</option>
+                </select> 
             </div>
             </div>
-  <div class="row">
+  <div class="row" id="boardtable">
     <c:forEach var="board" items="${sharing}">
   
         <div class="col-6 col-md-4">
@@ -132,42 +185,11 @@ function sortPosts(sortType) {
 </div>
 
 
-            <!-- Pagination -->
-            <nav class="d-flex justify-content-center justify-content-md-end">
-              <ul class="pagination pagination-sm text-gray-400">
-                <li class="page-item">
-                  <a class="page-link page-link-arrow" href="#">
-                    <i class="fa fa-caret-left"></i>
-                  </a>
-                </li>
-                <li class="page-item active">
-                  <a class="page-li nk" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">4</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">5</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">6</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link page-link-arrow" href="#">
-                    <i class="fa fa-caret-right"></i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+           
 
           </div>
         </div>
+      </div>
       </div>
     </section>
   

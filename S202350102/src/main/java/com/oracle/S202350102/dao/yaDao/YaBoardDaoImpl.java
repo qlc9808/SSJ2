@@ -174,19 +174,6 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	}
 
 	@Override
-	public Board commentSelect(int brd_num) {
-		System.out.println("YaBoardDaoImpl commentSelect start...");
-		Board board = new Board();
-		try {
-			session.selectOne("YaCommentSelect", brd_num);
-		} catch (Exception e) {
-			System.out.println("YaBoarDaoImpl void YaCommentSelect e.getMessage)?"+e.getMessage());
-		}
-		
-		return board;
-	}
-
-	@Override
 	public void commentUpdate(Board board) {
 		System.out.println("YaBoardDaoImpl commentUpdate start...");
 		try {
@@ -201,7 +188,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	public void commentDelete(Board board) {
 		System.out.println("YaBoardDaoImpl commentDelete start...");
 		try {
-			session.delete("YaCommnetDelte",board);
+			session.delete("YaCommentDelete",board);
 		} catch (Exception e) {
 			System.out.println("YaBoarDaoImpl void YaCommnetDelte e.getMessage)?"+e.getMessage());
 		}

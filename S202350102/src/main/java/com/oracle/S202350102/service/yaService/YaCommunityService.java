@@ -20,7 +20,6 @@ public interface YaCommunityService {
 	List<Board>  listComment(int brd_num);
 	
 	void         commentWrite(Board board);
-	Board        commentSelect(int brd_num);
 	void		 commentUpdate(Board board);
 	void         commentDelete(Board board);
 	int          getLatestBrdStep(int brd_group);

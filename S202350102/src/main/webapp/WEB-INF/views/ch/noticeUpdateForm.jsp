@@ -6,9 +6,24 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+	function fileUpdate(){
+		var fileInput = document.getElementById('fileInput');
+		if(fileInput.style.display == "none"){
+			fileInput.style.display = "block";
+			fileInput.removeAttribute('disabled');
+			$("#imgOroot").hide();
+		} else{
+			fileInput.style.display = "none";
+			fileInput.setAttribute('disabled', 'true');
+			$("#imgOroot").show();
+		}
+	}
+</script>
+
 </head>
 <body>
-<form action="noticeUpdate" method="post">
+	<form action="noticeUpdate" method="post" enctype="multipart/form-data">
 		<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
 		<input type="hidden" value="${noticeConts.brd_md  }" name="brd_md">
 		<table border="1">
@@ -29,7 +44,7 @@
 			</tr>
 			<tr>
 				<td>등록일</td>
-				<td>${noticeConts.reg_date }</td>
+				<td><fmt:formatDate value="${noticeConts.reg_date }" pattern="yy-MM-dd"/></td>
 			</tr>
 			<tr>
 				<td>내용</td>
@@ -37,6 +52,14 @@
 					<textarea rows="30" cols="30" name="conts">
 						${noticeConts.conts }
 					</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>파일</td>
+				<td>
+					<span id="imgOroot">${pageContext.request.contextPath}/upload/${noticeConts.img}</span>
+					<input type="file" name="file1" style="display: none;" id="fileInput" disabled="disabled">
+					<button type="button" onclick="fileUpdate()">파일 변경</button>					
 				</td>
 			</tr>
 			<tr>
