@@ -206,7 +206,9 @@ public class ChController {
 	@PostMapping("deleteNotice")
 	public String deleteNotice(Board board, HttpServletRequest request,HttpSession session) {
 		System.out.println("ChController deleteNotice Start...");
+		board = chBoardService.noticeConts(board.getBrd_num());
 		int user_num = 0;
+		
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 			// 글의 user_num과 내 session의 user_num이 같은가?
@@ -396,6 +398,22 @@ public class ChController {
 		result = chChallengeService.chgDeleteComm(ctn);
 		
 		return "redirect:chgCommManagement";
+	}
+	
+	@GetMapping(value = "myConts")
+	public String myConts(HttpSession session, Model model) {
+		System.out.println("ChController myConts Start...");
+		int user_num = 0;
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int)session.getAttribute("user_num"); 
+		}
+		
+		List<Board> myReviewList = chBoardService.myReview(user_num);
+		
+		model.addAttribute("myReviewList", myReviewList);
+		
+		return "ch/myContPage";
 	}
 	
 	
