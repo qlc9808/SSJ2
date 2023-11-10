@@ -185,6 +185,7 @@
 	}
 
 	
+	
 	// 찌르기 모달창 띄우기 
 	// 		forkModalCall(${status.index}) 에서 올 때 index 입력 잊지 말기~! 
 	function forkModalCall(index) { 
@@ -237,6 +238,7 @@
 		// 다음 동작으로 넘어가는 코드 
 		window.location.href = 'sendMail'; 
 	} 
+  
 	
 	
 </script> 
@@ -846,6 +848,7 @@
 					        </div><!-- <div class="modal-content"> -->
 					      </div><!-- <div class="modal-dialog modal-dialog-centered modal-xl" role="document"> -->
 					    </div><!-- <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
+					    
 					    
 			            <!-- Pagination -->
 			            <nav class="d-flex justify-content-center mt-9">
