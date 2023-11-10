@@ -44,7 +44,7 @@ public class YaController {
 	
 	//커뮤니티 게시글 전체조회
 	@RequestMapping(value="/listCommunity")
-	public String listCommunity(@RequestParam("brd_num") int brd_num, Board board, Model model) {
+	public String listCommunity(Board board, Model model) {
 		System.out.println("YaController listCommunity start....");
 		List<Board> listCommunity = ycs.listCommunity(board);
 		System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
