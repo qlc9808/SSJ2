@@ -154,10 +154,11 @@ public class ThController {
 	
 	@RequestMapping(value = "thKakaoPayForm")
 	public String thKakaoPayForm(HttpSession session, Model model) {
+		System.out.println("Thcontroller thKakaoPayForm Start... ");
 		if(session.getAttribute("user_num") == null) {
 			return "loginForm";
 		} 
-		return "th/thKakaoPayForm";
+		return "th/thkakaoPayForm";
 	}
 	
 	@GetMapping("/thKakaoPay")
