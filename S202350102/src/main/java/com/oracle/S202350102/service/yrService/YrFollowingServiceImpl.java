@@ -21,16 +21,16 @@ public class YrFollowingServiceImpl implements YrFollowingService {
 	}
 	
 	@Override
-	public boolean following(Following fwi) {
+	public int following(Following fwi) {
+		int result = 0;
 		if(this.isFollowing(fwi)) {	
 			// isFollowing = true -> following 값 있다 -> 없애기
-			yfid.deleteFollowing(fwi);
-			return false;
+			result = yfid.deleteFollowing(fwi);
 		} else {										
 			// isFollowing = false -> following 값 없다 -> 추가하기
-			yfid.insertFollowing(fwi);
-			return true;
+			result = yfid.insertFollowing(fwi);
 		}
+		return result;
 	}
 
 }
