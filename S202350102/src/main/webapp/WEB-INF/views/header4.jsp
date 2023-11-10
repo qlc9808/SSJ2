@@ -159,9 +159,18 @@
               </a>
             </li>
           </ul>
-		 
+		 	
         </div>
-       
+       		<div class="card" style="display: none;" id="alarmPopText" >
+			  <div class="card-body">
+			    <table id="test">
+			    	<h4>새로운 댓글이 없습니다.</h4>
+			    	<h6>더 열심히 활동해볼까요?</h6>
+			    </table>
+			    <a href="#" class="btn btn-primary" onclick="readAlarmAll() return false;">전체 읽음</a>
+			    
+			  </div>
+			</div>
  
       </div>
     </nav>
@@ -192,31 +201,81 @@
 
 <!--  jquery.js-->
 <script src="./js/jquery.js"></script>
-
+<a href="detailCommunity?user_num=4&brd_num=11"></a>
 
 <style>
 	#alarmPopText{
 		display: none;
-			
-	}
-	
-	#alarmDiv{
 		z-index: 999;
 		position: absolute;
 		right: 250px;
 		top: 80px;
+		width: 28em;
+			
 	}
+	#alarmPopText td{
+		padding: 10px;
+		border-bottom: 1px solid #EAEAEA;
+		
+	}
+	
 	
 </style>
 
 <script type="text/javascript">
 	function alarmText(data){
 		var str = "";
-		for(var i =0; i<data.reCount; i++){
-			str += "<li>'" + data.listBdRe[i].title +"'글에 댓글이 달렸습니다.</li>"
-		}
 		
+		for(var i =0; i<data.reCount; i++){
+			str += "<tr>";
+			str += "<td><a href='javascript:void(0);' onclick='read("+data.listBdRe[i].user_num+","+data.listBdRe[i].brd_num+"); return false;' ><b>";			
+			str += data.listBdRe[i].title + "</b>글에 "+data.listBdRe[i].re_step +"번째 댓글이 달렸습니다.</a></td>";
+			str += "<td><a href='#' id='alarmRead' data-user-num='" + data.listBdRe[i].user_num + "' data-re-step='"+data.listBdRe[i].re_step + "'onclick='readAlarm(event)'>";
+			str +="<button class='btn btn-danger btn-circle btn-xxs mb-1'><i class='fe fe-check'></i></button></a></td>"	  
+	    	str += "</tr>";			
+				
+		}
+				
 		return str;
+	}
+	
+	function readAlarm(event){
+		event.preventDefault();
+		
+		var userNum = $(event.target).data("user-num");
+		var reStep = $(event.target).data("re-step");
+		alert(reStep);
+		
+		
+		$.ajax(
+				{
+					type: "POST",
+					url:"readAlarm",
+					data:{user_num : userNum, re_step : reStep},
+					dataType: "text",
+					success:function(data){
+						if(data > 0){
+							alarmchk();
+						}
+					}
+				}
+		)
+	}
+	
+	function read(user_num, brd_num){
+		/* alert("user_num"+user_num);
+		alert("brd_num"+brd_num); */
+		$.ajax({
+			type:"POST",
+			url:"moveToNewCmt",
+			data: {user_num : user_num, brd_num : brd_num},
+			success:function(data){
+				if(data > 0){
+					window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+				}
+			}
+		})
+		
 	}
 	
 	

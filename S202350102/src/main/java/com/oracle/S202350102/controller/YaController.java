@@ -1,5 +1,6 @@
 package com.oracle.S202350102.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import org.json.simple.JSONArray;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,14 +54,14 @@ public class YaController {
 		
 		model.addAttribute("listCommunity", listCommunity);
 			
-		/*
-		 * //게시글 별 댓글 수 구하기 생각해보니 테이블에 컬럼이 추가되야 할것같음
-		 *  int replyCount = ycs.commentTotal(brd_num);
-		 * model.addAttribute("replyCount", replyCount);
-		 */
+		
+		//게시글 댓글 수 전체조회
+		List<Board> commentTotalList = ycs. commentTotalList(board);
+		model.addAttribute("commenetTotalList", commentTotalList);
 	
 		return "listCommunity";
 	}
+	
 	
 	
 	//게시글 제목을 누르면 자세히 보기 
@@ -117,28 +120,29 @@ public class YaController {
 			}
 
 	 // 게시글 작성
-	
 		@PostMapping(value="/writeCommunity") 
-		public String insertCommunity(@ModelAttribute Board board, HttpSession session,  Model model) {
-			System.out.println("YaController start insertCommunity... "); 
-			
-			int user_num = 0;
-			if (session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
-			
-			}
-				board.setUser_num(user_num);
-			
+		public String insertCommunity(HttpServletRequest request, @ModelAttribute Board board, Model model
+				,@RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+				
+				System.out.println("YaController start insertCommunity... "); 
+		
 				// 게시글 작성 (본글 설정)
 				board.setBrd_group(board.getBrd_num());
 				board.setBrd_step(0);
 				board.setBrd_lg(700);
-				/*
-				 * User1 user1 = new User1(); user1.getNick();
-				 */
+				
+				 // 저장경로 생성 (jk 컨트롤러 )
+				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+				System.out.println("realPath" + uploadPath);
+				log.info("originalName : " + file1.getOriginalFilename());
+				
+				// 진짜 저장(jk 컨트롤러 )
+				String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+				board.setImg(saveName);
+				System.out.println("brd_md->"+ board.getBrd_md());
 				
 				int insertResult = ycs.insertCommunity(board);
-				board.setUser_num(user_num);
+		
 				
 				System.out.println("board brd_lg :"+board.getBrd_lg());
 				System.out.println("boardbrd_md :"+board.getBrd_md());
@@ -152,7 +156,23 @@ public class YaController {
 			return "forward:writeCommunity";
 		 }
 		
-		
+		// 파일 업로드 
+		private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
+			UUID uid = UUID.randomUUID();
+			System.out.println("uploadPath->" + uploadPath);
+			File fileDirectory = new File(uploadPath);  
+			if (!fileDirectory.exists()) {
+				fileDirectory.mkdirs(); 
+				System.out.println("시스템 업로드용 폴더 생성 :" + uploadPath);	
+			}
+			
+			String savedName = uid.toString() + "_" + originalName;
+			log.info("saveName : " + savedName); 
+			File target = new File(uploadPath, savedName);
+			FileCopyUtils.copy(fileData, target); 
+			
+			return savedName;
+		}		
 		// 게시글 수정폼이동 
 		@GetMapping(value="/updateCommunityForm")
 		public String updateCommunity(int brd_num, Model model) {

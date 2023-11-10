@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
+import org.json.simple.JSONObject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpRequest;
@@ -206,7 +207,9 @@ public class ChController {
 	@PostMapping("deleteNotice")
 	public String deleteNotice(Board board, HttpServletRequest request,HttpSession session) {
 		System.out.println("ChController deleteNotice Start...");
+		board = chBoardService.noticeConts(board.getBrd_num());
 		int user_num = 0;
+		
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 			// 글의 user_num과 내 session의 user_num이 같은가?
@@ -396,6 +399,54 @@ public class ChController {
 		result = chChallengeService.chgDeleteComm(ctn);
 		
 		return "redirect:chgCommManagement";
+	}
+	
+	@GetMapping(value = "myConts")
+	public String myConts(HttpSession session, Model model) {
+		System.out.println("ChController myConts Start...");
+		int user_num = 0;
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int)session.getAttribute("user_num"); 
+		}
+		
+		List<Board> myReviewList = chBoardService.myReview(user_num);
+		List<Board> myCertiList = chBoardService.myCertiList(user_num);
+		List<Board> myCommuList = chBoardService.myCommuList(user_num);
+		List<Board> myShareList = chBoardService.myShareList(user_num);
+		
+		
+		model.addAttribute("myReviewList", myReviewList);
+		model.addAttribute("myCertiList", myCertiList);
+		model.addAttribute("myCommuList", myCommuList);
+		model.addAttribute("myShareList", myShareList);
+		
+		return "ch/myContPage";
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "readAlarm")
+	public String readAlarm(BoardReChk brc) {
+		System.out.println("ChController readAlarm Start...");
+		
+		int result = chBoardService.readAlarm(brc);
+		
+		String result1 = Integer.toString(result);
+		
+		return result1;
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "moveToNewCmt")
+	public String moveToNewCmt(BoardReChk brc) {
+		System.out.println("ChController readAlarm Start...");
+		
+		int result = chBoardService.moveToNewCmt(brc);
+		
+		String result1 = Integer.toString(result);
+		
+		return result1;
 	}
 	
 	

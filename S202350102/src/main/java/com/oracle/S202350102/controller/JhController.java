@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
+import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
+import com.oracle.S202350102.service.yrService.YrFollowingService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +36,9 @@ public class JhController {
 	private final JhCallengeService jhCService;
 	private final UserService userService;
 	// yr 작성
-	// challenger 테이블값 가져오기용
 	private final YrChallengerService ycs;
+	private final YrFollowingService yfis;
+	
 	private final BgService bs;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
@@ -186,8 +189,9 @@ public class JhController {
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
 		model.addAttribute("listSsj", listSsj);
-//		String boardRegDate = ycs.getBoardRegDate(chg_id);
-//		model.addAttribute("brdRegDate", boardRegDate);
+
+		// following 결과
+		
 
 		
 		// bg 작성

@@ -48,5 +48,18 @@
 		WHERE	user_name	=	#{user_name}
 		AND		email		=	#{email}
 	</select>
+	
+	<select id="thFindUser1ByIdAndEmail" parameterType="User1" resultType="User1">
+		SELECT 	*
+		FROM	user1
+		WHERE	user_id		=	#{user_id}
+		AND		email		=	#{email}
+	</select>
+	
+	<update id="thUser1PswdUpdate" parameterType="Map">
+		UPDATE	user1
+		SET		user_pswd 	= 	#{rndPswd}
+		WHERE	user_id		=	#{user_id}		
+	</update>
 </mapper>
 

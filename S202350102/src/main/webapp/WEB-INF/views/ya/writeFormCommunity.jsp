@@ -73,6 +73,7 @@
 					</div>	        
  			</form>
          </div>
+     </div>    
     </section>	
 </body>
 <%@ include file="../footer.jsp" %>

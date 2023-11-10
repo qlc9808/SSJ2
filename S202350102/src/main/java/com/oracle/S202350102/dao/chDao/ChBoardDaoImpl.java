@@ -175,6 +175,97 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		return result;
 	}
 
+
+
+	@Override
+	public List<Board> myReview(int user_num) {
+		List<Board> myReviewList = null;
+		
+		try {
+			myReviewList = session.selectList("myReviewList",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl myReviewList e.getMessage->" + e.getMessage());
+		}
+		
+		return myReviewList;
+	}
+
+
+
+	@Override
+	public List<Board> myCertiList(int user_num) {
+		List<Board> myCertiList = null;
+		
+		try {
+			myCertiList = session.selectList("myCertiList",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl myCertiList e.getMessage->" + e.getMessage());
+		}
+		return myCertiList;
+	}
+
+
+
+	@Override
+	public List<Board> myCommuList(int user_num) {
+		List<Board> myCommuList = null;
+		
+		try {
+			myCommuList = session.selectList("myCommuList",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl myCommuList e.getMessage->" + e.getMessage());
+		}
+		return myCommuList;
+	}
+
+
+
+	@Override
+	public List<Board> myShareList(int user_num) {
+		List<Board> myShareList = null;
+		
+		try {
+			myShareList = session.selectList("myShareList",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl myShareList e.getMessage->" + e.getMessage());
+		}
+		return myShareList;
+	}
+
+
+
+	@Override
+	public int readAlarm(BoardReChk brc) {
+		System.out.println("chBoardDaoImpl readAlarm Start...");
+		int result = 0;
+		try {
+			result = session.update("readAlarm", brc);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl readAlarm e.getMessage->" + e.getMessage());
+		}
+		return result;
+	}
+
+
+
+	@Override
+	public int moveToNewCmt(BoardReChk brc) {
+		System.out.println("chBoardDaoImpl moveToNewCmt Start...");
+		int result = 0;
+		try {
+			result = session.update("moveToNewCmt", brc);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl moveToNewCmt e.getMessage->" + e.getMessage());
+		}
+		return result;
+	}
+
 	
 
 

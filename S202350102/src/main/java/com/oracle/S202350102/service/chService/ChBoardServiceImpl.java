@@ -118,6 +118,56 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return result;
 	}
 
+	@Override
+	public List<Board> myReview(int user_num) {
+		System.out.println("chBoardServiceImpl myReview Start...");
+		List<Board> myReview = chBoardDao.myReview(user_num);
+		
+		System.out.println("chBoardServiceImpl myReview myReview.size()->" + myReview.size());
+		
+		return myReview;
+	}
+
+	@Override
+	public List<Board> myCertiList(int user_num) {
+		System.out.println("chBoardServiceImpl myCertiList Start...");
+		List<Board> myCertiList = chBoardDao.myCertiList(user_num);
+		System.out.println("chBoardServiceImpl myCertiList myCertiList.size()->" + myCertiList.size());
+		return myCertiList;
+	}
+
+	@Override
+	public List<Board> myCommuList(int user_num) {
+		System.out.println("chBoardServiceImpl myCommuList Start...");
+		List<Board> myCommuList = chBoardDao.myCommuList(user_num);
+		System.out.println("chBoardServiceImpl myCommuList myCommuList.size()->" + myCommuList.size());
+		return myCommuList;
+	}
+
+	@Override
+	public List<Board> myShareList(int user_num) {
+		System.out.println("chBoardServiceImpl myShareList Start...");
+		List<Board> myShareList = chBoardDao.myShareList(user_num);
+		System.out.println("chBoardServiceImpl myCommuList myShareList.size()->" + myShareList.size());
+		return myShareList;
+	}
+
+	@Override
+	public int readAlarm(BoardReChk brc) {
+		System.out.println("chBoardServiceImpl readAlarm Start...");
+		int result = chBoardDao.readAlarm(brc);
+		System.out.println("chBoardServiceImpl readAlarm result->" + result);
+		return result;
+	}
+
+	@Override
+	public int moveToNewCmt(BoardReChk brc) {
+		System.out.println("chBoardServiceImpl moveToNewCmt Start...");
+		int result = chBoardDao.moveToNewCmt(brc);
+		System.out.println("chBoardServiceImpl moveToNewCmt result->" + result);
+		return result;
+	}
+
 
 	
 

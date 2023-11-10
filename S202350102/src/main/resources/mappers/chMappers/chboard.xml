@@ -107,4 +107,61 @@
 	</select>
 	
 	
+	
+	<select id="myCertiList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick, c.title chg_title
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		JOIN challenge  c ON b.chg_id = c.chg_id
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 100
+		and b.brd_step = 0
+		ORDER BY b.reg_date DESC
+	</select>
+	
+	<select id="myReviewList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick, c.title chg_title
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		JOIN challenge  c ON b.chg_id = c.chg_id
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 101
+		and b.brd_step = 0
+		ORDER BY b.reg_date DESC
+	</select>
+	
+	<select id="myCommuList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 103
+		and b.brd_step = 0
+		ORDER BY b.reg_date DESC
+	</select>
+	
+	<select id="myShareList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 102
+		and b.brd_step = 0
+		ORDER BY b.reg_date DESC
+	</select>
+	
+	<update id="readAlarm" parameterType="BoardReChk">
+		Update BOARD_RE_CHK
+		Set SEND_DATE = 2, read_date=sysdate
+		Where user_num = #{user_num}
+		AND re_step = #{re_step}
+	</update>
+	
+	<update id="moveToNewCmt" parameterType="BoardReChk">
+		Update BOARD_RE_CHK
+		Set SEND_DATE = 2, read_date=sysdate
+		Where user_num = #{user_num}
+		AND brd_num = #{brd_num}
+	</update>
+	
 </mapper>

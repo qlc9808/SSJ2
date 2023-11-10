@@ -3,6 +3,7 @@ package com.oracle.S202350102.service.thService;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.oracle.S202350102.dto.User1;
 
@@ -15,6 +16,9 @@ public interface ThUser1Service {
 	int				user1IdCheck(String user_id);
 	int				user1NickCheck(String nick);
 	List<User1> 	findId(User1 user1);
+	String 			crRndPswd();
+	User1 			findUser1ByIdAndEmail(User1 user1);
+	int 			user1PswdUpdate(Map<String, Object> map);
 	
 	
 }

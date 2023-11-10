@@ -18,6 +18,12 @@ public interface JkBoardDao {
 	List<Board> 		getPopularPosts();
 	List<Board> 		getRecentPosts();
 	
+	// 댓글관련
+	void 				commentSharing(Board board);
+	List<Board> 		listCommentSharing(int brd_num);
+	void 				commentUpdateSharing(Board board);
+	void 				commentDeleteSharing(Board board);
+	
 	
 
 	

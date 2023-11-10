@@ -240,119 +240,106 @@
 
             </div>
 
-            <!-- Reviews -->
-            <div class="mt-8">
+<!-- Reviews -->
 
-              <!-- Review -->
-              <div class="review">
-                <div class="review-body">
-                  <div class="row">
+<div class="row">
+ 	<c:forEach var="board" items="${sharing}">
+	<div class="mt-8">
+
+    <!-- Iterate over the reviews -->
+
+        <!-- Review -->
+        <div class="review">
+            <div class="review-body">
+                <div class="row">
                     <div class="col-12 col-md-auto">
 
-                      <!-- Avatar -->
-                      <div class="avatar avatar-xxl mb-6 mb-md-0">
-                        <span class="avatar-title rounded-circle">
-                          <i class="fa fa-user"></i>
-                        </span>
-                      </div>
+                        <!-- Avatar -->
+                        <div class="avatar avatar-xxl mb-6 mb-md-0">
+                            <span class="avatar-title rounded-circle">
+                                <i class="fa fa-user"></i>
+                            </span>
+                        </div>
 
                     </div>
                     <div class="col-12 col-md">
 
-                      <!-- Header -->
-                      <div class="row mb-6">
-                        <div class="col-12">
+                        <!-- Header -->
+                        <div class="row mb-6">
+                            <div class="col-12">
 
-                          <!-- Rating -->
-                          <div class="rating fs-sm text-dark" data-value="5">
-                            <div class="rating-item">
-                              <i class="fas fa-star"></i>
+                                <!-- Time -->
+                                <span class="fs-xs text-muted">
+                                   ${board.nick} ${board.reg_date}
+                                </span>
+
                             </div>
-                            <div class="rating-item">
-                              <i class="fas fa-star"></i>
+                        </div>
+
+                        <!-- Title -->
+                        <p class="mb-2 fs-lg fw-bold">
+                            ${board.title}
+                        </p>
+
+                        <!-- Text -->
+                        <p class="text-gray-500">
+                            <!-- Add your text here -->
+                        </p>
+
+                        <!-- Footer -->
+                        <div class="row align-items-center">
+                            <div class="col-auto d-none d-lg-block">
+
+                                <!-- Text -->
+                                <p class="mb-0 fs-sm">이 댓글이 마음에 드시나요?</p>
+
                             </div>
-                            <div class="rating-item">
-                              <i class="fas fa-star"></i>
+                            <div class="col-auto me-auto">
+
+                                <!-- Rate -->
+                                <div class="rate">
+                                    <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+                                        <i class="fe fe-thumbs-up"></i>
+                                    </a>
+                                    <a class="rate-item" data-toggle="vote" data-count="0" href="#" role="button">
+                                        <i class="fe fe-thumbs-down"></i>
+                                    </a>
+                                </div>
+
                             </div>
-                            <div class="rating-item">
-                              <i class="fas fa-star"></i>
+                            <div class="col-auto d-none d-lg-block">
+
+                                <!-- Text -->
+                                <p class="mb-0 fs-sm">Comments (0)</p>
+
                             </div>
-                            <div class="rating-item">
-                              <i class="fas fa-star"></i>
+                            <div class="col-auto">
+
+                                <!-- Button -->
+                                <a class="btn btn-xs btn-outline-border" href="#!">
+                                    Comment
+                                </a>
+
                             </div>
-                          </div>
-
                         </div>
-                        <div class="col-12">
-
-                          <!-- Time -->
-                          <span class="fs-xs text-muted">
-                            Logan Edwards, <time datetime="2019-07-25">25 Jul 2019</time>
-                          </span>
-
-                        </div>
-                      </div>
-
-                      <!-- Title -->
-                      <p class="mb-2 fs-lg fw-bold">
-                        So cute!
-                      </p>
-
-                      <!-- Text -->
-                      <p class="text-gray-500">
-                        Justo ut diam erat hendrerit. Morbi porttitor, per eu. Sodales curabitur diam sociis. Taciti lobortis nascetur. Ante laoreet odio hendrerit.
-                        Dictumst curabitur nascetur lectus potenti dis sollicitudin habitant quis vestibulum.
-                      </p>
-
-                      <!-- Footer -->
-                      <div class="row align-items-center">
-                        <div class="col-auto d-none d-lg-block">
-
-                          <!-- Text -->
-                          <p class="mb-0 fs-sm">Was this review helpful?</p>
-
-                        </div>
-                        <div class="col-auto me-auto">
-
-                          <!-- Rate -->
-                          <div class="rate">
-                            <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-                              <i class="fe fe-thumbs-up"></i>
-                            </a>
-                            <a class="rate-item" data-toggle="vote" data-count="0" href="#" role="button">
-                              <i class="fe fe-thumbs-down"></i>
-                            </a>
-                          </div>
-
-                        </div>
-                        <div class="col-auto d-none d-lg-block">
-
-                          <!-- Text -->
-                          <p class="mb-0 fs-sm">Comments (0)</p>
-
-                        </div>
-                        <div class="col-auto">
-
-                          <!-- Button -->
-                          <a class="btn btn-xs btn-outline-border" href="#!">
-                            Comment
-                          </a>
-
-                        </div>
-                      </div>
 
                     </div>
-                  </div>
                 </div>
-              </div>
+            </div>
+        </div>
 
-                           </div>
-                        </div>
 
+</div>
+</c:forEach>
+</div>
+         </div>
+
+                   
 
     
 </section>
 
 </body>
+<%@ include file="commentSharing.jsp" %>
 <%@ include file="../footer.jsp" %>
 </html>

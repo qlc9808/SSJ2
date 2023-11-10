@@ -32,27 +32,27 @@ console.log("brd_num: " + brd_num);
 console.log("user_num: " +  user_num);
 
 $(document).ready(function(){
-    listcomment(brd_num);
+    listCommentSharing(brd_num);
 });
 
-function listcomment() {
+function listCommentSharing() {
     
     var brd_num = ${board.brd_num}
     var user_num =  ${board.user_num};
 
     $.ajax({
-        url: "listComment?brd_num="+brd_num,
+        url: "listCommentSharing?brd_num="+brd_num,
         type: "GET",
         data: {  user_num: user_num,   
           		  brd_num: brd_num,
         	 	 },
         dataType: "json",
         success: function(result) {
-            var commentList = $("#commentList"); 
-            commentList.empty();
-            console.log("listcomment brd_num: " + brd_num);
-            console.log("listcomment user_num: " + user_num);
-            console.log("listcomment sessionUserNum :" + sessionUserNum)
+            var listCommentSharing = $("#listCommentSharing"); 
+            listCommentSharing.empty();
+            console.log("listCommentSharing brd_num: " + brd_num);
+            console.log("listCommentSharing user_num: " + user_num);
+            console.log("listCommentSharing sessionUserNum :" + sessionUserNum  )
             $.each(result, function(index, board) {
                 var listItem = $("<li class='list-group-item'></li>");
                 listItem.append(" 댓글 번호 :"+ board.brd_num);
@@ -69,7 +69,7 @@ function listcomment() {
                 listItem.append("<button type='button' class='btn btn-outline-success comment-delete-btn' data-user-num='" + board.user_num 
 																										+ "'data-brd-num="+ board.brd_num + ">댓글 삭제</button>"); 
                 }
-                commentList.append(listItem);
+                listCommentSharing.append(listItem);
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -92,7 +92,7 @@ function listcomment() {
             console.log("brd_step: " + brd_step);
             // 댓글 작성을 서버로 전송
             $.ajax({
-                url: "commentWrite",
+                url: "commentSharing",
                 type: "POST",
                 data: {
                     user_num: user_num,
@@ -105,7 +105,7 @@ function listcomment() {
                 success: function (result) {
                     if (result.result === "success") {
                         // 댓글 작성이 성공한 경우, 댓글 목록 조회 아작스를 호출하여 댓글을 즉시 가져옴
-                        listcomment();
+                        listCommentSharing();
                     } else {
                         alert("댓글 작성에 실패했습니다.");
                     }
@@ -197,7 +197,7 @@ function listcomment() {
             // 댓글 작성자와 로그인 사용자가 같은지 확인
             if (${sessionScope.user_num}  === user_num) {
                 $.ajax({
-                    url: "commentUpdate",
+                    url: "commentUpdateSharing",
                     type: "POST",
                     data: {
                         user_num: user_num, 
@@ -208,7 +208,7 @@ function listcomment() {
                     success: function (result) {
                         if (result.result === "success") {
                             // 수정이 성공하면 댓글 목록을 다시 불러오기
-                            listcomment();
+                            listCommentSharing();
                             
                             alert("댓글이 수정되었습니다.")
                         } else {
@@ -242,7 +242,7 @@ function listcomment() {
 	    	if (confirm("정말로 댓글을 삭제하시겠습니까?")) {
 	    	    // 확인 버튼을 누른 경우 댓글 삭제를 서버로 전송
 	    	    $.ajax({
-	    	        url: "commentDelete",
+	    	        url: "commentDeleteSharing",
 	    	        type: "POST",
 	    	        data: {
 	    	            user_num: user_num,
@@ -251,10 +251,10 @@ function listcomment() {
 	    	        dataType: "json",
 	    	        success: function (result) {
 	    	            // 삭제가 성공하면 삭제 후의 댓글 목록을 다시 불러오기
-	    	            listcomment();
+	    	            listCommentSharing();
 	    	            if (result.result === "success") {
 	    	                alert("댓글 삭제되었습니다.");
-	    	                var deletedCommentElement = $('#commentList').find('li[data-brd-num="' + brd_num + '"]');
+	    	                var deletedCommentElement = $('#listCommentSharing').find('li[data-brd-num="' + brd_num + '"]');
 	    	                if (deletedCommentElement.length > 0) {
 	    	                    deletedCommentElement.remove();
 	    	                } else {
@@ -281,7 +281,7 @@ function listcomment() {
     <div class="card my-4">
        <h5 class="card-header">댓글 작성</h5>
        <div class="card-body">
-           <form name="comment-form" action="/commentWrite" method="post" autocomplete="off">
+           <form name="commentSharing" action="/commentSharing" method="post" autocomplete="off">
                <div class="form-group">
                    <input type="hidden" name="user_num"  id="user_num" value="${board.user_num}">
                    <input type="hidden" name="brd_group" id="brd_group" value="${board.brd_group}">
@@ -298,7 +298,7 @@ function listcomment() {
  <!-- 댓글 목록이 나타날 창  -->
 
 		<div class="container">
-		<ul class="list-group list-group-flush" id="commentList"> 
+		<ul class="list-group list-group-flush" id="listCommentSharing"> 
 		</ul>
 		</div>
 

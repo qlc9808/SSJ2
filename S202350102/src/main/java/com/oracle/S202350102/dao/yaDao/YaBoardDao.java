@@ -24,7 +24,7 @@ public interface YaBoardDao {
 	void		 commentUpdate(Board board);
 	void         commentDelete(Board board);
 	int          getLatestBrdStep(int brd_group);
-	//int          commentTotal(int brd_num);
+	List<Board>  commentTotal(Board board);
 	
 
 
