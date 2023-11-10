@@ -158,7 +158,11 @@
 		$('#editConts').val(conts);     
 		
 		// 모달 창 표시
+<<<<<<< HEAD
+		$('#modalUpdateCertBrdForm').modal('show');
+=======
 		$('#updateCertBrdForm').modal('show');
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 	}
 	
 	
@@ -183,6 +187,64 @@
 			}
 		});
 	}
+<<<<<<< HEAD
+	
+	
+	
+	// 찌르기 모달창 띄우기 
+	// 		forkModalCall(${status.index}) 에서 올 때 index 입력 잊지 말기~! 
+	function forkModalCall(index) { 
+		 
+		// 모달 창에 넘겨줄 값을 저장 
+		var ssjUserNum = $("#ssjUserNum"+index).val(); 
+		 
+		// 찌르기 모달 창 안의 태그 
+		$('#ssjUserNum').val(ssjUserNum); 
+		 
+		// 모달 창 표시 
+		$('#modalfork').modal('show'); 
+		document.getElementById('cheerUpMsg').placeholder = "안녕하세요!\n얼마 동안 활동이 뜸한 것 같아 걱정이 되네요\n함께 더 활발한 모습으로 돌아오기를 기대하고 있어요\n응원합니다!"; 
+		 
+	} 
+	 
+	 
+	 
+	// 찌르기 메일 보내기 
+	function sendMail() { 
+		 
+		// EL값을 JavaScript 변수에 저장 
+		// 실패:  
+		var sendMailUser_num	= ${user.user_num}; 
+		alert("sendMailUser_num -> "+sendMailUser_num); 
+		 
+		// 넘겨줄 값을 저장 
+		var ssjUserNum	= $("#ssjUserNum").val(); 
+		var cheerUpMsg	= $("#cheerUpMsg").val(); 
+		 
+		 
+		$.ajax({ 
+			type:	"POST", 
+			url:	"sendMail", 
+			data:	{ 
+				sendMailUser_num:	sendMailUser_num, 
+				ssjUserNum:	ssjUserNum, 
+				cheerUpMsg:	cheerUpMsg 
+			}, 
+			success:	function (response) { 
+				// 성공했을 때의 동작 
+				console.log(response); 
+			}, 
+			error:		function (error) { 
+				// 실패했을 때의 동작 
+				console.log(error); 
+			} 
+		}); 
+		 
+		// 다음 동작으로 넘어가는 코드 
+		window.location.href = 'sendMail'; 
+	} 
+=======
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
   
 	
 	
@@ -696,7 +758,11 @@
 			            
 			            
 			            <!-- 수정하기 모달 창 Product -->
+<<<<<<< HEAD
+					    <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+=======
 					    <div class="modal fade" id="updateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 					      <div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
 					        <div class="modal-content"><!--  -->
 					    
@@ -775,6 +841,10 @@
 							                <div class="row">
 							                  <div class="col-12 text-center">
 							                    <!-- 인증 글쓰기에서 가져온 글 수정 Form 등록 Button -->
+<<<<<<< HEAD
+							                     <!-- onclick(보류) 대신 form으로 작동시킴 --> 
+=======
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 							                    <button class="btn btn-outline-dark" type="submit" onclick="updateCertBoard()">
 							                      	수정하기
 							                    </button>
@@ -791,7 +861,11 @@
 					    
 					        </div><!-- <div class="modal-content"> -->
 					      </div><!-- <div class="modal-dialog modal-dialog-centered modal-xl" role="document"> -->
+<<<<<<< HEAD
+					    </div><!-- <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
+=======
 					    </div><!-- <div class="modal fade" id="updateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 					    
 					    
 					    
@@ -904,8 +978,14 @@
 													<div class="row align-items-center">
 														<div class="col-auto">
 															<!-- Button -->
+<<<<<<< HEAD
+															<a class="btn btn-xs btn-outline-border" 
+																href="#!" 
+																onclick="forkModalCall(${status.index})">찌르기</a>
+=======
 															<a class="btn btn-xs btn-outline-border" href="<%-- user_num=${ssj.user_num} --%>"
 																onclick="">FORK</a>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 														</div>
 													</div>
 												</c:when>
@@ -916,7 +996,11 @@
 													<div class="row align-items-center">
 														<div class="col-auto">
 															<!-- Button -->
+<<<<<<< HEAD
+															<a class="btn btn-xs btn-outline-border" href="/loginForm">찌르기</a>
+=======
 															<a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 														</div>
 													</div>
 												</c:when>
@@ -971,10 +1055,19 @@
 							</div>
 						
 
+<<<<<<< HEAD
+							<!-- BG 찌르기 fork 기능 모달창	 Wait List 를 참고함 -->
+							<div class="modal fade" id="modalfork" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<input type="hidden" name="ssjUserNum" id="ssjUserNum">
+										<input type="hidden" name="sendMailUser_num" id="sendMailUser_num">
+=======
 							<!-- BG 찌르기 fork 기능 모달창	 Wait List -->
 							<div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
 								<div class="modal-dialog modal-dialog-centered" role="document">
 									<div class="modal-content">
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 						
 										<!-- Close -->
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -983,11 +1076,60 @@
 						
 										<!-- Header-->
 										<div class="modal-header lh-fixed fs-lg">
+<<<<<<< HEAD
+											<strong class="mx-auto">찌르기</strong>
+=======
 											<strong class="mx-auto">Wait List</strong>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 										</div>
 						
 										<!-- Body -->
 										<div class="modal-body">
+<<<<<<< HEAD
+										
+											<!-- <div class="row mb-6"> -->
+												<!-- <div class="col-12 col-md-3"> -->
+													<!-- 아바타 부분 보류 Image -->
+													<!-- <a href="./product.html">
+														<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
+													</a>
+												</div> -->
+												
+												<!-- 보류 칸 <div class="col-12 col-md-9"> -->
+													<!-- Label -->
+													<!-- <p>
+														<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
+													</p>
+												</div> -->
+											<!-- </div> -->
+											
+											
+											<div class="row">
+												<div class="col-12">
+													<!-- Text -->
+													<p class="fs-sm text-center text-charcol-400">
+														인증 활동이 뜸한 참가자들에게 격려 메일을 보내보세요!
+													</p>
+												</div>
+											</div>
+											
+											
+											<div class="row gx-5 mb-2">
+												<!-- Form group -->
+												<div class="form-group">
+													<textarea class="form-control form-control-sm" id="cheerUpMsg" name="conts" rows="4" required></textarea>
+												</div>
+											</div>
+											
+											
+											<div class="row">
+												<div class="col-12 text-center">
+													<!-- Button -->
+													<button class="btn btn-dark" type="submit" onclick="sendMail()">메일 보내기</button>
+												</div>
+											</div>
+											
+=======
 											<div class="row mb-6">
 												<div class="col-12 col-md-3">
 						
@@ -1110,6 +1252,7 @@
 						
 												</div>
 											</div>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 										</div>
 						
 									</div>
@@ -1274,7 +1417,11 @@
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
 								            <td>${num }</td>
+<<<<<<< HEAD
+								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } []</a></td>
+=======
 								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
