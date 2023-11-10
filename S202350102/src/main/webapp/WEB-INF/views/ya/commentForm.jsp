@@ -52,7 +52,7 @@ function listcomment() {
             commentList.empty();
             console.log("listcomment brd_num: " + brd_num);
             console.log("listcomment user_num: " + user_num);
-            console.log("listcomment sessionUserNum :" + sessionUserNum  )
+            console.log("listcomment sessionUserNum :" + sessionUserNum)
             $.each(result, function(index, board) {
                 var listItem = $("<li class='list-group-item'></li>");
                 listItem.append(" 댓글 번호 :"+ board.brd_num);

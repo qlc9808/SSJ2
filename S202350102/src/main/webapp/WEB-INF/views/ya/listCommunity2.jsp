@@ -5,18 +5,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<!--  CSS  -->
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!--css  -->
 <style type="text/css">
-
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-    			
 /* 페이지 전체 스타일 */
-section.community {
-  padding: 100px 0;
-}
 
 body {
-   font-family: 'Noto Sans KR', sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -30,50 +31,34 @@ body {
 
 /* 타이틀 스타일 */
 .page-title {
-  	margin-bottom: 30px;
-}
-
-.page-title h3 {
-  font-size: 28px;
-  color: #333333;
-  font-weight: 400;
-  text-align: center;
+    background-color: #fff;
+    color: #353535;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* 검색 박스 스타일 */
-#serachBox .search-window .search-wrap {
-  position: relative;
-  padding-right: 50px;
-  margin: 0 auto;
-  width: 80%;
-  max-width: 564px;
+#searchBox {
+    text-align: center; /* 수평 가운데 정렬 */
+    margin: 0 auto;    /* 수평 가운데 정렬을 위한 가운데 마진 설정 */
+    width: 30%;        /* 화면 폭의 절반만 사용 */
+}
+#keyword {
+    padding: 10px;
+    width: 80%;         /* 검색창 너비 확장 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
 }
 
-#searchBox.search-window {
-  padding: 15px 15px;
-  background-color: #f9f7f9;
-  
-}
-#searchBox .search-window .search-wrap input {
-  height: 50px;
-  width: 30%;
-  font-size: 14px;
-  padding: 7px 14px;
-  border: 1px solid #ccc;
-}
-#searchBox.search-window .search-wrap input:focus {
-  border-color: #333;
-  outline: 0;
-  border-width: 1px;
-}
-#searchBox.search-window .search-wrap .btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 108px;
-  padding: 0;
-  font-size: 16px;
+#searchButton {
+    padding: 10px 20px;
+    background-color: #fff;
+   	color: #1f1f1f;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #searchButton:hover {
@@ -85,28 +70,27 @@ body {
     margin-top: 50px;
 }
 
-
-/* Select 조회와 글작성 부분 스타일--------------------------------------- */
+/* Select 조회와 글작성 부분 스타일 */
 #options {
     float: right; /* 오른쪽 정렬 */
-    right: 0;
-    margin-right: 500px;
-    position: inherit;
+    margin-top: -50px; /* 표 바로 위에 위치 */
+    margin-right: 20px;
+    position: absolute;
  
 }
 
 #options select {
-
+    background-color: #fff; 
     border: none;
     border-radius: 5px;
 }
 
 #options input[type="submit"] {
-  color: #fff; /* 글자색을 흰색(#fff)으로 설정 */
-  background-color: #000; /* 배경색을 검정색(#000)으로 설정 */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    background-color: #fff; 
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #options input[type="submit"]:hover {
@@ -115,117 +99,38 @@ body {
 
 
 /* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+table th {
+    background-color: #FFDDDD;
+    color: #353535;
+    text-align: center;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+/* 게시판 리스트 스타일 */
+#board-list {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* 게시판 테이블 스타일 */
 #boardtable {
-  font-size: 15px;
-  height: 300px;
-  width: 100%;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+    width: 100%;
 }
-
-#boardtable a {
-  color: #333;
-  display: inline-block;
-  line-height: 1.4;
-  word-break: break-all;
-  vertical-align: middle;
-}
-#boardtable a:hover {
-  text-decoration: underline;
-}
-#boardtable th {
-  text-align: center;
-}
-
-#boardtable .th-num {
-  width: 100px;
-  text-align: center;
-}
-
-#boardtable .th-date {
-  width: 200px;
-}
-
-#boardtable .th-view_cnt {
-  width: 200px;
-}
-
-#boardtable .th-replyCount{
-  width: 200px;
-}
-
-#boardtable th, .board-table td {
-  padding: 14px 0;
-}
-
-#boardtable tbody td {
-  border-top: 1px solid #e7e7e7;
-  text-align: center;
-}
-
-#boardtable tbody th {
-  padding-left: 28px;
-  padding-right: 14px;
-  border-top: 1px solid #e7e7e7;
-  text-align: left;
-}
-
-#boardtable tbody th p{
-  display: none;
-}
-
-/*버튼  */
-.btn {
-  height: 49.5px; 
-  display: inline-block;
-  padding: 0 30px;
-  font-size: 15px;
-  font-weight: 400;
-  background: transparent;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  border: 1px solid transparent;
-  text-transform: uppercase;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-}
-
-.btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.btn-dark:hover, .btn-dark:focus {
-  background: #373737;
-  border-color: #373737;
-  color: #fff;
-}
-
-.btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.btn-dark:hover, .btn-dark:focus {
-  background: #373737;
-  border-color: #373737;
-  color: #fff;
-}
-
 </style>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -324,33 +229,24 @@ $(document).ready(function () {
             </div>
         </div>
 
-    <!-- 게시판 검색 (옵션 제목, 작성자), 글작성 -->
-     <div id="searchBox">
-     	 <div class="container">
-       		<div class="search-window">
+        <!-- 게시판 검색 (옵션 제목, 작성자), 글작성 -->
+    
+        <div id="searchBox">
+            <input type="text" id="keyword" placeholder="검색어 입력" value="${srch_word }">
+            <button id="searchButton">검색</button>
+        </div>
 
-                  <div class="search-wrap">       			
-	            	<input type="search" id="keyword" placeholder="제목/작성자 검색" value="${srch_word}">
-	            	<button id="searchButton" class="btn btn-dark">검색</button>
-	              </div>
- 	
-      	 	</div> 
-      	 </div>   
-     </div>
-     
         <div id="searchResults">
             <!-- 검색 결과가 여기에 추가 -->
         </div>
 
-
-
-    <!-- select 조회 게시글작성  -->
+        <!-- select 조회 게시글작성  -->
         <div id="options">
             <form action="writeFormCommunity" method="post">
                 <select id="sortOption" name="sortOption">
                      <option value="view_cnt">조회수 높은순</option>
             	     <option value="reg_date">최근 등록일 순</option>
-                </select>         
+                </select> 
                 <input type="submit" value="글작성">
             </form>
         </div>
@@ -361,15 +257,14 @@ $(document).ready(function () {
                 <table id="boardtable">
                     <thead>
                         <tr>
-                            <th scope="col" class="th-num">번호</th>
-                            <th scope="col" class="th-title">제목</th>
-                            <th scope="col" class="th-nick">작성자</th>
-                            <th scope="col" class="th-date">등록일</th>
-                            <th scope="col" class="th-view_cnt">조회수</th>
-                            <th  scope="col" class="th-replyCount">댓글수</th>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>등록일</th>
+                            <th>조회수</th>
+                            <th >댓글수</th>
                         </tr>
                     </thead>
-                    
                     <tbody>
                         <c:forEach var="board" items="${listCommunity}">
                             <tr>
