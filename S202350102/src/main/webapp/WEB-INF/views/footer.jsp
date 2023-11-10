@@ -10,7 +10,7 @@
           <h5 class="mb-7 text-center text-white">Want style Ideas and Treats?</h5>
 
           <!-- Form -->
-          <form class="mb-11" action="thKakaoPayForm">
+          <form class="mb-11" action="l;">
             <div class="row gx-5 align-items-start">
               <div class="col">
                 <input type="email" class="form-control form-control-gray-700 form-control-lg"

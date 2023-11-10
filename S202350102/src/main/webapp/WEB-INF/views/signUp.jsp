@@ -5,23 +5,44 @@
 <html>
  <head>
  <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    
-    <!-- Libs CSS -->
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    
-    <!-- Theme CSS -->
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
-    
-    <!-- Title -->
-<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/th/thSignUp.js"></script>
+<script type="text/javascript">
+	function resetAll(){
+		/* 메세지 전부삭제  */
+		 $("#failId").css("display","none");	
+		 $("#failDupId").css("display","none");
+		 $("#failpwd").css("display", "none");
+		 $("#notMatchPwd").css("display", "none");
+		 $("#matchPwd").css("display", "none");
+		 $("#failNick").css("display","none"); 
+		 $("#failDupNick").css("display","none");
+		 $("#failemail").css("display", "none");
+		 $("#failtel").css("display", "none");
+		 
+		 /* 색깔 삭제 */
+		 $("#user_id").css("border-color", "#e5e5e5");
+         $("#user_id").css("border-width", "1px");
+		 
+         $("#user_pswd").css("border-color", "#e5e5e5");
+         $("#user_pswd").css("border-width", "1px");
+         
+         $("#nick").css("border-color", "#e5e5e5");
+         $("#nick").css("border-width", "1px");
+         
+         $("#user_name").css("border-color", "#e5e5e5");
+         $("#user_name").css("border-width", "1px");
+         
+         $("#email").css("border-color", "#e5e5e5");
+         $("#email").css("border-width", "1px");
+         
+         $("#tel").css("border-color", "#e5e5e5");
+         $("#tel").css("border-width", "1px");
+	}
+</script>
  </head>
 <body class="bg-light">
   	<c:import url="/WEB-INF/views/header4.jsp"/>
+  	
 
     <!-- MODALS -->
 <!--     {{> partials/modals}} -->
@@ -292,7 +313,7 @@
                       <button class="btn btn-sm btn-dark" type="submit" id="signupbtn" onclick="return checkSignupbtn()">
                         	회원가입
                       </button>
-					  <button class="btn btn-sm btn-dark" type="reset">
+					  <button class="btn btn-sm btn-dark" type="reset" onclick="resetAll()">
                         	다시 입력
                       </button>
                     </div>

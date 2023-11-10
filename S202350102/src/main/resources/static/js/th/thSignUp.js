@@ -10,7 +10,7 @@ var phoneCheck 	= 0;
 
 //정규 표현식 (추후 수정 필요)
 function regUser_id(user_id) {  //첫글자 영문, 영문자 또는 숫자  5자리 이상 15자리 이하 
-   var regExp = /^[a-z]+[a-z0-9]{4,14}$/g;
+   var regExp = /^[a-zA-Z]+[a-zA-Z0-9]{4,14}$/g;
    return regExp.test(user_id);   
 }
 function regPassword(user_pswd) { // 영문 숫자 특수기호 조합 8자리 이상 20자리이하
@@ -85,7 +85,7 @@ function checkPwd() {
 }
 function checkConfirmPswd() {
 	 if(document.getElementById('user_pswd').value !='' && document.getElementById('user_confirmPswd').value!=''){
-         if(document.getElementById('user_pswd').value==document.getElementById('user_confirmPswd').value){
+         if(document.getElementById('user_pswd').value == document.getElementById('user_confirmPswd').value){
         	 $("#matchPwd").css("display", "block");
         	 $("#notMatchPwd").css("display", "none");
          }

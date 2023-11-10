@@ -3,30 +3,25 @@ package com.oracle.S202350102.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-//import java.io.BufferedReader;
-//import java.io.DataOutputStream;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.io.InputStreamReader;
-//import java.io.OutputStream;
-//import java.net.HttpURLConnection;
-//import java.net.MalformedURLException;
-//import java.net.URL;
-
-import javax.mail.Session;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -50,6 +45,7 @@ public class ThController {
 	private final ThUser1Service us1;
 	private final ThKakaoPay thKakaoPay;
 	private final ThOrder1Service os1;
+	private final JavaMailSender mailSender;
 	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
@@ -244,4 +240,59 @@ public class ThController {
     	System.out.println("ThController user_id_List --> " + user_id_List);
     	return user_id_List;
     }
+    
+    
+    @RequestMapping(value = "/sendMailForResetPswd")
+    public String sendMailForResetPswd(HttpServletRequest request, Model model, User1 user1) {
+		System.out.println("ThController sendMailForResetPswd mailSending Start..");
+		
+		//1.아이디와 이메일이 일치하는 유저 조회
+		User1 findUser1 = us1.findUser1ByIdAndEmail(user1);
+		System.out.println("ThController sendMailForResetPswd findUser1 --> " + findUser1);
+		
+		if(findUser1 == null) {
+			model.addAttribute("check", 2);
+			return "th/thMailResult";
+		}
+		
+		//2.임시 비밀번호 생성(rndPswd: 랜덤패스워드)
+		String rndPswd = us1.crRndPswd();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("user_id", findUser1.getUser_id());
+		map.put("rndPswd", rndPswd);
+		
+		//3.비밀번호를 임시비밀번호로 변경
+		int updateResult = us1.user1PswdUpdate(map);
+		System.out.println("ThController sendMailForResetPswd updateResult --> " + updateResult);
+		
+		//4. 메일 발송
+		String tomail = findUser1.getEmail();		// 받는사람
+		System.out.println(tomail);
+		String setfrom = "chtaehyunl@gmail.com";	// 보내는 사람
+		String title =   "안녕하세요 Ssj 입니다 요청하신 임시 비밀번호입니다"; // 제목
+		
+		
+		try {
+			// Mime 전자우편 Internet 표준 Format
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+			messageHelper.setFrom(setfrom);		// 보내는 사람 생략하거나 하면 정상작동을 안함
+			messageHelper.setTo(tomail);		// 받는사람 이메일
+			messageHelper.setSubject(title);	// 메일 제목은 생략은 가능하지만(보내기는 가능) 받는쪽에서 스팸메일인줄알고 거르는경우가 많기때문에 생략하지 않는게 좋다.
+			String tempPassword = rndPswd;
+			messageHelper.setText("임시 비밀번호입니다: " + tempPassword); // 메일 내용
+			System.out.println("임시 비밀번호입니다: " + tempPassword);
+			DataSource dataSource = new FileDataSource("c:\\log\\hwa.png");
+			messageHelper.addAttachment(MimeUtility.encodeText("hwa3.png", "UTF-8", "B"), dataSource);	// hwa를 hwa3으로 Rename 해서 보냄
+			mailSender.send(message);
+			model.addAttribute("check", 1); // 정상전달
+			// DB Logic 구성
+		} catch (Exception e) {
+			System.out.println("mailTransport e.getMessage() -->" + e.getMessage());
+			model.addAttribute("check", 3); // 메일 전달 실패
+		}
+				
+		return "th/thMailResult";
+		
+	}
 }
