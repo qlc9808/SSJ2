@@ -20,6 +20,26 @@
 		/* 아작스 하는 중 함수형태랑 파라미터 이게 맞는지 확인하고 시작하기 */
 		
 	}
+	
+	function replyInsertChk(form){
+		form.conts.value = form.conts.value.trim();
+		
+		if(form.conts.value.length == 0 ){
+			alert('댓글을 입력해 주세요!');
+			form.conts.focus();
+			return false;
+		} 
+		
+		return true;
+	} 
+	
+	function replyDelete(ori_brd_num, rep_brd_num, chg_id) {
+        var confirmMessage = "댓글을 삭제하시겠습니까?";
+        if (confirm(confirmMessage)) {
+            location.href = '/replyDelete?ori_brd_num=' + ori_brd_num + '&rep_brd_num=' + rep_brd_num + '&chg_id=' + chg_id;
+   		}
+	}
+	
 </script>
 </head>
 <body>
@@ -50,23 +70,21 @@
 	
      <!-- 댓글 쓰기 -->
      <div class="modal-body py-9">
-
        <!-- Form -->
-       <form action="/replyInsert" method="post">
+       <form action="/replyInsert" method="post" onsubmit="return replyInsertChk(this)">
          <div class="row gx-5">
          	<c:choose>
          	  <c:when test="${chgrYN == 1 }">
 	            <!-- 참여자일 경우 -->
 	   			<div class="col">
-	   				
 	   				<input type="hidden" name="chg_id" value="${chg_id}">
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
-	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text" placeholder="${user.nick }님 댓글을 남겨주세요!">
+	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!">
 	 			</div>
 	            <div class="col-auto">
 					<!-- Button -->
-					<button class="btn btn-sm btn-dark" type="submit" id="replyInsertBtn">
+					<button class="btn btn-sm btn-dark" type="submit" id="replyInsertBtn" >
 					  	댓글 쓰기
 					</button>
 	            </div>
@@ -89,7 +107,7 @@
          	   <c:otherwise>
          	   <!-- 로그인 했지만 참가자 아닌 경우  -->
 	   			<div class="col">
-	   				<input class="form-control form-control-sm" id="reviewReply" type="text"  maxlength="100" placeholder="챌린지 참가자만 댓글을 남길 수 있습니다!" disabled="disabled">
+	   				<input class="form-control form-control-sm" id="reviewReply" type="text"  placeholder="챌린지 참가자만 댓글을 남길 수 있습니다!" disabled="disabled">
 	 			</div>
 	            <div class="col-auto">
 					<!-- Button -->
@@ -106,60 +124,70 @@
      
      <!-- 후기 댓글 -->
      <c:forEach var="reply" items="${reviewReply }">
+    	
 	     <div class="review">
-	
+		
 		  <!-- 댓글 Body -->
 		  <div class="review-body">
 		    <div class="row">
-		      <div class="col-12 col-md-auto">
 		
-		        <!-- 프로필 사진 -->
-		        <div class="avatar avatar-xxl mb-6 mb-md-0">
-		          <span class="avatar-title rounded-circle">
-		            <i class="fa fa-user"></i>
-		          </span>
-		        </div>
+		     	 <c:choose>
+			     	<c:when test="">
+			     	
+			     	
+			    	</c:when>
+			    	<c:otherwise>
+					      <div class="col-12 col-md-auto">
+						    	
+					        <!-- 프로필 사진 -->
+					        <div class="avatar avatar-xxl mb-6 mb-md-0">
+					          <span class="avatar-title rounded-circle">
+					            <i class="fa fa-user"></i>
+					          </span>
+					        </div>
+					
+					      </div>
+					        <div class="col-12 col-md">
+					      
+					        <!-- 닉네임 -->
+					        <p class="mb-2 fs-lg fw-bold">
+							  ${reply.nick }
+					        </p>
+					        
+					        <!-- 댓글 쓴 날짜 및 시간 -->
+					        <div class="row mb-6">
+					          <div class="col-12">
+					            <span class="fs-xs text-muted">
+					              <fmt:formatDate value="${reply.reg_date }" pattern="yyyy-MM-dd"/>
+					            </span>
+					
+					          </div>
+					        </div>
+					
+					        <!-- 댓글 내용 -->
+					        <p class="text-gray-500">
+								${reply.conts }
+					        </p>
+					
+					        <div class="col-auto">
+					
+			
+				             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
+				             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
+							  <c:if test="${user.nick == reply.nick }">
+									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="/showReplyUpdate?brd_num=${reply.brd_num}" >수정</button>
+									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
+							  </c:if>
+							  
+					        </div>
+					      </div>
+					
 		
-		      </div>
-		        <div class="col-12 col-md">
-		      
-		        <!-- 닉네임 -->
-		        <p class="mb-2 fs-lg fw-bold">
-				  ${reply.nick }
-		        </p>
-		        
-		        <!-- 댓글 쓴 날짜 및 시간 -->
-		        <div class="row mb-6">
-		          <div class="col-12">
-		            <span class="fs-xs text-muted">
-		              <fmt:formatDate value="${reply.reg_date }" pattern="yyyy-MM-dd"/>
-		            </span>
-		
-		          </div>
-		        </div>
-		
-		        <!-- 댓글 내용 -->
-		        <p class="text-gray-500">
-					${reply.conts }
-		        </p>
-		
-		        <div class="col-auto">
-		
-	             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
-	             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
-				  <c:if test="${user.nick == reply.nick }">
-					<input type="button"  onclick="replyUpdate(${reply.brd_num})" value="수정">
-<%-- 					<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='/replyUpdate?brd_num=${reply.brd_num}&chg_id=${chg_id }'" value="수정"> --%>
-					<input type="button"  onclick="location.href='/replyDelete?ori_brd_num=${reviewContent.brd_num}&rep_brd_num=${reply.brd_num}&chg_id=${chg_id }'" value="삭제" >
-<%-- 					<input type="button"  onclick="location.href='/replyDelete?brd_num=${reply.brd_num}&chg_id=${chg_id }'" value="삭제" > --%>
-				  </c:if>
-				  
-		          </div>
-		        </div>
-		
-		      </div>
+			    	</c:otherwise>
+		     	</c:choose>
 		    </div>
 		  </div>
+		</div>
      </c:forEach>
 </div>
 

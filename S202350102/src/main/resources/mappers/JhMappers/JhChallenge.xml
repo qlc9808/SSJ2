@@ -71,7 +71,7 @@
 						,#{chg_id , 	mode=IN , jdbcType=INTEGER}
 						,#{user_num, 	mode=IN , jdbcType=INTEGER}
 						,#{conts , 		mode=IN , jdbcType=VARCHAR}
-						,#{resultCount, 	mode=OUT   , jdbcType=INTEGER}
+						,#{resultCount, mode=OUT, jdbcType=INTEGER}
 						)
 		}
 		
