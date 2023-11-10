@@ -175,6 +175,22 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		return result;
 	}
 
+
+
+	@Override
+	public List<Board> myReview(int user_num) {
+		List<Board> myReviewList = null;
+		
+		try {
+			myReviewList = session.selectList("myReviewList",user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl alarmchk e.getMessage->" + e.getMessage());
+		}
+		
+		return myReviewList;
+	}
+
 	
 
 

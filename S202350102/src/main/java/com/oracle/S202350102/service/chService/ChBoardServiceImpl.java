@@ -118,6 +118,16 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return result;
 	}
 
+	@Override
+	public List<Board> myReview(int user_num) {
+		System.out.println("chBoardServiceImpl myReview Start...");
+		List<Board> myReview = chBoardDao.myReview(user_num);
+		
+		System.out.println("chBoardServiceImpl myReview myReview.size()->" + myReview.size());
+		
+		return myReview;
+	}
+
 
 	
 

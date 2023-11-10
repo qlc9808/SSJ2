@@ -48,6 +48,7 @@ public class Board {
 	private String user_name;
 	private String user_id;
 	private String user_img;		// 유저 프로필사진
+	private String chg_title;		// 내가쓴 인증/후기에서 챌린지 제목 가져오기 
 	
 	//후기 게시판 조회용 
 //	private int rn; //글번호 rownum 삭제 예정
