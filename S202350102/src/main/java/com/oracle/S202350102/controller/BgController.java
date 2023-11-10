@@ -321,14 +321,14 @@ public class BgController {
 		sendUser = userService.userSelect(sendUser.getUser_num());
 		
 		// 받는 사람의 메일 주소 
-		// String recvMail = recvUser.getEmail();
+		String recvMail = recvUser.getEmail();
 		// 임시
-		String recvMail = "forGitHubTest0907@gmail.com";
+//		String recvMail = "forGitHubTest0907@gmail.com";
 		System.out.println("sendMail recvMail -> "+recvMail);
 		
 		// 보내는 사람의 메일 주소
 //		String sendMail = sendUser.getEmail();
-		String sendMail = "forGitHubTest0907@gmail.com";
+		String sendMail = "chtaehyunl@gmail.com";
 		System.out.println("sendMail sendMail -> "+sendMail);
 
 		String title = sendUser.getNick()+"님이 응원 메시지를 보내셨습니다";
