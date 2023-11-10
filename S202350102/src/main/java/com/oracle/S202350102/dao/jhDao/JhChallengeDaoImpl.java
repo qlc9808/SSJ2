@@ -117,36 +117,84 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return reviewTotal;
 	}
 
+
+	
+	//미완성 //////////////////////////////////////////////
 	@Override
-	public List<Challenge> challengeList() {
-		System.out.println("JhChallengeDaoImpl challengeList Start...");
-		List<Challenge> chgList = null;
+	public int ingChgListTotal() {
+		System.out.println("JhChallengeDaoImpl chgListTotal Start...");
+		int ingChgListTotal = 0;
 		
 		try {
-			chgList = session.selectList("jhChallengeList");
-			
+			ingChgListTotal = session.selectOne("jhIngChgListTotal");
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl challengeList e.getMessage() -> " + e.getMessage());
+			System.out.println("JhChallengeDaoImpl ingChgListTotal e.getMessage() -> " + e.getMessage());
 		}
-		System.out.println("JhChallengeDaoImpl challengeList  chgList.size() -> " + chgList.size());
 		
-		
-		return chgList;
+		System.out.println("JhChallengeDaoImpl ingChgListTotal chgListTotal -> " + ingChgListTotal);
+		return ingChgListTotal;
 	}
 
 	@Override
-	public int chgListTotal() {
-		System.out.println("JhChallengeDaoImpl chgListTotal Start...");
-		int chgListTotal = 0;
+	public List<Challenge> ingChgRecentList(Challenge challenge) {
+		System.out.println("JhChallengeDaoImpl ingChgRecentList Start...");
+		List<Challenge> ingChgRecList = null;
 		
 		try {
-			chgListTotal = session.selectOne("jhChgListTotal");
+			ingChgRecList = session.selectList("jhIngChgRecentList", challenge);
+			
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl chgListTotal e.getMessage() -> " + e.getMessage());
+			System.out.println("JhChallengeDaoImpl ingChgRecentList e.getMessage() -> " + e.getMessage());
 		}
+		System.out.println("JhChallengeDaoImpl ingChgRecentList  ingChgRecList.size() -> " + ingChgRecList.size());
 		
-		System.out.println("JhChallengeDaoImpl challengeList chgListTotal -> " + chgListTotal);
-		return chgListTotal;
+		
+		return ingChgRecList;
+	}
+
+
+	@Override
+	public List<Challenge> ingChgPickList(Challenge challenge) {
+		System.out.println("JhChallengeDaoImpl ingChgPickList Start...");
+		List<Challenge> ingChgPicList = null;
+		
+		try {
+			ingChgPicList = session.selectList("jhIngChgPickList", challenge);
+			
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl ingChgPickList e.getMessage() -> " + e.getMessage());
+		}
+		System.out.println("JhChallengeDaoImpl ingChgPickList  ingChgPicList.size() -> " + ingChgPicList.size());
+		
+		return ingChgPicList;
+	}
+
+	//미완성 //////////////////////////////////////////////
+	
+	@Override
+	public void replyInsert(Board board) {
+		System.out.println("JhChallengeDaoImpl replyInsert Start...");
+		session.selectOne("jhReplyInsertPro", board);
+		System.out.println("JhChallengeDaoImpl replyInsert board.getResultCount() -> "+board.getResultCount());
+
+		
+	}
+
+	@Override
+	public int replyDelete(int brd_num) {
+		System.out.println("JhChallengeDaoImpl replyDelete Start...");
+		System.out.println("JhChallengeDaoImpl replyDelete brd_num -> "+ brd_num);
+		
+		int result = 0;
+		
+		try {
+			result = session.delete("jhReplyDelete", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl replyDelete e.getMessage() -> " + e.getMessage());
+		}
+		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
+		
+		return result;
 	}
 
 

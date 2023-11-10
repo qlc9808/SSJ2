@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="/css/qBoardList.css">
 </head>
 <body>
+	
 	<c:import url="/WEB-INF/views/header4.jsp"/>
 	<div class="mainBody">
 	  <div class="qe_body">
@@ -25,7 +26,7 @@
 	      </div>
 	      <div class="tb_body">
 	      <c:set var="num" value="${page.total-page.start+1 }"></c:set>
-	        <table>
+	        <table class="tb_main">
 	          <thead class="tb_thead">
 	              <tr>
 	                <td>번호</td>
@@ -33,7 +34,6 @@
 	                <td>작성자</td>
 	                <td>작성일</td>
 	                <td>조회수</td>
-	                <!-- https://java119.tistory.com/84 -->
 	              </tr>
 	          </thead>
 	          <tbody id="search-list">
@@ -64,32 +64,56 @@
 					<a href="qBoardList?currentPage=${page.startPage+page.pageBlock}">[다음]</a>
 				</c:if>
 			</div>
+			<c:if test="${user1.status_md == 102 }">
 			<div class="search">
-				<div >
-					<c:if test="${user1.status_md == 102 }">
-						<input class="search-form" id="searchValue" onkeyup="searchFunction()" type="text" size="20">
-					</c:if>				
-				</div>
 				<div>
-					<c:if test="${user1.status_md == 102 }">
-						<button class="search-btn" onclick="searchFunction()" type="button">검색</button>
-					</c:if>	
+					<input class="search-box" id="searchValue" type="text" size="20">
+				</div>
+				<div class="search-btn">
+					<button class="search-btn-form" type="button">검색</button>
 				</div>
 			</div>
+			</c:if>	
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	<c:import url="/WEB-INF/views/footer.jsp"/>
 	<script type="text/javascript">
-		function searchFunction() {
-			var sv = $('searchValue').val();
-			$.ajax(
-					{
-						
+		$(function(){
+			$('.search-btn-form').click(function(){
+				var keyword = $('.search-box').val();
+				$.ajax({
+					url: "qboardListSearch?keyword="+keyword,
+					type: "GET",
+					dataType: "json",
+					success: function (data){
+						console.log(data);
+						$('#search-list').empty();
+						if(data && data.length > 0){
+							for (var i = 0; i < data.length; i++){
+								var result = data[i];
+								var str = '<tr>';
+								str += "<td>"+ result.brd_num + "</td>";
+								str += "<td><a href='qBoardDetail?brd_num="+result.brd_num+"'>"+ result.title + "</a></td>";
+	                            str += "<td>" + result.nick + "</td>";
+	                            str += "<td>" + result.reg_date + "</td>";
+	                            str += "<td>" + result.view_cnt + "</td>";
+	                            str += "</tr>";
+	                            $('#search-list').append(str);
+							}
+						} else {
+							$('#search-list').append('<tr><td colspan="6">검색 결과가 없습니다.</td></tr>')
+						}
+					},
+					error : function (error){
+						console.log("에러발생: "+error);
 					}
-			);
-		}
+				});
+			});
+		});
+
+
 	
 	</script>
 	

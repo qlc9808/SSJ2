@@ -14,6 +14,7 @@
 나중에 챌린지 상세페이지에 import로 넣을 수 있을지도?!
 시도해보기
  -->
+ <!-- chgDetail로 합침 -->
 	<!-- header -->
 	<c:import url="/WEB-INF/views/header4.jsp"/>
 	

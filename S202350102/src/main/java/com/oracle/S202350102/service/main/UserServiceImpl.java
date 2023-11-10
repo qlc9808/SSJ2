@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 	/*
 	 * 강한빛
 	 * User1 - Level1 간의 모든정보를 조회 (게시글 작성한 유저의 아이콘 및 정보 조회용)
-	 */	
+	 */
 	@Override
 	public List<UserLevel> userLevelInfoList() {
 		List<UserLevel> userLevelInfoList = ud.userLevelInfoList();

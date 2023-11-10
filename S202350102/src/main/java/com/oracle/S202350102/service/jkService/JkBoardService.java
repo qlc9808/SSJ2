@@ -18,8 +18,7 @@ public interface JkBoardService {
 	int 			updateSharing(Board board);
 	int 			deleteSharing(int brd_num);
 	String 			uploadImage(MultipartFile file);
-	List<Board> 	getPopularPosts(Board board);
-	List<Board> 	getRecentPosts(Board board);
+	List<Board> 	loadSortedPosts(String sortOption);
 
 	
 	

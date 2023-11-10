@@ -36,24 +36,76 @@ public class JhController {
 	private final YrChallengerService ycs;
 	private final BgService bs;
 	
+	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
+//	@RequestMapping(value = "challengeList")
+//	public String challengeList(HttpSession session
+//			  					, Model model 
+//			  					, String currentPage
+//			  					, Challenge challenge
+//			  					, int state_md
+//			  					) {
+//		System.out.println("JhController challengeList Start...");
+//		
+//
+//		//진행중 총 챌린지 수
+//		int chgListTotal = jhCService.chgListTotal(state_md);
+//		
+//		//페이지네이션
+//		Paging chgListPage = new Paging(chgListTotal, currentPage);
+//		challenge.setStart(chgListPage.getStart());
+//		challenge.setEnd(chgListPage.getEnd());
+//		
+//		////진행중 챌린지///
+//		//최신순
+//		List<Challenge> chgRecList = jhCService.ingChgRecentList(challenge);
+//		
+//		//찜순
+//		List<Challenge> ingChgPicList = jhCService.ingChgPickList(challenge);
+//		
+//		
+//		model.addAttribute("chgListPage",chgListPage);
+//		model.addAttribute("ingRecList", ingChgRecList);
+//		model.addAttribute("ingPicList", ingChgPicList);
+//		model.addAttribute("ingListTotal", ingChgListTotal);
+//		
+//		
+//		return "jh/jhChgList";
+//	}
 	
-	@RequestMapping(value = "challengeList")
-	public String challengeList(HttpSession session
-			  					, Model model 
-			  					, String currentPage) {
-		System.out.println("JhController challengeList Start...");
-		
-		List<Challenge> chgList = jhCService.challengeList();
-		
-		int chgListTotal = jhCService.chgListTotal();
-		Paging chgListPage = new Paging(chgListTotal, currentPage);
-		
-		model.addAttribute("chgList", chgList);
-		model.addAttribute("chgListPage", chgListPage);
-		
-		
-		return "jh/jhChallengeList";
-	}
+//	//종료된 챌린지 기본화면 최근 종료순
+//	@RequestMapping(value = "endChallengeList")
+//	public String endChallengeList(HttpSession session
+//			, Model model 
+//			, String currentPage
+//			, Challenge challenge
+//			) {
+//		System.out.println("JhController challengeList Start...");
+//		
+//		
+//		//진행중 총 챌린지 수
+//		int endChgListTotal = jhCService.endChgListTotal();
+//		
+//		//페이지네이션
+//		Paging endchgListPage = new Paging(endChgListTotal, currentPage);
+//		challenge.setStart(endchgListPage.getStart());
+//		challenge.setEnd(endchgListPage.getEnd());
+//		
+//		////종료된 챌린지///
+//		//최신순
+//		List<Challenge> endChgRecList = jhCService.endChgRecentList();
+//		
+//		//찜순
+//		List<Challenge> endChgPicList = jhCService.endChgPickList();
+//		
+//		
+//		model.addAttribute("endchgListPage",endchgListPage);
+//		model.addAttribute("endRecList", endChgRecList);
+//		model.addAttribute("endPicList", endChgPicList);
+//		model.addAttribute("endListTotal", endChgListTotal);
+//		
+//		
+//		return "jh/jhEndChgList";
+//	}
 	
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	//챌린지 상세정보 조회
@@ -307,7 +359,7 @@ public class JhController {
 		
 	}
 	
-	
+	//챌린지 후기 댓글 입력
 	@RequestMapping(value = "replyInsert")
 	public String replyInsert(Board board, HttpSession session, Model model) {
 		System.out.println("JhController replyInsert Start...");
@@ -320,8 +372,36 @@ public class JhController {
 //		brd_group / brd_num과 같음
 //		brd_step = 1 
 		
+		jhCService.replyInsert(board);
+		
 		return "forward:reviewContent";
 	}
+	
+	//후기 댓글 삭제 근데 화면처리는 어떻게?
+	@RequestMapping(value = "replyDelete")
+	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, @RequestParam("rep_brd_num") String brd_num2, int chg_id, HttpSession session, Model model) {
+		System.out.println("JhController replyDelete Start...");
+		int brd_num2_reply = Integer.parseInt(brd_num2);
+		int brd_num_origin = Integer.parseInt(brd_num);
+		
+		System.out.println("JhController replyDelete brd_num -> " + brd_num);
+//		System.out.println("JhController replyDelete chg_id -> " + chg_id);
+		
+//		int result = jhCService.replyDelete(brd_num2);
+		int result = jhCService.replyDelete(brd_num2_reply);
+		
+		System.out.println("JhController replyDelete result -> " + result);
+		
+		model.addAttribute("brd_num", brd_num);
+		model.addAttribute("chg_id", chg_id);
+		model.addAttribute("result", result);
+		
+		
+		//forward할 때 파라미터를 꼭 줘야함
+//		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
+		return "forward:reviewContent?brd_num="+brd_num_origin+"&chg_id="+chg_id;
+	}
+	
 	
 	
 }

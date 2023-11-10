@@ -25,12 +25,21 @@ public interface JhCallengeService {
 	int 			reviewTotal(int chg_id);
 
 
-	List<Challenge> challengeList();
+	int 			ingChgListTotal();
 
 
-	int 			chgListTotal();
+	List<Challenge> ingChgRecentList(Challenge challenge);
 
-   
+
+	List<Challenge> ingChgPickList(Challenge challenge);
+
+
+	void 			replyInsert(Board board);
+
+
+	int 			replyDelete(int brd_num); 
+
+    
    
  
 

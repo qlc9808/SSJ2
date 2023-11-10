@@ -43,42 +43,48 @@ public class HbController {
 	private final UserService   us;
 	private final Level1Service ls;
 	
+	// 문의게시판 리스트
 	@RequestMapping("qBoardList")
-	public String callInfo(Board board, Model model, String currentPage, HttpSession session) {
-		
-		// 전체 게시글 수
-		int total = qbs.totalQBoard();
-		
-		// Paging 작업
-		Paging page = new Paging(total, currentPage);
-		
-		board.setStart(page.getStart());   // 시작시 1
-		board.setEnd(page.getEnd());       // 시작시 10 
-		
-		// 보드 리스트 불러오기
-		List<Board> qBoardList = qbs.qBoardList(board);
+	public String qBoardList(Board board, 
+							 Model model,
+							 String currentPage,
+							 HttpSession session) {
 		
 		// 유저 세션 불러오기
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
+			// 전체 게시글 수
+			int total = qbs.totalQBoard();
+			
+			// Paging 작업
+			Paging page = new Paging(total, currentPage);
+			
+			board.setStart(page.getStart());
+			board.setEnd(page.getEnd());
+			
+			// 보드 리스트 불러오기
+			List<Board> qBoardList = qbs.qBoardList(board);
+			
 			user_num = (int) session.getAttribute("user_num");
+			
+			// 유저 정보 불러오기
+			User1 user1 = us.userSelect(user_num);
+			
+			// 게시판 유저 정보 BoardList에 저장하기
+			qBoardList = us.boardWriterLevelInfo(qBoardList);
+			
+			model.addAttribute("total", total);
+			model.addAttribute("page", page);		
+			model.addAttribute("user1", user1);
+			model.addAttribute("qBoardList", qBoardList);
+			
+			return "hb/qBoardList";
 		}
-		System.out.println("controller qBoardList  qBoardList.size()->"+qBoardList.size());
-		
-		// 유저 정보 불러오기
-		User1 user1 = us.userSelect(user_num);
-		
-		// 게시판 유저 정보 BoardList에 저장하기
-		qBoardList = us.boardWriterLevelInfo(qBoardList);
-		
-		model.addAttribute("total", total);
-		model.addAttribute("page", page);		
-		model.addAttribute("user1", user1);
-		model.addAttribute("qBoardList", qBoardList);
-		
-		return "hb/qBoardList";
+		return "redirect:/loginForm";
+
 	}
 	
+	// 문의 게시판 상세보기
 	@RequestMapping("qBoardDetail")
 	public String qBoardDetail(@RequestParam("brd_num") int brd_num, Model model, HttpSession session) {
 		System.out.println("qBoardDetail controller start..");
@@ -98,6 +104,7 @@ public class HbController {
 		return "hb/qBoardDetail";
 	}
 	
+	// 문의게시판 수정화면
 	@RequestMapping("qBoardUpdateForm")
 	public String qBoardUpdateForm(@RequestParam("brd_num") int brd_num, Model model, HttpSession session) {
 		System.out.println("qBoardUpdateForm contoller start...");
@@ -118,6 +125,7 @@ public class HbController {
 		return "잘못된 접근";
 	}
 	
+	// 문의게시판 수정로직
 	@RequestMapping("qBoardUpdate")
 	public String qBoardUpdate(Board board, HttpServletRequest request) {
 		System.out.println("qBoardUpdate contoller start...");
@@ -129,6 +137,7 @@ public class HbController {
 		return "forward:qBoardDetail";
 	}
 	
+	// 글작성 페이지
 	@RequestMapping("qBoardWriteForm")
 	public String qBoardInsertForm(Model model, HttpSession session) {
 		
@@ -143,6 +152,7 @@ public class HbController {
 		return "잘못된접근";
 	}
 	
+	// 글작성 로직
 	@RequestMapping("qBoardWrite")
 	public String qBoardInsert(Board board, Model model, HttpSession session, HttpServletRequest request) {	
 		int user_num = 0;
@@ -162,17 +172,21 @@ public class HbController {
 		return "redirect:qBoardList";
 	}
 	
+	// 글삭제
 	@RequestMapping("qBoardDelete")
-	public String qBoardDelete(int brd_num, Model model, HttpSession session, HttpServletRequest request) {
+	public String qBoardDelete(int brd_num, Model model, HttpSession session) {
 		int user_num = 0;
 		if (session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
 		int result = qbs.qBoardDelete(brd_num);
+		
 		model.addAttribute("result",result);
+		
 		return "forward:qBoardList";
 	}
 	
+	// 레벨 리스트
 	@RequestMapping("level")
 	public String levelView(Model model) {
 		
@@ -182,6 +196,15 @@ public class HbController {
 		
 		return "hb/level";
 	}
+	
+	// 문의게시판 검색 비동기통신
+	@ResponseBody
+	@RequestMapping(value = "qboardListSearch", method = RequestMethod.GET)
+	public List<Board> qboardListSearch(@RequestParam(value = "keyword") String keyword){
+		
+		return qbs.qboardListSearch(keyword);
+	}
+	
 	
 	
 }

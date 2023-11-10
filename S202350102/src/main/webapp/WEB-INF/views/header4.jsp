@@ -23,7 +23,7 @@
           <ul class="navbar-nav mx-auto">
           
             <li class="nav-item">
-              <a class="nav-link" href=/challengeList>챌린지</a>
+              <a class="nav-link" href=/listChallenge>챌린지</a>
             </li>
             
             <li class="nav-item">
@@ -74,6 +74,10 @@
                 </div>
               </div>
               
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="/qBoardList">문의</a>
             </li>
             
             <li class="nav-item">

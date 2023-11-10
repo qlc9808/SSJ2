@@ -38,7 +38,7 @@
 		$('#displayUserImg').text(user_img);
 		
 		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
-		$('#inputUserNum1').val(user_num);	// follow()
+		$('#inputUserNum1').val(user_num);	// following()
 		$('#inputUserNum2').val(user_num);	// sendMessage()
 
 		// 모달 창 표시
@@ -46,14 +46,16 @@
 	}
 
 	// 팔로우 하기 버튼
-	function follow() {
-		var sendData = $('#followForm').serialize();
+	function following() {
+		var sendData = $('#followingForm').serialize();	// user_num=?
 		alert("sendDate -> " + sendData);
+		location.href = "followingPro?"+sendData;	// YrController에서 작동됨
+		
 	}
 
 	// 쪽지보내기 버튼
 	function sendMessage() {
-		var sendData = $('#sendMessageForm').serialize();
+		var sendData = $('#sendMessageForm').serialize();	// user_num=?
 		alert("sendDate -> " + sendData);
 	}
   
@@ -260,7 +262,7 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">진행 기간</li>
-                    <li class="list-group-item"><fmt:formatDate value="${chg.start_date }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"/> </li>
+                    <li class="list-group-item"><fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"/> </li>
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">진행 상태</li>
@@ -856,6 +858,7 @@
 													<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
 														<span>${ssj.nick}</span>
 													</a>
+													<!-- 글씨 빨간색으로 나옴 -> 검은색으로 나오게 수정해야함 -->
 												</div>
 											</div>
 										</div>
@@ -888,7 +891,6 @@
 														<span>
 															${dDay }일 전
 														</span>
-														<!-- 1일전 이런식으로 나오게 수정할 예정 -->
 													</c:if>
 						
 												</div>
@@ -937,6 +939,7 @@
 												<div class="avatar avatar-xxl mb-6 mb-md-0">
 													<span class="avatar-title rounded-circle">
 														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+														<!-- img 불러와지는지 확인해야함 -->
 													</span>
 												</div>
 											</div>
@@ -951,8 +954,8 @@
 						
 										<div class="modal-footer">
 											
-											<button type="button" class="btn btn-outline-primary" onclick="follow(${status.index})">팔로우</button>
-											<form id="followForm">
+											<button type="button" class="btn btn-outline-primary" onclick="following(${status.index})">팔로우</button>
+											<form id="followingForm">
 												<input type="hidden" id="inputUserNum1" name="user_num">
 											</form>
 											
@@ -1270,7 +1273,7 @@
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
 								            <td>${num }</td>
-								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title }</a></td>
+								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } []</a></td>
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>

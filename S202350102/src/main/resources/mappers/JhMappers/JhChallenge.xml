@@ -28,15 +28,15 @@
 	<select id="jhChgReviewList" parameterType="Board" resultType="Board">
 		SELECT * 
 		FROM (
-		        SELECT ROWNUM AS rn, b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date
-		        FROM board b
-		        INNER JOIN user1 u      ON b.user_num = u.user_num
-		        INNER JOIN challenge ch ON b.chg_id   = ch.chg_id
-		        WHERE ch.chg_id = #{chg_id}
-		        AND brd_lg     	= 700
-		        AND brd_md    	= 101
-		        AND b.brd_step 	= 0
-		        ORDER BY b.reg_date DESC
+		        SELECT 		ROWNUM AS rn, b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date
+		        FROM 		board b
+		        INNER JOIN 	user1 u      ON b.user_num = u.user_num
+		        INNER JOIN 	challenge ch ON b.chg_id   = ch.chg_id
+		        WHERE 		ch.chg_id = #{chg_id}
+		        AND 		brd_lg     	= 700
+		        AND 		brd_md    	= 101
+		        AND 		b.brd_step 	= 0
+		        ORDER BY 	b.reg_date DESC
 		)
 		WHERE rn BETWEEN #{start} AND #{end}  
 	</select>
@@ -49,10 +49,14 @@
 	</select>
 
 	<select id="jhReviewContent" parameterType="int" resultType="Board">
-		SELECT b.brd_num, b.title, b.conts, b.img, b.reg_date, u.nick, b.view_cnt
+		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.nick, b.view_cnt,
+			    (   SELECT COUNT(*)-1
+			        FROM board
+			        WHERE brd_group = #{brd_num}
+			    ) AS replyCount
 		FROM board b
 		INNER JOIN user1 u ON b.user_num = u.user_num
-		WHERE brd_num = #{brd_num}
+		WHERE b.brd_num = #{brd_num}
 	</select>
 	
 	<select id="jhReviewReply" parameterType="int" resultType="Board">
@@ -63,15 +67,82 @@
 		AND b.brd_step=1
 	</select>
 	
-	
-	<select id="jhChallengeList" resultType="Challenge">
-		SELECT chg_id, chg_lg, chg_md, title, chg_capacity, state_lg, state_md, pick_cnt, chg_public, priv_pswd, thumb, create_date, start_date, end_date
-		FROM challenge
+	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
+		{
+			call Challenge_Review_Insert_Proc(
+						 #{brd_num , 	mode=IN , jdbcType=INTEGER}
+						,#{chg_id , 	mode=IN , jdbcType=INTEGER}
+						,#{user_num, 	mode=IN , jdbcType=INTEGER}
+						,#{conts , 		mode=IN , jdbcType=VARCHAR}
+						,#{resultCount, 	mode=OUT   , jdbcType=INTEGER}
+						)
+		}
+		
 	</select>
 	
-	<select id="jhChgListTotal" resultType="int">
+	<delete id="jhReplyDelete" parameterType="int">
+		DELETE FROM board
+		WHERE brd_num = ${brd_num}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 챌린지 목록 관련 미완 -->
+	<select id="jhChgListTotal" parameterType="int" resultType="int">
 		SELECT  COUNT(*)
 		FROM challenge
+		WHERE state_lg = 300
+		AND state_md = #{state_md}
 	</select>
+	
+	<select id="jhChgRecentList" parameterType="Challenge" resultType="Challenge">
+		SELECT * 
+		FROM (
+				SELECT ROWNUM AS rn, chg_id, chg_lg, chg_md, title, chg_capacity, state_lg, state_md, pick_cnt, chg_public, priv_pswd, thumb, create_date, start_date, end_date
+				FROM challenge
+				WHERE state_lg = 300
+				AND state_md = #{state_md}
+				ORDER BY 	create_date desc
+			 )
+		WHERE rn BETWEEN #{start} AND #{end}  
+	</select>
+	
+	<select id="jhChgPickList" parameterType="Challenge" resultType="Challenge">
+		SELECT * 
+		FROM (
+				SELECT ROWNUM AS rn, chg_id, chg_lg, chg_md, title, chg_capacity, state_lg, state_md, pick_cnt, chg_public, priv_pswd, thumb, create_date, start_date, end_date
+				FROM challenge
+				WHERE state_lg = 300
+				AND state_md = #{state_md}
+				ORDER BY 	pick_cnt desc
+			 )
+		WHERE rn BETWEEN #{start} AND #{end}  
+	</select>
+	
+
+
+
+
+
+
 	
 </mapper> 
