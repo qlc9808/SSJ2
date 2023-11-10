@@ -162,19 +162,7 @@
 		 
         </div>
        
-        <div id="alarmDiv">
-        	<div class="card" style="width: 18rem;" id="alarmPopText" >
-			  <div class="card-body">
-			    <ul id="test">
-			    	
-			    </ul>
-			    <a href="#" class="btn btn-primary">Go somewhere</a>
-			  </div>
-			</div>
-	  	</div>
-	  	
-	  	
-	  	
+ 
       </div>
     </nav>
 		

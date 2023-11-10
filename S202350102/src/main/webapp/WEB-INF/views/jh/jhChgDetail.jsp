@@ -157,7 +157,11 @@
 		$('#editConts').val(conts);     
 		
 		// 모달 창 표시
+<<<<<<< HEAD
 		$('#modalUpdateCertBrdForm').modal('show');
+=======
+		$('#updateCertBrdForm').modal('show');
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 	}
 	
 	
@@ -182,6 +186,7 @@
 			}
 		});
 	}
+<<<<<<< HEAD
 	
 	
 	
@@ -237,6 +242,8 @@
 		// 다음 동작으로 넘어가는 코드 
 		window.location.href = 'sendMail'; 
 	} 
+=======
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
   
 	
 	
@@ -750,7 +757,11 @@
 			            
 			            
 			            <!-- 수정하기 모달 창 Product -->
+<<<<<<< HEAD
 					    <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+=======
+					    <div class="modal fade" id="updateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 					      <div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
 					        <div class="modal-content"><!--  -->
 					    
@@ -829,7 +840,10 @@
 							                <div class="row">
 							                  <div class="col-12 text-center">
 							                    <!-- 인증 글쓰기에서 가져온 글 수정 Form 등록 Button -->
+<<<<<<< HEAD
 							                     <!-- onclick(보류) 대신 form으로 작동시킴 --> 
+=======
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 							                    <button class="btn btn-outline-dark" type="submit" onclick="updateCertBoard()">
 							                      	수정하기
 							                    </button>
@@ -846,7 +860,11 @@
 					    
 					        </div><!-- <div class="modal-content"> -->
 					      </div><!-- <div class="modal-dialog modal-dialog-centered modal-xl" role="document"> -->
+<<<<<<< HEAD
 					    </div><!-- <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
+=======
+					    </div><!-- <div class="modal fade" id="updateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 					    
 					    
 					    
@@ -959,9 +977,14 @@
 													<div class="row align-items-center">
 														<div class="col-auto">
 															<!-- Button -->
+<<<<<<< HEAD
 															<a class="btn btn-xs btn-outline-border" 
 																href="#!" 
 																onclick="forkModalCall(${status.index})">찌르기</a>
+=======
+															<a class="btn btn-xs btn-outline-border" href="<%-- user_num=${ssj.user_num} --%>"
+																onclick="">FORK</a>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 														</div>
 													</div>
 												</c:when>
@@ -972,7 +995,11 @@
 													<div class="row align-items-center">
 														<div class="col-auto">
 															<!-- Button -->
+<<<<<<< HEAD
 															<a class="btn btn-xs btn-outline-border" href="/loginForm">찌르기</a>
+=======
+															<a class="btn btn-xs btn-outline-border" href="/loginForm">FORK</a>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 														</div>
 													</div>
 												</c:when>
@@ -1027,12 +1054,19 @@
 							</div>
 						
 
+<<<<<<< HEAD
 							<!-- BG 찌르기 fork 기능 모달창	 Wait List 를 참고함 -->
 							<div class="modal fade" id="modalfork" tabindex="-1" role="dialog" aria-hidden="true">
 								<div class="modal-dialog modal-dialog-centered" role="document">
 									<div class="modal-content">
 										<input type="hidden" name="ssjUserNum" id="ssjUserNum">
 										<input type="hidden" name="sendMailUser_num" id="sendMailUser_num">
+=======
+							<!-- BG 찌르기 fork 기능 모달창	 Wait List -->
+							<div class="modal fade" id="modalWaitList" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 						
 										<!-- Close -->
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -1041,11 +1075,16 @@
 						
 										<!-- Header-->
 										<div class="modal-header lh-fixed fs-lg">
+<<<<<<< HEAD
 											<strong class="mx-auto">찌르기</strong>
+=======
+											<strong class="mx-auto">Wait List</strong>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 										</div>
 						
 										<!-- Body -->
 										<div class="modal-body">
+<<<<<<< HEAD
 										
 											<!-- <div class="row mb-6"> -->
 												<!-- <div class="col-12 col-md-3"> -->
@@ -1089,6 +1128,130 @@
 												</div>
 											</div>
 											
+=======
+											<div class="row mb-6">
+												<div class="col-12 col-md-3">
+						
+													<!-- Image -->
+													<a href="./product.html">
+														<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
+													</a>
+						
+												</div>
+												<div class="col-12 col-md-9">
+						
+													<!-- Label -->
+													<p>
+														<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
+													</p>
+						
+													<!-- Radio -->
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeOne" value="6" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeOne">3XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeTwo" value="6.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeTwo">2XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeThree" value="7" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeThree">XS</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeFour" value="7.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption" checked>
+														<label class="form-check-label" for="modalWaitListSizeFour">S</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeFive" value="8" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeFive">M</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeSix" value="8.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeSix">LG</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeSeven" value="9" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeSeven">XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeEight" value="9.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeEight">2XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeNine" value="10" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeNine">3XL</label>
+													</div>
+													<div class="form-check form-check-inline form-check-size mb-2">
+														<input type="radio" class="form-check-input" name="modalWaitListSize"
+															id="modalWaitListSizeTen" value="10.5" data-toggle="form-caption"
+															data-target="#modalWaitListSizeCaption">
+														<label class="form-check-label" for="modalWaitListSizeTen">4XL</label>
+													</div>
+						
+												</div>
+						
+											</div>
+											<div class="row">
+												<div class="col-12">
+						
+													<!-- Text -->
+													<p class="fs-sm text-center text-gray-500">
+														Justo ut diam erat hendrerit morbi porttitor,
+														per eu curabitur diam sociis.
+													</p>
+						
+												</div>
+											</div>
+											<div class="row gx-5 mb-2">
+												<div class="col-12 col-md-6">
+						
+													<!-- Form group -->
+													<div class="form-group">
+														<label class="visually-hidden" for="listName">Your Name</label>
+														<input class="form-control" id="listName" type="text" placeholder="Your Name *"
+															required>
+													</div>
+						
+												</div>
+												<div class="col-12 col-md-6">
+						
+													<!-- Form group -->
+													<div class="form-group">
+														<label class="visually-hidden" for="listEmail">Your Name</label>
+														<input class="form-control" id="listEmail" type="email" placeholder="Your Email *"
+															required>
+													</div>
+						
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 text-center">
+						
+													<!-- Button -->
+													<button class="btn btn-dark" type="submit">Subscribe</button>
+						
+												</div>
+											</div>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 										</div>
 						
 									</div>
@@ -1253,7 +1416,11 @@
 								         <c:forEach var="review" items="${chgReviewList}">
 								          <tr>
 								            <td>${num }</td>
+<<<<<<< HEAD
 								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } []</a></td>
+=======
+								            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
+>>>>>>> 2c47a02ff5f79e4a606f7f892b04ff0e7859b8bb
 								            <td>${review.nick }</td>
 								            <td>${review.view_cnt }</td>
 								            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>

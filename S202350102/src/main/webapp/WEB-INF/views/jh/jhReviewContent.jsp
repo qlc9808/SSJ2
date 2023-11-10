@@ -58,10 +58,11 @@
          	  <c:when test="${chgrYN == 1 }">
 	            <!-- 참여자일 경우 -->
 	   			<div class="col">
+	   				
 	   				<input type="hidden" name="chg_id" value="${chg_id}">
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
-	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text" placeholder="댓글을 남겨주세요!">
+	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text" placeholder="${user.nick }님 댓글을 남겨주세요!">
 	 			</div>
 	            <div class="col-auto">
 					<!-- Button -->

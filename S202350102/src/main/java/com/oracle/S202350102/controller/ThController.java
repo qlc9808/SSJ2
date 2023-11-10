@@ -1,5 +1,8 @@
 package com.oracle.S202350102.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 //import java.io.BufferedReader;
@@ -49,11 +52,32 @@ public class ThController {
 	private final ThOrder1Service os1;
 	
 	@PostMapping(value = "/writeUser1")
-	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail) {
+	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
+													   @RequestParam("birth_year")  String birth_year,
+													   @RequestParam("birth_month") String birth_month,
+													   @RequestParam("birth_date")  String birth_date) 
+													   {
 		System.out.println("ThController writeUser1 start...");
 		// 기존 주소에 상세 주소를 추가( 주소받는게 API에 2개로 나뉘어 있음)
 		String sumAddr	= user1.getAddr() + " " + addr_detail;
 		user1.setAddr(sumAddr);
+		
+		// 생년월일 년+/+월+/+일 
+		String sumBirth = birth_year+ "/" + birth_month + "/" + birth_date;
+		
+		// 년월일 문자열을 Date타입으로 형변환
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		Date strToDate = null;
+		try {
+			strToDate = formatter.parse(sumBirth);
+			System.out.println("strToDate --> " + strToDate);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+
+		// 형변환한 생년월일을 user1에 담음
+		user1.setBirth(strToDate);
+		
 		
 		int insertResult = us1.insertUser1(user1);
 		model.addAttribute("insertResult",insertResult);
@@ -102,7 +126,7 @@ public class ThController {
 	}
 	
 	@GetMapping(value = "/deleteUser1Form")
-	public String deleteUser1Form() {
+	public String deleteUser1Form(HttpSession session) {
 		System.out.println("ThController deleteUser1Form Start...");
 		return "th/deleteUser1Form";
 	}
@@ -111,15 +135,15 @@ public class ThController {
 	public String deleteUser1(User1 user1, HttpSession session, Model model) {
 		System.out.println("ThController deleteUser1 Start... ");
 		int deleteUserCnt = us1.deleteUser(user1); // 회원상태 탈퇴여부 N에서 Y로 변경
-		session.invalidate(); // 세션 끊어줌
 		System.out.println("ThController deleteUserCnt result --> " + deleteUserCnt);
 		if (deleteUserCnt > 0) {
 			model.addAttribute("deleteUserCnt",deleteUserCnt);
-			return "home";
+			session.invalidate(); // 세션 끊어줌
+			return "th/user1DelAlert";
 		}
 		else {
 			model.addAttribute("deleteUserCnt",deleteUserCnt);
-			return "th/deleteUser1Form";
+			return "th/user1DelAlert";
 		}
 	}
 	
@@ -130,10 +154,11 @@ public class ThController {
 	
 	@RequestMapping(value = "thKakaoPayForm")
 	public String thKakaoPayForm(HttpSession session, Model model) {
+		System.out.println("Thcontroller thKakaoPayForm Start... ");
 		if(session.getAttribute("user_num") == null) {
 			return "loginForm";
 		} 
-		return "th/thKakaoPayForm";
+		return "th/thkakaoPayForm";
 	}
 	
 	@GetMapping("/thKakaoPay")
