@@ -20,7 +20,7 @@
 	<update id="thDeleteUser1" parameterType="User1">
 		UPDATE 	user1
 		SET	   	delete_yn = 'Y'
-		WHERE  	user_id   = #{user_id}
+		WHERE  	user_num   = #{user_num}
 		AND		user_pswd = #{user_pswd}	
 	</update>
 	

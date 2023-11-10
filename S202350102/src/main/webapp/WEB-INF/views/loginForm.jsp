@@ -24,6 +24,65 @@
 </script>
 </head>
 <body class="bg-light">
+	<!-- MODALS  -->
+	 <!-- Password Reset -->
+    <div class="modal fade" id="modalPasswordReset" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+    
+          <!-- Close -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+    
+          <!-- Header-->
+          <div class="modal-header lh-fixed fs-lg">
+            <strong class="mx-auto">비밀번호 찾기</strong>
+          </div>
+    
+          <!-- Body -->
+          <div class="modal-body text-center">
+    
+            <!-- Text -->
+            <p class="mb-7 fs-sm text-gray-500">
+              	아이디와 이메일을 입력해주세요 <br>
+              	해당 이메일로 새로운 비밀번호를 발급 받으실 수 있습니다
+            </p>
+    
+            <!-- Form -->
+            <form action="/">
+    			
+    		  <!-- 아이디 -->
+              <div class="form-group">
+                <label class="visually-hidden" for="modalPasswordResetEmail">
+                  	아이디 *
+                </label>
+                <input class="form-control form-control-sm" id="modalPasswordResetEmail" name="user_id" type="text"  placeholder="아이디 " required>
+              </div>
+              		
+              <!-- Email -->
+              <div class="form-group">
+                <label class="visually-hidden" for="modalPasswordResetEmail">
+                  	이메일 *
+                </label>
+                <input class="form-control form-control-sm" id="modalPasswordResetEmail" name="email" type="email" placeholder="이메일 you@xxx.xxx" required>
+              </div>
+              
+           
+    
+              <!-- Button type ="submit을" 안걸어도 알아서 연동됨 ;; 왜지?-->
+              <button class="btn btn-sm btn-dark">
+                	비밀번호 리셋
+              </button>
+    
+            </form>
+    
+          </div>
+    
+        </div>
+    
+      </div>
+    </div>
     <!-- NAVBAR -->
 	<c:import url="/WEB-INF/views/header4.jsp"/>
 
@@ -85,7 +144,7 @@
                       	<small class="fs-sm text-reset"> | </small>
                         <a class="fs-sm text-reset" href="/findIdForm">아이디 찾기 </a>
                         <small class="fs-sm text-reset"> | </small>
-                        <a class="fs-sm text-reset" href="/user1ResetPswd">비밀번호 찾기 </a>
+                        <a class="fs-sm text-reset" data-bs-toggle="modal" href="#modalPasswordReset">비밀번호 찾기 </a>
                       </div>
                     </div>
                     
