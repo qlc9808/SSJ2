@@ -85,20 +85,20 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	}
 
 	@Override
-	public List<Board> reviewReply(int brd_num) {
-		System.out.println("JhChallengeDaoImpl reviewReply Start...");
+	public List<Board> reviewReplyList(int brd_num) {
+		System.out.println("JhChallengeDaoImpl reviewReplyList Start...");
 		
-		List<Board> reviewReply = null;
+		List<Board> reviewReplyList = null;
 		
 		try {
-			reviewReply = session.selectList("jhReviewReply", brd_num);
+			reviewReplyList = session.selectList("jhReviewReplyList", brd_num);
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewContent e.getMessage() -> " + e.getMessage());
+			System.out.println("JhChallengeDaoImpl reviewReplyList e.getMessage() -> " + e.getMessage());
 		}
 		
-		System.out.println("JhChallengeDaoImpl chgReviewList  reviewReply.size() -> " + reviewReply.size());
+		System.out.println("JhChallengeDaoImpl reviewReplyList  reviewReplyList.size() -> " + reviewReplyList.size());
 		
-		return reviewReply;
+		return reviewReplyList;
 	}
 
 	@Override

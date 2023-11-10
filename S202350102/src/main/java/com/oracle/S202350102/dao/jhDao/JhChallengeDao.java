@@ -15,7 +15,7 @@ public interface JhChallengeDao {
 
 	Board 			reviewContent(int brd_num);
 
-	List<Board>		reviewReply(int brd_num);
+	List<Board>		reviewReplyList(int brd_num);
 
 	int 			reviewTotal(int chg_id);
 

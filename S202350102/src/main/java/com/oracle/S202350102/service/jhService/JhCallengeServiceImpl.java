@@ -56,12 +56,12 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	}
 
 	@Override
-	public List<Board> reviewReply(int brd_num) {
-		System.out.println("JhCallengeServiceImpl reviewReply Start...");
+	public List<Board> reviewReplyList(int brd_num) {
+		System.out.println("JhCallengeServiceImpl reviewReplyList Start...");
 		
-		List<Board> reviewReply = jhChgDao.reviewReply(brd_num);
+		List<Board> reviewReplyList = jhChgDao.reviewReplyList(brd_num);
 		
-		return reviewReply;
+		return reviewReplyList;
 	}
 
 	@Override

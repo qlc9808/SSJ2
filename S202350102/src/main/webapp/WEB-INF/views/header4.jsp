@@ -159,11 +159,9 @@
               </a>
             </li>
           </ul>
-		 
+		 	
         </div>
-       
-        <div id="alarmDiv">
-        	<div class="card" style="width: 18rem;" id="alarmPopText" >
+       		<div class="card" style="display: none;" id="alarmPopText" >
 			  <div class="card-body">
 			    <ul id="test">
 			    	
@@ -171,10 +169,7 @@
 			    <a href="#" class="btn btn-primary">Go somewhere</a>
 			  </div>
 			</div>
-	  	</div>
-	  	
-	  	
-	  	
+ 
       </div>
     </nav>
 		
@@ -209,15 +204,13 @@
 <style>
 	#alarmPopText{
 		display: none;
-			
-	}
-	
-	#alarmDiv{
 		z-index: 999;
 		position: absolute;
 		right: 250px;
 		top: 80px;
+			
 	}
+	
 	
 </style>
 

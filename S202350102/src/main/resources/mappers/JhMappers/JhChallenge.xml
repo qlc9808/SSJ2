@@ -28,7 +28,7 @@
 	<select id="jhChgReviewList" parameterType="Board" resultType="Board">
 		SELECT * 
 		FROM (
-		        SELECT 		ROWNUM AS rn, b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date
+		        SELECT 		ROWNUM AS rn, b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date, replyCount(b.brd_num) replyCount
 		        FROM 		board b
 		        INNER JOIN 	user1 u      ON b.user_num = u.user_num
 		        INNER JOIN 	challenge ch ON b.chg_id   = ch.chg_id
@@ -49,22 +49,19 @@
 	</select>
 
 	<select id="jhReviewContent" parameterType="int" resultType="Board">
-		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.nick, b.view_cnt,
-			    (   SELECT COUNT(*)-1
-			        FROM board
-			        WHERE brd_group = #{brd_num}
-			    ) AS replyCount
+		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.nick, b.view_cnt, replyCount(b.brd_num) replyCount
 		FROM board b
 		INNER JOIN user1 u ON b.user_num = u.user_num
 		WHERE b.brd_num = #{brd_num}
 	</select>
 	
-	<select id="jhReviewReply" parameterType="int" resultType="Board">
+	<select id="jhReviewReplyList" parameterType="int" resultType="Board">
 		SELECT b.brd_num, b.title, b.conts, b.reg_date, u.nick, b.view_cnt
 		FROM board b
 		INNER JOIN user1 u ON b.user_num = u.user_num
 		WHERE b.brd_group = #{brd_num}
-		AND b.brd_step=1
+		AND b.brd_step > 0
+		ORDER BY b.reg_date DESC
 	</select>
 	
 	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >

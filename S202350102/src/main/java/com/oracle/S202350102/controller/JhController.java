@@ -288,7 +288,7 @@ public class JhController {
 		Board reviewContent = jhCService.reviewContent(brd_num);
 		
 		//챌린지 해당 글에 대한 댓글 조회
-		List<Board> reviewReply = jhCService.reviewReply(brd_num);
+		List<Board> reviewReplyList = jhCService.reviewReplyList(brd_num);
 		
 		// challenger 참여 유무 판단용
 		Challenger chgr = new Challenger();
@@ -300,16 +300,49 @@ public class JhController {
 		
 		
 		System.out.println("JhController reviewContent reviewContent -> " + reviewContent);
-		System.out.println("JhController reviewContent reviewReply -> " + reviewReply);
+		System.out.println("JhController reviewContent reviewReply -> " + reviewReplyList);
 		model.addAttribute("reviewContent", reviewContent);
-		model.addAttribute("reviewReply", reviewReply);
+		model.addAttribute("reviewReply", reviewReplyList);
 		model.addAttribute("chg_id", chg_id);
 		
 		return "jh/jhReviewContent";
 	}
 	
 	
+	//챌린지 후기 댓글 입력
+	@RequestMapping(value = "replyInsert")
+	public String replyInsert(Board board, HttpSession session, Model model) {
+		System.out.println("JhController replyInsert Start...");
+		
+		jhCService.replyInsert(board);
+		
+		return "forward:reviewContent";
+	}
 	
+	//후기 댓글 삭제 근데 화면처리는 어떻게?
+	@RequestMapping(value = "replyDelete")
+	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, @RequestParam("rep_brd_num") String brd_num2, int chg_id, HttpSession session, Model model) {
+		System.out.println("JhController replyDelete Start...");
+		int brd_num2_reply = Integer.parseInt(brd_num2);
+		int brd_num_origin = Integer.parseInt(brd_num);
+		
+		System.out.println("JhController replyDelete brd_num -> " + brd_num);
+//		System.out.println("JhController replyDelete chg_id -> " + chg_id);
+		
+//		int result = jhCService.replyDelete(brd_num2);
+		int result = jhCService.replyDelete(brd_num2_reply);
+		
+		System.out.println("JhController replyDelete result -> " + result);
+		
+		model.addAttribute("brd_num", brd_num);
+		model.addAttribute("chg_id", chg_id);
+		model.addAttribute("result", result);
+		
+		
+		//forward할 때 파라미터를 꼭 줘야함
+//		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
+		return "forward:reviewContent?brd_num="+brd_num_origin+"&chg_id="+chg_id;
+	}
 	
 	
 	
@@ -359,48 +392,7 @@ public class JhController {
 		
 	}
 	
-	//챌린지 후기 댓글 입력
-	@RequestMapping(value = "replyInsert")
-	public String replyInsert(Board board, HttpSession session, Model model) {
-		System.out.println("JhController replyInsert Start...");
-		//넣어야 할 값 -> 프로시저 만들기?
-//		brd_num / chg_id / 히든으로 파라미터로 받기
-//		user_num //user객체에서빼기
-//		/ brd_lg / brd_md / 
-//		conts /파라미터값으로
-//		reg_date sysdate쓰기/ 
-//		brd_group / brd_num과 같음
-//		brd_step = 1 
-		
-		jhCService.replyInsert(board);
-		
-		return "forward:reviewContent";
-	}
-	
-	//후기 댓글 삭제 근데 화면처리는 어떻게?
-	@RequestMapping(value = "replyDelete")
-	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, @RequestParam("rep_brd_num") String brd_num2, int chg_id, HttpSession session, Model model) {
-		System.out.println("JhController replyDelete Start...");
-		int brd_num2_reply = Integer.parseInt(brd_num2);
-		int brd_num_origin = Integer.parseInt(brd_num);
-		
-		System.out.println("JhController replyDelete brd_num -> " + brd_num);
-//		System.out.println("JhController replyDelete chg_id -> " + chg_id);
-		
-//		int result = jhCService.replyDelete(brd_num2);
-		int result = jhCService.replyDelete(brd_num2_reply);
-		
-		System.out.println("JhController replyDelete result -> " + result);
-		
-		model.addAttribute("brd_num", brd_num);
-		model.addAttribute("chg_id", chg_id);
-		model.addAttribute("result", result);
-		
-		
-		//forward할 때 파라미터를 꼭 줘야함
-//		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
-		return "forward:reviewContent?brd_num="+brd_num_origin+"&chg_id="+chg_id;
-	}
+
 	
 	
 	
