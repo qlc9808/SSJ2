@@ -107,4 +107,35 @@
 	</select>
 	
 	
+	
+	<select id="myCertiList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick, c.title
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		JOIN challenge  c ON b.chg_id = c.chg_id
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 100
+		ORDER BY reg_date DESC
+	</select>
+	
+	<select id="myReviwList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick, c.title
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		JOIN challenge  c ON b.chg_id = c.chg_id
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 101
+	</select>
+	
+	<select id="myCommuiList" parameterType="int" resultType="Board">
+		SELECT b.*, u.nick, c.title
+		FROM board  b
+		JOIN user1 u On b.user_num = u.user_num
+		JOIN challenge  c ON b.chg_id = c.chg_id
+		WHERE b.user_num = #{user_num}
+		AND b.brd_md = 103
+		ORDER BY b.reg_date DESC
+	</select>
+	
+	
 </mapper>
