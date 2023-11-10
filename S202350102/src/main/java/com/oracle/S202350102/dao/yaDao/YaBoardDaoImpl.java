@@ -208,6 +208,14 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		return getLatestBrdStep;
 	}
 
+	@Override
+	public List<Board> commentTotal(Board board) {
+		System.out.println("YaBoardDaoImplList<Board> commentTotal start...");
+	
+		
+		return null;
+	}
+
 	/*
 	 * @Override public int commentTotal(int brd_num) {
 	 * System.out.println("YaBoardDaoImpl commentTotal start..."); int commentTotal

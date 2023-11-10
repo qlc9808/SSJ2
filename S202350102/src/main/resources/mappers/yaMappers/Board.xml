@@ -30,8 +30,8 @@
 	
 	
     <insert id="YaBoardInsert" parameterType="Board">
-    	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, reg_Date, brd_group, brd_step)
-    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},#{brd_lg}, #{brd_md}, #{title},#{conts}, sysdate, BRD_NUM_SEQ.nextval,0)
+    	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, img, reg_Date, brd_group, brd_step)
+    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},#{brd_lg}, #{brd_md}, #{title},#{conts}, #{img},sysdate, BRD_NUM_SEQ.nextval,0)
     </insert>
     
     <update id="YaBoardUpdate" parameterType="Board">
@@ -102,15 +102,15 @@
 		AND    brd_num =#{brd_num}
 	</update>
 	
-	<!-- <select id="YaCommentTotal" parameterType="int" resultType="int">
-		SELECT count (*)
+	<select id="YaCommentTotal" parameterType="int" resultType="int">
+		SELECT replyCount(brd_num) replyCount
 		FROM  board
 		WHERE brd_group =#{brd_num}
 		AND brd_md = 103
 		aAND brd_lg = 700
 		ADND brd_step >0
 		AND brd_num = #{brd_num}
-	</select> -->
+	</select>
 	
 	<delete id="YaCommentDelete" parameterType="Board">
 		DELETE FROM board
