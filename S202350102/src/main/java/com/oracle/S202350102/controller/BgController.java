@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -39,6 +42,7 @@ public class BgController {
 
 	private final BgService bs;
 	private final UserService userService;
+	private final JavaMailSender mailSender;
 
 		// 이 코드를 쓰려면 지금은 ?chg_id=1 를 bgChgDetail.jsp 페이지에서 주소창에 넣어줘야 함
 	  @RequestMapping(value = "/bgChgDetail") public String
@@ -147,7 +151,8 @@ public class BgController {
 	@RequestMapping(value = "writeCertBoard", method = RequestMethod.POST)
 	public String writeCertBoard(@RequestParam("chg_id") int chg_id,
 			                     @RequestParam("screenshot") MultipartFile screenshot, 
-								 Board board, Model model, HttpSession session, HttpServletRequest request) 
+								 Board board, Model model, 
+								 HttpSession session, HttpServletRequest request) 
 										 throws IOException, Exception {
 		System.out.println("BgController writeCertBoard Start...");
 		System.out.println("BgController writeCertBoard board.getConts() -> " + board.getConts());
@@ -249,7 +254,7 @@ public class BgController {
 	
 	
 	
-	// certBoardUpdate 인증 게시판 글 수정
+	// certBoardUpdate 인증 게시판 글 수정	-> 현재 챌린지 메인 페이지가 없는 관계로 수정하면 DB 값은 수정되나, 화면 에러가 남. 보류
 	@PostMapping(value = "updateCertBrd")
 	public String updateCertBrd(Board board, Model model) {
 		log.info("updateCertBrd Start...");
@@ -284,4 +289,70 @@ public class BgController {
 		String delStatusStr = Integer.toString(delStatus);
 		return delStatusStr;
 	}
+	
+	
+	
+	// 찌르기 - 메일 보내기
+	@RequestMapping(value = "sendMail", method = RequestMethod.POST)
+	public String sendMail(@RequestParam("ssjUserNum")			String ssjUserNum,
+						   @RequestParam("sendMailUser_num") 	String user_num, 
+						   @RequestParam("cheerUpMsg")			String cheerUpMsg, 
+								Model model) {
+		System.out.println("mailSending...");
+		
+		// 메일 받는 사람
+		User1 recvUser = new User1();
+		// 메일 보내는 사람
+		User1 sendUser = new User1();
+		
+		try {
+			// 유효성 검사 및 user_num 값 설정
+			recvUser.setUser_num(Integer.parseInt(ssjUserNum));
+			sendUser.setUser_num(Integer.parseInt(user_num));
+			
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid ssjUserNum format");
+		}
+		
+		System.out.println("sendMail recvUser -> "+recvUser.getUser_num());
+		System.out.println("sendMail sendUser -> "+sendUser.getUser_num());
+		
+		recvUser = userService.userSelect(recvUser.getUser_num());
+		sendUser = userService.userSelect(sendUser.getUser_num());
+		
+		// 받는 사람의 메일 주소 
+		// String recvMail = recvUser.getEmail();
+		// 임시
+		String recvMail = "forGitHubTest0907@gmail.com";
+		System.out.println("sendMail recvMail -> "+recvMail);
+		
+		// 보내는 사람의 메일 주소
+//		String sendMail = sendUser.getEmail();
+		String sendMail = "forGitHubTest0907@gmail.com";
+		System.out.println("sendMail sendMail -> "+sendMail);
+
+		String title = sendUser.getNick()+"님이 응원 메시지를 보내셨습니다";
+		System.out.println("sendMail title -> "+title);
+		System.out.println("sendMail cheerUpMsg -> "+cheerUpMsg);
+		
+		try {
+			// Mime 전자 우편 Internet 표준 Format
+			MimeMessage msg = mailSender.createMimeMessage();
+			MimeMessageHelper msgHelper = new MimeMessageHelper(msg, true, "UTF-8");
+			msgHelper.setFrom(sendMail);	// 보내는 사람: 생략하거나 하면 정상 작동을 안함
+			msgHelper.setTo(recvMail);		// 받는 사람
+			msgHelper.setSubject(title); 	// 메일 제목: 생략 가능하지만 스팸 메일 분류 때문에 가급적 넣음
+			msgHelper.setText(cheerUpMsg); 	// 메일 내용
+			
+			mailSender.send(msg);
+			model.addAttribute("check", 1);		// 정상 전달
+			
+		} catch (Exception e) {
+			System.out.println("e.getMessage() -> "+e.getMessage());
+			model.addAttribute("check", 2);		// 메일 전달 실패
+		}
+		
+		return "sendMail";
+	}
 }
+
