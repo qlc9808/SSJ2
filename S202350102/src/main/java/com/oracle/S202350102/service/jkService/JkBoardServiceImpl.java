@@ -153,4 +153,33 @@ public class JkBoardServiceImpl implements JkBoardService {
 			return jbd.getRecentPosts();
 		}
 	}
+
+	@Override
+	public void commentSharing(Board board) {
+		System.out.println("JkCommunityServiceImpl commentSharing start..");
+		jbd.commentSharing(board);
+	
+		
+	}
+
+	@Override
+	public List<Board> listCommentSharing(int brd_num) {
+		List<Board> listCommentSharing = null;
+		System.out.println("JkCommunityServiceImpl listCommentSharing start...");
+		listCommentSharing = jbd.listCommentSharing(brd_num);
+		return listCommentSharing;
+	}
+
+	@Override
+	public void commentUpdateSharing(Board board) {
+		System.out.println("JkCommunityServiceImpl commentUpdateSharing start..");
+		jbd.commentUpdateSharing(board);
+	}
+
+	@Override
+	public void commentDeleteSharing(Board board) {
+		System.out.println("JkCommunityServiceImpl commentDeleteSharing start..");
+		jbd.commentDeleteSharing(board);
+	
+	}
 }

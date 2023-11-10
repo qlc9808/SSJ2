@@ -136,11 +136,48 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	        }
 	}
 
+	@Override
+	public void commentSharing(Board board) {
+		System.out.println("JkBoardDaoImpl commentSharing start...");
+	 	
+		try {
+			session.insert("commentSharing", board);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl void commentSharing e.getMessage)?"+e.getMessage());
+		}
+	}
 
+	@Override
+	public List<Board> listCommentSharing(int brd_num) {
+		List<Board> listCommentSharing = null;
+		try {
+			System.out.println("JkBoardDaoImpl listCommentSharing start....");
+			listCommentSharing = session.selectList("listCommentSharing",brd_num);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl listComment e.getMessage?"+e.getMessage());
+		}
+		return listCommentSharing;
+	}
 
-
-
+	@Override
+	public void commentUpdateSharing(Board board) {
+		System.out.println("JkBoardDaoImpl commentUpdateSharing start...");
+		try {
+			session.update("commentUpdateSharing", board);
+		} catch (Exception e) {
+			System.out.println("JkBoarDaoImpl void commentUpdateSharing e.getMessage)?"+e.getMessage());
+		}
 		
-	
+	}
 
+	@Override
+	public void commentDeleteSharing(Board board) {
+		System.out.println("JkBoardDaoImpl commentDeleteSharing start...");
+		try {
+			session.delete("commentDeleteSharing",board);
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl void commentDeleteSharing e.getMessage)?"+e.getMessage());
+		}
+			
+	}
 }
