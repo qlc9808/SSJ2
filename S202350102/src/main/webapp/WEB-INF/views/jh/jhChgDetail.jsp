@@ -16,6 +16,7 @@
 	// yr 작성
 	// 챌린지 신청 완료 후 body onload 실행
 	function chgResultModalClickTest() {
+		alert("참여 완료");
 		document.getElementById("chgResultModalClick").click();
 	}
 
@@ -929,7 +930,7 @@
 						
 							</c:forEach>
 						
-
+							<!-- nick 클릭 시 나타나는 modal -->
 							<!-- Modal -->
 							<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
