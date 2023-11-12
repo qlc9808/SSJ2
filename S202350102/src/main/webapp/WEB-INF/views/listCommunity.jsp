@@ -224,8 +224,7 @@ body {
 
 </style>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-
+<title>커뮤니티 게시판</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -233,10 +232,11 @@ $(document).ready(function () {
     $("#searchButton").click(function () {
         var keyword = $("#keyword").val();
          if (keyword !== "") { 
-            //  검색 아작스 요청
+         
+        	 //  검색 아작스 요청
         	$.ajax({
             	type: "GET",
-            	url: "listBoardSearch?keyword=" + keyword,      		
+            	url: "listBoardSearch?keyword=" + keyword,
                 dataType: "json",
                 async: false,
                 success: function (data) { 
@@ -251,9 +251,17 @@ $(document).ready(function () {
                              str += "<td>" + result.brd_num + "</td>";
                              str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                              str += "<td>" + result.nick + "</td>";
-                             str += "<td>" + result.reg_date + "</td>";
+                             // 날짜 형식 변환
+                             var formattedDate = new Date(result.reg_date);
+                             var day = formattedDate.getDate();
+                             var month = formattedDate.getMonth() + 1;
+                             var year = formattedDate.getFullYear() % 100;
+                             day = (day < 10) ? '0' + day : day;
+                             month = (month < 10) ? '0' + month : month;
+                             str += "<td>" + year + "-" + month + "-" + day + "</td>";
+                             
                              str += "<td>" + result.view_cnt + "</td>";
-                             str += "<td></td>"; // 댓글 수 넣어야 함
+                             str += "<td>" + result.replyCount +"</td>"; 
                              str += "</tr>";
                              $('#boardtable').append(str);
                          }
@@ -272,6 +280,7 @@ $(document).ready(function () {
              location.reload();
          }        
      });
+    
     
     // 정렬 아작스 요청
     $("#sortOption").change(function() {
@@ -294,9 +303,17 @@ $(document).ready(function () {
                       str += "<td>" + result.brd_num + "</td>";
                       str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                       str += "<td>" + result.nick + "</td>";
-                      str += "<td>" + result.reg_date + "</td>";
+                      // 날짜 형식 변환
+                      var formattedDate = new Date(result.reg_date);
+                      var day = formattedDate.getDate();
+                      var month = formattedDate.getMonth() + 1;
+                      var year = formattedDate.getFullYear() % 100;
+                      day = (day < 10) ? '0' + day : day;
+                      month = (month < 10) ? '0' + month : month;
+                      str += "<td>" + year + "-" + month + "-" + day + "</td>";
+                      
                       str += "<td>" + result.view_cnt + "</td>";
-                      str += "<td></td>"; // 댓글 수 넣어야 함
+                      str += "<td>" + result.replyCount +"</td>";
                       str += "</tr>";
                       $('#boardtable').append(str);
                   }
@@ -324,7 +341,7 @@ $(document).ready(function () {
             </div>
         </div>
 
-    <!-- 게시판 검색 (옵션 제목, 작성자), 글작성 -->
+    <!-- 게시판 검색 (옵션 제목, 작성자)-->
      <div id="searchBox">
      	 <div class="container">
        		<div class="search-window">
@@ -339,12 +356,10 @@ $(document).ready(function () {
      </div>
      
         <div id="searchResults">
-            <!-- 검색 결과가 여기에 추가 -->
+            
         </div>
 
-
-
-    <!-- select 조회 게시글작성  -->
+    <!-- select 조회/ 게시글작성 버튼  -->
         <div id="options">
             <form action="writeFormCommunity" method="post">
                 <select id="sortOption" name="sortOption">
@@ -358,6 +373,7 @@ $(document).ready(function () {
         <!-- 게시판리스트  -->
         <div id="board-list">
             <div class="container">
+             <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 
                 <table id="boardtable">
                     <thead>
                         <tr>
@@ -368,21 +384,33 @@ $(document).ready(function () {
                             <th scope="col" class="th-view_cnt">조회수</th>
                             <th  scope="col" class="th-replyCount">댓글수</th>
                         </tr>
-                    </thead>
-                    
+                    </thead>                 
                     <tbody>
                         <c:forEach var="board" items="${listCommunity}">
                             <tr>
-                                <td>${board.brd_num}</td>
+                                <td>${num}</td>
                                 <td><a href="detailCommunity?user_num=${board.user_num}&brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td>${board.nick}</td>
-                                <td>${board.reg_date}</td>
+                                <td><fmt:formatDate value="${board.reg_date }" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
-                                <td></td>
+				         		<td>${board.replyCount}</td>
+				         		<c:set var="num" value="${num-1}"></c:set> 			       
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
+                
+				   <div class="page">
+				    <c:if test="${boardPage.startPage >boardPage.pageBlock}">
+				        <a href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">[이전]</a>
+				    </c:if>
+				    <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
+				        <a href="listCommunity?currentPage=${i}">[${i}]</a>
+				    </c:forEach>
+				    <c:if test="${boardPage.endPage < boardPage.totalPage}">
+				        <a href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">[다음]</a>
+				    </c:if>
+				</div>
             </div>
         </div>
     </section>

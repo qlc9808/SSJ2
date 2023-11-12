@@ -71,6 +71,7 @@ table th, table td {
 <!-- 게시글 상세 내용 확인 -->
 <input type="hidden" name="brd_step" value="${board.brd_step}"> 
 <input type="hidden" name="brd_group" value="${board.brd_group}"> 
+댓글 총 개수 : ${board.replyCount}
 <c:choose>
     <c:when test="${board.brd_step == 0}">
         <table>
@@ -97,7 +98,10 @@ table th, table td {
         </table>
     </c:when>
 </c:choose>
+		
 </section>
+
+	
 <%@ include file="./commentForm.jsp" %>
 <%@ include file="../footer.jsp" %>
 </body>

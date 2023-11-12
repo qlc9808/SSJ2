@@ -274,7 +274,7 @@ function listcomment() {
 <c:choose>
     <c:when test="${empty sessionScope.user_num}">
         <p><p>
-        <h5>댓글을 작성하실 분은 로그인을 해주세요!</h5>
+        <h5>댓글을  확인하실 분들은 로그인을 해주세요</h5>
     </c:when>
     
     <c:otherwise>
