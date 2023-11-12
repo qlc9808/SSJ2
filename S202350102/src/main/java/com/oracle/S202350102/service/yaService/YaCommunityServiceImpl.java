@@ -24,6 +24,8 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return listCommunity ;
 	}
 	
+
+	
 	//게시글 상세보기
 	@Override
 	public Board detailCommunity(int brd_num) {
@@ -136,12 +138,22 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	}
 
 	@Override
-	public List<Board> commentTotalList(Board board) {
-		System.out.println("YacommentTotalList start....");
-		List<Board> commentTotal = null;
-		System.out.println("YaCommnetTotalList start...");
-		commentTotal = ybd.commentTotal(board);
-		return commentTotal;
+	public int commentCount(int brd_num) {
+		System.out.println("YaCommunityServiceImpl commentCount start...");
+		int commentCount = ybd.commentCount(brd_num);
+		
+		return commentCount;
 	}
+
+
+
+	@Override
+	public int totalCommunity(Board board) {
+		System.out.println("YaCommunityServiceImpl totalCommuinty()t start...");
+		int totalCommunity = ybd.totalCommunity(board);
+		return totalCommunity;
+	}
+
+
 
 }

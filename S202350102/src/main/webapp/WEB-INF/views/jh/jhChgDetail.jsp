@@ -64,6 +64,7 @@
 				if( result.following > 0) {
 					// alert("성공");
 					document.getElementById('follow').className = 'btn btn-light';
+					$('#follow').text("팔로잉");
 				} else {
 					// alert("실패");
 				}

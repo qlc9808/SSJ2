@@ -5,16 +5,20 @@
 <mapper namespace="com.oracle.S202350102.BoardMapper">
 
     <select id="listCommunity" parameterType="Board" resultType="Board">
-        SELECT *
-        FROM board b, user1 u
-        WHERE b.user_num = u.user_num
-        AND b.brd_lg = 700
-        AND b.brd_md = 103
-        AND b.brd_step =0
-        ORDER BY b.brd_num
+ 		 SELECT *
+ 		 FROM (
+ 		 		SELECT ROWNUM AS rn,  b.brd_num, b.title, u.nick, b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
+ 		 		FROM   board b
+ 		 		INNER JOIN user1 u  ON b.user_num = u.user_num
+ 		 	    WHERE b.user_num = u.user_num
+        		AND b.brd_lg = 700
+        		AND b.brd_md = 103
+       		    AND b.brd_step =0
+      		    ORDER BY b.reg_date DESC
+ 		 )
+ 		 WHERE rn BETWEEN #{start} AND #{end}  
     </select>
-    
-
+  
    <select id="YaCommunityOne" parameterType="int" resultType="Board">
     	 SELECT  *
     	 FROM board b, user1 u
@@ -30,8 +34,8 @@
 	
 	
     <insert id="YaBoardInsert" parameterType="Board">
-    	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, img, reg_Date, brd_group, brd_step)
-    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},#{brd_lg}, #{brd_md}, #{title},#{conts}, #{img},sysdate, BRD_NUM_SEQ.nextval,0)
+    	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, reg_Date, brd_group, brd_step)
+    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},#{brd_lg}, #{brd_md}, #{title},#{conts},sysdate, BRD_NUM_SEQ.nextval,0)
     </insert>
     
     <update id="YaBoardUpdate" parameterType="Board">
@@ -44,7 +48,7 @@
     </delete>
     
     <select id="YaBoardSearhList" parameterType="String" resultType="Board">
-		SELECT *
+		SELECT b.brd_num, b.title, u.nick,b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
         FROM board b ,user1 u
         WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
@@ -56,7 +60,7 @@
     </select>
     
 	 <select id="sortByViewCnt" parameterType="String" resultType="Board">
-	    SELECT *
+	    SELECT b.brd_num, b.title, u.nick,b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
 	    FROM board b ,user1 u
 	    WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
@@ -66,7 +70,7 @@
 	</select>
 	
 	<select id="sortByRegDate" parameterType="String" resultType="Board">
-	    SELECT *
+	    SELECT b.brd_num, b.title, u.nick,b.reg_date, b.view_cnt,  replyCount(b.brd_num) replyCount
 	    FROM board b ,user1 u
 	    WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
@@ -103,13 +107,13 @@
 	</update>
 	
 	<select id="YaCommentTotal" parameterType="int" resultType="int">
-		SELECT replyCount(brd_num) replyCount
+		SELECT count(*)
 		FROM  board
 		WHERE brd_group =#{brd_num}
 		AND brd_md = 103
-		aAND brd_lg = 700
-		ADND brd_step >0
-		AND brd_num = #{brd_num}
+		AND brd_lg = 700
+		AND brd_step >0
+
 	</select>
 	
 	<delete id="YaCommentDelete" parameterType="Board">
@@ -118,7 +122,13 @@
 		AND brd_num = #{brd_num}
 	</delete>
 	
-	
+	<select id="YaTotalCommunity" parameterType="Board" resultType="int">
+		SELECT count(*) 
+		FROM board 
+		WHERE brd_lg = 700 
+		AND brd_md=103
+		AND brd_step = 0
+	</select>
 	
 
 </mapper>
