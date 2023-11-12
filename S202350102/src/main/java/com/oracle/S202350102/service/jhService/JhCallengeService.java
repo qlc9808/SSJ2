@@ -37,10 +37,19 @@ public interface JhCallengeService {
 	void 			replyInsert(Board board);
 
 
-	int 			replyDelete(int brd_num); 
+	int 			replyDelete(int brd_num);
 
+
+	void 			viewCntUp(int brd_num);
+
+
+	Board 			showReply(int brd_num);
+
+
+	int 			replyUpdate(Board board); 
+
+      
     
-   
  
 
 }

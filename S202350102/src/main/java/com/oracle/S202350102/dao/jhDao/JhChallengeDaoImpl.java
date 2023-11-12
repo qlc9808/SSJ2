@@ -197,6 +197,48 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return result;
 	}
 
+	@Override
+	public void viewCntUp(int brd_num) {
+		System.out.println("JhChallengeDaoImpl viewCntUp Start...");
+		
+		int result = 0;
+		
+		try {
+			result = session.update("jhViewCntUp", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl viewCntUp e.getMessage() -> " + e.getMessage());
+		}
+		
+		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
+		
+	}
+
+	//삭제예정
+	@Override
+	public Board showReply(int brd_num) {
+		System.out.println("JhChallengeDaoImpl showReply Start...");
+		Board showReply = null;
+		try {
+			showReply = session.selectOne("jhShowReply", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl showReply e.getMessage() -> " + e.getMessage());
+		}
+		
+		return showReply;
+	}
+
+	@Override
+	public int replyUpdate(Board board) {
+		System.out.println("JhChallengeDaoImpl replyUpdate Start...");
+		int result = 0;
+		try {
+			result = session.update("jhReplyUpdate", board);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl replyUpdate e.getMessage() -> " + e.getMessage());
+		}
+		return result;
+	}
+
 
 
 }

@@ -1140,6 +1140,7 @@
             
             
               
+            <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
             <c:choose>
             	<c:when test="${chg.stateCtn == '종료'}">
    	              <div class="tab-pane fade" id="reviewTab">

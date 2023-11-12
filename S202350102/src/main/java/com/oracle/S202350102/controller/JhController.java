@@ -115,7 +115,7 @@ public class JhController {
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-	public String chgDetail(@RequestParam("chg_id") int chg_id
+	public String chgDetail(@RequestParam int chg_id
 						  , HttpSession session
 						  , Model model
 						  , String insertResultStr	// yr작성(챌린지 신청 후 결과 값 불러오기)
@@ -248,7 +248,12 @@ public class JhController {
 	//댓글 페이지네이션!!!!!!!!!
 	//챌린지 후기글 내용 조회
 	@RequestMapping(value = "reviewContent")
-	public String reviewContent(@RequestParam int brd_num, @RequestParam("chg_id") int chg_id,  HttpSession session, Model model) {
+	public String reviewContent(@RequestParam int brd_num, 
+								@RequestParam int chg_id,  
+								HttpSession session, 
+								Model model,
+								@RequestParam(name = "flag", required = false) String flag,
+	                            @RequestParam(name = "rep_brd_num", required = false) Integer rep_brd_num) {
 		System.out.println("JhController reviewContent Start...");
 		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		
@@ -263,6 +268,9 @@ public class JhController {
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
 		model.addAttribute("user", user);
+		
+		//후기 글 조회수 +1
+		jhCService.viewCntUp(brd_num);
 		
 		//챌린지 후기글 내용 조회
 		Board reviewContent = jhCService.reviewContent(brd_num);
@@ -286,6 +294,14 @@ public class JhController {
 		model.addAttribute("reviewReply", reviewReplyList);
 		model.addAttribute("chg_id", chg_id);
 		
+		//댓글 수정
+		if ( flag != null ) {
+			model.addAttribute("flag", flag);
+			model.addAttribute("rep_brd_num", rep_brd_num);
+			System.out.println("JhController reviewContent flag -> " + flag);
+			System.out.println("JhController reviewContent rep_brd_num -> " + rep_brd_num);
+		}
+		
 		return "jh/jhReviewContent";
 	}
 	
@@ -297,6 +313,8 @@ public class JhController {
 		
 		jhCService.replyInsert(board);
 		
+		//리다이렉트를 쓰고 싶은데 파라미터 처리를 어떻게? 일단 forward가 동작하니 이대로 두고 나중에 변경할 것!!!!
+//		근데 왜 이건 파라미터 없어도 동작하는데 replyDelete는 파라미터가 필요하지?
 		return "forward:reviewContent";
 	}
 	
@@ -311,18 +329,18 @@ public class JhController {
 //		System.out.println("JhController replyDelete chg_id -> " + chg_id);
 		
 //		int result = jhCService.replyDelete(brd_num2);
-		int result = jhCService.replyDelete(rep_brd_num);
+		int delResult = jhCService.replyDelete(rep_brd_num);
 		
-		System.out.println("JhController replyDelete result -> " + result);
+		System.out.println("JhController replyDelete result -> " + delResult);
 		
 		model.addAttribute("brd_num", brd_num);
 		model.addAttribute("chg_id", chg_id);
-		model.addAttribute("result", result);
+		model.addAttribute("delResult", delResult);
 		
 		
 		//forward할 때 파라미터를 꼭 줘야함
 //		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
-		return "forward:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
 	}
 	
 	
@@ -373,11 +391,37 @@ public class JhController {
 		
 	}
 	
-	@ResponseBody
 	@RequestMapping(value = "showReplyUpdate")
-	public String showReplyUpdate(int brd_num ) {
-			
-		return "";
+	public String showReplyUpdate(@RequestParam("rep_brd_num") int rep_brd_num, 
+								  @RequestParam("ori_brd_num") int ori_brd_num,
+								  @RequestParam("chg_id") 	   int chg_id, 
+								  Model model
+								  ) {
+		System.out.println("JhController showReplyUpdate Start...");
+		System.out.println("JhController showReplyUpdate rep_brd_num -> " + rep_brd_num);
+//		Board showReply = jhCService.showReply(brd_num);
+		
+		String flag = "flag";
+//		model.addAttribute("showReply", showReply);
+		/*이렇게 하고 reviewContent에서 @ModelAttribute("flag") String flag,
+								@ModelAttribute("rep_brd_num") Integer rep_brd_num로 받으려 하니 rep_brd_num는 들어오는데 
+								왜 flag는 안들어오지?
+		 * model.addAttribute("flag", flag); model.addAttribute("rep_brd_num",
+		 * rep_brd_num);
+		 * "forward:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
+		 */
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id+"&flag="+flag+"&rep_brd_num="+rep_brd_num;
+	}
+	
+	@RequestMapping(value = "replyUpdate")
+	public String replyUpdate( @RequestParam("ori_brd_num") int ori_brd_num,
+							   @RequestParam("chg_id") 	    int chg_id, 
+							   Model model,
+							   Board board) {
+		
+		int result = jhCService.replyUpdate(board);
+		
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
 	}
 	
 }
