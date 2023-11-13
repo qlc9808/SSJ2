@@ -227,6 +227,23 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return result;
 	}
 
+	@Override
+	public int reviewInsert(Board board) {
+		System.out.println("JhChallengeDaoImpl reviewInsert Start...");
+		
+		int result = 0;
+		
+		try {
+			result = session.insert("jhReviewInsert", board);
+			
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewInsert e.getMessage() -> " + e.getMessage());
+			
+		}
+		
+		return result;
+	}
+
 
 
 }

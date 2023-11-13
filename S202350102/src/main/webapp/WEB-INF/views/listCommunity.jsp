@@ -391,7 +391,7 @@ $(document).ready(function () {
                                 <td>${num}</td>
                                 <td><a href="detailCommunity?user_num=${board.user_num}&brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td>${board.nick}</td>
-                                <td><fmt:formatDate value="${board.reg_date }" pattern="yy-MM-dd"/></td>
+                                <td><fmt:formatDate value="${board.reg_date}" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
 				         		<td>${board.replyCount}</td>
 				         		<c:set var="num" value="${num-1}"></c:set> 			       

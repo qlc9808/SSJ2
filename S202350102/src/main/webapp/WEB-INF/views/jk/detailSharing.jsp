@@ -108,12 +108,15 @@
                                 <!-- Labels for Applicants, Participants, and Content -->
                                 <!-- ... -->
                                 <!-- Submit Buttons -->
-                                <div class="row">
-                                    <div class="col-lg-6 mb-2">
-                                        <button class="btn btn-dark w-100" data-toggle="button">
+                                <div class="row"> 
+                                <input type="hidden" name="brd_num" value="${board.brd_num}"> 
+								<input type="hidden" name="user_num" value="${sessionScope.user_num}">		
+                                    <div class="col-lg-6 mb-2">			 
+                                        <button id="openModalButton" class="btn btn-dark w-100" data-toggle="button">
                                             <i class="fe fe-mail me-2"></i> 구매신청
-                                        </button>
-                                    </div>
+                                        </button>    
+  
+    	                                   </div>
                                     <div class="col-lg-6 mb-2">
                                         <button class="btn btn-outline-dark w-100" data-toggle="button">
                                             찜하기 <i class="fe fe-heart ms-2"></i>

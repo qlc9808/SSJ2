@@ -18,6 +18,12 @@ function regPassword(user_pswd) { // 영문 숫자 특수기호 조합 8자리 �
    return regExp.test(user_pswd);
 }
 
+function regConfirmPassword(user_pswd) { // 영문 숫자 특수기호 조합 8자리 이상 20자리이하
+   var regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/
+   return regExp.test(user_pswd);
+}
+
+
 function regNick(nick) { //닉네임 : 2자 이상 12자 이하, 영어 또는 숫자 또는 한글로 구성
 	   var regExp = /^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9가-힣]{2,12}$/
 	   return regExp.test(nick);
@@ -49,7 +55,7 @@ function checkId() {
 	            $("#failDupId").css("display", "block"); //중복 에러메세지를 띄운다
 	            $("#failId").css("display","none"); //중복 에러메세지 말고 다른 에러 메세지를 지운다.
 	            $("#user_id").css("border-color", "#FFCECE");
-	            $("#user_id").css("border-width", "3px");
+	            $("#user_id").css("border-width", "2px");
 	            idCheck = 0;
 	         } else if (regUser_id(inputed) == false || inputed.length > 15 ) {
 	            $("#failId").css("display","block");
@@ -73,7 +79,7 @@ function checkPwd() {
 	   var inputed = $('#user_pswd').val();
 	         if(regPassword(inputed) == false) {
 	            $("#failpwd").css("display", "block");
-	            $("#user_pswd").css("border-color", "#FFCECE").css("border-width", "3px");
+	            $("#user_pswd").css("border-color", "#FFCECE").css("border-width", "2px");
 	            pwdCheck = 0;
 //	            alert("checkPwd() pwdCheck -->" + pwdCheck ); checkPwd와 activateSignupbtn 테스트용 , 펑션이 먼저 호출되고, 아작스가 늦게 수행된다
 	         } else if(regPassword(inputed) == true) {
@@ -83,15 +89,26 @@ function checkPwd() {
 //	            alert("checkPwd() pwdCheck -->" + pwdCheck ); checkPwd와 activateSignupbtn 테스트용 , 펑션이 먼저 호출되고, 아작스가 늦게 수행된다
 	         }
 }
+
 function checkConfirmPswd() {
-	 if(document.getElementById('user_pswd').value !='' && document.getElementById('user_confirmPswd').value!=''){
+	 var inputed = $('#user_confirmPswd').val();
+	  if(regConfirmPassword(inputed) == false) {
+	            $("#failConfirmpwd").css("display", "block");
+	            $("#matchPwd").css("display", "none");
+        	    $("#notMatchPwd").css("display", "none");
+        	    $("#user_confirmPswd").css("border-color", "#FFCECE").css("border-width", "2px");
+	 } else if(document.getElementById('user_pswd').value != '' && document.getElementById('user_confirmPswd').value != ''){
          if(document.getElementById('user_pswd').value == document.getElementById('user_confirmPswd').value){
         	 $("#matchPwd").css("display", "block");
         	 $("#notMatchPwd").css("display", "none");
+        	 $("#failConfirmpwd").css("display", "none");
+        	 $("#user_confirmPswd").css("border-color", "#e5e5e5").css("border-width", "1px");
          }
          else{
         	 $("#notMatchPwd").css("display", "block");
         	 $("#matchPwd").css("display", "none");
+        	 $("#failConfirmpwd").css("display", "none");
+        	 $("#user_confirmPswd").css("border-color", "#FFCECE").css("border-width", "2px");
          }
      }
 }
@@ -101,17 +118,17 @@ function checkNick() {
 		   		data 	: {nick : inputed},
 		   		url		: "user1NickCheck",	
 	      success: function(data) {
-	    	  if(data == '1'){
+	    	  if(data >= '1'){
 	    		$("#failDupNick").css("display", "block"); //중복 에러메세지를 띄운다
 	            $("#failNick").css("display","none"); //중복 에러메세지 말고 다른 에러 메세지를 지운다.
 	            $("#nick").css("border-color", "#FFCECE").css("border-width", "2px");  // input 테두리 붉은색으로 바꾸기  테두리 굵기 2px
 	            nickCheck = 0; // 회원 가입 전 값들 체크하기 위해 (0은 불가, 1은 가능)
-	         } else if(regNick(inputed) == false) { //정규표현식에 해당할 때
+	         } else if(regNick(inputed) == false) { 
 	        	$("#failNick").css("display","block");
  		        $("#failDupNick").css("display","none"); 
-	            $("#nick").css("border-color", "#e5e5e5").css("border-width", "1px"); // input 테두리 초록색으로 바꾸기
+	            $("#nick").css("border-color", "#FFCECE").css("border-width", "2px"); 
 	            nickCheck = 0;
-	         } else if(regNick(inputed) == true && data == '0'){
+	         } else if(regNick(inputed) == true && data == '0'){	//정규표현식에 true + 중복 되지않을때
     	 	    $("#nick").css("border-color", "#e5e5e5");
 		            $("#nick").css("border-width", "1px");
 		            $("#failDupNick").css("display","none");
@@ -171,6 +188,7 @@ function checkTel() {
             phoneCheck = 1;
          }
 }
+
 
 function checkSignupbtn() {
    if(idCheck == 0 ) {
@@ -244,6 +262,49 @@ function checkSignupbtn() {
 	   frm.tel.focus();
 	   return false;
    }
-   
+   if(document.getElementById('user_pswd').value != document.getElementById('user_confirmPswd').value) {
+   		alert("비밀번호와 확인용 비밀번호가 일치하지 않습니다. 다시 입력해주세요");
+   		frm.user_pswd.focus();
+   		return false;
+   }
 	return true;   
 }
+
+function resetAll(){
+		/* 메세지 전부삭제  */
+		 $("#failId").css("display","none");	
+		 $("#failDupId").css("display","none");
+		 $("#failpwd").css("display", "none");
+		 $("#notMatchPwd").css("display", "none");
+		 $("#matchPwd").css("display", "none");
+		 $("#failConfirmpwd").css("display", "none");
+		 $("#failNick").css("display","none"); 
+		 $("#failDupNick").css("display","none");
+		 $("#failemail").css("display", "none");
+		 $("#failtel").css("display", "none");
+		 
+		 /* 색깔 삭제 */
+		 $("#user_id").css("border-color", "#e5e5e5");
+         $("#user_id").css("border-width", "1px");
+		 
+         $("#user_pswd").css("border-color", "#e5e5e5");
+         $("#user_pswd").css("border-width", "1px");
+         
+         $("#user_confirmPswd").css("border-color", "#e5e5e5");
+         $("#user_confirmPswd").css("border-width", "1px");
+         
+         $("#nick").css("border-color", "#e5e5e5");
+         $("#nick").css("border-width", "1px");
+         
+         $("#user_name").css("border-color", "#e5e5e5");
+         $("#user_name").css("border-width", "1px");
+         
+         $("#email").css("border-color", "#e5e5e5");
+         $("#email").css("border-width", "1px");
+         
+         $("#tel").css("border-color", "#e5e5e5");
+         $("#tel").css("border-width", "1px");
+         
+         
+}
+

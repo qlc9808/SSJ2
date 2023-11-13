@@ -113,6 +113,26 @@ public class QBoardDaoImpl implements QBoardDao {
 		return qboardListSearch;
 	}
 	
+	@Override
+	public List<Board> qBoardCommentList(int brd_group){
+		List<Board> qBoardCommentList = null;
+		try {
+			qBoardCommentList = session.selectList("qBoardCommentList",brd_group);
+		} catch (Exception e) {
+			System.out.println("qBoardCommentList dao sql exception->"+e.getMessage());
+		}
+		return qBoardCommentList;
+	}
 	
+	@Override
+	public int qBoardCommentWrite(Board board) {
+		int result = 0;
+		try {
+			result = session.insert("qBoardCommentWrite",board);
+		} catch (Exception e) {
+			System.out.println("qBoardCommentWrite dao sql exception->"+e.getMessage());
+		}
+		return result;
+	}
 
 }
