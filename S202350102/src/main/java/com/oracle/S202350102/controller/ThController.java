@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 //import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 //import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
@@ -46,6 +47,7 @@ public class ThController {
 	private final ThKakaoPay thKakaoPay;
 	private final ThOrder1Service os1;
 	private final JavaMailSender mailSender;
+	private final Level1Service ls;
 	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
@@ -95,6 +97,8 @@ public class ThController {
 			if(loginResult.getDelete_yn().equals("N")) {
 				session = request.getSession();
 				session.setAttribute("user_num", loginResult.getUser_num());
+		         int user_num = (int) session.getAttribute("user_num");
+		         ls.userLevelCheck(user_num);
 				System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
 				return "home2";
 			// 탈퇴처리된 아이디 인경우		
