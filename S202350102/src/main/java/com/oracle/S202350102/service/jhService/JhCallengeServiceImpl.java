@@ -109,6 +109,27 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return result;
 	}
 
+	@Override
+	public void viewCntUp(int brd_num) {
+		System.out.println("JhCallengeServiceImpl viewCntUp Start...");
+		jhChgDao.viewCntUp(brd_num);
+	}
+
+	//삭제 예정
+	@Override
+	public Board showReply(int brd_num) {
+		System.out.println("JhCallengeServiceImpl viewCntUp Start...");
+		Board showReply = jhChgDao.showReply(brd_num);
+		return showReply;
+	}
+
+	@Override
+	public int replyUpdate(Board board) {
+		System.out.println("JhCallengeServiceImpl replyUpdate Start...");
+		int result = jhChgDao.replyUpdate(board);
+		return result;
+	}
+
 
 	
 	

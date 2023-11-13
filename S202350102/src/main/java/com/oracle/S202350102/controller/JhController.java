@@ -1,5 +1,6 @@
 package com.oracle.S202350102.controller;
 
+import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -10,16 +11,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
+import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
+import com.oracle.S202350102.service.yrService.YrFollowingService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +36,9 @@ public class JhController {
 	private final JhCallengeService jhCService;
 	private final UserService userService;
 	// yr 작성
-	// challenger 테이블값 가져오기용
 	private final YrChallengerService ycs;
+	private final YrFollowingService yfis;
+	
 	private final BgService bs;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
@@ -110,7 +115,7 @@ public class JhController {
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
-	public String chgDetail(@RequestParam("chg_id") int chg_id
+	public String chgDetail(@RequestParam int chg_id
 						  , HttpSession session
 						  , Model model
 						  , String insertResultStr	// yr작성(챌린지 신청 후 결과 값 불러오기)
@@ -184,8 +189,9 @@ public class JhController {
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
 		model.addAttribute("listSsj", listSsj);
-//		String boardRegDate = ycs.getBoardRegDate(chg_id);
-//		model.addAttribute("brdRegDate", boardRegDate);
+
+		// following 결과
+		
 
 		
 		// bg 작성
@@ -239,36 +245,15 @@ public class JhController {
 	}
 	
 	
-	//챌린지 후기목록 조회 -> chgDetail로 합침
-//	@RequestMapping(value = "reviewTab")
-//	public String chgReviewList(@RequestParam("chg_id") int chg_id,  HttpSession session, Model model ){
-//		System.out.println("JhController reviewList Start...");
-//		System.out.println("JhController reviewList chg_id -> " + chg_id);
-//		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
-//		
-//		//세션에서 회원번호 가져옴
-//		int userNum = 0;
-//		if(session.getAttribute("user_num") != null) {
-//			userNum = (int) session.getAttribute("user_num");
-//			System.out.println("JhController chgDetail userNum -> " + userNum);
-//		}
-//		
-//		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
-//		User1 user = userService.userSelect(userNum);
-//		System.out.println("JhController chgDetail userNum -> " + user);
-//		
-//		List<Board> chgReviewList = jhCService.chgReviewList(chg_id);
-//		model.addAttribute("chgReviewList", chgReviewList);
-//		
-//		model.addAttribute("user", user);
-//		
-//		return "jh/test3";
-//	}
-//	
-	
+	//댓글 페이지네이션!!!!!!!!!
 	//챌린지 후기글 내용 조회
 	@RequestMapping(value = "reviewContent")
-	public String reviewContent(@RequestParam int brd_num, @RequestParam("chg_id") int chg_id, HttpSession session, Model model) {
+	public String reviewContent(@RequestParam int brd_num, 
+								@RequestParam int chg_id,  
+								HttpSession session, 
+								Model model,
+								@RequestParam(name = "flag", required = false) String flag,
+	                            @RequestParam(name = "rep_brd_num", required = false) Integer rep_brd_num) {
 		System.out.println("JhController reviewContent Start...");
 		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		
@@ -284,11 +269,15 @@ public class JhController {
 		System.out.println("JhController chgDetail userNum -> " + user);
 		model.addAttribute("user", user);
 		
+		//후기 글 조회수 +1
+		jhCService.viewCntUp(brd_num);
+		
 		//챌린지 후기글 내용 조회
 		Board reviewContent = jhCService.reviewContent(brd_num);
 		
 		//챌린지 해당 글에 대한 댓글 조회
 		List<Board> reviewReplyList = jhCService.reviewReplyList(brd_num);
+		
 		
 		// challenger 참여 유무 판단용
 		Challenger chgr = new Challenger();
@@ -305,6 +294,14 @@ public class JhController {
 		model.addAttribute("reviewReply", reviewReplyList);
 		model.addAttribute("chg_id", chg_id);
 		
+		//댓글 수정
+		if ( flag != null ) {
+			model.addAttribute("flag", flag);
+			model.addAttribute("rep_brd_num", rep_brd_num);
+			System.out.println("JhController reviewContent flag -> " + flag);
+			System.out.println("JhController reviewContent rep_brd_num -> " + rep_brd_num);
+		}
+		
 		return "jh/jhReviewContent";
 	}
 	
@@ -316,6 +313,8 @@ public class JhController {
 		
 		jhCService.replyInsert(board);
 		
+		//리다이렉트를 쓰고 싶은데 파라미터 처리를 어떻게? 일단 forward가 동작하니 이대로 두고 나중에 변경할 것!!!!
+//		근데 왜 이건 파라미터 없어도 동작하는데 replyDelete는 파라미터가 필요하지?
 		return "forward:reviewContent";
 	}
 	
@@ -323,25 +322,25 @@ public class JhController {
 	@RequestMapping(value = "replyDelete")
 	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, @RequestParam("rep_brd_num") String brd_num2, int chg_id, HttpSession session, Model model) {
 		System.out.println("JhController replyDelete Start...");
-		int brd_num2_reply = Integer.parseInt(brd_num2);
-		int brd_num_origin = Integer.parseInt(brd_num);
+		int ori_brd_num = Integer.parseInt(brd_num);
+		int rep_brd_num = Integer.parseInt(brd_num2);
 		
 		System.out.println("JhController replyDelete brd_num -> " + brd_num);
 //		System.out.println("JhController replyDelete chg_id -> " + chg_id);
 		
 //		int result = jhCService.replyDelete(brd_num2);
-		int result = jhCService.replyDelete(brd_num2_reply);
+		int delResult = jhCService.replyDelete(rep_brd_num);
 		
-		System.out.println("JhController replyDelete result -> " + result);
+		System.out.println("JhController replyDelete result -> " + delResult);
 		
 		model.addAttribute("brd_num", brd_num);
 		model.addAttribute("chg_id", chg_id);
-		model.addAttribute("result", result);
+		model.addAttribute("delResult", delResult);
 		
 		
 		//forward할 때 파라미터를 꼭 줘야함
 //		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
-		return "forward:reviewContent?brd_num="+brd_num_origin+"&chg_id="+chg_id;
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
 	}
 	
 	
@@ -381,9 +380,9 @@ public class JhController {
 		System.out.println("JhController chgApplication Start...");
 		System.out.println("JhController chgApplication chg -> " + chg);		
 		
-		Date start_date = chg.getStart_date();
-		Date end_date = chg.getEnd_date();
-		
+//		Date start_date = chg.getStart_date();
+//		Date end_date = chg.getEnd_date();
+//		
 		
 	
 		//임시로 챌린지 목록으로 이동하게 함
@@ -392,8 +391,37 @@ public class JhController {
 		
 	}
 	
-
+	@RequestMapping(value = "showReplyUpdate")
+	public String showReplyUpdate(@RequestParam("rep_brd_num") int rep_brd_num, 
+								  @RequestParam("ori_brd_num") int ori_brd_num,
+								  @RequestParam("chg_id") 	   int chg_id, 
+								  Model model
+								  ) {
+		System.out.println("JhController showReplyUpdate Start...");
+		System.out.println("JhController showReplyUpdate rep_brd_num -> " + rep_brd_num);
+//		Board showReply = jhCService.showReply(brd_num);
+		
+		String flag = "flag";
+//		model.addAttribute("showReply", showReply);
+		/*이렇게 하고 reviewContent에서 @ModelAttribute("flag") String flag,
+								@ModelAttribute("rep_brd_num") Integer rep_brd_num로 받으려 하니 rep_brd_num는 들어오는데 
+								왜 flag는 안들어오지?
+		 * model.addAttribute("flag", flag); model.addAttribute("rep_brd_num",
+		 * rep_brd_num);
+		 * "forward:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
+		 */
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id+"&flag="+flag+"&rep_brd_num="+rep_brd_num;
+	}
 	
-	
+	@RequestMapping(value = "replyUpdate")
+	public String replyUpdate( @RequestParam("ori_brd_num") int ori_brd_num,
+							   @RequestParam("chg_id") 	    int chg_id, 
+							   Model model,
+							   Board board) {
+		
+		int result = jhCService.replyUpdate(board);
+		
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
+	}
 	
 }

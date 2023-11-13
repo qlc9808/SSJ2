@@ -15,4 +15,9 @@
 		WHERE user_num = #{user_num}
 		AND following_id = #{following_id}
 	</delete>
+	
+	<insert id="insertFollowing" parameterType="Following">
+		INSERT INTO following (user_num, following_id, send_date)
+		VALUES(#{user_num}, #{following_id}, 1)
+	</insert>
 </mapper>

@@ -14,15 +14,48 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-    @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+/* 테이블 스타일 */
+section.community {
+  padding: 300px 0;
+}
+
+body {
+   font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+table {
+  font-size: 15px;
+  height: 100px;
+  width: 70%;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+table th {
+
+    text-align: center;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+
 </style>
 </head>
 
 <body>
-<h3>게시글 상세내용 확인</h3>
+<section class="detailcommunity">
+   <div class="page-title">
+        <div class="container">
+            <h3>상세글</h3>
+        </div>
+   </div>
 
 <input type="hidden" name="brd_num" value="${board.brd_num}"> 
 
@@ -38,6 +71,7 @@
 <!-- 게시글 상세 내용 확인 -->
 <input type="hidden" name="brd_step" value="${board.brd_step}"> 
 <input type="hidden" name="brd_group" value="${board.brd_group}"> 
+댓글 총 개수 : ${board.replyCount}
 <c:choose>
     <c:when test="${board.brd_step == 0}">
         <table>
@@ -64,7 +98,10 @@
         </table>
     </c:when>
 </c:choose>
+		
+</section>
 
+	
 <%@ include file="./commentForm.jsp" %>
 <%@ include file="../footer.jsp" %>
 </body>

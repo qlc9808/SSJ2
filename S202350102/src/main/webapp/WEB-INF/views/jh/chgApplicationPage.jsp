@@ -45,7 +45,7 @@
 
 <div class="input-group mb-3">
   <span class="input-group-text" id="inputGroup-sizing-default">참여 기간</span>
-  <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="start_date">
+  <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="create_date">
  
   <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="end_date">
 </div>
@@ -65,7 +65,7 @@
 <div class="input-group mb-3">
   <span class="input-group-text" id="inputGroupSelect01">인증 빈도</span>
   <select class="form-select" id="inputGroupSelect01" name="freq" required="required">
-    <option selected>일주일에 인증할 회수를 선택해 주세요</option>
+    <option selected value="" selected disabled hidden>일주일에 인증할 회수를 선택해 주세요</option>
     <option value="1">1일</option>
     <option value="2">2일</option>
     <option value="3">3일</option>

@@ -17,5 +17,10 @@ public interface ChBoardService {
 	List<Board> popShareList();
 	List<Board> myReview(int user_num);
 	List<BoardReChk> alarmchk(int user_num);
+	List<Board> myCertiList(int user_num);
+	List<Board> myCommuList(int user_num);
+	List<Board> myShareList(int user_num);
+	int 		readAlarm(BoardReChk brc);
+	int 		moveToNewCmt(BoardReChk brc);
 	
 }

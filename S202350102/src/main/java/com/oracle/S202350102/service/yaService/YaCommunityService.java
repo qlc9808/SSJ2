@@ -23,7 +23,9 @@ public interface YaCommunityService {
 	void		 commentUpdate(Board board);
 	void         commentDelete(Board board);
 	int          getLatestBrdStep(int brd_group);
-	//int          commentTotal(int brd_num);
+
+	int			 commentCount(int brd_num);
+	int 		 totalCommunity(Board board);
 
 	
 	

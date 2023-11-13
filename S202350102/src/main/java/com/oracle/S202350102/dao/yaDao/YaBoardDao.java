@@ -19,12 +19,16 @@ public interface YaBoardDao {
 	List<Board>  sortByRegDate();
 	User1        userSelect(int user_num);
 	List<Board>  listComment(int brd_num);
+
 	// 댓글관련
 	void         commentWrite(Board board);
 	void		 commentUpdate(Board board);
 	void         commentDelete(Board board);
 	int          getLatestBrdStep(int brd_group);
-	//int          commentTotal(int brd_num);
+
+	
+	int 		commentCount(int brd_num);
+	int 		totalCommunity(Board board);
 	
 
 

@@ -9,8 +9,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -25,11 +26,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,13 +121,18 @@ public class JkController {
 	//쉐어링 조회 필터
 	@GetMapping("/loadSortedPosts")
 	@ResponseBody
-	public List<Board> loadSortedPosts(HttpServletRequest request) {
+	public List<Board> loadSortedPosts(Board board, HttpServletRequest request) {
+		logger.info("JkController /loadSortedPosts start....");
+		
 		System.out.println("JkController jbs.loadSortedPosts start....");
 	    String sortOption = request.getParameter("sort");
+	    logger.info("JSON Data: {}", sortOption);
 	    List<Board> loadSortedPosts = jbs.loadSortedPosts(sortOption);
-	
+	    logger.info("Returned Data: {}", loadSortedPosts);
 	    return loadSortedPosts;
 	  	}
+	
+	
 	//쉐어링 게시글 상세조회
 	@GetMapping(value="/detailSharing")
 	public String detailSharing(int brd_num, Model model, HttpSession session) {
@@ -262,7 +269,142 @@ public class JkController {
 
 		    return "forward:mySharing";
 		}
+	
+	//상세 페이지 댓글  조회
+	@RequestMapping(value="/listCommentSharing", method=RequestMethod.GET)
+	@ResponseBody
+	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board) {
+		System.out.println("JkController jbs.listCommentSharing start....");
+
+		
+		List<Board> listCommentSharing = jbs.listCommentSharing(brd_num);
+		model.addAttribute(" listCommenty",  listCommentSharing);
+		board.setBrd_group(brd_num);
+		
+		System.out.println("YaController listComment size?" + listCommentSharing.size());
+		System.out.println("YaController listComment brd_group?"+board.getBrd_group());
+		return listCommentSharing; 
+	}
+
+
+	// 쉐어링 댓글 작성
+	@RequestMapping("/commentSharing")
+	@ResponseBody
+	public Map<String, String> commentSharing(HttpSession session, HttpServletRequest request, @ModelAttribute Board board) {
+	    Map<String, String> response = new HashMap<>();
+
+	    try {
+	        System.out.println("JkController jbs.commentSharing start....");
+
+	        int user_num = 0;
+	        if (session.getAttribute("user_num") != null) {
+	            user_num = (int) session.getAttribute("user_num");
+	            board.setUser_num(user_num);
+	            
+	            int brd_num =Integer.parseInt(request.getParameter("brd_num")); 
+	            
+	            board.setBrd_group(brd_num);
+	            board.setBrd_lg(700);
+			    
+			   try {
+				    int brd_group = board.getBrd_num();
+					int latestBrdStep = ycs.getLatestBrdStep(brd_group);
+				    board.setBrd_step(latestBrdStep + 1);
+			   
+			   } catch (NumberFormatException e) {
+			        e.printStackTrace();
+			   
+			        response.put("result", "failure");
+			        response.put("error", "Invalid brd_num format");
+			    }		
+		            jbs.commentSharing(board);
+ 
+		            response.put("result", "success");
+		            response.put("redirectUrl", "/ya/commentForm?brd_num=" + board.getBrd_num());
+		        } else {
+		            
+		            response.put("result", "failure");
+		            response.put("error", "User not logged in");
+		        	}	
+	    		} catch (Exception e) {
+			        e.printStackTrace();
+			        
+			        response.put("result", "failure");
+			        response.put("error", "An error occurred");
+			    }
+
+			    return response;
+	}	
+	
+	// 쉐어링 댓글 수정
+	@PostMapping(value="/commentUpdateSharing")
+	@ResponseBody
+	public Map<String, Object> commentUpdateSharing(HttpSession session,
+		      @RequestParam("brd_num") int brd_num, @RequestParam("conts") String conts, @ModelAttribute Board board) {
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    try {
+	        System.out.println("JkController jbs.commentUpdateSharing start...");
+
+	        int user_num = 0;
+	        if (session.getAttribute("user_num") != null) {
+	            user_num = (int) session.getAttribute("user_num");
+	            
+	            board.setUser_num(user_num);
+	            board.setBrd_num(brd_num);
+	            board.setConts(conts);
+	     
+	            jbs.commentUpdateSharing(board);
+
+	            // 댓글 정보 확인
+	            System.out.println("session.getAttributeuser_num?"+session.getAttribute("user_num"));
+	            System.out.println("board 댓글 수정후 conts?" + board.getConts());
+
+	       
+	            map.put("result", "success");
+	            
+	        } else {
+	            
+	            map.put("result", "failure");
+	            map.put("error", "User not logged in");
+	        }
+	    } catch (Exception e) {
+	        System.out.println("JkController commentUpdateSharing e.getMessage()"+e.getMessage());
+	       
+	        map.put("result", "failure");
+	        map.put("error", "An error occurred");
+	    }
+
+	    return map;
+	}
+	
+	// 쉐어링 댓글 삭제
+
+	@PostMapping(value="/commentDeleteSharing")
+	@ResponseBody
+	public Map<String, Object> commentDeleteSharing(HttpSession session,
+			@RequestParam("brd_num") int brd_num,  @ModelAttribute Board board){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			System.out.println("JkController jbs.commentDeleteSharing start...");
 			
+			int user_num = 0;
+			if(session.getAttribute("user_num")!=null) {
+				 user_num = (int) session.getAttribute("user_num");				 
+				 board.setUser_num(user_num);
+				 
+				 jbs.commentDeleteSharing(board);
+			}
+			
+		} catch (Exception e) {
+			 System.out.println("JkController commentDeleteSharing e.getMessage()"+e.getMessage());
+		}
+
+		
+		return map;
+		
+	}	
+		
 	@PostMapping("/writeShare")
 	public String writeShare(Board board, HttpServletRequest request,@RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 		System.out.println("JkController writeShaire start..");
@@ -279,6 +421,7 @@ public class JkController {
 		return "forward:mySharing";		
 		
 	}
+	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
 		UUID uid = UUID.randomUUID();

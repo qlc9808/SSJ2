@@ -54,14 +54,14 @@ function renderTable(data) {
     				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
     					</button>
 
-                      <img class="card-img-top" src="${board.img}" alt="..." style="width: 100%; height: 250;">
+                      <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
     					 </div>
                     <div class="card-body fw-bold text-center">
                         <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                             ${board.title}
                         </a><p>
                         <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                            	${board.price}원</a><p>
+                            	{board.price}원</a><p>
                         <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
                         						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
                         				
@@ -205,6 +205,5 @@ $("#sortOption").change(function() {
   
    
 </body>
-
 <%@ include file="footer.jsp" %>
 </html>
