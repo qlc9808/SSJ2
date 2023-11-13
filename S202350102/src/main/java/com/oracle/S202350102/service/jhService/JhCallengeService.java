@@ -43,10 +43,13 @@ public interface JhCallengeService {
 	void 			viewCntUp(int brd_num);
 
 
-	int 			replyUpdate(Board board); 
+	int 			replyUpdate(Board board);
+
+
+	int 			reviewInsert(Board board); 
 
       
-    
+     
  
 
 }

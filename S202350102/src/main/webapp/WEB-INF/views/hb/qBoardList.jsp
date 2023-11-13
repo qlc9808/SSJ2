@@ -43,7 +43,7 @@
 							<td>${num}</td>
 							<td><a href="qBoardDetail?brd_num=${board.brd_num}">${board.title}</a></td>
 							<td>
-								<img title="Lv.${board.user_level } | exp.${board.user_exp}(${board.percentage }%)" class="Select" src="/images/level/${board.icon}.gif">${board.nick}
+								<img title="Lv.${board.user_level } | exp.${board.user_exp}(${board.percentage }%)" src="/images/level/${board.icon}.gif">${board.nick}
 							</td>
 							<td><fmt:formatDate value="${board.reg_date }" pattern="yy-MM-dd"/></td>
 							<td>${board.view_cnt}</td>
@@ -79,6 +79,8 @@
 	  </div>
 	</div>
 	<c:import url="/WEB-INF/views/footer.jsp"/>
+	
+</body>
 	<script type="text/javascript">
 		$(function(){
 			$('.search-btn-form').click(function(){
@@ -97,7 +99,14 @@
 								str += "<td>"+ result.brd_num + "</td>";
 								str += "<td><a href='qBoardDetail?brd_num="+result.brd_num+"'>"+ result.title + "</a></td>";
 	                            str += "<td>" + result.nick + "</td>";
-	                            str += "<td>" + result.reg_date + "</td>";
+								var formatDate = new Date(result.reg_date);
+								var day = formatDate.getDate();
+								var month = formatDate.getMonth()+1;
+								var year = formatDate.getFullYear() % 100;
+								day = (day < 10) ? '0'+day : day;
+								month = (month<10) ? '0'+month : month;
+								year = (year<10) ? '0'+year : year;
+	                            str += "<td>" + year+'-'+month+'-'+day + "</td>";
 	                            str += "<td>" + result.view_cnt + "</td>";
 	                            str += "</tr>";
 	                            $('#search-list').append(str);
@@ -113,9 +122,5 @@
 			});
 		});
 
-
-	
 	</script>
-	
-</body>
 </html>

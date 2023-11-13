@@ -123,6 +123,15 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return result;
 	}
 
+	@Override
+	public int reviewInsert(Board board) {
+		System.out.println("JhCallengeServiceImpl reviewInsert Start...");
+		
+		int result = jhChgDao.reviewInsert(board);
+		
+		return result;
+	}
+
 
 	
 	
