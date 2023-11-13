@@ -102,9 +102,9 @@
   
   
 	// bg 작성
-	function writeCertBoard() {
+	function writeCertBrd() {
 		
-		//alert("writeCertBoard Start");
+		//alert("writeCertBrd Start");
 		
 		// EL값을 JavaScript 변수에 저장
 		var user_num = ${user.user_num};
@@ -139,14 +139,14 @@
 		
 		// 서버로 데이터 전송
 		$.ajax({
-			url	:	"/writeCertBoard",
+			url	:	"/writeCertBrd",
 			type:	"POST",
 			data:	formData,
 			dataType:'text',
 			processData: false,		// 이미지 파일 처리를 위해 false로 설정
 			contentType: false,		// 이미지 파일 처리를 위해 false로 설정
 			success:function(data){
-				alert(".ajax writeCertBoard->"+data); 
+				alert(".ajax writeCertBrd->"+data); 
 				if (data == '1') {
 					// 성공하면 아래라인 수행 
 					alert("입력성공");
@@ -610,26 +610,26 @@
 			                </div>
 			
 			              </div>
+			              
 			              <div class="col-12 col-md text-md-center">
-			
-		
-			
 			                <!-- Count -->
-			                <strong class="fs-sm ms-2">Reviews ${totalCert }</strong>
-			
+			                <strong class="fs-sm ms-2">Total ${totalCert }</strong>
 			              </div>
-			              <div class="col-12 col-md-auto">
-			
-			                <!-- Button -->
-			                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
-			                  	인증하기
-			                </a>
-			
-			              </div>
+			              
+			              
+			              <form action="">
+				              <div class="col-12 col-md-auto">
+				              	<!-- Button -->
+				                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
+			                		인증하기
+			                	</a>
+				              </div>
+			              </form>
+			              
 			            </div>
 			
-			            <!-- New Review -->
-			            <div class="collapse" id="reviewForm">
+			            <!-- 새 인증글 -->
+			            <div class="collapse" id="writeForm">
 			
 			              <!-- Divider -->
 			              <hr class="my-8">
@@ -673,7 +673,7 @@
 									                  
 			                  <div class="col-12 text-center">
 			                    <!-- 등록 Button -->
-			                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBoard()">
+			                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBrd()">
 			                      	등록
 			                    </button>
 			                  </div>
@@ -776,7 +776,6 @@
 												수정
 					                          </a>
 					                          
-					                          Button
 					                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
 												삭제
 					                          </a>
