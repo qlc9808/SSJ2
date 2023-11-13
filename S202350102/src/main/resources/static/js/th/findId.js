@@ -34,6 +34,7 @@
 									alert("회원님의 아이디 : \n" + str);
 									$('#user_name').val('');
 									$('#email').val('');
+									$('#modalFindId').modal('hide');
 								}
 			}
 		});

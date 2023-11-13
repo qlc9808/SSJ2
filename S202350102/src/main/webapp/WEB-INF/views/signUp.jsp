@@ -7,52 +7,11 @@
  <meta charset="UTF-8">
 <script type="text/javascript" src="js/th/thSignUp.js"></script>
 <script type="text/javascript">
-	function resetAll(){
-		/* 메세지 전부삭제  */
-		 $("#failId").css("display","none");	
-		 $("#failDupId").css("display","none");
-		 $("#failpwd").css("display", "none");
-		 $("#notMatchPwd").css("display", "none");
-		 $("#matchPwd").css("display", "none");
-		 $("#failNick").css("display","none"); 
-		 $("#failDupNick").css("display","none");
-		 $("#failemail").css("display", "none");
-		 $("#failtel").css("display", "none");
-		 
-		 /* 색깔 삭제 */
-		 $("#user_id").css("border-color", "#e5e5e5");
-         $("#user_id").css("border-width", "1px");
-		 
-         $("#user_pswd").css("border-color", "#e5e5e5");
-         $("#user_pswd").css("border-width", "1px");
-         
-         $("#nick").css("border-color", "#e5e5e5");
-         $("#nick").css("border-width", "1px");
-         
-         $("#user_name").css("border-color", "#e5e5e5");
-         $("#user_name").css("border-width", "1px");
-         
-         $("#email").css("border-color", "#e5e5e5");
-         $("#email").css("border-width", "1px");
-         
-         $("#tel").css("border-color", "#e5e5e5");
-         $("#tel").css("border-width", "1px");
-	}
+
 </script>
  </head>
 <body class="bg-light">
   	<c:import url="/WEB-INF/views/header4.jsp"/>
-  	
-
-    <!-- MODALS -->
-<!--     {{> partials/modals}} -->
-
-    <!-- NAVBAR -->
-<!--     {{> navbars/navbar-topbar classList="bg-light"}} -->
-
-    <!-- NAVBAR -->
-<!--     {{> navbars/navbar classList="bg-white"}} -->
-
     <!-- CONTENT -->
     <section class="py-12">
       <div class="container">
@@ -108,8 +67,9 @@
                       	<div class="form-floating mb-3">
 	                        <input class="form-control form-control-sm" id="user_confirmPswd" type="password" name="user_confirmPswd" placeholder="비밀번호  확인 *" onchange="checkConfirmPswd()">
 	                        <label for="floatingInput">비밀번호 확인</label>
-	                        <font color ="green" id = "matchPwd" 	style = "display:none" size="2 rem">비밀번호가 일치합니다 </font>
-	                        <font color ="red"   id = "notMatchPwd" style = "display:none" size="2 rem">비밀번호가 일치하지 않습니다 </font>
+	                        <font color ="green" id = "matchPwd" 		style = "display:none" size="2 rem">비밀번호가 일치합니다 </font>
+	                        <font color ="red"   id = "notMatchPwd" 	style = "display:none" size="2 rem">비밀번호가 일치하지 않습니다 </font>
+	                        <font color ="red"   id = "failConfirmpwd" 	style = "display:none" size="2 rem">8자 이상 영문,숫자,특수기호를 조합해 입력해주세요 </font>
                         </div>
                       </div>
                     </div>

@@ -14,7 +14,6 @@
 		FROM 	user1 
 		WHERE 	user_id = #{user_id} 
 		AND 	user_pswd= #{user_pswd}
-		AND		delete_yn = 'N'
 	</select>
 	
 	<update id="thDeleteUser1" parameterType="User1">
@@ -47,6 +46,7 @@
 		FROM	user1
 		WHERE	user_name	=	#{user_name}
 		AND		email		=	#{email}
+		AND		delete_yn	=	'N'
 	</select>
 	
 	<select id="thFindUser1ByIdAndEmail" parameterType="User1" resultType="User1">
@@ -54,12 +54,14 @@
 		FROM	user1
 		WHERE	user_id		=	#{user_id}
 		AND		email		=	#{email}
+		AND		delete_yn	=	'N'
 	</select>
 	
 	<update id="thUser1PswdUpdate" parameterType="Map">
 		UPDATE	user1
 		SET		user_pswd 	= 	#{rndPswd}
-		WHERE	user_id		=	#{user_id}		
+		WHERE	user_id		=	#{user_id}	
+		AND		delete_yn	=	'N'	
 	</update>
 </mapper>
 
