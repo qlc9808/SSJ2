@@ -10,7 +10,7 @@
         border: none /* 테두리 없애기 */
     }
 </style>
-<title>Insert title here</title>
+<title>챌린지 상세 페이지</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	// yr 작성	
@@ -53,7 +53,7 @@
 				if(followingCheck.fStatus > 0) {
 					$("#follow").removeClass("btn-danger");
 					$("#follow").addClass("btn-light");
-					$("#follow").text("팔로잉");
+ 					$("#follow").text("팔로잉");
 				} else {
 					$("#follow").removeClass("btn-light");
 					$("#follow").addClass("btn-danger");
