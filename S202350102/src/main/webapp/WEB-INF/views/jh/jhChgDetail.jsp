@@ -13,6 +13,23 @@
 <title>Insert title here</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+/* 	//jh 작성 -> 보류(챌린지 후기 10개 이상 쓰고 다시 해보기)
+	$(document).ready(function() {
+	        var currentPage = $("#reviewCurrentPage").val();
+	        if (currentPage != null) {
+					var targetElement = $('.nav-link');
+					if(targetElement.length > 0) {
+						 $('html, body').animate({
+			                    scrollTop: targetElement.offset().top 
+			                }, 1000);
+					}
+	        } */
+	        
+
+
+
+
+
 	// yr 작성	
 	// 챌린지 신청
 	function cJoin() {
@@ -1155,8 +1172,8 @@
               </div>
             
             
-            
-              
+            <!-- jh 후기글   -->
+            <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${reviewPage.currentPage}">  
             <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
             <c:choose>
             	<c:when test="${chg.stateCtn == '종료'}">
@@ -1165,23 +1182,22 @@
 	                  <div class="col-12 col-lg-10 col-xl-8">
 	                  	 <!-- Heading -->
 				            <h4 class="mb-10 text-center">후기 게시판</h4>
-				
+				            
+				            
+			              	<c:choose>
+			              	<c:when test="${chgrYN == 1 }">
+			              	<!-- 참가자인 경우 -->
 				            <!-- Header -->
 				            <div class="row align-items-center">
-				              <div class="col-12 col-md-auto">
-				
-				                <strong class="fs-sm ms-2">유저 아이디</strong>
-				               		
-				              </div>
-				              <div class="col-12 col-md text-md-center">
-				
 				              
+				              <div class="col-12 col-md text-md">
 				
 				                <!-- Count -->
 				                <strong class="fs-sm ms-2">총 리뷰수 : ${reviewTotal }</strong>
 				
 				              </div>
-				              <div class="col-12 col-md-auto">
+				              
+   				              <div class="col-12 col-md-auto">
 				
 				                <!-- Button -->
 				                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
@@ -1190,99 +1206,170 @@
 				
 				              </div>
 				            </div>
+				            
+
+				              	<!-- New Review -->
+						            <div class="collapse" id="reviewForm">
+						
+						              <!-- Divider -->
+						              <hr class="my-8">
+						              
+						              <div class="col-12 col-md-auto">
+						
+						                <strong class="fs-sm ms-2">${user.nick }님 후기를 입력해 주세요!</strong><p>
+						               		
+						              </div>
+						
+						              <!-- Form -->
+						              <form action="/reviewInsert">
+						              	<input type="hidden" 	name="chg_id" 		value="${chg.chg_id}" >
+						              	<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
+						                <div class="row">
+						 
+						                  <div class="col-12">
+						
+						                    <!-- Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+						                      <input class="form-control form-control-sm" id="reviewTitle" type="text" name="title" placeholder="Review Title *" required>
+						                    </div>
+						
+						                  </div>
+						                  <div class="col-12">
+						
+						                    <!-- Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">Review:</label>
+						                      <textarea class="form-control form-control-sm" id="reviewText" rows="5" name="conts" placeholder="Review *" required></textarea>
+						                    </div>
+						
+						                  </div>
+						                  
+						                  <div class="input-group mb-3">
+											  <input type="file" class="form-control" name="img" id="inputGroupFile02">
+											  <label class="input-group-text" for="inputGroupFile02">Upload</label>
+										  </div>
+						                  
+						                  <div class="col-12 text-center">
+						
+						                    <!-- Button -->
+						                    <button class="btn btn-outline-dark" type="submit">
+						                      Post Review
+						                    </button>
+						
+						                  </div>
+						                </div>
+						              </form>
+						
+						            </div>
+				              	</c:when>
+				              	
+				              	<c:when test="${user == null  }">
+				              	<!-- 로그인 전인 경우 -->
+				              	<!-- Header -->
+						            <div class="row align-items-center">
+						              
+						              <div class="col-12 col-md text-md">
+						
+						                <!-- Count -->
+						                <strong class="fs-sm ms-2">총 리뷰수 : ${reviewTotal }</strong>
+						
+						              </div>
+						              
+		   				              <div class="col-12 col-md-auto">
+						
+						                <!-- Button -->
+						                <a class="btn btn-sm btn-dark"  href="/reviewInsert">
+						                  Write Review
+						                </a>
+						
+						              </div>
+						            </div>
+				              	
+				              	</c:when>
+				              	
+				              	<c:otherwise>
+				              	<!-- 로그인 했지만 참가자 아닌 경우 -->
+				              	<div class="row align-items-center">
+				              
+				              <div class="col-12 col-md text-md">
 				
-				            <!-- New Review -->
-				            <div class="collapse" id="reviewForm">
+				                <!-- Count -->
+				                <strong class="fs-sm ms-2">총 리뷰수 : ${reviewTotal }</strong>
 				
-				              <!-- Divider -->
-				              <hr class="my-8">
+				              </div>
+				              
+   				              <div class="col-12 col-md-auto">
 				
-				              <!-- Form -->
-				              <form>
-				                <div class="row">
-				                  <div class="col-12 mb-6 text-center">
+				                <!-- Button -->
+				                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
+				                  Write Review
+				                </a>
 				
-				                    <!-- Text -->
-				                    <p class="mb-1 fs-xs">
-				                      Score:
-				                    </p>
-				
-				                    <!-- Rating form -->
-				                    <div class="rating-form">
-				
-				                      <!-- Input -->
-				                      <input class="rating-input" type="range" min="1" max="5" value="5">
-				
-				                      <!-- Rating -->
-				                      <div class="rating h5 text-dark" data-value="5">
-				                        <div class="rating-item">
-				                          <i class="fas fa-star"></i>
-				                        </div>
-				                        <div class="rating-item">
-				                          <i class="fas fa-star"></i>
-				                        </div>
-				                        <div class="rating-item">
-				                          <i class="fas fa-star"></i>
-				                        </div>
-				                        <div class="rating-item">
-				                          <i class="fas fa-star"></i>
-				                        </div>
-				                        <div class="rating-item">
-				                          <i class="fas fa-star"></i>
-				                        </div>
-				                      </div>
-				
-				                    </div>
-				
-				                  </div>
-				                  <div class="col-12 col-md-6">
-				
-				                    <!-- Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewName">Your Name:</label>
-				                      <input class="form-control form-control-sm" id="reviewName" type="text" placeholder="Your Name *" required>
-				                    </div>
-				
-				                  </div>
-				                  <div class="col-12 col-md-6">
-				
-				                    <!-- Email -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewEmail">Your Email:</label>
-				                      <input class="form-control form-control-sm" id="reviewEmail" type="email" placeholder="Your Email *" required>
-				                    </div>
-				
-				                  </div>
-				                  <div class="col-12">
-				
-				                    <!-- Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
-				                      <input class="form-control form-control-sm" id="reviewTitle" type="text" placeholder="Review Title *" required>
-				                    </div>
-				
-				                  </div>
-				                  <div class="col-12">
-				
-				                    <!-- Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewText">Review:</label>
-				                      <textarea class="form-control form-control-sm" id="reviewText" rows="5" placeholder="Review *" required></textarea>
-				                    </div>
-				
-				                  </div>
-				                  <div class="col-12 text-center">
-				
-				                    <!-- Button -->
-				                    <button class="btn btn-outline-dark" type="submit">
-				                      Post Review
-				                    </button>
-				
-				                  </div>
-				                </div>
-				              </form>
-				
+				              </div>
 				            </div>
+				            
+
+				              	<!-- New Review -->
+						            <div class="collapse" id="reviewForm">
+						
+						              <!-- Divider -->
+						              <hr class="my-8">
+						              
+						              <div class="col-12 col-md-auto">
+						
+						                <strong class="fs-sm ms-2">${user.nick }님 챌린지 참가자만 후기를 남길 수 있습니다! 다음엔 꼭 참가해 주세요!</strong><p>
+						               		
+						              </div>
+						
+						              <!-- Form -->
+						              <form action="/reviewInsert">
+						              	<input type="hidden" 	name="chg_id" 		value="${chg.chg_id}" >
+						              	<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
+						                <div class="row">
+						 
+						                  <div class="col-12">
+						
+						                    <!-- Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+						                      <input class="form-control form-control-sm" id="reviewTitle" type="text" name="title" placeholder="챌린지 참가자만 후기를 남길 수 있습니다!" disabled>
+						                    </div>
+						
+						                  </div>
+						                  <div class="col-12">
+						
+						                    <!-- Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">Review:</label>
+						                      <textarea class="form-control form-control-sm" id="reviewText" rows="5" name="conts" placeholder="챌린지 참가자만 후기를 남길 수 있습니다!" disabled></textarea>
+						                    </div>
+						
+						                  </div>
+						                  
+						                  <div class="input-group mb-3">
+											  <input type="file" class="form-control" name="img" id="inputGroupFile02" disabled>
+											  <label class="input-group-text" for="inputGroupFile02">Upload</label>
+										  </div>
+						                  
+						                  <div class="col-12 text-center">
+						
+						                    <!-- Button -->
+						                    <button class="btn btn-outline-dark" type="submit" disabled>
+						                      Post Review
+						                    </button>
+						
+						                  </div>
+						                </div>
+						              </form>
+						
+						            </div>
+				              	</c:otherwise>
+				              </c:choose>
+				              
+
+				
+				            
 	                  	
 		                    <!-- Table -->
 		                    <div class="table-responsive">     
@@ -1317,19 +1404,19 @@
 								  <ul class="pagination pagination-sm text-gray-400">
 								  <c:if test="${reviewPage.startPage > reviewPage.pageBlock}">
 								    <li class="page-item">
-								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }&chg_id=${chg.chg_id}">
 								        <i class="fa fa-caret-left"></i>
 								      </a>
 					              </c:if>
 								    </li>
 						          <c:forEach var="i" begin="${reviewPage.startPage }" end="${reviewPage.endPage }">
 								    <li class="page-item active">
-								      <a class="page-link" href="chgDetail?currentPage=${i}">${i}</a>
+								      <a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}">${i}</a>
 								    </li>
 						          </c:forEach>
 						          <c:if test="${reviewPage.endPage < reviewPage.totalPage }">
 								    <li class="page-item">
-								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage+reviewPage.pageBlock }">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage+reviewPage.pageBlock }&chg_id=${chg.chg_id}">
 								        <i class="fa fa-caret-right"></i>
 								      </a>
 								    </li>

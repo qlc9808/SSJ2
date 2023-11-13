@@ -441,6 +441,16 @@ public class JhController {
 		
 	}
 	
+	@RequestMapping(value = "reviewInsert")
+	public String reviewInsert(Board board ) {
+		System.out.println("JhController reviewInsert Start...");
+		
+		int result = jhCService.reviewInsert(board);
+		System.out.println("JhController chgApplication result -> " + result);		
+		
+		return "redirect:chgDetail?&chg_id="+board.getChg_id();
+	}
+	
 
 	
 }
