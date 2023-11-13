@@ -19,7 +19,7 @@ public interface JhCallengeService {
 	Board 			reviewContent(int brd_num);
 
 
-	List<Board>		reviewReplyList(int brd_num);
+	List<Board>		reviewReplyList(Board board);
 
 
 	int 			reviewTotal(int chg_id);
@@ -37,10 +37,16 @@ public interface JhCallengeService {
 	void 			replyInsert(Board board);
 
 
-	int 			replyDelete(int brd_num); 
+	int 			replyDelete(int brd_num);
 
+
+	void 			viewCntUp(int brd_num);
+
+
+	int 			replyUpdate(Board board); 
+
+      
     
-   
  
 
 }

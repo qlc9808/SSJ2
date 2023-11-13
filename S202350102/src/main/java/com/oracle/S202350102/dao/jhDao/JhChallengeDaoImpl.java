@@ -85,13 +85,13 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	}
 
 	@Override
-	public List<Board> reviewReplyList(int brd_num) {
+	public List<Board> reviewReplyList(Board board) {
 		System.out.println("JhChallengeDaoImpl reviewReplyList Start...");
 		
 		List<Board> reviewReplyList = null;
 		
 		try {
-			reviewReplyList = session.selectList("jhReviewReplyList", brd_num);
+			reviewReplyList = session.selectList("jhReviewReplyList", board);
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl reviewReplyList e.getMessage() -> " + e.getMessage());
 		}
@@ -194,6 +194,36 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		}
 		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
 		
+		return result;
+	}
+
+	@Override
+	public void viewCntUp(int brd_num) {
+		System.out.println("JhChallengeDaoImpl viewCntUp Start...");
+		
+		int result = 0;
+		
+		try {
+			result = session.update("jhViewCntUp", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl viewCntUp e.getMessage() -> " + e.getMessage());
+		}
+		
+		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
+		
+	}
+
+
+
+	@Override
+	public int replyUpdate(Board board) {
+		System.out.println("JhChallengeDaoImpl replyUpdate Start...");
+		int result = 0;
+		try {
+			result = session.update("jhReplyUpdate", board);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl replyUpdate e.getMessage() -> " + e.getMessage());
+		}
 		return result;
 	}
 

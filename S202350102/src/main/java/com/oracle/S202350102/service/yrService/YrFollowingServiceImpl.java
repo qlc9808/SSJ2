@@ -12,25 +12,28 @@ import lombok.RequiredArgsConstructor;
 public class YrFollowingServiceImpl implements YrFollowingService {
 	private final YrFollowingDao yfid;
 
-	// following 여부 판단
-	public boolean isFollowing(Following fwi) {
+	@Override
+	public int followingCheck(Following fwi) {
 		int result = yfid.selectFollowingYN(fwi);
-		System.out.println("YrFollowingService isFollowing result -> " + result);
-		if(result == 0) return false;	// following 값이 없다
-		else			return true;	// following 값이 있다
+		System.out.println("YrFollowingService followingCheck result -> " + result);
+		
+		return result;
 	}
 	
 	@Override
-	public boolean following(Following fwi) {
-		if(this.isFollowing(fwi)) {	
-			// isFollowing = true -> following 값 있다 -> 없애기
+	public int following(Following fwi) {
+		int result = 0;
+		if(this.followingCheck(fwi) == 1) {	
+			// followingCheck = 1 -> following 값 있다 -> 없애기
 			yfid.deleteFollowing(fwi);
-			return false;
+			result = 0;
 		} else {										
-			// isFollowing = false -> following 값 없다 -> 추가하기
+			// followingCheck = 0 -> following 값 없다 -> 추가하기
 			yfid.insertFollowing(fwi);
-			return true;
+			result = 1;
 		}
+		System.out.println("YrFollowingService following result -> " + result);
+		return result;
 	}
 
 }

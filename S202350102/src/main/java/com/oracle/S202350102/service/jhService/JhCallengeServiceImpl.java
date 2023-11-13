@@ -56,10 +56,10 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	}
 
 	@Override
-	public List<Board> reviewReplyList(int brd_num) {
+	public List<Board> reviewReplyList(Board board) {
 		System.out.println("JhCallengeServiceImpl reviewReplyList Start...");
 		
-		List<Board> reviewReplyList = jhChgDao.reviewReplyList(brd_num);
+		List<Board> reviewReplyList = jhChgDao.reviewReplyList(board);
 		
 		return reviewReplyList;
 	}
@@ -106,6 +106,20 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		System.out.println("JhCallengeServiceImpl replyDelete Start...");
 		int result = jhChgDao.replyDelete(brd_num);
 		
+		return result;
+	}
+
+	@Override
+	public void viewCntUp(int brd_num) {
+		System.out.println("JhCallengeServiceImpl viewCntUp Start...");
+		jhChgDao.viewCntUp(brd_num);
+	}
+
+
+	@Override
+	public int replyUpdate(Board board) {
+		System.out.println("JhCallengeServiceImpl replyUpdate Start...");
+		int result = jhChgDao.replyUpdate(board);
 		return result;
 	}
 

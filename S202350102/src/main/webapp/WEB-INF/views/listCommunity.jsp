@@ -5,14 +5,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<!--css  -->
+
 <style type="text/css">
+
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+    			
 /* 페이지 전체 스타일 */
+section.community {
+  padding: 100px 0;
+}
 
 body {
-    font-family: Arial, sans-serif;
+   font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -26,34 +30,50 @@ body {
 
 /* 타이틀 스타일 */
 .page-title {
-    background-color: #fff;
-    color: #353535;
-    padding: 10px;
-    text-align: center;
-    margin-bottom: 20px;
+  	margin-bottom: 30px;
+}
+
+.page-title h3 {
+  font-size: 28px;
+  color: #333333;
+  font-weight: 400;
+  text-align: center;
 }
 
 /* 검색 박스 스타일 */
-#searchBox {
-    text-align: center; /* 수평 가운데 정렬 */
-    margin: 0 auto;    /* 수평 가운데 정렬을 위한 가운데 마진 설정 */
-    width: 30%;        /* 화면 폭의 절반만 사용 */
-}
-#keyword {
-    padding: 10px;
-    width: 80%;         /* 검색창 너비 확장 */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+#serachBox .search-window .search-wrap {
+  position: relative;
+  padding-right: 50px;
+  margin: 0 auto;
+  width: 80%;
+  max-width: 564px;
 }
 
-#searchButton {
-    padding: 10px 20px;
-    background-color: #fff;
-   	color: #1f1f1f;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+#searchBox.search-window {
+  padding: 15px 15px;
+  background-color: #f9f7f9;
+  
+}
+#searchBox .search-window .search-wrap input {
+  height: 50px;
+  width: 30%;
+  font-size: 14px;
+  padding: 7px 14px;
+  border: 1px solid #ccc;
+}
+#searchBox.search-window .search-wrap input:focus {
+  border-color: #333;
+  outline: 0;
+  border-width: 1px;
+}
+#searchBox.search-window .search-wrap .btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 108px;
+  padding: 0;
+  font-size: 16px;
 }
 
 #searchButton:hover {
@@ -65,27 +85,28 @@ body {
     margin-top: 50px;
 }
 
-/* Select 조회와 글작성 부분 스타일 */
+
+/* Select 조회와 글작성 부분 스타일--------------------------------------- */
 #options {
     float: right; /* 오른쪽 정렬 */
-    margin-top: -50px; /* 표 바로 위에 위치 */
-    margin-right: 20px;
-    position: absolute;
+    right: 0;
+    margin-right: 500px;
+    position: inherit;
  
 }
 
 #options select {
-    background-color: #fff; 
+
     border: none;
     border-radius: 5px;
 }
 
 #options input[type="submit"] {
-    background-color: #fff; 
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  color: #fff; /* 글자색을 흰색(#fff)으로 설정 */
+  background-color: #000; /* 배경색을 검정색(#000)으로 설정 */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #options input[type="submit"]:hover {
@@ -94,38 +115,116 @@ body {
 
 
 /* 테이블 스타일 */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-table th {
-    background-color: #FFDDDD;
-    color: #353535;
-    text-align: center;
-}
-
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-}
-
-/* 게시판 리스트 스타일 */
-#board-list {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    margin-top: 20px;
-}
-
-/* 게시판 테이블 스타일 */
 #boardtable {
-    width: 100%;
+  font-size: 15px;
+  height: 300px;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
+
+#boardtable a {
+  color: #333;
+  display: inline-block;
+  line-height: 1.4;
+  word-break: break-all;
+  vertical-align: middle;
+}
+#boardtable a:hover {
+  text-decoration: underline;
+}
+#boardtable th {
+  text-align: center;
+}
+
+#boardtable .th-num {
+  width: 100px;
+  text-align: center;
+}
+
+#boardtable .th-date {
+  width: 200px;
+}
+
+#boardtable .th-view_cnt {
+  width: 200px;
+}
+
+#boardtable .th-replyCount{
+  width: 200px;
+}
+
+#boardtable th, .board-table td {
+  padding: 14px 0;
+}
+
+#boardtable tbody td {
+  border-top: 1px solid #e7e7e7;
+  text-align: center;
+}
+
+#boardtable tbody th {
+  padding-left: 28px;
+  padding-right: 14px;
+  border-top: 1px solid #e7e7e7;
+  text-align: left;
+}
+
+#boardtable tbody th p{
+  display: none;
+}
+
+/*버튼  */
+.btn {
+  height: 49.5px; 
+  display: inline-block;
+  padding: 0 30px;
+  font-size: 15px;
+  font-weight: 400;
+  background: transparent;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.btn-dark {
+  background: #555;
+  color: #fff;
+}
+
+.btn-dark:hover, .btn-dark:focus {
+  background: #373737;
+  border-color: #373737;
+  color: #fff;
+}
+
+.btn-dark {
+  background: #555;
+  color: #fff;
+}
+
+.btn-dark:hover, .btn-dark:focus {
+  background: #373737;
+  border-color: #373737;
+  color: #fff;
+}
+
 </style>
+<meta charset="UTF-8">
+<title>커뮤니티 게시판</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -133,10 +232,11 @@ $(document).ready(function () {
     $("#searchButton").click(function () {
         var keyword = $("#keyword").val();
          if (keyword !== "") { 
-            //  검색 아작스 요청
+         
+        	 //  검색 아작스 요청
         	$.ajax({
             	type: "GET",
-            	url: "listBoardSearch?keyword=" + keyword,      		
+            	url: "listBoardSearch?keyword=" + keyword,
                 dataType: "json",
                 async: false,
                 success: function (data) { 
@@ -151,9 +251,17 @@ $(document).ready(function () {
                              str += "<td>" + result.brd_num + "</td>";
                              str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                              str += "<td>" + result.nick + "</td>";
-                             str += "<td>" + result.reg_date + "</td>";
+                             // 날짜 형식 변환
+                             var formattedDate = new Date(result.reg_date);
+                             var day = formattedDate.getDate();
+                             var month = formattedDate.getMonth() + 1;
+                             var year = formattedDate.getFullYear() % 100;
+                             day = (day < 10) ? '0' + day : day;
+                             month = (month < 10) ? '0' + month : month;
+                             str += "<td>" + year + "-" + month + "-" + day + "</td>";
+                             
                              str += "<td>" + result.view_cnt + "</td>";
-                             str += "<td></td>"; // 댓글 수 넣어야 함
+                             str += "<td>" + result.replyCount +"</td>"; 
                              str += "</tr>";
                              $('#boardtable').append(str);
                          }
@@ -172,6 +280,7 @@ $(document).ready(function () {
              location.reload();
          }        
      });
+    
     
     // 정렬 아작스 요청
     $("#sortOption").change(function() {
@@ -194,9 +303,17 @@ $(document).ready(function () {
                       str += "<td>" + result.brd_num + "</td>";
                       str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                       str += "<td>" + result.nick + "</td>";
-                      str += "<td>" + result.reg_date + "</td>";
+                      // 날짜 형식 변환
+                      var formattedDate = new Date(result.reg_date);
+                      var day = formattedDate.getDate();
+                      var month = formattedDate.getMonth() + 1;
+                      var year = formattedDate.getFullYear() % 100;
+                      day = (day < 10) ? '0' + day : day;
+                      month = (month < 10) ? '0' + month : month;
+                      str += "<td>" + year + "-" + month + "-" + day + "</td>";
+                      
                       str += "<td>" + result.view_cnt + "</td>";
-                      str += "<td></td>"; // 댓글 수 넣어야 함
+                      str += "<td>" + result.replyCount +"</td>";
                       str += "</tr>";
                       $('#boardtable').append(str);
                   }
@@ -224,24 +341,31 @@ $(document).ready(function () {
             </div>
         </div>
 
-        <!-- 게시판 검색 (옵션 제목, 작성자), 글작성 -->
-    
-        <div id="searchBox">
-            <input type="text" id="keyword" placeholder="검색어 입력" value="${srch_word }">
-            <button id="searchButton">검색</button>
-        </div>
+    <!-- 게시판 검색 (옵션 제목, 작성자)-->
+     <div id="searchBox">
+     	 <div class="container">
+       		<div class="search-window">
 
+                  <div class="search-wrap">       			
+	            	<input type="search" id="keyword" placeholder="제목/작성자 검색" value="${srch_word}">
+	            	<button id="searchButton" class="btn btn-dark">검색</button>
+	              </div>
+ 	
+      	 	</div> 
+      	 </div>   
+     </div>
+     
         <div id="searchResults">
-            <!-- 검색 결과가 여기에 추가 -->
+            
         </div>
 
-        <!-- select 조회 게시글작성  -->
+    <!-- select 조회/ 게시글작성 버튼  -->
         <div id="options">
             <form action="writeFormCommunity" method="post">
                 <select id="sortOption" name="sortOption">
                      <option value="view_cnt">조회수 높은순</option>
             	     <option value="reg_date">최근 등록일 순</option>
-                </select> 
+                </select>         
                 <input type="submit" value="글작성">
             </form>
         </div>
@@ -249,32 +373,47 @@ $(document).ready(function () {
         <!-- 게시판리스트  -->
         <div id="board-list">
             <div class="container">
+             <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 
                 <table id="boardtable">
                     <thead>
                         <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>등록일</th>
-                            <th>조회수</th>
-                            <th >댓글수</th>
+                            <th scope="col" class="th-num">번호</th>
+                            <th scope="col" class="th-title">제목</th>
+                            <th scope="col" class="th-nick">작성자</th>
+                            <th scope="col" class="th-date">등록일</th>
+                            <th scope="col" class="th-view_cnt">조회수</th>
+                            <th  scope="col" class="th-replyCount">댓글수</th>
                         </tr>
-                    </thead>
+                    </thead>                 
                     <tbody>
                         <c:forEach var="board" items="${listCommunity}">
                             <tr>
-                                <td>${board.brd_num}</td>
+                                <td>${num}</td>
                                 <td><a href="detailCommunity?user_num=${board.user_num}&brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td>${board.nick}</td>
-                                <td>${board.reg_date}</td>
+                                <td><fmt:formatDate value="${board.reg_date }" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
-                                <td></td>
+				         		<td>${board.replyCount}</td>
+				         		<c:set var="num" value="${num-1}"></c:set> 			       
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
+                
+				   <div class="page">
+				    <c:if test="${boardPage.startPage >boardPage.pageBlock}">
+				        <a href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">[이전]</a>
+				    </c:if>
+				    <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
+				        <a href="listCommunity?currentPage=${i}">[${i}]</a>
+				    </c:forEach>
+				    <c:if test="${boardPage.endPage < boardPage.totalPage}">
+				        <a href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">[다음]</a>
+				    </c:if>
+				</div>
             </div>
         </div>
     </section>
 </body>
+<%@ include file="footer.jsp" %>
 </html>

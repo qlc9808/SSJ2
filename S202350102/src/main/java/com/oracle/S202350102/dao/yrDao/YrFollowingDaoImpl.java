@@ -47,6 +47,6 @@ public class YrFollowingDaoImpl implements YrFollowingDao {
 		}
 		return insertFollowing;
 	}
-	
-	
+
+
 }

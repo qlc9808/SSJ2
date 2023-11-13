@@ -39,4 +39,5 @@
     <input type="submit" value="수정완료">
 </form>
 </body>
+<%@ include file="../footer.jsp" %>
 </html>

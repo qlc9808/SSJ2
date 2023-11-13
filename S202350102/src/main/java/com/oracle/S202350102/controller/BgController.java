@@ -148,27 +148,27 @@ public class BgController {
 	
 	// 인증 글쓰기! mapper key: insertCertBrd		 ajax 로 시도했을 때 만든 코드
 	@ResponseBody
-	@RequestMapping(value = "writeCertBoard", method = RequestMethod.POST)
-	public String writeCertBoard(@RequestParam("chg_id") int chg_id,
+	@RequestMapping(value = "writeCertBrd", method = RequestMethod.POST)
+	public String writeCertBrd(@RequestParam("chg_id") int chg_id,
 			                     @RequestParam("screenshot") MultipartFile screenshot, 
 								 Board board, Model model, 
 								 HttpSession session, HttpServletRequest request) 
 										 throws IOException, Exception {
-		System.out.println("BgController writeCertBoard Start...");
-		System.out.println("BgController writeCertBoard board.getConts() -> " + board.getConts());
-		System.out.println("BgController writeCertBoard board.getTitle() -> " + board.getTitle());
-		System.out.println("BgController writeCertBoard board.getChg_Id() -> " + board.getChg_id());
-		System.out.println("BgController writeCertBoard chg_id -> " +chg_id);
+		System.out.println("BgController writeCertBrd Start...");
+		System.out.println("BgController writeCertBrd board.getConts() -> " + board.getConts());
+		System.out.println("BgController writeCertBrd board.getTitle() -> " + board.getTitle());
+		System.out.println("BgController writeCertBrd board.getChg_Id() -> " + board.getChg_id());
+		System.out.println("BgController writeCertBrd chg_id -> " +chg_id);
 		// chg_id = board.getChg_id();
 		  // 세션에서 회원 번호 가져옴 
 		int userNum = 0; 
 		if (session.getAttribute("user_num") != null) { 
 		// 현재 세션에 'user_num'이라는 속성이 있는지 확인하고, 있다면 가져옵니다. 
 		userNum = (int) session.getAttribute("user_num");
-		System.out.println("BgController writeCertBoard userNum -> "+userNum); 
+		System.out.println("BgController writeCertBrd userNum -> "+userNum); 
 		}
 		
-		System.out.println("BgController writeCertBoard board.getUser_num() -> " + board.getUser_num());
+		System.out.println("BgController writeCertBrd board.getUser_num() -> " + board.getUser_num());
 		
 		
 		// 파일 업로드 경로를 설정
@@ -205,7 +205,7 @@ public class BgController {
 		int insertResult = 0;
 
 		try {
-			System.out.println("BgController writeCertBoard board -> "+board);
+			System.out.println("BgController writeCertBrd board -> "+board);
 			insertResult = bs.insertCertBrd(board);
 			// if (insertResult > 0) boardList = bs.boardCert(board);
 
@@ -217,11 +217,11 @@ public class BgController {
 			}
 
 		} catch (Exception e) {
-			System.out.println("BgController writeCertBoard e.getMessage() -> " + e.getMessage());
+			System.out.println("BgController writeCertBrd e.getMessage() -> " + e.getMessage());
 		}
 
-		System.out.println("BgController writeCertBoard insertResult -> " + insertResult);
-		System.out.println("BgController writeCertBoard rtnStr -> " + rtnStr1);
+		System.out.println("BgController writeCertBrd insertResult -> " + insertResult);
+		System.out.println("BgController writeCertBrd rtnStr -> " + rtnStr1);
 
 		return rtnStr1;
 	}
@@ -264,7 +264,7 @@ public class BgController {
 		model.addAttribute("uptCnt", updateCount);
 		model.addAttribute("kk3", "Message Test");
 		
-		return "redirect:bgChgDetail";
+		return "redirect:jhChgDetail";
 	}
 	
 	
@@ -274,7 +274,7 @@ public class BgController {
 		System.out.println("BgController Start delete...");
 		int result = bs.deleteCertBrd(brd_num);
 		
-		return "redirect:bgChgDetail";
+		return "redirect:jhChgDetail";
 	}
 	
 	
@@ -328,7 +328,7 @@ public class BgController {
 		
 		// 보내는 사람의 메일 주소
 //		String sendMail = sendUser.getEmail();
-		String sendMail = "chtaehyunl@gmail.com";
+		String sendMail = "teamssj02@gmail.com";
 		System.out.println("sendMail sendMail -> "+sendMail);
 
 		String title = sendUser.getNick()+"님이 응원 메시지를 보내셨습니다";
@@ -352,6 +352,7 @@ public class BgController {
 			model.addAttribute("check", 2);		// 메일 전달 실패
 		}
 		
+		// 챌린지 메인 페이지 만들어야 제대로 넣을 수 있음
 		return "sendMail";
 	}
 }

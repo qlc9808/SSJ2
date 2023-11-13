@@ -1,5 +1,6 @@
 package com.oracle.S202350102.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
@@ -7,11 +8,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.ibatis.annotations.Param;
 import org.json.simple.JSONArray;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
@@ -44,33 +42,47 @@ public class YaController {
 	
 	//커뮤니티 게시글 전체조회
 	@RequestMapping(value="/listCommunity")
-	public String listCommunity(Board board, Model model) {
+	public String listCommunity(Board board, Model model,String currentPage ) {
 		System.out.println("YaController listCommunity start....");
+		
+		//전체 게시글 총 수 
+		int totalCommunity = ycs.totalCommunity(board);
+		model.addAttribute("totalCommunity", totalCommunity);		
+		System.out.println("YaContorller totalCommunity->"+totalCommunity);
+		
+		//페이징처리
+		Paging boardPage = new Paging(totalCommunity, currentPage);
+		board.setStart(boardPage.getStart());
+	    board.setEnd(boardPage.getEnd());
+	    model.addAttribute("boardPage", boardPage);
+		System.out.println(" YaController boardPage start?"+boardPage.getStart());
+		System.out.println(" YaControlloer boardpage total?"+boardPage.getTotal());
+		System.out.println("boardPage End?"+boardPage.getEnd());
+		
 		List<Board> listCommunity = ycs.listCommunity(board);
 		System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
-		
 		model.addAttribute("listCommunity", listCommunity);
-			
-		/*
-		 * //게시글 별 댓글 수 구하기 생각해보니 테이블에 컬럼이 추가되야 할것같음
-		 *  int replyCount = ycs.commentTotal(brd_num);
-		 * model.addAttribute("replyCount", replyCount);
-		 */
-	
+		
+		
+
+
 		return "listCommunity";
 	}
 	
 	
+	
 	//게시글 제목을 누르면 자세히 보기 
 	@GetMapping(value="detailCommunity")
-	public String detailCommunity(int brd_num, Model model, HttpSession session) {
+	public String detailCommunity(@RequestParam("brd_num")int brd_num, Model model, HttpSession session) {
 		System.out.println("YaController Start detailCommunity start...");
 		
-	    // 게시글 상세 정보 확인
-		Board board = ycs.detailCommunity(brd_num);
-		int brd_step=0;
 		
-		board.setBrd_step(brd_step);
+	   
+		Board board = ycs.detailCommunity(brd_num);
+		// 게시글 댓글수 후가시 
+		int replyCount = ycs.commentCount(brd_num);
+		
+		board.setReplyCount(replyCount);
 		board.setBrd_group(board.getBrd_num());
 		
 		//로그인 상태 확인 
@@ -82,11 +94,18 @@ public class YaController {
 		//조회수 증가
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
-			
+		
+		
+		System.out.println("YaController  commentCount replyCount?"+ replyCount);
+		
+	
+		
 		model.addAttribute("board", board);
 		model.addAttribute("upViewCnt", upViewCnt);	
+		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("loggedIn", user_num!= 0);
-			
+		
+		System.out.println("replyCount:" +board.getReplyCount());
 	    System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
 	    System.out.println("user_num:"+board.getUser_num());
@@ -117,40 +136,37 @@ public class YaController {
 			}
 
 	 // 게시글 작성
-	
 		@PostMapping(value="/writeCommunity") 
-		public String insertCommunity(@ModelAttribute Board board, HttpSession session,  Model model) {
-			System.out.println("YaController start insertCommunity... "); 
-			
-			int user_num = 0;
-			if (session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
-			
-			}
+		public String insertCommunity(@ModelAttribute Board board, Model model,HttpSession session ) {
+				
+				System.out.println("YaController start insertCommunity... "); 
+				
+				int user_num = 0;
+				if (session.getAttribute("user_num") != null) {
+					user_num = (int) session.getAttribute("user_num");
+				}
 				board.setUser_num(user_num);
-			
 				// 게시글 작성 (본글 설정)
 				board.setBrd_group(board.getBrd_num());
 				board.setBrd_step(0);
 				board.setBrd_lg(700);
-				/*
-				 * User1 user1 = new User1(); user1.getNick();
-				 */
 				
 				int insertResult = ycs.insertCommunity(board);
 				board.setUser_num(user_num);
 				
 				System.out.println("board brd_lg :"+board.getBrd_lg());
 				System.out.println("boardbrd_md :"+board.getBrd_md());
-				System.out.println("board nick :"+board.getNick());
 				
-			if (insertResult >0) 
-				return "redirect:listCommunity";			
-				else {
-					 model.addAttribute("msg", "작성 실패, 확인해보세요");
-				 }
-			return "forward:writeCommunity";
-		 }
+				if (insertResult >0) 
+					return "redirect:listCommunity";			
+					else {
+						 model.addAttribute("msg", "작성 실패, 확인해보세요");
+					 }
+				return "forward:writeCommunity";
+			 }
+			
+		
+	
 		
 		
 		// 게시글 수정폼이동 
@@ -202,7 +218,11 @@ public class YaController {
 		public List<Board> listBoardSearch(HttpServletRequest request) {
 			System.out.println("YaController ycs.listSearchBoardart....");
 			String keyword = request.getParameter("keyword");
-		    System.out.println("사용자 검색한 키워드: " + keyword);
+			
+			System.out.println("사용자 검색한 키워드: " + keyword);
+		    
+			
+		    
 		   
 		    List<Board> listSearchBoard = ycs.listSearchBoard(keyword);
 		    System.out.println("YaController listSearchBoard.size?" + listSearchBoard.size());
@@ -215,6 +235,7 @@ public class YaController {
 		public  List<Board> listBoardSort(HttpServletRequest request ) {
 			System.out.println("YaController ycs.listBoardSort start....");
 			String sortOption = request.getParameter("sort");
+			
 			List<Board> listSortedBoard = ycs.listBoardSort(sortOption);
 		
 		    return listSortedBoard;

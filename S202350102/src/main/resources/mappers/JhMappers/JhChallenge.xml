@@ -16,13 +16,13 @@
 	
 	
 	<select id="jhReviewTotal" parameterType="int" resultType="int">
-		SELECT COUNT(*)
-		FROM board b
+		SELECT 	COUNT(*)
+		FROM 	board b
 		INNER JOIN challenge c ON b.chg_id = c.chg_id
-		WHERE brd_lg = 700
-		AND brd_md = 101
-		AND c.chg_id = #{chg_id}
-		AND brd_step = 0
+		WHERE 	brd_lg = 700
+		AND 	brd_md = 101
+		AND 	c.chg_id = #{chg_id}
+		AND 	brd_step = 0
 	</select>
 	
 	<select id="jhChgReviewList" parameterType="Board" resultType="Board">
@@ -42,26 +42,36 @@
 	</select>
 	
 	<select id="jhUserStatus" parameterType="int" resultType="java.lang.String">
-		SELECT c.ctn
-		FROM user1 u
+		SELECT 	c.ctn
+		FROM 	user1 u
 		INNER JOIN comm c ON u.status_lg = c.lg AND u.status_md = c.md
-		WHERE u.user_num = #{user_num}
+		WHERE 	u.user_num = #{user_num}
 	</select>
 
+	<update id="jhViewCntUp" parameterType="int">
+		UPDATE board
+		SET    view_cnt = view_cnt+1
+		WHERE  brd_num  = #{brd_num}
+	</update>
+
 	<select id="jhReviewContent" parameterType="int" resultType="Board">
-		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.nick, b.view_cnt, replyCount(b.brd_num) replyCount
-		FROM board b
+		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.user_num, u.nick, b.view_cnt, replyCount(b.brd_num) replyCount
+		FROM 	board b
 		INNER JOIN user1 u ON b.user_num = u.user_num
-		WHERE b.brd_num = #{brd_num}
+		WHERE 	b.brd_num = #{brd_num}
 	</select>
 	
-	<select id="jhReviewReplyList" parameterType="int" resultType="Board">
-		SELECT b.brd_num, b.title, b.conts, b.reg_date, u.nick, b.view_cnt
-		FROM board b
-		INNER JOIN user1 u ON b.user_num = u.user_num
-		WHERE b.brd_group = #{brd_num}
-		AND b.brd_step > 0
-		ORDER BY b.reg_date DESC
+	<select id="jhReviewReplyList" parameterType="Board" resultType="Board">
+		SELECT * 
+		FROM (
+				SELECT 	 ROWNUM AS rn, b.brd_num, b.conts, b.reg_date, u.user_num, u.nick
+				FROM 	 board b
+				INNER JOIN user1 u ON b.user_num = u.user_num
+				WHERE 	 b.brd_group = #{brd_num}
+				AND 	 b.brd_step > 0
+				ORDER BY b.brd_num DESC
+		)
+		WHERE rn BETWEEN #{start} AND #{end} 
 	</select>
 	
 	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
@@ -71,19 +81,25 @@
 						,#{chg_id , 	mode=IN , jdbcType=INTEGER}
 						,#{user_num, 	mode=IN , jdbcType=INTEGER}
 						,#{conts , 		mode=IN , jdbcType=VARCHAR}
-						,#{resultCount, 	mode=OUT   , jdbcType=INTEGER}
+						,#{resultCount, mode=OUT, jdbcType=INTEGER}
 						)
 		}
 		
 	</select>
 	
 	<delete id="jhReplyDelete" parameterType="int">
-		DELETE FROM board
-		WHERE brd_num = ${brd_num}
+		DELETE 	FROM board
+		WHERE 	brd_num = #{brd_num}
 	</delete>
 	
+	<update id="jhReplyUpdate" parameterType="Board">
+		UPDATE board
+		SET    conts = #{conts}, reg_date = SYSDATE
+		WHERE  brd_num = #{brd_num}
+	</update>
 	
-	
+
+
 	
 	
 	

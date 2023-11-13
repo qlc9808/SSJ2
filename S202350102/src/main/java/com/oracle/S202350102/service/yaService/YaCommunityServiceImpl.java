@@ -24,6 +24,8 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return listCommunity ;
 	}
 	
+
+	
 	//게시글 상세보기
 	@Override
 	public Board detailCommunity(int brd_num) {
@@ -134,17 +136,24 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return getLatestBrdStep;
 		
 	}
-	/*
-	 * // 게시글 댓글 수 구하기
-	 * 
-	 * @Override public int commentTotal(int brd_num) {
-	 * System.out.println("YaCommunityServiceImp lcommentTotal start...."); int
-	 * commentTotal = ybd.commentTotal(brd_num);
-	 * 
-	 * return commentTotal; }
-	 * 
-	 * 
-	 * 
-	 */
-	
+
+	@Override
+	public int commentCount(int brd_num) {
+		System.out.println("YaCommunityServiceImpl commentCount start...");
+		int commentCount = ybd.commentCount(brd_num);
+		
+		return commentCount;
+	}
+
+
+
+	@Override
+	public int totalCommunity(Board board) {
+		System.out.println("YaCommunityServiceImpl totalCommuinty()t start...");
+		int totalCommunity = ybd.totalCommunity(board);
+		return totalCommunity;
+	}
+
+
+
 }

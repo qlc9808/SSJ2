@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
@@ -53,8 +54,9 @@ public class YrController {
 	// }
 	
 	// chgDetail로 출력됨
+	@ResponseBody
 	@RequestMapping(value = "chgJoinPro")
-	public String chgJoinPro(Challenger chgr, Model model) {
+	public Map<String, Object> chgJoinPro(Challenger chgr) {
 		System.out.println("YrController chgJoinPro Start...");
 		
 		int insertResult = ycs.insertChgr(chgr);
@@ -62,28 +64,65 @@ public class YrController {
 //		model.addAttribute("insertResult", insertResult);		// 없어도 되나? -> 이게 되네
 		
 //		return "forward:chgDetail?chg_id=" + chgr.getChg_id() + "&insertResultStr=" + insertResult;	// forward 안써도 가능. 왜냐면 parameter를 직접 보내기 때문이다
-		return "redirect:chgDetail?chg_id=" + chgr.getChg_id() + "&insertResultStr=" + insertResult;
+//		return "redirect:chgDetail?chg_id=" + chgr.getChg_id() + "&insertResultStr=" + insertResult;
+		Map<String, Object> joinResult = new HashMap<>();
+		joinResult.put("chgJoin", insertResult);
+		
+		return joinResult;
 	}
 
-//	@RequestMapping(value = "followingPro")
-//	public Map<String, Boolean> followingPro(@RequestParam("user_num") int following_id
-//											, HttpSession session) {
-//		System.out.println("YrController followingPro Start...");
-//		System.out.println("YrController followingPro following_id -> " + following_id);
-//		
-//		int userNum = 0;
-//		if(session.getAttribute("user_num") != null) {
-//			userNum = (int) session.getAttribute("user_num");
-//			System.out.println("YrController followingPro userNum -> " + userNum);
-//		}
-//		
-//		Following fwi = new Following();
-//		fwi.setUser_num(userNum);
-//		fwi.setFollowing_id(following_id);
-//		boolean followingPro = yfis.following(fwi);
-//		Map<String, Boolean> result = new HashMap<>();
-//		result.put("following", followingPro);
-//		return result;
-//	}
+	// follow 유무 체크
+	@ResponseBody
+	@RequestMapping(value = "followingCheck")
+	public Map<String, Object> followingCheck(@RequestParam("following_id") int following_id
+											, HttpSession session) {
+		System.out.println("YrController followingCheck Start...");
+		System.out.println("YrController followingCheck following_id -> " + following_id);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController followingCheck userNum -> " + userNum);
+		}
+		
+		Following fwi = new Following();
+		Map<String, Object> followCheck = new HashMap<>();
+		fwi.setUser_num(userNum);
+		fwi.setFollowing_id(following_id);
+		int fStatus = yfis.followingCheck(fwi);
+		System.out.println("YrController followingCheck fStatus -> " + fStatus);
+		followCheck.put("fStatus", fStatus);			
+		return followCheck;
+	}
+	
+	// follow or UnFollow
+	@ResponseBody
+	@RequestMapping(value = "followingPro")
+	public Map<String, Object> followingPro(@RequestParam("user_num") int following_id
+											, HttpSession session) {
+		System.out.println("YrController followingPro Start...");
+		System.out.println("YrController followingPro following_id -> " + following_id);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController followingPro userNum -> " + userNum);
+		}
+		
+		Following fwi = new Following();
+		Map<String, Object> followResult = new HashMap<>();
+		if(userNum != following_id) {	// 나 자신은 팔로우할 수 없다
+			fwi.setUser_num(userNum);
+			fwi.setFollowing_id(following_id);
+			int followingPro = yfis.following(fwi);
+			System.out.println("YrController followingPro followingPro -> " + followingPro);
+			
+			followResult.put("following", followingPro);			
+		} else {
+			followResult.put("following", -1);
+		}
+		return followResult;
+	}
+	
 	
 }

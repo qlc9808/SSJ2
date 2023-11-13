@@ -19,6 +19,12 @@ public interface JkBoardService {
 	int 			deleteSharing(int brd_num);
 	String 			uploadImage(MultipartFile file);
 	List<Board> 	loadSortedPosts(String sortOption);
+	
+	//댓글기능
+	void			commentSharing(Board board);
+	List<Board> 	listCommentSharing(int brd_num);
+	void 			commentUpdateSharing(Board board);
+	void			commentDeleteSharing(Board board);
 
 	
 	

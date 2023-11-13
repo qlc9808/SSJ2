@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
+import org.json.simple.JSONObject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpRequest;
@@ -410,10 +411,42 @@ public class ChController {
 		}
 		
 		List<Board> myReviewList = chBoardService.myReview(user_num);
+		List<Board> myCertiList = chBoardService.myCertiList(user_num);
+		List<Board> myCommuList = chBoardService.myCommuList(user_num);
+		List<Board> myShareList = chBoardService.myShareList(user_num);
+		
 		
 		model.addAttribute("myReviewList", myReviewList);
+		model.addAttribute("myCertiList", myCertiList);
+		model.addAttribute("myCommuList", myCommuList);
+		model.addAttribute("myShareList", myShareList);
 		
 		return "ch/myContPage";
+	}
+	
+	
+	@ResponseBody
+	@PostMapping(value = "readAlarm")
+	public String readAlarm(BoardReChk brc) {
+		System.out.println("ChController readAlarm Start...");
+		
+		int result = chBoardService.readAlarm(brc);
+		
+		String result1 = Integer.toString(result);
+		
+		return result1;
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "moveToNewCmt")
+	public String moveToNewCmt(BoardReChk brc) {
+		System.out.println("ChController readAlarm Start...");
+		
+		int result = chBoardService.moveToNewCmt(brc);
+		
+		String result1 = Integer.toString(result);
+		
+		return result1;
 	}
 	
 	

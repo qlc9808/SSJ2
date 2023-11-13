@@ -31,6 +31,8 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		return listCommunity;
 	}
 	
+
+	
 	@Override
 	// board테이블 community 게시판 상세글 내용 확인
 	public Board detailCommunity(int brd_num) {
@@ -208,16 +210,35 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		return getLatestBrdStep;
 	}
 
-	/*
-	 * @Override public int commentTotal(int brd_num) {
-	 * System.out.println("YaBoardDaoImpl commentTotal start..."); int commentTotal
-	 * = 0; try { session.selectOne("YaCommentTotal",brd_num); } catch (Exception e)
-	 * {
-	 * System.out.println("YaBoarDaoImpl commentTotal e.getMessage)?"+e.getMessage()
-	 * ); } return commentTotal; }
-	 */
+	@Override
+	public int commentCount(int brd_num) {
+		System.out.println("YaBoardDaoImpl getLatestBrdStep start...");
+		int commentCount = 0;
+		try {
+			session.selectOne("YaCommentTotal",brd_num);
+		} catch (Exception e) {
+			System.out.println("YaBoarDaoImpl commentCount e.getMessage)?"+e.getMessage());
+		}
+		return commentCount;
+	}
 
-	
+
+	// 총 게시글 
+	@Override
+	public int totalCommunity(Board board) {
+		System.out.println("YaBoardDaoImpl totalCommunity start....");
+		int totalCommunity = 0;
+		try {
+			totalCommunity = session.selectOne("YaTotalCommunity");
+		} catch (Exception e) {
+			System.out.println("YaBoardDao YaTotalCommunity e.getmmessage?"+e.getMessage());
+		}
+		return totalCommunity;
+	}
+
+
+
+
 }
 
 	
