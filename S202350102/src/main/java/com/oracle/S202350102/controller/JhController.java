@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
@@ -248,35 +249,53 @@ public class JhController {
 	//댓글 페이지네이션!!!!!!!!!
 	//챌린지 후기글 내용 조회
 	@RequestMapping(value = "reviewContent")
-	public String reviewContent(@RequestParam int brd_num, 
-								@RequestParam int chg_id,  
-								HttpSession session, 
-								Model model,
-								@RequestParam(name = "flag", required = false) String flag,
-	                            @RequestParam(name = "rep_brd_num", required = false) Integer rep_brd_num) {
+	public String reviewContent(
+//								@RequestParam int brd_num 
+								@RequestParam int chg_id 
+								,HttpSession   session 
+								,Model 		   model 
+								,String 	   rep_brd_num
+								,String 	   result
+								,String 	   currentPage
+								,Board		   board
+								) {
 		System.out.println("JhController reviewContent Start...");
-		System.out.println("JhController reviewContent brd_num -> " + brd_num);
-		
+
+			
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
-			System.out.println("JhController chgDetail userNum -> " + userNum);
+			System.out.println("JhController reviewContent userNum -> " + userNum);
 		}
 		
 		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
 		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController chgDetail userNum -> " + user);
+		System.out.println("JhController reviewContent userNum -> " + user);
 		model.addAttribute("user", user);
 		
+		int brd_num = board.getBrd_num();
+		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		//후기 글 조회수 +1
 		jhCService.viewCntUp(brd_num);
 		
 		//챌린지 후기글 내용 조회
 		Board reviewContent = jhCService.reviewContent(brd_num);
 		
+		//후기글 총 댓글 수
+		int replyCount = reviewContent.getReplyCount();
+		
+		//페이지네이션
+		Paging replyPage = new Paging(replyCount, currentPage);
+		board.setStart(replyPage.getStart());
+		board.setEnd(replyPage.getEnd());
+		model.addAttribute("replyPage",replyPage);
+		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ replyPage.getStart());
+		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ replyPage.getTotal());
+		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		
 		//챌린지 해당 글에 대한 댓글 조회
-		List<Board> reviewReplyList = jhCService.reviewReplyList(brd_num);
+		List<Board> reviewReplyList = jhCService.reviewReplyList(board);
 		
 		
 		// challenger 참여 유무 판단용
@@ -295,14 +314,36 @@ public class JhController {
 		model.addAttribute("chg_id", chg_id);
 		
 		//댓글 수정
-		if ( flag != null ) {
+		if ( rep_brd_num != null ) {
+			String flag = "flag";
 			model.addAttribute("flag", flag);
 			model.addAttribute("rep_brd_num", rep_brd_num);
 			System.out.println("JhController reviewContent flag -> " + flag);
 			System.out.println("JhController reviewContent rep_brd_num -> " + rep_brd_num);
 		}
 		
+		
+		//댓글 삭제/업데이트 결과정보 전달
+		model.addAttribute("result", result);
+		System.out.println("JhController reviewContent result -> " + result);
+		
 		return "jh/jhReviewContent";
+	}
+	
+	@RequestMapping(value = "showReplyUpdate")
+	public String showReplyUpdate(@RequestParam("rep_brd_num") int rep_brd_num, 
+								  @RequestParam("ori_brd_num") int ori_brd_num,
+								  @RequestParam("chg_id") 	   int chg_id, 
+								  String currentPage,
+								  Model model
+								  ) {
+		System.out.println("JhController showReplyUpdate Start...");
+		System.out.println("JhController showReplyUpdate rep_brd_num -> " + rep_brd_num);
+		
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("rep_brd_num", rep_brd_num); 
+		return "forward:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id ;
+		
 	}
 	
 	
@@ -313,34 +354,43 @@ public class JhController {
 		
 		jhCService.replyInsert(board);
 		
-		//리다이렉트를 쓰고 싶은데 파라미터 처리를 어떻게? 일단 forward가 동작하니 이대로 두고 나중에 변경할 것!!!!
-//		근데 왜 이건 파라미터 없어도 동작하는데 replyDelete는 파라미터가 필요하지?
-		return "forward:reviewContent";
+		//디비에 인서트는 이 메소드에서 해결 했으니 새롭게 reviewContent 요청해야하니 redirect 사용
+		//forward 사용하면 새로고침시 같은 댓글이 계속 입력되는 문제 발생
+		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
+	}
+	
+
+	@RequestMapping(value = "replyUpdate")
+	public String replyUpdate( @RequestParam("ori_brd_num") int ori_brd_num,
+							   Model model,
+							   Board board) {
+		
+		int result = jhCService.replyUpdate(board);
+		System.out.println("JhController replyInsert replyUpdate -> " + result );
+		
+		//댓글 수정 결과를 삭제와 어떻게 구분하지? -> 구분 안하고 댓글 변경 완료되었습니다 메세지로 통일
+//		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+board.getChg_id();
+		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+board.getChg_id()+"&result="+result;
 	}
 	
 	//후기 댓글 삭제 근데 화면처리는 어떻게?
 	@RequestMapping(value = "replyDelete")
-	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, @RequestParam("rep_brd_num") String brd_num2, int chg_id, HttpSession session, Model model) {
+	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, 
+							  @RequestParam("rep_brd_num") String brd_num2, 
+							  int chg_id, 
+							  HttpSession session, 
+							  Model model) {
+		
 		System.out.println("JhController replyDelete Start...");
-		int ori_brd_num = Integer.parseInt(brd_num);
+		
 		int rep_brd_num = Integer.parseInt(brd_num2);
 		
-		System.out.println("JhController replyDelete brd_num -> " + brd_num);
-//		System.out.println("JhController replyDelete chg_id -> " + chg_id);
+		int result = jhCService.replyDelete(rep_brd_num);
 		
-//		int result = jhCService.replyDelete(brd_num2);
-		int delResult = jhCService.replyDelete(rep_brd_num);
-		
-		System.out.println("JhController replyDelete result -> " + delResult);
-		
-		model.addAttribute("brd_num", brd_num);
-		model.addAttribute("chg_id", chg_id);
-		model.addAttribute("delResult", delResult);
+		System.out.println("JhController replyDelete result -> " + result);
 		
 		
-		//forward할 때 파라미터를 꼭 줘야함
-//		return "forward:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id;
-		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
+		return "redirect:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id+"&result="+result;
 	}
 	
 	
@@ -391,37 +441,6 @@ public class JhController {
 		
 	}
 	
-	@RequestMapping(value = "showReplyUpdate")
-	public String showReplyUpdate(@RequestParam("rep_brd_num") int rep_brd_num, 
-								  @RequestParam("ori_brd_num") int ori_brd_num,
-								  @RequestParam("chg_id") 	   int chg_id, 
-								  Model model
-								  ) {
-		System.out.println("JhController showReplyUpdate Start...");
-		System.out.println("JhController showReplyUpdate rep_brd_num -> " + rep_brd_num);
-//		Board showReply = jhCService.showReply(brd_num);
-		
-		String flag = "flag";
-//		model.addAttribute("showReply", showReply);
-		/*이렇게 하고 reviewContent에서 @ModelAttribute("flag") String flag,
-								@ModelAttribute("rep_brd_num") Integer rep_brd_num로 받으려 하니 rep_brd_num는 들어오는데 
-								왜 flag는 안들어오지?
-		 * model.addAttribute("flag", flag); model.addAttribute("rep_brd_num",
-		 * rep_brd_num);
-		 * "forward:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
-		 */
-		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id+"&flag="+flag+"&rep_brd_num="+rep_brd_num;
-	}
-	
-	@RequestMapping(value = "replyUpdate")
-	public String replyUpdate( @RequestParam("ori_brd_num") int ori_brd_num,
-							   @RequestParam("chg_id") 	    int chg_id, 
-							   Model model,
-							   Board board) {
-		
-		int result = jhCService.replyUpdate(board);
-		
-		return "redirect:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id;
-	}
+
 	
 }

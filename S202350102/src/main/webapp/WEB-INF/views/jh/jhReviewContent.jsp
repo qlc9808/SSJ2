@@ -44,33 +44,39 @@
 	}
 	
 /*     
- * 왜 이것만 있으면 댓글쓰기에 대한 자바스크립트가 실행이 안되지?
- 	$(document).ready(function() {
+ * 왜 이것만 있으면 댓글쓰기에 대한 자바스크립트가 실행이 안되지?*/
+ 	/* $(document).ready(function() {
         var delResult = ${delResult};
-          if (delResult == 1) {
+          if (delResult != 1) {
               // 댓글이 삭제되었다는 alert 메시지
               alert('댓글이 삭제되었습니다.');
           }
-      }); */
+      });  */
       
     /* 이건 왜 안됨? 제이쿼리 떄문에 버튼 안먹힘*/
-/*    	$(document).ready(function() {
-        var flag = ${flag};
-          if (flag == 'flag') {
-				var targetElement = $('#reviewReplyUpdate');
-				if(targetElement.length > 0) {
-					 $('html, body').animate({
-		                    scrollTop: targetElement.offset().top
-		                }, 1000);
-				}
-          }
-      });  */
+     	$(document).ready(function() {
+	        var flag = $("#updateFlag").val();
+	        if (flag == 'flag') {
+					var targetElement = $('#reviewReplyUpdate');
+					if(targetElement.length > 0) {
+						 $('html, body').animate({
+			                    scrollTop: targetElement.offset().top -400
+			                }, 1000);
+					}
+	        }
+	        
+	        var result = $("#result").val();
+	        if (result != 0){
+	        	alert('댓글 변경이 완료되었습니다.');
+	        }
+      }); 
 	
 </script>
 </head>
 <body>
 
-
+<input type="hidden" name="updateFlag" id="updateFlag" value="${flag }">
+<input type="hidden" name="result" id="result" value="${result }">
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 <c:if test="${user.user_num == reviewContent.user_num }">
 	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num=${reviewContent.brd_num}'" value="수정">
@@ -90,7 +96,7 @@
 	<!-- 후기 글 내용 -->
 	<div class="card-body">
 	  <h3 class="card-title">${reviewContent.title }</h3>
-	  <h6 class="card-subtitle mb-2 text-muted">${reviewContent.nick }</h6>
+	  <h6 class="card-subtitle mb-2 text-muted">${reviewContent.nick }${result }</h6>
 	  <p class="card-text">${reviewContent.conts }</p>
 	  <p class="card-text"><small class="text-muted"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></small></p>
 	  <p class="card-text"><small class="text-muted">조회수 : ${reviewContent.view_cnt }</small>
@@ -232,7 +238,7 @@
 				             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 				             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
 							  <c:if test="${user.user_num == reply.user_num }">
-									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}'">수정</button>
+									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}&currentPage=${replyPage.currentPage }'">수정</button>
 									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
 							  </c:if>
 							  
@@ -248,6 +254,30 @@
      </c:forEach>
 </div>
 
+<!-- Pagination -->
+<nav class="d-flex justify-content-center mt-9">
+  <ul class="pagination pagination-sm text-gray-400">
+  <c:if test="${replyPage.startPage > replyPage.pageBlock}">
+    <li class="page-item">
+      <a class="page-link page-link-arrow" href="reviewContent?currentPage=${replyPage.startPage-replyPage.pageBlock }&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}">
+        <i class="fa fa-caret-left"></i>
+      </a>
+           </c:if>
+    </li>
+        <c:forEach var="i" begin="${replyPage.startPage }" end="${replyPage.endPage }">
+    <li class="page-item active">
+      <a class="page-link" href="reviewContent?currentPage=${i}&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}">${i}</a>
+    </li>
+        </c:forEach>
+        <c:if test="${replyPage.endPage < replyPage.totalPage }">
+    <li class="page-item">
+      <a class="page-link page-link-arrow" href="reviewContent?currentPage=${replyPage.startPage+replyPage.pageBlock }&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}">
+        <i class="fa fa-caret-right"></i>
+      </a>
+    </li>
+        </c:if>
+  </ul>
+</nav>
 
 
 </body>
