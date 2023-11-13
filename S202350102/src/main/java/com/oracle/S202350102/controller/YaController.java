@@ -76,8 +76,6 @@ public class YaController {
 	public String detailCommunity(@RequestParam("brd_num")int brd_num, Model model, HttpSession session) {
 		System.out.println("YaController Start detailCommunity start...");
 		
-		
-	   
 		Board board = ycs.detailCommunity(brd_num);
 		// 게시글 댓글수 후가시 
 		int replyCount = ycs.commentCount(brd_num);
@@ -385,4 +383,28 @@ public class YaController {
 			
 		}
 		
+		//sharing 참가 신청 모달창 값 전달	
+		/*@GetMapping(value="/sharingParticipate")
+		@ResponseBody // 해당 데이터 반환@ResponseBody //  해당 데이터 반환
+		public String sharingParticipate(HttpSession session, Model model,  @RequestParam("brd_num") int brd_num) {
+			System.out.println("YaController sharingParticipate start...");
+				
+			int user_num=0;
+			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
+				
+				User1 user1 = ycs.userSelect(user_num);
+				model.addAttribute("user1", user1);	
+				
+				Board board = new Board();
+				board.setBrd_num(brd_num);
+		
+				
+				model.addAttribute("board", board);
+				System.out.println("sessionScope.user_num?"+session.getAttribute("user_num"));
+				System.out.println("sharing participate brd_num?"+board.getBrd_num());
+				
+			} 
+			return "ya/sharingParticipate";	
+		}*/
 }		

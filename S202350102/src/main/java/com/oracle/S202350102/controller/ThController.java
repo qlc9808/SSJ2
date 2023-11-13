@@ -85,27 +85,32 @@ public class ThController {
 	}
 	
 	@PostMapping(value = "/login")							// 로그인 유지를 위한 세션 필요
-	public String login(@ModelAttribute User1 user1, HttpSession session, HttpServletRequest request) {
+	public String login(@ModelAttribute User1 user1, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("ThController login start... ");
 		User1 loginResult = us1.login(user1);
-		System.out.println("ThController loginResult -- >" + loginResult);
+		System.out.println("ThController loginResult -->" + loginResult);
+		// 회원정보가 존재 하는경우
 		if (loginResult != null) {
-			session = request.getSession();
-			session.setAttribute("user_num", loginResult.getUser_num());
-			System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
-			return "home2";
+			// 탈퇴처리가 되지 않은 회원의경우 세션처리
+			if(loginResult.getDelete_yn().equals("N")) {
+				session = request.getSession();
+				session.setAttribute("user_num", loginResult.getUser_num());
+				System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
+				return "home2";
+			// 탈퇴처리된 아이디 인경우		
+			} else {
+				model.addAttribute("result","delId");
+				return "loginForm";
+			}
+			
+		// 회원정보가 없는경우(아이디 비밀번호 틀린경우)
 		} else {
+			// chk에 1값을 주고 JS통해서 chk값에 따라 다른 alert창 만듬 
+			model.addAttribute("result","wrongValue");
 			return "loginForm";
 		}
 	}
-	
-	@RequestMapping(value = "/loginForm2")
-	public String loginForm2() {
-		System.out.println("ThController loginForm2 start...");
 		
-		return "th/loginForm2";
-	}
-	
 	@RequestMapping(value = "/logoutForm")
 	public String logoutForm() {
 		System.out.println("ThController logoutForm start...");
@@ -116,7 +121,6 @@ public class ThController {
 	@RequestMapping(value = "/logout")
 	public String logout(User1 user1, HttpSession session) {
 		System.out.println("ThController logout start... ");
-
 		session.invalidate();
 		return "home2";
 	}
@@ -225,19 +229,16 @@ public class ThController {
     	System.out.println("ThController user1NickCheck result --> " + result);
     	return result;
     }
-	
-    @RequestMapping(value = "/findIdForm")
-    public String findIdForm(User1 user1 ) {
-    	System.out.println("ThController findId Start...");
-    	return "th/findIdForm";
-    }
     
     @ResponseBody
     @RequestMapping(value = "/findId")
-    public List<User1> findId(User1 user1 ) {
+    public List<User1> findId(User1 user1, Model model) {
     	System.out.println("ThController findId Start...");
     	List<User1> user_id_List = us1.findId(user1);
     	System.out.println("ThController user_id_List --> " + user_id_List);
+    	
+    	model.addAttribute("user_id_List" , user_id_List);
+    	
     	return user_id_List;
     }
     
@@ -268,7 +269,7 @@ public class ThController {
 		//4. 메일 발송
 		String tomail = findUser1.getEmail();		// 받는사람
 		System.out.println(tomail);
-		String setfrom = "chtaehyunl@gmail.com";	// 보내는 사람
+		String setfrom = "teamssj02@gmail.com";	// 보내는 사람
 		String title =   "안녕하세요 Ssj 입니다 요청하신 임시 비밀번호입니다"; // 제목
 		
 		
@@ -282,8 +283,6 @@ public class ThController {
 			String tempPassword = rndPswd;
 			messageHelper.setText("임시 비밀번호입니다: " + tempPassword); // 메일 내용
 			System.out.println("임시 비밀번호입니다: " + tempPassword);
-			DataSource dataSource = new FileDataSource("c:\\log\\hwa.png");
-			messageHelper.addAttachment(MimeUtility.encodeText("hwa3.png", "UTF-8", "B"), dataSource);	// hwa를 hwa3으로 Rename 해서 보냄
 			mailSender.send(message);
 			model.addAttribute("check", 1); // 정상전달
 			// DB Logic 구성

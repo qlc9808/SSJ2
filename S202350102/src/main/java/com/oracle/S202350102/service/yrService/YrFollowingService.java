@@ -4,5 +4,6 @@ import com.oracle.S202350102.dto.Following;
 
 public interface YrFollowingService {
 	int		following(Following fwi);
+	int 	followingCheck(Following fwi);
 
 }

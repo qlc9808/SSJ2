@@ -60,5 +60,15 @@ public class QBoardServiceImpl implements QBoardService {
 		return qbd.qboardListSearch(keyword);
 	}
 
-
+	@Override
+	public List<Board> qBoardCommentList(int brd_group){
+		return qbd.qBoardCommentList(brd_group);
+	}
+	
+	@Override
+	public int qBoardCommentWrite(Board board) {
+		int result = 0;
+		result = qbd.qBoardCommentWrite(board);
+		return result;
+	}
 }

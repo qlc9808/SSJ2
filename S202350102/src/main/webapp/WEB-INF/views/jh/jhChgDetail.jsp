@@ -59,6 +59,29 @@
 		var user_num = $("#ssjUserNum" + index).val();
 		var user_nick = $("#ssjNick" + index).val();
 		var user_img = $("#ssjImg" + index).val();
+		
+		// DB에 있는지 존재 유무 체크
+		$.ajax({
+			url : "/followingCheck",
+			type : "POST",
+			data:{following_id : user_num},
+			dataType : 'json',
+			success : function(followingCheck) {
+				if(followingCheck.fStatus > 0) {
+					$("#follow").removeClass("btn-danger");
+					$("#follow").addClass("btn-light");
+					$("#follow").text("팔로잉");
+				} else {
+					$("#follow").removeClass("btn-light");
+					$("#follow").addClass("btn-danger");
+					$("#follow").text("팔로우");
+				}
+			},
+			error : function() {
+				alert("팔로우 오류");
+			}
+
+		});
 
 		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
@@ -67,25 +90,15 @@
 		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
 		$('#inputUserNum2').val(user_num);	// sendMessage()
-			
-		// follow 버튼에 value값 지정
-		$('#follow').val(user_num);
 
 		// 모달 창 표시
 		$('#userShowModal').modal('show');
-
-		
 	}
+
 
 	// 팔로우 하기 버튼
 	function following() {
 		var sendData = $('#followingForm').serialize();	// user_num=?
-		// alert("sendDate -> " + sendData);
-		// location.href = "followingPro?"+sendData;	// YrController에서 작동됨
-
-		// follow의 value값 저장
-		// var follow_index = $('#follow').val();
-		
 
 		$.ajax({
 			url : "/followingPro",
@@ -93,14 +106,15 @@
 			data : sendData,
 			dataType : 'json',
 			success : function(followResult) {
-			//	alert('response.following -> ' + response.following);
 
 				if(followResult.following > 0) {
-					alert("팔로우 성공");
-					// document.getElementById('follow').className = 'btn btn-light';
-					// $('#follow').text("팔로잉");
+					$("#follow").removeClass("btn-danger");
+					$("#follow").addClass("btn-light");
+					$("#follow").text("팔로잉");
 				} else {
-					alert("팔로우 취소");
+					$("#follow").removeClass("btn-light");
+					$("#follow").addClass("btn-danger");
+					$("#follow").text("팔로우");
 				}
 			},
 			error : function() {

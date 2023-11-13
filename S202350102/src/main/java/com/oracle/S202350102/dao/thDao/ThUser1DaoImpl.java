@@ -32,8 +32,14 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 
 	@Override
 	public User1 login(User1 user1) {
-		System.out.println("ThUser1DaoImpl loginstart Start...");
-		return session.selectOne("thLogin", user1);
+		System.out.println("ThUser1DaoImpl login Start...");
+		User1 loginUser = null;
+		try {
+			loginUser = session.selectOne("thLogin", user1);
+		} catch (Exception e) {
+			System.out.println("ThUser1DaoImpl login Exception --> " + e.getMessage());
+		}
+		return loginUser; 
 	}
 
 	@Override

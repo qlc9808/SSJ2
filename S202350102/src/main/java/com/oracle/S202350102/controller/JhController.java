@@ -119,7 +119,6 @@ public class JhController {
 	public String chgDetail(@RequestParam int chg_id
 						  , HttpSession session
 						  , Model model
-						  , String insertResultStr	// yr작성(챌린지 신청 후 결과 값 불러오기)
 						  , String currentPage
 						  , Board board) {
 
@@ -166,7 +165,6 @@ public class JhController {
 		
 		
 		
-		
 		// yr 작성
 		// challenger 테이블에서 참여인원 가져오기용
 		int chgrParti = ycs.selectChgrParti(chg_id);
@@ -181,18 +179,9 @@ public class JhController {
 		System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
 		model.addAttribute("chgrYN", chgrJoinYN);
 		
-		// 챌린지 신청 완료 유무 판단용
-		int insertResult = 0;
-		if(insertResultStr != null) insertResult = Integer.parseInt(insertResultStr);
-		System.out.println("JhController chgDetail insertResult -> " + insertResult);
-		model.addAttribute("insertResult", insertResult);
-		
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
 		model.addAttribute("listSsj", listSsj);
-
-		// following 결과
-		
 
 		
 		// bg 작성

@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,7 +73,7 @@ public class HbController {
 			
 			// 유저 정보 불러오기
 			User1 user1 = us.userSelect(user_num);
-			
+			ls.userLevelCheck(user_num);
 			// 게시판 유저 정보 BoardList에 저장하기
 			qBoardList = us.boardWriterLevelInfo(qBoardList);
 			
@@ -90,7 +94,6 @@ public class HbController {
 		System.out.println("qBoardDetail controller start..");
 		qbs.readCnt(brd_num);
 		Board board = qbs.qBoardSelect(brd_num);
-		
 		int user_num = 0;
 		if (session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
@@ -205,6 +208,36 @@ public class HbController {
 		return qbs.qboardListSearch(keyword);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "qBoardCommentList", method = RequestMethod.GET)
+	public List<Board> qBoardCommentList(@RequestParam int brd_group,
+																HttpSession session){
+		System.out.println("brd_group->"+brd_group);
+		List<Board> qBoardCommentList = qbs.qBoardCommentList(brd_group);
+		qBoardCommentList = us.boardWriterLevelInfo(qBoardCommentList);
+		
+		System.out.println("qBoardCommentList->"+qBoardCommentList);
+		System.out.println("qBoardCommentList.size->"+qBoardCommentList.size());
+		
+		return qBoardCommentList;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "qBoardCommentWrite", method = RequestMethod.POST)
+	public Map<String, Object>  qBoardCommentWrite(@ModelAttribute Board board, HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+		int result = 0;
+		int user_num = 0;
+		if (session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			board.setUser_num(user_num);
+			result = qbs.qBoardCommentWrite(board);
+			
+			response.put("result", result);
+		}
+		return response;
+
+	}
 	
 	
 }

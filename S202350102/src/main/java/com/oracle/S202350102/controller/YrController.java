@@ -71,6 +71,31 @@ public class YrController {
 		return joinResult;
 	}
 
+	// follow 유무 체크
+	@ResponseBody
+	@RequestMapping(value = "followingCheck")
+	public Map<String, Object> followingCheck(@RequestParam("following_id") int following_id
+											, HttpSession session) {
+		System.out.println("YrController followingCheck Start...");
+		System.out.println("YrController followingCheck following_id -> " + following_id);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController followingCheck userNum -> " + userNum);
+		}
+		
+		Following fwi = new Following();
+		Map<String, Object> followCheck = new HashMap<>();
+		fwi.setUser_num(userNum);
+		fwi.setFollowing_id(following_id);
+		int fStatus = yfis.followingCheck(fwi);
+		System.out.println("YrController followingCheck fStatus -> " + fStatus);
+		followCheck.put("fStatus", fStatus);			
+		return followCheck;
+	}
+	
+	// follow or UnFollow
 	@ResponseBody
 	@RequestMapping(value = "followingPro")
 	public Map<String, Object> followingPro(@RequestParam("user_num") int following_id
@@ -98,5 +123,6 @@ public class YrController {
 		}
 		return followResult;
 	}
+	
 	
 }
