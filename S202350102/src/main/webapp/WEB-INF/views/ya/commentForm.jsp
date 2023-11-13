@@ -64,9 +64,9 @@ function listcomment() {
                 listItem.append("<br>댓글 내용: <span>" + board.conts + "</span><br>");         
            		
                 if (${sessionScope.user_num} === board.user_num) {
-                listItem.append("<button type='button' class='btn btn-outline-success comment-update-btn' data-user-num='" + board.user_num 
+                listItem.append("<button type='button' class='btn-dark btn-sm  comment-update-btn' data-user-num='" + board.user_num 
                 																						+ "'data-brd-num="+ board.brd_num + ">댓글 수정</button>");
-                listItem.append("<button type='button' class='btn btn-outline-success comment-delete-btn' data-user-num='" + board.user_num 
+                listItem.append("<button type='button' class='btn-dark btn-sm  comment-delete-btn' data-user-num='" + board.user_num 
 																										+ "'data-brd-num="+ board.brd_num + ">댓글 삭제</button>"); 
                 }
                 commentList.append(listItem);
@@ -145,8 +145,8 @@ function listcomment() {
             listItem.find('span').replaceWith(inputField);
 
             // 수정 버튼 클릭 시, '저장' 버튼에 data-value를 추가하여 댓글 번호를 저장
-            var saveButton = $('<button type="button" class="btn btn-success save-comment-btn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
-            var cancelButton = $('<button type="button" class="btn btn-secondary cancel-comment-btn" data-user-num="' + user_num + '">취소</button>');
+            var saveButton = $('<button type="button" class="btn btn-dark btn-sm save-comment-btn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
+            var cancelButton = $('<button type="button" class="btn btn-dark btn-sm  cancel-comment-btn" data-user-num="' + user_num + '">취소</button>');
             listItem.append(saveButton, cancelButton);
             var user_num = listItem.find('.user_num').val();
   
@@ -288,7 +288,7 @@ function listcomment() {
                    <input type="hidden" name="brd_step" id="brd_step" value="${board.brd_step}">
                    <textarea name="conts" id="conts" class="form-control" rows="3" placeholder="댓글을 남겨주세요"></textarea>
                </div>
-                   <button id="submit-comment" type="button" class="btn btn-primary">댓글 작성</button>
+                   <button id="submit-comment" type="button" class="btn btn-dark btn-sm">댓글 작성</button>
            </form>
        </div>
    </div>

@@ -65,11 +65,39 @@
 						<img id="imgPreview" style="max-width: 200px; margin-top: 10px;" />
 					</div>
 					
-					 <!-- Button (input 요소로 submit) -->
+		<!-- 			 Button (input 요소로 submit)
 					<div class="col-lg-6 mb-2">
 					    <button type="submit" class="btn btn-outline-dark w-100">
 					        작성완료
-					    </button>      
+					    </button>    -->
+					    
+					 <!--작성완료버튼 모달창  -->
+					<button type="button" class="btn btn-dark btn-sm" id="openModalButton">작성완료</button>
+					<!-- Modal -->
+					<div class="modal fade" id="writeModal" tabindex="-1" role="dialog" aria-labelledby="writeModalLabel" aria-hidden="true">
+					    <div class="modal-dialog modal-sm" role="document"> <!-- 모달 사이즈를 조절 -->
+					        <div class="modal-content">
+					            <div class="modal-header">
+					                <h5 class="modal-title" id="writeModalLabel">게시물 작성</h5>
+					            </div>
+					            <div class="modal-body">
+					              	  게시물 작성이 완료되었습니다.
+					            </div>
+					            <div class="modal-footer">
+					                <button type="submit" class="btn btn-dark btn-sm"  data-dismiss="modal">확인</button>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					
+					<script>
+					    // 버튼 클릭 시 모달 열기
+					    document.getElementById('openModalButton').addEventListener('click', function() {
+					        $('#writeModal').modal('show');
+					    });		    
+					</script>
+					    
+					       
 					</div>	        
  			</form>
          </div>
