@@ -13,18 +13,27 @@
 <title>Insert title here</title>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
-	// yr 작성
-	// 챌린지 신청 완료 후 insertResult > 0 일 때 실행
-	$(document).ready(function () {
-		// alert("chgResultModalClick 실행");
-		document.getElementById('chgResultModalClick').click();
-		
-	})
-
-	// 챌린지 신청 시 작동
+	// yr 작성	
+	// 챌린지 신청
 	function cJoin() {
 		var sendData = $('#cJoinForm').serialize();	// user_num=?&chg_id=?
-		location.href = "chgJoinPro?" + sendData;     // YrController에서 작동됨
+		// alert("sendData -> " + sendData);
+		
+		$.ajax({
+			url: "/chgJoinPro",
+			type : "POST",
+			data : sendData,
+			dataType : 'json',
+			success : function(joinResult) {
+				if(joinResult.chgJoin > 0) {
+					// 참여 완료 modal
+					document.getElementById('chgResultModalClick').click();
+				}
+			},
+			error : function() {
+				alert("참여 오류");
+			} 		
+		});
 	}
 
 	// 유저 닉네임 클릭 시 modal 창 띄우기
@@ -34,17 +43,21 @@
 		var user_nick = $("#ssjNick" + index).val();
 		var user_img = $("#ssjImg" + index).val();
 
-		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
-		$('#displayUserNum').text(user_num);
+		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
 		$('#displayUserImg').text(user_img);
-		
-		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
+			
+		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
 		$('#inputUserNum2').val(user_num);	// sendMessage()
+			
+		// follow 버튼에 value값 지정
+		$('#follow').val(user_num);
 
 		// 모달 창 표시
 		$('#userShowModal').modal('show');
+
+		
 	}
 
 	// 팔로우 하기 버튼
@@ -52,22 +65,29 @@
 		var sendData = $('#followingForm').serialize();	// user_num=?
 		// alert("sendDate -> " + sendData);
 		// location.href = "followingPro?"+sendData;	// YrController에서 작동됨
+
+		// follow의 value값 저장
+		// var follow_index = $('#follow').val();
 		
+
 		$.ajax({
 			url : "/followingPro",
 			type : "POST",
 			data : sendData,
 			dataType : 'json',
-			success : function(result) {
+			success : function(followResult) {
 			//	alert('response.following -> ' + response.following);
 
-				if( result.following > 0) {
-					// alert("성공");
-					document.getElementById('follow').className = 'btn btn-light';
-					$('#follow').text("팔로잉");
+				if(followResult.following > 0) {
+					alert("팔로우 성공");
+					// document.getElementById('follow').className = 'btn btn-light';
+					// $('#follow').text("팔로잉");
 				} else {
-					// alert("실패");
+					alert("팔로우 취소");
 				}
+			},
+			error : function() {
+				alert("팔로우 오류");
 			}
 
 		});
@@ -263,8 +283,7 @@
 	
 </script> 
 </head>
-<body>  
-	<!-- 챌린지 신청 완료 후 신청완료 modal창 띄우기 -->
+<body>
 	<input type="button" value="목록" onclick="location.href='/challengeList'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
@@ -461,20 +480,18 @@
 						</button>
 						
 						<!-- 챌린지 참여 성공 -->
-						<c:if test="${insertResult > 0}">
-							<div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-								<div class="modal-body">
-									<p>챌린지 참여가 완료되었습니다</p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-								</div>
-								</div>
+						<div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+							<div class="modal-body">
+								<p>챌린지 참여가 완료되었습니다</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
 							</div>
 							</div>
-						</c:if>
+						</div>
+						</div>
 							
 
 						<!-- 찜하기 -->
@@ -1042,7 +1059,7 @@
 						
 										<div class="modal-footer">
 											
-											<button type="button" class="btn btn-danger" onclick="following(${status.index})" id="follow">팔로우</button>
+											<button type="button" class="btn btn-danger" name="user_num" onclick="following(${status.index})" id="follow">팔로우</button>
 											<form id="followingForm">
 												<input type="hidden" id="inputUserNum1" name="user_num">
 											</form>
