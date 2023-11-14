@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-auto">
                                 <a class="fs-sm text-reset ms-2" href="#reviews">
-                                    Reviews ()
+                                   Reviews (${board.replyCount})
                                 </a>	
                             </div>
                         </div>
@@ -136,5 +136,6 @@
 </section>
 
 </body>
+<%@ include file="commentSharing.jsp" %>
 <%@ include file="../footer.jsp" %>
 </html>

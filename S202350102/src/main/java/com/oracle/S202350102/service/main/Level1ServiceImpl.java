@@ -58,16 +58,20 @@ public class Level1ServiceImpl implements Level1Service {
 		
 		Level1 level1 = new Level1();
 		List<Level1> level1List = ld.level1List();
-		
-		if ( user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
+		while (user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size()) {
 			user_level += 1;
-			nextLevelInfo = ld.level1Select(user_level+1);
-			if( user_exp >=  nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
-				user_level += 1;
-				return user_level;
-			}   return user_level;
-		} else  return user_level;
+		}
+		nextLevelInfo = ld.level1Select(user_level+1);
+		return user_level;
 	}
+//		if ( user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
+//			user_level += 1;
+//			nextLevelInfo = ld.level1Select(user_level+1);
+//			if( user_exp >=  nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {
+//				user_level += 1;
+//				return user_level;
+//			}   return user_level;
+//		} else  return user_level;
 
 	/*
 	 * 강한빛 

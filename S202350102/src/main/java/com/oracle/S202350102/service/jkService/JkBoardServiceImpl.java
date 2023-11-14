@@ -28,12 +28,12 @@ public class JkBoardServiceImpl implements JkBoardService {
 	
 	
 	@Override
-	public List<Board> getRecentPosts(Board board) {
-		List<Board> getRecentPosts = null;
+	public List<Board> sharing(Board board) {
+		List<Board> sharing = null;
 		System.out.println("JkCommunityServiceImpl start...");
-		getRecentPosts = jbd.getRecentPosts(board);
-		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+getRecentPosts.size());
-		return getRecentPosts ;
+		sharing = jbd.sharing(board);
+		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+sharing.size());
+		return sharing ;
 	}
 
 	@Override

@@ -63,12 +63,11 @@
                                 <!-- Preheading -->
                                 <a class="text-muted" href="../sharing">쉐어링 게시판</a>
                             </div>
-        <input type="hidden" name="brd_step" value="${board.brd_step}"> 
-		<input type="hidden" name="brd_group" value="${board.brd_group}"> 
-                            댓글 총 개수 : ${board.replyCount}
+         				<input type="hidden" name="brd_group" value="${board.brd_group}"> 
+                  
                             <div class="col-auto">
                                 <a class="fs-sm text-reset ms-2" href="#reviews">
-                                    Reviews ()
+                                    Reviews (${board.replyCount})
                                 </a>	
                             </div>
                         </div>
