@@ -17,7 +17,7 @@
 <a href="/reviewTab">jh 챌린지 후기 목록</a><p>
 
 <a href="/bgChgDetail">bg 챌린지 상세</a><p>
-
+<a href="/jhChgList">jh 챌린지 목록(태현)</a><p>
 
 </body>
 </html>

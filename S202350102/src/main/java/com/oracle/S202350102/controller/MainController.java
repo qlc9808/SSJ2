@@ -1,10 +1,14 @@
 package com.oracle.S202350102.controller;
 
-import org.springframework.stereotype.Controller;
+import java.util.List;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.thService.ThChgService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class MainController {
+	private final ThChgService tcs;
 	
 	
 	
@@ -120,10 +125,30 @@ public class MainController {
 		
 		return "loginForm";
 	}
+	
 	@RequestMapping(value ="jhChgList")
-	public String jhChgList() {
-		System.out.println("MainController logIn Start...");
+	public String jhChgList(Challenge chg, String currentPage, Model model) {
+		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
+		System.out.println("Main Controller jhChgList Start...");
+		// Challenge 게시판 전체 Count
+		int totalChg =  tcs.totalChg();
 		
+		// Paging 작업			  	11			0
+		Paging page = new Paging(totalChg, currentPage);
+		
+		chg.setStart(page.getStart());
+		chg.setEnd(page.getEnd());
+		System.out.println("Main Controller chg.getStart() --> " + chg.getStart() );
+		System.out.println("Main Controller chg.getEnd() --> " + chg.getEnd() );
+		
+		List<Challenge> listChg = tcs.listChg(chg);
+		System.out.println("MainController list listChg.size() --> " + listChg.size());
+		
+		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
+		model.addAttribute("totalChg", totalChg);
+		model.addAttribute("listChg", listChg);
+		model.addAttribute("page", page);
+
 		return "jh/jhChgList";
 	}
 }

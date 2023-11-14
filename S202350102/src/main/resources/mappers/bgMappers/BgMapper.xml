@@ -14,29 +14,22 @@
 		
 	</select>
 
-	<select id="certTotal" resultType="int">
-		select Count(*) 
-		From board
-		where brd_lg=700 AND brd_md=100 AND brd_step=0
-	</select>
 	
 	<select id="bgCertBoardAll" parameterType="Board" resultType="Board">
 	<![CDATA[
-		Select b.*, u.nick
-		From
-		(
-			Select rownum rn, a.*
-			From (
-					select * 
-					from board 
-					Where	brd_lg=700 AND brd_md=100 AND brd_step=0
-					order by brd_num DESC
-			) a
-		) b
-		Join user1 u On b.user_num = u.user_num
-		Where	b.rn >= #{start}
-		And		b.rn <= #{end}
-		And		chg_id = #{chg_id}
+		Select Rownum As rn, b.*
+		FROM	(
+		        Select b.*, u.nick,
+		                Row_Number() Over (Order By brd_num Desc) As row_num                
+		        From    board b
+		                INNER JOIN  user1 u On  b.user_num = u.user_num
+		        Where   brd_md= 100
+		                and     brd_lg		=	700
+		                and     brd_step	=	0
+		                and     chg_id		=	#{chg_id}
+		        ) b
+		Where b.row_num Between #{start} 
+						And 	#{end}
 		]]>
 	</select>
 	
@@ -63,5 +56,15 @@
 		Delete From	board
 		Where		brd_num = #{brd_num}
 	</delete>
+	
+	<select id="certTotal" parameterType="int" resultType="int">
+		Select		Count(*)
+		From		board b
+		Inner Join	challenge c On b.chg_id = c.chg_id
+		Where		brd_lg = 700
+		And			brd_md = 100
+		And			c.chg_id = #{chg_id}
+		And			brd_step = 0
+	</select>
 	
 </mapper>
