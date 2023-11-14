@@ -25,9 +25,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oracle.S202350102.dto.Challenge;
 //import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.Level1Service;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 //import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
@@ -48,6 +51,7 @@ public class ThController {
 	private final ThOrder1Service os1;
 	private final JavaMailSender mailSender;
 	private final Level1Service ls;
+	private final ThChgService tcs;
 	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
@@ -125,7 +129,9 @@ public class ThController {
 	@RequestMapping(value = "/logout")
 	public String logout(User1 user1, HttpSession session) {
 		System.out.println("ThController logout start... ");
+		System.out.println("ThController logout session --> " + session);
 		session.invalidate();
+		System.out.println("ThController logout session --> " + session);
 		return "home2";
 	}
 	
@@ -298,4 +304,31 @@ public class ThController {
 		return "th/thMailResult";
 		
 	}
+    
+    @RequestMapping(value ="thChgList")
+	public String jhChgList(Challenge chg, String currentPage, Model model) {
+		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
+		System.out.println("Main Controller jhChgList Start...");
+		// Challenge 게시판 전체 Count
+		int totalChg =  tcs.totalChg();
+		
+		// Paging 작업			  	11			0
+		Paging page = new Paging(totalChg, currentPage);
+		
+		chg.setStart(page.getStart());
+		chg.setEnd(page.getEnd());
+		System.out.println("Main Controller chg.getStart() --> " + chg.getStart() );
+		System.out.println("Main Controller chg.getEnd() --> " + chg.getEnd() );
+		
+		List<Challenge> listChg = tcs.listChg(chg);
+		System.out.println("MainController list listChg.size() --> " + listChg.size());
+		
+		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
+		model.addAttribute("totalChg", totalChg);
+		model.addAttribute("listChg", listChg);
+		model.addAttribute("page", page);
+
+		return "th/thChgList";
+	}
+
 }
