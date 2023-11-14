@@ -24,13 +24,6 @@ public class BgServiceImpl implements BgService {
 		return chg;
 	}
 	
-	@Override
-	public int totalCert() {
-		System.out.println("BgServiceImpl totalCert Start...");
-		int totCertCnt = bd.totalCert();
-		System.out.println("BgServiceImpl totalCert totCertCnt -> "+totCertCnt);
-		return totCertCnt;
-	}
 	
 	@Override
 	public List<Board> certBoard(Board board) {
@@ -77,6 +70,13 @@ public class BgServiceImpl implements BgService {
 		int result = bd.deleteCertBrd(brd_num);
 		System.out.println("BgServiceImpl delete Start...");
 		return result;
+	}
+
+	@Override
+	public int certTotal(int chg_id) {
+		System.out.println("BgServiceImpl certTotal Start...");
+		int certTotal = bd.certTotal(chg_id);
+		return certTotal;
 	}
 
 

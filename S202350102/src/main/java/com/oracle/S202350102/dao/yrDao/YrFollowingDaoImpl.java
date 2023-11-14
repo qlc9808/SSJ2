@@ -64,5 +64,17 @@ public class YrFollowingDaoImpl implements YrFollowingDao {
 		return followingList;
 	}
 
+	@Override
+	public List<User1> selectFollowerList(int userNum) {
+		List<User1> followerList = null;
+		System.out.println("YrFollowingDaoImpl followerList Start...");
+		try {
+			followerList = session.selectList("selectFollowerList", userNum);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return followerList;
+	}
+
 
 }

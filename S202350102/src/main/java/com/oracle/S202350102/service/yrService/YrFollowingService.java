@@ -9,5 +9,6 @@ public interface YrFollowingService {
 	int				following(Following fwi);
 	int 			followingCheck(Following fwi);
 	List<User1> 	followingList(int userNum);
+	List<User1> 	followerList(int userNum);
 
 }
