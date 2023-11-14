@@ -200,13 +200,19 @@ public class JhController {
 		board.setChg_id(chg_id);
 		  
 		// 페이징 작업 
-		int totalCert = bs.totalCert();
+		// 인증 글 개수			mapper 키: certTotal
+		int certTotal = bs.certTotal(chg_id);
+		model.addAttribute("certTotal", certTotal);
+		System.out.println("certTotal -> " + certTotal);
 		
-		Paging certBrdPage = new Paging(totalCert, currentPage);
+		Paging certBrdPage = new Paging(certTotal, currentPage);
 		board.setStart(certBrdPage.getStart()); 
 		board.setEnd(certBrdPage.getEnd());
-		model.addAttribute("totalCert", totalCert);
+		model.addAttribute("certTotal", certTotal);
 		model.addAttribute("certBrdPage", certBrdPage);
+		System.out.println("certBrdPage.getStart() -> "+certBrdPage.getStart());
+		System.out.println("certBrdPage.getTotal() -> "+certBrdPage.getTotal());
+		
 		  
 		  
 		// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
