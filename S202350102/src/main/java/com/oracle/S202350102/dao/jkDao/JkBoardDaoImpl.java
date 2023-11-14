@@ -19,18 +19,18 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	private final SqlSession session;
 
 	@Override
-	public List<Board> sharing(Board board) {
+	public List<Board> getRecentPosts(Board board) {
 		// board 테이블 쉐어링게시판조회
-		List<Board> sharing = null;
+		List<Board> getRecentPosts = null;
 		System.out.println("JkBoardDaoImpl Sharing start...");
 		try {
-			sharing = session.selectList("sharing", board);
-			System.out.println("JkBoardDaoImpl Sharing.size()-->"+sharing.size());
+			getRecentPosts = session.selectList("getRecentPosts", board);
+			System.out.println("JkBoardDaoImpl Sharing.size()-->"+getRecentPosts.size());
 		} catch (Exception e) {
 			System.out.println("JkBoardDaoImpl Sharing e.getMessage()?"+e.getMessage());
 		}
 		
-		return sharing;
+		return getRecentPosts;
 	}
 
 	@Override
@@ -179,5 +179,17 @@ public class JkBoardDaoImpl implements JkBoardDao {
 			System.out.println("JkBoardDaoImpl void commentDeleteSharing e.getMessage)?"+e.getMessage());
 		}
 			
+	}
+
+	@Override
+	public int commentCountSharing(int brd_num) {
+		System.out.println("JkBoardDaoImpl commentCountSharing start...");
+		int commentCountSharing = 0;
+		try {
+			session.selectOne("commentCountSharing",brd_num);
+		} catch (Exception e) {
+			System.out.println("JkaBoarDaoImpl commentCountSharing e.getMessage)?"+e.getMessage());
+		}
+		return commentCountSharing;
 	}
 }

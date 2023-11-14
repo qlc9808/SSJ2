@@ -111,5 +111,15 @@
 		AND brd_num = #{brd_num}
 	</delete>
 	
+	<select id="commentCountSharing" parameterType="int" resultType="int">
+		SELECT count(*)
+		FROM  board
+		WHERE brd_group =#{brd_num}
+		AND brd_md = 103
+		AND brd_lg = 700
+		AND brd_step >0
+	</select>
+	
+	
 </mapper>
 

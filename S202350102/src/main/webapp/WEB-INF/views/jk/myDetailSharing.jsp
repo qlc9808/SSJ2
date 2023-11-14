@@ -42,10 +42,7 @@
                             <div class="col-10">
                                 <!-- Card -->
                                 <div class="card">
-                                    <!-- Badge -->
-                                    <div class="badge bg-secondary card-badge card-badge-end text-uppercase">
-                                        Out of Stock
-                                    </div>
+                                  
                                     <!-- Slider -->
                                     <div data-flickity='{"draggable": false, "fade": true}' id="productSlider">
                                         <!-- Item -->

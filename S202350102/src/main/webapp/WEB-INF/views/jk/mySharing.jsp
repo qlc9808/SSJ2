@@ -76,15 +76,17 @@
 	<c:set var="mySharingList" value="${mySharing}" />
     <c:forEach var="board" items="${mySharing}">
   	<c:if test = "${board.user_num eq usernum}">
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-4" style="padding-left: 8px; padding-right: 8px;">
             <div class="card mb-7">
                 <div class="card-img">
-                    
+                    <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
+                        <i class="fe fe-heart"></i>
+                    </button>
                    <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='myDetailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
 				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 					</button>
 
-                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
+                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 200;">
 					 </div>
                 <div class="card-body fw-bold text-center">
                     <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
