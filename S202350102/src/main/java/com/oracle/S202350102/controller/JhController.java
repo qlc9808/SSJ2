@@ -159,6 +159,7 @@ public class JhController {
 		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
 		
 		
+		
 		//후기 목록 조회
 		List<Board> chgReviewList = jhCService.chgReviewList(board);
 		model.addAttribute("chgReviewList", chgReviewList);

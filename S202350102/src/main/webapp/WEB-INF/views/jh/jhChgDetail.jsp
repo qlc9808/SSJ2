@@ -14,18 +14,28 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 /* 	//jh 작성 -> 보류(챌린지 후기 10개 이상 쓰고 다시 해보기)
+ * 일단 리뷰에만 적용되게 하고 추후에 변경하기 1페이지 누르면 아래 적용 안됨
+ */
 	$(document).ready(function() {
 	        var currentPage = $("#reviewCurrentPage").val();
-	        if (currentPage != null) {
+	        if (currentPage > 1) {
 					var targetElement = $('.nav-link');
 					if(targetElement.length > 0) {
 						 $('html, body').animate({
-			                    scrollTop: targetElement.offset().top 
+			                    scrollTop: targetElement.offset().top +1000
 			                }, 1000);
 					}
-	        } */
-	        
 
+					// 현재 active 클래스가 있는 요소를 찾아서 제거
+					document.querySelector('.nav-link.active')?.classList.remove('active');
+					document.querySelector('.tab-pane.fade.show.active')?.classList.remove('active', 'show');
+
+					// 새로운 active 클래스를 추가할 요소들을 찾아서 추가
+					document.getElementById('reviewNav')?.classList.add('active');
+					document.getElementById('reviewTab')?.classList.add('active', 'show');
+	        } 
+	        
+	});
 
 
 
@@ -574,18 +584,18 @@
 
             <!-- Nav -->
             <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
-              <a class="nav-link active" data-bs-toggle="tab" href="#descriptionTab">
+              <a class="nav-link active" id="descriptionNav" data-bs-toggle="tab" href="#descriptionTab">
                	 챌린지 소개
               </a>
-              <a class="nav-link" data-bs-toggle="tab" href="#certBoardTab">
+              <a class="nav-link" id="certNav" data-bs-toggle="tab" href="#certBoardTab">
                              인증 게시판
               </a>
-              <a class="nav-link" data-bs-toggle="tab" href="#ssjFriendsTab">
+              <a class="nav-link" id="ssgNav" data-bs-toggle="tab" href="#ssjFriendsTab">
                              소세지들
               </a>
               
               <!-- 일단 기본 활성화 상태로 두었다가 시간 남으면 챌린지 종료되면 활성화 되게 하기  -->
-              <a class="nav-link" data-bs-toggle="tab" href="#reviewTab">
+              <a class="nav-link" id="reviewNav" data-bs-toggle="tab" href="#reviewTab">
                              후기 게시판
               </a>
             </div>
