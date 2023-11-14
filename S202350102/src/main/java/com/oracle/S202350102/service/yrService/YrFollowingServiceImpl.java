@@ -1,9 +1,12 @@
 package com.oracle.S202350102.service.yrService;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.oracle.S202350102.dao.yrDao.YrFollowingDao;
 import com.oracle.S202350102.dto.Following;
+import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +37,13 @@ public class YrFollowingServiceImpl implements YrFollowingService {
 		}
 		System.out.println("YrFollowingService following result -> " + result);
 		return result;
+	}
+
+	@Override
+	public List<User1> followingList(int userNum) {
+		List<User1> followingList = yfid.selectFollowingList(userNum);
+		System.out.println("YrFollowingService followingList -> " + followingList);
+		return followingList;
 	}
 
 }

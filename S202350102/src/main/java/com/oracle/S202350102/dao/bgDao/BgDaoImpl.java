@@ -31,20 +31,6 @@ public class BgDaoImpl implements BgDao {
 		return chg;
 	}
 	
-	@Override
-	public int totalCert() {
-		int totCertCount = 0;
-		System.out.println("BgDaoImpl totalCert Start...");
-		
-		try {
-			totCertCount = session.selectOne("certTotal");
-			System.out.println("BgDaoImpl totalCert totCertCount"+totCertCount);
-		} catch (Exception e) {
-			System.out.println("BgDaoImpl totalCert Exception -> "+e.getMessage());
-		}
-		
-		return totCertCount;
-	}
 
 	@Override
 	public List<Board> certBoard(Board board) {
@@ -112,6 +98,21 @@ public class BgDaoImpl implements BgDao {
 			System.out.println("BgDaoImpl delete Exception -> "+e.getMessage());
 		}
 		return result;
+	}
+
+	@Override
+	public int certTotal(int chg_id) {
+		System.out.println("BgDaoImpl certTotal Start...");
+		int certTotal = 0;
+		
+		try {
+			certTotal = session.selectOne("certTotal", chg_id);
+		} catch (Exception e) {
+			System.out.println("BgDaoImpl certTotal e.getMessage() -> "+e.getMessage());
+		}
+		System.out.println("BgDaoImpl certTotal -> "+certTotal);
+		
+		return certTotal;
 	}
 
 

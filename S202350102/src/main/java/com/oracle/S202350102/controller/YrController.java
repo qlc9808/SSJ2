@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
+import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 import com.oracle.S202350102.service.yrService.YrFollowingService;
 
@@ -32,26 +33,6 @@ public class YrController {
 //		System.out.println("YrController index Start...");
 //		return "yr/checkBoard";
 //	}
-//	test
-	
-	// jhChgDetail로 합침
-	// 일단 작업 중지
-	// @RequestMapping(value = "chgJoin")
-	// public String chgJoin(int user_num, int chg_id, Model model) {
-	// 	System.out.println("YrController chgJoin Start...");
-		
-	// 	return "yr/chgJoin";
-	// }
-	
-	// JhController로 합침
-	// @RequestMapping(value = "ssjFriends")
-	// public String listSsj(int chg_id, Model model) {
-	// 	System.out.println("YrController listSsj Start...");
-	// 	List<User1> listSsj = ycs.getListSsj(chg_id);
-		
-	// 	model.addAttribute("listSsj", listSsj);
-	// 	return "yr/ssjFriends";
-	// }
 	
 	// chgDetail로 출력됨
 	@ResponseBody
@@ -124,5 +105,21 @@ public class YrController {
 		return followResult;
 	}
 	
+	// following 리스트
+	@RequestMapping(value = "followManagement")
+	public String followingList(HttpSession session, Model model) {
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController followingList userNum -> " + userNum);
+		}
+		
+		List<User1> followingList = yfis.followingList(userNum);
+		System.out.println("YrController followingList -> " + followingList);
+		model.addAttribute("followingList", followingList);
+		
+		return "jk/followManagement";
+	}
 	
 }

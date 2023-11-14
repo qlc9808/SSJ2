@@ -1,9 +1,12 @@
 package com.oracle.S202350102.dao.yrDao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Following;
+import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +49,19 @@ public class YrFollowingDaoImpl implements YrFollowingDao {
 			System.out.println(e.getMessage());
 		}
 		return insertFollowing;
+	}
+
+	@Override
+	public List<User1> selectFollowingList(int userNum) {
+		List<User1> followingList = null;
+		System.out.println("YrFollowingDaoImpl followingList Start...");
+		try {
+			followingList = session.selectList("selectFollowingList", userNum);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return followingList;
 	}
 
 

@@ -22,26 +22,12 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		System.out.println("YrChallengerDaoImpl listSsj Start...");
 		try {
 			userListSsj = session.selectList("yrUser1ListSsj", chg_id);
-			System.out.println(userListSsj);
 		} catch (Exception e) {
-			System.out.println("YrChallengerDaoImpl listSsj e.getMessage() -> " + e.getMessage());
+			System.out.println(e.getMessage());
 		}
 		return userListSsj;
 	}
 	
-	// 인증 게시판 작성 일자 출력
-//	@Override
-//	public String getBoardRegDate(int chg_id) {
-//		String boardRegDate = null;
-//		System.out.println("YrChallengerDaoImpl selectChgrJoinYN Start...");
-//		try {
-//			boardRegDate = session.selectOne("yrBoardRegDate", chg_id);
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-//		return boardRegDate;
-//	}
-
 	// 챌린지 참가자 insert
 	@Override
 	public int insertChgr(Challenger chgr) {
@@ -49,7 +35,6 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		System.out.println("YrChallengerDaoImpl insertChgr Start...");
 		try {
 			insertChgr = session.insert("yrChgrInsert", chgr);
-			System.out.println("YrChallengerDaoImpl insert");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -63,7 +48,6 @@ public class YrChallengerDaoImpl implements YrChallengerDao {
 		System.out.println("YrChallengerDaoImpl selectChgrParti Start...");
 		try {
 			selectChgrParti = session.selectOne("yrChgrSelectParti", chg_id);
-			System.out.println("YrChallengerDaoImpl selectChgrParti -> " + selectChgrParti);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

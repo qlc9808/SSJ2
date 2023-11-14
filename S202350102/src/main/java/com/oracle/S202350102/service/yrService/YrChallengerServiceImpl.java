@@ -22,14 +22,6 @@ public class YrChallengerServiceImpl implements YrChallengerService {
 		List<User1> listSsj = ycd.getListSsj(chg_id); 
 		return listSsj;
 	}
-	
-	// 인증 게시판 작성 일자 출력
-//	@Override
-//	public String getBoardRegDate(int chg_id) {
-//		System.out.println("YrChallengerServiceImpl listSsj Start...");
-//		String boardRegDate = ycd.getBoardRegDate(chg_id);
-//		return boardRegDate;
-//	}
 
 	// 챌린지 참가자 insert
 	@Override
