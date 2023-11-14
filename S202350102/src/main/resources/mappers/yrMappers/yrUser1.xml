@@ -22,4 +22,10 @@
 		and f.following_id = u.user_num
 	</select>
 	
+	<select id="selectFollowerList" parameterType="int" resultType="User1">
+		select u.*
+		from user1 u, following f
+		where f.following_id = #{user_num}
+		and f.user_num = u.user_num
+	</select>
 </mapper>
