@@ -18,7 +18,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>챌린지 목록 전체 챌린지개수 : ${totalChg }</h1>
+<h1>챌린지 목록 전체 챌린지개수 : ${totalChg } , ${pageContext.request.contextPath}</h1>
 <a href="/chgDetail">jh 챌린지 상세 </a><p>
     <section class="py-11">
       <div class="container">
@@ -125,16 +125,25 @@
 		
 		                  <!-- Image -->
 		                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
-		                  <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
+		                  <c:if test="${chg.thumb != null}">
+		                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250;" >
+		                  </c:if>
+		                  <c:if test="${chg.thumb == null}">
+		                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="logo01" style="width: 100%; height: 250;">
+		                  </c:if>
 						  </a>
 		              </div>
 		
 		              <!-- Body -->
 		              <div class="card-body fw-bold text-center">
 		                <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
-		                <div class="text-muted">참여기간: ${chg.start_date } ~ ${chg.end_date }</div>
+		                <div class="text-muted">참여기간<br> 
+		                 <fmt:formatDate value="${chg.start_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+		                  ~ 
+		                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+		                 </div>
 		              </div>
-		
+						<fmt:formatDate value="${noticeConts.reg_date }" pattern="yy-MM-dd"/>
 		            </div>
 				  </div>
 				  <c:set var="num" value="${num -1 }"></c:set>
