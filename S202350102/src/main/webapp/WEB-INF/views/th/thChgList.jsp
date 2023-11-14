@@ -18,8 +18,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>챌린지 목록 전체 챌린지개수 : ${totalChg } , ${pageContext.request.contextPath}</h1>
-<a href="/chgDetail">jh 챌린지 상세 </a><p>
+<%-- <h4>챌린지 목록 전체 챌린지개수 : ${totalChg } , ${pageContext.request.contextPath}</h4> --%>
     <section class="py-11">
       <div class="container">
         <div class="row">
@@ -138,7 +137,7 @@
 		              <div class="card-body fw-bold text-center">
 		                <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
 		                <div class="text-muted">참여기간<br> 
-		                 <fmt:formatDate value="${chg.start_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+		                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 		                  ~ 
 		                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 		                 </div>
