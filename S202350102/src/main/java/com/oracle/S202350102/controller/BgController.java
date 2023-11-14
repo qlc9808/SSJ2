@@ -255,6 +255,7 @@ public class BgController {
 	
 	
 	// certBoardUpdate 인증 게시판 글 수정	-> 현재 챌린지 메인 페이지가 없는 관계로 수정하면 DB 값은 수정되나, 화면 에러가 남. 보류
+	// mapper key:	certBoardUpdate
 	@PostMapping(value = "updateCertBrd")
 	public String updateCertBrd(Board board, Model model) {
 		log.info("updateCertBrd Start...");

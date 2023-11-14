@@ -36,7 +36,7 @@
 		        AND 		brd_lg     	= 700
 		        AND 		brd_md    	= 101
 		        AND 		b.brd_step 	= 0
-		        ORDER BY 	b.reg_date DESC
+		        ORDER BY 	b.brd_num DESC
 		)
 		WHERE rn BETWEEN #{start} AND #{end}  
 	</select>
@@ -61,13 +61,17 @@
 		WHERE 	b.brd_num = #{brd_num}
 	</select>
 	
-	<select id="jhReviewReplyList" parameterType="int" resultType="Board">
-		SELECT 	 b.brd_num, b.conts, b.reg_date, u.user_num, u.nick
-		FROM 	 board b
-		INNER JOIN user1 u ON b.user_num = u.user_num
-		WHERE 	 b.brd_group = #{brd_num}
-		AND 	 b.brd_step > 0
-		ORDER BY b.reg_date DESC
+	<select id="jhReviewReplyList" parameterType="Board" resultType="Board">
+		SELECT * 
+		FROM (
+				SELECT 	 ROWNUM AS rn, b.brd_num, b.conts, b.reg_date, u.user_num, u.nick
+				FROM 	 board b
+				INNER JOIN user1 u ON b.user_num = u.user_num
+				WHERE 	 b.brd_group = #{brd_num}
+				AND 	 b.brd_step > 0
+				ORDER BY b.brd_num DESC
+		)
+		WHERE rn BETWEEN #{start} AND #{end} 
 	</select>
 	
 	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
@@ -90,18 +94,15 @@
 	
 	<update id="jhReplyUpdate" parameterType="Board">
 		UPDATE board
-		SET    conts = #{conts}, reg_date = SYSDATE + 1
+		SET    conts = #{conts}, reg_date = SYSDATE
 		WHERE  brd_num = #{brd_num}
 	</update>
 	
 
-<!-- 삭제 예정 없어도 됨-->
-	<select id="jhShowReply" parameterType="int" resultType="Board">
-		SELECT 	 b.brd_num, b.conts, b.reg_date, u.user_num, u.nick
-		FROM 	 board b
-		INNER JOIN user1 u ON b.user_num = u.user_num
-		WHERE 	 b.brd_num = #{brd_num}
-	</select>
+	<insert id="jhReviewInsert" parameterType="Board" >
+		INSERT INTO board (brd_num, chg_id, user_num, brd_lg, brd_md, title, conts, img, reg_date , brd_group, brd_step)
+		VALUES (brd_num_seq.NEXTVAL, #{chg_id}, #{user_num}, 700, 101, #{title}, #{conts}, #{img}, SYSDATE, brd_num_seq.NEXTVAL, 0)
+	</insert>
 	
 	
 	

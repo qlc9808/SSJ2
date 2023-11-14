@@ -120,4 +120,10 @@ public class MainController {
 		
 		return "loginForm";
 	}
+	@RequestMapping(value ="jhChgList")
+	public String jhChgList() {
+		System.out.println("MainController logIn Start...");
+		
+		return "jh/jhChgList";
+	}
 }
