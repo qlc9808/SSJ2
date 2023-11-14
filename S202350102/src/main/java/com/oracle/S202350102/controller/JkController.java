@@ -135,26 +135,32 @@ public class JkController {
 	
 	//쉐어링 게시글 상세조회
 	@GetMapping(value="/detailSharing")
-	public String detailSharing(int brd_num, Model model, HttpSession session) {
+	public String detailSharing(@RequestParam("brd_num")int brd_num, Model model, HttpSession session) {
 		System.out.println("JkController detailSharing Start...");
 		System.out.println("brd_num->"+brd_num);
+		
+		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
+		
+		board.setReplyCount(replyCount);
+		board.setBrd_group(board.getBrd_group());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
 		
-		Board board = jbs.detailSharing(brd_num);
-		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
+		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("loggedIn", user_num!=0);
 	
-	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
 	
+	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
+	    System.out.println("replyCount:" +board.getReplyCount());
 		return"jk/detailSharing";
 				
 	}
@@ -197,13 +203,17 @@ public class JkController {
 		}
 		
 		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
 		
+		board.setReplyCount(replyCount);
+		board.setBrd_group(board.getBrd_group());
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("replyCount", replyCount);
 		
 		System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
@@ -273,11 +283,12 @@ public class JkController {
 	//상세 페이지 댓글  조회
 	@RequestMapping(value="/listCommentSharing", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board) {
+	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board, HttpSession session) {
 		System.out.println("JkController jbs.listCommentSharing start....");
 
 		
 		List<Board> listCommentSharing = jbs.listCommentSharing(brd_num);
+		
 		model.addAttribute(" listCommenty",  listCommentSharing);
 		board.setBrd_group(brd_num);
 		

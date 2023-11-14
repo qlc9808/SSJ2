@@ -78,25 +78,26 @@
 <input type="hidden" name="updateFlag" id="updateFlag" value="${flag }">
 <input type="hidden" name="result" id="result" value="${result }">
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
-<c:if test="${user.user_num == reviewContent.user_num }">
-	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num=${reviewContent.brd_num}'" value="수정">
-	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" value="삭제">
-</c:if>
 
-<input type="button" value="목록" onclick="location.href='chgDetail?chg_id=${chg_id}'" >  
-
+<div class="col-auto">
+	<c:if test="${user.user_num == reviewContent.user_num }">
+		<button  class="btn btn-xs btn-outline-border btn-danger" type="button"  onclick="location.href='reviewUpdate?brd_num=${reviewContent.brd_num}'" >수정</button>
+		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" >삭제</button>
+	</c:if>
+	<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
+</div>
 <div class="card mb-3">
-
-	<!-- 이미지 null 아닌 경우 출력 -->
-	<c:if test="${reviewContent.img != null} ">
-  		<img src="${reviewContent.img}" class="card-img-top" alt="">
-  	</c:if>
   	
   	
 	<!-- 후기 글 내용 -->
 	<div class="card-body">
+
 	  <h3 class="card-title">${reviewContent.title }</h3>
 	  <h6 class="card-subtitle mb-2 text-muted">${reviewContent.nick }${result }</h6>
+	  <!-- 이미지 null 아닌 경우 출력 -->
+	  <c:if test="${not empty reviewContent.img} ">
+	    <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 300px; max-height: 200px; width: auto; height: auto;">
+  	  </c:if>
 	  <p class="card-text">${reviewContent.conts }</p>
 	  <p class="card-text"><small class="text-muted"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></small></p>
 	  <p class="card-text"><small class="text-muted">조회수 : ${reviewContent.view_cnt }</small>
@@ -116,13 +117,17 @@
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
 	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!">
+	   				
+	   				
 	 			</div>
+	 			
 	            <div class="col-auto">
 					<!-- Button -->
 					<button class="btn btn-sm btn-dark" type="submit" id="replyInsertBtn" >
 					  	댓글 쓰기
 					</button>
 	            </div>
+	            
          	   </c:when>
          	   <c:when test="${user == null  }">
 	            <!-- 로그인 전일 경우 -->

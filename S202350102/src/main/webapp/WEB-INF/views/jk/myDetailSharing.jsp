@@ -42,10 +42,7 @@
                             <div class="col-10">
                                 <!-- Card -->
                                 <div class="card">
-                                    <!-- Badge -->
-                                    <div class="badge bg-secondary card-badge card-badge-end text-uppercase">
-                                        Out of Stock
-                                    </div>
+                                  
                                     <!-- Slider -->
                                     <div data-flickity='{"draggable": false, "fade": true}' id="productSlider">
                                         <!-- Item -->
@@ -68,7 +65,7 @@
                             </div>
                             <div class="col-auto">
                                 <a class="fs-sm text-reset ms-2" href="#reviews">
-                                    Reviews ()
+                                   Reviews (${board.replyCount})
                                 </a>	
                             </div>
                         </div>
@@ -139,5 +136,6 @@
 </section>
 
 </body>
+<%@ include file="commentSharing.jsp" %>
 <%@ include file="../footer.jsp" %>
 </html>

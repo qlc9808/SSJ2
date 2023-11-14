@@ -42,9 +42,7 @@
                                 <!-- Card -->
                                 <div class="card">
                                     <!-- Badge -->
-                                    <div class="badge bg-secondary card-badge card-badge-end text-uppercase">
-                                        Out of Stock
-                                    </div>
+                                  
                                     <!-- Slider -->
                                     <div data-flickity='{"draggable": false, "fade": true}' id="productSlider">
                                         <!-- Item -->
@@ -65,9 +63,11 @@
                                 <!-- Preheading -->
                                 <a class="text-muted" href="../sharing">쉐어링 게시판</a>
                             </div>
+         				<input type="hidden" name="brd_group" value="${board.brd_group}"> 
+                  
                             <div class="col-auto">
                                 <a class="fs-sm text-reset ms-2" href="#reviews">
-                                    Reviews ()
+                                    Reviews (${board.replyCount})
                                 </a>	
                             </div>
                         </div>
@@ -133,209 +133,6 @@
         </div>
     </div>
     
-    <!-- REVIEWS -->
-    <section class="pt-9 pb-11" id="reviews">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-
-            <!-- Heading -->
-            <h4 class="mb-10 text-center">Reviews</h4>
-
-                <!-- Button -->
-                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
-                  Write Review
-                </a>
-
-              </div>
-            </div>
-
-            <!-- New Review -->
-            <div class="collapse" id="reviewForm">
-
-              <!-- Divider -->
-              <hr class="my-8">
-
-              <!-- Form -->
-              <form>
-                <div class="row">
-                  <div class="col-12 mb-6 text-center">
-
-                    <!-- Text -->
-                    <p class="mb-1 fs-xs">
-                      Score:
-                    </p>
-
-                    <!-- Rating form -->
-                    <div class="rating-form">
-
-                      <!-- Input -->
-                      <input class="rating-input" type="range" min="1" max="5" value="5">
-
-                      <!-- Rating -->
-                      <div class="rating h5 text-dark" data-value="5">
-                        <div class="rating-item">
-                          <i class="fas fa-star"></i>
-                        </div>
-                        <div class="rating-item">
-                          <i class="fas fa-star"></i>
-                        </div>
-                        <div class="rating-item">
-                          <i class="fas fa-star"></i>
-                        </div>
-                        <div class="rating-item">
-                          <i class="fas fa-star"></i>
-                        </div>
-                        <div class="rating-item">
-                          <i class="fas fa-star"></i>
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-                  <div class="col-12 col-md-6">
-
-                    <!-- Name -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="reviewName">Your Name:</label>
-                      <input class="form-control form-control-sm" id="reviewName" type="text" placeholder="Your Name *" required>
-                    </div>
-
-                  </div>
-                  <div class="col-12 col-md-6">
-
-                    <!-- Email -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="reviewEmail">Your Email:</label>
-                      <input class="form-control form-control-sm" id="reviewEmail" type="email" placeholder="Your Email *" required>
-                    </div>
-
-                  </div>
-                  <div class="col-12">
-
-                    <!-- Name -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
-                      <input class="form-control form-control-sm" id="reviewTitle" type="text" placeholder="Review Title *" required>
-                    </div>
-
-                  </div>
-                  <div class="col-12">
-
-                    <!-- Name -->
-                    <div class="form-group">
-                      <label class="visually-hidden" for="reviewText">Review:</label>
-                      <textarea class="form-control form-control-sm" id="reviewText" rows="5" placeholder="Review *" required></textarea>
-                    </div>
-
-                  </div>
-                  <div class="col-12 text-center">
-
-                    <!-- Button -->
-                    <button class="btn btn-outline-dark" type="submit">
-                      Post Review
-                    </button>
-
-                  </div>
-                </div>
-              </form>
-
-            </div>
-
-<!-- Reviews -->
-
-<div class="row">
- 	<c:forEach var="board" items="${sharing}">
-	<div class="mt-8">
-
-    <!-- Iterate over the reviews -->
-
-        <!-- Review -->
-        <div class="review">
-            <div class="review-body">
-                <div class="row">
-                    <div class="col-12 col-md-auto">
-
-                        <!-- Avatar -->
-                        <div class="avatar avatar-xxl mb-6 mb-md-0">
-                            <span class="avatar-title rounded-circle">
-                                <i class="fa fa-user"></i>
-                            </span>
-                        </div>
-
-                    </div>
-                    <div class="col-12 col-md">
-
-                        <!-- Header -->
-                        <div class="row mb-6">
-                            <div class="col-12">
-
-                                <!-- Time -->
-                                <span class="fs-xs text-muted">
-                                   ${board.nick} ${board.reg_date}
-                                </span>
-
-                            </div>
-                        </div>
-
-                        <!-- Title -->
-                        <p class="mb-2 fs-lg fw-bold">
-                            ${board.title}
-                        </p>
-
-                        <!-- Text -->
-                        <p class="text-gray-500">
-                            <!-- Add your text here -->
-                        </p>
-
-                        <!-- Footer -->
-                        <div class="row align-items-center">
-                            <div class="col-auto d-none d-lg-block">
-
-                                <!-- Text -->
-                                <p class="mb-0 fs-sm">이 댓글이 마음에 드시나요?</p>
-
-                            </div>
-                            <div class="col-auto me-auto">
-
-                                <!-- Rate -->
-                                <div class="rate">
-                                    <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-                                        <i class="fe fe-thumbs-up"></i>
-                                    </a>
-                                    <a class="rate-item" data-toggle="vote" data-count="0" href="#" role="button">
-                                        <i class="fe fe-thumbs-down"></i>
-                                    </a>
-                                </div>
-
-                            </div>
-                            <div class="col-auto d-none d-lg-block">
-
-                                <!-- Text -->
-                                <p class="mb-0 fs-sm">Comments (0)</p>
-
-                            </div>
-                            <div class="col-auto">
-
-                                <!-- Button -->
-                                <a class="btn btn-xs btn-outline-border" href="#!">
-                                    Comment
-                                </a>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-</div>
-</c:forEach>
-</div>
-         </div>
 
                    
 

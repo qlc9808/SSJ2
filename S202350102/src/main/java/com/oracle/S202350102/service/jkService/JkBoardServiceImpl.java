@@ -182,4 +182,11 @@ public class JkBoardServiceImpl implements JkBoardService {
 		jbd.commentDeleteSharing(board);
 	
 	}
+
+	@Override
+	public int commentCountSharing(int brd_num) {
+		System.out.println("JkCommunityServiceImpl commentCountSharing start...");
+		int commentCountSharing = jbd.commentCountSharing(brd_num);
+		return commentCountSharing;
+	}
 }

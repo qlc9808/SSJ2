@@ -1,8 +1,8 @@
 package com.oracle.S202350102.dao.jkDao;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
@@ -179,5 +179,18 @@ public class JkBoardDaoImpl implements JkBoardDao {
 			System.out.println("JkBoardDaoImpl void commentDeleteSharing e.getMessage)?"+e.getMessage());
 		}
 			
+	}
+
+	@Override
+	public int commentCountSharing(int brd_num) {
+		System.out.println("JkBoardDaoImpl commentCountSharing start...");
+		int commentCountSharing = 0;
+		try {
+			commentCountSharing = session.selectOne("commentCountSharing",brd_num);
+		} catch (Exception e) {
+			System.out.println("JkaBoarDaoImpl commentCountSharing e.getMessage)?"+e.getMessage());
+		
+		}
+		return commentCountSharing;
 	}
 }

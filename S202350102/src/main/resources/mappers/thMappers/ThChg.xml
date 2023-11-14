@@ -8,13 +8,14 @@
 		SELECT COUNT(*) FROM challenge
 	</select>
 	
+	<!--개설일 순으로 조회 ( 기본값 )  -->
 	<select id="thChgListAll" parameterType="Challenge" resultType="Challenge">
 		SELECT * 
 		FROM 
 		(
 			SELECT rownum rn, a.*
 			FROM
-				(SELECT * FROM challenge ORDER BY chg_id) a
+				(SELECT * FROM challenge ORDER BY create_date DESC) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>

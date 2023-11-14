@@ -402,19 +402,78 @@ public class ChController {
 	}
 	
 	@GetMapping(value = "myConts")
-	public String myConts(HttpSession session, Model model) {
+	public String myConts(HttpSession session, Model model, String currentPage) {
 		System.out.println("ChController myConts Start...");
 		int user_num = 0;
 		
+		
+		Paging myReviewPage = null;
+		Paging myCertiPage = null;
+		Paging myCommuPage = null;
+		Paging mySharePage = null;
+		
+		List<Board> myReviewList = null;
+		List<Board> myCertiList = null;
+		List<Board> myCommuList = null;
+		List<Board> myShareList = null;
+		
 		if(session.getAttribute("user_num") != null) {
-			user_num = (int)session.getAttribute("user_num"); 
-		}
-		
-		List<Board> myReviewList = chBoardService.myReview(user_num);
-		List<Board> myCertiList = chBoardService.myCertiList(user_num);
-		List<Board> myCommuList = chBoardService.myCommuList(user_num);
-		List<Board> myShareList = chBoardService.myShareList(user_num);
-		
+			user_num = (int)session.getAttribute("user_num");
+			Board board = new Board();
+			List<Paging> myPaging = chBoardService.myCount(user_num);
+			System.out.println("myPaging size->" + myPaging.size());
+			for(Paging p : myPaging) {
+				if(p.getBrd_md() == 100) {
+					myCertiPage= new Paging(p.getTotal(), currentPage);
+					System.out.println("myCertiPage.getBrd_md()->" + myCertiPage.getBrd_md());
+					board.setBrd_md(p.getBrd_md());
+					board.setUser_num(user_num);
+					board.setStart(myCertiPage.getStart());
+					board.setEnd(myCertiPage.getEnd());
+					myCertiList = chBoardService.mychgBoardList(board);
+					
+					model.addAttribute("Certi_md",p.getBrd_md());
+					model.addAttribute("myCertiPage",myCertiPage);
+				} else if(p.getBrd_md() == 101) {
+					myReviewPage= new Paging(p.getTotal(), currentPage);
+					System.out.println("myCertiPage.getBrd_md()->" + myReviewPage.getBrd_md());
+					board.setBrd_md(p.getBrd_md());
+					board.setUser_num(user_num);
+					board.setStart(myReviewPage.getStart());
+					System.out.println("myReviewPage.getStart()->" + myReviewPage.getStart());
+					board.setEnd(myReviewPage.getEnd());
+					myReviewList = chBoardService.mychgBoardList(board);
+					
+					model.addAttribute("Review_md",p.getBrd_md());
+					model.addAttribute("myReviewPage",myReviewPage);
+				} else if(p.getBrd_md() == 102) {
+					mySharePage= new Paging(p.getTotal(), currentPage);
+					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
+					board.setBrd_md(p.getBrd_md());
+					board.setUser_num(user_num);
+					board.setStart(mySharePage.getStart());
+					board.setEnd(mySharePage.getEnd());
+					myShareList = chBoardService.myCommuList(board);
+					
+					model.addAttribute("Share_md",p.getBrd_md());
+					model.addAttribute("mySharePage",mySharePage);
+				} else if(p.getBrd_md() == 103) {
+					myCommuPage= new Paging(p.getTotal(), currentPage);
+					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+					board.setBrd_md(p.getBrd_md());
+					board.setUser_num(user_num);
+					board.setStart(myCommuPage.getStart());
+					board.setEnd(myCommuPage.getEnd());
+					myCommuList = chBoardService.myCommuList(board);
+					
+					model.addAttribute("commu_bd",p.getBrd_md());
+					model.addAttribute("myCommuPage",myCommuPage);
+				}
+						
+					
+				}
+			}
+
 		
 		model.addAttribute("myReviewList", myReviewList);
 		model.addAttribute("myCertiList", myCertiList);

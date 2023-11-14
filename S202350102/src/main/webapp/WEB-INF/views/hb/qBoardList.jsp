@@ -53,7 +53,7 @@
 				</c:forEach>
 	          </tbody>
 	        </table>
-	        <div class="page">
+	        <div class="page" id="page">
 	        	<c:if test="${page.startPage > page.pageBlock }">
 					<a href="qBoardList?currentPage=${page.startPage-page.pageBlock}">[이전]</a>
 				</c:if>
@@ -67,6 +67,11 @@
 			<c:if test="${user1.status_md == 102 }">
 			<div class="search">
 				<div>
+					<select id="search-select">
+						<option value="title">제목</option>
+						<option value="conts">내용</option>
+						<option value="nick">작성자</option>
+					</select>
 					<input class="search-box" id="searchValue" type="text" size="20">
 				</div>
 				<div class="search-btn">
@@ -83,13 +88,25 @@
 </body>
 	<script type="text/javascript">
 		$(function(){
-			$('.search-btn-form').click(function(){
+			
+			
+			
+			$(document).off('click', '.search-btn-form');
+			$(document).on('click', '.search-btn-form', function () {
+//			$('.search-btn-form').click(function(){
+				var searchType =  $('#search-select').val();
 				var keyword = $('.search-box').val();
+				
 				$.ajax({
-					url: "qboardListSearch?keyword="+keyword,
+					url: "qboardListSearch",
 					type: "GET",
+					data: {
+						keyword: keyword,
+						searchType: searchType
+					},
 					dataType: "json",
 					success: function (data){
+						$('#page').hide();
 						console.log(data);
 						$('#search-list').empty();
 						if(data && data.length > 0){
@@ -119,6 +136,23 @@
 						console.log("에러발생: "+error);
 					}
 				});
+				
+/* 				$.ajax({
+					url: 'qboardListSearchPaging',
+					type: 'GET',
+					data: {
+						keyword: keyword,
+						searchType: searchType
+					},
+					dataType: 'json',
+					success: function(response) {
+						alert(response.page.totalPage);
+						
+					}
+					
+				}) */
+				
+				
 			});
 		});
 

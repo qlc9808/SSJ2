@@ -33,7 +33,7 @@
 			</tr>
 			<tr>
 				<td>등록일</td>
-				<td><fmt:formatDate value="${noticeConts.reg_date }" pattern="yy-MM-dd"/></td>
+				<td><fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></td>
 			</tr>
 			<tr>
 				<td>내용</td>

@@ -121,8 +121,12 @@
 		    	formInfo.method = "GET";
 		    	formInfo.submit();
 		    }
+		    
+		    // 취소 버튼 클릭 시 모달 닫기
+		    document.querySelector('.modal-footer button[data-dismiss="modal"]').addEventListener('click', function() {
+		        $('#deleteModal').modal('hide');
+		    });
 		</script>		
-				
         </div>
     </c:if>
 </c:if>

@@ -12,7 +12,10 @@ public interface QBoardDao {
 	void 				readCnt(int brd_num);
 	int 				qBoardUpdate(Board board);
 	int 				totalQBoard();
-	List<Board> 	qboardListSearch(String keyword);
+	List<Board> 	qboardListSearch(Board board);
 	int 				qBoardCommentWrite(Board board);
 	List<Board> 	qBoardCommentList(int brd_group);
+	int 				qBoardCommentUpdate(Board board);
+	int 				qBoardCommentDelete(int brd_num);
+	int 				qBoardSearchListCount(Board board);
 }

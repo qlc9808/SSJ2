@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.oracle.S202350102.dao.yaDao.YaBoardDao;
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
@@ -152,6 +153,15 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		System.out.println("YaCommunityServiceImpl totalCommuinty()t start...");
 		int totalCommunity = ybd.totalCommunity(board);
 		return totalCommunity;
+	}
+
+
+
+	@Override
+	public int saveSharing(SharingList sharingList) {
+		System.out.println("YaCommunityServiceImpl saveS");
+		int saveResult = ybd.saveSharing(sharingList);
+		return saveResult;
 	}
 
 

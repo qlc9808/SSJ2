@@ -23,6 +23,8 @@ public interface JkBoardDao {
 	List<Board> 		listCommentSharing(int brd_num);
 	void 				commentUpdateSharing(Board board);
 	void 				commentDeleteSharing(Board board);
+	int					commentCountSharing(int brd_num);
+	
 	
 	
 
