@@ -124,8 +124,9 @@
 		                  </button>
 		
 		                  <!-- Image -->
+		                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
 		                  <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
-		
+						  </a>
 		              </div>
 		
 		              <!-- Body -->
