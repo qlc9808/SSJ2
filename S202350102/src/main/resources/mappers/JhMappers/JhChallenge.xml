@@ -103,7 +103,7 @@
 	</update>
 	
 
-	<insert id="jhReviewInsert" parameterType="Board" >
+	<insert id="jhReviewPost" parameterType="Board" >
 		INSERT INTO board (brd_num, chg_id, user_num, brd_lg, brd_md, title, conts, img, reg_date , brd_group, brd_step)
 		VALUES (brd_num_seq.NEXTVAL, #{chg_id}, #{user_num}, 700, 101, #{title}, #{conts}, #{img}, SYSDATE, brd_num_seq.NEXTVAL, 0)
 	</insert>
