@@ -7,7 +7,7 @@
     <select id="listCommunity" parameterType="Board" resultType="Board">
  		 SELECT *
  		 FROM (
- 		 		SELECT ROWNUM AS rn,  b.brd_num, b.title, u.nick, b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
+ 		 		SELECT ROWNUM AS rn,  b.brd_num, b.title, u.nick, u.user_num, b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
  		 		FROM   board b
  		 		INNER JOIN user1 u  ON b.user_num = u.user_num
  		 	    WHERE b.user_num = u.user_num
@@ -129,6 +129,5 @@
 		AND brd_md=103
 		AND brd_step = 0
 	</select>
-	
 
 </mapper>
