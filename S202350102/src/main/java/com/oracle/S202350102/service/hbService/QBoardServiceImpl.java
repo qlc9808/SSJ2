@@ -56,8 +56,9 @@ public class QBoardServiceImpl implements QBoardService {
 	}
 
 	@Override
-	public List<Board> qboardListSearch(String keyword) {
-		return qbd.qboardListSearch(keyword);
+	public List<Board> qboardListSearch(Board board) {
+		System.out.println("qboardListSearch service start.");
+		return qbd.qboardListSearch(board);
 	}
 
 	@Override
@@ -70,5 +71,20 @@ public class QBoardServiceImpl implements QBoardService {
 		int result = 0;
 		result = qbd.qBoardCommentWrite(board);
 		return result;
+	}
+
+	@Override
+	public int qBoardCommentUpdate(Board board) {
+		return qbd.qBoardCommentUpdate(board);
+	}
+
+	@Override
+	public int qBoardCommentDelete(int brd_num) {
+		return qbd.qBoardCommentDelete(brd_num);
+	}
+	
+	@Override
+	public int qBoardSearchListCount(Board board) {
+		return qbd.qBoardSearchListCount(board);
 	}
 }

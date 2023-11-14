@@ -19,7 +19,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -203,21 +206,38 @@ public class HbController {
 	// 문의게시판 검색 비동기통신
 	@ResponseBody
 	@RequestMapping(value = "qboardListSearch", method = RequestMethod.GET)
-	public List<Board> qboardListSearch(@RequestParam(value = "keyword") String keyword){
+	public List<Board> qboardListSearch(@ModelAttribute Board board, String currentPage){
+		int totalCnt = qbs.qBoardSearchListCount(board);
+		Paging page = new Paging(totalCnt, currentPage);
 		
-		return qbs.qboardListSearch(keyword);
+		board.setStart(page.getStart());
+		board.setEnd(page.getEnd());
+		List<Board> qboardListSearch = qbs.qboardListSearch(board);
+		return qboardListSearch;
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "qboardListSearchPaging")
+	public Map<String, Object> qboardListSearchPaging(@ModelAttribute Board board, String currentPage) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		int totalCnt = qbs.qBoardSearchListCount(board);
+		
+		Paging page = new Paging(totalCnt, currentPage);
+		
+		response.put("total", totalCnt);
+		response.put("page", page);
+		
+		return response;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "qBoardCommentList", method = RequestMethod.GET)
 	public List<Board> qBoardCommentList(@RequestParam int brd_group,
 																HttpSession session){
-		System.out.println("brd_group->"+brd_group);
+		
 		List<Board> qBoardCommentList = qbs.qBoardCommentList(brd_group);
 		qBoardCommentList = us.boardWriterLevelInfo(qBoardCommentList);
-		
-		System.out.println("qBoardCommentList->"+qBoardCommentList);
-		System.out.println("qBoardCommentList.size->"+qBoardCommentList.size());
 		
 		return qBoardCommentList;
 	}
@@ -239,5 +259,38 @@ public class HbController {
 
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "qBoardCommentUpdate")
+	public Map<String, String> qBoardCommentUpdate(@ModelAttribute Board board) {
+		Map<String, String> response = new HashMap<>();
+		
+		int result = 0;
+		result = qbs.qBoardCommentUpdate(board);
+		
+		if ( result > 0 ) {
+			response.put("result", "success");
+		} else {
+			response.put("result", "fail");
+		}
+		
+		return response;
+	}
+	
+	@ResponseBody
+	@DeleteMapping(value = "qBoardCommentDelete")
+	public Map<String, String> qBoardCommentDelete(@RequestParam int brd_num) {
+		Map<String, String> response = new HashMap<>();
+		
+		int result = 0;
+		result = qbs.qBoardCommentDelete(brd_num);
+		
+		if ( result > 0 ) {
+			response.put("result", "success");
+		} else {
+			response.put("result", "fail");
+		}
+		
+		return response;
+	}
 	
 }
