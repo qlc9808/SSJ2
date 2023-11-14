@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oracle.S202350102.dto.Challenge;
 //import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.main.Level1Service;
@@ -125,7 +126,9 @@ public class ThController {
 	@RequestMapping(value = "/logout")
 	public String logout(User1 user1, HttpSession session) {
 		System.out.println("ThController logout start... ");
+		System.out.println("ThController logout session --> " + session);
 		session.invalidate();
+		System.out.println("ThController logout session --> " + session);
 		return "home2";
 	}
 	
@@ -298,4 +301,5 @@ public class ThController {
 		return "th/thMailResult";
 		
 	}
+
 }

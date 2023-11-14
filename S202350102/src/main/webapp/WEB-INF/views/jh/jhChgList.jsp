@@ -18,8 +18,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>챌린지 목록</h1>
-<a href="/chgDetail">jh 챌린지 상세</a><p>
+<h1>챌린지 목록 전체 챌린지개수 : ${totalChg }</h1>
+<a href="/chgDetail">jh 챌린지 상세 </a><p>
     <section class="py-11">
       <div class="container">
         <div class="row">
@@ -102,39 +102,43 @@
 
               </div>
             </div>  
-            
-            <div class="col-6 col-md-4">
-
-               <!-- Card -->
-              <div class="card mb-7">
-
-                <!-- Image -->
-                <div class="card-img">
-
-                  <!-- Action -->
-                  <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
-                  <i class="fe fe-heart"></i>
-                  </button>
-
-                  <!-- Button -->
-                  <button class="btn btn-xs w-100 btn-dark card-btn">
-                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
-                  </button>
-
-                  <!-- Image -->
-                  <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
-
-              </div>
-
-              <!-- Body -->
-              <div class="card-body fw-bold text-center">
-                <a class="text-body" href="#!">챌린지명</a>
-                <div class="text-muted">참여기간</div>
-              </div>
-
-            </div>
-		  </div>
-
+            <div class="row">
+            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
+            	<c:forEach var="chg" items="${listChg }">
+		            <div class="col-6 col-md-4">
+					
+		               <!-- Card -->
+		              <div class="card mb-7">
+		
+		                <!-- Image -->
+		                <div class="card-img">
+		
+		                  <!-- Action -->
+		                  <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
+		                  <i class="fe fe-heart"></i>
+		                  </button>
+		
+		                  <!-- Button -->
+		                  <button class="btn btn-xs w-100 btn-dark card-btn">
+		                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
+		                  </button>
+		
+		                  <!-- Image -->
+		                  <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
+		
+		              </div>
+		
+		              <!-- Body -->
+		              <div class="card-body fw-bold text-center">
+		                <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+		                <div class="text-muted">참여기간: ${chg.start_date } ~ ${chg.end_date }</div>
+		              </div>
+		
+		            </div>
+				  </div>
+				  <c:set var="num" value="${num -1 }"></c:set>
+			</c:forEach>
+			</div>
       </div>
     </div>
   </div>
