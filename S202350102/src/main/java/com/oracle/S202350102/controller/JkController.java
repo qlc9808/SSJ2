@@ -148,15 +148,17 @@ public class JkController {
 		int replyCount = jbs.commentCountSharing(brd_num);
 		
 		board.setReplyCount(replyCount);
+		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("replyCount", replyCount);
 	
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
-	
+	    System.out.println("replyCount:" +board.getReplyCount());
 		return"jk/detailSharing";
 				
 	}
