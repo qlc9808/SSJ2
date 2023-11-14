@@ -10,5 +10,6 @@ public interface YrFollowingDao {
 	int			 	deleteFollowing(Following fwi);
 	int 			insertFollowing(Following fwi);
 	List<User1> 	selectFollowingList(int userNum);
+	List<User1> 	selectFollowerList(int userNum);
 
 }

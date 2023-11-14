@@ -46,4 +46,11 @@ public class YrFollowingServiceImpl implements YrFollowingService {
 		return followingList;
 	}
 
+	@Override
+	public List<User1> followerList(int userNum) {
+		List<User1> followerList = yfid.selectFollowerList(userNum);
+		System.out.println("YrFollowingService followerList -> " + followerList);
+		return followerList;
+	}
+
 }
