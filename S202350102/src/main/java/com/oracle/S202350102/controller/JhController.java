@@ -3,7 +3,9 @@ package com.oracle.S202350102.controller;
 import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
@@ -120,10 +123,12 @@ public class JhController {
 						  , HttpSession session
 						  , Model model
 						  , String currentPage
-						  , Board board) {
+						  , Board board
+						  , String tap) {
 
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
+		System.out.println("JhController chgDetail  tap -> "+ tap);
 
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
@@ -163,7 +168,7 @@ public class JhController {
 		//후기 목록 조회
 		List<Board> chgReviewList = jhCService.chgReviewList(board);
 		model.addAttribute("chgReviewList", chgReviewList);
-		
+		model.addAttribute("tap", tap);
 		
 		
 		// yr 작성
@@ -437,16 +442,33 @@ public class JhController {
 		
 	}
 	
+	
+	private String uploadFile(String originalName, byte[] fileData, String uploadPath) {
+		
+		UUID uid = UUID.randomUUID();
+		
+		System.out.println();
+		
+		
+		return savedName;
+	}
+	
+	
 	@RequestMapping(value = "reviewInsert")
-	public String reviewInsert(Board board ) {
+	public String reviewInsert(Board board, HttpServletRequest request, MultipartFile file1, Model model  ) {
 		System.out.println("JhController reviewInsert Start...");
+		
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+		
 		
 		int result = jhCService.reviewInsert(board);
 		System.out.println("JhController chgApplication result -> " + result);		
 		
-		return "redirect:chgDetail?&chg_id="+board.getChg_id();
+		return "redirect:chgDetail?&chg_id="+board.getChg_id()+"&tap=3";
 	}
 	
 
-	
+
 }

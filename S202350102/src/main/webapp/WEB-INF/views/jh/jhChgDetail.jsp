@@ -16,9 +16,10 @@
 /* 	//jh 작성 -> 보류(챌린지 후기 10개 이상 쓰고 다시 해보기)
  * 일단 리뷰에만 적용되게 하고 추후에 변경하기 1페이지 누르면 아래 적용 안됨
  */
-	$(document).ready(function() {
-	        var currentPage = $("#reviewCurrentPage").val();
-	        if (currentPage > 1) {
+ 	$(document).ready(function() {
+ 			//jh작성
+	        var tap = $("#reviewCurrentPage").val();
+	        if (tap == 3) {
 					var targetElement = $('.nav-link');
 					if(targetElement.length > 0) {
 						 $('html, body').animate({
@@ -35,7 +36,10 @@
 					document.getElementById('reviewTab')?.classList.add('active', 'show');
 	        } 
 	        
-	});
+	        //
+	        
+	        
+	}); 
 
 
 
@@ -1390,7 +1394,7 @@
             
             
             <!-- jh 후기글   -->
-            <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${reviewPage.currentPage}">  
+            <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${tap}">  
             <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
             <c:choose>
             	<c:when test="${chg.stateCtn == '종료'}">
@@ -1438,7 +1442,7 @@
 						              </div>
 						
 						              <!-- Form -->
-						              <form action="/reviewInsert">
+						              <form action="/reviewInsert" method="post">
 						              	<input type="hidden" 	name="chg_id" 		value="${chg.chg_id}" >
 						              	<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
 						                <div class="row">
@@ -1621,19 +1625,19 @@
 								  <ul class="pagination pagination-sm text-gray-400">
 								  <c:if test="${reviewPage.startPage > reviewPage.pageBlock}">
 								    <li class="page-item">
-								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }&chg_id=${chg.chg_id}">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }&chg_id=${chg.chg_id}&tap=3">
 								        <i class="fa fa-caret-left"></i>
 								      </a>
 					              </c:if>
 								    </li>
 						          <c:forEach var="i" begin="${reviewPage.startPage }" end="${reviewPage.endPage }">
 								    <li class="page-item active">
-								      <a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}">${i}</a>
+								      <a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3">${i}</a>
 								    </li>
 						          </c:forEach>
 						          <c:if test="${reviewPage.endPage < reviewPage.totalPage }">
 								    <li class="page-item">
-								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage+reviewPage.pageBlock }&chg_id=${chg.chg_id}">
+								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage+reviewPage.pageBlock }&chg_id=${chg.chg_id}&tap=3">
 								        <i class="fa fa-caret-right"></i>
 								      </a>
 								    </li>

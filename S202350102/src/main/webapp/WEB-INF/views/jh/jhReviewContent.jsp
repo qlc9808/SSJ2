@@ -83,7 +83,7 @@
 	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" value="삭제">
 </c:if>
 
-<input type="button" value="목록" onclick="location.href='chgDetail?chg_id=${chg_id}'" >  
+<input type="button" value="목록" onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >  
 
 <div class="card mb-3">
 
