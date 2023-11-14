@@ -252,6 +252,7 @@ public class JhController {
 	//챌린지 후기글 내용 조회
 	@RequestMapping(value = "reviewContent")
 	public String reviewContent(
+			//board에 brd_num 있기 때문에 따로 파라미터 없어도 됨, 페이지네이션 하려고 board를 파라미터로 받음
 //								@RequestParam int brd_num 
 								@RequestParam int chg_id 
 								,HttpSession   session 
@@ -329,7 +330,7 @@ public class JhController {
 		model.addAttribute("result", result);
 		System.out.println("JhController reviewContent result -> " + result);
 		
-		return "jh/jhReviewContent";
+		return "jh/jhReviewContent2";
 	}
 	
 	@RequestMapping(value = "showReplyUpdate")
@@ -344,6 +345,8 @@ public class JhController {
 		
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("rep_brd_num", rep_brd_num); 
+		
+		//여기서 바로 업데이트 하는 게 아니라 forward 사용 redirect는 디비 수정후에 사용하는 것
 		return "forward:reviewContent?brd_num="+ori_brd_num+"&chg_id="+chg_id ;
 		
 	}
@@ -497,6 +500,13 @@ public class JhController {
 		
 	}
 	
+//	@RequestMapping(value = "reviewUpdate")
+//	public String reviewUpdate(Board board, Model model, HttpSession session ) {
+//		System.out.println("JhController reviewUpdate Start...");
+//		
+//		int result = jhCService.reviewUpdate(board);
+//		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id()+"&result="+result;
+//	}
 
 
 }

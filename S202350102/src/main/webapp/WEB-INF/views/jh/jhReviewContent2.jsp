@@ -258,101 +258,56 @@
      </div>
      
      <!-- 후기 댓글 리스트 -->
-     <c:forEach var="reply" items="${reviewReply }" >
+     <c:forEach var="reply" items="${reviewReply }" varStatus="status">
     	
 	     <div class="review">
 		
 		  <!-- 댓글 Body -->
 		  <div class="review-body">
 		    <div class="row">
-		
-		
-		     	 <c:choose>
-		     	 
-			     	<c:when test="${flag == 'flag' && rep_brd_num == reply.brd_num}">
+
 		     	 <!-- 댓글 수정 버튼 눌렀을 때 -->
- 						<div class="col-12 col-md-auto">
-						    	
-					        <!-- 프로필 사진 -->
-					        <div class="avatar avatar-xxl mb-6 mb-md-0">
-					          <span class="avatar-title rounded-circle">
-					            <i class="fa fa-user"></i>
-					          </span>
-					        </div>
-					
-					    </div>
-					    <div class="col-12 col-md">
-					      
-					        <!-- 닉네임 -->
-					        <p class="mb-2 fs-lg fw-bold">
-							  ${reply.nick }
-					        </p>
-			               <form action="/replyUpdate?ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}" method="post" onsubmit="return replyInsertChk(this)">
-						        <!-- 댓글 쓴 날짜 및 시간 sysdate로 update할 것-->
-								<input type="hidden" name="brd_num" value="${reply.brd_num }">
-						        <!-- 댓글 내용 -->
-						        <p class="text-gray-500">
-						        <input class="form-control form-control-sm" id="reviewReplyUpdate" name="conts" type="text"  maxlength="100" value="${reply.conts }">
-						        </p>
-						
-						        <div class="col-auto">
-								<button class="btn btn-xs btn-outline-border btn-dark" type="submit" id="replyUpdateBtn">수정</button>
-								<button class="btn btn-xs btn-outline-border" type="button" id="resetBtn" onclick="window.history.back();" >취소</button>
-						        </div>
-			     			</form>
-			     		</div>
-			    	</c:when>
-			    	
-			    	<c:otherwise>
-			    	<!-- 댓글 내용 -->
-					      <div class="col-12 col-md-auto">
-						    	
-					        <!-- 프로필 사진 -->
-					        <div class="avatar avatar-xxl mb-6 mb-md-0">
-					          <span class="avatar-title rounded-circle">
-					            <i class="fa fa-user"></i>
-					          </span>
-					        </div>
-					
-					      </div>
-					        <div class="col-12 col-md">
-					      
-					        <!-- 닉네임 -->
-					        <p class="mb-2 fs-lg fw-bold">
-							  ${reply.nick }
-					        </p>
-					        
-					        <!-- 댓글 쓴 날짜 및 시간 -->
-					        <div class="row mb-6">
-					          <div class="col-12">
-					            <span class="fs-xs text-muted">
-					              <fmt:formatDate value="${reply.reg_date }" pattern="yyyy-MM-dd"/>
-					            </span>
-					
-					          </div>
-					        </div>
-					
-					        <!-- 댓글 내용 -->
-					        <p class="text-gray-500">
-								${reply.conts }
-					        </p>
-					
-					        <div class="col-auto">
-					
+					<div class="col-12 col-md-auto">
+				    	
+			        <!-- 프로필 사진 -->
+			        <div class="avatar avatar-xxl mb-6 mb-md-0">
+			          <span class="avatar-title rounded-circle">
+			            <i class="fa fa-user"></i>
+			          </span>
+			        </div>
 			
-				             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
-				             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
-							  <c:if test="${user.user_num == reply.user_num }">
-									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}&currentPage=${replyPage.currentPage }'">수정</button>
-									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
-							  </c:if>
-							  
+			    </div>
+			    <div class="col-12 col-md">
+			      
+			        <!-- 닉네임 -->
+			        <p class="mb-2 fs-lg fw-bold">
+					  ${reply.nick }
+			        </p>
+	               <form action="/replyUpdate?ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}" method="post" onsubmit="return replyInsertChk(this)">
+				        <!-- 댓글 쓴 날짜 및 시간 sysdate로 update할 것-->
+						<input type="hidden" name="brd_num" value="${reply.brd_num }">
+				        <!-- 댓글 내용 -->
+				        <p id="input${status.index}" class="text-gray-500 fade" >
+				        <input class="form-control form-control-sm" id="reviewReplyUpdate" name="conts" type="text"  maxlength="100" value="${reply.conts }">
+				        </p>
+				
+						<!-- 댓글 내용 -->
+				        <p id="text${status.index}" class="text-gray-500">
+							${reply.conts }
+				        </p>
+				
+				        <c:if test="${user.user_num == reply.user_num }">
+					        <div class="col-auto">
+							<button class="btn btn-xs btn-outline-border btn-dark" type="submit" id="replyUpdateBtn">저장</button>
+							<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}&currentPage=${replyPage.currentPage }'">수정</button>
+							<button class="btn btn-xs btn-outline-border" type="button" id="resetBtn" onclick="window.history.back();" >취소</button>
+							<button  class="btn btn-xs btn-outline-border" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
 					        </div>
-					      </div>
-					
-		
-			    	</c:otherwise>
-		     	</c:choose>
+					   </c:if>
+						
+	     			</form>
+	     		</div>
+
 		    </div>
 		  </div>
 		</div>

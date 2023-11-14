@@ -11,7 +11,6 @@
     }
 </style>
 <title>챌린지 상세 페이지</title>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 /* 	//jh 작성 -> 보류(챌린지 후기 10개 이상 쓰고 다시 해보기)
  * 일단 리뷰에만 적용되게 하고 추후에 변경하기 1페이지 누르면 아래 적용 안됨
@@ -25,7 +24,7 @@
 					if(targetElement.length > 0) {
 						 $('html, body').animate({
 			                    scrollTop: targetElement.offset().top +1000
-			                }, 1000);
+			                }, 500);
 					}
 
 					// 현재 active 클래스가 있는 요소를 찾아서 제거
@@ -382,7 +381,14 @@
 
 
                     <!-- Item -->
-                      <img src="assets/img/chgDfaultImg.png" alt="${chg.title }" class="card-img-top" onerror="assets/img/chgDfaultImg.png">
+           		    <c:choose>
+					    <c:when test="${empty reviewContent.img}">
+							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 650px; max-height: 550px; width: auto; height: auto;">
+					    </c:when>
+					    <c:otherwise>
+							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 650px; max-height: 550px; width: auto; height: auto;">
+					    </c:otherwise>
+					</c:choose>
              <!--썸네일 처리 해야 함 파일 위치랑 null일 때 뜨게 할 것  -->
                   </div>
                 </div>
@@ -1425,7 +1431,7 @@
 							
 							                <!-- Button -->
 							                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
-							                  Write Review
+							                  	후기 등록하기
 							                </a>
 							
 							              </div>
@@ -1478,7 +1484,10 @@
 							
 							                    <!-- Button -->
 							                    <button class="btn btn-outline-dark" type="submit">
-							                      Post Review
+							                      	등록
+							                    </button>
+							                    <button class="btn btn-outline-secondary" type="reset">
+							                      	취소
 							                    </button>
 							
 							                  </div>
@@ -1594,7 +1603,7 @@
 			                    <!-- Table -->
 			                    <div class="table-responsive">     
 	                    			<c:set var="num" value="${reviewPage.total-reviewPage.start+1 }"></c:set>
-									<table class="table table-bordered table-sm table-hover" border="1">
+									<table class="table table-bordered table-sm table-hover" id="reviewTable" border="1">
 									       <thead>
 									         <tr>
 									           <th>글번호</th>
