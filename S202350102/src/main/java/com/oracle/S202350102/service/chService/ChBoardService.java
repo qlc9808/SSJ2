@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardReChk;
+import com.oracle.S202350102.service.hbService.Paging;
 
 public interface ChBoardService {
 	List<Board> noticeLIst(Board board);
@@ -15,12 +16,11 @@ public interface ChBoardService {
 	List<Board> popBoardList();
 	int 		noticeCount(int brd_md);
 	List<Board> popShareList();
-	List<Board> myReview(int user_num);
 	List<BoardReChk> alarmchk(int user_num);
-	List<Board> myCertiList(int user_num);
-	List<Board> myCommuList(int user_num);
-	List<Board> myShareList(int user_num);
 	int 		readAlarm(BoardReChk brc);
 	int 		moveToNewCmt(BoardReChk brc);
+	List<Paging> myCount(int user_num);
+	List<Board> mychgBoardList(Board board);
+	List<Board> myCommuList(Board board);
 	
 }

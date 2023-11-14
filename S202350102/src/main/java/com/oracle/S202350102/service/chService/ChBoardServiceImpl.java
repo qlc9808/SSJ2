@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.oracle.S202350102.dao.chDao.ChBoardDao;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardReChk;
+import com.oracle.S202350102.service.hbService.Paging;
 
 import lombok.Data;
 @Service
@@ -118,38 +119,13 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return result;
 	}
 
-	@Override
-	public List<Board> myReview(int user_num) {
-		System.out.println("chBoardServiceImpl myReview Start...");
-		List<Board> myReview = chBoardDao.myReview(user_num);
-		
-		System.out.println("chBoardServiceImpl myReview myReview.size()->" + myReview.size());
-		
-		return myReview;
-	}
 
 	@Override
-	public List<Board> myCertiList(int user_num) {
-		System.out.println("chBoardServiceImpl myCertiList Start...");
-		List<Board> myCertiList = chBoardDao.myCertiList(user_num);
-		System.out.println("chBoardServiceImpl myCertiList myCertiList.size()->" + myCertiList.size());
-		return myCertiList;
-	}
-
-	@Override
-	public List<Board> myCommuList(int user_num) {
+	public List<Board> myCommuList(Board board) {
 		System.out.println("chBoardServiceImpl myCommuList Start...");
-		List<Board> myCommuList = chBoardDao.myCommuList(user_num);
+		List<Board> myCommuList = chBoardDao.myCommuList(board);
 		System.out.println("chBoardServiceImpl myCommuList myCommuList.size()->" + myCommuList.size());
 		return myCommuList;
-	}
-
-	@Override
-	public List<Board> myShareList(int user_num) {
-		System.out.println("chBoardServiceImpl myShareList Start...");
-		List<Board> myShareList = chBoardDao.myShareList(user_num);
-		System.out.println("chBoardServiceImpl myCommuList myShareList.size()->" + myShareList.size());
-		return myShareList;
 	}
 
 	@Override
@@ -165,6 +141,22 @@ public class ChBoardServiceImpl implements ChBoardService {
 		System.out.println("chBoardServiceImpl moveToNewCmt Start...");
 		int result = chBoardDao.moveToNewCmt(brc);
 		System.out.println("chBoardServiceImpl moveToNewCmt result->" + result);
+		return result;
+	}
+
+	@Override
+	public List<Paging> myCount(int user_num) {
+		System.out.println("chBoardServiceImpl myCount Start...");
+		List<Paging> result = chBoardDao.myCount(user_num);
+		System.out.println("chBoardServiceImpl myCount result->" + result);
+		return result;
+	}
+
+	@Override
+	public List<Board> mychgBoardList(Board board) {
+		System.out.println("chBoardServiceImpl mychgBoardList Start...");
+		List<Board> result = chBoardDao.mychgBoardList(board);
+		System.out.println("chBoardServiceImpl mychgBoardList result->" + result.size());
 		return result;
 	}
 
