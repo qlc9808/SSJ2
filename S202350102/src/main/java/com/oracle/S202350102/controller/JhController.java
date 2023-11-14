@@ -1,17 +1,23 @@
 package com.oracle.S202350102.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
@@ -33,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JhController {
-
+	
 	private final JhCallengeService jhCService;
 	private final UserService userService;
 	// yr 작성
@@ -120,17 +126,19 @@ public class JhController {
 						  , HttpSession session
 						  , Model model
 						  , String currentPage
-						  , Board board) {
+						  , Board board
+						  , String tap) {
 
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
+		System.out.println("JhController chgDetail  tap -> "+ tap);
 
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
 			System.out.println("JhController chgDetail userNum -> " + userNum);
-		}
+		} 
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
@@ -158,11 +166,10 @@ public class JhController {
 		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
 		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
 		
-		
 		//후기 목록 조회
 		List<Board> chgReviewList = jhCService.chgReviewList(board);
 		model.addAttribute("chgReviewList", chgReviewList);
-		
+		model.addAttribute("tap", tap);
 		
 		
 		// yr 작성
@@ -436,16 +443,60 @@ public class JhController {
 		
 	}
 	
-	@RequestMapping(value = "reviewInsert")
-	public String reviewInsert(Board board ) {
-		System.out.println("JhController reviewInsert Start...");
+	
+	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
+		System.out.println("JhController uploadFile Start...");
 		
-		int result = jhCService.reviewInsert(board);
-		System.out.println("JhController chgApplication result -> " + result);		
+		UUID uid = UUID.randomUUID();
 		
-		return "redirect:chgDetail?&chg_id="+board.getChg_id();
+		System.out.println("uploadPath" + uploadPath);
+		
+		//Directory 생성
+		File fileDirectory = new File(uploadPath);
+		if(!fileDirectory.exists()) {
+			//신규폴더Directory 생성
+			fileDirectory.mkdirs();
+			System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		}
+		
+		String savedName = uid.toString() + "_" + originalName;
+		log.info("savedName: " + savedName);
+		File target = new File(uploadPath, savedName);
+		FileCopyUtils.copy(fileData, target);
+		return savedName;
+	}
+	
+	
+	@RequestMapping(value = "reviewPost")
+	public String reviewPost(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1, Model model) throws IOException {
+		System.out.println("JhController reviewPost Start...");
+		
+		//저장 경로 생성
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		
+			
+			log.info("originalName: " + file1.getOriginalFilename());
+			log.info("size: " +file1.getSize());
+			log.info("contentType : " + file1.getContentType());
+			log.info("uploadPath : " + uploadPath);
+			
+			//진짜 저장
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			board.setImg(saveName);
+			
+			
+			log.info("Return savedName: " + saveName);
+			model.addAttribute("savedName", saveName);
+			
+			
+			int result = jhCService.reviewPost(board);
+			System.out.println("JhController chgApplication result -> " + result);		
+			
+			return "redirect:chgDetail?&chg_id="+board.getChg_id()+"&tap=3";
+		
 	}
 	
 
-	
+
 }

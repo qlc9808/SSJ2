@@ -9,7 +9,7 @@ public class Paging {
 	private int start;				private int end;
 	private int startPage;			private int endPage;
 	private int total;				private int totalPage;
-    
+    private int brd_md;
 	public Paging(int total, String currentPage1) {
 		
 		this.total = total;
