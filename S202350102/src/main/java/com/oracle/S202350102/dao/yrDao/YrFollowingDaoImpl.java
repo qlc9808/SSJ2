@@ -64,5 +64,11 @@ public class YrFollowingDaoImpl implements YrFollowingDao {
 		return followingList;
 	}
 
+	@Override
+	public List<User1> selectFollowerList(int userNum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
