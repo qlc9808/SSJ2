@@ -49,9 +49,10 @@ function renderTable(data) {
                         "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='likePost("+`${board.brd_num}`+")'>"+
                             "<i class='fe fe-heart'></i>"+
                        " </button>"+
-                       "<button class='btn btn-xs w-100 btn-dark card-btn' onclick='location.href='detailSharing?user_num=`${board.user_num}`&brd_num=`${board.brd_num}`\''>"+
-    				    "<i class='fe fe-eye me-2 mb-1'></i> 자세히 보기"+
-    					"</button>"+
+                       "<button class='btn btn-xs w-100 btn-dark card-btn' onclick='location.href=\"detailSharing?user_num=" + board.user_num + "&brd_num=" + board.brd_num + "\"'>" +
+                       "<i class='fe fe-eye me-2 mb-1'></i> 자세히 보기" +
+                       "</button>" +
+
                       "<img class='card-img-top' src='/upload/"+board.img+"' alt='...' style='width: 100%; height: 200;'>"+
     					" </div>"+
                    " <div class='card-body fw-bold text-center'>"+
@@ -63,7 +64,9 @@ function renderTable(data) {
                        " <a class='text-primary'><i class='fas fa-heart me-1'></i>"+
                        		board.like_cnt+"</a>"+
                         						"<i class='fe fe-eye me-1 mb-1' style='margin-left: 30px;'></i>"+
-                        	board.view_cnt+"</div>"+"</div>"+"</div>"                    				
+                        	board.view_cnt+
+                        						"<i class='fas fa-comment text-secondary me-1' style='margin-left: 20px;'></i>"+
+                        	board.replyCount+	"</div>"+"</div>"+"</div>"                    				
     				       
             ;
         }
@@ -143,10 +146,7 @@ $("#sortOption").change(function() {
 			    <option value="view_cnt">조회수 높은 순</option>
 			</select> -->
 			
-			  <select id="sortOption" name="sortOption">
-			  		<option value="reg_date">최근 등록일 순</option>
-                    <option value="view_cnt">좋아요순</option>
-              </select> 
+
             </div>
             </div>
   <div class="row" id="boardtable">
@@ -171,8 +171,8 @@ $("#sortOption").change(function() {
                     <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                         ${board.price}원</a><p>
                     <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
-                    						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
-                    						<i class="fas fa-comment text-secondary me-1" style="margin-left: 30px;">${board.replyCount}</i>
+                    						<i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
+                    						<i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}
                     				
 				</div>
 				 

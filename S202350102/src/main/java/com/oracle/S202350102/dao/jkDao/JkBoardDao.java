@@ -6,7 +6,7 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
 
 public interface JkBoardDao {
-	List<Board> 		getRecentPosts(Board board);
+	List<Board> 		sharing(Board board);
 	User1 				userSelect(int user_num);
 	Board 				getboardBybrd_num(int brd_num);
 	boolean 			getLikeStatus(int brd_num);
@@ -24,6 +24,7 @@ public interface JkBoardDao {
 	void 				commentUpdateSharing(Board board);
 	void 				commentDeleteSharing(Board board);
 	int					commentCountSharing(int brd_num);
+	
 	
 	
 

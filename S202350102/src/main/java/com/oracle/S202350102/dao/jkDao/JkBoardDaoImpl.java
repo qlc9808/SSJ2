@@ -1,8 +1,8 @@
 package com.oracle.S202350102.dao.jkDao;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
@@ -19,18 +19,18 @@ public class JkBoardDaoImpl implements JkBoardDao {
 	private final SqlSession session;
 
 	@Override
-	public List<Board> getRecentPosts(Board board) {
+	public List<Board> sharing(Board board) {
 		// board 테이블 쉐어링게시판조회
-		List<Board> getRecentPosts = null;
+		List<Board> sharing = null;
 		System.out.println("JkBoardDaoImpl Sharing start...");
 		try {
-			getRecentPosts = session.selectList("getRecentPosts", board);
-			System.out.println("JkBoardDaoImpl Sharing.size()-->"+getRecentPosts.size());
+			sharing = session.selectList("sharing", board);
+			System.out.println("JkBoardDaoImpl Sharing.size()-->"+sharing.size());
 		} catch (Exception e) {
 			System.out.println("JkBoardDaoImpl Sharing e.getMessage()?"+e.getMessage());
 		}
 		
-		return getRecentPosts;
+		return sharing;
 	}
 
 	@Override
@@ -186,9 +186,10 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		System.out.println("JkBoardDaoImpl commentCountSharing start...");
 		int commentCountSharing = 0;
 		try {
-			session.selectOne("commentCountSharing",brd_num);
+			commentCountSharing = session.selectOne("commentCountSharing",brd_num);
 		} catch (Exception e) {
 			System.out.println("JkaBoarDaoImpl commentCountSharing e.getMessage)?"+e.getMessage());
+		
 		}
 		return commentCountSharing;
 	}
