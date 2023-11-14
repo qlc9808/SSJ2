@@ -78,7 +78,7 @@ public class JkController {
 	@RequestMapping(value="/sharingUserDetail")
 	public String sharingUserDetail(Board board, Model model, HttpSession session) {
 		System.out.println("JkController sharingUserDetail start...");
-		List<Board> sharing = jbs.sharing(board);
+		List<Board> sharing = jbs.getRecentPosts(board);
 		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
@@ -102,7 +102,7 @@ public class JkController {
 	@RequestMapping(value="/sharing")
 	public String Sharing(Board board, Model model, HttpSession session) {
 		System.out.println("JkController Sharing start...");
-		List<Board> sharing = jbs.sharing(board);
+		List<Board> sharing = jbs.getRecentPosts(board);
 		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
@@ -145,6 +145,9 @@ public class JkController {
 		}
 		
 		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
+		
+		board.setReplyCount(replyCount);
 		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
@@ -152,9 +155,10 @@ public class JkController {
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("replyCount", replyCount);
 	
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
-	
+	    System.out.println("replyCount:" +board.getReplyCount());
 		return"jk/detailSharing";
 				
 	}
@@ -173,7 +177,7 @@ public class JkController {
 				return "redirect:/loginForm";
 			}
 			
-			List<Board> mySharing = jbs.sharing(board);
+			List<Board> mySharing = jbs.getRecentPosts(board);
 			System.out.println("JkController list mySharing.size()?" + mySharing.size());
 			
 		
@@ -273,11 +277,12 @@ public class JkController {
 	//상세 페이지 댓글  조회
 	@RequestMapping(value="/listCommentSharing", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board) {
+	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board, HttpSession session) {
 		System.out.println("JkController jbs.listCommentSharing start....");
 
 		
 		List<Board> listCommentSharing = jbs.listCommentSharing(brd_num);
+		
 		model.addAttribute(" listCommenty",  listCommentSharing);
 		board.setBrd_group(brd_num);
 		

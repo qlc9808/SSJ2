@@ -28,12 +28,12 @@ public class JkBoardServiceImpl implements JkBoardService {
 	
 	
 	@Override
-	public List<Board> sharing(Board board) {
-		List<Board> sharing = null;
+	public List<Board> getRecentPosts(Board board) {
+		List<Board> getRecentPosts = null;
 		System.out.println("JkCommunityServiceImpl start...");
-		sharing = jbd.sharing(board);
-		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+sharing.size());
-		return sharing ;
+		getRecentPosts = jbd.getRecentPosts(board);
+		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+getRecentPosts.size());
+		return getRecentPosts ;
 	}
 
 	@Override
@@ -181,5 +181,12 @@ public class JkBoardServiceImpl implements JkBoardService {
 		System.out.println("JkCommunityServiceImpl commentDeleteSharing start..");
 		jbd.commentDeleteSharing(board);
 	
+	}
+
+	@Override
+	public int commentCountSharing(int brd_num) {
+		System.out.println("JkCommunityServiceImpl commentCountSharing start...");
+		int commentCountSharing = jbd.commentCountSharing(brd_num);
+		return commentCountSharing;
 	}
 }
