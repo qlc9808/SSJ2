@@ -16,7 +16,14 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <title>챌린지 리스트</title>
+<script type="text/javascript">
+	function fn_sortOpt(){
+		var sortOpt = $('#sortOpt').val()
+		location.href= 'thChgList?sortOpt='+sortOpt;
+	}
+</script>
 </head>
+
 <body>
 <%-- <h4>챌린지 목록 전체 챌린지개수 : ${totalChg } , ${pageContext.request.contextPath}</h4> --%>
     <section class="py-11">
@@ -42,8 +49,13 @@
                     <div class="form-group">
                       <ul class="list-styled mb-0" id="chgCtNav">
                         <li class="list-styled-item">
+                          <a class="list-styled-link" href="/thChgList">
+                            	전체
+                          </a>
+                        </li>
+                        <li class="list-styled-item">
                           <a class="list-styled-link" href="#">
-                            	카테고리들 데이터 가져오기
+                            	운동
                           </a>
                         </li>
                       </ul>
@@ -66,8 +78,13 @@
                     <div class="form-group">
                       <ul class="list-styled mb-0" id="productsNav">
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="#">
-                            	카테고리들 데이터 가져오기
+                          <a class="list-styled-link" href="/thEndChgList">
+                            	전체
+                          </a>
+                        </li>
+                         <li class="list-styled-item">
+                          <a class="list-styled-link" href="/endChg">
+                            	공부
                           </a>
                         </li>
                       </ul>
@@ -91,16 +108,16 @@
               </div>
               <div class="col-12 col-md-auto">
 
-                <!-- Select -->
-                <select class="form-select form-select-xs">
-                  <option selected>최신 개설순</option>
-                  <!-- 종료 챌린지는 최신 종료순? -->
-                  <option>찜순</option>
-                  <option>참여자순</option>
+                <!-- 필터 조회 -->
+                <select class="form-select form-select-xs" id="sortOpt" onchange="fn_sortOpt()"> 
+                  <option value="create_date" 	<c:if test="${sortOpt eq 'create_date' }">	selected="selected"</c:if>>최신등록순</option>
+                  <option value="pick_cnt" 		<c:if test="${sortOpt eq 'pick_cnt' }">		selected="selected"</c:if>>찜순</option>
+                  <option value="participants" 	<c:if test="${sortOpt eq 'participants' }">	selected="selected"</c:if>>참여자순</option>
                 </select>
 
               </div>
-            </div>  
+            </div> 
+             
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }">
@@ -160,7 +177,7 @@
 					
 				    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 						<li class="page-item">
-							<a class="page-link" href="thChgList?currentPage=${i }">${i}</a>
+								<a class="page-link" href="thChgList?currentPage=${i }">${i}</a>
 						</li>
 					</c:forEach>
 				    <c:if test="${page.endPage < page.totalPage }">

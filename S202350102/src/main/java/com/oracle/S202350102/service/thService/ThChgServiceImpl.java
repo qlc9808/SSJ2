@@ -23,12 +23,36 @@ public class ThChgServiceImpl implements ThChgService {
 		return totChgCnt;
 	}
 
+
+	@Override
+	public int totalChgIng() {
+		System.out.println("thChgServiceImpl totalChgIng Start... ");
+		int totChgIngCnt = tcd.totalChgIng();
+		return totChgIngCnt;
+	}
+
+	@Override
+	public int totalChgFin() {
+		System.out.println("thChgServiceImpl totalChgFin Start... ");
+		int totChgFinCnt = tcd.totalChgFin();
+		return totChgFinCnt;
+	}
+
 	@Override
 	public List<Challenge> listChg(Challenge chg) {
 			System.out.println("ThChgServiceImpl listChg Start... ");
 			List<Challenge> chgList = tcd.listChg(chg);
 			System.out.println("ThChgServiceImpl listChg chgList.size() --> " + chgList.size());
 		return chgList;
+	}
+
+
+	@Override
+	public List<Challenge> listEndChg(Challenge chg) {
+			System.out.println("ThChgServiceImpl listEndChg Start... ");
+			List<Challenge> EndChgList = tcd.listEndChg(chg);
+			System.out.println("ThChgServiceImpl listEndChg EndChgList.size() --> " + EndChgList.size());
+		return EndChgList;
 	}
 
 }

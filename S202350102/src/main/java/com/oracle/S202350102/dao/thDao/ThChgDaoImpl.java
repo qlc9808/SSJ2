@@ -19,13 +19,41 @@ public class ThChgDaoImpl implements ThChgDao {
 		int totChgCnt = 0;
 		System.out.println("ThChgDaoImpl totalChg Start... ");
 		try {
-			totChgCnt = session.selectOne("chgTotal");
+			totChgCnt = session.selectOne("thChgTotal");
 			System.out.println("ThChgDaoImpl totalChg totalChgCnt --> " + totChgCnt);
 		} catch (Exception e) {
 			System.out.println("ThChgDaoImpl totalChg Exception --> " + e.getMessage());
 		}
 		return totChgCnt;
 	}
+	
+
+	@Override
+	public int totalChgIng() {
+		int totChgIngCnt = 0;
+		System.out.println("ThChgDaoImpl totalChgIng Start... ");
+		try {
+			totChgIngCnt = session.selectOne("thChgTotalIng");
+			System.out.println("ThChgDaoImpl totalChg totalChgCnt --> " + totChgIngCnt);
+		} catch (Exception e) {
+			System.out.println("ThChgDaoImpl totalChg Exception --> " + e.getMessage());
+		}
+		return totChgIngCnt;
+	}
+
+	@Override
+	public int totalChgFin() {
+		int totChgFinCnt = 0;
+		System.out.println("ThChgDaoImpl totalChgFin Start... ");
+		try {
+			totChgFinCnt = session.selectOne("thChgTotalFin");
+			System.out.println("ThChgDaoImpl totalChg totalChgCnt --> " + totChgFinCnt);
+		} catch (Exception e) {
+			System.out.println("ThChgDaoImpl totalChg Exception --> " + e.getMessage());
+		}
+		return totChgFinCnt;
+	}
+
 
 	@Override
 	public List<Challenge> listChg(Challenge chg) {
@@ -38,6 +66,20 @@ public class ThChgDaoImpl implements ThChgDao {
 			System.out.println("ThChgDaoImpl listChg Exception --> " + e.getMessage());
 		}
 		return chgList;
+	}
+
+
+	@Override
+	public List<Challenge> listEndChg(Challenge chg) {
+		System.out.println("ThChgDaoImpl listChg Start...");
+		List<Challenge> endChgList = null;
+		try {
+			endChgList = session.selectList("thEndChgListAll",chg);
+			System.out.println("ThChgDaoImpl listEndChg endChgList.size() --> " + endChgList.size());			
+		} catch (Exception e) {
+			System.out.println("ThChgDaoImpl listEndChg Exception --> " + e.getMessage());
+		}
+		return endChgList;
 	}
 
 }

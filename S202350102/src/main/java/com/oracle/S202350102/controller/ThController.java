@@ -306,27 +306,69 @@ public class ThController {
 	}
     
     @RequestMapping(value ="thChgList")
-	public String jhChgList(Challenge chg, String currentPage, Model model) {
+	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt) {
 		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
-		System.out.println("Main Controller jhChgList Start...");
-		// Challenge 게시판 전체 Count
-		int totalChg =  tcs.totalChg();
+		System.out.println("Main Controller thChgList Start...");
 		
-		// Paging 작업			  	11			0
-		Paging page = new Paging(totalChg, currentPage);
+		// Challenge 게시판 진행중인 챌린지만 Count ( 현재 사용중)		
+		int totalChgIng = tcs.totalChgIng();
+		
+		// 챌린지 카테고리 가져오기
+		
+		// Paging 작업			  	7			0
+		Paging page = new Paging(totalChgIng, currentPage);
 		
 		chg.setStart(page.getStart());
 		chg.setEnd(page.getEnd());
-		System.out.println("Main Controller chg.getStart() --> " + chg.getStart() );
-		System.out.println("Main Controller chg.getEnd() --> " + chg.getEnd() );
 		
+		if(sortOpt != null) {
+			chg.setSortOpt(sortOpt);
+			System.out.println("ThController thChgList sortOption --> " + sortOpt);
+		}
+		
+		// 챌린지 리스트 가져오기
 		List<Challenge> listChg = tcs.listChg(chg);
 		System.out.println("MainController list listChg.size() --> " + listChg.size());
 		
 		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
-		model.addAttribute("totalChg", totalChg);
+		model.addAttribute("totalChg", totalChgIng);
 		model.addAttribute("listChg", listChg);
 		model.addAttribute("page", page);
+		model.addAttribute("sortOpt", sortOpt);
+
+		return "th/thChgList";
+	}
+    
+    @RequestMapping(value ="/thEndChgList")
+	public String EndChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt) {
+		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
+		System.out.println("Main Controller thChgList Start...");
+		
+		// Challenge 게시판 진행중인 챌린지만 Count ( 현재 사용중)		
+		int totalChgIng = tcs.totalChgIng();
+		
+		// 챌린지 카테고리 가져오기
+		
+		// Paging 작업			  	7			0
+		Paging page = new Paging(totalChgIng, currentPage);
+		
+		chg.setStart(page.getStart());
+		chg.setEnd(page.getEnd());
+		
+		if(sortOpt != null) {
+			chg.setSortOpt(sortOpt);
+			System.out.println("ThController thChgList sortOption --> " + sortOpt);
+		}
+		
+		// 챌린지 리스트 가져오기
+		List<Challenge> endChgList = tcs.listEndChg(chg);
+		System.out.println("MainController list EndChgList.size() --> " + endChgList.size());
+		
+		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
+		model.addAttribute("totalChg", totalChgIng);
+		model.addAttribute("listChg", endChgList);
+		model.addAttribute("page", page);
+		model.addAttribute("sortOpt", sortOpt);
 
 		return "th/thChgList";
 	}

@@ -19,7 +19,7 @@ public class Paging {
 		
 		start = (currentPage - 1) * rowPage + 1;
 		end   = start + rowPage - 1;
-		
+		//								7			10
 		totalPage = (int) Math.ceil((double)total / rowPage);
 		startPage = currentPage - (currentPage - 1) % pageBlock;
 		endPage = startPage + pageBlock - 1;
