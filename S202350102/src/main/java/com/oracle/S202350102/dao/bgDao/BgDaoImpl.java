@@ -116,6 +116,14 @@ public class BgDaoImpl implements BgDao {
 	}
 
 
+	@Override
+	public void commentInsert(Board board) {
+		System.out.println("BgDaoImpl commentInsert Start...");
+		session.selectOne("commentInsert", board);
+		System.out.println("BgDaoImpl commentInsert Start..."+board.getResultCount());
+	}
+
+
 
 
 }

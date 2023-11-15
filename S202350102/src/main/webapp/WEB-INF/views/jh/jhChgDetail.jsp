@@ -140,7 +140,8 @@
 		// EL값을 JavaScript 변수에 저장
 		var user_num = ${user.user_num};
 		// chg_id 챌린지 페이지 아직 없어서 임시용으로 변수에 저장함
-		var chg_id = 1;
+		//var chg_id = 1;
+		var chg_id = ${chg.chg_id};
 		
 		// 이미지 파일 선택
 		var screenshot = $("#screenshot")[0].files[0];
@@ -312,6 +313,29 @@
 	
 	
 	
+	function toggleCommentForm(index) {
+		alert("toggleCommentForm Start...")
+		var commentForm = document.getElementById("commentForm"+index);
+		if (commentForm) {
+			commentForm.classList.toggle("show");
+		}
+	}
+	
+	
+	
+	// 댓글 공백 체크
+	function commentInsertchk(form) {
+		form.conts.value = form.conts.value.trim();
+		
+		// 댓글 미입력시 체크
+		if(form.conts.value.length == 0) {
+			alert("댓글을 입력해주세요");
+			form.conts.focus();
+			return false;
+		}
+		// 댓글 입력시 실행
+		return true;
+	}
 	
 	
 	
@@ -620,310 +644,45 @@
             <div class="tab-pane fade" id="certBoardTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
-	                  			            <!-- Heading -->
+     			        <!-- Heading -->
 			            <h4 class="mb-10 text-center">인증 게시판</h4>
-			
-			            <!-- Header -->
-			            <div class="row align-items-center">
-			              <div class="col-12 col-md-auto">
-			
-			                <!-- Dropdown -->
-			                <div class="dropdown mb-4 mb-md-0">
-			
-			                  <!-- Toggle -->
-			                  <a class="dropdown-toggle text-reset" data-bs-toggle="dropdown" href="#">
-			                    <strong>Sort by: Newest</strong>
-			                  </a>
-			
-			                  <!-- Menu -->
-			                  <div class="dropdown-menu mt-3">
-			                    <a class="dropdown-item" href="#!">Newest</a>
-			                    <a class="dropdown-item" href="#!">Oldest</a>
-			                  </div>
-			
-			                </div>
-			
-			              </div>
-			              
-			              <div class="col-12 col-md text-md-center">
-			                <!-- Count 총 인증 수 -->
-			                <strong class="fs-sm ms-2">Total ${certTotal }</strong>
-			              </div>
-			              
-			              
-			              <div class="col-12 col-md-auto">
-			              	<c:choose>
-			              	
-			              		<c:when test="${chgrYN == 1 }">
-			              			<!-- 참여자일 경우 -->
-					              	<!-- Button -->
-					                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
-				                		인증하기
-				                	</a>
-			              		</c:when>
-			              		
-			              		<c:when test="${user == null }">
-			              			<!-- 로그인 전일 경우 로그인 폼으로 이동  -->
-					              	<!-- Button -->
-					                <a class="btn btn-sm btn-dark" href="/loginForm">
-				                		인증하기
-				                	</a>
-			              		</c:when>
-			              		
-			              		<c:otherwise>
-			              			<!-- 로그인 했지만 참여자가 아닌 경우 -->
-			              			<!-- Button -->
-			              			<a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
-				                		인증하기
-				                	</a>
-			              			
-			              		</c:otherwise>
-			              		
-			              	</c:choose>
-			              </div>
-			              
-			              
-			            </div>
-			
-			            <!-- 새 인증글 -->
-			            <div class="collapse" id="writeForm">
-			
-			              <!-- Divider -->
-			              <hr class="my-8">
-			
-			
-			
-			              <!-- 인증 글쓰기 Form -->
-			              <form id="certForm">
-			                <div class="row">
-			                  
-				              <c:choose>
-				              	<c:when test="${chgrYN == 1 }">
-				                  <div class="col-12 col-md-6">
-				                    <!-- 유저 닉네임 표시하는 란 Name -->
-				                    <div class="form-group">
-					                      <p class="mb-2 fs-lg fw-bold">
-					                        ${user.nick }
-					                      </p>
-				                    </div>
-				                  </div>
-				                  
-				                  <div class="col-12">
-				                    <!-- 제목 입력란  Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
-				                      <input class="form-control form-control-sm" id="title" type="text" placeholder="제목을 작성해주세요 *" required>
-				                    </div>
-				                  </div>
-				                  
-				                  <div class="col-12">
-				                    <!-- 인증글 입력란 Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewText">CertBrd:</label>
-				                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="인증글을 작성해주세요 *" required></textarea>
-				                    </div>
-				                  </div>
-				                  
-				                  <div class="mb-3">
-				                  	<!-- 인증샷 -->
-								  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
-									<input class="form-control" type="file" id="screenshot" name="screenshot">
-								  </div>
-										                  
-				                  <div class="col-12 text-center">
-				                    <!-- 등록 Button -->
-				                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBrd()">
-				                      	등록
-				                    </button>
-				                  </div>
-				              	</c:when>
-				              	
-				              	<c:otherwise>
-				              		<div class="col-12 col-md-6">
-				                    <!-- 유저 닉네임 표시하는 란 Name -->
-				                    <div class="form-group">
-					                      <p class="mb-2 fs-lg fw-bold">
-					                        ${user.nick }
-					                      </p>
-				                    </div>
-				                  </div>
-				                  
-				                  <div class="col-12">
-				                    <!-- 제목 입력란  Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
-				                      <input class="form-control form-control-sm" id="title" type="text"  placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
-				                    </div>
-				                  </div>
-				                  
-				                  <div class="col-12">
-				                    <!-- 인증글 입력란 Name -->
-				                    <div class="form-group">
-				                      <label class="visually-hidden" for="reviewText">Review:</label>
-				                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
-				                    </div>
-				                  </div>
-				                  
-				                  <div class="mb-3">
-				                  	<!-- 인증샷 -->
-								  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
-									<input class="form-control" type="file" id="screenshot" name="screenshot">
-								  </div>
-										                  
-				                  <div class="col-12 text-center">
-				                    <!-- 등록 Button -->
-				                    <button class="btn btn-outline-dark" type="submit" disabled="disabled">
-				                      	등록
-				                    </button>
-				                  </div>
-				              	</c:otherwise>
-				                  
-				              </c:choose>
-			                </div>
-			              </form>
-			
-			            </div>
-			
-			
-			
-			            <!-- 인증글 리스트 -->
-			            <div class="mt-8">
-			
-			              <!--  여기부터 첫번째 인증글 -->
-			              <c:forEach var="certBoard" items="${certBoard }" varStatus="status">
-			              
-				              <div class="review" id="review${status.index}">
-				                <div class="review-body">
-				                  <div class="row" id="certBoard${status.index}">
-				                  	<input type="hidden" id="brd_num${status.index}" value="${certBoard.brd_num }">
-				                  	<input type="hidden" id="nick${status.index}" value="${certBoard.nick }">
-				                  	<input type="hidden" id="reg_date${status.index}" value="${certBoard.reg_date }">
-				                  	<input type="hidden" id="title${status.index}" value="${certBoard.title }">
-				                  	<input type="hidden" id="conts${status.index}" value="${certBoard.conts }">
-				                  	<input type="hidden" id="img${status.index}" value="${certBoard.img }">
-				                  	
-				                  	
-				                  	<div class="col-5 col-md-3 col-xl-2">
-										<!-- 인증샷 Image -->
-				                    	<img src="${pageContext.request.contextPath}/upload/${certBoard.img }" alt="인증샷" class="img-fluid">
-				                    </div>
-				                    
-				                    
-				                    
-				                    <div class="col-12 col-md">
-				                    
-										<!-- Avatar -->
-				                    	<div class="avatar avatar-lg">
-										  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
-										</div>
-				                    
-				                      <!-- Header -->
-				                      <div class="row mb-6">
-				                        <div class="col-12">
-				                          <!-- Time -->
-				                          <span class="fs-xs text-muted">
-				                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
-				                          </span>
-				                        </div>
-				                      </div>
-				                      
-				
-				                      <!-- Title -->
-				                      <p class="mb-2 fs-lg fw-bold">
-				                        ${certBoard.title }
-				                      </p>
-				
-				                      <!-- Text -->
-				                      <p class="text-gray-500">
-				                      	${certBoard.conts }
-				                      </p>
-				                      
-				
-				                      <!-- Footer -->
-				                      <div class="row align-items-center">
-				                      
-										
-				                      
-				                        <div class="col-auto d-none d-lg-block">
-				                          <!-- Text -->
-				                          <p class="mb-0 fs-sm">좋아요</p>
-				                        </div>
-				                        
-				                        <div class="col-auto me-auto">
-				                          <!-- Rate -->
-				                          <div class="rate">
-				                            <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-				                              <i class="fe fe-thumbs-up"></i>
-				                            </a>
-				                          </div>
-				                        </div>
-				                        
-				                        
-				                        <div class="col-auto d-none d-lg-block">
-				                          <!-- Text -->
-				                          <p class="mb-0 fs-sm">Comments (0)</p>
-				                        </div>
-				                        
-				                        
-				                        <c:if test="${user.user_num == certBoard.user_num }">
-				                        
-					                        <div class="col-auto">
-					                        
-					                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
-					                          <a class="btn btn-xs btn-outline-border" 
-					                          	 href="#!" 
-					                          	 id="showModalButton"
-					                          	 onclick="updateModalCall(${status.index})"
-					                          >
-												수정
-					                          </a>
-					                          
-					                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
-												삭제
-					                          </a>
-					                          
-					                        </div>
-				                        
-				                        </c:if>
-			                        	<c:choose>
-			                        		<c:when test="${chgrYN == 1 }">
-			                        			<div class="col-auto">
-													<!-- Button -->	
-													<a class="btn btn-xs btn-outline-border" href="#!">
-														더보기
-													</a>
-													<!-- Button -->
-													<a class="btn btn-xs btn-outline-border" data-bs-toggle="collapse" href="#commentForm">
-														댓글
-													</a>
-												</div>
-			                        		</c:when>
-			                        	</c:choose>
-				                        
-				                        
-				                      </div>
-				                    </div>
-				                  </div>
-				                </div>
-				              </div>
-				              
-				              
-				              
-				              
-				              <!-- 새 댓글 -->
-					            <div class="collapse" id="commentForm">
-					
+			            
+		            	<!-- 인증게시판 C -->
+			            <c:choose>
+			            	<c:when test="${certTotal == 0 }">
+			            	<!-- 1. 인증글이 없을 때 -->
+			            		<div class="text-center">
+			            			<div class="mb-6 fs-1">🙁</div>
+			            			<p>
+			            				인증글이 없습니다. 첫 인증글을 올려주세요!
+			            			</p>
+			            			<c:choose>
+					              		<c:when test="${chgrYN == 1 }">
+					              			<!-- 참여자일 경우 -->
+							              	<!-- Button -->
+							                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
+						                		인증하기
+						                	</a>
+					              		</c:when>
+					              		<c:otherwise>
+					              			<!-- 로그인 했지만 참여자가 아닌 경우 -->
+					              			<!-- Button -->
+					              			<a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
+						                		인증하기
+						                	</a>
+					              		</c:otherwise>
+					              	</c:choose>
+			            		</div>
+			            		<!-- 새 인증글 -->
+					            <div class="collapse" id="writeForm">
 					              <!-- Divider -->
 					              <hr class="my-8">
-					
-					
-					
-					              <!-- 인증 댓글쓰기 Form -->
-					              <form id="certCommentForm">
+					              <!-- 인증 글쓰기 Form -->
+					              <form id="certForm">
 					                <div class="row">
-					                  
 						              <c:choose>
 						              	<c:when test="${chgrYN == 1 }">
+						              	<!-- 1. 참여자일 경우 -->
 						                  <div class="col-12 col-md-6">
 						                    <!-- 유저 닉네임 표시하는 란 Name -->
 						                    <div class="form-group">
@@ -937,7 +696,7 @@
 						                    <!-- 제목 입력란  Name -->
 						                    <div class="form-group">
 						                      <label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
-						                      <input class="form-control form-control-sm" id="commentTitle" type="text" placeholder="제목을 작성해주세요 *" required>
+						                      <input class="form-control form-control-sm" id="title" type="text" placeholder="제목을 작성해주세요 *" required>
 						                    </div>
 						                  </div>
 						                  
@@ -945,20 +704,68 @@
 						                    <!-- 인증글 입력란 Name -->
 						                    <div class="form-group">
 						                      <label class="visually-hidden" for="reviewText">CertBrd:</label>
-						                      <textarea class="form-control form-control-sm" id="commentConts" rows="5" placeholder="인증글을 작성해주세요 *" required></textarea>
+						                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="인증글을 작성해주세요 *" required></textarea>
 						                    </div>
 						                  </div>
 						                  
+						                  <div class="mb-3">
+						                  	<!-- 인증샷 -->
+										  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+											<input class="form-control" type="file" id="screenshot" name="screenshot">
+										  </div>
 												                  
 						                  <div class="col-12 text-center">
 						                    <!-- 등록 Button -->
-						                    <button class="btn btn-outline-dark" type="submit" onclick="commentCertBrd()">
+						                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBrd()">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:when>
+						              	
+						              	
+						              	<c:when test="${user == null }">
+						              	<!-- 2. 비로그인 인터셉터 ing -->
+											<div class="col-12 col-md-6">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
+						                      <input class="form-control form-control-sm" id="title" type="text" placeholder="제목을 작성해주세요 *" >
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 인증글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">CertBrd:</label>
+						                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="인증글을 작성해주세요 *" ></textarea>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="mb-3">
+						                  	<!-- 인증샷 -->
+										  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+											<input class="form-control" type="file" id="screenshot" name="screenshot">
+										  </div>
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBrd()">
 						                      	등록
 						                    </button>
 						                  </div>
 						              	</c:when>
 						              	
 						              	<c:otherwise>
+						              	<!-- 3. 참여자가 아닌 회원 -->
 						              		<div class="col-12 col-md-6">
 						                    <!-- 유저 닉네임 표시하는 란 Name -->
 						                    <div class="form-group">
@@ -972,7 +779,7 @@
 						                    <!-- 제목 입력란  Name -->
 						                    <div class="form-group">
 						                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
-						                      <input class="form-control form-control-sm" type="text"  placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
+						                      <input class="form-control form-control-sm" id="title" type="text"  placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
 						                    </div>
 						                  </div>
 						                  
@@ -980,7 +787,558 @@
 						                    <!-- 인증글 입력란 Name -->
 						                    <div class="form-group">
 						                      <label class="visually-hidden" for="reviewText">Review:</label>
-						                      <textarea class="form-control form-control-sm" rows="5" placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
+						                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="mb-3">
+						                  	<!-- 인증샷 -->
+										  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+											<input class="form-control" type="file" id="screenshot" name="screenshot">
+										  </div>
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" disabled="disabled">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:otherwise>
+						                  
+						              </c:choose>
+					                </div>
+					              </form>
+					
+					            </div>
+			            	</c:when>
+			            	<c:otherwise>
+			            	<!-- 2. 인증글이 있을 때 -->
+					            <!-- Header -->
+					            <div class="row align-items-center">
+					              <div class="col-12 col-md-auto">
+					
+					                <!-- Dropdown -->
+					                <div class="dropdown mb-4 mb-md-0">
+					
+					                  <!-- Toggle -->
+					                  <a class="dropdown-toggle text-reset" data-bs-toggle="dropdown" href="#">
+					                    <strong>Sort by: Newest</strong>
+					                  </a>
+					
+					                  <!-- Menu -->
+					                  <div class="dropdown-menu mt-3">
+					                    <a class="dropdown-item" href="#!">Newest</a>
+					                    <a class="dropdown-item" href="#!">Oldest</a>
+					                  </div>
+					
+					                </div>
+					
+					              </div>
+					              
+					              <div class="col-12 col-md text-md-center">
+					                <!-- Count 총 인증 수 -->
+					                <strong class="fs-sm ms-2">Total ${certTotal }</strong>
+					              </div>
+					              
+					              
+					              <div class="col-12 col-md-auto">
+					              	<c:choose>
+					              	
+					              		<c:when test="${chgrYN == 1 }">
+					              			<!-- 참여자일 경우 -->
+							              	<!-- Button -->
+							                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
+						                		인증하기
+						                	</a>
+					              		</c:when>
+					              		
+					              		
+					              		
+					              		<c:otherwise>
+					              			<!-- 로그인 했지만 참여자가 아닌 경우 -->
+					              			<!-- Button -->
+					              			<a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#writeForm">
+						                		인증하기
+						                	</a>
+					              			
+					              		</c:otherwise>
+					              		
+					              	</c:choose>
+					              </div>
+					              
+					              
+					            </div>
+					            <!-- 새 인증글 -->
+					            <div class="collapse" id="writeForm">
+					
+					              <!-- Divider -->
+					              <hr class="my-8">
+					
+					              <!-- 인증 글쓰기 Form -->
+					              <form id="certForm">
+					                <div class="row">
+					                  
+						              <c:choose>
+						              	<c:when test="${chgrYN == 1 }">
+						              	<!-- 1. 참여자일 경우 -->
+						                  <div class="col-12 col-md-6">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
+						                      <input class="form-control form-control-sm" id="title" type="text" placeholder="제목을 작성해주세요 *" required>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 인증글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">CertBrd:</label>
+						                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="인증글을 작성해주세요 *" required></textarea>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="mb-3">
+						                  	<!-- 인증샷 -->
+										  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+											<input class="form-control" type="file" id="screenshot" name="screenshot">
+										  </div>
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBrd()">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:when>
+						              	
+						              	
+						              	<c:when test="${user == null }">
+						              	<!-- 2. 비로그인 인터셉터 ing -->
+											<div class="col-12 col-md-6">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
+						                      <input class="form-control form-control-sm" id="title" type="text" placeholder="제목을 작성해주세요 *" >
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 인증글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">CertBrd:</label>
+						                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="인증글을 작성해주세요 *" ></textarea>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="mb-3">
+						                  	<!-- 인증샷 -->
+										  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+											<input class="form-control" type="file" id="screenshot" name="screenshot">
+										  </div>
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" onclick="writeCertBrd()">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:when>
+						              	
+						              	
+						              	<c:otherwise>
+						              	<!-- 3. 참여자가 아닌 회원 -->
+						              		<div class="col-12 col-md-6">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+						                      <input class="form-control form-control-sm" id="title" type="text"  placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 인증글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">Review:</label>
+						                      <textarea class="form-control form-control-sm" id="conts" rows="5" placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="mb-3">
+						                  	<!-- 인증샷 -->
+										  	<label for="formFile" class="form-label">인증샷을 올려주세요 *</label>
+											<input class="form-control" type="file" id="screenshot" name="screenshot">
+										  </div>
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" disabled="disabled">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:otherwise>
+						                  
+						              </c:choose>
+					                </div>
+					              </form>
+					
+					            </div>
+				            </c:otherwise>
+			            </c:choose>
+			
+			
+			            <!-- 인증글 게시판 R -->
+			            <div class="mt-8">
+			
+			              <!--  여기부터 첫번째 인증글 -->
+							<c:forEach var="certBoard" items="${certBoard }" varStatus="status">
+				              	<c:choose>
+				              		<c:when test="${certBoard.brd_step == 0 }">
+				              		<!-- 1. 원글 -->
+						              <div class="review" id="review${status.index}">
+						                <div class="review-body">
+						                  <div class="row" id="certBoard${status.index}">
+						                  	<input type="hidden" id="brd_num${status.index}"	value="${certBoard.brd_num }">
+						                  	<input type="hidden" id="nick${status.index}"		value="${certBoard.nick }">
+						                  	<input type="hidden" id="reg_date${status.index}"	value="${certBoard.reg_date }">
+						                  	<input type="hidden" id="title${status.index}"		value="${certBoard.title }">
+						                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
+						                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
+						                  	
+						                  	
+						                  	<div class="col-5 col-md-3 col-xl-2">
+												<!-- 인증샷 Image -->
+						                    	<img src="${pageContext.request.contextPath}/upload/${certBoard.img }" alt="인증샷" class="img-fluid">
+						                    </div>
+						                    
+						                    
+						                    
+						                    <div class="col-12 col-md">
+						                    
+												<!-- Avatar -->
+						                    	<div class="avatar avatar-lg">
+												  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+												</div>
+						                    
+						                      <!-- Header -->
+						                      <div class="row mb-6">
+						                        <div class="col-12">
+						                          <!-- Time -->
+						                          <span class="fs-xs text-muted">
+						                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
+						                          </span>
+						                        </div>
+						                      </div>
+						                      
+						
+						                      <!-- Title -->
+						                      <p class="mb-2 fs-lg fw-bold">
+						                        ${certBoard.title }
+						                      </p>
+						
+						                      <!-- Text -->
+						                      <p class="text-gray-500">
+						                      	${certBoard.conts }
+						                      </p>
+						                      
+						
+						                      <!-- Footer -->
+						                      <div class="row align-items-center">
+						                      
+						                        <div class="col-auto d-none d-lg-block">
+							                        <p class="mb-0 fs-sm">좋아요</p>
+						                        </div>
+						                        
+						                        <!-- Text -->
+						                        <div class="col-auto me-auto">
+						                        
+							                        <!-- Rate -->
+							                        <div class="rate">
+							                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+							                            <i class="fe fe-thumbs-up"></i>
+							                          </a>
+							                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+							                            <i class="fe fe-thumbs-up"></i>
+							                          </a>
+							                        </div>
+							                        
+						                        </div>
+						                        
+						                        <div class="col-auto d-none d-lg-block">
+						                          <!-- Text -->
+						                          <p class="mb-0 fs-sm">Comments (${certBoard.replyCount })</p>
+						                        </div>
+						                        
+						                        <c:choose>
+						                        	<c:when test="${user.user_num == certBoard.user_num }">
+						                        	<!-- 작성자 본인일 경우 -->
+								                        <div class="col-auto">
+								                        
+								                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
+								                          <a class="btn btn-xs btn-outline-border" 
+								                          	 href="#!" 
+								                          	 id="showModalButton"
+								                          	 onclick="updateModalCall(${status.index})"
+								                          >
+															수정
+								                          </a>
+								                          
+								                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
+															삭제
+								                          </a>
+								                          
+								                        </div>
+						                        	</c:when>
+						                        	
+						                        	<c:otherwise>
+					                        			<div class="col-auto">
+															<!-- Button -->	
+															<a class="btn btn-xs btn-outline-border" href="#!">
+																더보기
+															</a>
+															<!-- Button -->
+															<button class="btn btn-xs btn-outline-border" data-bs-toggle="collapse" data-bs-target="#commentForm${status.index }" aria-expanded="false" aria-controls="commentForm${status.index }">
+																댓글
+															</button>
+														</div>
+						                        	</c:otherwise>
+						                        </c:choose>
+						                        
+						                        
+						                      </div>
+						                    </div>
+						                  </div>
+						                </div>
+						              </div>
+					              	</c:when>
+				            		<c:otherwise>
+				            		<!-- 2. 댓글 Child review -->
+										<div class="review">
+			            					<div class="review review-child">
+							                  <div class="review-body">
+								                  <div class="row" id="certBoard${status.index}">
+								                  	<input type="hidden" id="brd_num${status.index}"	value="${certBoard.brd_num }">
+								                  	<input type="hidden" id="nick${status.index}"		value="${certBoard.nick }">
+								                  	<input type="hidden" id="reg_date${status.index}"	value="${certBoard.reg_date }">
+								                  	<input type="hidden" id="title${status.index}"		value="${certBoard.title }">
+								                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
+								                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
+								                  	
+								                  	
+													<div class="col-12 col-md-auto">
+								                        <!-- Avatar -->
+								                        <div class="avatar avatar-xxl mb-6 mb-md-0">
+								                          <span class="avatar-title rounded-circle">
+								                            <i class="fa fa-user"></i>
+								                          </span>
+								                        </div>
+													</div>
+								                    
+								                    
+								                    
+								                    <div class="col-12 col-md">
+								                    
+								                    
+								                      <!-- Header -->
+								                      <div class="row mb-6">
+								                        <div class="col-12">
+								                          <!-- Time -->
+								                          <span class="fs-xs text-muted">
+								                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
+								                          </span>
+								                        </div>
+								                      </div>
+								                      
+								
+								                      <!-- Title -->
+								                      <p class="mb-2 fs-lg fw-bold">
+								                        ${certBoard.title }
+								                      </p>
+								
+								                      <!-- Text -->
+								                      <p class="text-gray-500">
+								                      	${certBoard.conts }
+								                      </p>
+								                      
+								
+								                      <!-- Footer -->
+								                      <div class="row align-items-center">
+								                      
+								                      	<div class="col-auto me-auto"></div>
+								                      
+								                        <c:choose>
+								                        	<c:when test="${user.user_num == certBoard.user_num }">
+								                        	<!-- 작성자 본인일 경우 -->
+										                        <div class="col-auto">
+										                        
+										                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
+										                          <a class="btn btn-xs btn-outline-border" 
+										                          	 href="#!" 
+										                          	 id="showModalButton"
+										                          	 onclick="updateModalCall(${status.index})"
+										                          >
+																	수정
+										                          </a>
+										                          
+										                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
+																	삭제
+										                          </a>
+										                          
+										                        </div>
+								                        	</c:when>
+								                        	
+								                        </c:choose>
+								                        
+								                        
+								                      </div>
+								                    </div>
+								                  </div>
+								                </div>
+											</div>	
+										</div>
+					                </c:otherwise>
+				            	</c:choose>		
+							
+			              	
+				              
+				              <!-- 새 댓글 -->
+					            <div class="collapse" id="commentForm${status.index }">
+					
+					              <!-- Divider -->
+					              <hr class="my-8">
+					
+					
+					
+					              <!-- 인증 댓글 쓰기 Form -->
+					              <form id="certCommentForm" action="/commentInsert" method="post" onsubmit="return commentInsertchk(this)">
+					                <div class="row">
+					                  
+						              <c:choose>
+						              	<c:when test="${chgrYN == 1 }">
+						              	<!-- 1. 참가자일 경우 -->
+						                  <div class="col-12 col-md-6">
+						                  	<input type="hidden" name="chg_id"		value="${chg.chg_id }">
+						                  	<input type="hidden" name="user_num"	value="${user.user_num }">
+						                  	<input type="hidden" name="brd_num"		value="${certBoard.brd_num }">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
+						                      <input class="form-control form-control-sm" id="commentTitle" name="title" type="text" placeholder="제목을 작성해주세요 *" >
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 댓글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">CertBrd:</label>
+						                      <textarea class="form-control form-control-sm" id="commentConts" name="conts" rows="5" placeholder="댓글을 작성해주세요 *" ></textarea>
+						                    </div>
+						                  </div>
+						                  
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" onclick="commentCertBrd()">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:when>
+						              	
+						              	<c:when test="${user == null }">
+						              	<!-- 2. 비로그인 -->
+						              		<div class="col-12 col-md-6">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+						                      <input class="form-control form-control-sm" type="text" name="title"  placeholder="로그인 해주세요" disabled="disabled">
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 댓글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">Review:</label>
+						                      <textarea class="form-control form-control-sm" rows="5" name="conts" placeholder="로그인 해주세요" disabled="disabled"></textarea>
+						                    </div>
+						                  </div>
+						                  
+												                  
+						                  <div class="col-12 text-center">
+						                    <!-- 등록 Button -->
+						                    <button class="btn btn-outline-dark" type="submit" onclick="commentCertBrd()">
+						                      	등록
+						                    </button>
+						                  </div>
+						              	</c:when>
+						              	
+						              	<c:otherwise>
+						              	<!-- 3. 참여자가 아닌 회원 -->
+						              		<div class="col-12 col-md-6">
+						                    <!-- 유저 닉네임 표시하는 란 Name -->
+						                    <div class="form-group">
+							                      <p class="mb-2 fs-lg fw-bold">
+							                        ${user.nick }
+							                      </p>
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 제목 입력란  Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewTitle">Review Title:</label>
+						                      <input class="form-control form-control-sm" type="text" name="title"  placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
+						                    </div>
+						                  </div>
+						                  
+						                  <div class="col-12">
+						                    <!-- 댓글 입력란 Name -->
+						                    <div class="form-group">
+						                      <label class="visually-hidden" for="reviewText">Review:</label>
+						                      <textarea class="form-control form-control-sm" rows="5" name="conts" placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
 						                    </div>
 						                  </div>
 						                  
@@ -999,26 +1357,11 @@
 					
 					            </div>
 				            
-				            
-				            
-				            
-			              </c:forEach>
-			              
-			              
-			              
-			              
-			            
-			
-			              
+							</c:forEach>
 			            </div>
 			            
 			            
-			            
-			            
-			            
-			            
-			            
-			            <!-- 수정하기 모달 창 Product -->
+			            <!-- 인증글 게시판 U: 수정하기 모달 창 Product -->
 					    <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
 					      <div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
 					        <div class="modal-content"><!--  -->
@@ -1124,7 +1467,7 @@
 			              
 			              <c:if test="${certBrdPage.startPage > certBrdPage.pageBlock }">
 			                <li class="page-item">
-			                  <a class="page-link page-link-arrow" href="chgDetail?currentPage=${certBrdPage.startPage-certBrdPage.pageBlock }">
+			                  <a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${certBrdPage.startPage-certBrdPage.pageBlock }">
 			                    <i class="fa fa-caret-left"></i>
 			                  </a>
 			                </li>
@@ -1132,19 +1475,32 @@
 			              
 			              <c:forEach var="i" begin="${certBrdPage.startPage }" end="${certBrdPage.endPage }">
 			                <li class="page-item active">
-			                  <a class="page-link" href="chgDetail?currentPage=${i}">${i}</a>
+			                  <a class="page-link" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${i}">${i}</a>
 			                </li>
 			              </c:forEach>
 			              
 			              <c:if test="${certBrdPage.endPage < certBrdPage.totalPage }">
 			                <li class="page-item">
-			                  <a class="page-link page-link-arrow" href="chgDetail?currentPage=${certBrdPage.startPage+certBrdPage.pageBlock }">
+			                  <a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${certBrdPage.startPage+certBrdPage.pageBlock }">
 			                    <i class="fa fa-caret-left"></i>
 			                  </a>
 			                </li>
 			              </c:if>
 			              </ul>
 			            </nav>
+			            <!-- Body: Form -->
+						<div class="offcanvas-body">
+					        <form>
+					          <div class="input-group input-group-merge">
+					            <input class="form-control" type="search" placeholder="Search">
+					            <div class="input-group-append">
+					              <button class="btn btn-outline-border" type="submit">
+					                <i class="fe fe-search"></i>
+					              </button>
+					            </div>
+					          </div>
+					        </form>
+						</div>
 			            </div>
 			            </div>
 			            </div>
@@ -1302,8 +1658,8 @@
 							<div class="modal fade" id="modalfork" tabindex="-1" role="dialog" aria-hidden="true">
 								<div class="modal-dialog modal-dialog-centered" role="document">
 									<div class="modal-content">
-										<input type="hidden" name="ssjUserNum" id="ssjUserNum">
-										<input type="hidden" name="sendMailUser_num" id="sendMailUser_num">
+										<input type="hidden" name="ssjUserNum" 			id="ssjUserNum">
+										<input type="hidden" name="sendMailUser_num"	id="sendMailUser_num">
 						
 										<!-- Close -->
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
