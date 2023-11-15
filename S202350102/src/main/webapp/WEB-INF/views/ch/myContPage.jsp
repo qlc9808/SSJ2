@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <style type="text/css">
 	.container {
@@ -74,9 +75,7 @@
 	  border-top: 1px solid #e7e7e7;
 	  text-align: left;
 	}
-	
-	
-	
+
 </style>
 <title>Insert title here</title>
 </head>
@@ -96,19 +95,20 @@
 	                            <th scope="col" class="th-date">등록일</th>
 	                            <th scope="col" class="th-view_cnt">조회수</th>
 	                            <th  scope="col" class="th-replyCount">댓글수</th>
+	                            <th  scope="col" ></th>
 	                            <th></th>
 	                        </tr>
 	                    </thead>                 
-	                    <tbody>
+	                    <tbody id="body${Certi_md }">
 	                        <c:forEach items="${myCertiList }" var="myCertiList">
-	                            <tr>
+	                            <tr id="row${myCertiList.brd_num}">
 	                                <td>${num}</td>
-	                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
+	                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
 	                                <td>${myCertiList.nick}</td>
 	                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
 	                                <td>${myCertiList.view_cnt}</td>
 					         		<td>${myCertiList.replyCount}</td>
-					         		<td></td>
+					         		<td>삭제</td>
 					         		<c:set var="num" value="${num-1}"></c:set> 			       
 	                            </tr>
 	                        </c:forEach>
@@ -119,8 +119,8 @@
 					    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
 					        <a href="listCommunity?currentPage=${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
 					    </c:if>
-					    <c:forEach var="i" begin="${myCertiPage.startPage}" end="${myCertiPage.endPage}">
-					        <a href="listCommunity?currentPage=${i}">[${i}]</a>
+					    <c:forEach var="i" begin="${myCertiPage.startPage}" end="${myCertiPage.endPage}">					        
+					        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${i }); return false;" >[${i}]</a>
 					    </c:forEach>
 					    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">
 					        <a href="listCommunity?currentPage=${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
@@ -157,9 +157,9 @@
 	                            <th  scope="col" class="th-replyCount">댓글수</th>
 	                        </tr>
 	                    </thead>                 
-	                    <tbody>
+	                    <tbody id="body${Review_md}">
 	                        <c:forEach items="${myReviewList }" var="myReviewList">
-	                            <tr>
+	                            <tr id="row${myReviewList.brd_num }">
 	                                <td>${num}</td>
 	                                <td><a href="reviewContent?brd_num=${myReviewList.brd_num }&chg_id=${myReviewList.chg_id }">${myReviewList.title}</a></td>
 	                                <td>${myReviewList.nick}</td>
@@ -173,14 +173,14 @@
 	                </table>
 	                
 					<div class="page">
-					    <c:if test="${myReviewPage.startPage >myReviewPage.pageBlock}">
-					        <a href="listCommunity?currentPage=${myReviewPage.startPage-myReviewPage.pageBlock}">[이전]</a>
+					    <c:if test="${myReviewPage.startPage >myReviewPage.pageBlock}">					        
+					        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage-myReviewPage.pageBlock}); return false;" >[이전]</a>
 					    </c:if>
-					    <c:forEach var="i" begin="${myReviewPage.startPage}" end="${myReviewPage.endPage}">
-					        <a href="listCommunity?currentPage=${i}">[${i}]</a>
+					    <c:forEach var="i" begin="${myReviewPage.startPage}" end="${myReviewPage.endPage}">					    	
+					        <a href="javascript:void(0);" onclick="pageMove(${Review_md}, ${i }); return false;" >[${i}]</a>
 					    </c:forEach>
-					    <c:if test="${myReviewPage.endPage < myReviewPage.totalPage}">
-					        <a href="listCommunity?currentPage=${myReviewPage.startPage+myCommuPage.pageBlock}">[다음]</a>
+					    <c:if test="${myReviewPage.endPage < myReviewPage.totalPage}">					        
+					        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>
 					    </c:if>
 					</div>            	
             	</c:when> 
@@ -224,7 +224,7 @@
 	                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
 	                                <td>${myCommuList.view_cnt}</td>
 					         		<td>${myCommuList.replyCount}</td>
-					         		<td><a href="/deleteCommunity?brd_num=${board.brd_num}">삭제</a></td>
+					         		<td><a href="/deleteCommunity?brd_num=${myCommuList.brd_num}">삭제</a></td>
 					         		<c:set var="num" value="${num-1}"></c:set> 			       
 	                            </tr>
 	                        </c:forEach>
@@ -232,14 +232,14 @@
 	                </table>
 	                
 					   <div class="page">
-					    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">
-					        <a href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">[이전]</a>
+					    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
+					        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
 					    </c:if>
-					    <c:forEach var="i" begin="${myCommuPage.startPage}" end="${myCommuPage.endPage}">
-					        <a href="listCommunity?currentPage=${i}">[${i}]</a>
+					    <c:forEach var="i" begin="${myCommuPage.startPage}" end="${myCommuPage.endPage}">					        
+					        <a href="javascript:void(0);" onclick="pageMove(${commu_bd}, ${i }); return false;" >[${i}]</a>
 					    </c:forEach>
-					    <c:if test="${myCommuPage.endPage < myCommuPage.totalPage}">
-					        <a href="listCommunity?currentPage=${myCommuPage.startPage+myCommuPage.pageBlock}">[다음]</a>
+					    <c:if test="${myCommuPage.endPage < myCommuPage.totalPage}">					        
+					        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>					        
 					    </c:if>
 					</div>            	
             	</c:when> 
@@ -271,18 +271,19 @@
 	                            <th scope="col" class="th-date">등록일</th>
 	                            <th scope="col" class="th-view_cnt">조회수</th>
 	                            <th  scope="col" class="th-replyCount">댓글수</th>
+	                            <th  scope="col" ></th>
 	                        </tr>
 	                    </thead>                 
-	                    <tbody>
+	                    <tbody id="body${Share_md }">
 	                        <c:forEach items="${myShareList }" var="myShareList">
-	                            <tr>
+	                            <tr id="row${myShareList.brd_num }">
 	                                <td>${num}</td>
 	                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>
 	                                <td>${myShareList.nick}</td>
 	                                <td><fmt:formatDate value="${myShareList.reg_date}" pattern="yyyy-MM-dd"/></td>
 	                                <td>${myShareList.view_cnt}</td>
 					         		<td>${myShareList.replyCount}</td>
-					         		<td><a href="/deleteCommunity?brd_num=${board.brd_num}">삭제</a></td>
+					         		<td><a href="/deleteCommunity?brd_num=${myShareList.brd_num}">삭제</a></td>
 					         		<c:set var="num" value="${num-1}"></c:set> 			       
 	                            </tr>
 	                        </c:forEach>
@@ -291,13 +292,13 @@
 	                
 					   <div class="page">
 					    <c:if test="${mySharePage.startPage >mySharePage.pageBlock}">
-					        <a href="listCommunity?currentPage=${mySharePage.startPage-mySharePage.pageBlock}">[이전]</a>
+					        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage-mySharePage.pageBlock}); return false;" >[이전]</a>
 					    </c:if>
 					    <c:forEach var="i" begin="${mySharePage.startPage}" end="${mySharePage.endPage}">
-					        <a href="listCommunity?currentPage=${i}">[${i}]</a>
+					        <a href="javascript:void(0);" onclick="pageMove(${Share_md}, ${i }); return false;" >[${i}]</a>
 					    </c:forEach>
 					    <c:if test="${mySharePage.endPage < mySharePage.totalPage}">
-					        <a href="listCommunity?currentPage=${mySharePage.startPage+mySharePage.pageBlock}">[다음]</a>
+					        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage+mySharePage.pageBlock}); return false;" >[다음]</a>
 					    </c:if>
 					</div>            	
             	</c:when> 
