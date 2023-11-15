@@ -32,51 +32,83 @@ console.log("brd_num: " + brd_num);
 console.log("user_num: " +  user_num);
 
 $(document).ready(function(){
-    listcomment(brd_num);
+    listCommentg(brd_num);
 });
 
-function listcomment() {
-    
+function listCommentg() {
     var brd_num = ${board.brd_num}
     var user_num =  ${board.user_num};
-
+    
     $.ajax({
-        url: "listComment?brd_num="+brd_num,
+        url: "listComment?brd_num=" + brd_num,
         type: "GET",
-        data: {  user_num: user_num,   
-          		  brd_num: brd_num,
-        	 	 },
+        data: {  
+            user_num: user_num,
+            brd_num: brd_num,
+        },
         dataType: "json",
-        success: function(result) {
-            var commentList = $("#commentList"); 
-            commentList.empty();
+        success: function (result) {
+            var listComment = $("#commentList");
+            
+            listcomment.empty();
             console.log("listcomment brd_num: " + brd_num);
             console.log("listcomment user_num: " + user_num);
             console.log("listcomment sessionUserNum :" + sessionUserNum)
-            $.each(result, function(index, board) {
+
+            $.each(result, function (index, board) {
                 var listItem = $("<li class='list-group-item'></li>");
-                listItem.append(" 댓글 번호 :"+ board.brd_num);
-                listItem.append("작성자: " + board.nick + " &nbsp;&nbsp;&nbsp;&nbsp;");
-                listItem.append("작성자 회원번호: " + board.user_num);
-                listItem.append("<br>댓글 그룹: " + board.brd_group);
-                listItem.append("댓글 순서: " + board.brd_step);
-                listItem.append("작성날짜: " + board.reg_date);
-                listItem.append("<br>댓글 내용: <span>" + board.conts + "</span><br>");         
-           		
+                var reviewContainer = $("<div class='review' style='padding-bottom:20px'></div>");
+                var reviewBody = $("<div class='review-body style='padding-bottom:20px'></div>");
+                var row = $("<div class='row'></div>");
+                var colMdAuto = $("<div class='col-12 col-md-auto'></div>");
+                var avatar = $("<div class='avatar avatar-xxl mb-6 mb-md-0'></div>");
+                avatar.append("<span class='avatar-title rounded-circle'><i class='fa fa-user'></i></span>");
+                colMdAuto.append(avatar);
+                var colMd = $("<div class='col-12 col-md'></div>");
+                var headerRow = $("<div class='row mb-6'></div>");
+                var headerCol = $("<div class='col-12'></div>");
+                
+                var regDate = new Date(board.reg_date);
+                var formattedRegDate = regDate.toLocaleString();
+                headerCol.append("<span class='fs-xs text-muted'>" + board.nick + " " + formattedRegDate + "</span>");
+                headerRow.append(headerCol);
+                
+                var text = $("<p class='text-gray-500'>" + board.conts + "</p>");
+                var footerRow = $("<div class='row align-items-center'></div>");
+                
+                reviewBody.append(row.append(colMdAuto).append(colMd.append(headerRow).append(text).append(footerRow)));
+                reviewContainer.append(reviewBody);
+                
+                listItem.append(reviewContainer);
+
                 if (${sessionScope.user_num} === board.user_num) {
-                listItem.append("<button type='button' class='btn-dark btn-sm  comment-update-btn' data-user-num='" + board.user_num 
-                																						+ "'data-brd-num="+ board.brd_num + ">댓글 수정</button>");
-                listItem.append("<button type='button' class='btn-dark btn-sm  comment-delete-btn' data-user-num='" + board.user_num 
-																										+ "'data-brd-num="+ board.brd_num + ">댓글 삭제</button>"); 
+                    // 댓글 수정 버튼
+                    var commentUpdateButton = $("<button type='button' class='btn btn-xs btn-outline-border comment-update-btn ms-2'' data-user-num='" + board.user_num +
+                        "'data-brd-num=" + board.brd_num + ">댓글 수정</button>");
+
+                    // 댓글 삭제 버튼
+                    var commentDeleteButton = $("<button type='button' class='btn btn-xs btn-outline-border comment-delete-btn ms-2'' data-user-num='" + board.user_num +
+                        "'data-brd-num=" + board.brd_num + ">댓글 삭제</button>");
+
+                    // 버튼을 가로로 나란히 놓기 위해 d-flex 클래스를 적용
+                    var buttonsContainer = $("<div class='d-flex justify-content-end'></div>");
+                    buttonsContainer.append(commentUpdateButton).append(commentDeleteButton);
+                    
+                    // 댓글 컨테이너에 버튼 컨테이너 추가
+                    reviewContainer.append(buttonsContainer);
                 }
-                commentList.append(listItem);
+
+                listCommentSharing.append(listItem);
             });
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log("Ajax 요청 실패: " + errorThrown);
         }
     });
 }
+
+
+
 
 
 /*댓글 작성 아작스 */
@@ -105,7 +137,7 @@ function listcomment() {
                 success: function (result) {
                     if (result.result === "success") {
                         // 댓글 작성이 성공한 경우, 댓글 목록 조회 아작스를 호출하여 댓글을 즉시 가져옴
-                        listcomment();
+                        listComment();
                     } else {
                         alert("댓글 작성에 실패했습니다.");
                     }
@@ -140,14 +172,15 @@ function listcomment() {
 			  console.log("수정 버튼 클릭 sessionUserNum: " +sessionUserNum );
             
 			// 댓글 내용을 텍스트 필드로 교체           
-            var originalContent = listItem.find('span').text();
+            var originalContent = listItem.find('p').text();
             var inputField = $('<input type="text" class="form-control" value="' + originalContent + '">');
-            listItem.find('span').replaceWith(inputField);
+            listItem.find('p').replaceWith(inputField);
 
             // 수정 버튼 클릭 시, '저장' 버튼에 data-value를 추가하여 댓글 번호를 저장
-            var saveButton = $('<button type="button" class="btn btn-dark btn-sm save-comment-btn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
-            var cancelButton = $('<button type="button" class="btn btn-dark btn-sm  cancel-comment-btn" data-user-num="' + user_num + '">취소</button>');
-            listItem.append(saveButton, cancelButton);
+         var saveButton = $('<button type="button" class="btn btn-xs btn-outline-border save-comment-btn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
+            var cancelButton = $('<button type="button" class="btn btn-xs btn-outline-border cancel-comment-btn" data-user-num="' + user_num + '">취소</button>');
+            var buttonContainer = $('<div style="position: relative; margin-top: 5px;"></div>').append(saveButton, cancelButton);
+            listItem.append(buttonContainer);
             var user_num = listItem.find('.user_num').val();
   
             // 기존 수정 버튼을 비활성화
@@ -208,7 +241,7 @@ function listcomment() {
                     success: function (result) {
                         if (result.result === "success") {
                             // 수정이 성공하면 댓글 목록을 다시 불러오기
-                            listcomment();
+                            listComment();
                             
                             alert("댓글이 수정되었습니다.")
                         } else {
@@ -251,7 +284,7 @@ function listcomment() {
 	    	        dataType: "json",
 	    	        success: function (result) {
 	    	            // 삭제가 성공하면 삭제 후의 댓글 목록을 다시 불러오기
-	    	            listcomment();
+	    	            listCommentSharing();
 	    	            if (result.result === "success") {
 	    	                alert("댓글 삭제되었습니다.");
 	    	                var deletedCommentElement = $('#commentList').find('li[data-brd-num="' + brd_num + '"]');
@@ -274,30 +307,60 @@ function listcomment() {
 <c:choose>
     <c:when test="${empty sessionScope.user_num}">
         <p><p>
-        <h5>댓글을  확인하실 분들은 로그인을 해주세요</h5>
-    </c:when>  
-    <c:otherwise>
-    <div class="card my-4">
-       <h5 class="card-header">댓글 작성</h5>
-       <div class="card-body">
-           <form name="comment-form" action="/commentWrite" method="post" autocomplete="off">
-               <div class="form-group">
-                   <input type="hidden" name="user_num"  id="user_num" value="${board.user_num}">
-                   <input type="hidden" name="brd_group" id="brd_group" value="${board.brd_group}">
-                   <input type="hidden" name="brd_step" id="brd_step" value="${board.brd_step}">
-                   <textarea name="conts" id="conts" class="form-control" rows="3" placeholder="댓글을 남겨주세요"></textarea>
-               </div>
-                   <button id="submit-comment" type="button" class="btn btn-dark btn-sm">댓글 작성</button>
-           </form>
-       </div>
-   </div>
-   </c:otherwise> 
-</c:choose> 
+        <h5>댓글을 작성하실 분은 로그인을 해주세요!</h5>
+    </c:when>
+    
+    <c:otherwise> 
+ <!-- REVIEWS -->
 
+    <section class="pt-9 pb-8" id="reviews">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+                <!-- Button -->
+                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
+                  	댓글 작성
+                </a>
+              </div>
+            </div>
+            <!-- New Review -->
+            <div class="collapse" id="reviewForm">
+              <!-- Divider -->
+              <hr class="my-6">
+              <!-- Form -->
+	            <form name="commentSharing" action="/commentSharing" method="post" autocomplete="off">
+                <input type="hidden" name="user_num"  id="user_num" value="${board.user_num}">
+                <input type="hidden" name="brd_group" id="brd_group" value="${board.brd_group}">
+                <input type="hidden" name="brd_step" id="brd_step" value="${board.brd_step}">
+                <div class="row">
+                   <div class="col-12">
+                    <!-- Name -->
+					<div class="form-group">
+					  <label class="visually-hidden" for="reviewText"></label>
+					  <textarea class="form-control form-control-sm full-width" id="conts" name="conts" rows="5" placeholder="댓글을 작성해주세요.*" required></textarea>
+					</div>
+                  </div>
+                  <div class="col-12 text-center">
+
+                    <!-- Button -->
+                    <button class="btn btn-outline-dark" id="submit-comment" type="button">
+                      	작성완료
+                    </button>
+
+                  </div>
+                </div>
+              </form>
+
+            </div>
+</div>
+</section>
+<!-- Reviews -->
+  </c:otherwise> 
+</c:choose> 
  <!-- 댓글 목록이 나타날 창  -->
 
 		<div class="container">
-		<ul class="list-group list-group-flush" id="commentList"> 
+		<ul class="list-group list-group-flush" id="listCommentSharing"> 
 		</ul>
 		</div>
 

@@ -37,9 +37,7 @@
 					document.getElementById('reviewNav')?.classList.add('active');
 					document.getElementById('reviewTab')?.classList.add('active', 'show');
 	        } 
-	        
-	        //
-	        
+	            
 	        
 	}); 
 
@@ -140,6 +138,32 @@
 		});
 		
 	}
+
+
+	// 챌린지 찜하기
+	function chgPick(p_index) {
+		// var chg_id = p_chg_id;
+		// alert("chg_id -> " + chg_id);
+
+		$.ajax({
+			url : "/chgPickPro",
+			type : "POST",
+			data : {chg_id : p_index},
+			dataType : 'json',
+			success : function(chgPickResult) {
+				if(chgPickResult.chgPick > 0) {
+					$("#chgPick").removeClass("btn-outline-dark").addClass("btn-dark");
+				} else {
+					$("#chgPick").removeClass("btn-dark").addClass("btn-outline-dark");
+				}
+
+			},
+			error : function() {
+				alert("찜하기 오류");
+			}
+		});
+	}
+
 
 	// 쪽지보내기 버튼
 	function sendMessage() {
@@ -456,134 +480,166 @@
                
 					<div class="form-group">
 						<div class="row gx-5 mb-7">
-						<!-- 참여하기 -->
-						<!-- YR 작업 중 -->
-						<c:choose>
-							<c:when test="${chg.stateCtn == '진행중'}">
-
-								<div class="col-12 col-lg">
-									<c:choose>
-									
-									<c:when test="${sessionScope.user_num != null}">
-										<!-- 로그인 한 상태 -->
-										<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-										참여하기
-										</button>
-									
-										<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-										<div class="modal-dialog">
-									
-											<c:choose>
-									
-											<c:when test="${chg.chg_capacity == chgrParti }">
-												<!-- 참여 정원 = 참가 인원 -->
-												<div class="modal-content">
-												<div class="modal-body">
-													<p>참여인원이 마감되었습니다</p>
+							<!-- 참여하기 -->
+							<!-- YR 작성 -->
+							<div class="col-12 col-lg-auto">
+								<c:choose>
+									<c:when test="${chg.stateCtn == '진행중'}">
+							
+										<c:choose>
+							
+											<c:when test="${sessionScope.user_num != null}">
+												<!-- 로그인 한 상태 -->
+												<button type="button" class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+													참여하기
+												</button>
+							
+												<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+													aria-hidden="true">
+													<div class="modal-dialog">
+							
+														<c:choose>
+							
+															<c:when test="${chg.chg_capacity == chgrParti }">
+																<!-- 참여 정원 = 참가 인원 -->
+																<div class="modal-content">
+																	<div class="modal-body">
+																		<p>참여인원이 마감되었습니다</p>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+																			aria-label="Close">취소하기</button>
+																	</div>
+																</div>
+							
+															</c:when>
+							
+							
+															<c:otherwise>
+							
+																<c:choose>
+							
+																	<c:when test="${chgrYN == 1 }">
+																		<!-- 이미 챌린지 참여함 -->
+																		<div class="modal-content">
+																			<div class="modal-body">
+																				<p>이미 참여한 챌린지입니다</p>
+																			</div>
+																			<div class="modal-footer">
+																				<button type="button" class="btn btn-secondary"
+																					data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+																			</div>
+																		</div>
+																	</c:when>
+							
+							
+																	<c:otherwise>
+																		<!-- 챌린지 참가 -->
+																		<div class="modal-content">
+																			<div class="modal-body">
+																				<p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
+																				<p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
+																			</div>
+																			<div class="modal-footer">
+																				<button type="button" class="btn btn-secondary"
+																					data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+																				<button type="button" class="btn btn-danger"
+																					onclick="cJoin()">참여하기</button>
+																				<form id="cJoinForm">
+																					<input type="hidden" name="user_num" value="${user.user_num}">
+																					<input type="hidden" name="chg_id" value="${chg.chg_id}">
+																				</form>
+																			</div>
+																		</div>
+							
+																	</c:otherwise>
+							
+																</c:choose>
+							
+															</c:otherwise>
+							
+														</c:choose>
+							
+													</div>
 												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-												</div>
-												</div>
-									
+							
 											</c:when>
-									
-											
-											<c:otherwise>
-		
-												<c:choose>
-		
-												<c:when test="${chgrYN == 1 }">
-													<!-- 이미 챌린지 참여함 -->
-													<div class="modal-content">
-													<div class="modal-body">
-														<p>이미 참여한 챌린지입니다</p>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-													</div>
-													</div>
-												</c:when>
-												
-												
-												<c:otherwise>
-													<!-- 챌린지 참가 -->
-													<div class="modal-content">
-													<div class="modal-body">
-														<p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
-														<p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-														<button type="button" class="btn btn-danger" onclick="cJoin()">참여하기</button>
-														<form id="cJoinForm">
-														<input type="hidden" name="user_num" value="${user.user_num}">
-														<input type="hidden" name="chg_id" value="${chg.chg_id}">
-														</form> 
-													</div>
-													</div>
-												
-												</c:otherwise>
-												
-												</c:choose>
-												
-											</c:otherwise>
-									
-											</c:choose>
-											
-										</div>
-										</div>
-									
+							
+											<c:when test="${sessionScope.user_num == null}">
+												<!-- 로그인 안 한 상태 -->
+												<button type="button" class="btn btn-danger mb-2" onclick="location.href='/loginForm'">
+													참여하기
+												</button>
+											</c:when>
+							
+										</c:choose>
+							
 									</c:when>
-									
-									<c:when test="${sessionScope.user_num == null}">
-										<!-- 로그인 안 한 상태 -->
-										<button type="button" class="btn btn-danger" onclick="location.href='/loginForm'">
-										참여하기
+							
+									<c:otherwise>
+										<button type="button" class="btn btn-secondary mb-2">
+											챌린지 종료
 										</button>
-									</c:when>
-									
-									</c:choose>
-		
-								</div>
-							</c:when>
-
-							<c:otherwise>
-								<button type="button" class="btn btn-secondary">
-									챌린지 종료
+									</c:otherwise>
+								</c:choose>
+								
+								<!-- 참여완료 YN -->
+								<button type="button" class="btn btn-danger mb-2" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
+									참여완료
 								</button>
-							</c:otherwise>
-						</c:choose>
-						
-						<!-- 참여완료 YN -->
-						<button type="button" class="btn btn-danger" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
-							참여완료
-						</button>
-						
-						<!-- 챌린지 참여 성공 -->
-						<div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-							<div class="modal-body">
-								<p>챌린지 참여가 완료되었습니다</p>
+								
+								<!-- 챌린지 참여 성공 -->
+								<div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<p>챌린지 참여가 완료되었습니다</p>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-							</div>
-							</div>
-						</div>
-						</div>
 							
 
-						<!-- 찜하기 -->
-						<div class="col-12 col-lg-auto">
+							<!-- 찜하기 -->
+							<!-- YR 작성 -->
+							<div class="col-12 col-lg">
 
-							<!-- Wishlist -->
-							<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button">
-								챌린지 찜 <i class="fe fe-heart ms-2"></i>
-							</button>
+								<c:choose>
+									<c:when test="${sessionScope.user_num != null}">
+										<!-- 로그인 한 상태 -->
+										<c:choose>
+										
+											<c:when test="${chgPickYN == 1}">
+												<!-- 찜 기록 있을 때 -->
+												<button class="btn btn-dark w-100 mb-2" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
+													챌린지 찜 <i class="fe fe-heart ms-2"></i>
+												</button>	
+											</c:when>
 
-						</div>
+											<c:otherwise>
+												<!-- 찜 기록 없을 때 -->
+												<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
+													챌린지 찜 <i class="fe fe-heart ms-2"></i>
+												</button>
+											</c:otherwise>
+										</c:choose>
+
+									</c:when>
+									
+									<c:otherwise>
+										<!-- 로그인 안 한 상태 -> 로그인 페이지로 이동 -->
+										<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="location.href='/loginForm'">
+											챌린지 찜 <i class="fe fe-heart ms-2"></i>
+										</button>
+									</c:otherwise>
+
+								</c:choose>
+
+							</div>
 						</div>
 
 
@@ -2032,12 +2088,6 @@
         </div>
       </div>
     </section>
-
-
-
-
-
-
 
 
 </body>
