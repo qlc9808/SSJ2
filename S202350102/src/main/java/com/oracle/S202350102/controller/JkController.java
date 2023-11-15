@@ -39,9 +39,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkBoardService;
+import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,6 +58,8 @@ public class JkController {
 	private final JkUserService jus;
 	private final JkBoardService jbs;
 	private final YaCommunityService ycs;
+	private final JkMypageService jms;
+	
 	
 	
 	//좋아요 기능 컨트롤러
@@ -516,15 +521,25 @@ public class JkController {
 	}
 	
 	@GetMapping("/mypage")
-	public String mypage(HttpSession session, Model model) {
+	public String mypage(HttpSession session, Challenge chg, Board board, Model model) {
 	    System.out.println("JkController mypage start...");
-
 	    System.out.println("session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
+
 	    int user_num = 0;
 	    if (session.getAttribute("user_num") != null) {
 	        user_num = (int) session.getAttribute("user_num");
 	    }
-
+	    
+	    List<Challenge> myChgList = jms.myChgList(chg);
+	    
+	  
+	    		
+	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
+	
+	   
+	   
+	    
+	    
 	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
 	}
 
