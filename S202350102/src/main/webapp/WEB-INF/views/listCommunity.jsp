@@ -369,7 +369,7 @@ $(document).ready(function () {
                 <input type="submit" value="글작성">
             </form>
         </div>
-
+	
         <!-- 게시판리스트  -->
         <div id="board-list">
             <div class="container">
@@ -415,5 +415,25 @@ $(document).ready(function () {
         </div>
     </section>
 </body>
+
+<!--비로그인 자가 글작성 시도시 알람창 띄우면서 로그인 페이지로 넘겨버리기  ---------->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const submitButton = document.querySelector('#options input[type="submit"]');
+        submitButton.addEventListener('click', function (event) {
+            // 세션의 user_num 값 확인
+            const userNum = <%= session.getAttribute("user_num") %>;
+
+            // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
+            if (userNum === null) {
+                alert('로그인 후 이용해주세요!');
+                event.preventDefault(); // 폼 전송을 막음
+                window.location.href = '/loginForm'; // 로그인 페이지로 이동
+            }
+        });
+    });
+</script>
+
+
 <%@ include file="footer.jsp" %>
 </html>

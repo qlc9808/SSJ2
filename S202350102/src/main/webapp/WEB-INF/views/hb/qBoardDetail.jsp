@@ -15,7 +15,7 @@
 		<div id="qbd-title">
 			<p>${board.title }
 					<a href="qBoardUpdateForm?brd_num=${board.brd_num }">수정</a>
-					<a href="qBoardDelete?brd_num=${board.brd_num }">삭제</a>
+					<a href="javascript:void(0);" onclick="confirmDelete(${board.brd_num});">삭제</a>
 					<a href="qBoardList?board=${board }">목록</a></p>
 				
 		</div>
@@ -206,6 +206,13 @@
 	    });
 	});
 
+	function confirmDelete(brd_num) {
+	    var result = confirm("게시글을 삭제하시겠습니까?");
+	    if (result) {
+	        window.location.href = "qBoardDelete?brd_num=" + brd_num;
+	    } else {
+	    }
+	}
 
 </script>
 </body>

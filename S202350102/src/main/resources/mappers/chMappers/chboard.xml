@@ -186,8 +186,16 @@
 		                        Where b.brd_md = #{brd_md}
 		                        and b.user_num = #{user_num}
 		                        and b.brd_step = 0
-		                        ORDER by b.reg_date) a ) d
+		                        ORDER by b.reg_date DESC) a ) d
 		Where rn BETWEEN #{start} and #{end}
+	</select>
+	
+	<select id="userTot" parameterType="Board" resultType="int">
+		Select Count(*)
+		From board
+		Where user_num = #{user_num}
+		and brd_md = #{brd_md}
+		and brd_step =0
 	</select>
 	
 </mapper>
