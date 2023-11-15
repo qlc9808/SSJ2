@@ -141,10 +141,10 @@ $("#sortOption").change(function() {
                 <!-- 공간을 벌리기 위해 클래스 추가 -->
             </div>
             <div class="d-flex justify-content-end mb-3">
-			<!-- <select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
+			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
 			    <option value="reg_date">최근 게시물</option>
 			    <option value="view_cnt">조회수 높은 순</option>
-			</select> -->
+			</select>
 			
 
             </div>
