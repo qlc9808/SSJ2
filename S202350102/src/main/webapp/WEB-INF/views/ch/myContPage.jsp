@@ -200,55 +200,55 @@
 	<h4>자유 게시판</h4>
 	<div id="board-list">
             <div class="container">
-            <c:choose>
-            	<c:when test="${not empty myCommuList }">
-            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
-	                <table class="boardtable">
-	                    <thead>
-	                        <tr>
-	                            <th scope="col" class="th-num">번호</th>
-	                            <th scope="col" class="th-title">제목</th>
-	                            <th scope="col" class="th-nick">작성자</th>
-	                            <th scope="col" class="th-date">등록일</th>
-	                            <th scope="col" class="th-view_cnt">조회수</th>
-	                            <th  scope="col" class="th-replyCount">댓글수</th>
-	                            <th></th>
-	                        </tr>
-	                    </thead>                 
-	                    <tbody>
-	                        <c:forEach items="${myCommuList }" var="myCommuList">
-	                            <tr>
-	                                <td>${num}</td>
-	                                <td><a href="detailCommunity?user_num=${myCommuList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
-	                                <td>${myCommuList.nick}</td>
-	                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
-	                                <td>${myCommuList.view_cnt}</td>
-					         		<td>${myCommuList.replyCount}</td>
-					         		<td><a href="/deleteCommunity?brd_num=${myCommuList.brd_num}">삭제</a></td>
-					         		<c:set var="num" value="${num-1}"></c:set> 			       
-	                            </tr>
-	                        </c:forEach>
-	                    </tbody>
-	                </table>
-	                
-					   <div class="page">
-					    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
-					        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
-					    </c:if>
-					    <c:forEach var="i" begin="${myCommuPage.startPage}" end="${myCommuPage.endPage}">					        
-					        <a href="javascript:void(0);" onclick="pageMove(${commu_bd}, ${i }); return false;" >[${i}]</a>
-					    </c:forEach>
-					    <c:if test="${myCommuPage.endPage < myCommuPage.totalPage}">					        
-					        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>					        
-					    </c:if>
-					</div>            	
-            	</c:when> 
-            	
-            	<c:otherwise>
-            		<h3>작성한 글이 없습니다.</h3>
-            	</c:otherwise>
-            	
-			</c:choose>
+	            <c:choose>
+	            	<c:when test="${not empty myCommuList }">
+	            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
+		                <table class="boardtable">
+		                    <thead>
+		                        <tr>
+		                            <th scope="col" class="th-num">번호</th>
+		                            <th scope="col" class="th-title">제목</th>
+		                            <th scope="col" class="th-nick">작성자</th>
+		                            <th scope="col" class="th-date">등록일</th>
+		                            <th scope="col" class="th-view_cnt">조회수</th>
+		                            <th  scope="col" class="th-replyCount">댓글수</th>
+		                            <th></th>
+		                        </tr>
+		                    </thead>                 
+		                    <tbody>
+		                        <c:forEach items="${myCommuList }" var="myCommuList">
+		                            <tr>
+		                                <td>${num}</td>
+		                                <td><a href="detailCommunity?user_num=${myCommuList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
+		                                <td>${myCommuList.nick}</td>
+		                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
+		                                <td>${myCommuList.view_cnt}</td>
+						         		<td>${myCommuList.replyCount}</td>
+						         		<td><a href="/deleteCommunity?brd_num=${myCommuList.brd_num}">삭제</a></td>
+						         		<c:set var="num" value="${num-1}"></c:set> 			       
+		                            </tr>
+		                        </c:forEach>
+		                    </tbody>
+		                </table>
+		                
+						   <div class="page">
+						    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
+						        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
+						    </c:if>
+						    <c:forEach var="i" begin="${myCommuPage.startPage}" end="${myCommuPage.endPage}">					        
+						        <a href="javascript:void(0);" onclick="pageMove(${commu_bd}, ${i }); return false;" >[${i}]</a>
+						    </c:forEach>
+						    <c:if test="${myCommuPage.endPage < myCommuPage.totalPage}">					        
+						        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>					        
+						    </c:if>
+						</div>            	
+	            	</c:when> 
+	            	
+	            	<c:otherwise>
+	            		<h3>작성한 글이 없습니다.</h3>
+	            	</c:otherwise>
+	            	
+				</c:choose>
 				
             </div>
         </div>
