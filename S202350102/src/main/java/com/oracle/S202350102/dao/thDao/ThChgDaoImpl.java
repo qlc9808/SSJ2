@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -80,6 +81,21 @@ public class ThChgDaoImpl implements ThChgDao {
 			System.out.println("ThChgDaoImpl listEndChg Exception --> " + e.getMessage());
 		}
 		return endChgList;
+	}
+
+
+	// 챌린지 카테고리 리스트 조회
+	@Override
+	public List<Comm> listChgCategory() {
+		System.out.println("ThChgDaoImpl listChgCategory Start...");
+		List<Comm> chgCategoryList = null;
+		try {
+			chgCategoryList = session.selectList("thChgCategoryList");
+			System.out.println("ThChgDaoImpl listChgCategory chgCategoryList.size() --> " + chgCategoryList.size());			
+		} catch (Exception e) {
+			System.out.println("ThChgDaoImpl listChgCategory Exception --> " + e.getMessage());
+		}
+		return chgCategoryList;
 	}
 
 }

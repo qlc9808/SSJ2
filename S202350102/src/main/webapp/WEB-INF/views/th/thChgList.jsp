@@ -19,7 +19,14 @@
 <script type="text/javascript">
 	function fn_sortOpt(){
 		var sortOpt = $('#sortOpt').val()
-		location.href= 'thChgList?sortOpt='+sortOpt;
+ 		var state_md 	= 	${chg.state_md}
+ 		var chg_lg 		= 	${chg.chg_lg}
+ 		var chg_md 		= 	${chg.chg_md}
+
+		location.href= 'thChgList?state_md='+state_md
+								+'&chg_lg='+chg_lg
+								+'&chg_md='+chg_md
+								+'&sortOpt='+sortOpt;
 	}
 </script>
 </head>
@@ -40,7 +47,7 @@
                 <li class="nav-item">
 
                   <!-- Toggle -->
-                  <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6" data-bs-toggle="collapse" href="#ingChallenge">
+                  <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6" data-bs-toggle="collapse" href="#ingChallenge" id="ingDropDown">
                     	진행중 챌린지
                   </a>
 
@@ -49,15 +56,15 @@
                     <div class="form-group">
                       <ul class="list-styled mb-0" id="chgCtNav">
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/thChgList">
+                          <a class="list-styled-link" href="/thChgList?state_md=102">
                             	전체
                           </a>
                         </li>
-                        <li class="list-styled-item">
-                          <a class="list-styled-link" href="#">
-                            	운동
-                          </a>
-                        </li>
+                        <c:forEach var="comm" items="${chgCategoryList }">
+	                        <li class="list-styled-item" >
+	                          <a class="list-styled-link" href="/thChgList?state_md=102&chg_lg=${comm.lg }&chg_md=${comm.md}">${comm.ctn }</a>
+	                        </li>
+                        </c:forEach>
                       </ul>
                     </div>
     			  </div>
@@ -78,20 +85,23 @@
                     <div class="form-group">
                       <ul class="list-styled mb-0" id="productsNav">
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/thEndChgList">
-                            	전체
-                          </a>
+                          <a class="list-styled-link" href="/thChgList?state_md=103">전체</a>
                         </li>
-                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/endChg">
-                            	공부
-                          </a>
-                        </li>
+                        <c:forEach var="comm" items="${chgCategoryList }">
+	                        <li class="list-styled-item">
+	                          <a class="list-styled-link" href="/thChgList?state_md=103&chg_lg=${comm.lg }&chg_md=${comm.md}">${comm.ctn }</a>
+	                        </li>
+                        </c:forEach>
                       </ul>
                     </div>
                   </div>
-
-                </li>
+			<li>	
+				<div style="text-align: center;">
+	               <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
+	            		  챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
+	            	</button>
+	         	</div>
+            </li>
                 
               </ul>
             </form>
@@ -103,7 +113,7 @@
               <div class="col-12 col-md">
 
                 <!-- Heading -->
-                <h3 class="mb-1">카테고리명 챌린지</h3>
+                <h3 class="mb-1">챌린지</h3>
 
               </div>
               <div class="col-12 col-md-auto">
@@ -118,6 +128,7 @@
               </div>
             </div> 
              
+            <!-- 챌린지 리스트 조회  -->
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }">
@@ -195,5 +206,6 @@
     </div>
   </div>
 </section>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

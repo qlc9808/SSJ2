@@ -356,5 +356,17 @@ public class BgController {
 		// 챌린지 메인 페이지 만들어야 제대로 넣을 수 있음
 		return "sendMail";
 	}
+	
+	
+	
+	// mapper key:	commentInsert
+	@RequestMapping(value = "commentInsert")
+	public String commentInsert(Board board, HttpSession session, Model model) {
+		System.out.println("BgController commentInsert Start...");
+		
+		 bs.commentInsert(board);
+		
+		return "redirect:ChgDetail";
+	}
 }
 
