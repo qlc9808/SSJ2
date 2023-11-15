@@ -30,74 +30,110 @@
     취소 버튼을 누르면 쉐어링 상세페이지 이동
 
 
-<!--jk detailSharing 모달창 내용 분리   -->
-<!--쉐어링 참가버튼을 누른 사람 (session의 usernum 정보 brd_num을 담는다.) -->
-  <button id="openModalButton" class="btn btn-dark w-100" data-toggle="button" data-bs-target="#participateModal">
-         <i class="fe fe-mail me-2"></i> 구매신청
-  </button>    
-  
-  
-<!--Ya test (참가신청) -------------------------------------------------------------------------->
-<div class="modal" id="participateModal">
-	<div class="modal-dialog">
-				 <div class="modal-content">
-						<!-- 모달 내용 -->
-				<div id="remoteModalContent"></div>
-				</div>
-	</div>
-</div>                
-<div id="modalContainer"></div>
+
+<button type="button" id = "infoModal" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#infoModal">
+  참가신청
+</button>
+
+<div class="modal" id="infoModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">쉐어링 등록자에게 전달할 정보입니다. 신청하시겠습니까?</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="infoForm">
+          <div class="form-group">
+            <label for="nick">닉네임</label>
+            <input type="text" class="form-control" id="nick" name="nick" value="${user1.nick}"readonly >
+          </div>
+          <div class="form-group">
+            <label for="user_name">이름</label>
+            <input type="text" class="form-control" id="user_name" name="user_name" value="${{user1.user_name}"readonly >
+          </div>
+          <div class="form-group">
+            <label for="tel">번호</label>
+            <input type="text" class="form-control" id="tel" name="tel" type="text" value="${user1.tel}">
+          </div>
+          <div class="form-group">
+            <label for="add">주소</label>
+            <input type="text" class="form-control"id="addr" name="addr" value="${user1.addr}" >
+          </div>
+          <div class="form-group">
+            <label for="add">전달할 메세지</label>
+            <input type="text" class="form-control"id="addr" name="addr" value="${user1.addr}" >
+          </div>
+          
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-dark btn-sm" onclick="submitInfo()">신청</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-document.getElementById('openModalButton').addEventListener('click', function() {
-		fetch(`/sharingParticipate?brd_num=${brd_num}`)// controller requestmapping
-		.then(response => response.text())
-		.then(data => {
-		document.getElementById('remoteModalContent').innerHTML = data;
-		var myModal = new bootstrap.Modal(document.getElementById('participateModal'));
-		myModal.show();
-		 });
+	
+	// 모달창열기
+	document.addEventListener('DOMContentLoaded', function() {
+	  const modalBtn = document.querySelector('[data-target="#infoModal"]');
+	  modalBtn.addEventListener('click', function() {
+	    // 여기에 사용자 정보를 불러오는 코드 추가:
+	    document.getElementById('nick').value = user1.nick;
+	    document.getElementById('user_name').value = user1.user_name;
+	    document.getElementById('tel').value = user1.tel;
+	    document.getElementById('addr').value = user1.addr;
+	  });
 	});
+	
+	//모달창에 데이터 불러오기
+	 document.addEventListener('DOMContentLoaded', function() {
+		  const modalBtn = document.querySelector('[data-target="#infoModal"]');
+		  modalBtn.addEventListener('click', function() {
+		    // 여기에 사용자 정보를 불러오는 코드 추가:
+		    // 서버에서 정보를 가져와야 하므로 fetch로 데이터를 가져오는 예시입니다.
+		    fetch('/user-info-endpoint')
+		      .then(response => response.json()) // 사용자 정보를 JSON받음
+		      .then(userData => {
+		        document.getElementById('nick').value = userData.nick;
+		        document.getElementById('user_name').value = userData.user_name;
+		        document.getElementById('tel').value = userData.tel;
+		        document.getElementById('addr').value = userData.addr;
+		      })
+		      .catch(error => {
+		        console.error('Error fetching user data:', error);
+		      });
+		  });
+		});
+	
+	// 신청 버튼 클릭 시 데이터 저장
+	function submitInfo() {
+	  const nick = document.getElementById('nick').value;
+	  const name = document.getElementById('user_name').value;
+	  const tel = document.getElementById('tel').value;
+	  const addr = document.getElementById('addr').value;
+	  const message = document.getElementById('message').value;
+	
+	  console.log("닉네임: " + nick);
+	  console.log("이름: " + name);
+	  console.log("번호: " + tel);
+	  console.log("주소: " + addr);
+	  console.log("메세지: " + message);
+	  // 데이터를 서버에 전송하는 등의 작업이 필요할 수 있습니다.
+	  };
 </script>
- <!---------------------------------------------------------------------------------------------->
 
-
-
-<!-- 모달 -->
-<div class="modal" id="purchaseModal">
-<input type="hidden" name="brd_num" value="${board.brd_num}"> 
-<input type="hidden" name="user_num" value="${user1.user_num}">
-<div>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">쉐어링 등록자에게 전달할 정보입니다. 동의 후 신청하시겠습니까?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- 모달 내용 -->
-                <label class="form-label" for="nick">닉네임 *</label>
-				<input class="form-control form-control-sm" id="nick" name="nick" type="text" value="${user1.nick}"readonly style="width: 103px; ">
-				<label class="form-label" for="name">이름 *</label>
-				<input class="form-control form-control-sm" id="user_name" name="user_name" type="text" value="${user1.user_name}"readonly style="width: 115px; "><p>
-				<label class="form-label" for="tel">번호 *</label>
-				<input class="form-control form-control-sm" id="tel" name="tel" type="text" value="${user1.tel}"readonly style="width: 96px; "><p>
-				<label class="form-label" for="addr">주소 *</label>
-				<input class="form-control form-control-sm" id="addr" name="addr" type="text" value="${user1.addr}" readonly style="width: 131px; ">
-				</p>
-				<!--입력받을 값-->
-				<label class="form-label" for="conts">전달할 메시지 </label><div class="d-flex align-items-start" style="margin-top: 10px;">
-				<textarea class="form-control form-control-sm" id="conts" name="conts" rows="8" style="width: 424px; height: 130px; "></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary">신청</button>
-            </div>
-        	</div>
-    	</div>
-	</div>
-</div>
-</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<%@ include file="footer.jsp" %>
+</html>
 </body>
 <%@ include file="../footer.jsp" %>
 </html>

@@ -78,7 +78,7 @@ public class JkController {
 	@RequestMapping(value="/sharingUserDetail")
 	public String sharingUserDetail(Board board, Model model, HttpSession session) {
 		System.out.println("JkController sharingUserDetail start...");
-		List<Board> sharing = jbs.getRecentPosts(board);
+		List<Board> sharing = jbs.sharing(board);
 		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
@@ -102,7 +102,7 @@ public class JkController {
 	@RequestMapping(value="/sharing")
 	public String Sharing(Board board, Model model, HttpSession session) {
 		System.out.println("JkController Sharing start...");
-		List<Board> sharing = jbs.getRecentPosts(board);
+		List<Board> sharing = jbs.sharing(board);
 		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
@@ -135,27 +135,29 @@ public class JkController {
 	
 	//쉐어링 게시글 상세조회
 	@GetMapping(value="/detailSharing")
-	public String detailSharing(int brd_num, Model model, HttpSession session) {
+	public String detailSharing(@RequestParam("brd_num")int brd_num, Model model, HttpSession session) {
 		System.out.println("JkController detailSharing Start...");
 		System.out.println("brd_num->"+brd_num);
+		
+		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
+		
+		board.setReplyCount(replyCount);
+		board.setBrd_group(board.getBrd_group());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
 		
-		Board board = jbs.detailSharing(brd_num);
-		int replyCount = jbs.commentCountSharing(brd_num);
-		
-		board.setReplyCount(replyCount);
-		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
-		model.addAttribute("loggedIn", user_num!=0);
 		model.addAttribute("replyCount", replyCount);
+		model.addAttribute("loggedIn", user_num!=0);
+	
 	
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
 	    System.out.println("replyCount:" +board.getReplyCount());
@@ -177,7 +179,7 @@ public class JkController {
 				return "redirect:/loginForm";
 			}
 			
-			List<Board> mySharing = jbs.getRecentPosts(board);
+			List<Board> mySharing = jbs.sharing(board);
 			System.out.println("JkController list mySharing.size()?" + mySharing.size());
 			
 		
@@ -201,13 +203,17 @@ public class JkController {
 		}
 		
 		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
 		
+		board.setReplyCount(replyCount);
+		board.setBrd_group(board.getBrd_group());
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("replyCount", replyCount);
 		
 		System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());

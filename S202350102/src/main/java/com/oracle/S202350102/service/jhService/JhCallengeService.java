@@ -46,7 +46,7 @@ public interface JhCallengeService {
 	int 			replyUpdate(Board board);
 
 
-	int 			reviewInsert(Board board); 
+	int 			reviewPost(Board board); 
 
       
      

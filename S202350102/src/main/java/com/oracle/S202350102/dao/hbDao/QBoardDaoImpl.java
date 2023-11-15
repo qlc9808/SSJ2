@@ -103,10 +103,12 @@ public class QBoardDaoImpl implements QBoardDao {
 
 
 	@Override
-	public List<Board> qboardListSearch(String keyword) {
+	public List<Board> qboardListSearch(Board board) {
+		System.out.println("qboardListSearch dao start..");
 		List<Board> qboardListSearch = null;
 		try {
-			qboardListSearch = session.selectList("qboardListSearch",keyword);
+			qboardListSearch = session.selectList("qboardListSearch",board);
+			System.out.println("qboardListSearch size->"+qboardListSearch.size());
 		} catch (Exception e) {
 			System.out.println("qboardListSearch dao sql exception->"+e.getMessage());
 		}
@@ -133,6 +135,41 @@ public class QBoardDaoImpl implements QBoardDao {
 			System.out.println("qBoardCommentWrite dao sql exception->"+e.getMessage());
 		}
 		return result;
+	}
+
+
+	@Override
+	public int qBoardCommentUpdate(Board board) {
+		int result = 0;
+		try {
+			result = session.update("qBoardCommentUpdate",board);
+		} catch (Exception e) {
+			System.out.println("qBoardCommentUpdate dao sql exception->"+e.getMessage());
+		}
+		return result;
+	}
+
+
+	@Override
+	public int qBoardCommentDelete(int brd_num) {
+		int result = 0;
+		try {
+			result = session.delete("qBoardCommentDelete",brd_num);
+		} catch (Exception e) {
+			System.out.println("qBoardCommentDelete dao sql exception->"+e.getMessage());
+		}
+		return result;
+	}
+	
+	@Override
+	public int qBoardSearchListCount(Board board) {
+		int total = 0;
+		try {
+			total = session.selectOne("qBoardSearchListCount", board);
+		} catch (Exception e) {
+			System.out.println("qBoardSearchListCount dao sql exception->"+e.getMessage());
+		}
+		return total;
 	}
 
 }

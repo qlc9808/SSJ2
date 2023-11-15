@@ -9,6 +9,6 @@
 </head>
 <body>
 <h1>테스트</h1>
-결과 : ${result }
+결과 :
 </body>
 </html>
