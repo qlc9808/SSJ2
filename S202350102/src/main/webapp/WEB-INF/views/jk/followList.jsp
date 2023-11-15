@@ -156,18 +156,12 @@
                             <div class="row align-items-center">
                               <div class="col-auto">
                                 
-
                                 <!-- following -->
                                 <button type="button" class="btn btn-light" onclick="following(${status.index})" id="following${status.index}">팔로잉</button>
                                 <form id="followingForm">
                                   <input type="hidden" value="${following.following_id}" name="user_num">
                                 </form>
 
-
-                                
-
-
-                                
                                 <!-- sendMessage -->
                                 <button type="button" class="btn btn-info" onclick="sendMessageFollowing()">쪽지보내기</button>
                                 <form id="sendMessageFormFollowing">
