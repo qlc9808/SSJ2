@@ -9,7 +9,7 @@ import com.oracle.S202350102.dto.User1;
 
 public interface JkBoardService {
 	// 쉐어링 게시글 전체
-	List<Board> 	sharing(Board board);
+	List<Board>     sharing(Board board);
 	User1 			userSelect(int user_num);
 	Board 			likeService(int brd_num);
 	void 			updateLikeStatus(int brd_num);
@@ -25,6 +25,9 @@ public interface JkBoardService {
 	List<Board> 	listCommentSharing(int brd_num);
 	void 			commentUpdateSharing(Board board);
 	void			commentDeleteSharing(Board board);
+	int 			commentCountSharing(int brd_num);
+	
+	
 
 	
 	

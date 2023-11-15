@@ -3,6 +3,7 @@ package com.oracle.S202350102.service.yaService;
 import java.util.List;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
 
 public interface YaCommunityService {
@@ -26,6 +27,8 @@ public interface YaCommunityService {
 
 	int			 commentCount(int brd_num);
 	int 		 totalCommunity(Board board);
+	
+	int          saveSharing(SharingList sharingList);
 
 	
 	

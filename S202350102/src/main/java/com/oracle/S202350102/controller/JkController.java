@@ -39,9 +39,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkBoardService;
+import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,6 +58,8 @@ public class JkController {
 	private final JkUserService jus;
 	private final JkBoardService jbs;
 	private final YaCommunityService ycs;
+	private final JkMypageService jms;
+	
 	
 	
 	//좋아요 기능 컨트롤러
@@ -135,26 +140,32 @@ public class JkController {
 	
 	//쉐어링 게시글 상세조회
 	@GetMapping(value="/detailSharing")
-	public String detailSharing(int brd_num, Model model, HttpSession session) {
+	public String detailSharing(@RequestParam("brd_num")int brd_num, Model model, HttpSession session) {
 		System.out.println("JkController detailSharing Start...");
 		System.out.println("brd_num->"+brd_num);
+		
+		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
+		
+		board.setReplyCount(replyCount);
+		board.setBrd_group(board.getBrd_group());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
 		
-		Board board = jbs.detailSharing(brd_num);
-		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
+		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("loggedIn", user_num!=0);
 	
-	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
 	
+	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
+	    System.out.println("replyCount:" +board.getReplyCount());
 		return"jk/detailSharing";
 				
 	}
@@ -197,13 +208,17 @@ public class JkController {
 		}
 		
 		Board board = jbs.detailSharing(brd_num);
+		int replyCount = jbs.commentCountSharing(brd_num);
 		
+		board.setReplyCount(replyCount);
+		board.setBrd_group(board.getBrd_group());
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("replyCount", replyCount);
 		
 		System.out.println("nick: " + board.getNick());
 	    System.out.println("userName:"+board.getUser_name());
@@ -273,11 +288,12 @@ public class JkController {
 	//상세 페이지 댓글  조회
 	@RequestMapping(value="/listCommentSharing", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board) {
+	public List<Board> listCommentSharing(@RequestParam("brd_num") int brd_num,  Model model, Board board, HttpSession session) {
 		System.out.println("JkController jbs.listCommentSharing start....");
 
 		
 		List<Board> listCommentSharing = jbs.listCommentSharing(brd_num);
+		
 		model.addAttribute(" listCommenty",  listCommentSharing);
 		board.setBrd_group(brd_num);
 		
@@ -505,15 +521,25 @@ public class JkController {
 	}
 	
 	@GetMapping("/mypage")
-	public String mypage(HttpSession session, Model model) {
+	public String mypage(HttpSession session, Challenge chg, Board board, Model model) {
 	    System.out.println("JkController mypage start...");
-
 	    System.out.println("session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
+
 	    int user_num = 0;
 	    if (session.getAttribute("user_num") != null) {
 	        user_num = (int) session.getAttribute("user_num");
 	    }
-
+	    
+	    List<Challenge> myChgList = jms.myChgList(chg);
+	    
+	  
+	    		
+	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
+	
+	   
+	   
+	    
+	    
 	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
 	}
 

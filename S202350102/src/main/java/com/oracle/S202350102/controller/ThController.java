@@ -25,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 //import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.Level1Service;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 //import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
@@ -48,6 +52,7 @@ public class ThController {
 	private final ThOrder1Service os1;
 	private final JavaMailSender mailSender;
 	private final Level1Service ls;
+	private final ThChgService tcs;
 	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
@@ -125,7 +130,9 @@ public class ThController {
 	@RequestMapping(value = "/logout")
 	public String logout(User1 user1, HttpSession session) {
 		System.out.println("ThController logout start... ");
+		System.out.println("ThController logout session --> " + session);
 		session.invalidate();
+		System.out.println("ThController logout session --> " + session);
 		return "home2";
 	}
 	
@@ -298,4 +305,48 @@ public class ThController {
 		return "th/thMailResult";
 		
 	}
+    
+    @RequestMapping(value ="thChgList")
+	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt) {
+		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
+		System.out.println("thController thChgList Start...");
+
+		// Challenge 게시판 진행중인 챌린지만 Count ( 현재 사용중)		
+		int totalChg = tcs.totalChg();
+		
+		// 챌린지 카테고리 가져오기
+		List<Comm> chgCategoryList = tcs.listChgCategory();
+		
+		// Paging 작업			  	7			0
+		Paging page = new Paging(totalChg, currentPage);
+		
+		chg.setStart(page.getStart());
+		chg.setEnd(page.getEnd());
+		
+		// 조회 필터 가져오기
+		if(sortOpt != null) {
+			chg.setSortOpt(sortOpt);
+			System.out.println("ThController thChgList sortOption --> " + sortOpt);
+		}
+		// 참여자 수 계산
+		
+		
+		// 챌린지 리스트 가져오기
+		List<Challenge> listChg = tcs.listChg(chg);
+		System.out.println("thController list listChg.size() --> " + listChg.size());
+		System.out.println("State_md --> " + chg.getState_md());
+		System.out.println("chg_lg --> " + chg.getChg_lg());
+		System.out.println("chg_md --> " + chg.getChg_md());
+		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
+		model.addAttribute("totalChg", totalChg);
+		model.addAttribute("listChg", listChg);
+		model.addAttribute("page", page);
+		model.addAttribute("sortOpt", sortOpt);
+		model.addAttribute("chgCategoryList", chgCategoryList);
+		
+		model.addAttribute("chg", chg);
+		return "th/thChgList";
+	}
+
+
 }

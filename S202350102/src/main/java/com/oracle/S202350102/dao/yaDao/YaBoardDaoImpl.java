@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
@@ -142,7 +143,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	public User1 userSelect(int user_num) {
 		User1 user = new User1();
 		try {
-			System.out.println("user_id->"+user_num);
+			System.out.println("user_num->"+user_num);
 			user = session.selectOne("userSelect",user_num);
 			System.out.println("user->"+user);
 		} catch (Exception e) {
@@ -234,6 +235,20 @@ public class YaBoardDaoImpl implements YaBoardDao {
 			System.out.println("YaBoardDao YaTotalCommunity e.getmmessage?"+e.getMessage());
 		}
 		return totalCommunity;
+	}
+
+
+	// 쉐어링리스트 등록
+	@Override
+	public int saveSharing(SharingList sharingList) {
+		System.out.println("YaBoardDaoImpl saveSahing  start....");
+		int saveSharing = 0;
+		try {
+			saveSharing = session.insert("YaSharingSave", sharingList);
+		} catch (Exception e) {
+			System.out.println("YaBoardDao saveSahing e.getmmessage?"+e.getMessage());
+		}
+		return saveSharing;
 	}
 
 

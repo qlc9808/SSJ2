@@ -44,4 +44,8 @@ public class Challenge {
 	private String search;   	private String keyword;
 	private String pageNum;
 	private int start; 		 	private int end;
+	
+	// 챌린지 리스트 카테고리 조회용
+	private String sortOpt;
+	private String chlgerCnt; // 챌린지 참여자 수 
 }

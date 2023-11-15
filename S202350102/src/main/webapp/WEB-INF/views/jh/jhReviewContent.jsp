@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,32 +72,127 @@
 	        }
       }); 
 	
+      
+      function updateModal(){
+    	  
+    	  $('#updateFormModal').modal('show')
+    	  
+    	  
+      }
 </script>
 </head>
 <body>
 
+ <!-- MODALS -->
+    <!-- Newsletter: Horizontal -->
+    <div class="modal fade" id="updateFormModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+    
+          <!-- Close -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+    
+          <!-- Content -->
+          <div class="row gx-0">
+            
+            <div class="col-12 col-lg-10 d-flex flex-column px-md-8 mx-auto " >
+    
+              <!-- Body -->
+              <div class="modal-body my-auto py-10">
+    
+    			<h4>${user.nick}</h4>
+                <!-- Form -->
+                <form action="reviewUpdate">
+                  <div class="row gx-5">
+                    <div class="col">
+						<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
+						<input type="hidden" 	name="brd_num" 		value="${reviewContent.brd_num}" >
+    	
+						<!-- Input -->
+						<div class="col-12">
+							<input class="form-control form-control-sm" id="reviewTitle" type="text" name="title" value="${reviewContent.title }" required><p>
+						</div>
+						
+						<div class="form-group">
+							<label class="visually-hidden" for="reviewText">Review:</label>
+							<textarea class="form-control form-control-sm" id="reviewText" rows="5" name="conts"  required>${reviewContent.conts}</textarea>
+						</div>
+						
+						<div class="input-group mb-3">
+							<input type="file" class="form-control" name="file" id="inputGroupFile02">
+							<label class="input-group-text" for="inputGroupFile02">이미지 업로드</label>
+						</div>
+                    </div>
+                  </div>
+ 					<div class="col-12 text-center">
+    
+         
+				       <button class="btn btn-outline-dark" type="submit">수정</button>
+	                   <button class="btn btn-outline-secondary" type="reset">취소</button>
+                    </div>
+                </form>
+    
+              </div>
+    
+            </div>
+          </div>
+    
+        </div>
+    
+      </div>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <input type="hidden" name="updateFlag" id="updateFlag" value="${flag }">
 <input type="hidden" name="result" id="result" value="${result }">
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
-<c:if test="${user.user_num == reviewContent.user_num }">
-	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewUpdate?brd_num=${reviewContent.brd_num}'" value="수정">
-	<input type="button" class="btn btn-xs btn-outline-border" onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" value="삭제">
-</c:if>
 
-<input type="button" value="목록" onclick="location.href='chgDetail?chg_id=${chg_id}'" >  
+<!-- 버튼 위치 조정하기 -->
+<div class="col-auto">
+	<c:if test="${user.user_num == reviewContent.user_num }">
+		<button  class="btn btn-xs btn-outline-border btn-danger" type="button" id="showUpdateModalBtn" onclick="updateModal()" >수정</button>
+<%-- 		<button  class="btn btn-xs btn-outline-border btn-danger" type="button"  onclick="location.href='reviewUpdateForm?brd_num=${reviewContent.brd_num}'" >수정</button> --%>
+		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" >삭제</button>
+	</c:if>
+	<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
+</div>
 
 <div class="card mb-3">
-
-	<!-- 이미지 null 아닌 경우 출력 -->
-	<c:if test="${reviewContent.img != null} ">
-  		<img src="${reviewContent.img}" class="card-img-top" alt="">
-  	</c:if>
   	
   	
 	<!-- 후기 글 내용 -->
 	<div class="card-body">
+
 	  <h3 class="card-title">${reviewContent.title }</h3>
 	  <h6 class="card-subtitle mb-2 text-muted">${reviewContent.nick }${result }</h6>
+		 <c:choose>
+		    <c:when test="${empty reviewContent.img}">
+				<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
+		    </c:when>
+		    <c:otherwise>
+				 <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
+		    </c:otherwise>
+		</c:choose>
+
+
 	  <p class="card-text">${reviewContent.conts }</p>
 	  <p class="card-text"><small class="text-muted"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></small></p>
 	  <p class="card-text"><small class="text-muted">조회수 : ${reviewContent.view_cnt }</small>
@@ -116,13 +212,17 @@
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
 	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!">
+	   				
+	   				
 	 			</div>
+	 			
 	            <div class="col-auto">
 					<!-- Button -->
 					<button class="btn btn-sm btn-dark" type="submit" id="replyInsertBtn" >
 					  	댓글 쓰기
 					</button>
 	            </div>
+	            
          	   </c:when>
          	   <c:when test="${user == null  }">
 	            <!-- 로그인 전일 경우 -->
@@ -157,8 +257,8 @@
 
      </div>
      
-     <!-- 후기 댓글 -->
-     <c:forEach var="reply" items="${reviewReply }">
+     <!-- 후기 댓글 리스트 -->
+     <c:forEach var="reply" items="${reviewReply }" >
     	
 	     <div class="review">
 		
@@ -166,8 +266,11 @@
 		  <div class="review-body">
 		    <div class="row">
 		
+		
 		     	 <c:choose>
+		     	 
 			     	<c:when test="${flag == 'flag' && rep_brd_num == reply.brd_num}">
+		     	 <!-- 댓글 수정 버튼 눌렀을 때 -->
  						<div class="col-12 col-md-auto">
 						    	
 					        <!-- 프로필 사진 -->
@@ -199,7 +302,9 @@
 			     			</form>
 			     		</div>
 			    	</c:when>
+			    	
 			    	<c:otherwise>
+			    	<!-- 댓글 내용 -->
 					      <div class="col-12 col-md-auto">
 						    	
 					        <!-- 프로필 사진 -->

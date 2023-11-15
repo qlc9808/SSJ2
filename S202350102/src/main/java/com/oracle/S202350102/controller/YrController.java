@@ -106,20 +106,27 @@ public class YrController {
 	}
 	
 	// following 리스트
-	@RequestMapping(value = "followManagement")
-	public String followingList(HttpSession session, Model model) {
+	@RequestMapping(value = "followList")
+	public String followList(HttpSession session, Model model) {
 		
+		// session에 저장된 로그인 정보값 가져오기
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
-			System.out.println("YrController followingList userNum -> " + userNum);
+			System.out.println("YrController followList userNum -> " + userNum);
 		}
 		
+		// 팔로잉 리스트 출력
 		List<User1> followingList = yfis.followingList(userNum);
 		System.out.println("YrController followingList -> " + followingList);
 		model.addAttribute("followingList", followingList);
 		
-		return "jk/followManagement";
+		// 팔로우 리스트 출력
+		List<User1> followerList = yfis.followerList(userNum);
+		System.out.println("YrController followerList -> " + followerList);
+		model.addAttribute("followerList", followerList);
+		
+		return "jk/followList";
 	}
 	
 }

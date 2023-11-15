@@ -16,10 +16,28 @@
 	</select>
 	
 	<select id="selectFollowingList" parameterType="int" resultType="User1">
-		select u.*
-		from user1 u, following f
-		where f.user_num = #{user_num}
-		and f.following_id = u.user_num
+		select f1.user_num, f1.following_id
+		      , (select 1
+		         from following f2
+		         where f1.user_num = f2.following_id
+		         and f1.following_id = f2.user_num
+		        ) matpal
+		        , u.*
+		from following f1, user1 u
+		where f1.user_num = #{user_num}
+		and f1.following_id = u.user_num
 	</select>
 	
+	<select id="selectFollowerList" parameterType="int" resultType="User1">
+		select f1.user_num, f1.following_id
+		      , (select 1
+		         from following f2
+		         where f1.user_num = f2.following_id
+		         and f1.following_id = f2.user_num
+		        ) matpal
+		        , u.*
+		from following f1, user1 u
+		where f1.following_id = #{user_num}
+		and f1.user_num = u.user_num
+	</select>
 </mapper>

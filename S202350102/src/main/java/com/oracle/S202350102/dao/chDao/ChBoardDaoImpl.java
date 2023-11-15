@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardReChk;
+import com.oracle.S202350102.service.hbService.Paging;
 
 import lombok.Data;
 
@@ -209,11 +210,11 @@ public class ChBoardDaoImpl implements ChBoardDao {
 
 
 	@Override
-	public List<Board> myCommuList(int user_num) {
+	public List<Board> myCommuList(Board board) {
 		List<Board> myCommuList = null;
 		
 		try {
-			myCommuList = session.selectList("myCommuList",user_num);
+			myCommuList = session.selectList("myCommuList",board);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl myCommuList e.getMessage->" + e.getMessage());
@@ -262,6 +263,36 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl moveToNewCmt e.getMessage->" + e.getMessage());
+		}
+		return result;
+	}
+
+
+
+	@Override
+	public List<Paging> myCount(int user_num) {
+		System.out.println("chBoardDaoImpl myCount Start...");
+		List<Paging> result =null;
+		try {
+			result = session.selectList("myCount", user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl myCount e.getMessage->" + e.getMessage());
+		}
+		return result;
+	}
+
+
+
+	@Override
+	public List<Board> mychgBoardList(Board board) {
+		System.out.println("chBoardDaoImpl mychgBoardList Start...");
+		List<Board> result =null;
+		try {
+			result = session.selectList("mychgBoardList", board);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl mychgBoardList e.getMessage->" + e.getMessage());
 		}
 		return result;
 	}

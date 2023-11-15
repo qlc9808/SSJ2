@@ -103,6 +103,10 @@
          </div>
      </div>    
     </section>	
+    <script>
+        alert("${alertMessage}");
+        window.location.replace("/loginForm");
+    </script>
 </body>
 <%@ include file="../footer.jsp" %>
 </html>

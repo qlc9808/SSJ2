@@ -76,15 +76,17 @@
 	<c:set var="mySharingList" value="${mySharing}" />
     <c:forEach var="board" items="${mySharing}">
   	<c:if test = "${board.user_num eq usernum}">
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-4" style="padding-left: 8px; padding-right: 8px;">
             <div class="card mb-7">
                 <div class="card-img">
-                    
+                    <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
+                        <i class="fe fe-heart"></i>
+                    </button>
                    <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='myDetailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
 				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 					</button>
 
-                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 250;">
+                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 200;">
 					 </div>
                 <div class="card-body fw-bold text-center">
                     <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
@@ -94,6 +96,7 @@
                         ${board.price}원</a><p>
                     <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
                     						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
+                    						<i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}
                     				
 				</div>
 				 
@@ -104,40 +107,6 @@
     </div>
 </div>
 
-
-            <!-- Pagination -->
-            <nav class="d-flex justify-content-center justify-content-md-end">
-              <ul class="pagination pagination-sm text-gray-400">
-                <li class="page-item">
-                  <a class="page-link page-link-arrow" href="#">
-                    <i class="fa fa-caret-left"></i>
-                  </a>
-                </li>
-                <li class="page-item active">
-                  <a class="page-li nk" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">4</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">5</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">6</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link page-link-arrow" href="#">
-                    <i class="fa fa-caret-right"></i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
 
           </div>
         </div>

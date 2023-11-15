@@ -1,9 +1,10 @@
 package com.oracle.S202350102.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
-
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 
 
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class MainController {
-	
-	
 	
 	@RequestMapping(value ="/")
 	public String index() {
@@ -120,10 +119,5 @@ public class MainController {
 		
 		return "loginForm";
 	}
-	@RequestMapping(value ="jhChgList")
-	public String jhChgList() {
-		System.out.println("MainController logIn Start...");
-		
-		return "jh/jhChgList";
-	}
+	
 }
