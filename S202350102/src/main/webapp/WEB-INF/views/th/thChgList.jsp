@@ -153,25 +153,28 @@
 			                  <!-- Image -->
 			                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
 			                  <c:if test="${chg.thumb != null}">
-			                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250;" >
+			                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
 			                  </c:if>
 			                  <c:if test="${chg.thumb == null}">
-			                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="logo01" style="width: 100%; height: 250;">
+			                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
 			                  </c:if>
 							  </a>
 			              </div>
 			
 			              <!-- Body -->
-			              <div class="card-body fw-bold text-center">
+			              <div class="card-body fw-bold text-start px-0 py-2">
 			                <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
-			                <div class="text-muted">참여기간<br> 
+			                <div class="text-muted"> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 
 			                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                 </div>
+			                <div class="text-muted">참여인원: ${chg.chlgerCnt}
+			            	</div>
 			              </div>
-							<fmt:formatDate value="${noticeConts.reg_date }" pattern="yy-MM-dd"/>
+							
 			            </div>
+			            	
 					  </div>
 					  <c:set var="num" value="${num -1 }"></c:set>
 				</c:forEach>

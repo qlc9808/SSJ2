@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
@@ -97,5 +98,6 @@ public class ThChgDaoImpl implements ThChgDao {
 		}
 		return chgCategoryList;
 	}
+
 
 }

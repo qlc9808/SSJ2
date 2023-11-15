@@ -25,7 +25,12 @@
 	
 	<!--진행중 챌린지 조회 (choose: null(기본값), 개설일 순, 찜 순, 참가자 순 -->
 	<select id="thChgListAll" parameterType="Challenge" resultType="Challenge">
-		SELECT * 
+		SELECT chl.* , (
+			                SELECT      COUNT(chg_id) 
+			                FROM        challenger cr
+			                WHERE       cr.chg_id = chl.chg_id
+			                GROUP BY    chg_id
+			           ) AS chlgerCnt
 		FROM 
 		(
 			SELECT rownum rn, a.*
@@ -40,9 +45,7 @@
 				 </choose>
 				 		
 				 <choose>
-				 	<when test="chg_lg == 200">
-				 			AND c.chg_md = #{chg_md}
-				 	</when>
+				 	<when test="chg_lg == 200">		AND c.chg_md = #{chg_md}</when>
 				 </choose>
 				 
 				 <choose>
@@ -56,7 +59,7 @@
 														                    GROUP BY    cr.chg_id
 															            ) DESC) a</when>
 				 </choose>
-		)
+		) chl
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
 	
@@ -67,5 +70,5 @@
 		WHERE	lg = 200
 		AND		md != 999
 	</select>
-	
+
 </mapper>
