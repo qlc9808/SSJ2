@@ -107,6 +107,7 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl deleteNotice e.getMessage->" + e.getMessage());
+			result = 0;
 		}
 		return result;
 	}
@@ -308,6 +309,22 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl mychgBoardList e.getMessage->" + e.getMessage());
+		}
+		return result;
+	}
+
+
+
+	@Override
+	public int readAllcmt(int user_num) {
+		System.out.println("chBoardDaoImpl mychgBoardList Start...");
+		int result =0;		
+		try {
+			result = session.update("readAllcmt", user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl mychgBoardList e.getMessage->" + e.getMessage());
+			result = 0;
 		}
 		return result;
 	}

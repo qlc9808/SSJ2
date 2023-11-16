@@ -31,6 +31,12 @@
 			                WHERE       cr.chg_id = chl.chg_id
 			                GROUP BY    chg_id
 			           ) AS chlgerCnt
+			           , (
+			                SELECT 		COUNT(*)
+			                FROM   		chg_pick cp
+			                WHERE 		cp.chg_id = chl.chg_id
+			                AND 		cp.user_num = #{my_user_num}
+			               ) AS pickyn
 		FROM 
 		(
 			SELECT rownum rn, a.*

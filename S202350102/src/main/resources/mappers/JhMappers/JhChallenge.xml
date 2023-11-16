@@ -108,6 +108,20 @@
 		VALUES (brd_num_seq.NEXTVAL, #{chg_id}, #{user_num}, 700, 101, #{title}, #{conts}, #{img}, SYSDATE, brd_num_seq.NEXTVAL, 0)
 	</insert>
 	
+	<update id="jhReviewUpdate" parameterType="Board">
+      UPDATE  board
+      SET     title = #{title} 
+            , conts = #{conts} 
+             <if test="img!=null and !img.equals('')"> ,  img = #{img}    </if>
+            , reg_date = SYSDATE   
+      WHERE   brd_num = #{brd_num}
+   </update>
+	
+	<delete id="jhReviewDelete" parameterType="int">
+		DELETE	FROM board
+		WHERE 	brd_num = #{brd_num}
+		OR		brd_group = #{brd_num}
+	</delete>
 	
 	
 	

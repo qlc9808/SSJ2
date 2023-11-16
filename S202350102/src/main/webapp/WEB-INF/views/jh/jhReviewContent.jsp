@@ -17,6 +17,20 @@
 
 </style>
 <script type="text/javascript">
+
+ 	function fileUpdate(){
+		   var fileInput = document.getElementById('fileInput');
+		   if(fileInput.style.display == "none"){
+		      fileInput.style.display = "block";
+		      fileInput.removeAttribute('disabled');
+		      $("#imgOroot").hide();
+		      // 파일 변경 
+		   } else{
+		      fileInput.style.display = "none";
+		      fileInput.setAttribute('disabled', 'true');
+		      $("#imgOroot").show();
+		   }
+		} 
 	function replyUpdate(${reply.brd_num}){
 		/* 아작스 하는 중 함수형태랑 파라미터 이게 맞는지 확인하고 시작하기 */
 		
@@ -41,6 +55,14 @@
         var confirmMessage = "댓글을 삭제하시겠습니까?";
         if (confirm(confirmMessage)) {
             location.href = '/replyDelete?ori_brd_num=' + ori_brd_num + '&rep_brd_num=' + rep_brd_num + '&chg_id=' + chg_id;
+   		}
+	}
+	
+	
+	function reviewDelete(brd_num, chg_id) {
+        var confirmMessage = "글을 삭제하시겠습니까?";
+        if (confirm(confirmMessage)) {
+        	location.href='/reviewDelete?brd_num='+ brd_num + '&chg_id=' + chg_id;
    		}
 	}
 	
@@ -104,10 +126,12 @@
     
     			<h4>${user.nick}</h4>
                 <!-- Form -->
-                <form action="reviewUpdate">
+                <form action="reviewUpdate"  method="post"  enctype="multipart/form-data">
                   <div class="row gx-5">
                     <div class="col">
 						<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
+						<input type="hidden" 	name="chg_id" 		value="${chg_id}" >
+						<input type="hidden" 	name="img" 			value="${reviewContent.img}" >
 						<input type="hidden" 	name="brd_num" 		value="${reviewContent.brd_num}" >
     	
 						<!-- Input -->
@@ -120,10 +144,18 @@
 							<textarea class="form-control form-control-sm" id="reviewText" rows="5" name="conts"  required>${reviewContent.conts}</textarea>
 						</div>
 						
-						<div class="input-group mb-3">
-							<input type="file" class="form-control" name="file" id="inputGroupFile02">
-							<label class="input-group-text" for="inputGroupFile02">이미지 업로드</label>
-						</div>
+						<!-- 이미지 미리보기 -->
+		                <div class="form-group mb-7">
+		                     <span id="imgOroot">${pageContext.request.contextPath}/upload/${reviewContent.img}</span>
+		                     <input type="file" name="file1" style="display: none;" id="fileInput" disabled="disabled">
+		                     <input type="hidden" name="delStatus" value="0">
+		                     
+		                     <button type="button" onclick="fileUpdate()">파일 변경</button>
+		                </div>
+<!-- 						<div class="input-group mb-3">
+							<input type="file" class="form-control" name="file" id="inputGroupFile">
+							<label class="input-group-text" for="inputGroupFile">이미지 업로드</label>
+						</div>  -->
                     </div>
                   </div>
  					<div class="col-12 text-center">
@@ -170,7 +202,7 @@
 	<c:if test="${user.user_num == reviewContent.user_num }">
 		<button  class="btn btn-xs btn-outline-border btn-danger" type="button" id="showUpdateModalBtn" onclick="updateModal()" >수정</button>
 <%-- 		<button  class="btn btn-xs btn-outline-border btn-danger" type="button"  onclick="location.href='reviewUpdateForm?brd_num=${reviewContent.brd_num}'" >수정</button> --%>
-		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="location.href='reviewDelete?brd_num=${reviewContent.brd_num}'" >삭제</button>
+		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="reviewDelete('${reviewContent.brd_num}', '${chg_id}')" >삭제</button>
 	</c:if>
 	<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
 </div>
@@ -342,7 +374,7 @@
 			
 				             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 				             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
-							  <c:if test="${user.user_num == reply.user_num }">
+							  <c:if test="${user.user_num == reply.user_num }">					 
 									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}&currentPage=${replyPage.currentPage }'">수정</button>
 									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
 							  </c:if>

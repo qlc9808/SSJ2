@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header4.jsp" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>챌린지 신청</h1>
+
+
+
 
 <!-- date오류 -->
 

@@ -78,6 +78,100 @@
 
 </style>
 <title>Insert title here</title>
+<script src="./js/jquery.js"></script>
+<script type="text/javascript">
+	function pageMove(brd_md, currentPage){
+		/* alert(brd_md);
+		alert(currentPage); */
+		var brdMd = brd_md;
+		var currentP = currentPage;
+		var data = 
+		$.ajax({
+			url : "pageAjax",
+			data: {brd_md : brdMd, currentPage : currentP},
+			dataType: "json",
+			success: function(result){				
+				var text = "";
+				text = brdText(result);
+				$("#body"+result.page.brd_md).html(text);
+				$("#body"+result.page.brd_md).css()
+			}
+		})
+	}
+	
+	function brdText(result){
+		var text ="";
+		switch(result.page.brd_md){
+		/**********************인증***************/
+		case 100:
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+         			+"<td>"+result.listBdRe[i].replyCount+"</td>"
+         			+"<td>삭제"+"</td></tr>";
+         		num = num - 1;            
+			}
+			return text;
+			break;
+		/**********************후기***************/
+		case 101:						
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+         			+"<td>"+result.listBdRe[i].replyCount+"</td></tr>";
+         		num = num - 1;            
+			}
+			return text;
+			
+			break;
+			/**********************쉐어링***************/
+		case 102:
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='detailSharing?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"                	
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+         			+"<td>"+result.listBdRe[i].replyCount+"</td>"
+         			+"<td><a href='/deleteCommunity?brd_num="+result.listBdRe[i].brd_num+"'>삭제</a></td></tr>";
+         		num = num - 1;            
+			}
+			return text;
+			break;
+			/**********************자유***************/
+		case 103:
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='detailCommunity?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+         			+"<td>"+result.listBdRe[i].replyCount+"</td></tr>";
+         			
+         		num = num - 1;            
+			}
+			return text;
+			break;
+		}
+		
+		
+		
+	}
+</script>
 </head>
 <body>
 	<h4>인증 게시판</h4>
