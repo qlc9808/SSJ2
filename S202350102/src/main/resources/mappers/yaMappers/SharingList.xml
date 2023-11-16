@@ -6,6 +6,6 @@
 
 	<insert id="YaSharingSave" parameterType="SharingList" >
 	    INSERT INTO sharingList (brd_num, user_num, reg_date, state_lg, state_md, reject_msg, message)
-	    VALUES (#{brd_num}, #{user_num}, sysdate, 300,100, ' ', #{message})
+	    VALUES (#{brd_num}, #{user_num}, sysdate, 300,100,'' , #{message})
 	</insert>
 </mapper>	

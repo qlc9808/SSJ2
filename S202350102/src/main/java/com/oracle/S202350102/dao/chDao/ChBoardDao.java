@@ -25,5 +25,6 @@ public interface ChBoardDao {
 	int 		moveToNewCmt(BoardReChk brc);
 	List<Paging> myCount(int user_num);
 	List<Board> mychgBoardList(Board board);
+	int 		pageMove(Board board);
 	
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 //import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
@@ -317,8 +318,9 @@ public class ThController {
 		// 챌린지 카테고리 가져오기
 		List<Comm> chgCategoryList = tcs.listChgCategory();
 		
-		// Paging 작업			  	7			0
-		Paging page = new Paging(totalChg, currentPage);
+		// paging 작업 수정해야할듯 ? totalChg가 아니라 해당페이지 값별로 다시 조회 해야함
+		// Paging 작업			  	7			0 
+		Paging page = new Paging(chgCategoryList.size(), currentPage);
 		
 		chg.setStart(page.getStart());
 		chg.setEnd(page.getEnd());
@@ -328,8 +330,6 @@ public class ThController {
 			chg.setSortOpt(sortOpt);
 			System.out.println("ThController thChgList sortOption --> " + sortOpt);
 		}
-		// 참여자 수 계산
-		
 		
 		// 챌린지 리스트 가져오기
 		List<Challenge> listChg = tcs.listChg(chg);
@@ -337,14 +337,15 @@ public class ThController {
 		System.out.println("State_md --> " + chg.getState_md());
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
+
 		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
 		model.addAttribute("totalChg", totalChg);
 		model.addAttribute("listChg", listChg);
 		model.addAttribute("page", page);
 		model.addAttribute("sortOpt", sortOpt);
 		model.addAttribute("chgCategoryList", chgCategoryList);
+		model.addAttribute("chg", chg);	
 		
-		model.addAttribute("chg", chg);
 		return "th/thChgList";
 	}
 

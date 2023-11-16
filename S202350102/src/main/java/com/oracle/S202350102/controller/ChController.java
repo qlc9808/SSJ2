@@ -1,7 +1,10 @@
 package com.oracle.S202350102.controller;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -401,8 +404,8 @@ public class ChController {
 		return "redirect:chgCommManagement";
 	}
 	
-	@GetMapping(value = "myConts")
-	public String myConts(HttpSession session, Model model, String currentPage) {
+	
+	public void myConts(HttpSession session, Model model, String currentPage) {
 		System.out.println("ChController myConts Start...");
 		int user_num = 0;
 		
@@ -425,7 +428,7 @@ public class ChController {
 			for(Paging p : myPaging) {
 				if(p.getBrd_md() == 100) {
 					myCertiPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCertiPage.getBrd_md()->" + myCertiPage.getBrd_md());
+					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myCertiPage.getStart());
@@ -436,11 +439,11 @@ public class ChController {
 					model.addAttribute("myCertiPage",myCertiPage);
 				} else if(p.getBrd_md() == 101) {
 					myReviewPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCertiPage.getBrd_md()->" + myReviewPage.getBrd_md());
+					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myReviewPage.getStart());
-					System.out.println("myReviewPage.getStart()->" + myReviewPage.getStart());
+					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
 					board.setEnd(myReviewPage.getEnd());
 					myReviewList = chBoardService.mychgBoardList(board);
 					
@@ -480,7 +483,7 @@ public class ChController {
 		model.addAttribute("myCommuList", myCommuList);
 		model.addAttribute("myShareList", myShareList);
 		
-		return "ch/myContPage";
+		
 	}
 	
 	
@@ -506,6 +509,55 @@ public class ChController {
 		String result1 = Integer.toString(result);
 		
 		return result1;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "pageAjax" )
+	public commReChk pageAjax(int brd_md,String currentPage, HttpSession session) {
+		System.out.println("pageAjax Start...");
+		int user_num = 0;
+		commReChk result = new commReChk();
+		
+		
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int)session.getAttribute("user_num");
+			Board board = new Board();
+			board.setUser_num(user_num);
+			board.setBrd_md(brd_md);
+			int tot = chBoardService.pageMove(board);
+			
+			Paging page = new Paging(tot, currentPage);
+			page.setBrd_md(brd_md);
+			board.setUser_num(user_num);
+			board.setStart(page.getStart());
+			board.setEnd(page.getEnd());
+			List<Board> myList = null;
+			
+			switch (page.getBrd_md()) {
+			case 100:
+			case 101:
+				myList = chBoardService.mychgBoardList(board);
+				result.setListBdRe(myList);
+				result.setPage(page);
+				result.setReCount(myList.size());
+				break;
+				
+			case 102:
+			case 103:
+				myList = chBoardService.myCommuList(board);
+				result.setListBdRe(myList);
+				result.setPage(page);
+				result.setReCount(myList.size());
+				break;
+				
+			default:
+				break;
+			}
+			
+		}
+		
+		return result;
 	}
 	
 	
@@ -537,8 +589,9 @@ public class ChController {
 	private class commReChk {
 		private List<?> listBdRe;
 		private Object reCount;
-		private ModelAndView mav;
+		private Paging page;
 	}
+	
 	
 	
 }

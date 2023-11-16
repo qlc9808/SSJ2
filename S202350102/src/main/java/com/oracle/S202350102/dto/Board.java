@@ -35,6 +35,7 @@ public class Board {
 	private String pageNum;
 	private int start; 		 	private int end;
 	private String searchType;
+	private String category;
 	
 	//파일 업로드
 	

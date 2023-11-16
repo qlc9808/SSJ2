@@ -107,6 +107,7 @@ public class QBoardDaoImpl implements QBoardDao {
 		System.out.println("qboardListSearch dao start..");
 		List<Board> qboardListSearch = null;
 		try {
+			System.out.println("board->"+board);
 			qboardListSearch = session.selectList("qboardListSearch",board);
 			System.out.println("qboardListSearch size->"+qboardListSearch.size());
 		} catch (Exception e) {

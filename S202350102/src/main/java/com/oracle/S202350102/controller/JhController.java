@@ -2,8 +2,6 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,21 +14,19 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
-import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
+import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
-import com.oracle.S202350102.service.yrService.YrFollowingService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +40,7 @@ public class JhController {
 	private final UserService userService;
 	// yr 작성
 	private final YrChallengerService ycs;
-	private final YrFollowingService yfis;
+	private final YrChallengePickService ycps;
 	
 	private final BgService bs;
 	
@@ -189,6 +185,14 @@ public class JhController {
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
 		model.addAttribute("listSsj", listSsj);
+		
+		// 찜 여부 판단용
+		ChallengPick chgPick = new ChallengPick();
+		chgPick.setChg_id(chg_id);
+		chgPick.setUser_num(userNum);
+		int chgPickYN = ycps.selectChgPickYN(chgPick);
+		System.out.println("JhController chgDetail chgPickYN -> " + chgPickYN);
+		model.addAttribute("chgPickYN", chgPickYN);
 
 		
 		// bg 작성
