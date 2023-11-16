@@ -43,6 +43,12 @@
 	}
 
 </script>
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    	body{
+    		font-family: 'Noto Sans KR', sans-serif;
+    		} 
+</style>
 </head>
 
 <body>
@@ -109,23 +115,26 @@
                       </ul>
                     </div>
                   </div>
-			<li>	
-				<div style="text-align: center;">
-	               <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
-	            		  챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
-	            	</button>
-	         	</div>
-            </li>
+		
                 
               </ul>
             </form>
             
-            <div style="text-align: center;">
+          <div style="text-align: center;">
 	            <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
 	 				챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
 				</button>
+		  </div>
+			
+		  <!-- 전체 회원 조회 버튼 -->
+			<div style="text-align: center;">
+	            <button class="btn btn-primary mb-1" onclick="location.href='/listAllUser'">
+	 				전체 회원 조회 <i class="fe fe-arrow-right ms-2"></i>
+				</button>
 			</div>
           </div>
+          
+      
          
 		  <div class="col-12 col-md-8 col-lg-9">
 			<!-- Header -->
