@@ -31,11 +31,11 @@ public class ThChgDaoImpl implements ThChgDao {
 	
 
 	@Override
-	public int totalChgIng() {
+	public int totalChgIng(Challenge chg) {
 		int totChgIngCnt = 0;
 		System.out.println("ThChgDaoImpl totalChgIng Start... ");
 		try {
-			totChgIngCnt = session.selectOne("thChgTotalIng");
+			totChgIngCnt = session.selectOne("thChgTotalIng", chg);
 			System.out.println("ThChgDaoImpl totalChg totalChgCnt --> " + totChgIngCnt);
 		} catch (Exception e) {
 			System.out.println("ThChgDaoImpl totalChg Exception --> " + e.getMessage());
@@ -44,11 +44,11 @@ public class ThChgDaoImpl implements ThChgDao {
 	}
 
 	@Override
-	public int totalChgFin() {
+	public int totalChgFin(Challenge chg) {
 		int totChgFinCnt = 0;
 		System.out.println("ThChgDaoImpl totalChgFin Start... ");
 		try {
-			totChgFinCnt = session.selectOne("thChgTotalFin");
+			totChgFinCnt = session.selectOne("thChgTotalFin", chg);
 			System.out.println("ThChgDaoImpl totalChg totalChgCnt --> " + totChgFinCnt);
 		} catch (Exception e) {
 			System.out.println("ThChgDaoImpl totalChg Exception --> " + e.getMessage());

@@ -32,9 +32,9 @@
 			dataType : 'json',
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
-					$("#chgPickY" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
 				} else {
-					$("#chgPickY" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
 				}
 
 			},
@@ -56,9 +56,11 @@
 			dataType : 'json',
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
-					$("#chgPickN" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+					
+					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
 				} else {
-					$("#chgPickN" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+					alert('hello');
+					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
 				}
 
 			},
@@ -68,6 +70,12 @@
 		});
 	}
 </script>
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    	body{
+    		font-family: 'Noto Sans KR', sans-serif;
+    		} 
+    </style>
 </head>
 
 <body>
@@ -134,20 +142,19 @@
                       </ul>
                     </div>
                   </div>
-			<li>	
-				<div style="text-align: center;">
-	               <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
-	            		  챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
-	            	</button>
-	         	</div>
-            </li>
-                
               </ul>
             </form>
             
             <div style="text-align: center;">
 	            <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
 	 				챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
+				</button>
+			</div>
+			
+			<!-- 전체 회원 조회 버튼 -->
+			<div style="text-align: center;">
+	            <button class="btn btn-primary mb-1" onclick="location.href='/listAllUser'">
+	 				전체 회원 조회 <i class="fe fe-arrow-right ms-2"></i>
 				</button>
 			</div>
           </div>
@@ -178,7 +185,7 @@
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }">
 			            <div class="col-6 col-md-4">
-						
+							
 			               <!-- Card -->
 			              <div class="card mb-7">
 			
@@ -193,14 +200,14 @@
 										<c:choose>
 											<c:when test="${chg.pickyn > 0}">
 												<!-- 찜하기 있음 -->
-												<button class="btn btn-xs btn-circle btn-primary" data-toggle="button" onclick="chgPickY(${chg.chg_id})" id="chgPickY${chg.chg_id}">
+												<button class="btn btn-xs btn-circle btn-primary" data-toggle="button" onclick="chgPickY(${chg.chg_id})" id="chgPick${chg.chg_id}">
 													<i class="fe fe-heart"></i>
 												</button>
 											</c:when>
 								
 											<c:otherwise>
 												<!-- 찜하기 없음 -->
-												<button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button" onclick="chgPickN(${chg.chg_id})" id="chgPickN${chg.chg_id}">
+												<button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button" onclick="chgPickN(${chg.chg_id})" id="chgPick${chg.chg_id}">
 													<i class="fe fe-heart"></i>
 												</button>
 											</c:otherwise>
@@ -234,7 +241,7 @@
 			
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+			                <a class="text-body fw-bolder fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
 			                <div class="text-muted"> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 

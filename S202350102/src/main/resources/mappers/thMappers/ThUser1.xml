@@ -63,5 +63,22 @@
 		WHERE	user_id		=	#{user_id}	
 		AND		delete_yn	=	'N'	
 	</update>
+	
+	<select id="ThTotUserCnt" resultType="int">
+		SELECT	COUNT(*)
+		FROM	user1
+	</select>
+	
+	<select id="tkUserListAll" parameterType="User1" resultType="User1">
+		SELECT * 
+		FROM 
+			(
+				SELECT rownum rn, a.*
+				FROM
+					(SELECT * FROM user1 ORDER BY user_num) a
+			)
+		WHERE rn BETWEEN #{start} AND #{end}
+		
+	</select>
 </mapper>
 

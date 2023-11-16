@@ -17,7 +17,7 @@
                   placeholder="Enter Email *">
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn btn-gray-500 btn-lg">구독하기(결제창)</button>
+                <button type="submit" class="btn btn-gray-500 btn-lg">구독하기</button>
               </div>
             </div>
           </form>
