@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
 <script type="text/javascript">
 	function ajaxChallengeList(chg_md){
 		$.ajax({
@@ -118,6 +119,17 @@
 
                 </div>
                 
+				<div class="container">
+				    <div class="row">
+				        <div class="col-12">
+			                <label>추천 챌린지</label>
+				            <div id="imageContainer" class="text-center" style="width: 100%; height: 200px; border: 1px dotted #ccc;">
+				            	<p>카테고리를 선택해주세요!</p>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				
                 <div class="col-12">
 
                   <!-- 챌린지명 -->
