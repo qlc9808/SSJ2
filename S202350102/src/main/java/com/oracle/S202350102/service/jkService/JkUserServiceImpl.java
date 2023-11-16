@@ -33,6 +33,14 @@ public class JkUserServiceImpl implements JkUserService {
 		return jud.userSelect(user_num);
 	}
 
+	@Override
+	public int updateProfile(User1 user1) {
+		 System.out.println("User1ServiceImpl updateProfile start... ");
+		    int result = jud.updateProfile(user1);
+		    System.out.println("User1ServiceImpl updateProfile result --> " + result);
+		    return result;
+	}
+
 		
 
 	}
