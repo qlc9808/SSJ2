@@ -3,6 +3,7 @@ package com.oracle.S202350102.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -600,6 +601,17 @@ public class JhController {
 		return result;
 	}
 	
+	@RequestMapping(value = "modify")
+	 public String modify() {
+		
+		return "jh/modify";
+	}
+	
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "recommendCallenge") public List<E>
+	 */
 	
 	/*
 	 * @ResponseBody
