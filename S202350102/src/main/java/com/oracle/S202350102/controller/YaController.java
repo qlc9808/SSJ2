@@ -293,7 +293,7 @@ public class YaController {
 				        response.put("error", "Invalid brd_num format");
 				    }		
 			            ycs.commentWrite(board);
-     
+			            System.out.println("conts:"+board.getConts());
 		                // 성공한 경우, 상세 페이지로 리다이렉트
 			            response.put("result", "success");
 			            response.put("redirectUrl", "/ya/commentForm?brd_num=" + board.getBrd_num());
@@ -467,4 +467,44 @@ public class YaController {
 
 		        return result;
 		    }
+		  
+		//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing)  리스트 조회  - 내가 참가한 쉐어링(myJoinSharing)  		
+		@RequestMapping(value="/sharingManagement")
+		public String myUploadSharingList(HttpSession session, Board board,  Model model) {
+			System.out.println("YaController myUploadSharingList start...");
+			
+			int user_num=0;
+			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
+				
+				User1 user1 = ycs.userSelect(user_num);
+				model.addAttribute("user1", user1);		
+			
+			List<Board> myUploadSharingList = ycs.myUploadSharingList(user_num);
+			
+			System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
+			model.addAttribute("myUploadSharingList", myUploadSharingList);
+		}
+			return "ya/mySharingManagement";
+	}	  
+		
+		//마이페이지 쉐어링 관리 - 내가 올린 쉐어링 에서 참가자 리스트 조회 (sharingParticipantsInfo)
+		   /*@ResponseBody
+				public String sharingParticipantsInfo(SharingList sharingList, Model model, @RequestParam("brd_num") int brd_num) {
+					System.out.println("YaController sharingParticipantsInfo start.."); */
+					
+				/* brd_num= sharingList.getBrd_num(); */
+	
+		@GetMapping(value = "/sharingParticipantsInfo", produces = "application/json")
+	    @ResponseBody
+	    public List<SharingList> sharingParticipantsInfo(@RequestParam("brd_num") int brd_num) {
+	        System.out.println("YaController sharingParticipantsInfo start..");
+	        System.out.println("Ya sharingParticipantsInfo Received brd_num: " + brd_num);
+
+	   		List<SharingList> sharingParticipantsInfo = ycs.sharingParticipantsList(brd_num);
+	   		
+			/* model.addAttribute(" sharingParticipantsInfo", sharingParticipantsInfo); */
+	   		return  sharingParticipantsInfo;
+	}	
+		  
 }		
