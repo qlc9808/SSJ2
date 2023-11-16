@@ -8,5 +8,6 @@ public interface JkUser1Dao {
 	User1	 	getUserDetails(int user_num);
 	User1 		userSelect(int user_num);
 	int 		writeFormSharing(int user_num);
+	int 		updateProfile(User1 user1);
 
 }
