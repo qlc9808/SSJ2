@@ -28,7 +28,10 @@
 
             <!-- Form -->
             <form>
-              <div class="row">
+              <input type="hidden" name="user_num" value="${user.user_num}">
+<%-- 필요한가
+			  <input type="hidden" name="userStatus" value="${userStatus}">
+ --%>              <div class="row">
                 <div class="col-12 col-md-6">
 
                   <!-- Email -->

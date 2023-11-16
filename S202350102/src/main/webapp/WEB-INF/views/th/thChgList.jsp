@@ -95,14 +95,6 @@
                       </ul>
                     </div>
                   </div>
-			<li>	
-				<div style="text-align: center;">
-	               <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
-	            		  챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
-	            	</button>
-	         	</div>
-            </li>
-                
               </ul>
             </form>
             

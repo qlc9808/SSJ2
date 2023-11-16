@@ -17,7 +17,20 @@
 
 </style>
 <script type="text/javascript">
+	/* 후기 수정에서 이미지 파일 삭제버튼 누른 경우  */
+ 	function delFile(){
+	    delAnswer = confirm("삭제를 하시겠습니까?" );
+		if(delAnswer == true) {
+			 $('#delFileDiv').remove();   
+			 $('#delStatus').val('1');   
+			 alert("삭제되었습니다!");
+		}
+		else {
+			 alert("삭제 취소되었습니다 ^^")
+		}
+	} 
 
+ 	
  	function fileUpdate(){
 		   var fileInput = document.getElementById('fileInput');
 		   if(fileInput.style.display == "none"){
@@ -30,11 +43,15 @@
 		      fileInput.setAttribute('disabled', 'true');
 		      $("#imgOroot").show();
 		   }
-		} 
-	function replyUpdate(${reply.brd_num}){
+	} 
+ 	
+ 	
+/* 	function replyUpdate(${reply.brd_num}){
 		/* 아작스 하는 중 함수형태랑 파라미터 이게 맞는지 확인하고 시작하기 */
 		
-	}
+	} */
+	
+	
 	
 	/* 댓글 공백만 있는 경우 체크 */
 	function replyInsertChk(form){
@@ -50,6 +67,8 @@
 		return true;
 	} 
 	
+	
+	
 	/* 댓글 삭제전 삭제여부 체크 */
 	function replyDelete(ori_brd_num, rep_brd_num, chg_id) {
         var confirmMessage = "댓글을 삭제하시겠습니까?";
@@ -58,11 +77,11 @@
    		}
 	}
 	
-	
-	function reviewDelete(brd_num, chg_id) {
+	/* 후기 글 삭제 */
+	function reviewDelete(brd_num, chg_id, img) {
         var confirmMessage = "글을 삭제하시겠습니까?";
         if (confirm(confirmMessage)) {
-        	location.href='/reviewDelete?brd_num='+ brd_num + '&chg_id=' + chg_id;
+        	location.href='/reviewDelete?brd_num='+ brd_num + '&chg_id=' + chg_id + '&img='+ img;
    		}
 	}
 	
@@ -77,7 +96,7 @@
       });  */
       
     /* 이건 왜 안됨? 제이쿼리 떄문에 버튼 안먹힘*/
-     	$(document).ready(function() {
+     $(document).ready(function() {
 	        var flag = $("#updateFlag").val();
 	        if (flag == 'flag') {
 					var targetElement = $('#reviewReplyUpdate');
@@ -94,19 +113,17 @@
 	        }
       }); 
 	
-      
+      /* 글 수정 눌렀을 때 모달창 띄우기 */
       function updateModal(){
     	  
     	  $('#updateFormModal').modal('show')
-    	  
-    	  
       }
+      
 </script>
 </head>
 <body>
 
- <!-- MODALS -->
-    <!-- Newsletter: Horizontal -->
+ <!-- 글 수정 모달 창 -->
     <div class="modal fade" id="updateFormModal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
@@ -129,40 +146,47 @@
                 <form action="reviewUpdate"  method="post"  enctype="multipart/form-data">
                   <div class="row gx-5">
                     <div class="col">
-						<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
-						<input type="hidden" 	name="chg_id" 		value="${chg_id}" >
 						<input type="hidden" 	name="img" 			value="${reviewContent.img}" >
 						<input type="hidden" 	name="brd_num" 		value="${reviewContent.brd_num}" >
+						<input type="hidden" 	name="user_num" 	value="${user.user_num}" >
+						<input type="hidden" 	name="chg_id" 		value="${chg_id}" >
     	
 						<!-- Input -->
-						<div class="col-12">
+						<div class="form-group">
+							<label class="form-label" for="title">
+							제목
+							</label>
 							<input class="form-control form-control-sm" id="reviewTitle" type="text" name="title" value="${reviewContent.title }" required><p>
 						</div>
 						
 						<div class="form-group">
-							<label class="visually-hidden" for="reviewText">Review:</label>
+							<label class="form-label" for="reviewText">내용</label>
 							<textarea class="form-control form-control-sm" id="reviewText" rows="5" name="conts"  required>${reviewContent.conts}</textarea>
 						</div>
 						
-						<!-- 이미지 미리보기 -->
-		                <div class="form-group mb-7">
-		                     <span id="imgOroot">${pageContext.request.contextPath}/upload/${reviewContent.img}</span>
-		                     <input type="file" name="file1" style="display: none;" id="fileInput" disabled="disabled">
-		                     <input type="hidden" name="delStatus" value="0">
-		                     
-		                     <button type="button" onclick="fileUpdate()">파일 변경</button>
+		                <div class="alert alert-warning">
+		                	<strong>수정 유의사항</strong><br>
+		                	이미지 파일은 최대 1개만 업로드 하실 수 있습니다.<br> 
+		                	기존 이미지를 삭제하고 싶으면 파일 삭제 버튼을 눌러주세요!<br>
+		                	기존 이미지를 삭제하지 않고 새로운 이미지를 업로드 하셔도 새로운 이미지로 대체 됩니다.<br>
 		                </div>
-<!-- 						<div class="input-group mb-3">
-							<input type="file" class="form-control" name="file" id="inputGroupFile">
-							<label class="input-group-text" for="inputGroupFile">이미지 업로드</label>
-						</div>  -->
+						<div class="input-group mb-3">
+							<input type="file" class="form-control" name="file1" id="inputGroupFile">
+		                    <input type="hidden" name="delStatus" id="delStatus" value="0">
+						</div>  
+						
+						<div class="input-group mb-3" id="delFileDiv">
+							<c:if test="${reviewContent.img != null}">
+					       		<button class="btn btn-outline-secondary" type="button" id="delFile1" onclick="delFile()">파일 삭제</button>
+								<span class="input-group-text" id="imagePath">${reviewContent.img}</span>
+							</c:if>
+						</div>  
                     </div>
                   </div>
  					<div class="col-12 text-center">
     
          
 				       <button class="btn btn-outline-dark" type="submit">수정</button>
-	                   <button class="btn btn-outline-secondary" type="reset">취소</button>
                     </div>
                 </form>
     
@@ -178,21 +202,7 @@
     
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- 후기 본문  -->
 <input type="hidden" name="updateFlag" id="updateFlag" value="${flag }">
 <input type="hidden" name="result" id="result" value="${result }">
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
@@ -202,7 +212,7 @@
 	<c:if test="${user.user_num == reviewContent.user_num }">
 		<button  class="btn btn-xs btn-outline-border btn-danger" type="button" id="showUpdateModalBtn" onclick="updateModal()" >수정</button>
 <%-- 		<button  class="btn btn-xs btn-outline-border btn-danger" type="button"  onclick="location.href='reviewUpdateForm?brd_num=${reviewContent.brd_num}'" >수정</button> --%>
-		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="reviewDelete('${reviewContent.brd_num}', '${chg_id}')" >삭제</button>
+		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="reviewDelete('${reviewContent.brd_num}', '${chg_id}', '${reviewContent.img}')" >삭제</button>
 	</c:if>
 	<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
 </div>
@@ -399,8 +409,8 @@
       <a class="page-link page-link-arrow" href="reviewContent?currentPage=${replyPage.startPage-replyPage.pageBlock }&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}">
         <i class="fa fa-caret-left"></i>
       </a>
-           </c:if>
     </li>
+  </c:if>
         <c:forEach var="i" begin="${replyPage.startPage }" end="${replyPage.endPage }">
     <li class="page-item active">
       <a class="page-link" href="reviewContent?currentPage=${i}&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}">${i}</a>

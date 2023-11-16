@@ -140,10 +140,21 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	}
 
 	@Override
-	public void reviewDelete(int brd_num) {
+	public int reviewDelete(int brd_num) {
 		System.out.println("JhCallengeServiceImpl reviewDelete Start...");
 		
-		jhChgDao.reviewDelete(brd_num);
+		int reviewDel = jhChgDao.reviewDelete(brd_num);
+		return reviewDel;
+	}
+
+	@Override
+	public int boardImgDelete(int brd_num) {
+		System.out.println("JhCallengeServiceImpl boardImgDelete Start...");
+		int brdImgDel = jhChgDao.boardImgDelete(brd_num);
+		
+		return brdImgDel;
+		
+		
 	}
 
 
