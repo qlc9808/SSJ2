@@ -20,10 +20,8 @@
 	}
 
 	// yr 작성
-	// 찜하기 있음
-	function chgPickY(p_index) {
-		// var chg_id = p_chg_id;
-		// alert("chg_id -> " + chg_id);
+	// 찜하기 기능
+	function chgPick(p_index) {
 
 		$.ajax({
 			url : "/chgPickPro",
@@ -32,9 +30,9 @@
 			dataType : 'json',
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
-					$("#chgPickY" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
 				} else {
-					$("#chgPickY" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
 				}
 
 			},
@@ -44,29 +42,6 @@
 		});
 	}
 
-	// 찜하기 없음
-	function chgPickN(p_index) {
-		// var chg_id = p_chg_id;
-		// alert("chg_id -> " + chg_id);
-
-		$.ajax({
-			url : "/chgPickPro",
-			type : "POST",
-			data : {chg_id : p_index},
-			dataType : 'json',
-			success : function(chgPickResult) {
-				if(chgPickResult.chgPick > 0) {
-					$("#chgPickN" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
-				} else {
-					$("#chgPickN" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
-				}
-
-			},
-			error : function() {
-				alert("찜하기 오류");
-			}
-		});
-	}
 </script>
 </head>
 
@@ -193,14 +168,14 @@
 										<c:choose>
 											<c:when test="${chg.pickyn > 0}">
 												<!-- 찜하기 있음 -->
-												<button class="btn btn-xs btn-circle btn-primary" data-toggle="button" onclick="chgPickY(${chg.chg_id})" id="chgPickY${chg.chg_id}">
+												<button type="button" class="btn btn-xs btn-circle btn-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
 													<i class="fe fe-heart"></i>
 												</button>
 											</c:when>
 								
 											<c:otherwise>
 												<!-- 찜하기 없음 -->
-												<button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button" onclick="chgPickN(${chg.chg_id})" id="chgPickN${chg.chg_id}">
+												<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
 													<i class="fe fe-heart"></i>
 												</button>
 											</c:otherwise>
@@ -209,7 +184,7 @@
 								
 									<c:otherwise>
 										<!-- 로그인 안 한 상태 -->
-										<button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button"
+										<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button"
 											onclick="location.href='/loginForm'">
 											<i class="fe fe-heart"></i>
 										</button>
