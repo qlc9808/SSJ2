@@ -216,7 +216,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		System.out.println("YaBoardDaoImpl getLatestBrdStep start...");
 		int commentCount = 0;
 		try {
-			session.selectOne("YaCommentTotal",brd_num);
+			commentCount=session.selectOne("YaCommentTotal",brd_num);
 		} catch (Exception e) {
 			System.out.println("YaBoarDaoImpl commentCount e.getMessage)?"+e.getMessage());
 		}
@@ -238,7 +238,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	}
 
 
-	// 쉐어링리스트 등록
+	// 쉐어링리스트 참가자 등록
 	@Override
 	public int saveSharing(SharingList sharingList) {
 		System.out.println("YaBoardDaoImpl saveSahing  start....");
@@ -252,7 +252,36 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	}
 
 
+	//마이페이지-내가올린 쉐어링리스트 조회 
+	@Override
+	public List<Board> myUploadSharingList(int user_num) {
+		System.out.println("YaBoardDaoImpl myUploadSharingList start...");
+		List<Board> myUploadSharingList = null;
+		try {
+			myUploadSharingList = session.selectList("myUploadSharingList", user_num);
+			System.out.println("YaBoardDaoImpl myUploadSharingList List.size()?"+myUploadSharingList.size());
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl myUploadSharingList e.getMessage()?"+e.getMessage());
+		}
+		
+		return myUploadSharingList;
 
+	}
+
+
+	//마이페이지 - 내가 올린 쉐어링 게시글의 참가자리스트 조회
+	@Override
+	public List<SharingList> sharingParticipantsList(int brd_num) {
+		System.out.println("YaBoardDaoImpl myUploadSharingList start...");
+		List<SharingList> sharingParticipantsList = null;
+		try {
+			sharingParticipantsList = session.selectList("sharingParticipantsInfo", brd_num);
+			System.out.println("YaBoardDaoImpl sharingParticipantsList.size()(?"+sharingParticipantsList.size());
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl sharingParticipantsList e.getMessage()?"+e.getMessage());
+		}
+		return sharingParticipantsList;
+	}
 
 }
 
