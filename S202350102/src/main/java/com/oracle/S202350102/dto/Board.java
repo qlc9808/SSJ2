@@ -35,9 +35,10 @@ public class Board {
 	private String pageNum;
 	private int start; 		 	private int end;
 	private String searchType;
+	private String category;
 	
 	//파일 업로드
-	
+	private int delStatus;
 	// 게시판 유저 정보 조회용
 	private String icon;
 	private int user_level;

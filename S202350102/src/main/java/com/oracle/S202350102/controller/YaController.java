@@ -2,6 +2,8 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
 import org.json.simple.JSONArray;
+import org.springframework.beans.propertyeditors.URLEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
@@ -40,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 public class YaController {
 	
 	private final YaCommunityService ycs;
+	private final JkBoardService jbs;
 	
 	//커뮤니티 게시글 전체조회
 	@RequestMapping(value="/listCommunity")
@@ -127,14 +132,10 @@ public class YaController {
 			
 			User1 user1 = ycs.userSelect(user_num);
 			model.addAttribute("user1", user1);				
+					
+		} 		   
 			return "ya/writeFormCommunity"; 
-		}
-		System.out.println("user_num?"+ session.getAttribute("user_num"));
-		 // 로그인되지 않은 사용자에게 알람창을 띄움
-		    String alertMessage = "로그인 후 이용해주세요!";
-		    model.addAttribute("alertMessage", alertMessage);
-			return "ya/writeFormCommunity";
-			
+				
 		}
 
 	 // 게시글 작성
@@ -388,19 +389,31 @@ public class YaController {
 		@GetMapping(value="/sharingParticipate")
 		@ResponseBody // 해당 데이터 반환@ResponseBody //  해당 데이터 반환
 		public Map<String, Object> sharingParticipate(HttpSession session, Model model,
-														@RequestParam("user_num") int user_num) {
+														@RequestParam("user_num") int user_num,
+														@RequestParam("brd_num") int brd_num) 
+																								{
+													
 			System.out.println("YaController sharingParticipate start...");
-			
-			
-			
-			
+		    System.out.println("Received user_num: " + user_num);
+		    System.out.println("Received brd_num: " + brd_num);
+		    
 			Map<String, Object> result = new HashMap<>();
+			
+			//detailSharing 메서드를 통해 Board 객체를 얻어옴
+			Board board =  jbs.detailSharing(brd_num);
+			
+			//Board 객체에 brd_num과 user_num 설정
+			board.setBrd_num(brd_num);
+			System.out.println("board brd_num ?"+board.getBrd_num());
+		
+			model.addAttribute("board", board);
 			
 			if (session.getAttribute("user_num") != null) {
 			User1 user1 = ycs.userSelect(user_num);
 			model.addAttribute("user1", user1);
 			
 			result.put("user1", user1);
+			result.put("board", board);
 			result.put("status", "success");
 			} else {
 			result.put("status", "error");
@@ -409,30 +422,44 @@ public class YaController {
 			return result;
 			}
 		
-		// sharing 참가자 등록 데이터 save --> sharingList
+		// sharing 참가자 등록 데이터 save --> sharingList  똑같은 USER_NUM , 모집인원 마감시 알림창 띄우기 
 		  @PostMapping(value="/saveSharingInfo")
-		  @ResponseBody
-		    public Map<String, String> saveSharingInfo(@RequestParam("brd_num") int brd_num,
+		  @ResponseBody	
+		  public Map<String, String> saveSharingInfo(@RequestBody Map<String, Object> requestBody, @ModelAttribute SharingList sharingList) {
+			    int user_num = Integer.parseInt(requestBody.get("user_num").toString());
+			    int brd_num = Integer.parseInt(requestBody.get("brd_num").toString());
+			    String message = (String) requestBody.get("message");
+		  
+		  // 이렇게 하면 안됨...
+		/*  public Map<String, String> saveSharingInfo(
 		    										   @RequestParam("user_num") int user_num,
-		                                               @RequestParam("tel") String tel,
-		                                               @RequestParam("addr") String addr,
+		    										   @RequestParam("brd_num") int brd_num,
 		                                               @RequestParam("message") String message,
-		                                               @ModelAttribute SharingList	sharingList	) {
+		                                               @ModelAttribute SharingList	sharingList	) { */
 		        
 			System.out.println("YaController saveSharingInfo start...");
+			System.out.println("received user_num?" + user_num); 
 			
-			  Board board = new Board();
-			  sharingList.setBrd_num(board.getBrd_num());
-
-		       sharingList.setBrd_num(brd_num);
-		       sharingList.setMessage(message);
-		       sharingList.setUser_num(user_num);
+	
+			
+			Board board = jbs.detailSharing(brd_num);
+			  
+			  sharingList.setBrd_num(board.getBrd_num());	  
+		      sharingList.setMessage(message);
+		      sharingList.setUser_num(user_num);
 		       
+		      System.out.println("brd_num:"+sharingList.getBrd_num());
+		      System.out.println("message:"+sharingList.getMessage());
+		      System.out.println("user_num:"+sharingList.getUser_num());
+		      
+		      
 		       int saveResult = ycs.saveSharing(sharingList); 
 		        Map<String, String> result = new HashMap<>();
 		        
 		        if (saveResult > 0) {
+		        	
 		            result.put("status", "success");
+		            
 		        } else {
 		            result.put("status", "error");
 		        }

@@ -55,39 +55,83 @@ public class HbController {
 	public String qBoardList(Board board, 
 							 Model model,
 							 String currentPage,
+							 String keyword,
+							 String searchType,
+							 String category,
 							 HttpSession session) {
-		
-		// 유저 세션 불러오기
-		int user_num = 0;
-		if(session.getAttribute("user_num") != null) {
-			// 전체 게시글 수
-			int total = qbs.totalQBoard();
+		board.setKeyword(keyword);
+		board.setSearchType(searchType);
+		board.setCategory(category);
+		if ( keyword == null ) {
+			// 유저 세션 불러오기
+			int user_num = 0;
+			if(session.getAttribute("user_num") != null) {
+				// 전체 게시글 수
+				int total = qbs.totalQBoard();
+				System.out.println(total);
+				
+				// Paging 작업
+				Paging page = new Paging(total, currentPage);
+				
+				board.setStart(page.getStart());
+				board.setEnd(page.getEnd());
+				
+				// 보드 리스트 불러오기
+				List<Board> qBoardList = qbs.qBoardList(board);
+				
+				user_num = (int) session.getAttribute("user_num");
+				
+				// 유저 정보 불러오기
+				User1 user1 = us.userSelect(user_num);
+				ls.userLevelCheck(user_num);
+				// 게시판 유저 정보 BoardList에 저장하기
+				qBoardList = us.boardWriterLevelInfo(qBoardList);
+				
+				model.addAttribute("total", total);
+				model.addAttribute("page", page);		
+				model.addAttribute("user1", user1);
+				model.addAttribute("qBoardList", qBoardList);
+				
+				return "hb/qBoardList";
+			} else {
+				return "redirect:/loginForm";
+			}
 			
-			// Paging 작업
-			Paging page = new Paging(total, currentPage);
-			
-			board.setStart(page.getStart());
-			board.setEnd(page.getEnd());
-			
-			// 보드 리스트 불러오기
-			List<Board> qBoardList = qbs.qBoardList(board);
-			
-			user_num = (int) session.getAttribute("user_num");
-			
-			// 유저 정보 불러오기
-			User1 user1 = us.userSelect(user_num);
-			ls.userLevelCheck(user_num);
-			// 게시판 유저 정보 BoardList에 저장하기
-			qBoardList = us.boardWriterLevelInfo(qBoardList);
-			
-			model.addAttribute("total", total);
-			model.addAttribute("page", page);		
-			model.addAttribute("user1", user1);
-			model.addAttribute("qBoardList", qBoardList);
-			
-			return "hb/qBoardList";
+		} else { // 키워드가 있을 때, 페이징
+			int user_num = 0;
+			if(session.getAttribute("user_num") != null) {
+				// 전체 게시글 수
+				int total = qbs.qBoardSearchListCount(board);
+				System.out.println(total);
+				// Paging 작업
+				Paging page = new Paging(total, currentPage);
+				
+				board.setStart(page.getStart());
+				board.setEnd(page.getEnd());
+				
+				// 보드 리스트 불러오기
+				List<Board> qboardListSearch = qbs.qboardListSearch(board);
+				
+				user_num = (int) session.getAttribute("user_num");
+				
+				// 유저 정보 불러오기
+				User1 user1 = us.userSelect(user_num);
+				ls.userLevelCheck(user_num);
+				// 게시판 유저 정보 BoardList에 저장하기
+				qboardListSearch = us.boardWriterLevelInfo(qboardListSearch);
+				
+				model.addAttribute("searchInfo",board);
+				model.addAttribute("total", total);
+				model.addAttribute("page", page);		
+				model.addAttribute("user1", user1);
+				model.addAttribute("qBoardList", qboardListSearch);
+				
+				return "hb/qBoardList";
+			} else {
+				return "redirect:/loginForm";
+			}
 		}
-		return "redirect:/loginForm";
+		
 
 	}
 	
@@ -203,29 +247,19 @@ public class HbController {
 		return "hb/level";
 	}
 	
-	// 문의게시판 검색 비동기통신
+	// 문의게시판 검색
 	@ResponseBody
 	@RequestMapping(value = "qboardListSearch", method = RequestMethod.GET)
-	public List<Board> qboardListSearch(@ModelAttribute Board board, String currentPage){
+	public Map<String, Object> qboardListSearch(@ModelAttribute Board board, String currentPage){
+		Map<String, Object> response = new HashMap<String, Object>();
 		int totalCnt = qbs.qBoardSearchListCount(board);
+		System.out.println("qboardListSearch cont totalcnt->"+totalCnt);
 		Paging page = new Paging(totalCnt, currentPage);
-		
 		board.setStart(page.getStart());
 		board.setEnd(page.getEnd());
 		List<Board> qboardListSearch = qbs.qboardListSearch(board);
-		return qboardListSearch;
-	}
-	
-	@ResponseBody
-	@GetMapping(value = "qboardListSearchPaging")
-	public Map<String, Object> qboardListSearchPaging(@ModelAttribute Board board, String currentPage) {
-		Map<String, Object> response = new HashMap<String, Object>();
-		
-		int totalCnt = qbs.qBoardSearchListCount(board);
-		
-		Paging page = new Paging(totalCnt, currentPage);
-		
-		response.put("total", totalCnt);
+		qboardListSearch = us.boardWriterLevelInfo(qboardListSearch);
+		response.put("list", qboardListSearch);
 		response.put("page", page);
 		
 		return response;

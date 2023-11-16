@@ -297,6 +297,21 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		return result;
 	}
 
+
+
+	@Override
+	public int pageMove(Board board) {
+		System.out.println("chBoardDaoImpl mychgBoardList Start...");
+		int result =0;		
+		try {
+			result = session.selectOne("userTot", board);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl mychgBoardList e.getMessage->" + e.getMessage());
+		}
+		return result;
+	}
+
 	
 
 

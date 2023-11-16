@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.oracle.S202350102.dao.thDao.ThChgDao;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
+import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -54,5 +56,16 @@ public class ThChgServiceImpl implements ThChgService {
 			System.out.println("ThChgServiceImpl listEndChg EndChgList.size() --> " + EndChgList.size());
 		return EndChgList;
 	}
+
+
+	@Override
+	public List<Comm> listChgCategory() {
+		System.out.println("ThChgServiceImpl listChgCategory Start... ");
+		List<Comm> chgCategoryList = tcd.listChgCategory();
+		System.out.println("ThChgServiceImpl listChgCategory listChgCategory.size() --> " + chgCategoryList.size());
+		return chgCategoryList;
+	}
+
+
 
 }

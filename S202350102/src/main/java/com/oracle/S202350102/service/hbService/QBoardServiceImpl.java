@@ -17,12 +17,37 @@ public class QBoardServiceImpl implements QBoardService {
 	@Override
 	public List<Board> qBoardList(Board board) {
 		List<Board> qBoardList = qbd.qBoardList(board);
+		
+		int brd_md = 0;
+		for (int i = 0; i < qBoardList.size(); i++) {
+			brd_md = qBoardList.get(i).getBrd_md();
+			switch (brd_md) {
+			case 100: qBoardList.get(i).setCategory("회원관련"); break;
+			case 101: qBoardList.get(i).setCategory("버그"); break;
+			case 102: qBoardList.get(i).setCategory("챌린지"); break;
+			case 103: qBoardList.get(i).setCategory("쉐어링"); break;
+			case 104: qBoardList.get(i).setCategory("팔로워"); break;
+			case 105: qBoardList.get(i).setCategory("기타건의"); break;
+			}
+		}
+		
 		return qBoardList;
 	}
 
 	@Override
 	public Board qBoardSelect(int brd_num) {
 		Board board = qbd.qBoardSelect(brd_num);
+		
+		int brd_md = board.getBrd_md();
+		switch (brd_md) {
+		case 100: board.setCategory("회원관련"); break;
+		case 101: board.setCategory("버그"); break;
+		case 102: board.setCategory("챌린지"); break;
+		case 103: board.setCategory("쉐어링"); break;
+		case 104: board.setCategory("팔로워"); break;
+		case 105: board.setCategory("기타건의"); break;
+		}
+		
 		return board;
 	}
 
@@ -57,8 +82,22 @@ public class QBoardServiceImpl implements QBoardService {
 
 	@Override
 	public List<Board> qboardListSearch(Board board) {
-		System.out.println("qboardListSearch service start.");
-		return qbd.qboardListSearch(board);
+		List<Board> qboardListSearch = qbd.qboardListSearch(board);
+		
+		int brd_md = 0;
+		for (int i = 0; i < qboardListSearch.size(); i++) {
+			brd_md = qboardListSearch.get(i).getBrd_md();
+			switch (brd_md) {
+			case 100: qboardListSearch.get(i).setCategory("회원관련"); break;
+			case 101: qboardListSearch.get(i).setCategory("버그"); break;
+			case 102: qboardListSearch.get(i).setCategory("챌린지"); break;
+			case 103: qboardListSearch.get(i).setCategory("쉐어링"); break;
+			case 104: qboardListSearch.get(i).setCategory("팔로워"); break;
+			case 105: qboardListSearch.get(i).setCategory("기타건의"); break;
+			}
+		}
+		
+		return qboardListSearch;
 	}
 
 	@Override

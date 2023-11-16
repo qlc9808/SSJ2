@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 import com.oracle.S202350102.service.yrService.YrFollowingService;
 
@@ -25,8 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class YrController {
-	private final YrChallengerService ycs;
-	private final YrFollowingService yfis;
+	private final YrChallengerService 		ycs;
+	private final YrFollowingService 		yfis;
+	private final YrChallengePickService 	ycps;
 	
 //	@RequestMapping(value = "checkBoard")
 //	public String checkBoard() {
@@ -128,5 +131,56 @@ public class YrController {
 		
 		return "jk/followList";
 	}
+
+	// 챌린지 찜 유무
+//	@ResponseBody
+//	@RequestMapping(value = "chgPickCheck")
+//	public int chgPickCheck(@RequestParam("chg_id") int chg_id
+//							, HttpSession session) {
+//		
+//		System.out.println("YrController chgPickCheck Start...");
+//		System.out.println("YrController chgPickCheck chg_id -> " + chg_id);
+//		
+//		int userNum = 0;
+//		if(session.getAttribute("user_num") != null) {
+//			userNum = (int) session.getAttribute("user_num");
+//			System.out.println("YrController chgPickCheck userNum -> " + userNum);
+//		}
+//		
+//		ChallengPick chgPick = new ChallengPick();
+//		chgPick.setChg_id(chg_id);
+//		chgPick.setUser_num(userNum);
+//		int chgPickYN = ycps.selectChgPickYN(chgPick);
+//		
+//		return chgPickYN;
+//	}
+	
+	// 챌린지 찜하기
+	// chgDetail로 출력됨
+	@ResponseBody
+	@RequestMapping(value = "chgPickPro")
+	public Map<String, Object> chgPickPro(@RequestParam("chg_id") int chg_id
+										, HttpSession session) {
+		
+		System.out.println("YrController chgPickPro Start...");
+		System.out.println("YrController chgPickPro chg_id -> " + chg_id);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController chgPickPro userNum -> " + userNum);
+		}
+
+		ChallengPick chgPick = new ChallengPick();
+		Map<String, Object> chgPickResult = new HashMap<>();
+		chgPick.setChg_id(chg_id);
+		chgPick.setUser_num(userNum);
+		int chgPickPro = ycps.chgPick(chgPick); 
+		System.out.println("YrController chgPickPro chgPickPro -> " + chgPickPro);
+		chgPickResult.put("chgPick", chgPickPro);
+		return chgPickResult;
+	}
+	
+	
 	
 }

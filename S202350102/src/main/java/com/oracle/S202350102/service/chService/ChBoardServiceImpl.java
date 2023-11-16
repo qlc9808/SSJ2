@@ -160,12 +160,14 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return result;
 	}
 
+	@Override
+	public int pageMove(Board board) {
+		int result = 0;
+		System.out.println("chBoardServiceImpl mychgBoardList Start...");
+		result = chBoardDao.pageMove(board);
+		System.out.println("chBoardServiceImpl mychgBoardList result->" + result);
+		return result;
+	}
 
-	
-
-
-
-
-	
 
 }

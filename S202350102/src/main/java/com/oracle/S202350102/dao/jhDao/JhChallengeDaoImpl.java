@@ -209,7 +209,7 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 			System.out.println("JhChallengeDaoImpl viewCntUp e.getMessage() -> " + e.getMessage());
 		}
 		
-		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
+		System.out.println("JhChallengeDaoImpl viewCntUp result -> "+ result);
 		
 	}
 
@@ -242,6 +242,32 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public int reviewUpdate(Board board) {
+		System.out.println("JhChallengeDaoImpl reviewUpdate Start...");
+		int result = 0;
+		try {
+			result = session.update("jhReviewUpdate", board);
+			
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewUpdate e.getMessage() -> " + e.getMessage());
+			
+		}
+		return result;
+	}
+
+	@Override
+	public void reviewDelete(int brd_num) {
+		System.out.println("JhChallengeDaoImpl reviewDelete Start...");
+		
+		try {
+			session.delete("jhReviewDelete", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl reviewDelete e.getMessage() -> " + e.getMessage());
+		}
+		
 	}
 
 

@@ -19,13 +19,12 @@
 	<![CDATA[
 		Select Rownum As rn, b.*
 		FROM	(
-		        Select b.*, u.nick,
-		                Row_Number() Over (Order By brd_num Desc) As row_num                
+		        Select b.*, u.nick, replyCount(b.brd_num) replyCount,
+		                Row_Number() Over (Order By brd_group Desc, brd_step) As row_num                
 		        From    board b
 		                INNER JOIN  user1 u On  b.user_num = u.user_num
-		        Where   brd_md= 100
+		        Where   brd_md				= 	100
 		                and     brd_lg		=	700
-		                and     brd_step	=	0
 		                and     chg_id		=	#{chg_id}
 		        ) b
 		Where b.row_num Between #{start} 
@@ -33,11 +32,13 @@
 		]]>
 	</select>
 	
+	
 	<select id="bkCertBoard" parameterType="Board" resultType="Board">
 		select *
 		from board
 		where brd_lg=700 AND brd_md=100 AND brd_step=0
 	</select>
+	
 	
 	<insert id="insertCertBrd" parameterType="Board">
 		Insert Into board (BRD_NUM, title, conts, img, chg_id,   user_num, brd_step,
@@ -46,16 +47,19 @@
 		                   700,      100,      sysdate, BRD_NUM_SEQ.currval)  
 	</insert>
 	
+	
 	<update id="certBoardUpdate" parameterType="Board">
 		Update	board
 		Set		title = #{title}, conts = #{conts}
 		Where	brd_num = #{brd_num}
 	</update>
 	
+	
 	<delete id="deleteCertBrd" parameterType="int">
 		Delete From	board
 		Where		brd_num = #{brd_num}
 	</delete>
+	
 	
 	<select id="certTotal" parameterType="int" resultType="int">
 		Select		Count(*)
@@ -66,5 +70,24 @@
 		And			c.chg_id = #{chg_id}
 		And			brd_step = 0
 	</select>
+	
+	
+	<select id="commentInsert" parameterType="Board" statementType="CALLABLE">
+		{
+			call Challenge_Comment_Insert_Proc(
+						#{brd_num,		mode=IN,	jdbcType=INTEGER},
+						#{chg_id,		mode=IN,	jdbcType=INTEGER},
+						#{user_num,		mode=IN,	jdbcType=INTEGER},
+						#{title,		mode=IN,	jdbcType=VARCHAR},
+						#{conts,		mode=IN,	jdbcType=VARCHAR},
+						#{resultCount,	mode=OUT,	jdbcType=INTEGER}
+			)
+		}
+	</select>
+	
+	
+	
+	
+	
 	
 </mapper>

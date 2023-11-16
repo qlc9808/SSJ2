@@ -2,8 +2,6 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,21 +14,19 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
-import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
+import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
-import com.oracle.S202350102.service.yrService.YrFollowingService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +40,7 @@ public class JhController {
 	private final UserService userService;
 	// yr 작성
 	private final YrChallengerService ycs;
-	private final YrFollowingService yfis;
+	private final YrChallengePickService ycps;
 	
 	private final BgService bs;
 	
@@ -189,6 +185,14 @@ public class JhController {
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
 		model.addAttribute("listSsj", listSsj);
+		
+		// 찜 여부 판단용
+		ChallengPick chgPick = new ChallengPick();
+		chgPick.setChg_id(chg_id);
+		chgPick.setUser_num(userNum);
+		int chgPickYN = ycps.selectChgPickYN(chgPick);
+		System.out.println("JhController chgDetail chgPickYN -> " + chgPickYN);
+		model.addAttribute("chgPickYN", chgPickYN);
 
 		
 		// bg 작성
@@ -263,6 +267,7 @@ public class JhController {
 								,Board		   board
 								) {
 		System.out.println("JhController reviewContent Start...");
+		System.out.println("JhController reviewContent chg_id -> " + chg_id);
 
 			
 		//세션에서 회원번호 가져옴
@@ -293,9 +298,9 @@ public class JhController {
 		board.setStart(replyPage.getStart());
 		board.setEnd(replyPage.getEnd());
 		model.addAttribute("replyPage",replyPage);
-		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ replyPage.getStart());
-		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ replyPage.getTotal());
-		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
+		System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
+		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
 		
 		//챌린지 해당 글에 대한 댓글 조회
 		List<Board> reviewReplyList = jhCService.reviewReplyList(board);
@@ -330,7 +335,7 @@ public class JhController {
 		model.addAttribute("result", result);
 		System.out.println("JhController reviewContent result -> " + result);
 		
-		return "jh/jhReviewContent2";
+		return "jh/jhReviewContent";
 	}
 	
 	@RequestMapping(value = "showReplyUpdate")
@@ -402,9 +407,9 @@ public class JhController {
 	
 	
 	//챌린지 신청 페이지로 이동
-	@RequestMapping(value = "chgApplicationPage")
-	public String chgApplication (HttpSession session, Model model) {
-		System.out.println("JhController chgApplication Start...");
+	@RequestMapping(value = "chgApplicationForm")
+	public String chgApplicationForm (HttpSession session, Model model) {
+		System.out.println("JhController chgApplicationForm Start...");
 		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
 		
 		//세션에서 회원번호 가져옴
@@ -425,7 +430,7 @@ public class JhController {
 		model.addAttribute("userStatus", userStatus);
 		
 		
-		return "jh/chgApplicationPage";
+		return "jh/jhChgApplicationForm";
 	}
 	
 	
@@ -500,13 +505,42 @@ public class JhController {
 		
 	}
 	
-//	@RequestMapping(value = "reviewUpdate")
-//	public String reviewUpdate(Board board, Model model, HttpSession session ) {
-//		System.out.println("JhController reviewUpdate Start...");
-//		
-//		int result = jhCService.reviewUpdate(board);
-//		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id()+"&result="+result;
-//	}
+	@RequestMapping(value = "reviewUpdate")
+	// public String reviewUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+	public String reviewUpdate(Board board, HttpServletRequest request, MultipartFile file1) throws IOException {
+		System.out.println("JhController reviewUpdate Start...");
+		if(file1 != null && !file1.isEmpty()) {
+			log.info("size: " +file1.getSize());
+			System.out.println("file1 -> " + file1.isEmpty());
+			System.out.println("img -> " + board.getImg());
+		} else {
+			System.out.println("file1 == null ");
 
+		}
+		
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		if (file1 != null && !file1.isEmpty()) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			board.setImg(saveName);
+		}
+		else {
+			board.setImg(null);
+		}
+		int result = jhCService.reviewUpdate(board);
+		
+		System.out.println("result -> " + result);
+		
+		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
+	}
+
+	@RequestMapping(value = "reviewDelete")
+	public String reviewDelete(int brd_num, int chg_id) {
+		System.out.println("JhController reviewDelete Start...");
+		
+		jhCService.reviewDelete(brd_num);
+		
+		
+		return "redirect:chgDetail?&chg_id=" + chg_id +"&tap=3";
+	}
 
 }

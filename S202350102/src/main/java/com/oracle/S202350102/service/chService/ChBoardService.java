@@ -22,5 +22,7 @@ public interface ChBoardService {
 	List<Paging> myCount(int user_num);
 	List<Board> mychgBoardList(Board board);
 	List<Board> myCommuList(Board board);
+	int 		pageMove(Board board);
+	
 	
 }

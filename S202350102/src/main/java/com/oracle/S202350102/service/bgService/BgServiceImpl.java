@@ -80,6 +80,13 @@ public class BgServiceImpl implements BgService {
 	}
 
 
+	@Override
+	public void commentInsert(Board board) {
+		System.out.println("BgServiceImpl commentInsert Start...");
+		bd.commentInsert(board);
+	}
+
+
 
 
 

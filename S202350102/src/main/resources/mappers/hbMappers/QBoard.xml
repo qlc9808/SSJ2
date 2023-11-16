@@ -12,7 +12,7 @@
 	      SELECT rownum rn, m.* 
 	      FROM  
           (
-              SELECT b.brd_num, u.user_num, b.title, u.nick, b.reg_date, b.view_cnt 
+              SELECT b.brd_num, u.user_num, b.title, u.nick, b.reg_date, b.view_cnt, b.brd_md 
               FROM   board b, user1 u 
               WHERE  b.user_num = u.user_num 
               AND    brd_lg = 400
@@ -79,12 +79,32 @@
 	      SELECT rownum rn, m.* 
 	      FROM  
           (
-		SELECT  b.user_num, u.user_level, b.title, b.brd_num, l.req_exp, l.tot_exp, l.lv_name, u.user_exp, u.nick, b.reg_date, b.view_cnt
+		SELECT  b.user_num, u.user_level, b.title, b.brd_num, l.req_exp, l.tot_exp, l.lv_name, u.user_exp, u.nick, b.reg_date, b.view_cnt, b.brd_md
         FROM    board b ,user1 u, level1 l
         WHERE   b.user_num = u.user_num
         AND     u.user_level = l.user_level
         AND     brd_lg = 400
-        AND     brd_md = 102
+        <choose>
+        	<when test="category == 'user'">
+        		AND brd_md = 100
+        	</when>
+        	<when test="category == 'buggy'">
+        		AND brd_md = 101
+        	</when>
+        	<when test="category == 'challenge'">
+        		AND brd_md = 102
+        	</when>
+        	<when test="category == 'sharing'">
+        		AND brd_md = 103
+        	</when>
+        	<when test="category == 'follow'">
+        		AND brd_md = 104
+        	</when>
+        	<when test="category == 'suggest'">
+        		AND brd_md = 105
+        	</when>
+        	<otherwise></otherwise>
+        </choose>
         AND     brd_step = 0
         AND 
         <if test="searchType == 'title'">title like '%' || #{keyword} || '%' </if>
@@ -97,11 +117,33 @@
 	</select>
 	
 	
-	<select id="qBoardSearchListCount" resultType="int" parameterType="String">
+	<select id="qBoardSearchListCount" resultType="int" parameterType="Board">
 		SELECT count(*)
-		FROM    board b
+		FROM    board b, user1 u
 		WHERE  brd_lg = 400
+        <choose>
+        	<when test="category == 'user'">
+        		AND brd_md = 100
+        	</when>
+        	<when test="category == 'buggy'">
+        		AND brd_md = 101
+        	</when>
+        	<when test="category == 'challenge'">
+        		AND brd_md = 102
+        	</when>
+        	<when test="category == 'sharing'">
+        		AND brd_md = 103
+        	</when>
+        	<when test="category == 'follow'">
+        		AND brd_md = 104
+        	</when>
+        	<when test="category == 'suggest'">
+        		AND brd_md = 105
+        	</when>
+        	<otherwise></otherwise>
+        </choose>
 		AND      brd_step = 0
+		AND      b.user_num = u.user_num
 		AND 
 		<if test="searchType == 'title'">title like '%' || #{keyword} || '%' </if>
         <if test="searchType == 'conts'">conts like '%' || #{keyword} || '%' </if>

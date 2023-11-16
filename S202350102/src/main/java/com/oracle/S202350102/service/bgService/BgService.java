@@ -14,5 +14,6 @@ public interface BgService {
 	int         updateCertBrd(Board board);
 	int         deleteCertBrd(int brd_num);
 	int         certTotal(int chg_id);
+	void        commentInsert(Board board);
 
 }

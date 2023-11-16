@@ -136,7 +136,7 @@
 </section>
 
 	
-<%@ include file="./commentForm.jsp" %>
+<%@ include file="./commentForm2.jsp" %>
 <%@ include file="../footer.jsp" %>
 </body>
 </html>

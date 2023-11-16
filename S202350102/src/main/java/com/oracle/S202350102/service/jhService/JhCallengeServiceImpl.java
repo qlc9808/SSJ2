@@ -132,6 +132,20 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return result;
 	}
 
+	@Override
+	public int reviewUpdate(Board board) {
+		System.out.println("JhCallengeServiceImpl reviewUpdate Start...");
+		int result = jhChgDao.reviewUpdate(board);
+		return result;
+	}
+
+	@Override
+	public void reviewDelete(int brd_num) {
+		System.out.println("JhCallengeServiceImpl reviewDelete Start...");
+		
+		jhChgDao.reviewDelete(brd_num);
+	}
+
 
 	
 	

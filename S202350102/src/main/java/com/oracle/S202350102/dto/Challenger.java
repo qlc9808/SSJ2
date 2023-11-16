@@ -8,4 +8,8 @@ public class Challenger {
 	private int chg_id;   // 챌린지등록번호
 	private int gubun_lg; // 첼린져구분 (대분류)
 	private int gubun_md; // 첼린져구분 (중분류)
+	
+	
+	
+	
 }

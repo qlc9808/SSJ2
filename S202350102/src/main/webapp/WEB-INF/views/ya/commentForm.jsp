@@ -275,8 +275,7 @@ function listcomment() {
     <c:when test="${empty sessionScope.user_num}">
         <p><p>
         <h5>댓글을  확인하실 분들은 로그인을 해주세요</h5>
-    </c:when>
-    
+    </c:when>  
     <c:otherwise>
     <div class="card my-4">
        <h5 class="card-header">댓글 작성</h5>
