@@ -5,16 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    
-    <!-- Libs CSS -->
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    
-    <!-- Theme CSS -->
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <title>챌린지 리스트</title>
 <script type="text/javascript">
 	function fn_sortOpt(){
@@ -27,6 +17,55 @@
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt;
+	}
+
+	// yr 작성
+	// 찜하기 있음
+	function chgPickY(p_index) {
+		// var chg_id = p_chg_id;
+		// alert("chg_id -> " + chg_id);
+
+		$.ajax({
+			url : "/chgPickPro",
+			type : "POST",
+			data : {chg_id : p_index},
+			dataType : 'json',
+			success : function(chgPickResult) {
+				if(chgPickResult.chgPick > 0) {
+					$("#chgPickY" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+				} else {
+					$("#chgPickY" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+				}
+
+			},
+			error : function() {
+				alert("찜하기 오류");
+			}
+		});
+	}
+
+	// 찜하기 없음
+	function chgPickN(p_index) {
+		// var chg_id = p_chg_id;
+		// alert("chg_id -> " + chg_id);
+
+		$.ajax({
+			url : "/chgPickPro",
+			type : "POST",
+			data : {chg_id : p_index},
+			dataType : 'json',
+			success : function(chgPickResult) {
+				if(chgPickResult.chgPick > 0) {
+					$("#chgPickN" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+				} else {
+					$("#chgPickN" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+				}
+
+			},
+			error : function() {
+				alert("찜하기 오류");
+			}
+		});
 	}
 </script>
 </head>
@@ -138,7 +177,6 @@
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }">
-	            		<%-- <h1>찜하기 여부 : ${chg.pickyn }</h1> --%>
 			            <div class="col-6 col-md-4">
 						
 			               <!-- Card -->
@@ -147,10 +185,36 @@
 			                <!-- Image -->
 			                <div class="card-img">
 			
-			                  <!-- Action -->
-			                  <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
-			                  <i class="fe fe-heart"></i>
-			                  </button>
+								<!-- YR 작성 -->
+								<!-- 찜하기 -->
+								<c:choose>
+									<c:when test="${sessionScope.user_num != null}">
+										<!-- 로그인 한 상태 -->
+										<c:choose>
+											<c:when test="${chg.pickyn > 0}">
+												<!-- 찜하기 있음 -->
+												<button class="btn btn-xs btn-circle btn-primary" data-toggle="button" onclick="chgPickY(${chg.chg_id})" id="chgPickY${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:when>
+								
+											<c:otherwise>
+												<!-- 찜하기 없음 -->
+												<button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button" onclick="chgPickN(${chg.chg_id})" id="chgPickN${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+								
+									<c:otherwise>
+										<!-- 로그인 안 한 상태 -->
+										<button class="btn btn-xs btn-circle btn-white-primary" data-toggle="button"
+											onclick="location.href='/loginForm'">
+											<i class="fe fe-heart"></i>
+										</button>
+									</c:otherwise>
+								</c:choose>
 			
 			                  <!-- Button -->
 			                  <button class="btn btn-xs w-100 btn-dark card-btn">
