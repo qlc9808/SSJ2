@@ -163,11 +163,11 @@
         </div>
        		<div class="card" style="display: none;" id="alarmPopText" >
 			  <div class="card-body">
-			    <table id="test">
-			    	<h4>새로운 댓글이 없습니다.</h4>
-			    	<h6>더 열심히 활동해볼까요?</h6>
+			    <table id="alarmEmpty">
+			    	<tr><td><h4>새로운 댓글이 없습니다.</h4></td></tr>
+			    	<tr><td><h6>더 열심히 활동해볼까요?</h6></td></tr>
 			    </table>
-			    <a href="#" class="btn btn-primary" onclick="readAlarmAll() return false;">전체 읽음</a>
+			    <a href="javascript:void(0);" class="btn btn-primary" onclick="readAlarmAll()">전체 읽음</a>
 			    
 			  </div>
 			</div>
@@ -230,8 +230,8 @@
 			str += "<tr>";
 			str += "<td><a href='javascript:void(0);' onclick='read("+data.listBdRe[i].user_num+","+data.listBdRe[i].brd_num+"); return false;' ><b>";			
 			str += data.listBdRe[i].title + "</b>글에 "+data.listBdRe[i].re_step +"번째 댓글이 달렸습니다.</a></td>";
-			str += "<td><a href='#' id='alarmRead' data-user-num='" + data.listBdRe[i].user_num + "' data-re-step='"+data.listBdRe[i].re_step + "'onclick='readAlarm(event)'>";
-			str +="<button class='btn btn-danger btn-circle btn-xxs mb-1'><i class='fe fe-check'></i></button></a></td>"	  
+			str += "<td><a href='javascript:void(0);' id='alarmRead' data-user-num='" + data.listBdRe[i].user_num + "' data-re-step='"+data.listBdRe[i].re_step + "' onclick='readAlarm(event);'>";
+			str +="<button class='btn btn-danger btn-circle btn-xxs mb-1'><i class='fe fe-check'></i></button></a></td>";
 	    	str += "</tr>";			
 				
 		}
@@ -240,11 +240,11 @@
 	}
 	
 	function readAlarm(event){
-		event.preventDefault();
 		
-		var userNum = $(event.target).data("user-num");
-		var reStep = $(event.target).data("re-step");
-		alert(reStep);
+		event.preventDefault();
+
+	    var userNum = $(event.currentTarget).data("user-num");
+	    var reStep = $(event.currentTarget).data("re-step");
 		
 		
 		$.ajax(
@@ -260,6 +260,22 @@
 					}
 				}
 		)
+	}
+	
+	function readAlarmAll(){
+		alert("test");
+		$.ajax({
+			type: "POST",
+			url: "readAllcmt",
+			dataType: "text",
+			success:function(data){
+				if(data>0){
+					var text = EmptyAlarm();
+					$("#alarmPopText").html(text);
+					$(".alarmAjax").empty();
+				}
+			}
+		});
 	}
 	
 	function read(user_num, brd_num){
@@ -278,6 +294,12 @@
 		
 	}
 	
+	function EmptyAlarm(){
+		var text = "<tr><td><h4>새로운 댓글이 없습니다.</h4></td></tr><tr><td><h6>더 열심히 활동해볼까요?</h6></td></tr>";
+		return text;
+		
+	}
+	
 	
 	function alarmchk(){
 		/* alert("test"); */
@@ -293,8 +315,13 @@
 						$(".alarmAjax").html(str); 
 						
 						var text = alarmText(data);
-						$("#test").html(text);
+						$("#alarmEmpty").empty();
+						$("#alarmEmpty").html(text);
 						
+					} else {
+						var text = EmptyAlarm();
+						$("#alarmPopText").html(text);
+						$(".alarmAjax").empty();						
 					}
 				}
 			}
@@ -313,7 +340,6 @@
 				}
 				
 			}
-		
 			
 	}	
 	)

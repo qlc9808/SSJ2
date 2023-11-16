@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -512,6 +513,22 @@ public class ChController {
 	}
 	
 	@ResponseBody
+	@PostMapping(value = "readAllcmt")
+	public int readAllcmt(HttpSession session) {
+		System.out.println("ChController readAllcmt Start...");
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num =(int) session.getAttribute("user_num");
+		}
+		
+		int result = chBoardService.readAllcmt(user_num);
+		
+		System.out.println("ChController readAllcmt Start...");
+		
+		return result;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "pageAjax" )
 	public commReChk pageAjax(int brd_md,String currentPage, HttpSession session) {
 		System.out.println("pageAjax Start...");
@@ -560,6 +577,23 @@ public class ChController {
 		return result;
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "myContsDelete")
+	public int myContsDelete(int brd_num) {
+		System.out.println("ChController myContsDelete Start");
+		System.out.println("ChController myContsDelete board.getBrd_num() -> "+brd_num);
+		int result = 0;
+		
+		result = chBoardService.deleteNotice(brd_num);
+		
+		
+		return result;
+	}
+	
+	public void commentAlaram(int brd_num) {
+		
+	}
+	
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
@@ -591,6 +625,7 @@ public class ChController {
 		private Object reCount;
 		private Paging page;
 	}
+	
 	
 	
 	
