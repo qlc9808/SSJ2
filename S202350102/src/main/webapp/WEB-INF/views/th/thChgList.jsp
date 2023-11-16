@@ -105,6 +105,12 @@
                 
               </ul>
             </form>
+            
+            <div style="text-align: center;">
+	            <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
+	 				챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
+				</button>
+			</div>
           </div>
          
 		  <div class="col-12 col-md-8 col-lg-9">

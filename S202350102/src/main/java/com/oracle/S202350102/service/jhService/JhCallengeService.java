@@ -46,10 +46,16 @@ public interface JhCallengeService {
 	int 			replyUpdate(Board board);
 
 
-	int 			reviewPost(Board board); 
+	int 			reviewPost(Board board);
 
+
+	int 			reviewUpdate(Board board);
+
+
+	void 			reviewDelete(int brd_num); 
+ 
       
-     
+      
  
 
 }

@@ -267,6 +267,7 @@ public class JhController {
 								,Board		   board
 								) {
 		System.out.println("JhController reviewContent Start...");
+		System.out.println("JhController reviewContent chg_id -> " + chg_id);
 
 			
 		//세션에서 회원번호 가져옴
@@ -297,9 +298,9 @@ public class JhController {
 		board.setStart(replyPage.getStart());
 		board.setEnd(replyPage.getEnd());
 		model.addAttribute("replyPage",replyPage);
-		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ replyPage.getStart());
-		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ replyPage.getTotal());
-		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
+		System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
+		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
 		
 		//챌린지 해당 글에 대한 댓글 조회
 		List<Board> reviewReplyList = jhCService.reviewReplyList(board);
@@ -334,7 +335,7 @@ public class JhController {
 		model.addAttribute("result", result);
 		System.out.println("JhController reviewContent result -> " + result);
 		
-		return "jh/jhReviewContent2";
+		return "jh/jhReviewContent";
 	}
 	
 	@RequestMapping(value = "showReplyUpdate")
@@ -406,9 +407,9 @@ public class JhController {
 	
 	
 	//챌린지 신청 페이지로 이동
-	@RequestMapping(value = "chgApplicationPage")
-	public String chgApplication (HttpSession session, Model model) {
-		System.out.println("JhController chgApplication Start...");
+	@RequestMapping(value = "chgApplicationForm")
+	public String chgApplicationForm (HttpSession session, Model model) {
+		System.out.println("JhController chgApplicationForm Start...");
 		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
 		
 		//세션에서 회원번호 가져옴
@@ -429,7 +430,7 @@ public class JhController {
 		model.addAttribute("userStatus", userStatus);
 		
 		
-		return "jh/chgApplicationPage";
+		return "jh/jhChgApplicationForm";
 	}
 	
 	
@@ -504,13 +505,42 @@ public class JhController {
 		
 	}
 	
-//	@RequestMapping(value = "reviewUpdate")
-//	public String reviewUpdate(Board board, Model model, HttpSession session ) {
-//		System.out.println("JhController reviewUpdate Start...");
-//		
-//		int result = jhCService.reviewUpdate(board);
-//		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id()+"&result="+result;
-//	}
+	@RequestMapping(value = "reviewUpdate")
+	// public String reviewUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+	public String reviewUpdate(Board board, HttpServletRequest request, MultipartFile file1) throws IOException {
+		System.out.println("JhController reviewUpdate Start...");
+		if(file1 != null && !file1.isEmpty()) {
+			log.info("size: " +file1.getSize());
+			System.out.println("file1 -> " + file1.isEmpty());
+			System.out.println("img -> " + board.getImg());
+		} else {
+			System.out.println("file1 == null ");
 
+		}
+		
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		if (file1 != null && !file1.isEmpty()) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			board.setImg(saveName);
+		}
+		else {
+			board.setImg(null);
+		}
+		int result = jhCService.reviewUpdate(board);
+		
+		System.out.println("result -> " + result);
+		
+		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
+	}
+
+	@RequestMapping(value = "reviewDelete")
+	public String reviewDelete(int brd_num, int chg_id) {
+		System.out.println("JhController reviewDelete Start...");
+		
+		jhCService.reviewDelete(brd_num);
+		
+		
+		return "redirect:chgDetail?&chg_id=" + chg_id +"&tap=3";
+	}
 
 }
