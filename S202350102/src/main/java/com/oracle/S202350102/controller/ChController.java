@@ -590,7 +590,9 @@ public class ChController {
 		return result;
 	}
 	
-	
+	public void commentAlaram(int brd_num) {
+		
+	}
 	
 	
 	
