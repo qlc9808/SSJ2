@@ -265,7 +265,7 @@ public class BgController {
 		model.addAttribute("uptCnt", updateCount);
 		model.addAttribute("kk3", "Message Test");
 		
-		return "redirect:jhChgDetail";
+		return "redirect:ChgDetail";
 	}
 	
 	

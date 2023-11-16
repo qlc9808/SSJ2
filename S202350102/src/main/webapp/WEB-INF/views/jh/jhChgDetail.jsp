@@ -238,6 +238,7 @@
 		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayNick').text(nick);     
 		$('#displayReg_date').text(reg_date); 
+		$('#editImage').text(img);
 		
 		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#editBrd_num').val(brd_num);     
@@ -247,6 +248,22 @@
 		
 		// 모달 창 표시
 		$('#modalUpdateCertBrdForm').modal('show');
+	}
+	
+	
+	
+	// 수정 시, 업로드 사진 변경할 수 있게
+	function fileUpdate() {
+		var fileInput = document.getElementById('fileInput');
+		if(fileInput.style.display == "none") {
+			fileInput.style.display = "block";
+			fileInput.removeAttribute('disabled');
+			$("#imgOroot").hide();
+		} else {
+			fileInput.style.display = "none";
+			fileInput.setAttribute('disabled', 'true');
+			$('#imgOroot').show();
+		}
 	}
 	
 	
@@ -1061,7 +1078,6 @@
 						                    </div>
 						                    
 						                    
-						                    
 						                    <div class="col-12 col-md">
 						                    
 												<!-- Avatar -->
@@ -1413,65 +1429,70 @@
 		                  
 		
 					                <!-- 수정 Form -->
-							            <form action="updateCertBrd" method="post">
-							              <input type="hidden" name="brd_num" id="editBrd_num">
-							              <input type="hidden" name="nick" id="editNick">
-							                
-											<div class="avatar avatar-xl">
-											  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
-											</div>
-						                      
-						                      
-							                <div class="col-12 col-md-6"><!--  -->
-						                    <!-- 유저 닉네임 표시하는 란 Name -->
-						                    <div class="form-group"><!--  -->
-							                      <p class="mb-2 fs-lg fw-bold" id="displayNick">
-							                      </p>
-						                    </div>
-							                </div>
-				                    
-					                      <!-- Header -->
-						                      <div class="row mb-6"><!--  -->
-						                        <div class="col-12"><!--  -->
-						                          <!-- Time -->
-						                          <span class="fs-xs text-muted">
-						                            <time datetime="2019-07-25" id="displayReg_date"></time>
-						                          </span>
-						                        </div>
-						                      </div>
-							                
+						            <form action="updateCertBrd" method="post">
+						              <input type="hidden" name="brd_num" id="editBrd_num">
+						              <input type="hidden" name="nick" id="editNick">
+						                
+										<div class="avatar avatar-xl">
+										  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+										</div>
+					                      
+					                      
+						                <div class="col-12 col-md-6"><!--  -->
+					                    <!-- 유저 닉네임 표시하는 란 Name -->
+					                    <div class="form-group"><!--  -->
+						                      <p class="mb-2 fs-lg fw-bold" id="displayNick">
+						                      </p>
+					                    </div>
+						                </div>
+			                    
+				                      <!-- Header -->
+					                      <div class="row mb-6"><!--  -->
+					                        <div class="col-12"><!--  -->
+					                          <!-- Time -->
+					                          <span class="fs-xs text-muted">
+					                            <time datetime="2019-07-25" id="displayReg_date"></time>
+					                          </span>
+					                        </div>
+					                      </div>
+						                
+	
+			        					<div class="col-12"><!--  -->
+						                  <!-- Email -->
+						                  <div class="form-group"><!--  -->
+						                    <label class="form-label" for="accountEmail">
+						                     	 제목 *
+						                    </label>
+						                      <input class="form-control form-control-sm" id="editTitle" name="title" type="text" placeholder="제목을 작성해주세요 *" required>
+						                  </div>
+						                </div>
 		
-				        					<div class="col-12"><!--  -->
-							                  <!-- Email -->
-							                  <div class="form-group"><!--  -->
-							                    <label class="form-label" for="accountEmail">
-							                     	 제목 *
-							                    </label>
-							                      <input class="form-control form-control-sm" id="editTitle" name="title" type="text" placeholder="제목을 작성해주세요 *" required>
-							                  </div>
-							                </div>
-			
-							                <div class="col-12">
-							                  <!-- Email -->
-							                  <div class="form-group">
-							                    <label class="form-label" for="accountEmail">
-							                     	 인증글 *
-							                    </label>
-							                      <textarea class="form-control form-control-sm" id="editConts" name="conts" rows="4" placeholder="인증글을 작성해주세요 *" required></textarea>
-							                  </div>
-							                </div>
-							                
-							                <div class="row">
-							                  <div class="col-12 text-center">
-							                    <!-- 인증 글쓰기에서 가져온 글 수정 Form 등록 Button -->
-							                     <!-- onclick(보류) 대신 form으로 작동시킴 --> 
-							                    <button class="btn btn-outline-dark" type="submit" onclick="updateCertBoard()">
-							                      	수정하기
-							                    </button>
-							                  </div>
-							                </div>
-							                
-							            </form>
+						                <div class="col-12">
+						                  <!-- Email -->
+						                  <div class="form-group">
+						                    <label class="form-label" for="accountEmail">
+						                     	 인증글 *
+						                    </label>
+						                      <textarea class="form-control form-control-sm" id="editConts" name="conts" rows="4" placeholder="인증글을 작성해주세요 *" required></textarea>
+						                  </div>
+						                </div>
+						                
+						                <div class="row">
+						                  <div class="col-12 text-center">
+						                  	<div class="form-group mb-7">
+						                  		<span id="imgOroot">${pageContext.request.contextPath}/upload/<span id="editImage"></span></span>
+						                  		<input type="file" name="file1" style="display:none;" id="fileInput" disabled="disabled">
+						                  		<button type="button" onclick="fileUpdate()">파일 변경</button>
+											</div>
+						                    <!-- 인증 글쓰기에서 가져온 글 수정 Form 등록 Button -->
+						                    <!-- onclick(보류) 대신 form으로 작동시킴 --> 
+						                    <button class="btn btn-outline-dark" type="submit" onclick="updateCertBoard()">
+						                      	수정하기
+						                    </button>
+						                  </div>
+						                </div>
+						                
+						            </form>
 								
 								
 					    
