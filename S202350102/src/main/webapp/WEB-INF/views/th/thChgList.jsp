@@ -132,6 +132,7 @@
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }">
+	            		<%-- <h1>찜하기 여부 : ${chg.pickyn }</h1> --%>
 			            <div class="col-6 col-md-4">
 						
 			               <!-- Card -->
@@ -163,7 +164,7 @@
 			
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+			                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
 			                <div class="text-muted"> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 
