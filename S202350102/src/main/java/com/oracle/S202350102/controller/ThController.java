@@ -308,11 +308,11 @@ public class ThController {
 	}
     
     @RequestMapping(value ="thChgList")
-	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt) {
+	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt, HttpSession session) {
 		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
 		System.out.println("thController thChgList Start...");
 
-		// Challenge 게시판 진행중인 챌린지만 Count ( 현재 사용중)		
+		// Challenge 게시판 진행중인 챌린지만 Count (현재 사용중)		
 		int totalChg = tcs.totalChg();
 		
 		// 챌린지 카테고리 가져오기
@@ -321,9 +321,16 @@ public class ThController {
 		// paging 작업 수정해야할듯 ? totalChg가 아니라 해당페이지 값별로 다시 조회 해야함
 		// Paging 작업			  	7			0 
 		Paging page = new Paging(chgCategoryList.size(), currentPage);
-		
+
 		chg.setStart(page.getStart());
 		chg.setEnd(page.getEnd());
+		
+		// 찜하기
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			chg.setMy_user_num(userNum);
+		}
 		
 		// 조회 필터 가져오기
 		if(sortOpt != null) {
@@ -337,7 +344,7 @@ public class ThController {
 		System.out.println("State_md --> " + chg.getState_md());
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
-
+			
 		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
 		model.addAttribute("totalChg", totalChg);
 		model.addAttribute("listChg", listChg);

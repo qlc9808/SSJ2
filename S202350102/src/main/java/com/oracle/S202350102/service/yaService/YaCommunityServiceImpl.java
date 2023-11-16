@@ -165,5 +165,34 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	}
 
 
+	//마이페이지- 내가 올린 쉐어링 리스트 조회 
+	@Override
+	public List<Board> myUploadSharingList(int user_num) {
+		System.out.println("YaCommunityServiceImpl myUploadSharingList start....");
+		List<Board> myUploadSharingList = null;
+		try {
+			myUploadSharingList = ybd.myUploadSharingList(user_num);
+			System.out.println("YaCommunityServiceImpl myUploadSharingList.size()?"+myUploadSharingList.size());			
+		} catch (Exception e) {
+			System.out.println("YaCommunityServiceImpl myUploadSharingList e.getMessage?"+e.getMessage());
+		}
+		return myUploadSharingList;
+	}
+
+
+	//마이페이지 - 내가 올린 쉐어링 게시글의 참가자리스트 조회
+	@Override
+	public List<SharingList> sharingParticipantsList(int brd_num) {
+		System.out.println("YaCommunityServiceImpl sharingParticipantsList start...");
+		List<SharingList> sharingParticipantsList = null;
+		try {
+			sharingParticipantsList = ybd.sharingParticipantsList(brd_num);
+		} catch (Exception e) {
+			System.out.println("YaCommunityServiceImpl sharingParticipantsList e.getMessage?"+e.getMessage());
+		}
+		return null;
+	}
+
+
 
 }

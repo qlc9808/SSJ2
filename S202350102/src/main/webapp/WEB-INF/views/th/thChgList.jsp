@@ -5,16 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    
-    <!-- Libs CSS -->
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    
-    <!-- Theme CSS -->
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <title>챌린지 리스트</title>
 <script type="text/javascript">
 	function fn_sortOpt(){
@@ -28,6 +18,30 @@
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt;
 	}
+
+	// yr 작성
+	// 찜하기 기능
+	function chgPick(p_index) {
+
+		$.ajax({
+			url : "/chgPickPro",
+			type : "POST",
+			data : {chg_id : p_index},
+			dataType : 'json',
+			success : function(chgPickResult) {
+				if(chgPickResult.chgPick > 0) {
+					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+				} else {
+					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+				}
+
+			},
+			error : function() {
+				alert("찜하기 오류");
+			}
+		});
+	}
+
 </script>
 </head>
 
@@ -105,6 +119,12 @@
                 
               </ul>
             </form>
+            
+            <div style="text-align: center;">
+	            <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
+	 				챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
+				</button>
+			</div>
           </div>
          
 		  <div class="col-12 col-md-8 col-lg-9">
@@ -140,10 +160,36 @@
 			                <!-- Image -->
 			                <div class="card-img">
 			
-			                  <!-- Action -->
-			                  <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
-			                  <i class="fe fe-heart"></i>
-			                  </button>
+								<!-- YR 작성 -->
+								<!-- 찜하기 -->
+								<c:choose>
+									<c:when test="${sessionScope.user_num != null}">
+										<!-- 로그인 한 상태 -->
+										<c:choose>
+											<c:when test="${chg.pickyn > 0}">
+												<!-- 찜하기 있음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:when>
+								
+											<c:otherwise>
+												<!-- 찜하기 없음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+								
+									<c:otherwise>
+										<!-- 로그인 안 한 상태 -->
+										<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button"
+											onclick="location.href='/loginForm'">
+											<i class="fe fe-heart"></i>
+										</button>
+									</c:otherwise>
+								</c:choose>
 			
 			                  <!-- Button -->
 			                  <button class="btn btn-xs w-100 btn-dark card-btn">
@@ -163,7 +209,7 @@
 			
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+			                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
 			                <div class="text-muted"> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 

@@ -399,7 +399,7 @@
 </script> 
 </head>
 <body>
-	<input type="button" value="목록" onclick="location.href='/challengeList'" > 
+	<input type="button" value="목록" onclick="location.href='/thChgList'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -448,10 +448,10 @@
                     <!-- Item -->
            		    <c:choose>
 					    <c:when test="${empty reviewContent.img}">
-							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 650px; max-height: 550px; width: auto; height: auto;">
+							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" class="card-img-top" >
 					    </c:when>
 					    <c:otherwise>
-							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 650px; max-height: 550px; width: auto; height: auto;">
+							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." >
 					    </c:otherwise>
 					</c:choose>
              <!--썸네일 처리 해야 함 파일 위치랑 null일 때 뜨게 할 것  -->
@@ -1909,8 +1909,8 @@
 							                  </div>
 							                  
 							                  <div class="input-group mb-3">
-												  <input type="file" class="form-control" name="file" id="inputGroupFile02">
-												  <label class="input-group-text" for="inputGroupFile02">이미지 업로드</label>
+												  <input type="file" class="form-control" name="file" id="inputGroupFile">
+												  <label class="input-group-text" for="inputGroupFile">이미지 업로드</label>
 											  </div>
 							                  
 							                  <div class="col-12 text-center">
@@ -1945,7 +1945,7 @@
 				   				              <div class="col-12 col-md-auto">
 								
 								                <!-- Button -->
-								                <a class="btn btn-sm btn-dark"  href="/reviewInsert">
+								                <a class="btn btn-sm btn-dark"  href="/reviewPost">
 								                  Write Review
 								                </a>
 								
@@ -2110,6 +2110,6 @@
       </div>
     </section>
 
-
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

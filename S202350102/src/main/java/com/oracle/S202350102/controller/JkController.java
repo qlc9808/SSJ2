@@ -40,6 +40,7 @@ import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class JkController {
 	private final JkBoardService jbs;
 	private final YaCommunityService ycs;
 	private final JkMypageService jms;
-	private final ChController chcont; 
+	private final ChController chcont;
 	
 	
 	//좋아요 기능 컨트롤러
@@ -529,7 +530,10 @@ public class JkController {
 	    List<Challenge> myChgList = jms.myChgList(chg);
 	    
 	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
-	
+	    
+	    // yr 작성
+
+	    
 	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
 	}
 	

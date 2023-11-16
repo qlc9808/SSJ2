@@ -47,5 +47,7 @@ public class Challenge {
 	
 	// 챌린지 리스트 카테고리 조회용
 	private String sortOpt;
-	private String chlgerCnt; // 챌린지 참여자 수 
+	private String chlgerCnt; 		// 챌린지 참여자 수 
+	private int	   my_user_num;  	// user별 챌린지 리스트 찜하기 확인용
+	private int    pickyn;			// 찜하기 여부 판단용
 }
