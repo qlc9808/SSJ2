@@ -32,6 +32,10 @@ public interface YaBoardDao {
 	int 		totalCommunity(Board board);
 
 	int         saveSharing(SharingList sharingList);
+
+	List<Board>       myUploadSharingList(int user_num);
+
+	List<SharingList> sharingParticipantsList(int brd_num);
 	
 
 

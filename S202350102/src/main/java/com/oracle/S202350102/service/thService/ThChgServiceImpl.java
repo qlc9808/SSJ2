@@ -27,16 +27,16 @@ public class ThChgServiceImpl implements ThChgService {
 
 
 	@Override
-	public int totalChgIng() {
+	public int totalChgIng(Challenge chg) {
 		System.out.println("thChgServiceImpl totalChgIng Start... ");
-		int totChgIngCnt = tcd.totalChgIng();
+		int totChgIngCnt = tcd.totalChgIng(chg);
 		return totChgIngCnt;
 	}
 
 	@Override
-	public int totalChgFin() {
+	public int totalChgFin(Challenge chg) {
 		System.out.println("thChgServiceImpl totalChgFin Start... ");
-		int totChgFinCnt = tcd.totalChgFin();
+		int totChgFinCnt = tcd.totalChgFin(chg);
 		return totChgFinCnt;
 	}
 

@@ -7,9 +7,14 @@
 	
     <update id="updateUser1" parameterType="User1">
         UPDATE user1
-        SET user_pswd = #{user_pswd}, nick = #{nick}, user_name = #{user_name}, email = #{email},
-            birth = #{birth}, addr = #{addr}, tel = #{tel}, gender = #{gender}
-        WHERE user_id = #{user_id}
+	    SET user_pswd = #{user_pswd},
+	        nick = #{nick},
+	        user_name = #{user_name},
+	        email = #{email},
+	        birth = #{birth},
+	        addr = #{addr},
+	        tel = #{tel}
+	    WHERE user_num = #{user_num}
     </update>
 
     <select id="loginUser" parameterType="User1" resultType="User1">
@@ -17,9 +22,14 @@
     </select>
     
  	<select id="getUserDetails" parameterType="User1" resultType="User1">
-        SELECT * FROM user1 WHERE user_id = #{user_id}
+        SELECT * FROM user1 WHERE user_num = #{user_num}
     </select>
-      
+     
+     <update id="updateProfile" parameterType="User1">
+        UPDATE user1
+        SET img = #{img}
+        WHERE user_num = #{user_num}
+    </update> 
     
 </mapper>
 

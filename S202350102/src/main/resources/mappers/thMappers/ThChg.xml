@@ -9,18 +9,24 @@
 		FROM 	challenge
 	</select>
 	
-	<select id="thChgTotalIng" resultType="int">
+	<select id="thChgTotalIng" parameterType="Challenge" resultType="int">
 		SELECT 	COUNT(*) 
 		FROM 	challenge
 		WHERE	state_lg = 300
 		AND		state_md = 102
+		<choose>
+			<when test="chg_lg == 200">		AND chg_md = #{chg_md}</when>
+		</choose>
 	</select>
 
-	<select id="thChgTotalFin" resultType="int">
+	<select id="thChgTotalFin" parameterType="Challenge" resultType="int">
 		SELECT 	COUNT(*) 
 		FROM 	challenge
 		WHERE	state_lg = 300
 		AND		state_md = 103
+		<choose>
+			<when test="chg_lg == 200">		AND chg_md = #{chg_md}</when>
+		</choose>
 	</select>
 	
 	<!--진행중 챌린지 조회 (choose: null(기본값), 개설일 순, 찜 순, 참가자 순 -->
@@ -31,6 +37,12 @@
 			                WHERE       cr.chg_id = chl.chg_id
 			                GROUP BY    chg_id
 			           ) AS chlgerCnt
+			           , (
+			                SELECT 		COUNT(*)
+			                FROM   		chg_pick cp
+			                WHERE 		cp.chg_id = chl.chg_id
+			                AND 		cp.user_num = #{my_user_num}
+			               ) AS pickyn
 		FROM 
 		(
 			SELECT rownum rn, a.*

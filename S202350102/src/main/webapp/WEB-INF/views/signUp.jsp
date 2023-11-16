@@ -6,9 +6,8 @@
  <head>
  <meta charset="UTF-8">
 <script type="text/javascript" src="js/th/thSignUp.js"></script>
-<script type="text/javascript">
 
-</script>
+<title>회원가입</title>
  </head>
 <body class="bg-light">
   	<c:import url="/WEB-INF/views/header4.jsp"/>

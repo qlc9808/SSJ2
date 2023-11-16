@@ -39,4 +39,9 @@ public class User1 {
 	// following 조회용
 	private int following_id;
 	private int matpal;
+	
+	// 페이징 조회용    //검색타입						 //검색 내용
+	private String search;   	private String keyword;
+	private String pageNum;
+	private int start; 		 	private int end;
 }
