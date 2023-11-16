@@ -8,6 +8,121 @@
     <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
     <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
     <title>Insert title here</title>
+<script src="./js/jquery.js"></script>
+<script type="text/javascript">
+	function myContsDelete(brd_md, brd_num){
+		var brdMd = brd_md;
+		var brdNum = brd_num;
+		
+		$.ajax({
+			url: "myContsDelete",
+			type: "POST",
+			data: { brd_num: brd_num },
+			dataType: "text",
+			success: function(data){
+				if(parseInt(data)>0){
+					$("#body" + brdMd + " #row" + brd_num).remove();
+				}
+			}
+		})
+		
+	}
+
+
+	function pageMove(brd_md, currentPage){
+		/* alert(brd_md);
+		alert(currentPage); */
+		var brdMd = brd_md;
+		var currentP = currentPage;
+		
+		$.ajax({
+			url : "pageAjax",
+			data: {brd_md : brdMd, currentPage : currentP},
+			dataType: "json",
+			success: function(result){				
+				var text = "";
+				text = brdText(result);
+				$("#body"+result.page.brd_md).html(text);
+				$("#body"+result.page.brd_md).css()
+			}
+		})
+	}
+	
+	function brdText(result){
+		var text ="";
+		switch(result.page.brd_md){
+		/**********************인증***************/
+		case 100:
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='chgDetail?chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+         			+"<td>"+result.listBdRe[i].replyCount+"</td>"
+         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
+         		num = num - 1;            
+			}
+			return text;
+			break;
+		/**********************후기***************/
+		case 101:						
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].replyCount+"</td>"
+         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
+         		num = num - 1;            
+			}
+			return text;
+			
+			break;
+			/**********************쉐어링***************/
+		case 102:
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='detailSharing?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"                	
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+         			+"<td>"+result.listBdRe[i].replyCount+"</td>"
+         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
+         		num = num - 1;            
+			}
+			return text;
+			break;
+			/**********************자유***************/
+		case 103:
+			var num = result.page.total - result.page.start+1;
+			for(var i = 0; i< result.reCount; i++){
+				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
+                	+"<td>"+num+"</td>"
+                	+"<td><a href='detailCommunity?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
+                	+"<td>"+result.listBdRe[i].replyCount+"</td>"
+         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
+         			
+         		num = num - 1;            
+			}
+			return text;
+			break;
+		}
+		
+		
+		
+	}
+</script>    
+
 </head>
 <style type="text/css">
 @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
@@ -318,7 +433,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
 			                                <td>${myCertiList.view_cnt}</td>
 							         		<td>${myCertiList.replyCount}</td>
-							         		<td>삭제</td>
+							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a></td>
 							         		<c:set var="num" value="${num-1}"></c:set> 			       
 			                            </tr>
 			                        </c:forEach>
@@ -371,6 +486,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                                <td><fmt:formatDate value="${myReviewList.reg_date}" pattern="yyyy-MM-dd"/></td>
 			                                <td>${myReviewList.view_cnt}</td>
 							         		<td>${myReviewList.replyCount}</td>
+							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Review_md},${myReviewList.brd_num })">삭제</a></td>
 							         		<c:set var="num" value="${num-1}"></c:set> 			       
 			                            </tr>
 			                        </c:forEach>
@@ -425,7 +541,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                                <td><fmt:formatDate value="${myShareList.reg_date}" pattern="yyyy-MM-dd"/></td>
 			                                <td>${myShareList.view_cnt}</td>
 							         		<td>${myShareList.replyCount}</td>
-							         		<td><a href="/deleteCommunity?brd_num=${myShareList.brd_num}">삭제</a></td>
+							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Share_md},${myShareList.brd_num })">삭제</a></td>
 							         		<c:set var="num" value="${num-1}"></c:set> 			       
 			                            </tr>
 			                        </c:forEach>
@@ -472,7 +588,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                            <th></th>
 			                        </tr>
 			                    </thead>                 
-			                    <tbody>
+			                    <tbody id="body${commu_bd }">
 			                        <c:forEach items="${myCommuList }" var="myCommuList">
 			                            <tr>
 			                                <td>${num}</td>
@@ -481,7 +597,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
 			                                <td>${myCommuList.view_cnt}</td>
 							         		<td>${myCommuList.replyCount}</td>
-							         		<td><a href="/deleteCommunity?brd_num=${myCommuList.brd_num}">삭제</a></td>
+							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${commu_bd},${myCommuList.brd_num})">삭제</a></td>
 							         		<c:set var="num" value="${num-1}"></c:set> 			       
 			                            </tr>
 			                        </c:forEach>
