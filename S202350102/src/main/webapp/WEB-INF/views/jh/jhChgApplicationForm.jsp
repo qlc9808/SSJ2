@@ -124,7 +124,7 @@
 				        <div class="col-12">
 			                <label>추천 챌린지</label>
 				            <div id="imageContainer" class="text-center" style="width: 100%; height: 200px; border: 1px dotted #ccc;">
-				            	<p>카테고리를 선택해주세요!</p>
+				            	<p>카테고리를 먼저 선택해주세요!</p>
 				            </div>
 				        </div>
 				    </div>
