@@ -312,7 +312,7 @@ function listCommentSharing() {
         <div class="row">
           <div class="col-12">
                 <!-- Button -->
-				  <c:if test="${not empty sessionScope.user_num}">
+				<c:if test="${not empty sessionScope.user_num}">
 				    <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
 				       댓글 작성
 				    </a>

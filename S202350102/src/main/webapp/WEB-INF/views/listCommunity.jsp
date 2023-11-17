@@ -12,7 +12,7 @@
     			
 /* 페이지 전체 스타일 */
 section.community {
-  padding: 100px 0;
+  padding: 0;
 }
 
 body {
@@ -40,44 +40,10 @@ body {
   text-align: center;
 }
 
-/* 검색 박스 스타일 */
-#serachBox .search-window .search-wrap {
-  position: relative;
-  padding-right: 50px;
-  margin: 0 auto;
-  width: 80%;
-  max-width: 564px;
-}
 
-#searchBox.search-window {
-  padding: 15px 15px;
-  background-color: #f9f7f9;
-  
-}
-#searchBox .search-window .search-wrap input {
-  height: 50px;
-  width: 30%;
-  font-size: 14px;
-  padding: 7px 14px;
-  border: 1px solid #ccc;
-}
-#searchBox.search-window .search-wrap input:focus {
-  border-color: #333;
-  outline: 0;
-  border-width: 1px;
-}
-#searchBox.search-window .search-wrap .btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 108px;
-  padding: 0;
-  font-size: 16px;
-}
 
 #searchButton:hover {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 /* 검색 결과 스타일 */
@@ -342,19 +308,17 @@ $(document).ready(function () {
         </div>
 
     <!-- 게시판 검색 (옵션 제목, 작성자)-->
-     <div id="searchBox">
-     	 <div class="container">
-       		<div class="search-window">
+		<div class="container">
+		<div class="input-group input-group-merge">
+		            <input class="form-control-xs" id="keyword" type="search" placeholder="제목/작성자 검색" value="${srch_word}">
+		            <div class="input-group-append">
+		              <button class="btn btn-outline-border" id="searchButton">
+		                <i class="fe fe-search"></i>
+		              </button>
+		            </div>
+		          </div>
+		</div>
 
-                  <div class="search-wrap">       			
-	            	<input type="search" id="keyword" placeholder="제목/작성자 검색" value="${srch_word}">
-	            	<button id="searchButton" class="btn btn-dark">검색</button>
-	              </div>
- 	
-      	 	</div> 
-      	 </div>   
-     </div>
-     
         <div id="searchResults">
             
         </div>
