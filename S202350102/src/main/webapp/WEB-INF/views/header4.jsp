@@ -178,7 +178,7 @@
  
       </div>
     </nav>
-		
+
 
 
 <!-- CSS start -->
@@ -206,6 +206,12 @@
 <!--  jquery.js-->
 <script src="./js/jquery.js"></script>
 <a href="detailCommunity?user_num=4&brd_num=11"></a>
+
+<!--  font -->
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    body{ font-family: 'Noto Sans KR', sans-serif; } 
+</style>
 
 <style>
 	#alarmPopText{
@@ -349,5 +355,6 @@
 	)
 	
 </script>
+
 <body onload="alarmchk()"></body>
 

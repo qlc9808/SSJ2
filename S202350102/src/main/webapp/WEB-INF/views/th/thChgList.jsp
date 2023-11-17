@@ -45,9 +45,7 @@
 </script>
 <link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
 <style type="text/css">
-    	body{
-    		font-family: 'Noto Sans KR', sans-serif;
-    		} 
+    body{ font-family: 'Noto Sans KR', sans-serif; } 
 </style>
 </head>
 
