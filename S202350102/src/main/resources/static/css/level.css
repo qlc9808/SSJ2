@@ -14,6 +14,18 @@
   cursor: pointer;
 }
 
+#modalOpenBtn {
+  font-size: 16px;
+  color: #59a5d2;
+  border: none;
+}
+
+#levelInfoBtn {
+  font-size: 16px;
+  color: #59a5d2;
+  border: none;
+}
+
 #modalCloseBtn {
 	display: flex; justify-content: end; align-items: center;
 }	

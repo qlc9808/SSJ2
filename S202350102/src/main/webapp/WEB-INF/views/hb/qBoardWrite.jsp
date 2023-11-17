@@ -14,7 +14,7 @@
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
 	<h2>문의게시판 글쓰기폼</h2>
-	<form action="qBoardWrite" enctype="multipart/form-data">
+	<form action="qBoardWrite" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="brd_lg" value="400">
 		<table>
 			<tr>
@@ -36,7 +36,12 @@
 			</tr>
 			<tr>
 				<td>파일</td>
-				<td><input type="file" name="file" id="file"></td>
+				<td>
+					<!-- <input type="file" name="file" id="file"> -->
+					<!-- <input type="file" id="fileInput" name="file" onchange="previewFile()" />
+					<div id="imageContainer"></div> -->
+					<%@ include file="/WEB-INF/views/hb/test.jsp" %>
+				</td>
 			</tr>
 			<tr>
 				<td>내용</td>

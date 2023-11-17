@@ -41,7 +41,7 @@
 	
 	<update id="qBoardUpdate" parameterType="Board">
 		UPDATE board 
-		SET brd_md = #{brd_md}, title = #{title}, conts = #{conts}
+		SET brd_md = #{brd_md}, title = #{title}, conts = #{conts}, img = #{img}
 		WHERE brd_num = #{brd_num}
 	</update>
 	
@@ -54,7 +54,7 @@
 	
 	<delete id="qBoardDelete" parameterType="int">
 		DELETE Board 
-		WHERE brd_num = #{brd_num}
+		WHERE brd_group = #{brd_num}
 	</delete>
 	
 	<update id="qReadCount" parameterType="int">
