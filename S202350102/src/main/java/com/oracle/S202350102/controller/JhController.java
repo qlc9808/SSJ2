@@ -631,7 +631,8 @@ public class JhController {
 	        recomChg.setTitle(challenge.getTitle());
 	        recomChg.setThumb(challenge.getThumb());
 	        recomChgList.add(recomChg);
-		    System.out.println(recomChgList.getTitle());
+//		    System.out.println(recomChgList.getTitle());
+	        //다시 하기
 	    }
 		
 	    
