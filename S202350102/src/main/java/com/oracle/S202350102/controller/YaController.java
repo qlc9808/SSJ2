@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.mail.Session;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +21,7 @@ import org.springframework.beans.propertyeditors.URLEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.dto.Board;
@@ -121,9 +125,9 @@ public class YaController {
 		return"ya/detailCommunity";
 	}
 	
-	// 커뮤니티 게시글 작성폼으로 이동
+	// 커뮤니티 게시글 작성폼으로 이동 (************************************진기)
 	@RequestMapping(value="/writeFormCommunity")
-	public String writeFormCommunity(HttpSession session, Model model ) {
+	public String writeFormCommunity(Board board, HttpSession session, Model model ) {
 		System.out.println("YaController writeFormCommunity Start... ");
 	
 		int user_num=0;
@@ -138,10 +142,9 @@ public class YaController {
 				
 		}
 
-	 // 게시글 작성
+	 // 게시글 작성 ((************************************진기)
 		@PostMapping(value="/writeCommunity") 
-		public String insertCommunity(@ModelAttribute Board board, Model model,HttpSession session ) {
-				
+		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 				System.out.println("YaController start insertCommunity... "); 
 				
 				int user_num = 0;
@@ -149,6 +152,7 @@ public class YaController {
 					user_num = (int) session.getAttribute("user_num");
 				}
 				board.setUser_num(user_num);
+				/*
 				// 게시글 작성 (본글 설정)
 				board.setBrd_group(board.getBrd_num());
 				board.setBrd_step(0);
@@ -166,15 +170,57 @@ public class YaController {
 						 model.addAttribute("msg", "작성 실패, 확인해보세요");
 					 }
 				return "forward:writeCommunity";
-			 }
+			 }*/
+				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");  // 저장경로 생성
+				System.out.println("realPath" + uploadPath);
+				log.info("originalName : " + file1.getOriginalFilename());
+				
+				String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);  // 진짜 저장
+				board.setImg(saveName);
+				System.out.println("brd_md->"+ board.getBrd_md());
+				int result = ycs.insertCommunity(board);
+				System.out.println("Insert result->" + result);	
+				
+				return "forward:listCommunity";		
+				
+			}
 			
+			
+		// 파일 업로드 (************************************진기)
+		private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
+			UUID uid = UUID.randomUUID();
+			System.out.println("uploadPath->" + uploadPath);
+			File fileDirectory = new File(uploadPath);  
+			if (!fileDirectory.exists()) {
+				fileDirectory.mkdirs(); 
+				System.out.println("시스템 업로드용 폴더 생성 :" + uploadPath);	
+			}
+			
+			String savedName = uid.toString() + "_" + originalName;
+			log.info("saveName : " + savedName); 
+			File target = new File(uploadPath, savedName);
+			FileCopyUtils.copy(fileData, target); 
+			
+			return savedName;
+		}
 		
 		// 게시글 수정폼이동 
 		@GetMapping(value="/updateCommunityForm")
-		public String updateCommunity(int brd_num, Model model) {
+		public String updateCommunity(int brd_num, Model model, HttpSession session) {
 			System.out.println("YaController updaetCommunityForm start...");
 			
+			int user_num = 0;
+			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
+			}
+			
 			Board board = ycs.detailCommunity(brd_num);
+			model.addAttribute("board", board);
+			
+			User1 user1 = jbs.userSelect(user_num);
+			model.addAttribute("user1", user1);
+			
+			
 			// 수정전
 			System.out.println("title :"+board.getTitle());
 			System.out.println("conts :"+board.getConts());
@@ -185,21 +231,44 @@ public class YaController {
 		}
 		
 		
-		// 게시글 수정
-		@GetMapping(value="/updateCommunity")
-		public String updateCommunity(Board board, Model model) {
-	
+		// 게시글 수정 (진기)
+		@PostMapping(value="/updateCommunity")
+		public String updateCommunity(HttpSession session, User1 user1, Model model, Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
+	    System.out.println("YaController updateCommunity start...");
+		
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	    }
+	    user1.setUser_num(user_num);
+	    
+		ServletContext servletContext = request.getSession().getServletContext();
+		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath->" + realPath);
+	 
+		if(file1 != null) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
 			
-			int updateCommunity = ycs.updateCommunity(board);
-			
-			System.out.println("YaController ycs.updateCommunity updateBoard updateCommunity?"+updateCommunity);
-			model.addAttribute("updateCommunity", updateCommunity);
-			//수정후
-			System.out.println("title update:"+board.getTitle());
-			System.out.println("conts update:"+board.getConts());
-			
-			return "forward:listCommunity";
+			board.setImg(saveName);	
 		}
+	    
+	    int updateCommunity = ycs.updateCommunity(board);
+		
+		System.out.println("YaController ycs.updateCommunity updateBoard updateCommunity?"+updateCommunity);
+		model.addAttribute("updateResult", updateCommunity);
+		//수정후
+		System.out.println("title update:"+board.getTitle());
+		System.out.println("conts update:"+board.getConts());
+		System.out.println("updateResult->" + updateCommunity);
+		
+		if (updateCommunity > 0) {
+	       
+	        return "redirect:/listCommunity";
+	    } else {
+	        model.addAttribute("msg", "수정 실패 확인해 보세요");
+	        return "forward:/mypage.jsp";
+	    }
+	}
 		
 		//게시글 삭제
 		@GetMapping(value="/deleteCommunity")

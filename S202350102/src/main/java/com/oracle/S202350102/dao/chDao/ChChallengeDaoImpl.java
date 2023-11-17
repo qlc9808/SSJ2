@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 
 import lombok.Data;
@@ -73,6 +74,40 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<Challenge> myChgList(int user_num) {
+		System.out.println("ChChallengeDaoImpl myChgList Start...");
+		List<Challenge> myChgList = null;
+		
+		try {
+			myChgList = session.selectList("myChgList", user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChChallengeDaoImpl myChgList e.getMessage()->" + e.getMessage());
+			myChgList = null;
+		}
+		
+		
+		return myChgList;
+	}
+
+	@Override
+	public List<Challenger> myChgrList(int user_num) {
+		System.out.println("ChChallengeDaoImpl myChgrList Start...");
+		List<Challenger> myChgrList = null;
+		
+		try {
+			myChgrList = session.selectList("myChgrList", user_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChChallengeDaoImpl myChgrList e.getMessage()->" + e.getMessage());
+			myChgrList = null;
+		}
+		
+		
+		return myChgrList;
 	}
 
 }

@@ -596,15 +596,17 @@ public class ChController {
 		int result = chBoardService.commentAlarm(brd_num);
 	}
 	
-	public void myChgList(HttpSession session) {
+	public void myChgList(HttpSession session, Model model) {
 		System.out.println("ChController myChgList Start...");
 		
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
-//			List<Challenge> mychgList = chChallengeService.myChgList(user_num);
-//			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
+			List<Challenge> mychgList = chChallengeService.myChgList(user_num);
+			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
+			model.addAttribute("mychgList", mychgList);
+			model.addAttribute("mychgrList", mychgrList);
 		}
-		
+		System.out.println("ChController myChgList End...");
 		
 	}
 	

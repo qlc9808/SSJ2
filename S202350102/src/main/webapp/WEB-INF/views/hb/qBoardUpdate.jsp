@@ -18,9 +18,10 @@
 </head>
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
-	<form action="qBoardUpdate" method="post">
+	<form action="qBoardUpdate" method="post" enctype="multipart/form-data">
 		<input type="hidden" value="${board.brd_num  }" name="brd_num">
 		<input type="hidden" value="${board.brd_md  }" name="brd_md">
+		<input type="hidden" value="${board.img  }" name="img">
 		<table border="1">
 			<tr>
 				<td>글 번호 </td>
@@ -37,14 +38,11 @@
 				<td>${board.nick }</td>
 				<td><input type="hidden" value="${board.user_num }" name="user_num"></td>
 			</tr>
-	<%-- 	<tr> 파일들어가야됨 근데 난이도높아서 나중에 ㄱㄱ
-				<td>
-					<input type="file" accept="assets/img/${board.img }">
-				</td>
-			</tr> --%>
 			<tr>
 				<td>내용</td>
 				<td>
+					<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>
+					<%@ include file="/WEB-INF/views/hb/test.jsp" %>
 					<textarea rows="30" cols="30" id="conts" name="conts">
 						${board.conts }
 					</textarea>

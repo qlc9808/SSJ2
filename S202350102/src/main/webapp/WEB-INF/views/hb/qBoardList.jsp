@@ -158,13 +158,26 @@
                             str += "<td>" +img+result.nick + "</td>";
                             str += "<td>"+result.category+"</td>";
                             var formatDate = new Date(result.reg_date);
+                            formatDate.setHours(formatDate.getHours()+9);
                             var day = formatDate.getDate();
                             var month = formatDate.getMonth() + 1;
                             var year = formatDate.getFullYear() % 100;
+        					var hours = formatDate.getHours();
+        					var minutes = formatDate.getMinutes();
+        					
                             day = (day < 10) ? '0' + day : day;
                             month = (month < 10) ? '0' + month : month;
                             year = (year < 10) ? '0' + year : year;
-                            str += "<td>" + year + '-' + month + '-' + day + "</td>";
+        					hours = (hours < 10) ? '0' + hours : hours;
+        					minutes = (minutes < 10) ? '0' + minutes : minutes;
+        					var sysdate = new Date();
+        					if (sysdate.getDate() === formatDate.getDate()) {
+        					    // 날짜가 sysdate와 다르면 시간을 표시
+        					    str += "<td>" + hours + ":" + minutes + "</td>";
+        					} else {
+        					    // 날짜가 sysdate와 같으면 날짜를 표시
+        					    str += "<td>" + year + '-' + month + '-' + day + "</td>";
+        					}
                             str += "<td>" + result.view_cnt + "</td>";
                             str += "</tr>";
                             $('#search-list').append(str);

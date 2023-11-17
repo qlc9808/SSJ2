@@ -15,7 +15,28 @@
 </style>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
+	//yr 작성
+	// 찜하기 기능
+	function chgPick(p_index) {
 	
+		$.ajax({
+			url : "/chgPickPro",
+			type : "POST",
+			data : {chg_id : p_index},
+			dataType : 'json',
+			success : function(chgPickResult) {
+				if(chgPickResult.chgPick > 0) {
+					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+				} else {
+					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+				}
+	
+			},
+			error : function() {
+				alert("찜하기 오류");
+			}
+		});
+	}
 	
 	function sh(){
 		if($("#shList").css("display") == "none" || $("#shList").css("display") == ""){
@@ -38,12 +59,31 @@
 				}
 			}		
 		);
+		
 	})
+	
+	function likePost(brd_num) {
+			  
+			$.ajax({
+			    type: 'POST',
+			    url: '/board/' + brd_num + '/like', // 좋아요 업데이트를 처리할 서버 엔드포인트
+			    data: { brd_num : brd_num }, // 업데이트할 게시물의 ID를 전송
+			    success: function (response) {
+			        // 성공 시 수행할 작업
+			    },
+			    error: function (error) {
+			        // 오류 발생 시 수행할 작업
+			    }
+			});
+		}
+	
+
+		
 </script>
 </head>
 <body>
 <h1>검색</h1>
-
+<div class="container">
 	<div id="searchVar" class="mb-3">
 		<form action="searching">
 			<label for="srch_word">검색</label>
@@ -77,40 +117,172 @@
 	
 	<hr>
 	
-	<div id="popchg">
-		<h3>인기 챌린지</h3>
-		<table>
-			<tr>
-				<td>제목</td><td>신청자</td><td>신청일</td><td>시작일</td>
-			</tr>
-			<c:forEach var="popchg" items="${popchgList }">
-				<tr>
-					<td><a href="chg?chg_id=${popchg.chg_id }">${popchg.title }</a></td>
-					<td>${popchg.nick }</td>
-					<td><fmt:formatDate value="${popchg.reg_date }" pattern="yyyy-MM-dd" /></td>
-					<td><fmt:formatDate value="${popchg.start_date }" pattern="yyyy-MM-dd" /></td>
-				</tr>
-			</c:forEach>
-		</table>
-	</div>
+	<div class="container">
+        
+        
+		  <div class="col-12 col-md-8 col-lg-9">
+			<!-- Header -->
+            <div class="row align-items-center mb-7">
+              <div class="col-12 col-md">
+
+                <!-- Heading -->
+                <h3 class="mb-1">인기 챌린지</h3>
+
+              </div>
+              
+            </div> 
+             
+            <!-- 챌린지 리스트 조회  -->
+            <div class="row">	            
+	            	<!-- Slider -->
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
+							 <c:forEach var="chg" items="${popchgList }">
+			                  <div class="col-6 col-md-3">
+						
+			               <!-- Card -->
+			              <div class="card mb-7">
+			
+			                <!-- Image -->
+			                <div class="card-img">
+			
+								<!-- YR 작성 -->
+								<!-- 찜하기 -->
+								<c:choose>
+									<c:when test="${sessionScope.user_num != null}">
+										<!-- 로그인 한 상태 -->
+										<c:choose>
+											<c:when test="${chg.pickyn > 0}">
+												<!-- 찜하기 있음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:when>
+								
+											<c:otherwise>
+												<!-- 찜하기 없음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+								
+									<c:otherwise>
+										<!-- 로그인 안 한 상태 -->
+										<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button"
+											onclick="location.href='/loginForm'">
+											<i class="fe fe-heart"></i>
+										</button>
+									</c:otherwise>
+								</c:choose>
+			
+			                  <!-- Button -->
+			                  <button class="btn btn-xs w-100 btn-dark card-btn">
+			                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
+			                  </button>
+			
+			                  <!-- Image -->
+			                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
+			                  <c:if test="${chg.thumb != null}">
+			                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+			                  </c:if>
+			                  <c:if test="${chg.thumb == null}">
+			                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+			                  </c:if>
+							  </a>
+			              </div>
+			
+			              <!-- Body -->
+			              <div class="card-body fw-bold text-start px-0 py-2">
+			                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+			                <div class="text-muted"> 
+			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+			                  ~ 
+			                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+			                 </div>
+			                <div class="text-muted">참여인원: ${chg.chlgerCnt}
+			            	</div>
+			              </div>
+							
+			            </div>
+			            	
+					  </div>
+					  
+				</c:forEach>		
+			                		          
+			                </div> <!-- slider -->			
+			
+			</div>
+		
+      </div>
+      	  
+    
+  </div>
 	
 	<hr>
-	<div id="popcommu">
-		<h4>인기 쉐어링</h4>
-		<table>
-			<tr>
-				<td>제목</td><td>작성자</td><td>좋아요</td><td>등록일</td>
-			</tr>
-			<c:forEach var="popShare" items="${popShareList }">
-				<tr>
-					<td><a href="detailCommunity?user_num=${popShare.user_num }&brd_num=${popShare.brd_num }">${popShare.title }</a></td>
-					<td>${popShare.nick }</td>
-					<td>${popShare.like_cnt }</td>
-					<td><fmt:formatDate value="${popShare.reg_date }" pattern="yyyy-MM-dd" /></td>
-				</tr>
-			</c:forEach>
-		</table>
-	</div>
+<section class="pt-7 pb-12">
+      <div class="container-fluid">      
+        <div class="row">
+          
+              
+          <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
+            <div class="row">
+       		<div class="row align-items-center mb-7">
+              <div class="col-12 col-md">
+
+                <!-- Heading -->
+                <h3 class="mb-1">인기 쉐어링</h3>
+
+              </div>
+              
+            </div>
+  <div class="row" id="boardtable">
+    <c:forEach var="board" items="${popShareList}">
+  
+        <div class="col-6 col-md-2" style="padding-left: 8px; padding-right: 8px;">
+             <!-- Slider -->
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
+							 <c:forEach var="board" items="${popShareList}">
+			                  <div class="card mb-7">
+                <div class="card-img">
+                    <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
+                        <i class="fe fe-heart"></i>
+                    </button>
+                   <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
+				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
+					</button>
+
+                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." style="width: 100%; height: 200;">
+					 </div>
+                <div class="card-body fw-bold text-center">
+                    <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                        ${board.title}
+                    </a><p>
+                    <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                        ${board.price}원</a><p>
+                    <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
+                    						<i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
+                    						<i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}
+                    				
+				</div>
+				 
+            </div>
+					  
+				</c:forEach>		
+			                		          
+			                </div> <!-- slider -->
+        </div>
+    </c:forEach>
+</div>
+
+
+           
+
+          </div>
+        </div>
+      </div>
+      </div>
+</section>
 	
 	<hr>
 	
@@ -130,8 +302,8 @@
 			</c:forEach>
 		</table>
 	</div>
-	
-	
+</div>
+		
 <%@ include file="footer.jsp" %>
 </body>
 </html>

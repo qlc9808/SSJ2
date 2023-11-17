@@ -2,12 +2,38 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-     <link rel="stylesheet" href="./style.css">
-    <link href='//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'/>
-     <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+<!-- CSS start -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+<!-- Favicon -->
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+
+<!-- Libs CSS -->
+<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+
+<!-- Theme CSS -->
+<link rel="stylesheet" href="./assets/css/theme.bundle.css" />    
+    
+<!-- JAVASCRIPT -->
+<!-- Map (replace the API key to enable) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnKt8_N4-FKOnhI_pSaDL7g_g-XI1-R9E"></script>
+
+<!-- Vendor JS -->
+<script src="./assets/js/vendor.bundle.js"></script>
+
+<!-- Theme JS -->
+<script src="./assets/js/theme.bundle.js"></script>
+
+<!--  jquery.js-->
+<script src="./js/jquery.js"></script>
+
+
+<!--  font -->
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    body{ font-family: 'Noto Sans KR', sans-serif; } 
+</style>
+
     <title>Insert title here</title>
 </head>
 <script>
@@ -28,7 +54,7 @@
                  success: function (result) {
                      // 서버로부터의 응답을 처리 (예: 성공 메시지 또는 오류 메시지)
                      console.log(result);
-                     // 모달을 닫을 수 있는 코드 추가 (예: $('#editImageModal').modal('hide');)
+                      $('#editImageModal').modal('hide');
                  },
                  error: function (error) {
                      // 오류 처리
@@ -37,7 +63,7 @@
              });
          });
      });
-
+     
      function previewImage(input) {
          var file = input.files[0];
          if (file) {
@@ -375,7 +401,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
                    <!-- Nav -->
                    <nav class="mb-10 mb-md-0" >
                        <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-                           <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
+                           <a class="list-group-item list-group-item-action dropend-toggle " href="/mypage">
                                활동정보
                            </a>
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
@@ -408,7 +434,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editImageModalLabel">프로필 편집</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -429,7 +455,8 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal fade">닫기</button>
+               <button type="button" class="btn btn-dark btn-sm" data-bs-dismiss="modal">닫기</button>
+
                 <button type="button" class="btn btn-dark btn-sm" id="saveBtn">완료</button>
             </div>
         </div>
