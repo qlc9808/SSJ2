@@ -178,5 +178,14 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return result;
 	}
 
+	@Override
+	public int commentAlarm(int brd_num) {
+		int result = 0;
+		System.out.println("commentAlarm Service Start...");
+		result = chBoardDao.commentAlarm(brd_num);
+		
+		return result;
+	}
+
 
 }

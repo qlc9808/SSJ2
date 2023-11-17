@@ -329,6 +329,22 @@ public class ChBoardDaoImpl implements ChBoardDao {
 		return result;
 	}
 
+
+
+	@Override
+	public int commentAlarm(int brd_num) {
+		System.out.println("chBoardDaoImpl commentAlarm Start...");
+		int result =0;		
+		try {
+			result = session.insert("commentAlarm", brd_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("chBoardDaoImpl commentAlarm e.getMessage->" + e.getMessage());
+			result = 0;
+		}
+		return result;
+	}
+
 	
 
 

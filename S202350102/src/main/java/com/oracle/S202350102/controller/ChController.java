@@ -591,7 +591,8 @@ public class ChController {
 	}
 	
 	public void commentAlaram(int brd_num) {
-		
+		System.out.println("Start commentAlaram....");
+		int result = chBoardService.commentAlarm(brd_num);
 	}
 	
 	
