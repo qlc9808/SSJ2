@@ -284,7 +284,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		
 		 <!-- CATEGORIES -->
 
-		<div class="container" style="width : 90%">
+		<div class="container">
 	        <div class="row">
 	        	<div class="col-12">	
 	            	<!-- Heading -->
@@ -303,7 +303,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		            	<!-- Pane -->
 		            	<div class="tab-pane fade show active" id="topSellersTab">
 		            	  <!-- Slider -->
-			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>			
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
 				
 			                  <!-- Item -->
 			            		<div class="col px-4" style="max-width: 200px;">
@@ -313,14 +313,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                      <img class="card-img-top" src="assets/img/products/product-26.jpg" alt="...">
 				
 				                      <!-- Body -->
-				                      <div class="card-body py-4 px-0 text-center">				
-				                        <!-- Heading -->
-				                      	<a class="stretched-link text-body" href="shop.html">
-				                          <h7>챌린지명 <small>(35)</small></h7>
-				                          <h7>1111.11.11~1111.11.11</h7>
-				                          <h7>참여인원 : 111</h7>
-				                        </a>				                        				
-				                      </div>				
+				                <div class="card-body py-4 px-2 text-center">
+								    <!-- Heading -->
+								    <a class="stretched-link text-body" href="shop.html">
+								        <a class="fs-base mb-0">챌린지명(35)</a>
+								        <p class="fs-xs mb-0">1111.11.11~1111.11.11</p>
+								        <p class="fs-base mb-0">참여인원 : 111</p>
+								    </a>
+								</div>
+			
 				                    </div>
 				                    
 			                	</div>	<!-- item -->
@@ -335,7 +336,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
 	
 	
-      <div class="container"style="margin-top: 60px; width : 90%;">
+      <div class="container"style="margin-top: 60px;">
         <div class="row">
           <div class="col-12">
 
