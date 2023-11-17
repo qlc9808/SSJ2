@@ -130,6 +130,53 @@
 				    </div>
 				</div>
 				
+				    <!-- ARRIVALS -->
+    <section class="py-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Heading -->
+            <h2 class="mb-10 text-center">New Arrivals</h2>
+
+          </div>
+        </div>
+      </div>
+      <div class="flickity-page-dots-progress" data-flickity='{"pageDots": true}'>
+
+        <!-- Item -->
+        <div class="col px-4" style="max-width: 300px;">
+          <div class="card">
+
+            <!-- Image -->
+            <div class="card-img">
+
+              <!-- Action -->
+              <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
+                <i class="fe fe-heart"></i>
+              </button>
+
+              <!-- Button -->
+              <button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye me-2 mb-1"></i> Quick View
+              </button>
+
+              <!-- Image -->
+              <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
+
+            </div>
+
+            <!-- Body -->
+            <div class="card-body fw-bold text-center">
+              <a class="text-body" href="product.html">Cotton floral print Dress</a> <br>
+            </div>
+
+          </div>
+        </div>
+       </div>
+    </section>
+        
+				
                 <div class="col-12">
 
                   <!-- 챌린지명 -->
