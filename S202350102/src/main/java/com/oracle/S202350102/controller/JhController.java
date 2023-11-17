@@ -2,6 +2,7 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -607,11 +609,51 @@ public class JhController {
 		return "jh/modify";
 	}
 	
-	/*
-	 * @ResponseBody
-	 * 
-	 * @RequestMapping(value = "recommendCallenge") public List<E>
-	 */
+	@ResponseBody
+	@RequestMapping(value = "recommendCallenge") 
+	public RecommendationResult  recommendCallenge(int chg_md){
+		System.out.println("JhController recommendCallenge Start...");
+		RecommendChg recomChg= new RecommendChg();
+		
+		List<Challenge> chgList = jhCService.recomChgList(chg_md);
+		for (Challenge challenge : chgList) {
+		    System.out.println(challenge.getTitle());
+		}
+		
+		
+		List<RecommendChg> recomChgList = new ArrayList<RecommendChg>();
+		
+		
+		
+		 // chgList의 각 Challenge 객체를 순회하며 데이터를 추출하여 recomChgList에 추가
+	    for (Challenge challenge : chgList) {
+	        recomChg.setChg_id(challenge.getChg_id());
+	        recomChg.setTitle(challenge.getTitle());
+	        recomChg.setThumb(challenge.getThumb());
+	        recomChgList.add(recomChg);
+		    System.out.println(recomChgList.getTitle());
+	    }
+		
+	    
+		
+		return new RecommendationResult (recomChgList, recomChgList.size());
+	}
+	
+	@Data
+	private class RecommendChg {
+		private int 	chg_id;
+		private String 	title;
+		private String	thumb;
+		
+	}
+	 
+	@Data
+	private static class RecommendationResult {
+	    private final List<RecommendChg> recomChgList;
+	    private final int recomChgListSize;
+	}
+	
+	
 	
 	/*
 	 * @ResponseBody

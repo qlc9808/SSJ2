@@ -128,7 +128,7 @@
 	<delete id="jhReviewDelete" parameterType="int">
 		DELETE	FROM board
 		WHERE 	brd_num = #{brd_num}
-		OR		brd_group = #{brd_num}
+		<!-- OR		brd_group = #{brd_num} -->
 	</delete>
 	
 	<update id="jhBoardImgDelete" parameterType="int">
@@ -137,7 +137,20 @@
 		WHERE	brd_num = #{brd_num}
 	</update>
 	
+	<select id="jhRecommendChgList" parameterType="int" resultType="Challenge">
+		SELECT * 
+		FROM (
+		        SELECT  ROWNUM AS rn, a.* 
+		        FROM    (
+		                    SELECT      chg_id, thumb, title
+		                    FROM        challenge
+		                    WHERE       chg_md = #{chg_md}
+		                    ORDER BY    create_date desc
+		                ) a
+		)
+		WHERE rn BETWEEN 1 AND 10 
 	
+	</select>
 	
 	
 	

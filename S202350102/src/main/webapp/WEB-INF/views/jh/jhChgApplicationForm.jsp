@@ -8,33 +8,33 @@
 <meta charset="UTF-8">
 
 <script type="text/javascript">
-	function ajaxChallengeList(chg_md){
+	function ajaxChallengeList(pChg_md){
 		$.ajax({
-			url: '/recommendCallenge';
+			url: '/recommendCallenge',
+			data: {chg_md : pChg_md},
 			dataType:'json',
-			success:function(dept){
-				
-				
-				var jsonStr = JSON.stringify(dept); //stringify는 json객체를 string으로 변환시켜줌
-				alert("jsonStr -> " + jsonStr);
-				$('#dept_list_str').append(jsonStr);
-				str += "<select name='dept'>"; //콤보박스
-				
-				//아래 function은 콤보박스 만들기 위한 것
-				$(dept).each(
-					function(){
-						str2 = "<option value='"+this.deptno + "'>" + this.dname + "</option> ";
-						str += str2;
-					}		
-				)
-				str += "</select><p>"
-				alert("combobox str -> " + str);
-				$('#dept_list_combobox').append(str);
-				}
+			success:function(RecommendationResult){
+				alert("RecommendationResult -> "+RecommendationResult.recomChgListSize);
+				 var text = recomList(RecommendationResult);
+		            $('#hiddenCard').show();
+		            $("#hiddenCard .flickity-page-dots-progress").html(text);
 			}
-		);
+		})
 	}
-
+	
+	 function recomList(RecommendationResult){
+		 var text = "";
+	     for(var i = 0; i < RecommendationResult.recomChgListSize; i++ ){
+			alert("title -> " + RecommendationResult.recomChgList.title );
+	      }
+	      return text;
+	   }
+				
+				
+				
+				
+				
+			
 </script>
 <title>당신만의 챌린지를 신청하세요</title>
 </head>
@@ -119,62 +119,27 @@
 
                 </div>
                 
-				<div class="container">
-				    <div class="row">
-				        <div class="col-12">
-			                <label>추천 챌린지</label>
-				            <div id="imageContainer" class="text-center" style="width: 100%; height: 200px; border: 1px dotted #ccc;">
-				            	<p>카테고리를 먼저 선택해주세요!</p>
-				            </div>
-				        </div>
-				    </div>
-				</div>
+
 				
-				    <!-- ARRIVALS -->
-    <section class="py-12">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
+			    <!-- ARRIVALS -->
+			      <div class="container">
+			        <div class="row">
+			          <div class="col-12">
+			
+			            <!-- Heading -->
+			            <span class="mb-10">이런 챌린지는 어떠세요?</span><p>
+							<div class="alert alert-warning">
+							카테고리를  선택하시면 기존에 개설된 챌린지 리스트가 나옵니다!
+							</div>
+			          </div>
+			        </div>
+			      </div>
+			      <div id="hiddenCard" style="display: none;">
+				      <div class="flickity-page-dots-progress" data-flickity='{"pageDots": true}'>
+				
 
-            <!-- Heading -->
-            <h2 class="mb-10 text-center">New Arrivals</h2>
-
-          </div>
-        </div>
-      </div>
-      <div class="flickity-page-dots-progress" data-flickity='{"pageDots": true}'>
-
-        <!-- Item -->
-        <div class="col px-4" style="max-width: 300px;">
-          <div class="card">
-
-            <!-- Image -->
-            <div class="card-img">
-
-              <!-- Action -->
-              <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
-                <i class="fe fe-heart"></i>
-              </button>
-
-              <!-- Button -->
-              <button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" data-bs-target="#modalProduct">
-                <i class="fe fe-eye me-2 mb-1"></i> Quick View
-              </button>
-
-              <!-- Image -->
-              <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
-
-            </div>
-
-            <!-- Body -->
-            <div class="card-body fw-bold text-center">
-              <a class="text-body" href="product.html">Cotton floral print Dress</a> <br>
-            </div>
-
-          </div>
-        </div>
-       </div>
-    </section>
+				       </div>
+			       </div>
         
 				
                 <div class="col-12">
@@ -204,23 +169,16 @@
                 
                 
 
-                <div class="col-12 col-md-6">
-
-                  <!--  -->
-                  <div class="form-group">
-                    <label class="form-label" for="create_date">
-                      	시작 날짜
-                    </label>
-                    <input class="form-control form-control-sm" name="create_date" id="create_date" type="date" required>
-                  </div>
-
-                </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12">
                   <!--  -->
                   <div class="form-group">
                     <label class="form-label" for="end_date">
                      	종료 날짜
                     </label>
+                    <div class="alert alert-warning">
+						관리자가 승인하면 그때부터 챌린지가 시작됩니다!<br>
+						승인까지 3~5일이 소요되니 이 점 유의하시고 종료 날짜를 선택해 주시길 바랍니다.
+					</div>
                     <input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required>
                   </div>
 
@@ -239,14 +197,14 @@
                   </div>
 
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12">
                   <!--  -->
                   <div class="form-group">
                     <label class="form-label" for="freq">
                      	인증 빈도
                     </label>
 					<select class="form-select" id="freq" name="freq" required="required">
-				    <option selected value="" selected disabled hidden>일주일 인증할 횟수</option>
+				    <option selected value="" selected disabled hidden>일주일에 인증할 횟수를 선택해 주세요</option>
 				    <option value="1">1일</option>
 				    <option value="2">2일</option>
 				    <option value="3">3일</option>
@@ -291,19 +249,34 @@
 
                     <!-- Label -->
                     <label class="form-label">공개 여부</label>
-
                     <!-- Inputs -->
-                    <div>
-
-                      <!-- Male -->
-                      <input class="btn-check" type="radio" name="chg_public" id="public" checked>
-                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
-
-                      <!-- Female -->
-                      <input class="btn-check" type="radio" name="chg_public" id="private">
-                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
-
-                    </div>
+                    <c:choose>
+                    	<c:when test="{user.status_md = 101}">
+	                    	<div>
+		                      <!-- Male -->
+		                      <input class="btn-check" type="radio" name="chg_public" id="public" checked>
+		                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
+		
+		                      <!-- Female -->
+		                      <input class="btn-check" type="radio" name="chg_public" id="private">
+		                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
+		
+		                    </div>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<p>멤버십 가입자만 공개/비공개 설정을 할 수 있습니다~!
+	                    	<div>
+		                      <!-- Male -->
+		                      <input class="btn-check" type="radio" name="chg_public" id="public" disabled>
+		                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
+		
+		                      <!-- Female -->
+		                      <input class="btn-check" type="radio" name="chg_public" id="private" disabled>
+		                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
+		                    </div>
+                    	</c:otherwise>
+                    </c:choose>
+                    
 
                   </div>
 
@@ -317,7 +290,15 @@
                     <label class="form-label" for="priv_pswd">
                       	비밀번호
                     </label>
-					<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  required="required">
+                     <c:choose>
+                    	<c:when test="{user.status_md = 101}">
+							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  required="required">
+					 	</c:when>
+					
+                     	<c:otherwise>
+							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  disabled required="required">
+					 	</c:otherwise>
+                    </c:choose>
                   </div>
 
                 </div>

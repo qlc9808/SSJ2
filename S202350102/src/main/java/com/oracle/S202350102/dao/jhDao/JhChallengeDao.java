@@ -39,7 +39,9 @@ public interface JhChallengeDao {
 
 	int 			reviewDelete(int brd_num);
 
-	int 			boardImgDelete(int brd_num);    
+	int 			boardImgDelete(int brd_num);
+
+	List<Challenge> recomChgList(int chg_md);    
    
 }    
   
