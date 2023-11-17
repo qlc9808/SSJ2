@@ -79,7 +79,7 @@ public class BgDaoImpl implements BgDao {
 		int updateCount = 0;
 		
 		try {
-			updateCount = session.update("certBoardUpdate", board);
+			updateCount = session.update("updateCertBrd", board);
 		} catch (Exception e) {
 			System.out.println("BgDaoImpl updateCertBrd Exception -> "+e.getMessage());
 		}

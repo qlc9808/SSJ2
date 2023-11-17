@@ -48,9 +48,13 @@
 	</insert>
 	
 	
-	<update id="certBoardUpdate" parameterType="Board">
+	<update id="updateCertBrd" parameterType="Board">
 		Update	board
-		Set		title = #{title}, conts = #{conts}
+		Set		title = #{title}, 
+				conts = #{conts}
+				<if test="img != null">
+					,img = #{img}
+				</if>
 		Where	brd_num = #{brd_num}
 	</update>
 	
@@ -58,6 +62,7 @@
 	<delete id="deleteCertBrd" parameterType="int">
 		Delete From	board
 		Where		brd_num = #{brd_num}
+		Or			brd_group = #{brd_num}
 	</delete>
 	
 	

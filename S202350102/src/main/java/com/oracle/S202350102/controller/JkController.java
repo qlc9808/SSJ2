@@ -256,6 +256,7 @@ public class JkController {
 		@PostMapping("/updateSharing2")
 		public String updateSharing2(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
 		    System.out.println("JkController updateSharing2 start...");
+		    
 		    int result = 0;
 			ServletContext servletContext = request.getSession().getServletContext();
 			String realPath = servletContext.getRealPath("/upload/");

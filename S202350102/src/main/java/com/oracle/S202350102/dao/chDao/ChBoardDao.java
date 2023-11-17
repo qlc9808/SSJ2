@@ -27,5 +27,6 @@ public interface ChBoardDao {
 	List<Board> mychgBoardList(Board board);
 	int 		pageMove(Board board);
 	int 		readAllcmt(int user_num);
+	int 		commentAlarm(int brd_num);
 	
 }

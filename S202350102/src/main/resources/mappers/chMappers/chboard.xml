@@ -204,4 +204,10 @@
 		WHere user_num = #{user_num}
 	</update>
 	
+	<insert id="commentAlarm" parameterType="int">
+		{
+			call COMMENT_ALARM(#{brd_num, mode=IN,	jdbcType=INTEGER})
+		}	
+	</insert>
+	
 </mapper>

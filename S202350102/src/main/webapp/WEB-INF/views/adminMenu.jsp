@@ -10,14 +10,14 @@
  <div class="container">
         <div class="row">
           <div class="col-12 text-center">
-
+			
             <!-- Heading -->
-            <h3 class="mb-10">쉐어링 게시판</h3>
+            <div class="pt-10 pb-5"><h3 class="mb-10">관리자 전용 게시판</h3></div>
 
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-md-3">
+          <div class="col-12 col-md-2">
 
             <!-- Nav -->
             <nav class="mb-10 mb-md-0">

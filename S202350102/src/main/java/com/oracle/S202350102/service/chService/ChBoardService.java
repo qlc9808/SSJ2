@@ -24,6 +24,7 @@ public interface ChBoardService {
 	List<Board> myCommuList(Board board);
 	int 		pageMove(Board board);
 	int 		readAllcmt(int user_num);
+	int 		commentAlarm(int brd_num);
 	
 	
 }

@@ -5,10 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>관리자 메인</title>
 </head>
 <body>
 <%@ include file="adminMenu.jsp" %>
+<h4>관리자 메인페이지를 만들어도되고 안만들고 바로 회원관리로 이동 해도됨(태현)</h4>
 <!-- 여기에 코딩시작 -->
 
 </body>
