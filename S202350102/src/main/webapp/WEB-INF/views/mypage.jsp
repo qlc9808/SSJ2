@@ -264,79 +264,14 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
 </style>
 <body>
-<div class="container">
-    <div class="row profile">
-		<div class="col-md-3">
-			<div class="profile-sidebar">
-				<!-- SIDEBAR USERPIC -->
-				<div class="profile-userpic">
-					<img src="upload/프로필기본.png">
-				</div>
-				<!-- END SIDEBAR USERPIC -->
-				<!-- SIDEBAR USER TITLE -->
-				<div class="profile-usertitle">
-					<div class="profile-usertitle-name">
-						${sessionScope.user_num }
-					</div>
-					<div class="profile-usertitle-job">
-						level 1
-					</div>
-				</div>
-				<!-- END SIDEBAR USER TITLE -->
+ <div class="container">
+         <div class="row profile">
+            <div class="col-md-3">
+                <%@ include file="mypageMenu.jsp" %>
+            </div>
+             <div class="col-md-9 profile-form">
+<!-- 필수!! -->
 
-
-           <div class="portlet light bordered">
-                                                <!-- STAT -->
-                                                <div class="row list-separated profile-stat">
-                                                    <div class="col-md-4 col-sm-4 col-xs-6">
-                                                        <div class="uppercase profile-stat-title"> 37 </div>
-                                                        <div class="uppercase profile-stat-text"> 팔로우 </div>
-                                                    </div>
-                                                    <div class="col-md-4 col-sm-4 col-xs-6">
-                                                        <div class="uppercase profile-stat-title"> 51 </div>
-                                                        <div class="uppercase profile-stat-text"> 팔로잉 </div>
-                                                    </div>
-                                                    <div class="col-md-4 col-sm-4 col-xs-6">
-                                                        <div class="uppercase profile-stat-title"> 61 </div>
-                                                        <div class="uppercase profile-stat-text"> 내가 쓴 글</div>
-                                                    </div>
-                                                </div>
-                                                
-                                                 <div class="col-12 col-md-16">
-
-									            <!-- Nav -->
-									          <nav class="mb-10 mb-md-0" >
-									              <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-									               <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-									                  	활동정보
-									                </a>
-									                <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-									                  	챌린지 관리
-									                </a>
-									                <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
-									                 	팔로우 관리
-									                </a>
-									                <a class="list-group-item list-group-item-action dropend-toggle " href="/subscriptionManagement">
-									                 	구독 관리
-									                </a>
-									                <a class="list-group-item list-group-item-action dropend-toggle " href="/sharingManagement">
-									                 	쉐어링 관리
-									                </a>
-									             
-									               <a class="btn w-100 btn-dark mb-2" href="/userDetail" style=" margin-top: 50px;">	회원정보수정
-									               </a>
-									                
-									              </div>
-									            </nav>
-									 			<!-- Nav End -->
-									          </div>
-                                                <!-- END STAT -->
-                                               </div>                   
-                                           
-        
-        
-			</div>
-		</div>
 		 <!-- CATEGORIES -->
 
       <div class="container" style="width : 75%">
@@ -645,7 +580,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 </div>
 
 </div>
-
+</div>
     <button type="button" class="btn btn-primary" onclick="location.href='/chgCommManagement'">챌린지 카테고리 관리</button><p>
     <button type="button" class="btn btn-primary" onclick="location.href='/myConts'">내가 쓴 글 </button><p>
 </body>

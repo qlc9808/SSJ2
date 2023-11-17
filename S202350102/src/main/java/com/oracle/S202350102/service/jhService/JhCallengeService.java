@@ -52,10 +52,13 @@ public interface JhCallengeService {
 	int 			reviewUpdate(Board board);
 
 
-	void 			reviewDelete(int brd_num); 
+	int 			reviewDelete(int brd_num);
+
+
+	int 			boardImgDelete(int brd_num); 
  
       
-      
+       
  
 
 }
