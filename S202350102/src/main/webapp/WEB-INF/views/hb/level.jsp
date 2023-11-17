@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="css/level.css">
 </head>
 <body>
-<c:import url="/WEB-INF/views/header4.jsp"/>
 
        	<button id="modalOpenBtn">열기</button>
 		<div id="modal">
@@ -92,6 +91,5 @@
 	});
 
 </script>
-<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>
