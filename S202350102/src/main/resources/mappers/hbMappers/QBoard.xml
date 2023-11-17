@@ -41,20 +41,20 @@
 	
 	<update id="qBoardUpdate" parameterType="Board">
 		UPDATE board 
-		SET brd_md = #{brd_md}, title = #{title}, conts = #{conts}
+		SET brd_md = #{brd_md}, title = #{title}, conts = #{conts}, img = #{img}
 		WHERE brd_num = #{brd_num}
 	</update>
 	
 	<insert id="qBoardInsert" parameterType="Board">
 		INSERT INTO board 
-			(brd_num, brd_lg, brd_md, title, conts, reg_date, user_num, brd_group, brd_step, view_cnt) 
+			(brd_num, brd_lg, brd_md, title, conts, reg_date, user_num, brd_group, brd_step, view_cnt, img) 
 		VALUES
-			(brd_num_seq.nextval, 400, #{brd_md}, #{title}, #{conts}, sysdate, #{user_num}, brd_num_seq.currval, 0, 0)
+			(brd_num_seq.nextval, 400, #{brd_md}, #{title}, #{conts}, sysdate, #{user_num}, brd_num_seq.currval, 0, 0, #{img})
 	</insert>
 	
 	<delete id="qBoardDelete" parameterType="int">
 		DELETE Board 
-		WHERE brd_num = #{brd_num}
+		WHERE brd_group = #{brd_num}
 	</delete>
 	
 	<update id="qReadCount" parameterType="int">
@@ -63,11 +63,17 @@
 		WHERE brd_num = #{brd_num}
 	</update>
 	
-	<select id="totalQBoard" resultType="int">
-		SELECT count(*) 
+	<select id="totalQBoard" parameterType="User1" resultType="int">
+		SELECT count(*)
 		FROM board 
 		where brd_lg = 400
 		AND   brd_step = 0
+ 		<choose>
+			<when test="status_md==102"></when>
+			<otherwise>
+				AND   user_num = #{user_num}
+			</otherwise>
+		</choose>
 	</select>
 	
 	

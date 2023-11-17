@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
 		
 		int tot_exp, req_exp, remain_exp, user_exp, percentage = 0;
 		float data1, data2, data3 = 0;
-		
 		if ( user_num != 0 ) {
 			for (int i = 0; i < userLevelInfoList.size(); i++) {
 				user_exp = user1.getUser_exp();
@@ -43,8 +42,14 @@ public class UserServiceImpl implements UserService {
 					data2 = (float)(req_exp+100);
 					data3 = (float)(data1/data2);
 					percentage = (int)(data3*100);
-					user1.setPercentage(percentage);
-					user1.setRemain_exp(remain_exp);
+					
+					if ( userLevelInfoList.get(i).getUser_level() == 11 ) {
+						user1.setPercentage(100);
+						user1.setRemain_exp(0);
+					} else {
+						user1.setRemain_exp(remain_exp);
+						user1.setPercentage(percentage);
+					}
 				}
 			}
 		} else {
@@ -115,7 +120,12 @@ public class UserServiceImpl implements UserService {
 					data2 = (float)(req_exp+100);
 					data3 = (float)(data1/data2);
 					percentage  = (int)(data3*100);
-					boardList.get(i).setPercentage(percentage);
+					if ( boardList.get(i).getUser_level() == 11) {
+						boardList.get(i).setPercentage(100);
+					} else {
+						boardList.get(i).setPercentage(percentage);
+					}
+					
 				}
 			}
 		}

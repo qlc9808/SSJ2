@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.oracle.S202350102.dao.chDao.ChChallengeDao;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,34 @@ public class ChChallengeServiceImpl implements ChChallengeService {
 		result = chChallengeService.chgDeleteChg(ctn);
 		
 		return result;
+	}
+
+
+
+	@Override
+	public List<Challenge> myChgList(int user_num) {
+		System.out.println("ChChallengeServiceImpl myChgList Start...");
+		List<Challenge> myChgList = null;
+		
+		myChgList = chChallengeService.myChgList(user_num);
+		
+		System.out.println("ChChallengeServiceImpl myChgList myChgList->" + myChgList.size());
+		
+		return myChgList;
+	}
+
+
+
+	@Override
+	public List<Challenger> myChgrList(int user_num) {
+		System.out.println("ChChallengeServiceImpl myChgList Start...");
+		List<Challenger> myChgrList = null;
+		
+		myChgrList = chChallengeService.myChgrList(user_num);
+		
+		System.out.println("ChChallengeServiceImpl myChgList myChgList->" + myChgrList.size());
+		
+		return myChgrList;
 	}
 
 }

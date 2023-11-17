@@ -3,6 +3,7 @@ package com.oracle.S202350102.dao.hbDao;
 import java.util.List;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.User1;
 
 public interface QBoardDao {
 	List<Board>	qBoardList(Board board);
@@ -11,7 +12,7 @@ public interface QBoardDao {
 	int 				qBoardDelete(int brd_num);
 	void 				readCnt(int brd_num);
 	int 				qBoardUpdate(Board board);
-	int 				totalQBoard();
+	int 				totalQBoard(User1 user1);
 	List<Board> 	qboardListSearch(Board board);
 	int 				qBoardCommentWrite(Board board);
 	List<Board> 	qBoardCommentList(int brd_group);

@@ -242,7 +242,7 @@
 		                console.log('Message:', message);
 
 		                if (result.status === 'success') {
-		                    alert('신청이 완료되었습니다 마이페이지에서 쉐어링 승인상태를 확인해주세요.');
+		                    alert('신청이 완료되었습니다 마이페이지에서 승인상태를 확인해주세요.');
 		                } else {
 		                    alert('신청 저장에 실패했습니다.');
 		                }

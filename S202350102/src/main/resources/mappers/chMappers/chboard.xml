@@ -64,15 +64,18 @@
 	</select>
 	
 	<select id="popShareList" resultType="Board">
-		Select ROWNUM, a.*
-		From    (Select b.*, u.nick
-			     From  board b, user1 u
-			     Where brd_lg = 700
-			     and   b.user_num = u.user_num
-			     and   b.brd_md = 102
-			     and   b.like_cnt is not null
-			     ORDER BY like_cnt DESC) a
-		WHERE rownum BETWEEN 1 and 5   
+		SELECT ROWNUM, b.*
+		FROM (Select b.*, a.replyCount
+		        From (Select count(*) replyCount, brd_Group
+		                From board
+		                Where brd_step >0
+		                Group by brd_Group
+		                Order by replyCount desc) a
+		        JOIN Board b on b.brd_num = a.brd_Group 
+		        WHERE b.like_cnt is not null
+		        and   b.brd_md = 102
+		        ORDER BY b.like_cnt DESC) b
+		WHERE rownum BETWEEN 1 and 5
 	</select>
 	
 	
@@ -203,5 +206,11 @@
 		set send_date = 2, read_date = sysdate
 		WHere user_num = #{user_num}
 	</update>
+	
+	<insert id="commentAlarm" parameterType="int">
+		{
+			call COMMENT_ALARM(#{brd_num, mode=IN,	jdbcType=INTEGER})
+		}	
+	</insert>
 	
 </mapper>

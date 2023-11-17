@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -91,10 +92,10 @@ public class QBoardDaoImpl implements QBoardDao {
 
 
 	@Override
-	public int totalQBoard() {
+	public int totalQBoard(User1 user1) {
 		int total = 0;
 		try {
-			total = session.selectOne("totalQBoard");
+			total = session.selectOne("totalQBoard", user1);
 		} catch (Exception e) {
 			System.out.println("totalQBoard dao sql exception->"+e.getMessage());
 		}
