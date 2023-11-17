@@ -304,13 +304,7 @@ function listCommentSharing() {
     </script>
 
  <!--댓글작성-->
-<c:choose>
-    <c:when test="${empty sessionScope.user_num}">
-        <p><p>
-        <h5>댓글을 작성하실 분은 로그인을 해주세요!</h5>
-    </c:when>
-    
-    <c:otherwise> 
+
  <!-- REVIEWS -->
 
     <section class="pt-9 pb-8" id="reviews">
@@ -318,9 +312,11 @@ function listCommentSharing() {
         <div class="row">
           <div class="col-12">
                 <!-- Button -->
-                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
-                  	댓글 작성
-                </a>
+				  <c:if test="${not empty sessionScope.user_num}">
+				    <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
+				       댓글 작성
+				    </a>
+				</c:if>
               </div>
             </div>
             <!-- New Review -->
@@ -355,8 +351,7 @@ function listCommentSharing() {
 </div>
 </section>
 <!-- Reviews -->
-  </c:otherwise> 
-</c:choose> 
+
  <!-- 댓글 목록이 나타날 창  -->
 
 		<div class="container">

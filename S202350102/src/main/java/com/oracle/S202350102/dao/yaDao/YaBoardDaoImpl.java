@@ -10,6 +10,7 @@ import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
+
 @Repository
 @RequiredArgsConstructor
 public class YaBoardDaoImpl implements YaBoardDao {
