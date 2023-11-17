@@ -284,7 +284,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		
 		 <!-- CATEGORIES -->
 
-		<div class="container" style="width : 75%">
+		<div class="container" style="width : 90%">
 	        <div class="row">
 	        	<div class="col-12">	
 	            	<!-- Heading -->
@@ -307,6 +307,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				
 			                  <!-- Item -->
 			            		<div class="col px-4" style="max-width: 200px;">
+				                    
 				                    <div class="card">				
 				                      <!-- Image -->
 				                      <img class="card-img-top" src="assets/img/products/product-26.jpg" alt="...">
@@ -316,11 +317,13 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                        <!-- Heading -->
 				                      	<a class="stretched-link text-body" href="shop.html">
 				                          <h7>챌린지명 <small>(35)</small></h7>
+				                          <h7>1111.11.11~1111.11.11</h7>
+				                          <h7>참여인원 : 111</h7>
 				                        </a>				                        				
-				                      </div>
-				
+				                      </div>				
 				                    </div>
-			                	</div>	
+				                    
+			                	</div>	<!-- item -->
 			                		          
 			                </div> <!-- slider -->
 		
@@ -332,7 +335,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
 	
 	
-      <div class="container"style="margin-top: 60px; width : 75%;">
+      <div class="container"style="margin-top: 60px; width : 90%;">
         <div class="row">
           <div class="col-12">
 
@@ -340,10 +343,10 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
             <h5 class="mb-4">내가 쓴 글 </h5>
             <!-- Nav -->
             <nav class="nav justify-content-center mb-10">
-              <a class="nav-link active" href="#myCert-list" data-bs-toggle="tab">인증글</a>
-              <a class="nav-link" href="#myReview-list" data-bs-toggle="tab">후기글</a>
-              <a class="nav-link" href="#myCommu-list" data-bs-toggle="tab">자유글</a>
-              <a class="nav-link" href="#myShare-list" data-bs-toggle="tab">쉐어링</a>
+              <a class="nav-link px-100 active" href="#myCert-list" data-bs-toggle="tab">인증글</a>
+              <a class="nav-link px-100 " href="#myReview-list" data-bs-toggle="tab">후기글</a>
+              <a class="nav-link px-100 " href="#myCommu-list" data-bs-toggle="tab">자유글</a>
+              <a class="nav-link px-100 " href="#myShare-list" data-bs-toggle="tab">쉐어링</a>
             </nav>
 
             <!-- Content -->
