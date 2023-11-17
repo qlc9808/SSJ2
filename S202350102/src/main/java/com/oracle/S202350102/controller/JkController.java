@@ -43,6 +43,7 @@ import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
 import com.oracle.S202350102.service.main.Level1Service;
+import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
@@ -60,6 +61,7 @@ public class JkController {
 	private final JkMypageService jms;
 	private final ChController chcont;
 	private final Level1Service ls;
+	private final UserService us;
 	
 	
 	//좋아요 기능 컨트롤러
@@ -539,8 +541,7 @@ public class JkController {
 	    }
 	    user1.setUser_num(user_num);
 	    List<Challenge> myChgList = jms.myChgList(chg);
-	    User1 user1FromDB = jbs.userSelect(user_num);
-	    
+	    User1 user1FromDB = us.userSelect(user_num);
 	    
 	    
 	    user1.setUser_num(user_num);
