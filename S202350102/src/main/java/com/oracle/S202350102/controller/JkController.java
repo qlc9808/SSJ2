@@ -516,21 +516,7 @@ public class JkController {
 		     }
 		 }
 	
-	
-	
-//	@RequestMapping("/followManagement")
-//	public String challengeManagement() {
-//		System.out.println("JkController followManagement start...");
-//		
-//		return "jk/followManagement";
-//	}
-	
-	@RequestMapping("/sharingManagement")
-	public String sharingManagement() {
-		System.out.println("JkController sharingManagement start...");
-		
-		return "jk/sharingManagement";
-	}
+
 	
 	@RequestMapping("/subscriptionManagement")
 	public String subscriptionManagementManagement() {

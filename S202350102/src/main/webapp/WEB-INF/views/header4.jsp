@@ -84,6 +84,10 @@
               <a class="nav-link" href="/introduce">서비스 소개</a>
             </li>
             
+            <li class="nav-item">
+              <a class="nav-link" href="/introduce">관리자</a>
+            </li>
+            
           </ul>
 
           <!-- Nav -->
