@@ -372,9 +372,9 @@ public class ThController {
 		return "th/thChgList";
 	}
     
-    @GetMapping(value = "/listAllUser")
-    public String listAllUser(User1 user1, String currentPage, Model model) {
-    	System.out.println("thController listAllUser Start...");
+    @GetMapping(value = "/listUserByAdmin")
+    public String listUserByAdmin(User1 user1, String currentPage, Model model) {
+    	System.out.println("thController listUserByAdmin Start...");
     	// 전체 유저수 Count
     	int totalUser = us1.totalUser();
     	
@@ -393,7 +393,7 @@ public class ThController {
     	model.addAttribute("user1List", user1List);
     	model.addAttribute("page"	  ,	page );
     	
-    	return	"th/listAllUser";
+    	return	"th/listUserByAdmin.jsp";
     }
 
 }

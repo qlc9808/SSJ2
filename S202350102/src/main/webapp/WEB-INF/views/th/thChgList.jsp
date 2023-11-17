@@ -126,7 +126,7 @@
 			
 		  <!-- 전체 회원 조회 버튼 -->
 			<div style="text-align: center;">
-	            <button class="btn btn-primary mb-1" onclick="location.href='/listAllUser'">
+	            <button class="btn btn-primary mb-1" onclick="location.href='/listUserByAdmin'">
 	 				전체 회원 조회 <i class="fe fe-arrow-right ms-2"></i>
 				</button>
 			</div>
