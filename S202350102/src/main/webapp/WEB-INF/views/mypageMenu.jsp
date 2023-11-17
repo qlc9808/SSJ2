@@ -346,7 +346,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						${user1.nick } 님 
 					</div>
 					<div class="profile-usertitle-job">
-					level : ${user1.user_level} &nbsp;&nbsp;&nbsp;&nbsp; 누적 경험치 : ${user1.user_exp}exp 
+						<%@ include file="hb/level.jsp" %>
 					</div>
 					<div class="row list-separated profile-stat">
                    <div class="col-md-4 col-sm-4 col-xs-6">
