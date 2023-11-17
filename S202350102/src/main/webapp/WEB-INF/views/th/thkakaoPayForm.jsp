@@ -6,6 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>구독하기</title>
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    body{ font-family: 'Noto Sans KR', sans-serif;} 
+</style>
 </head>
 <body>
 
@@ -22,27 +26,6 @@
 
     <!-- PROMO -->
 <!--     {{> misc/promo}} -->
-
-    <!-- BREADCRUMB (Home > Women's Clothing 부분 -->
-<!--     <nav class="my-5"> -->
-<!--       <div class="container"> -->
-<!--         <div class="row"> -->
-<!--           <div class="col-12"> -->
-
-<!--             Breadcrumb -->
-<!--             <ol class="breadcrumb mb-0 fs-xs text-gray-400"> -->
-<!--               <li class="breadcrumb-item"> -->
-<!--                 <a class="text-reset" href="#">Home</a> -->
-<!--               </li> -->
-<!--               <li class="breadcrumb-item active"> -->
-<!--                 Women's Clothing -->
-<!--               </li> -->
-<!--             </ol> -->
-
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </nav> -->
 
     <!-- HEADER -->
     <div class="pt-10">
