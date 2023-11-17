@@ -10,8 +10,8 @@ public interface ThChgService {
 
 	int				 	totalChg();
 	List<Challenge> 	listChg(Challenge chg);
-	int					totalChgIng();
-	int 				totalChgFin();
+	int					totalChgIng(Challenge chg);
+	int 				totalChgFin(Challenge chg);
 	List<Challenge> 	listEndChg(Challenge chg);
 	List<Comm> 			listChgCategory();
 	

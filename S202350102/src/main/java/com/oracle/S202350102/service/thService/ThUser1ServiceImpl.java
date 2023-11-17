@@ -130,6 +130,24 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 	}
 
 
+	@Override
+	public int totalUser() {
+		System.out.println("ThUser1ServiceImpl totalUser Start...");
+		int totUserCnt = ud1.totalUser();
+		System.out.println("ThUser1ServiceImpl totalUser totalUserCnt --> " + totUserCnt);
+		return totUserCnt;
+	}
+
+
+	@Override
+	public List<User1> listUser(User1 user1) {
+		System.out.println("ThUser1ServiceImpl listUser Start...");
+		List<User1> userList = ud1.listUser(user1);
+		System.out.println("ThUser1ServiceImpl listUser userList.size() -->" + userList.size());
+		return userList;
+	}
+
+
 	
 
 }

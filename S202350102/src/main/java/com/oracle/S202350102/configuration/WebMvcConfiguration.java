@@ -14,6 +14,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 													   .addPathPatterns("/reviewPost")
 													   .addPathPatterns("/writeCertBrd")
 													   .addPathPatterns("/commentInsert")
+													   .addPathPatterns("/chgApplicationForm")
 													   ;
 	}
 }

@@ -272,14 +272,17 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	//마이페이지 - 내가 올린 쉐어링 게시글의 참가자리스트 조회
 	@Override
 	public List<SharingList> sharingParticipantsList(int brd_num) {
-		System.out.println("YaBoardDaoImpl myUploadSharingList start...");
+		System.out.println("YaBoardDaoImpl  sharingParticipantsList sharingParticipantsInfo start...");
 		List<SharingList> sharingParticipantsList = null;
 		try {
 			sharingParticipantsList = session.selectList("sharingParticipantsInfo", brd_num);
+			
 			System.out.println("YaBoardDaoImpl sharingParticipantsList.size()(?"+sharingParticipantsList.size());
+			System.out.println("sharingParticipantsList->"+sharingParticipantsList );
+		
 		} catch (Exception e) {
 			System.out.println("YaBoardDaoImpl sharingParticipantsList e.getMessage()?"+e.getMessage());
-		}
+		}	
 		return sharingParticipantsList;
 	}
 

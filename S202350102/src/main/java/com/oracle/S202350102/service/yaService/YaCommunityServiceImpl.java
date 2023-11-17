@@ -190,7 +190,7 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		} catch (Exception e) {
 			System.out.println("YaCommunityServiceImpl sharingParticipantsList e.getMessage?"+e.getMessage());
 		}
-		return null;
+		return sharingParticipantsList;
 	}
 
 
