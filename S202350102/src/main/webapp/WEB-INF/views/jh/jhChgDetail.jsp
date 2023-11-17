@@ -164,6 +164,20 @@
 		});
 	}
 
+	// 좋아요 버튼
+	function likePro(p_index) {
+		var brd_num = $('#brd_num' + p_index).val();
+		alert("brd_num -> " + brd_num);
+		$('#like' + p_index).addClass('btn');  // 바뀌는거 확인됨
+		$('#like' + p_index).text("싫어요");	// 바뀌는거 확인됨
+
+		
+		
+
+		// class="fa-solid fa-thumbs-up"	// 좋아요 눌렀을 때
+		// class="fa-regular fa-thumbs-up" 	// 좋아요 안 눌렀을 때
+	}
+
 
 	// 쪽지보내기 버튼
 	function sendMessage() {
@@ -1197,7 +1211,6 @@
 						                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
 						                  	<input type="hidden" id="brd_step${status.index}"	value="${certBoard.brd_step }">
                                             <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
-					   						                  	
 						                  	
 						                  	<div class="col-5 col-md-3 col-xl-2">
 												<!-- 인증샷 Image -->
@@ -1241,14 +1254,47 @@
 						                        <div class="col-auto me-auto">
 						                        
 							                        <!-- Rate -->
-							                        <div class="rate">
-							                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-					                            		좋아요 <i class="fe fe-thumbs-up"></i>
-							                          </a>
-							                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-					                            		태우기 <i class="fa-solid fa-fire"></i>
-							                          </a>
-							                        </div>
+													<div class="rate">
+														<c:choose>
+															<c:when test="${sessionScope.user_num != null }">
+															<!-- 로그인 한 상태 -->
+
+																<%-- <c:choose>
+																	<c:when test="${certBoard.like_cnt > 0}"> --%>
+																	<!-- 좋아요 눌렀을 때 -->
+																		<!-- <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button" onclick="likePro()">
+																			좋아요 <i class="fa-solid fa-thumbs-up"></i>
+																		</a> -->
+																	<%-- </c:when>
+
+																	<c:otherwise> --%>
+																	<!-- 좋아요 안 눌렀을 때 -->
+																
+																	
+																<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})" id="like${status.index}">
+																	좋아요 <i class="fa-regular fa-thumbs-up"></i>												
+																</a>
+																
+																
+																	<%-- </c:otherwise>
+
+																</c:choose> --%>
+
+															</c:when>
+															
+															<c:otherwise>
+															<!-- 로그인 안 한 상태 -->
+																<a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+																	좋아요 <i class="fa-regular fa-thumbs-up"></i>
+																</a>
+															</c:otherwise>
+
+														</c:choose>
+
+														<a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+															태우기 <i class="fa-solid fa-fire"></i>
+														</a>
+													</div>
 							                        
 						                        </div>
 						                        
@@ -1358,7 +1404,7 @@
 								                      		<!-- Rate -->
 									                        <div class="rate">
 									                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-							                            		좋아요 <i class="fe fe-thumbs-up"></i>
+							                            		좋아요 <i class="fa-regular fa-thumbs-up"></i>
 									                          </a>
 									                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
 							                            		태우기 <i class="fa-solid fa-fire"></i>
@@ -1694,7 +1740,7 @@
 						                    
 						                    	<div class="rate">
 												  <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-											    	좋아요 <i class="fe fe-thumbs-up"></i>
+											    	좋아요 <i class="fa-regular fa-thumbs-up"></i>
 												  </a>
 												  <a class="rate-item" data-toggle="vote" data-count="0" href="#" role="button">
 											    	태우기 <i class="fa-solid fa-fire"></i>
