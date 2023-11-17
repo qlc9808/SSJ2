@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.oracle.S202350102.dao.hbDao.QBoardDao;
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.User1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -75,8 +76,8 @@ public class QBoardServiceImpl implements QBoardService {
 	}
 
 	@Override
-	public int totalQBoard() {
-		int total = qbd.totalQBoard();
+	public int totalQBoard(User1 user1) {
+		int total = qbd.totalQBoard(user1);
 		return total;
 	}
 
