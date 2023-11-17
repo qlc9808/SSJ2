@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 import com.oracle.S202350102.service.yrService.YrFollowingService;
@@ -30,6 +32,7 @@ public class YrController {
 	private final YrChallengerService 		ycs;
 	private final YrFollowingService 		yfis;
 	private final YrChallengePickService 	ycps;
+	private final YrBoardLikeService		ybls;
 	
 //	@RequestMapping(value = "checkBoard")
 //	public String checkBoard() {
@@ -181,6 +184,28 @@ public class YrController {
 		return chgPickResult;
 	}
 	
-	
+	// 좋아요 기능
+	@ResponseBody
+	@RequestMapping(value = "likePro")
+	public int likePro(@RequestParam("brd_num") int brd_num
+					, HttpSession session) {
+
+		System.out.println("YrController likePro Start...");
+		System.out.println("YrController likePro brd_num -> " + brd_num);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController likePro userNum -> " + userNum);
+		}
+
+		BoardLike brdLike = new BoardLike();
+		brdLike.setBrd_num(brd_num);
+		brdLike.setUser_num(userNum);
+		int likeProResult = ybls.likePro(brdLike);
+		System.out.println("YrController likePro likeProResult -> " + likeProResult);
+		
+		return likeProResult;
+	}
 	
 }

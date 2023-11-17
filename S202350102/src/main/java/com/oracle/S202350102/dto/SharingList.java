@@ -13,5 +13,14 @@ public class SharingList {
 	private int 	state_md;	// 진행상태(중분류)
 	private String 	reject_msg;	// 반려사유
 	private String 	message;	// 전달메세지
+	
+	
+	
+	//join
+	private String user_name;
+	private String nick;
+	private String tel;
+	private String addr;
+	
 }
 

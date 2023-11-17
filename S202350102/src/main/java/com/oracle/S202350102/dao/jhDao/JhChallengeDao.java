@@ -24,7 +24,7 @@ public interface JhChallengeDao {
 	List<Challenge> ingChgRecentList(Challenge challenge);
 
 	List<Challenge> ingChgPickList(Challenge challenge);
-
+ 
 	void 			replyInsert(Board board);
 
 	int 			replyDelete(int brd_num);
@@ -33,7 +33,13 @@ public interface JhChallengeDao {
  
 	int 			replyUpdate(Board board);
 
-	int 			reviewPost(Board board);   
+	int 			reviewPost(Board board);
+
+	int 			reviewUpdate(Board board);
+
+	int 			reviewDelete(int brd_num);
+
+	int 			boardImgDelete(int brd_num);    
    
-}   
+}    
   

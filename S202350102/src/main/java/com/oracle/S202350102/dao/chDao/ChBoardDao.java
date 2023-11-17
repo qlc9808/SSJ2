@@ -26,5 +26,6 @@ public interface ChBoardDao {
 	List<Paging> myCount(int user_num);
 	List<Board> mychgBoardList(Board board);
 	int 		pageMove(Board board);
+	int 		readAllcmt(int user_num);
 	
 }

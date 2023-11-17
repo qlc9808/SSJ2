@@ -23,6 +23,7 @@ public interface ChBoardService {
 	List<Board> mychgBoardList(Board board);
 	List<Board> myCommuList(Board board);
 	int 		pageMove(Board board);
+	int 		readAllcmt(int user_num);
 	
 	
 }

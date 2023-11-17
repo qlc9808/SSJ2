@@ -120,4 +120,11 @@ public class MainController {
 		return "loginForm";
 	}
 	
+	@RequestMapping(value ="admin")
+	public String admin() {
+		System.out.println("MainController admin Start...");
+		
+		return "admin";
+	}
+	
 }

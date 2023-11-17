@@ -137,6 +137,36 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 		
 		return updateResult;
 	}
+
+	@Override
+	public int totalUser() {
+		System.out.println("User1DaoImpl totalUser Start... ");
+		int totUserCnt = 0;
+
+		try {											 
+			totUserCnt = session.selectOne("ThTotUserCnt");
+			System.out.println("User1DaoImpl totalUser totUserCnt -->" + totUserCnt);
+		} catch (Exception e) {
+			System.out.println("User1DaoImpl totalUser Exception -->" + e.getMessage());
+		} 
+		
+		return totUserCnt;
+
+	}
+
+	@Override
+	public List<User1> listUser(User1 user1) {
+		System.out.println("User1DaoImpl listUser Start... ");
+		List<User1> userList = null;
+		try {				
+			userList = session.selectList("tkUserListAll",user1);
+			System.out.println("User1DaoImpl listUser userList.size() --> " + userList.size());
+		} catch (Exception e) {
+			System.out.println("User1DaoImpl listUser Exception -->" + e.getMessage());
+		}
+		return userList;
+
+	}
 	
 	
 }

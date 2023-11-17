@@ -198,4 +198,10 @@
 		and brd_step =0
 	</select>
 	
+	<update id="readAllcmt" parameterType="int">
+		Update board_re_chk
+		set send_date = 2, read_date = sysdate
+		WHere user_num = #{user_num}
+	</update>
+	
 </mapper>

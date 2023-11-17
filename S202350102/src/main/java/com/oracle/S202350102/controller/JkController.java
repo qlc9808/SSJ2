@@ -5,7 +5,9 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,9 @@ import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
+import com.oracle.S202350102.service.main.Level1Service;
+import com.oracle.S202350102.service.main.UserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -54,7 +59,9 @@ public class JkController {
 	private final JkBoardService jbs;
 	private final YaCommunityService ycs;
 	private final JkMypageService jms;
-	private final ChController chcont; 
+	private final ChController chcont;
+	private final Level1Service ls;
+	private final UserService us;
 	
 	
 	//좋아요 기능 컨트롤러
@@ -459,54 +466,61 @@ public class JkController {
 	}
 	
 	// 회원정보 조회
-	@GetMapping("/userDetail")
-	public String userUpdate(Model model, HttpSession session) {
-	    System.out.println("JkController userDetail start...");
+		@GetMapping("/userDetail")
+		public String userUpdate(Model model, HttpSession session) {
+		    System.out.println("JkController userDetail start...");
 
-	    int user_num = 0;
-	    if (session.getAttribute("user_num") != null) {
-	        user_num = (int) session.getAttribute("user_num");
-	    }
+		    int user_num = 0;
+		    if (session.getAttribute("user_num") != null) {
+		        user_num = (int) session.getAttribute("user_num");
+		    }
 
-	    if (user_num != 0) {
-	        User1 user1 = jbs.userSelect(user_num);
-	        model.addAttribute("user1", user1);
-	        return "jk/userUpdate";
-	    } else {
-	        return "redirect:/loginForm";
-	    }
+		    if (user_num != 0) {
+		        User1 user1 = jbs.userSelect(user_num);
+
+		      
+		        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
+		        String formattedBirth = dateFormatter.format(user1.getBirth());
+		        
+		        model.addAttribute("user1", user1);
+		        model.addAttribute("formattedBirth", formattedBirth); // 형식화된 생년월일을 모델에 추가
+
+		        return "jk/userUpdate";
+		    } else {
+		        return "redirect:/loginForm";
+		    }
 	}
 
-	// 회원정보 수정
-	 @PostMapping("/updateUser1")
-	 public String updateUser(User1 user1, Model model) {
-		 System.out.println("JkController updateUser start...");
+		// 회원정보 수정
+		@PostMapping("/updateUser1")
+		public String updateUser(User1 user1, Model model, @RequestParam("birth_year") String birth_year, @RequestParam("birth_month") String birth_month, @RequestParam("birth_date") String birth_date) {
+		    System.out.println("JkController updateUser start...");
 
-	     int updateResult = jus.updateUser1(user1);
-	     model.addAttribute("updateResult", updateResult);
-	     if (updateResult > 0) {
-	         return "forward:/jk/updateResult.jsp"; // 업데이트 성공 시의 뷰 페이지로 이동
-	     } else {
-	         model.addAttribute("msg", "수정 실패 확인해 보세요");
-	         return "forward:/jk/mypage.jsp"; // 업데이트 실패 시의 뷰 페이지로 이동
-	     }
-	 }
+		    // 생년월일을 문자열로 합침
+		    String sumBirth = birth_year + "/" + birth_month + "/" + birth_date;
+		    
+		    // 생년월일을 Date 객체로 변환
+		    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		    Date strToDate = null;
+		    try {
+		        strToDate = formatter.parse(sumBirth);
+		        System.out.println("strToDate --> " + strToDate);
+		    } catch (ParseException e) {
+		        throw new RuntimeException(e);
+		    }
+		    user1.setBirth(strToDate);
+			
+		     int updateResult = jus.updateUser1(user1);
+		     model.addAttribute("updateResult", updateResult);
+		     if (updateResult > 0) {
+		         return "forward:/jk/updateResult.jsp"; // 업데이트 성공 시의 뷰 페이지로 이동
+		     } else {
+		         model.addAttribute("msg", "수정 실패 확인해 보세요");
+		         return "forward:/jk/mypage.jsp"; // 업데이트 실패 시의 뷰 페이지로 이동
+		     }
+		 }
 	
-	
-	
-//	@RequestMapping("/followManagement")
-//	public String challengeManagement() {
-//		System.out.println("JkController followManagement start...");
-//		
-//		return "jk/followManagement";
-//	}
-	
-	@RequestMapping("/sharingManagement")
-	public String sharingManagement() {
-		System.out.println("JkController sharingManagement start...");
-		
-		return "jk/sharingManagement";
-	}
+
 	
 	@RequestMapping("/subscriptionManagement")
 	public String subscriptionManagementManagement() {
@@ -516,7 +530,7 @@ public class JkController {
 	}
 	
 	@GetMapping("/mypage")
-	public String mypage(HttpSession session, Challenge chg, Board board, Model model) {
+	public String mypage(HttpSession session, User1 user1, Challenge chg, Board board, Model model) {
 	    System.out.println("JkController mypage start...");
 	    System.out.println("session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
 
@@ -525,13 +539,54 @@ public class JkController {
 	        user_num = (int) session.getAttribute("user_num");
 	        chcont.myConts(session, model, null);  // 메서드 실행, return void
 	    }
-	    
+	    user1.setUser_num(user_num);
 	    List<Challenge> myChgList = jms.myChgList(chg);
+	    User1 user1FromDB = us.userSelect(user_num);
+	    
+	    
+	    user1.setUser_num(user_num);
+	    model.addAttribute("level1List",ls.level1List());
+	    model.addAttribute("user1", user1FromDB);
 	    
 	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
-	
+
+
+	    
 	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
 	}
 	
+	@PostMapping("/updateProfile")
+	@ResponseBody
+	public String updateProfile(HttpSession session, User1 user1, Model model, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
+	    System.out.println("JkController updateProfile start...");
+
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	    }
+
+	    // 이제 User1 객체에 user_num을 설정
+	    user1.setUser_num(user_num);
+
+	    ServletContext servletContext = request.getSession().getServletContext();
+	    String realPath = servletContext.getRealPath("/upload/");
+	    System.out.println("realPath->" + realPath);
+
+	    if (file1 != null) {
+	        String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);
+	        user1.setImg(saveName);
+	    }
+
+	    int updateResult = jus.updateProfile(user1);
+	    model.addAttribute("updateResult", updateResult);
+	    System.out.println("updateResult->" + updateResult);
+
+	    if (updateResult > 0) {
+	        return "forward:/jk/updateResult.jsp";
+	    } else {
+	        model.addAttribute("msg", "수정 실패 확인해 보세요");
+	        return "forward:/mypage.jsp";
+	    }
+	}
 }   
 	

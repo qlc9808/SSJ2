@@ -45,7 +45,6 @@ public class Level1ServiceImpl implements Level1Service {
 	@Override
 	public void userLevelCheck(int user_num) {
 		User1 user1 = ud.userSelect(user_num);
-		
 		int user_level = userLevelUp( user1.getUser_exp(), user1.getUser_level());
 		
 		if ( user_level != user1.getUser_level() ) {
@@ -58,10 +57,15 @@ public class Level1ServiceImpl implements Level1Service {
 		
 		Level1 level1 = new Level1();
 		List<Level1> level1List = ld.level1List();
-		while (user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size()) {
-			user_level += 1;
+		if ( nextLevelInfo == null ) {
+			return user_level;
+		} else {
+			while (user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size()) {
+				user_level += 1;
+			}
+			nextLevelInfo = ld.level1Select(user_level+1);
 		}
-		nextLevelInfo = ld.level1Select(user_level+1);
+		
 		return user_level;
 	}
 //		if ( user_exp >= nextLevelInfo.getTot_exp() && user_level != level1List.size() ) {

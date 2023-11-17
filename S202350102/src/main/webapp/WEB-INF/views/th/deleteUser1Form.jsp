@@ -5,18 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    
-    <!-- Libs CSS -->
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    
-    <!-- Theme CSS -->
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
-    
+<title>회원 탈퇴</title>
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    body{ font-family: 'Noto Sans KR', sans-serif; } 
+</style>   
 </head>
 <script type="text/javascript">
 	function chk(){
@@ -37,7 +30,12 @@
           <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
 
             <!-- Icon -->
-            <div class="mb-7 fs-1">❤️</div>
+            <div class="row justify-content-center mb-5">
+	            <div class="mb-7 fs-1" style="max-width: 170px;">
+	             <!-- Image -->
+	                  <img class="card-img-top" src="images/th/crying.png" alt="crying.png">
+	            </div>
+            </div>
 
             <!-- Heading -->
             <h2 class="mb-5">회원탈퇴를 하시겠습니까?? </h2>

@@ -34,10 +34,11 @@
       <div class="col-12 col-md-9 col-lg-8 offset-lg-1">        	
 		<input type="hidden" name="brd_step" value="${board.brd_step}"> 
 		<input type="hidden" name="brd_group" value="${board.brd_group}"> 
-		댓글 총 개수 : ${board.replyCount}
+		            <input type=hidden  value="${board.user_num }">
+		
 		<c:choose>
     		<c:when test="${board.brd_step == 0}">
-  
+  			Reviews : ${board.replyCount}
               <div class="col-12">
                     <!-- 제목 -->
                     <div class="form-group">
@@ -57,15 +58,15 @@
           	   		</div>
 		    		<!-- 작성일자 -->
                     <div class="form-group mb-7">                       
-                           <label class="form-label" for="nick">닉네임</label>
-                           <input class="form-control form-control-sm" id="view_cnt" name="view_cnt" type="text" value="${board.reg_date}" readonly>
+                           <label class="form-label" for="reg_date">등록일자</label>
+                           <input class="form-control form-control-sm" id="reg_date" name="reg_date" type="text" value="${board.reg_date}" readonly>
           	   	    </div>
 		
 					<!-- 상세내용 -->       
 					<div class="form-group mb-7">
-    					<label class="form-label" for="conts">등록일자</label>
+    					<label class="form-label" for="conts">내용</label>
     					<div class="d-flex align-items-start" style="margin-top: 10px;">
-      					 	 <textarea class="form-control form-control-sm" id="conts" name="conts" rows="8" ${board.conts} readonly></textarea>
+      					 	 <textarea class="form-control form-control-sm"  rows="8"  readonly>${board.conts}</textarea>
   						</div>
 					</div>       
                     <!-- 이미지 업로드 -->	
@@ -98,8 +99,8 @@
 		                게시물을 삭제하시겠습니까?
 		            </div>
 		            <div class="modal-footer">
-		                <button type="button" class="btn btn-dark btn-sm" onclick="clickDel(formInfo)">삭제하기</button>
-		                <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">취소하기</button>
+		                <button type="button" class="btn btn-dark btn-sm" onclick="clickDel(formInfo)">삭제하기</button> 
+		                <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">취소하기</button>             
 		            </div>
 		        </div>
 		    </div>
@@ -127,6 +128,7 @@
 		        $('#deleteModal').modal('hide');
 		    });
 		</script>		
+				
         </div>
     </c:if>
 </c:if>

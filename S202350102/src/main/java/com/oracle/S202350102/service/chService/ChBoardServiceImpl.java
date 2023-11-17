@@ -169,5 +169,14 @@ public class ChBoardServiceImpl implements ChBoardService {
 		return result;
 	}
 
+	@Override
+	public int readAllcmt(int user_num) {
+		int result = 0;
+		System.out.println("chBoardServiceImpl readAllcmt Start...");
+		result = chBoardDao.readAllcmt(user_num);
+		System.out.println("chBoardServiceImpl readAllcmt result->" + result);
+		return result;
+	}
+
 
 }

@@ -308,22 +308,45 @@ public class ThController {
 	}
     
     @RequestMapping(value ="thChgList")
-	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt) {
-		//지혜가 뷰랑 연결까지 만들어 놓은거 가져옴
+	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt, HttpSession session) {
+		
 		System.out.println("thController thChgList Start...");
+		System.out.println("State_md --> " + chg.getState_md());
 
-		// Challenge 게시판 진행중인 챌린지만 Count ( 현재 사용중)		
-		int totalChg = tcs.totalChg();
+		// 카테고리 적용한 전체 게시글 수
+		int totalChg = 0;
+		// 		진행중				  or 		 nav 챌린지 클릭했을 때
+		if ( chg.getState_md() == 102 || chg.getState_md() == 0 ) {
+				totalChg = tcs.totalChgIng(chg);
+				System.out.println("tcs.totalChgIng(chg) --> " + totalChg);
+				
+		//				종료된 챌린지
+		} else if( chg.getState_md() == 103) {
+				totalChg = tcs.totalChgFin(chg);
+				System.out.println("tcs.totalChgFin(chg) --> " + totalChg);
+		}
+		
 		
 		// 챌린지 카테고리 가져오기
 		List<Comm> chgCategoryList = tcs.listChgCategory();
 		
-		// paging 작업 수정해야할듯 ? totalChg가 아니라 해당페이지 값별로 다시 조회 해야함
-		// Paging 작업			  	7			0 
-		Paging page = new Paging(chgCategoryList.size(), currentPage);
 		
+		// 						전체 챌린지수가 아니라  조회된 챌린지수로 페이징 작업을 해야한다. (= listChg.size() 사용)
+		// Paging 작업			  	7			0 
+		Paging page = new Paging(totalChg, currentPage);
+		
+
 		chg.setStart(page.getStart());
 		chg.setEnd(page.getEnd());
+	
+
+		
+		// 찜하기
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			chg.setMy_user_num(userNum);
+		}
 		
 		// 조회 필터 가져오기
 		if(sortOpt != null) {
@@ -334,10 +357,10 @@ public class ThController {
 		// 챌린지 리스트 가져오기
 		List<Challenge> listChg = tcs.listChg(chg);
 		System.out.println("thController list listChg.size() --> " + listChg.size());
-		System.out.println("State_md --> " + chg.getState_md());
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
 
+			
 		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
 		model.addAttribute("totalChg", totalChg);
 		model.addAttribute("listChg", listChg);
@@ -348,6 +371,29 @@ public class ThController {
 		
 		return "th/thChgList";
 	}
-
+    
+    @GetMapping(value = "/listUserAdmin")
+    public String listUserByAdmin(User1 user1, String currentPage, Model model) {
+    	System.out.println("thController listUserAdmin Start...");
+    	// 전체 유저수 Count
+    	int totalUser = us1.totalUser();
+    	
+    	
+    	// 페이징 작업
+    	Paging page = new Paging(totalUser, currentPage);
+    	user1.setStart(page.getStart());
+    	user1.setEnd(page.getEnd());
+    	
+    	// 유저 리스트 조회
+    	List<User1> user1List = us1.listUser(user1);
+    	System.out.println("ThController user1List.size()=>" + user1List.size());
+    	
+    	// Model에 저장
+    	model.addAttribute("totalUser", totalUser);
+    	model.addAttribute("user1List", user1List);
+    	model.addAttribute("page"	  ,	page );
+    	
+    	return	"th/listUserAdmin";
+    }
 
 }

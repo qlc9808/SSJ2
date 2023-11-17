@@ -6,9 +6,11 @@
  <head>
  <meta charset="UTF-8">
 <script type="text/javascript" src="js/th/thSignUp.js"></script>
-<script type="text/javascript">
-
-</script>
+<title>회원가입</title>
+<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<style type="text/css">
+    body{ font-family: 'Noto Sans KR', sans-serif; } 
+</style>
  </head>
 <body class="bg-light">
   	<c:import url="/WEB-INF/views/header4.jsp"/>

@@ -39,6 +39,18 @@ public class JkUserDaoImpl implements JkUser1Dao {
 	public int writeFormSharing(int user_num) {
 		 return session.selectOne("writeFormSharing", user_num);
 	}
+
+	@Override
+	public int updateProfile(User1 user1) {
+	    System.out.println("User1DaoImpl updateProfile start...");
+	    int result = 0;
+	    try {
+	        result = session.update("updateProfile", user1);
+	    } catch (Exception e) {
+	        System.out.println("User1DaoImpl updateProfile Exception --> " + e.getMessage());
+	    }
+	    return result;
+	}
 	}
 
 	

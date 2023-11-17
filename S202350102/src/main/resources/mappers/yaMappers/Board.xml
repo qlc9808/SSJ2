@@ -91,7 +91,7 @@
 	</select>
   	
 	<insert id="YacommentWrite" parameterType="Board">
-	    INSERT INTO board (brd_num,   user_num, brd_lg, brd_md, conts,   reg_date,  brd_group, brd_step)
+	    INSERT INTO board (brd_num,   user_num, brd_lg, brd_md,   conts,   reg_date,  brd_group, brd_step)
 	    VALUES (BRD_NUM_SEQ.nextval, #{user_num}, 700,   103,    #{conts}, sysdate, #{brd_num}, 
 	           (SELECT COALESCE(MAX(brd_step), 0) + 1 FROM board WHERE brd_group = #{brd_group}))
 	</insert>
@@ -129,5 +129,15 @@
 		AND brd_md=103
 		AND brd_step = 0
 	</select>
+	
+    <select id="myUploadSharingList" parameterType="int" resultType="Board"> 	
+ 		SELECT *
+ 		FROM   board b, user1 u 
+ 		WHERE  b.user_num = #{user_num} AND u.user_num = #{user_num} 
+ 		AND brd_lg = 700
+ 		AND brd_md = 102
+ 		AND brd_step = 0 
+    </select>	
+	
 
 </mapper>

@@ -19,6 +19,9 @@ public interface ThUser1Service {
 	String 			crRndPswd();
 	User1 			findUser1ByIdAndEmail(User1 user1);
 	int 			user1PswdUpdate(Map<String, Object> map);
+	int 			totalUser();
+	List<User1> 	listUser(User1 user1);
+
 	
 	
 }

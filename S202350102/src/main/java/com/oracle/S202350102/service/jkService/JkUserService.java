@@ -9,6 +9,7 @@ public interface JkUserService {
 	int 		updateUser1(User1 user1);
 	User1 		getUserDetails(int user_num);
 	User1 		userSelect(int user_num);
+	int 		updateProfile(User1 user1);
 	
 
 

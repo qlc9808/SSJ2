@@ -233,18 +233,19 @@
 	
 	
 	
-	//  '수정' 버튼 클릭 시    ->   글 수정용 모달 창 열기
-	function updateModalCall(index) {
+	//  '수정', '더보기' 버튼 클릭 시    ->   글 수정용, 더보기용 모달 창 열기
+	function updateModalCall(type, index) {
 		
 		// alert("updateModalCall Start...");
 		
 		// 모달창에 넘겨줄 값을 저장 
-		var brd_num =   $("#brd_num"+index).val();  		
-		var nick =   	$("#nick"+index).val();  		
-		var reg_date =	$("#reg_date"+index).val();  
-		var title =		$("#title"+index).val();  
-		var conts =		$("#conts"+index).val();  
-		var img =		$("#img"+index).val();  
+		var brd_num		=	$("#brd_num"+index).val();  		
+		var nick		=	$("#nick"+index).val();  		
+		var reg_date	=	$("#reg_date"+index).val();  
+		var title		=	$("#title"+index).val();  
+		var conts		=	$("#conts"+index).val();  
+		var img			=	$("#img"+index).val();  
+		var brd_step	=	$("#brd_step"+index).val();
 		
 		// alert("img -> " + img);
 		// alert("${pageContext.request.contextPath}/upload/"+img);
@@ -257,12 +258,20 @@
 		 */
 		 
 		// 이미지 설정
-		$('#modalImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
+		$('#updateImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
+		$('#moreImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
 		 
 		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayNick').text(nick);     
+		$('#moreNick').text(nick);
+		
 		$('#displayReg_date').text(reg_date); 
+		$('#moreReg_date').text(reg_date);
+		
 		$('#editImage').text(img);
+		
+		$('#moreTitle').text(title);
+		$('#moreConts').text(conts);
 		
 		//   글 수정 모달 창 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#editBrd_num').val(brd_num);     
@@ -270,8 +279,12 @@
 		$('#editTitle').val(title);     
 		$('#editConts').val(conts);     
 		
+		
+		if (type == 'edit') {
+			$('#modalUpdateCertBrdForm').modal('show');
+		}
+		else $('#modalMoreCertBrdForm').modal('show');
 		// 모달 창 표시
-		$('#modalUpdateCertBrdForm').modal('show');
 	}
 	
 	
@@ -292,27 +305,83 @@
 	
 	
 	
-	// '삭제' 버튼 클릭 시
-	function deleteCertBrd(index) {
+	// '삭제' 버튼 클릭 시 -> 글과, 업로드 삭제
+	function deleteCertBrd(type, index) {
+		
+		alert("type -> " + type);
+		// Group 번호 가져오기 
+		var arr = new Array();
+		var item;
+		
+	 	<c:forEach items="${certBoard }" var="item" >	
+	 		//alert("arr.title1->"+  ${list.title});
+	    	// arr.push("${item.title}");
+	    	arr.push({title:"${item.title }"
+	    		     ,brd_group:"${item.brd_group}"
+	    	});
+		</c:forEach>
+		
+		for (var i=0; i<arr.length;){
+			alert("arr.title2.title->"+ i + " :  "+ arr[i++].title);
+			alert("arr.title2.brd_group->"+ i + " :  "+ arr[i++].brd_group);
+			if(i > 2) return;
+				
+		}
+		
+		// var brd_num = $("#" + type + "brd_num"+index).val();
+		// var img		= $("#" + type + "img"+index).val();
 		
 		var brd_num = $("#brd_num"+index).val();
+		var img		= $("#img"+index).val();
+		alert("brd_num -> " + brd_num);
+		alert("img -> " + img);
+
 		
 		$.ajax({
 			url:"/brdNumDelete",
-			data:{brd_num : brd_num},
+			data:{
+				brd_num	:	brd_num,
+			  	img		:	img
+			  	},
 			dataType:'text',
 			
 			success:function(data){
 				alert(".ajax deleteCertBrd data -> "+data);
+				
 				if (data == '1') {
 					// id 가 review +index 성공하면 아래 라인 수행
-					$('#review'+index).remove();		/* Delete Tag */
-					
+					if (type == 'review') {
+						//$('#review'+index).remove();		/* Delete Tag */
+						// 해당 brd_group 을 remove
+						
+						// 원글의 brd_group 가져오기
+						var brd_group = arr[index].brd_group;
+						alert("brd_group"+brd_group);
+						
+						// 댓글 그룹이 동일한 모든 댓글 삭제
+						// 'comment'로 시작하는 모든 div 엘리먼트에 대해 아래의 코드를 실행
+						$("div[id^='comment']").each(function() {
+							
+							// 현재 댓글의 그룹 번호(brd_group)를 가져오기
+							var comment_group = $("#brd_group" + $(this).attr('id').replace('comment', '')).val();
+							
+							// 현재 댓글의 그룹 번호와 삭제 대상 원글의 그룹 번호가 같으면
+							if (comment_group == brd_group) {
+								
+								// 현재 댓글을 삭제
+								$(this).remove();
+							}
+						});
+						$('#review'+index).remove();
+						
+					}
+					else $('#comment'+index).remove();
+					//$("#" + type +index).remove();		/* Delete Tag */
+//					$('#review'+index).remove();		/* Delete Tag */
 				}
 			}
 		});
 	}
-
 	
 	
 	// 찌르기 모달창 띄우기 
@@ -353,7 +422,7 @@
 				sendMailUser_num:	sendMailUser_num, 
 				ssjUserNum:	ssjUserNum, 
 				cheerUpMsg:	cheerUpMsg 
-			}, 
+			},
 			success:	function (response) { 
 				// 성공했을 때의 동작 
 				console.log(response); 
@@ -399,7 +468,7 @@
 </script> 
 </head>
 <body>
-	<input type="button" value="목록" onclick="location.href='/challengeList'" > 
+	<input type="button" value="목록" onclick="location.href='/thChgList'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -448,10 +517,10 @@
                     <!-- Item -->
            		    <c:choose>
 					    <c:when test="${empty reviewContent.img}">
-							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 650px; max-height: 550px; width: auto; height: auto;">
+							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" class="card-img-top" >
 					    </c:when>
 					    <c:otherwise>
-							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 650px; max-height: 550px; width: auto; height: auto;">
+							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." >
 					    </c:otherwise>
 					</c:choose>
              <!--썸네일 처리 해야 함 파일 위치랑 null일 때 뜨게 할 것  -->
@@ -918,13 +987,13 @@
 					
 					                  <!-- Toggle -->
 					                  <a class="dropdown-toggle text-reset" data-bs-toggle="dropdown" href="#">
-					                    <strong>Sort by: Newest</strong>
+					                    <strong>Sort by: 최신순</strong>
 					                  </a>
 					
 					                  <!-- Menu -->
 					                  <div class="dropdown-menu mt-3">
-					                    <a class="dropdown-item" href="#!">Newest</a>
-					                    <a class="dropdown-item" href="#!">Oldest</a>
+					                    <a class="dropdown-item" href="#!">최신순</a>
+					                    <a class="dropdown-item" href="#!">oldest</a>
 					                  </div>
 					
 					                </div>
@@ -1126,7 +1195,9 @@
 						                  	<input type="hidden" id="title${status.index}"		value="${certBoard.title }">
 						                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
 						                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
-						                  	
+						                  	<input type="hidden" id="brd_step${status.index}"	value="${certBoard.brd_step }">
+                                            <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
+					   						                  	
 						                  	
 						                  	<div class="col-5 col-md-3 col-xl-2">
 												<!-- 인증샷 Image -->
@@ -1166,20 +1237,16 @@
 						                      <!-- Footer -->
 						                      <div class="row align-items-center">
 						                      
-						                        <div class="col-auto d-none d-lg-block">
-							                        <p class="mb-0 fs-sm">좋아요</p>
-						                        </div>
-						                        
 						                        <!-- Text -->
 						                        <div class="col-auto me-auto">
 						                        
 							                        <!-- Rate -->
 							                        <div class="rate">
 							                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-							                            <i class="fe fe-thumbs-up"></i>
+					                            		좋아요 <i class="fe fe-thumbs-up"></i>
 							                          </a>
 							                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-							                            <i class="fe fe-thumbs-up"></i>
+					                            		태우기 <i class="fa-solid fa-fire"></i>
 							                          </a>
 							                        </div>
 							                        
@@ -1199,12 +1266,12 @@
 								                          <a class="btn btn-xs btn-outline-border" 
 								                          	 href="#!" 
 								                          	 id="showModalButton"
-								                          	 onclick="updateModalCall(${status.index})"
+								                          	 onclick="updateModalCall('edit', ${status.index})"
 								                          >
 															수정
 								                          </a>
 								                          
-								                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
+								                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd('review', ${status.index})">
 															삭제
 								                          </a>
 								                          
@@ -1214,7 +1281,7 @@
 						                        	<c:otherwise>
 					                        			<div class="col-auto">
 															<!-- Button -->	
-															<a class="btn btn-xs btn-outline-border" href="#!">
+															<a class="btn btn-xs btn-outline-border" href="#!" onclick="updateModalCall('more', ${status.index})">
 																더보기
 															</a>
 															<!-- Button -->
@@ -1234,7 +1301,7 @@
 					              	</c:when>
 				            		<c:otherwise>
 				            		<!-- 2. 댓글 Child review -->
-										<div class="review">
+										<div class="review" id="comment${status.index }">
 			            					<div class="review review-child">
 							                  <div class="review-body">
 								                  <div class="row" id="certBoard${status.index}">
@@ -1244,6 +1311,8 @@
 								                  	<input type="hidden" id="title${status.index}"		value="${certBoard.title }">
 								                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
 								                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
+		                                            <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
+								                  	
 								                  	
 								                  	
 													<div class="col-12 col-md-auto">
@@ -1285,29 +1354,28 @@
 								                      <!-- Footer -->
 								                      <div class="row align-items-center">
 								                      
-								                      	<div class="col-auto me-auto"></div>
+								                      	<div class="col-auto me-auto">
+								                      		<!-- Rate -->
+									                        <div class="rate">
+									                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+							                            		좋아요 <i class="fe fe-thumbs-up"></i>
+									                          </a>
+									                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+							                            		태우기 <i class="fa-solid fa-fire"></i>
+									                          </a>
+									                        </div>
+								                      	</div>
 								                      
 								                        <c:choose>
 								                        	<c:when test="${user.user_num == certBoard.user_num }">
 								                        	<!-- 작성자 본인일 경우 -->
 										                        <div class="col-auto">
-										                        
 										                          <!-- comment 버튼을 수정 삭제 버튼으로 바꿈 Button -->
-										                          <a class="btn btn-xs btn-outline-border" 
-										                          	 href="#!" 
-										                          	 id="showModalButton"
-										                          	 onclick="updateModalCall(${status.index})"
-										                          >
-																	수정
-										                          </a>
-										                          
-										                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd(${status.index})">
+										                          <a class="btn btn-xs btn-outline-border" href="#!" onclick="deleteCertBrd('comment', ${status.index})">
 																	삭제
 										                          </a>
-										                          
 										                        </div>
 								                        	</c:when>
-								                        	
 								                        </c:choose>
 								                        
 								                        
@@ -1319,8 +1387,7 @@
 										</div>
 					                </c:otherwise>
 				            	</c:choose>		
-							
-			              	
+					               	
 				              
 				              <!-- 새 댓글 -->
 					            <div class="collapse" id="commentForm${status.index }">
@@ -1467,25 +1534,17 @@
 					          </button>
 					    
 					          <!-- Content -->
-					          <div class="container-fluid px-xl-0"><!--  -->
-					            <div class="row align-items-center mx-xl-0"><!--  -->
-					              <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"><!--  -->
-					    
+					          <div class="container-fluid px-xl-0">
+					            <div class="row align-items-center mx-xl-0">
+				            	
+									<div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0">
 					                <!-- Image 수정 모달창 인증샷 -->
-					                <img class="img-fluid" alt="수정 모달창 인증샷" id="modalImage">
-					    
-					                <!-- Button -->
-					                <!-- <a class="btn btn-sm w-100 btn-primary" href="./product.html">
-					                  More Product Info <i class="fe fe-info ms-2"></i>
-					                </a> -->
-					    
-					              </div><!-- <div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0"> -->
-					              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"><!--  -->
-					    
-		                  
-		
+						                <img class="img-fluid" alt="수정 모달창 인증샷" id="updateImage">
+					             	</div>
+					              
+					              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9">
 					                <!-- 수정 Form -->
-						            <form action="updateCertBrd" method="post">
+						            <form action="updateCertBrd" method="post" enctype="multipart/form-data">
 						              <input type="hidden" name="brd_num" id="editBrd_num">
 						              <input type="hidden" name="nick" id="editNick">
 						                
@@ -1494,9 +1553,9 @@
 										</div>
 					                      
 					                      
-						                <div class="col-12 col-md-6"><!--  -->
+						                <div class="col-12 col-md-6">
 					                    <!-- 유저 닉네임 표시하는 란 Name -->
-					                    <div class="form-group"><!--  -->
+					                    <div class="form-group">
 						                      <p class="mb-2 fs-lg fw-bold" id="displayNick">
 						                      </p>
 					                    </div>
@@ -1535,10 +1594,10 @@
 						                
 						                <div class="row">
 						                  <div class="col-12 text-center">
-						                  	<div class="form-group mb-7">
-						                  		<span id="imgOroot">${pageContext.request.contextPath}/upload/<span id="editImage"></span></span>
-						                  		<input type="file" name="file1" style="display:none;" id="fileInput" disabled="disabled">
-						                  		<button type="button" onclick="fileUpdate()">파일 변경</button>
+						                  	<!-- 파일 변경 -->
+						                  	<div class="input-group mb-3">
+											  <label class="input-group-text" for="inputGroupFile01">파일 변경</label>
+											  <input type="file" name="editFile" class="form-control" id="inputGroupFile01">
 											</div>
 						                    <!-- 인증 글쓰기에서 가져온 글 수정 Form 등록 Button -->
 						                    <!-- onclick(보류) 대신 form으로 작동시킴 --> 
@@ -1553,6 +1612,7 @@
 								
 					    
 					              </div><!-- <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"> -->
+					              
 					            </div><!-- <div class="row align-items-center mx-xl-0"> -->
 					          </div><!-- <div class="container-fluid px-xl-0"> -->
 					    
@@ -1561,44 +1621,145 @@
 					    </div><!-- <div class="modal fade" id="modalUpdateCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"> -->
 					    
 					    
+					    <!-- 더보기 모달 창 Product -->
+					    <div class="modal fade" id="modalMoreCertBrdForm" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+					      <div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
+					        <div class="modal-content"><!--  -->
+					    
+					          <!-- Close -->
+					          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					            <i class="fe fe-x" aria-hidden="true"></i>
+					          </button>
+					    
+					          <!-- Content -->
+					          <div class="container-fluid px-xl-0">
+					            <div class="row align-items-center mx-xl-0">
+				            	
+									<div class="col-12 col-lg-6 col-xl-5 py-4 py-xl-0 px-xl-0">
+					                <!-- Image 더보기 모달창 인증샷 -->
+						                <img class="img-fluid" alt="더보기 모달창 인증샷" id="moreImage">
+					             	</div>
+					              
+					              <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9">
+					                <!-- 더보기 Form -->
+						            <form action="moreCertBrd" method="post" enctype="multipart/form-data">
+						              <input type="hidden" name="brd_num" id="editBrd_num">
+						              <input type="hidden" name="nick" id="editNick">
+						                
+										<div class="avatar avatar-xl">
+										  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+										</div>
+					                      
+					                      
+						                <div class="col-12 col-md-6">
+					                    <!-- 유저 닉네임 표시하는 란 Name -->
+					                    <div class="form-group">
+						                      <p class="mb-2 fs-lg fw-bold" id="moreNick">
+						                      </p>
+					                    </div>
+						                </div>
+			                    
+				                      <!-- Header -->
+					                      <div class="row mb-6"><!--  -->
+					                        <div class="col-12"><!--  -->
+					                          <!-- Time -->
+					                          <span class="fs-xs text-muted">
+					                            <time datetime="2019-07-25" id="moreReg_date"></time>
+					                          </span>
+					                        </div>
+					                      </div>
+						                
+	
+			        					<div class="col-12"><!--  -->
+						                  <!-- 제목 -->
+						                  <div class="form-group"><!--  -->
+						                  	<h5 class="modal-title" id="moreTitle"></h5>
+						                  	<!-- <h4 id="moreTitle"></h4> -->
+						                  	<!-- <strong class="mx-auto" id="moreTitle"></strong> -->
+						                    <!-- <h5 class="mb-3" id="moreTitle"></h5> -->
+						                  </div>
+						                </div>
+		
+						                <div class="col-12">
+						                  <!-- 인증글 -->
+						                  <div class="form-group">
+						                  	<div class="modal-body" id="moreConts"></div>
+						                  	<!-- <p class="mb-7 fs-lg" id="moreConts"></p> -->
+						                    	<!-- <h4 class="mb-3" id="moreConts"></h4> -->
+						                  </div>
+						                </div>
+						                
+						                <div class="form-group mb-0">
+						                    <div class="row gx-2">
+						                    
+						                    	<div class="rate">
+												  <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+											    	좋아요 <i class="fe fe-thumbs-up"></i>
+												  </a>
+												  <a class="rate-item" data-toggle="vote" data-count="0" href="#" role="button">
+											    	태우기 <i class="fa-solid fa-fire"></i>
+												  </a>
+												</div>
+												
+						                      
+						                    </div>
+										</div>
+						                
+						            </form>
+								
+								
+					    
+					              </div><!-- <div class="col-12 col-lg-6 col-xl-7 py-9 px-md-9"> -->
+					              
+					            </div><!-- <div class="row align-items-center mx-xl-0"> -->
+					          </div><!-- <div class="container-fluid px-xl-0"> -->
+					    
+					        </div><!-- <div class="modal-content"> -->
+					      </div><!-- <div class="modal-dialog modal-dialog-centered modal-xl" role="document"> -->
+					    </div>
+					    
+					    
 			            <!-- Pagination		임시로 chg_id 넣어둠 -->
 			            <nav class="d-flex justify-content-center mt-9">
 			              <ul class="pagination pagination-sm text-gray-400">
 			              
-			              <c:if test="${certBrdPage.startPage > certBrdPage.pageBlock }">
 			                <li class="page-item">
-			                  <a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${certBrdPage.startPage-certBrdPage.pageBlock }">
-			                    <i class="fa fa-caret-left"></i>
-			                  </a>
+				              <c:if test="${certBrdPage.startPage > certBrdPage.pageBlock }">
+				                  <a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${certBrdPage.startPage-certBrdPage.pageBlock }">
+				                    <i class="fa fa-caret-left"></i>
+				                  </a>
+				              </c:if>
 			                </li>
-			              </c:if>
 			              
-			              <c:forEach var="i" begin="${certBrdPage.startPage }" end="${certBrdPage.endPage }">
-			                <li class="page-item active">
-			                  <a class="page-link" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${i}">${i}</a>
-			                </li>
-			              </c:forEach>
+				              <c:forEach var="i" begin="${certBrdPage.startPage }" end="${certBrdPage.endPage }">
+				                <li class="page-item active">
+				                  	<a class="page-link" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${i}">${i}</a>
+				                </li>
+				              </c:forEach>
 			              
-			              <c:if test="${certBrdPage.endPage < certBrdPage.totalPage }">
 			                <li class="page-item">
-			                  <a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${certBrdPage.startPage+certBrdPage.pageBlock }">
-			                    <i class="fa fa-caret-left"></i>
-			                  </a>
+				              <c:if test="${certBrdPage.endPage < certBrdPage.totalPage }">
+				                  <a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&currentPage=${certBrdPage.startPage+certBrdPage.pageBlock }">
+				                    <i class="fa fa-caret-left"></i>
+				                  </a>
+				              </c:if>
 			                </li>
-			              </c:if>
 			              </ul>
 			            </nav>
 			            <!-- Body: Form -->
 						<div class="offcanvas-body">
 					        <form>
-					          <div class="input-group input-group-merge">
-					            <input class="form-control" type="search" placeholder="Search">
-					            <div class="input-group-append">
-					              <button class="btn btn-outline-border" type="submit">
-					                <i class="fe fe-search"></i>
-					              </button>
-					            </div>
-					          </div>
+								<div class="input-group mb-3">
+								  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">검색</button>
+								  <ul class="dropdown-menu">
+								    <li><a class="dropdown-item" href="#">제목</a></li>
+								    <li><a class="dropdown-item" href="#">내용</a></li>
+								    <li><a class="dropdown-item" href="#">글쓴이</a></li>
+								    <li><hr class="dropdown-divider"></li>
+								    <li><a class="dropdown-item" href="#">Separated link</a></li>
+								  </ul>
+								  <input type="text" class="form-control" aria-label="Text input with dropdown button">
+								</div>
 					        </form>
 						</div>
 			            </div>
@@ -1909,8 +2070,8 @@
 							                  </div>
 							                  
 							                  <div class="input-group mb-3">
-												  <input type="file" class="form-control" name="file" id="inputGroupFile02">
-												  <label class="input-group-text" for="inputGroupFile02">이미지 업로드</label>
+												  <input type="file" class="form-control" name="file" id="inputGroupFile">
+												  <label class="input-group-text" for="inputGroupFile">이미지 업로드</label>
 											  </div>
 							                  
 							                  <div class="col-12 text-center">
@@ -1945,7 +2106,7 @@
 				   				              <div class="col-12 col-md-auto">
 								
 								                <!-- Button -->
-								                <a class="btn btn-sm btn-dark"  href="/reviewInsert">
+								                <a class="btn btn-sm btn-dark"  href="/reviewPost">
 								                  Write Review
 								                </a>
 								
@@ -2110,6 +2271,6 @@
       </div>
     </section>
 
-
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

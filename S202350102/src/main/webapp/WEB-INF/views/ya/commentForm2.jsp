@@ -32,10 +32,10 @@ console.log("brd_num: " + brd_num);
 console.log("user_num: " +  user_num);
 
 $(document).ready(function(){
-    listCommentg(brd_num);
+    listComment(brd_num);
 });
 
-function listCommentg() {
+function listComment() {
     var brd_num = ${board.brd_num}
     var user_num =  ${board.user_num};
     
@@ -48,9 +48,9 @@ function listCommentg() {
         },
         dataType: "json",
         success: function (result) {
-            var listComment = $("#commentList");
+            var commentList = $("#commentList");
             
-            listcomment.empty();
+            commentList.empty();
             console.log("listcomment brd_num: " + brd_num);
             console.log("listcomment user_num: " + user_num);
             console.log("listcomment sessionUserNum :" + sessionUserNum)
@@ -98,7 +98,7 @@ function listCommentg() {
                     reviewContainer.append(buttonsContainer);
                 }
 
-                listCommentSharing.append(listItem);
+                commentList.append(listItem);
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -120,7 +120,7 @@ function listCommentg() {
             var brd_step = $("#brd_step").val();
             console.log("brd_num: " + brd_num);
             console.log("brd_group: " + brd_group);
-         
+         	console.log("conts" + conts);
             console.log("brd_step: " + brd_step);
             // 댓글 작성을 서버로 전송
             $.ajax({
@@ -138,6 +138,7 @@ function listCommentg() {
                     if (result.result === "success") {
                         // 댓글 작성이 성공한 경우, 댓글 목록 조회 아작스를 호출하여 댓글을 즉시 가져옴
                         listComment();
+                        console.log("conts"+conts)
                     } else {
                         alert("댓글 작성에 실패했습니다.");
                     }
@@ -284,7 +285,7 @@ function listCommentg() {
 	    	        dataType: "json",
 	    	        success: function (result) {
 	    	            // 삭제가 성공하면 삭제 후의 댓글 목록을 다시 불러오기
-	    	            listCommentSharing();
+	    	            listComment();
 	    	            if (result.result === "success") {
 	    	                alert("댓글 삭제되었습니다.");
 	    	                var deletedCommentElement = $('#commentList').find('li[data-brd-num="' + brd_num + '"]');
@@ -328,7 +329,7 @@ function listCommentg() {
               <!-- Divider -->
               <hr class="my-6">
               <!-- Form -->
-	            <form name="commentSharing" action="/commentSharing" method="post" autocomplete="off">
+	            <form name="commentWrite" action="/commentWrite" method="post" autocomplete="off">
                 <input type="hidden" name="user_num"  id="user_num" value="${board.user_num}">
                 <input type="hidden" name="brd_group" id="brd_group" value="${board.brd_group}">
                 <input type="hidden" name="brd_step" id="brd_step" value="${board.brd_step}">
@@ -358,9 +359,8 @@ function listCommentg() {
   </c:otherwise> 
 </c:choose> 
  <!-- 댓글 목록이 나타날 창  -->
-
 		<div class="container">
-		<ul class="list-group list-group-flush" id="listCommentSharing"> 
+		<ul class="list-group list-group-flush" id="commentList"> 
 		</ul>
 		</div>
 

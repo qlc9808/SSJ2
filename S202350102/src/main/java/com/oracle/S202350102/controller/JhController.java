@@ -3,6 +3,7 @@ package com.oracle.S202350102.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
@@ -267,6 +269,7 @@ public class JhController {
 								,Board		   board
 								) {
 		System.out.println("JhController reviewContent Start...");
+		System.out.println("JhController reviewContent chg_id -> " + chg_id);
 
 			
 		//세션에서 회원번호 가져옴
@@ -297,9 +300,9 @@ public class JhController {
 		board.setStart(replyPage.getStart());
 		board.setEnd(replyPage.getEnd());
 		model.addAttribute("replyPage",replyPage);
-		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ replyPage.getStart());
-		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ replyPage.getTotal());
-		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
+		System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
+		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
 		
 		//챌린지 해당 글에 대한 댓글 조회
 		List<Board> reviewReplyList = jhCService.reviewReplyList(board);
@@ -334,7 +337,7 @@ public class JhController {
 		model.addAttribute("result", result);
 		System.out.println("JhController reviewContent result -> " + result);
 		
-		return "jh/jhReviewContent2";
+		return "jh/jhReviewContent";
 	}
 	
 	@RequestMapping(value = "showReplyUpdate")
@@ -406,9 +409,9 @@ public class JhController {
 	
 	
 	//챌린지 신청 페이지로 이동
-	@RequestMapping(value = "chgApplicationPage")
-	public String chgApplication (HttpSession session, Model model) {
-		System.out.println("JhController chgApplication Start...");
+	@RequestMapping(value = "chgApplicationForm")
+	public String chgApplicationForm (HttpSession session, Model model) {
+		System.out.println("JhController chgApplicationForm Start...");
 		System.out.println("JhController reviewList user_num -> " + session.getAttribute("user_num"));
 		
 		//세션에서 회원번호 가져옴
@@ -429,7 +432,7 @@ public class JhController {
 		model.addAttribute("userStatus", userStatus);
 		
 		
-		return "jh/chgApplicationPage";
+		return "jh/jhChgApplicationForm";
 	}
 	
 	
@@ -504,13 +507,132 @@ public class JhController {
 		
 	}
 	
-//	@RequestMapping(value = "reviewUpdate")
-//	public String reviewUpdate(Board board, Model model, HttpSession session ) {
-//		System.out.println("JhController reviewUpdate Start...");
-//		
-//		int result = jhCService.reviewUpdate(board);
-//		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id()+"&result="+result;
-//	}
+	//리뷰 수정
+	@RequestMapping(value = "reviewUpdate")
+	// public String reviewUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+	public String reviewUpdate(Board board, HttpServletRequest request, MultipartFile file1) throws Exception {
+		System.out.println("JhController reviewUpdate Start...");
+		
+		//파일값 확인용
+		if(file1 != null && !file1.isEmpty()) {
+			log.info("size: " +file1.getSize());
+			System.out.println("file1 -> " + file1.isEmpty());
+			System.out.println("img -> " + board.getImg());
+		} else {
+			System.out.println("file1 == null ");
+		}
+		
+		
+		int delStatus = board.getDelStatus();
+		System.out.println("delStatus -> " +delStatus);
+		
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		String deleteFile = uploadPath + board.getImg();
+		
+		//새이미지 올린경우 (사용자가 기존 이미지 파일 삭제 유무와 관계 없이 이미지 대체) -> img에 새로운 파일명 대체
+		if (file1 != null && !file1.isEmpty()) {
+			
+			
+			//사용자가 파일을 새로 올리면 기존 이미지 먼저 삭제 처리
+			int delResult= upFileDelete(deleteFile);
+			System.out.println("delResult1 -> " + delResult);
+			
+			//사용자가 새로 올린 이미지 board dto에 Img에 저장
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			board.setImg(saveName);
+			
+		//새이미지 올리지 않고 기존 이미지 파일 삭제 원한 경우(글만 남기는 경우) -> img에 null 셋팅
+		} else if (file1 == null || file1.isEmpty() && delStatus == 1) {
+			
+			int delResult= upFileDelete(deleteFile);
+			System.out.println("delResult2 -> " + delResult);
+			board.setImg(null);
+			
+		}//새이미지 올리지 않고 기존 이미지 원하는 경우 board dto에 기존 img값 유지
+		
+		
+		//진짜 이미지 업데이트
+		int result = jhCService.reviewUpdate(board);
+		
+		System.out.println("result -> " + result);
+		
+		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
+	}
 
+	//리뷰삭제
+	@RequestMapping(value = "reviewDelete")
+	public String reviewDelete(int brd_num, int chg_id, String img, HttpServletRequest request) throws Exception {
+		System.out.println("JhController reviewDelete Start...");
+		
+		//글 삭제(이미지는 upload폴더에 그대로 남아 있음)
+		int reviewDel = jhCService.reviewDelete(brd_num);
+		
+		if(reviewDel > 0) {
+			//upload에 담김 파일 삭제
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			String deleteFile = uploadPath + img;
+			int delResult= upFileDelete(deleteFile);
+			
+			System.out.println("JhController reviewDelete delResult -> " + delResult);
+			
+		}
+		return "redirect:chgDetail?&chg_id=" + chg_id +"&tap=3";
+	}
 
+	//파일 삭제
+	private int upFileDelete(String deleteFileName) throws Exception {
+		int result = 0;
+		log.info("upFileDelete result -> " + deleteFileName);
+		File file = new File(deleteFileName);
+		if (file.exists()) {
+			if (file.delete()) {
+				System.out.println("파일삭제 성공");
+				result = 1;
+				
+			} 
+			else {
+				System.out.println("파일삭제 실패");
+				result = 0;
+			}
+		} else {
+			System.out.println("삭제할 파일이 존재하지 않습니다.");
+			result = -1;
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "modify")
+	 public String modify() {
+		
+		return "jh/modify";
+	}
+	
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "recommendCallenge") public List<E>
+	 */
+	
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "boardImgDelete") public String boardImgDelete(int
+	 * brd_num, String img, HttpServletRequest request) throws Exception {
+	 * System.out.println("JhController boardImgDelete Start...");
+	 * 
+	 * 
+	 * //해당글의 이미지 디비에서 null로 만듦 int brdImgDel = jhCService.boardImgDelete(brd_num);
+	 * String delStatusStr = null; if ( brdImgDel > 0 ) {
+	 * 
+	 * //upload에 담김 파일 삭제 String uploadPath =
+	 * request.getSession().getServletContext().getRealPath("/upload/"); String
+	 * deleteFile = uploadPath + img; int delResult = upFileDelete(deleteFile);
+	 * delStatusStr = Integer.toString(delResult);
+	 * 
+	 * System.out.println("JhController boardImgDelete delResult -> " + delResult);
+	 * }
+	 * 
+	 * return delStatusStr; }
+	 */
+	
 }

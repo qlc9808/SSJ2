@@ -27,8 +27,10 @@ public interface YaCommunityService {
 
 	int			 commentCount(int brd_num);
 	int 		 totalCommunity(Board board);
-	
-	int          saveSharing(SharingList sharingList);
+
+	int                saveSharing(SharingList sharingList);
+	List<Board>        myUploadSharingList(int user_num);
+	List<SharingList>  sharingParticipantsList(int brd_num);
 
 	
 	
