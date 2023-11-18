@@ -144,7 +144,21 @@
  		AND brd_lg = 700
  		AND brd_md = 102
  		AND brd_step = 0 
-    </select>	
+    </select>
+    
+    <update id="YaUpParticipantsCnt" parameterType="int">
+  		UPDATE board set participants=participants+1 
+  		WHERE brd_num=#{brd_num}
+  	</update>  	
+	
+	<select id="YaMyConfirmSharingList" parameterType="int" resultType="Board">
+		SELECT s.brd_num, b.title, b.bank_info, b.bank_duedate, b.addr, b.applicants, b.price
+		FROM board b, sharingList s
+		WHERE s.user_num = #{user_num} 
+		AND b.brd_num = s.brd_num
+		AND s.state_md = 101
+	</select>
+
 	
 
 </mapper>

@@ -194,5 +194,53 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	}
 
 
+	//마이페이지 - 내가올린 쉐어링 참가자 승인처리 (state_md 101)
+	@Override
+	public int sharingConfirm(int brd_num) {
+		System.out.println("YaControllerServiceImpl sharingConfirm  start....");
+		int sharingConfirm = 0;
+		try {
+			sharingConfirm = ybd.sharingConfirm(brd_num);
+		} catch (Exception e) {
+			System.out.println("YaControllerServiceImpl shairngConfirm e.getMessage?"+e.getMessage());
+		}
 
+		return sharingConfirm;
+	}
+
+
+	// 마이페이지 - 승인 처리 후 참가자 수 증가 
+	@Override
+	public  void upParticipantsCnt(int brd_num) {
+		System.out.println("YaControllerService upParticipantsCnt start...");
+		
+		ybd.upParticipantsCnt(brd_num);
+	}
+
+	// 마이페이지 - 내가참여한 쉐어링 조회
+	@Override
+	public List<SharingList> myJoinSharingList(int user_num) {
+		System.out.println("YaControllerService  myJoinSharingList start...");
+		List<SharingList> myJoinSharingList = null;
+		try {
+			myJoinSharingList = ybd.myJoinSharingList(user_num);
+		} catch (Exception e) {
+			System.out.println("YaCommunityServiceImpl myJoinSharingList e.getMessage?"+e.getMessage());
+		}
+		return myJoinSharingList;
+	}
+
+
+	@Override
+	public List<Board> myConfirmSharingList(int user_num) {
+		System.out.println("YaControllerService   myConfirmSharingList start...");
+		List<Board> myConfirmSharingList = null;
+		try {
+			myConfirmSharingList = ybd.myConfirmSharingList(user_num);
+		} catch (Exception e) {
+			System.out.println("YaCommunityServiceImpl myConfirmSharingList e.getMessage?"+e.getMessage());
+		}
+		return myConfirmSharingList;
+	}
 }
+

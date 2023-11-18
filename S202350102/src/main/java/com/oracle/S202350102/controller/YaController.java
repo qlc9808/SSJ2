@@ -537,45 +537,87 @@ public class YaController {
 		        return result;
 		    }
 		  
-		//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing)  리스트 조회  - 내가 참가한 쉐어링(myJoinSharing)  		
-		@RequestMapping(value="/sharingManagement")
-		public String myUploadSharingList(HttpSession session, Board board,  Model model) {
-			System.out.println("YaController myUploadSharingList start...");
-			
-			int user_num=0;
-			if(session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
+			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing), 내가 참가한 쉐어링(myJoinSharing)  		
+			@RequestMapping(value="/sharingManagement")
+			public String SharingManagement(HttpSession session, Board board,  Model model) {
+				System.out.println("YaController myUploadSharingList start...");
 				
-				User1 user1 = ycs.userSelect(user_num);
-				model.addAttribute("user1", user1);		
-			
-			List<Board> myUploadSharingList = ycs.myUploadSharingList(user_num);
-			
-			System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
-			model.addAttribute("myUploadSharingList", myUploadSharingList);
-		}
-			return "ya/mySharingManagement";
-	}	  
-		
-		//마이페이지 쉐어링 관리 - 내가 올린 쉐어링 에서 참가자 리스트 조회 (sharingParticipantsInfo)
-		   /*@ResponseBody
-				public String sharingParticipantsInfo(SharingList sharingList, Model model, @RequestParam("brd_num") int brd_num) {
-					System.out.println("YaController sharingParticipantsInfo start.."); */
+				int user_num=0;
+				if(session.getAttribute("user_num") != null) {
+					user_num = (int) session.getAttribute("user_num");
 					
-				/* brd_num= sharingList.getBrd_num(); */
-	
-	    @GetMapping(value = "/sharingParticipantsInfo")
-	    @ResponseBody
-	    public List<SharingList>sharingParticipantsList(@RequestParam("brd_num") int brd_num, Model model) {
-	        System.out.println("YaController sharingParticipantsInfo start..");
-	      
-	        System.out.println("Ya sharingParticipantsInfo Received brd_num: " + brd_num);
-	        
-	        List<SharingList> sharingParticipantsList = ycs.sharingParticipantsList(brd_num);
-	        model.addAttribute("sharingParticipantsList", sharingParticipantsList);
-	        System.out.println("sharingParticipantsList: "+sharingParticipantsList);
-	        return sharingParticipantsList;
-	    }
+					User1 user1 = ycs.userSelect(user_num);
+					model.addAttribute("user1", user1);		
+				
+				List<Board> 	  myUploadSharingList = ycs.myUploadSharingList(user_num);
+				List<SharingList> myJoinSharingList = ycs.myJoinSharingList(user_num);
+				List<Board>		  myConfirmSharingList = ycs.myConfirmSharingList(user_num);
+				
+				System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
+				model.addAttribute("myUploadSharingList", myUploadSharingList);
+				System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
+				model.addAttribute("myJoinSharingList", myJoinSharingList);
+				System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
+				model.addAttribute("myConfirmSharingList", myConfirmSharingList);
+				
+			}
+				return "ya/mySharingManagement";
+				
+		}	  
+			
+			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링 에서 참가자 리스트 조회 (sharingParticipantsInfo)
+			   /*@ResponseBody
+					public String sharingParticipantsInfo(SharingList sharingList, Model model, @RequestParam("brd_num") int brd_num) {
+						System.out.println("YaController sharingParticipantsInfo start.."); */
+						
+					/* brd_num= sharingList.getBrd_num(); */
+		
+		    @GetMapping(value = "/sharingParticipantsInfo")
+		    @ResponseBody
+		    public List<SharingList>sharingParticipantsList(@RequestParam("brd_num") int brd_num, Model model) {
+		        System.out.println("YaController sharingParticipantsInfo start..");
+		      
+		        System.out.println("Ya sharingParticipantsInfo Received brd_num: " + brd_num);
+		        
+		        List<SharingList> sharingParticipantsList = ycs.sharingParticipantsList(brd_num);
+		        model.addAttribute("sharingParticipantsList", sharingParticipantsList);
+		
+		        return sharingParticipantsList;
+		    }
+		    
+		    //마이페이지 쉐어링 관리(내가 올린 쉐어링)-참가자 승인(state_md:101 업데이트), board의 participants가 1씩 증가 
+		    @PostMapping("/sharingConfirm")
+		    @ResponseBody
+		    public Map<String, Object>sharingConfirm (@RequestParam("brd_num") int brd_num, 
+		    										  @RequestParam("user_num") int user_num, 
+		    										  @ModelAttribute SharingList sharingList) {
+		    	System.out.println("YaController sharingConfirm start...");
+		        System.out.println("YaController sharingConfirm Received user_num: " + user_num);
+			    System.out.println("YaController sharingConfirm Received brd_num: " + brd_num);
+			    
+		    	// 참가자 승인 state_md: 101 update 
+		    	int sharingConfirm = 0;
+		    	sharingConfirm = ycs.sharingConfirm(brd_num);
+		    	
+		    	System.out.println("sharingList participants user_num?"+sharingList.getUser_num());
+		    	sharingList.setState_md(101);
+		    	System.out.println("참가자 승인 완료 :"+sharingList);
+		    	
+		        // board의 jk detail Sharing으로 participants 확인
+		        Board board = jbs.detailSharing(brd_num);
+		        System.out.println("YaController sharingConfirm board participants : "+board.getParticipants());
+		        
+		        // board의 participants +1 증가
+		       int participantsCnt = 0;
+		       ycs.upParticipantsCnt(brd_num);
+		       
+		        Map<String, Object> response = new HashMap<>();
+		        response.put("success", true);
+		        response.put("message", "승인처리가 완료되었습니다.");
+		        return response;
+		   
+		    }
+		     
 	
 		  
 }		

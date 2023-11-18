@@ -279,17 +279,76 @@ public class YaBoardDaoImpl implements YaBoardDao {
 			sharingParticipantsList = session.selectList("sharingParticipantsInfo", brd_num);
 			
 			System.out.println("YaBoardDaoImpl sharingParticipantsList.size()(?"+sharingParticipantsList.size());
-			System.out.println("sharingParticipantsList->"+sharingParticipantsList );
-		
 		} catch (Exception e) {
 			System.out.println("YaBoardDaoImpl sharingParticipantsList e.getMessage()?"+e.getMessage());
 		}	
 		return sharingParticipantsList;
 	}
 
+
+	// 마이페이지 - 승인처리
+	@Override
+	public int sharingConfirm(int brd_num) {
+		System.out.println("YaBoardDaoImpl sharingConfirm start...");
+		int sharingConfirm = 0;
+		try {
+			
+			sharingConfirm = session.update("YaSharingConfirm", brd_num);
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl sharingConfirm e.getMessage()?"+e.getMessage());
+		}				
+		return sharingConfirm;
+	}
+
+
+	// 마이페이지 쉐어링 승인시 참가자 수 증가
+	@Override
+	public void upParticipantsCnt(int brd_num) {
+		System.out.println("YaBoardDaoImpl upParticipantsCnt start...");
+	 	
+		try {
+			session.update("YaUpParticipantsCnt" , brd_num);
+		} catch (Exception e) {
+			System.out.println("YaUpParticipantsCnt void ParticipantsCnt e.getMessage)?"+e.getMessage());
+		}
+		
+	}
+
+
+	//마이페이지 내가 참가한 쉐어링 조회
+	@Override
+	public List<SharingList> myJoinSharingList(int user_num) {
+		System.out.println("YaBoardDaoImpl  myJoinSharingList sharingParticipantsInfo start...");
+		List<SharingList> myJoinSharingList = null;
+		try {
+			myJoinSharingList = session.selectList("YaMyJoinSharingList", user_num);
+			
+			System.out.println("YaBoardDaoImpl myJoinSharingList.size()?"+myJoinSharingList.size());
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl myJoinSharingList e.getMessage()?"+e.getMessage());
+		}	
+		return myJoinSharingList;
+
+	}
+
+
+	//마이페이지 내가 승인한 쉐어링 조회 
+	@Override
+	public List<Board> myConfirmSharingList(int user_num) {
+		System.out.println("YaBoardDaoImpl myConfirmSharingList sharingParticipantsInfo start...");
+		List<Board> myConfirmSharingList = null;
+		try {
+			myConfirmSharingList = session.selectList("YaMyConfirmSharingList", user_num);
+			
+			System.out.println("YaBoardDaoImpl myConfirmSharingList.size()?"+myConfirmSharingList.size());
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl myConfirmSharingList e.getMessage()?"+e.getMessage());
+		}	
+		return myConfirmSharingList;
+
+	}
 }
 
-	
 	
 
 
