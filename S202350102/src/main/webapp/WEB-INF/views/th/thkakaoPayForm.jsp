@@ -6,10 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>구독하기</title>
-<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif;} 
-</style>
 </head>
 <body>
 

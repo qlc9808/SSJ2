@@ -124,12 +124,6 @@
 				</button>
 		  </div>
 			
-		  <!-- 전체 회원 조회 버튼 -->
-			<div style="text-align: center;">
-	            <button class="btn btn-primary mb-1" onclick="location.href='/listUserByAdmin'">
-	 				전체 회원 조회 <i class="fe fe-arrow-right ms-2"></i>
-				</button>
-			</div>
           </div>
           
       
@@ -140,7 +134,16 @@
               <div class="col-12 col-md">
 
                 <!-- Heading -->
-                <h3 class="mb-1">챌린지</h3>
+
+                	<h3 class="mb-1">챌린지
+		                <c:choose>
+		                	<c:when test="${chg.chg_md == ''}"></c:when>	
+		                	<c:when test="${chg.chg_md == 100}"> - 운동</c:when>
+		                	<c:when test="${chg.chg_md == 101}"> - 공부</c:when>
+		                	<c:when test="${chg.chg_md == 102}"> - 취미</c:when>
+		                	<c:when test="${chg.chg_md == 103}"> - 습관</c:when>
+		                </c:choose>
+                	</h3>
 
               </div>
               <div class="col-12 col-md-auto">
@@ -206,24 +209,25 @@
 			                  <!-- Image -->
 			                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
 			                  <c:if test="${chg.thumb != null}">
-			                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+			                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
 			                  </c:if>
 			                  <c:if test="${chg.thumb == null}">
-			                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+			                  	<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
 			                  </c:if>
 							  </a>
 			              </div>
 			
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
-			                <div class="text-muted"> 
+			                <a class="text-body fw-bolder fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+			                <div> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 
 			                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                 </div>
-			                <div class="text-muted">참여인원: ${chg.chlgerCnt}
-			            	</div>
+			                <div>참여인원: ${chg.chlgerCnt}명</div>
+			                <div>찜수: ${chg.pick_cnt }</div>
+			                
 			              </div>
 							
 			            </div>
@@ -244,7 +248,12 @@
 					
 				    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 						<li class="page-item">
+							<c:if test="${i == page.currentPage }">
+								<a class="page-link" href="thChgList?currentPage=${i }"><b class="text-primary">${i}</b></a>
+							</c:if>
+							<c:if test="${i != page.currentPage }">
 								<a class="page-link" href="thChgList?currentPage=${i }">${i}</a>
+							</c:if>
 						</li>
 					</c:forEach>
 				    <c:if test="${page.endPage < page.totalPage }">

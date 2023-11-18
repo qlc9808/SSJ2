@@ -17,7 +17,6 @@ public class Challenge {
 	private String 	chg_conts;		// 챌린지소개
 	private int 	state_lg;		// 진행상태(대분류)
 	private int 	state_md;		// 진행상태(중분류)
-	private int 	pick_cnt;		// 챌린지찜수
 	private String 	upload;			// 인증방법
 	private String 	sample_img;		// 인증예시사진
 	private int 	freq;			// 인증빈도
@@ -50,4 +49,5 @@ public class Challenge {
 	private String chlgerCnt; 		// 챌린지 참여자 수 
 	private int	   my_user_num;  	// user별 챌린지 리스트 찜하기 확인용
 	private int    pickyn;			// 찜하기 여부 판단용
+	private int    pick_cnt;		// 챌린지 찜수
 }

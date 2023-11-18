@@ -126,7 +126,7 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 
 	@Override
 	public int user1PswdUpdate(Map<String, Object> map) {
-		System.out.println("User1DaoImpl User1PswdUpdate Start... ");
+		System.out.println("ThUser1DaoImpl User1PswdUpdate Start... ");
 		int updateResult = 0;
 		try {
 			updateResult = session.update("thUser1PswdUpdate", map);
@@ -140,14 +140,14 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 
 	@Override
 	public int totalUser() {
-		System.out.println("User1DaoImpl totalUser Start... ");
+		System.out.println("ThUser1DaoImpl totalUser Start... ");
 		int totUserCnt = 0;
 
 		try {											 
 			totUserCnt = session.selectOne("ThTotUserCnt");
-			System.out.println("User1DaoImpl totalUser totUserCnt -->" + totUserCnt);
+			System.out.println("ThUser1DaoImpl totalUser totUserCnt -->" + totUserCnt);
 		} catch (Exception e) {
-			System.out.println("User1DaoImpl totalUser Exception -->" + e.getMessage());
+			System.out.println("ThUser1DaoImpl totalUser Exception -->" + e.getMessage());
 		} 
 		
 		return totUserCnt;
@@ -156,16 +156,55 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 
 	@Override
 	public List<User1> listUser(User1 user1) {
-		System.out.println("User1DaoImpl listUser Start... ");
+		System.out.println("ThUser1DaoImpl listUser Start... ");
 		List<User1> userList = null;
 		try {				
-			userList = session.selectList("tkUserListAll",user1);
-			System.out.println("User1DaoImpl listUser userList.size() --> " + userList.size());
+			userList = session.selectList("thUserListAll",user1);
+			System.out.println("ThUser1DaoImpl listUser userList.size() --> " + userList.size());
 		} catch (Exception e) {
-			System.out.println("User1DaoImpl listUser Exception -->" + e.getMessage());
+			System.out.println("ThUser1DaoImpl listUser Exception -->" + e.getMessage());
 		}
 		return userList;
 
+	}
+
+	@Override
+	public int updateUserLoginDate(int user_num) {
+		System.out.println("ThUser1DaoImpl updateUserLoginDate Start... ");
+		int updateResult = 0;
+		try {				
+			updateResult = session.update("thUpdateUserLoginDate", user_num);
+			System.out.println("ThUser1DaoImpl updateUserLoginDate updateResult --> " + updateResult);
+		} catch (Exception e) {
+			System.out.println("ThUser1DaoImpl updateUserLoginDate Exception -->" + e.getMessage());
+		}
+		return updateResult;
+	}
+
+	@Override
+	public int deleteUserByAdmin(int user_num) {
+		System.out.println("ThUser1DaoImpl deleteUserByAdmin Start... ");
+		int deleteResult = 0;
+		try {				
+			deleteResult = session.update("thDeleteUserByAdmin", user_num);
+			System.out.println("ThUser1DaoImpl deleteUserByAdmin deleteResult --> " + deleteResult);
+		} catch (Exception e) {
+			System.out.println("ThUser1DaoImpl deleteUserByAdmin Exception -->" + e.getMessage());
+		}
+		return deleteResult;
+	}
+
+	@Override
+	public int activeUserByAdmin(int user_num) {
+		System.out.println("ThUser1DaoImpl activeUserByAdmin Start... ");
+		int deleteResult = 0;
+		try {				
+			deleteResult = session.update("thActiveUserByAdmin", user_num);
+			System.out.println("ThUser1DaoImpl activeUserByAdmin deleteResult --> " + deleteResult);
+		} catch (Exception e) {
+			System.out.println("ThUser1DaoImpl activeUserByAdmin Exception -->" + e.getMessage());
+		}
+		return deleteResult;
 	}
 	
 	

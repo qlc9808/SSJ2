@@ -6,10 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>회원 탈퇴</title>
-<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif; } 
-</style>   
 </head>
 <script type="text/javascript">
 	function chk(){

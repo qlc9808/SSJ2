@@ -6,31 +6,40 @@
 <head>
 <meta charset="UTF-8">
 <title>전체 유저 조회</title>
+<script type="text/javascript">
+	function fn_delCheck(p_index){
+		var p_user_num 		= $("#user_num"+p_index).val();
+		var p_delete_yn 	= $("#delete_yn"+p_index).val();
+		location.href = "/delUserByAdmin?user_num="+p_user_num+"&delete_yn="+p_delete_yn
+	}
+	
+</script>
 </head>
 <body>
 	<%@ include file="../adminMenu.jsp" %>
 		<div class="col-10">
 		<c:set var="num" value="${page.total-page.start+1 }"></c:set>
+		
 			<table class="table table-bordered table-sm mb-0">
 			  <thead>
-				<tr>
+				<tr class="p-2 text-center">
 					<th>번호</th>
 					<th>아이디</th>
 					<th>이름</th>
-					<th>이메일</th>
 					<th>전화번호</th>
 					<th>회원상태</th>
-					<th>탈퇴여부</th>
-					<th class="text-center"> - </th>
+					<th class="text-center"> 탈퇴여부 </th>
+					<th class="text-center"> 상세정보 </th>
 				</tr>
 			  </thead>
 			  <tbody>
-				<c:forEach var="user1" items="${user1List }">
-					<tr>
+				<c:forEach var="user1" items="${user1List }" varStatus="status">
+					<tr class="text-center" id="user${status.index }">
+						<input type="hidden" id="user_num${status.index}" value="${user1.user_num }">
+						<input type="hidden" id="delete_yn${status.index}" value="${user1.delete_yn }">
 						<td>${num }</td>
 						<td>${user1.user_id }</td>
 						<td>${user1.user_name}</td>
-						<td>${user1.email}</td>
 						<td>${user1.tel }</td>
 						<c:choose>
 							<c:when test="${user1.status_md == 100 }"><td>일반</td></c:when>
@@ -39,7 +48,9 @@
 							<c:when test="${user1.status_md == '' }"><td></td></c:when>
 						</c:choose>						
 						<td>${user1.delete_yn }</td>
-						<td class="justify-content-center"><button type="button" class="btn btn-secondary btn-xs">상세보기</button></td>
+						<td class="justify-content-center">
+							<button type="button" class="btn btn-secondary btn-xs" onclick="location.href='/detailUserByAdmin?user_num=${user1.user_num}&pageNum=${page.currentPage}'">상세보기</button>
+						</td>
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
 				</c:forEach>
@@ -58,7 +69,12 @@
 						
 					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 							<li class="page-item">
+								<c:if test="${i == page.currentPage }">
+									<a class="page-link px-2" href="listUserAdmin?currentPage=${i }"><b class="text-primary">${i}</b></a>
+								</c:if>
+								<c:if test="${i != page.currentPage }">
 									<a class="page-link px-2" href="listUserAdmin?currentPage=${i }">${i}</a>
+								</c:if>
 							</li>
 						</c:forEach>
 					    <c:if test="${page.endPage < page.totalPage }">
@@ -71,7 +87,7 @@
 			  		</nav>
 			  </div>
 		  	</div>
-		  <div class="py-10"></div>	
+		  	<div class="py-10"></div>	
 		  </div>
 <%@ include file="/WEB-INF/views/footer.jsp" %>		  		
 
