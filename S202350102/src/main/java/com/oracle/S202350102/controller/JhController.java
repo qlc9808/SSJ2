@@ -23,6 +23,7 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
+import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
@@ -430,6 +431,23 @@ public class JhController {
 		//유저의 회원상태 가져옴
 		String userStatus = jhCService.userStatus(userNum);
 		
+		//챌린지 카테고리 중분류 번호 가져오기
+		//챌린지 카테고리 대분류
+		int categoryLd = 200;
+		List<Comm> category = jhCService.category(categoryLd);
+		
+		model.addAttribute("category", category);
+		
+		List<Challenge> recomChgList = null;
+		if (!category.isEmpty()) {
+		    int firstMdValue = category.get(0).getMd();
+		    
+		    recomChgList = recommendCallenge(firstMdValue);
+			
+		}
+		
+		model.addAttribute("recomChgList", recomChgList);
+		
 		model.addAttribute("user", user);
 		model.addAttribute("userStatus", userStatus);
 		
@@ -437,6 +455,21 @@ public class JhController {
 		return "jh/jhChgApplicationForm";
 	}
 	
+	
+		@ResponseBody
+		@RequestMapping(value = "recommendCallenge") 
+		public List<Challenge>  recommendCallenge(int chg_md){
+			System.out.println("JhController recommendCallenge Start...");
+			
+			List<Challenge> recomChgList = jhCService.recomChgList(chg_md);
+//			for (Challenge challenge : chgList) {
+//			    System.out.println(challenge.getTitle());
+//			}
+			
+
+			return recomChgList;
+		}
+		
 	
 	//챌린지 신청 등록
 	@RequestMapping(value = "chgApplication")
@@ -609,49 +642,22 @@ public class JhController {
 		return "jh/modify";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "recommendCallenge") 
-	public RecommendationResult  recommendCallenge(int chg_md){
-		System.out.println("JhController recommendCallenge Start...");
-		
-		List<Challenge> chgList = jhCService.recomChgList(chg_md);
-//		for (Challenge challenge : chgList) {
-//		    System.out.println(challenge.getTitle());
-//		}
-		
-		
-		List<RecommendChg> recomChgList = new ArrayList<RecommendChg>();
-		
-		
-		
-		 // chgList의 각 Challenge 객체를 순회하며 데이터를 추출하여 recomChgList에 추가
-	    for (Challenge challenge : chgList) {
-	    	RecommendChg recomChg = new RecommendChg();
-	        recomChg.setChg_id(challenge.getChg_id());
-	        recomChg.setTitle(challenge.getTitle());
-	        recomChg.setThumb(challenge.getThumb());
-	        recomChgList.add(recomChg);
-	        System.out.println(recomChgList);
-	        //다시 하기
-	    }
-		
-	    
-		
-		return new RecommendationResult (recomChgList, recomChgList.size());
-	}
+	
 	
 	@Data
-	private class RecommendChg {
+	public class RecommendChg {
 		private int 	chg_id;
 		private String 	title;
 		private String	thumb;
 		
 	}
+	
+
 	 
 	@Data
-	private static class RecommendationResult {
-	    private final List<RecommendChg> recomChgList;
-	    private final int recomChgListSize;
+	private static class Result {
+	    private final List<?> List;
+	    private final int listSize;
 	}
 	
 	

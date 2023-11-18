@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -293,10 +294,23 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		try {
 			chgList = session.selectList("jhRecommendChgList", chg_md);
 		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl recomChgList e.getMessage() -> " + e.getMessage());
 
 		}
 		
 		return chgList;
+	}
+
+	@Override
+	public List<Comm> category(int categoryLd) {
+		System.out.println("JhChallengeDaoImpl category Start...");
+		List<Comm> category = null;
+		try {
+			category = session.selectList("jhCategory", categoryLd);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl category e.getMessage() -> " + e.getMessage());
+		}
+		return category;
 	}
 
 

@@ -8,41 +8,83 @@
 <meta charset="UTF-8">
 
 <script type="text/javascript">
-	function ajaxChallengeList(pChg_md){
+	function ajaxRecommendList(pChg_md){
 		$.ajax({
 			url: '/recommendCallenge',
 			data: {chg_md : pChg_md},
 			dataType:'json',
-			success:function(RecommendationResult){
-				console.log("RecommendationResult -> ", RecommendationResult);
-				alert("RecommendationResult -> "+RecommendationResult.recomChgListSize);
-				 var text = recomList(RecommendationResult);
-		            $('#hiddenCard').show();
-		            $("#hiddenCard .flickity-page-dots-progress").html(text);
-			}
-		})
+			success:function (recomChgList) {
+				 var text = recomList(recomChgList);
+				 $('#topSellersTab .flickity-buttons-lg').html(text);
+				 
+				 initFlickity();
+	        }
+	    });
+	}
+
+	function recomList(recomChgList) {
+	    var text = "";
+	    for (var i = 0; i < recomChgList.length; i++) {
+	        var item = recomChgList[i];
+	        var contextPath = $('#contextPath').val();
+	        alert("item -> " + item.chg_id + item.title);
+	        text += '<div class="col px-4" style="max-width: 200px;">';
+	        text += '<div class="card">';
+	        text += '<img class="card-img-top" id="recomChgThumb' + i + '" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="' + contextPath + item.thumb + '" alt="이미지 불러오기에 실패했습니다">';
+	        text += '<div class="card-body py-4 px-0 text-center">';
+	        text += '<a class="stretched-link text-body" id="rcomChgUrl' + i + '" href="/chgDetail?chg_id=' + item.chg_id + '">';
+	        text += '<label class="form-check-label" id="recomChgTitle' + i + '" for="rcomChgUrl">' + item.title + '</label>';
+	        text += '</a>';
+	        text += '</div>';
+	        text += '</div>';
+	        text += '</div>';
+	    }
+	    return text;
 	}
 	
-	 function recomList(RecommendationResult){
-		 var text = "";
-	     for(var i = 0; i < RecommendationResult.recomChgListSize; i++ ){
-			alert("title -> " + RecommendationResult.recomChgList[i].title );
-			text +='<div class="col px-4" style="max-width: 150px;">'
-                + '<div class="card">'
-             	 + '<div class="card-img">'
-             	 + '<button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" id="chgDetailBtn" onclick="/chgDetail?chg_id='+RecommendationResult.recomChgList[i].chg_id+'">'
-             	 + '<i class="fe fe-eye me-2 mb-1"></i> 챌린지 보러가기'
-                + '</button>'
-             	 + '<img id="recommendChgImg" class="card-img-top" src="'+RecommendationResult.recomChgList[i].thumb+'" alt="">'
-             	 + '</div>'
-                + '<div class="card-body fw-bold text-center">'
-                + '<a class="text-body" id="recommendChgTitle" href="/chgDetail?chg_id='+RecommendationResult.recomChgList[i].chg_id+'">'+RecommendationResult.recomChgList[i].title+'</a> <br>'
-                + '</div>'
-                + '</div>'
-                + '</div>';
-	      }
-	      return text;
-	   }
+	// Flickity 초기화 함수
+	function initFlickity() {
+	    $('.flickity-buttons-lg').flickity({
+	        // 옵션 설정
+	        prevNextButtons: true,
+	        // 다른 필요한 옵션들을 추가로 설정할 수 있습니다.
+	    });
+	}
+	    // 생성된 HTML을 어떤 엘리먼트에 추가할지 결정 (예시로 body에 추가)
+
+/* 	$(document).ready(function() {
+	    // 페이지 로딩 후 초기 설정
+	    if ($('#exercise').prop('checked')) {
+	        ajaxChallengeList(100);
+	    }
+	}
+
+	
+	function recomList(RecommendationResult) {
+	    var text = "";
+	    for (var i = 0; i < RecommendationResult.recomChgListSize; i++) {
+	        var chg_id = RecommendationResult.recomChgList[i].chg_id;
+	        var thumb = RecommendationResult.recomChgList[i].thumb;
+	        var title = RecommendationResult.recomChgList[i].title;
+
+	        text += '<div class="col px-4" style="max-width: 200px;">';
+	        text += '<div class="card">';
+
+	        // Image
+	        text += '<img class="card-img-top" src="' + thumb + '" alt="...">';
+
+	        // Body
+	        text += '<div class="card-body py-4 px-0 text-center">';
+	        text += '<a class="stretched-link text-body" href="/chgDetail?chg_id=' + chg_id + '">';
+	        text += '<label class="form-check-label" for="rcomChgUrl">' + title + '</label>';
+	        text += '</a>';
+	        text += '</div>';
+
+	        text += '</div>';
+	        text += '</div>';
+	    }
+	    return text;
+	} */
 				
 	   
 	 /*     function recomList(RecommendationResult){
@@ -95,6 +137,7 @@
             <!-- Form -->
             <form>
               <input type="hidden" name="user_num" value="${user.user_num}">
+              <input type="hidden" name="contextPath" id="contextPath" value="${pageContext.request.contextPath}/upload/">
 <%-- 필요한가
 			  <input type="hidden" name="userStatus" value="${userStatus}">
  --%>              
@@ -108,100 +151,74 @@
                   	<label class="form-label" for="accountFirstName">
                      	카테고리
                     </label>
-                    <div class="input-group mb-3  d-flex justify-content-between border-1">
-                    	<div class="input-group-text border-0">
-							<input class="form-check-input" 
-							       type="radio" 
-							       name="chg_md" 
-							       id="exercise" 
-							       value="100"  
-							       required="required"
-							       onclick="ajaxChallengeList(100)">
-                    		<label class="form-check-label" for="exercise">운동</label>
-                    	</div>
                     
-	                    <div class="input-group-text border-0">
-	                    	<input class="form-check-input" 
-	                    	type="radio" 
-	                    	name="chg_md" 
-	                    	id="studying" 
-	                    	value="101"
-	                    	 onclick="ajaxChallengeList(101)">
-	                    	<label class="form-check-label" for="studying">공부</label>
-	                    </div>
-                    
-	                    <div class="input-group-text border-0">
-	                    	<input class="form-check-input" 
-	                    	type="radio" 
-	                    	name="chg_md" 
-	                    	id="hobby" 
-	                    	value="102"
-	                    	 onclick="ajaxChallengeList(102)">
-	                    	<label class="form-check-label" for="hobby">취미</label>
-	                    </div>
-                    
-	                    <div class="input-group-text border-0">
-	                    	<input class="form-check-input" 
-	                    	type="radio" 
-	                    	name="chg_md" 
-	                    	id="habit" 
-	                    	value="103"
-	                    	onclick="ajaxChallengeList(103)">
-	                    	<label class="form-check-label" for="habit">습관</label>
-	                    </div>
+	                <div class="input-group mb-3  d-flex justify-content-between border-1">
+                    <c:forEach var="category" items="${category }" varStatus="status">
+	                    	<div class="input-group-text border-0">
+								<input class="form-check-input" 
+								       type="radio" 
+								       name="chg_md" 
+								       id="category${status.index}"
+								       ${status.index == 0 ? 'checked' : ''} 
+								       value="${category.md }"  
+								       required="required"
+								       onclick="ajaxRecommendList(${category.md })">
+	                    		<label class="form-check-label" for="category${status.index}">${category.ctn }</label>
+	                    	</div>
+	              	</c:forEach>
+
 					</div>
                   </div>
 
                 </div>
                 
+<div class="container">
+        <div class="row">
+          <div class="col-12">
 
-				
-			    <!-- ARRIVALS -->
-			      <div class="container">
-			        <div class="row">
-			          <div class="col-12">
-			
-			            <!-- Heading -->
-			            <span class="mb-10">이런 챌린지는 어떠세요?</span><p>
-							<div class="alert alert-warning">
-							카테고리를  선택하시면 기존에 개설된 챌린지 리스트가 나옵니다!
-							</div>
-			          </div>
-			        </div>
-			      </div>
-			      <div id="hiddenCard" >
-				      <div class="flickity-page-dots-progress" data-flickity='{"pageDots": true}'>
-				 <!-- Item -->
-        <div class="col px-4" style="max-width: 300px;">
-          <div class="card">
+            <!-- Heading -->
+           <span class="mb-10">이런 챌린지는 어떠세요?</span><p>
+                     <div class="alert alert-warning">
+                     카테고리를  선택하시면 기존에 개설된 챌린지 리스트가 나옵니다!
+</div>
+            
 
-            <!-- Image -->
-            <div class="card-img">
+            <!-- Content -->
+            <div class="tab-content">
 
-              <!-- Action -->
-              <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
-                <i class="fe fe-heart"></i>
-              </button>
+              <!-- Pane -->
+              <div class="tab-pane fade show active" id="topSellersTab">
 
-              <!-- Button -->
-              <button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" data-bs-target="#modalProduct">
-                <i class="fe fe-eye me-2 mb-1"></i> Quick View
-              </button>
+                <!-- Slider -->
+                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
 
-              <!-- Image -->
-              <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
-
-            </div>
-
-            <!-- Body -->
-            <div class="card-body fw-bold text-center">
-              <a class="text-body" href="product.html">Cotton floral print Dress</a> <br>
-              <span class="text-muted">$40.00</span>
-            </div>
-
-				       </div>
-			       </div>
-        </div>
+                    <c:forEach var="recomgList" items="${recomChgList }" varStatus="status">
+	                  <!-- Item -->
+	                  <div class="col px-4" style="max-width: 200px;">
+	                    <div class="card">
+	
+	                      <!-- Image -->
+	                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="이미지  불러오기에 실패했습니다">
+	
+	                      <!-- Body -->
+	                      <div class="card-body py-4 px-0 text-center">
+	
+	                        <!-- Heading -->
+	                        <a class="stretched-link text-body" id="rcomChgUrl${status.index}" href="/chgDetail?chg_id=${recomgList.chg_id }">
+	                        <label class="form-check-label" id="recomChgTitle${status.index}" for="rcomChgUrl">${recomgList.title }</label>
+	                        </a>
+	
+	                      </div>
+	
+	                    </div>
+	                  </div>
+	                </c:forEach>
+				</div>
+				</div>
+			  </div>
+			  </div>
+			  </div>
+			  </div>
 				
                 <div class="col-12">
 
@@ -218,9 +235,9 @@
                 
                 <div class="col-12">
 
-                  <!-- 챌린지명 -->
+                  <!-- 챌린지 소개-->
                   <div class="form-group">
-                    <label class="form-label" for="title">
+                    <label class="form-label" for="chg_conts">
                       	챌린지 소개
                     </label>
                     <textarea class="form-control form-control-sm" rows="5" id="chg_conts" type="text" name="chg_conts" required placeholder="예) 건강을 위해서 우리 다함께 매일 만보를 걷는 챌린지를 해봐요~"></textarea>
@@ -295,10 +312,10 @@
 
                   <!-- 인증예시 사진 -->
                   <div class="form-group">
-                    <label class="form-label" for="accountEmail">
+                    <label class="form-label" for="sample_img">
                       	인증 예시
                     </label>
-					<input type="file" class="form-control" id="inputGroupFile01" name="sample_img">
+					<input type="file" class="form-control" id="sample_img" name="sample_img">
                   </div>
 
                 </div>
@@ -370,10 +387,10 @@
 
                   <!-- 챌린지명 -->
                   <div class="form-group">
-                    <label class="form-label" for="title">
+                    <label class="form-label" for="thumb">
                       	썸네일
                     </label>
-					<input type="file" class="form-control" id="inputGroupFile01" name="thumb">
+					<input type="file" class="form-control" id="thumb" name="thumb">
                   </div>
 
                 </div>

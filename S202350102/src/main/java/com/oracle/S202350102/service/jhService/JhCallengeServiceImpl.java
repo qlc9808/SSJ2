@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.oracle.S202350102.dao.jhDao.JhChallengeDao;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -164,6 +165,15 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		List<Challenge> chgList = jhChgDao.recomChgList(chg_md);
 		
 		return chgList;
+	}
+
+	@Override
+	public List<Comm> category(int categoryLd) {
+		System.out.println("JhCallengeServiceImpl category Start...");
+		List<Comm> category = jhChgDao.category(categoryLd);
+		
+		
+		return category;
 	}
 
 
