@@ -148,6 +148,30 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 	}
 
 
+	@Override
+	public int updateUserLoginDate(int user_num) {
+		System.out.println("ThUser1ServiceImpl updateUserLoginDate Start...");
+		int updateResult = ud1.updateUserLoginDate(user_num);
+		return updateResult;
+	}
+
+
+	@Override
+	public int deleteUserByAdmin(int user_num) {
+		System.out.println("ThUser1ServiceImpl deleteUserByAdmin Start...");
+		int deleteResult = ud1.deleteUserByAdmin(user_num);
+		return deleteResult;
+	}
+
+
+	@Override
+	public int activeUserByAdmin(int user_num) {
+		System.out.println("ThUser1ServiceImpl activeUserByAdmin Start...");
+		int deleteResult = ud1.activeUserByAdmin(user_num);
+		return deleteResult;
+	}
+
+
 	
 
 }

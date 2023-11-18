@@ -18,7 +18,7 @@
 	
 	<update id="thDeleteUser1" parameterType="User1">
 		UPDATE 	user1
-		SET	   	delete_yn = 'Y'
+		SET	   	delete_yn = 'Y', end_date = SYSDATE
 		WHERE  	user_num   = #{user_num}
 		AND		user_pswd = #{user_pswd}	
 	</update>
@@ -69,7 +69,7 @@
 		FROM	user1
 	</select>
 	
-	<select id="tkUserListAll" parameterType="User1" resultType="User1">
+	<select id="thUserListAll" parameterType="User1" resultType="User1">
 		SELECT * 
 		FROM 
 			(
@@ -80,5 +80,25 @@
 		WHERE rn BETWEEN #{start} AND #{end}
 		
 	</select>
+	
+	<update id="thUpdateUserLoginDate" parameterType="int">
+		UPDATE	user1
+		SET		last_lgn_date = SYSDATE
+		WHERE	user_num = #{user_num}
+	</update>
+	
+	<update id="thDeleteUserByAdmin" parameterType="int">
+		UPDATE	user1
+		SET		delete_yn = 'Y', 
+				end_date = SYSDATE
+		WHERE	user_num = #{user_num}
+	</update>
+	
+	<update id="thActiveUserByAdmin" parameterType="int">
+		UPDATE	user1
+		SET		delete_yn = 'N'
+		WHERE	user_num = #{user_num}
+	</update>
+	
 </mapper>
 

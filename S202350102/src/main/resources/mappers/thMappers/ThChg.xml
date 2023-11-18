@@ -43,6 +43,7 @@
 			                WHERE 		cp.chg_id = chl.chg_id
 			                AND 		cp.user_num = #{my_user_num}
 			               ) AS pickyn
+			           , count_pick(chg_id) as pick_cnt
 		FROM 
 		(
 			SELECT rownum rn, a.*
@@ -63,7 +64,7 @@
 				 <choose>
 				 	<when test="sortOpt ==  null">			ORDER BY 	c.create_date DESC) a</when>
 				 	<when test="sortOpt == 'create_date'">	ORDER BY 	c.create_date DESC) a</when>
-				 	<when test="sortOpt == 'pick_cnt'">		ORDER BY 	c.pick_cnt DESC) a</when>
+				 	<when test="sortOpt == 'pick_cnt'">		ORDER BY 	count_pick(chg_id) DESC) a</when>
 				 	<when test="sortOpt == 'participants'">	ORDER BY 	( 
 														                    SELECT      COUNT(cr.chg_id) AS cnt
 														                    FROM        challenger cr

@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +32,7 @@ import com.oracle.S202350102.dto.Comm;
 //import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
@@ -54,6 +56,7 @@ public class ThController {
 	private final JavaMailSender mailSender;
 	private final Level1Service ls;
 	private final ThChgService tcs;
+	private final JkBoardService jbs;
 	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
@@ -105,7 +108,12 @@ public class ThController {
 				session.setAttribute("user_num", loginResult.getUser_num());
 		         int user_num = (int) session.getAttribute("user_num");
 		         ls.userLevelCheck(user_num);
-				System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
+		         
+		         //로그인 성공시 마지막 로그인 날짜 SYSDATE로 업데이트
+		         int updateResult = us1.updateUserLoginDate(user_num);
+		         System.out.println("Thcontroller login updateResult --> " + updateResult);
+		         
+				 System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
 				return "home2";
 			// 탈퇴처리된 아이디 인경우		
 			} else {
@@ -146,7 +154,8 @@ public class ThController {
 	@PostMapping(value = "/deleteUser1")
 	public String deleteUser1(User1 user1, HttpSession session, Model model) {
 		System.out.println("ThController deleteUser1 Start... ");
-		int deleteUserCnt = us1.deleteUser(user1); // 회원상태 탈퇴여부 N에서 Y로 변경
+		// 회원상태 탈퇴여부 N에서 Y로 변경, 탈퇴일자 추가
+		int deleteUserCnt = us1.deleteUser(user1); 
 		System.out.println("ThController deleteUserCnt result --> " + deleteUserCnt);
 		if (deleteUserCnt > 0) {
 			model.addAttribute("deleteUserCnt",deleteUserCnt);
@@ -394,6 +403,35 @@ public class ThController {
     	model.addAttribute("page"	  ,	page );
     	
     	return	"th/listUserAdmin";
+    }
+    
+    @GetMapping(value = "/delUserByAdmin")
+    public String delUserByAdmin(User1 user1, Model model, String pageNum) {
+    	System.out.println("thController delUserByAdmin Start...");
+    	System.out.println("thController user1.getUser_num() --> " + user1.getUser_num());
+    	System.out.println("thController user1.getDelete_yn() --> " + user1.getDelete_yn());
+    	int deleteResult = 0;
+
+    	// 유저의 탈퇴여부가 N이면 탈퇴 시킴 
+    	if(user1.getDelete_yn().equals("N")) {			// user_num 파라미터 넘겨줌
+    		deleteResult = us1.deleteUserByAdmin(user1.getUser_num());
+    	// 유저의 탈퇴여부가 Y면 다시 활성화 	
+    	} else if (user1.getDelete_yn().equals("Y")) {
+    		deleteResult = us1.activeUserByAdmin(user1.getUser_num());
+		}
+    	System.out.println("thController deleteResult --> " + deleteResult);
+//    	model.addAttribute("pageNum", pageNum);
+    	
+		return "forward:/detailUserByAdmin?user_num="+user1.getUser_num()+"&pageNum="+pageNum;
+    }
+    
+    @GetMapping(value = "/detailUserByAdmin")
+    public String detailUserByAdmin(User1 user1, int user_num, int pageNum, Model model) {
+    	System.out.println("thController detailUserByAdmin Start...");
+    	user1 = jbs.userSelect(user_num);
+    	model.addAttribute("user1", user1);
+    	model.addAttribute("pageNum",pageNum);
+    	return "th/detailUserByAdmin";
     }
 
 }
