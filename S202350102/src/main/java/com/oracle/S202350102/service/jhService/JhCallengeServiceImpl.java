@@ -157,6 +157,15 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		
 	}
 
+	@Override
+	public List<Challenge> recomChgList(int chg_md) {
+		System.out.println("JhCallengeServiceImpl recomChgList Start...");
+		
+		List<Challenge> chgList = jhChgDao.recomChgList(chg_md);
+		
+		return chgList;
+	}
+
 
 	
 	

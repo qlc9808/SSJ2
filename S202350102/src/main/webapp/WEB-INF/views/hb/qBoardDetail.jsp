@@ -11,16 +11,18 @@
 <link rel="stylesheet" href="/css/qBoardDetail.css">
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
+	<i class="fa-sharp fa-light fa-image"></i>
 	<div id="qbd-main">
 		<div id="qbd-title">
 			<p>${board.title }
 					<a href="qBoardUpdateForm?brd_num=${board.brd_num }">수정</a>
-					<a href="javascript:void(0);" onclick="confirmDelete(${board.brd_num});">삭제</a>
+					<a href="javascript:void(0);" onclick="confirmDelete(${board.brd_num}, '${board.img}');">삭제</a>
 					<a href="qBoardList?board=${board }">목록</a></p>
 				
 		</div>
 		<hr width="100%">
 		<div class="qbd-content">
+			<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>
 			<span>${board.conts }</span>
 		</div>
 		<hr width="100%">
@@ -28,6 +30,7 @@
 			<div class="qbd-rp-write">
 				<form  name="boardTrans"   id="boardTrans">
 				    <input type="hidden"  id="brd_num"  name="brd_num" value="${board.brd_num }">
+				    <input type="hidden"  id="img"  name="img" value="${board.img }">
 				    <input type="hidden"  id="brd_md" 	 name="brd_md" value="${board.brd_md }">
 				    <input type="hidden"  id="brd_group"  name="brd_group" value="${board.brd_num }">
 				    <textarea rows="4" cols="50" name="conts" id="conts" placeholder="댓글을 입력하세요." required="required"></textarea><p>
@@ -206,10 +209,10 @@
 	    });
 	});
 
-	function confirmDelete(brd_num) {
+	function confirmDelete(brd_num, img) {
 	    var result = confirm("게시글을 삭제하시겠습니까?");
 	    if (result) {
-	        window.location.href = "qBoardDelete?brd_num=" + brd_num;
+	        window.location.href = "qBoardDelete?brd_num=" + brd_num+"&img="+img;
 	    } else {
 	    }
 	}

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -159,7 +160,7 @@ public class BgController {
 		System.out.println("BgController writeCertBrd board.getTitle() -> " + board.getTitle());
 		System.out.println("BgController writeCertBrd board.getChg_Id() -> " + board.getChg_id());
 		System.out.println("BgController writeCertBrd chg_id -> " +chg_id);
-		// chg_id = board.getChg_id();
+		// chg_id = board.getCbrdNumDeletehg_id();
 		  // 세션에서 회원 번호 가져옴 
 		int userNum = 0; 
 		if (session.getAttribute("user_num") != null) { 
@@ -255,17 +256,34 @@ public class BgController {
 	
 	
 	// certBoardUpdate 인증 게시판 글 수정	-> 현재 챌린지 메인 페이지가 없는 관계로 수정하면 DB 값은 수정되나, 화면 에러가 남. 보류
-	// mapper key:	certBoardUpdate
+	// mapper key:	updateCertBrd
 	@PostMapping(value = "updateCertBrd")
-	public String updateCertBrd(Board board, Model model) {
+	public String updateCertBrd(Board board, Model model, HttpServletRequest request,
+								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
+										throws IOException {
 		log.info("updateCertBrd Start...");
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+//		ServletContext servletContext = request.getSession().getServletContext();
+//		String realPath = servletContext.getRealPath("/upload/");
+//		System.out.println("realPath -> "+realPath);
+		
+		if (editFile != null) {
+			// 진짜 저장
+			String saveName = uploadFile(editFile.getOriginalFilename(), editFile.getBytes(), realPath);
+			board.setImg(saveName);
+		}
+		System.out.println("realPath -> "+realPath);
+		System.out.println("board.getImg() -> "+board.getImg());
 		
 		int updateCount = bs.updateCertBrd(board);
 		System.out.println("BgController bs.updateCertBrd updateCount -> "+updateCount);
+		
 		model.addAttribute("uptCnt", updateCount);
 		model.addAttribute("kk3", "Message Test");
 		
-		return "redirect:ChgDetail";
+		return "redirect";
 	}
 	
 	
@@ -275,7 +293,7 @@ public class BgController {
 		System.out.println("BgController Start delete...");
 		int result = bs.deleteCertBrd(brd_num);
 		
-		return "redirect:jhChgDetail";
+		return "redirect:ChgDetail";
 	}
 	
 	
@@ -283,12 +301,72 @@ public class BgController {
 	// ajax로 인증 게시판 삭제하기		deleteCertBrd
 	@ResponseBody
 	@RequestMapping(value = "/brdNumDelete")
-	public String brdNumDelete(Board board) {
+	public String brdNumDelete( @RequestParam("brd_num") int brd_num,
+								@RequestParam("img") String img,
+								HttpServletRequest request) {
 		System.out.println("BgController brdNumDelete Start");
-		System.out.println("BgController brdNumDelete board.getBrd_num() -> "+board.getBrd_num());
-		int delStatus = bs.deleteCertBrd(board.getBrd_num());
-		String delStatusStr = Integer.toString(delStatus);
-		return delStatusStr;
+		System.out.println("BgController brdNumDelete brd_num -> "+brd_num);
+		System.out.println("BgController brdNumDelete img -> "+img);
+		
+		int delStatus = bs.deleteCertBrd(brd_num);
+		
+		if (delStatus == 1) {
+			
+			// 1. 파일 업로드 경로를 얻어옵니다
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			
+			// 2. 삭제할 파일의 경로를 지정합니다. 
+			String deleteFile = uploadPath + img;
+			
+			// 로그에 삭제할 파일의 경로를 출력합니다.
+			log.info("deleteFile: " + deleteFile);
+			
+			// 3. upFileDelete 메소드를 호출하여 파일을 삭제하고 그 결과를 받습니다.
+			int delResult = upFileDelete(deleteFile);
+			
+			// 로그에 파일 삭제 결과를 출력합니다
+			log.info("delResult -> "+delResult);
+			
+		}
+		
+		return String.valueOf(delStatus);
+	}
+	
+	
+	// 파일을 삭제하는 메소드입니다. 실제 파일 삭제가 수행되고 그 결과를 반환합니다
+	private int upFileDelete(String deleteFileName) {
+		
+		// 결과값을 초기화합니다
+		int result = 0;
+		
+		// 로그에 삭제할 파일의 경로를 출력합니다
+		log.info("deleteFileName -> "+deleteFileName);
+		
+		// 파일 객체를 생성합니다
+		File file = new File(deleteFileName);
+		
+		// 파일이 존재하는지 확인합니다
+		if (file.exists()) {
+			
+			// 파일이 존재하면 삭제를 시도합니다.
+			if (file.delete()) {
+				
+				// 파일 삭제에 성공한 경우
+				System.out.println("파일 삭제 성공");
+				result = 1;
+			}
+			else {
+				System.out.println("파일 삭제 실패");
+				result = 0;
+			}
+		}
+		else {
+			System.out.println("삭제할 파일이 존재하지 않습니다");
+			result = -1;
+		}
+		
+		//최종 결과를 반환합니다
+		return result;
 	}
 	
 	
@@ -366,7 +444,7 @@ public class BgController {
 		
 		 bs.commentInsert(board);
 		
-		return "redirect:ChgDetail";
+		return "redirect";
 	}
 }
 

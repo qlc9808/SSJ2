@@ -72,8 +72,9 @@
                     <!-- 이미지 업로드 -->	
 					<div class="form-group mb-7">
 						<label class="form-label" for="file">이미지 *</label>
-						<input class="form-control form-control-sm me-3" id="file" name="file" type="file">
-						<img id="imgPreview" style="max-width: 200px; margin-top: 10px;" />
+						<a href="${pageContext.request.contextPath}/upload/${board.img}">
+                            <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top">
+                        </a>
 					</div>   	
 		 	</c:when>
 		</c:choose>					

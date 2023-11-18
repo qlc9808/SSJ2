@@ -34,14 +34,21 @@
 	
 	
     <insert id="YaBoardInsert" parameterType="Board">
-    	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, reg_Date, brd_group, brd_step)
-    	VALUES          ( BRD_NUM_SEQ.nextval,#{user_num},#{brd_lg}, #{brd_md}, #{title},#{conts},sysdate, BRD_NUM_SEQ.nextval,0)
+    	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, img, reg_Date, brd_group, brd_step)
+    	VALUES          ( BRD_NUM_SEQ.nextval, #{user_num}, 700, 103, #{title}, #{conts}, #{img}, sysdate, BRD_NUM_SEQ.nextval,0)
     </insert>
     
-    <update id="YaBoardUpdate" parameterType="Board">
-    	UPDATE board SET title=#{title}, conts=#{conts}
-    	WHERE  brd_num = #{brd_num}
-    </update>
+	<update id="YaBoardUpdate" parameterType="Board">
+	    UPDATE board 
+	    SET 
+	    <if test="img != null">
+	        img = #{img},
+	    </if>
+	    title = #{title},
+	    conts = #{conts}
+	    WHERE  brd_num = #{brd_num}
+	</update>
+
     
     <delete id="YaBoardDelete" parameterType="int">
     	DELETE FROM board WHERE brd_num = #{brd_num} 
@@ -137,7 +144,21 @@
  		AND brd_lg = 700
  		AND brd_md = 102
  		AND brd_step = 0 
-    </select>	
+    </select>
+    
+    <update id="YaUpParticipantsCnt" parameterType="int">
+  		UPDATE board set participants=participants+1 
+  		WHERE brd_num=#{brd_num}
+  	</update>  	
+	
+	<select id="YaMyConfirmSharingList" parameterType="int" resultType="Board">
+		SELECT s.brd_num, b.title, b.bank_info, b.bank_duedate, b.addr, b.applicants, b.price
+		FROM board b, sharingList s
+		WHERE s.user_num = #{user_num} 
+		AND b.brd_num = s.brd_num
+		AND s.state_md = 101
+	</select>
+
 	
 
 </mapper>

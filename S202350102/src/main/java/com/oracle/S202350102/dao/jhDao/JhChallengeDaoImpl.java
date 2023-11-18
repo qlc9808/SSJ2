@@ -285,6 +285,20 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		
 	}
 
+	@Override
+	public List<Challenge> recomChgList(int chg_md) {
+		System.out.println("JhChallengeDaoImpl boardImgDelete Start...");
+		List<Challenge> chgList = null;
+		
+		try {
+			chgList = session.selectList("jhRecommendChgList", chg_md);
+		} catch (Exception e) {
+
+		}
+		
+		return chgList;
+	}
+
 
 
 }

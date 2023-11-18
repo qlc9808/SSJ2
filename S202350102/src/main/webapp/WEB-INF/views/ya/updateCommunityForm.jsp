@@ -3,7 +3,6 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>     
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
 <head>
 <!--  CSS  -->
 <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
@@ -16,8 +15,21 @@
 @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
     	body{
     	font-family: 'Noto Sans KR', sans-serif;} 
-			
 </style>
+<script type="text/javascript">
+function fileUpdate(){
+	var fileInput = document.getElementById('fileInput');
+	if(fileInput.style.display == "none"){
+		fileInput.style.display = "block";
+		fileInput.removeAttribute('disabled');
+		$("#imgOroot").hide();
+	} else{
+		fileInput.style.display = "none";
+		fileInput.setAttribute('disabled', 'true');
+		$("#imgOroot").show();
+	}
+}
+</script>
 </head>
 
 
@@ -34,8 +46,10 @@
 	   <!--form  -->
       <div class="col-12 col-md-9 col-lg-8 offset-lg-1">        
      	<!--제목, 닉네임, 내용, 작성일자, 첨부파일 -->
- 		<form action="/updateCommunity" method="get"> 	 	
+ 		<form action="/updateCommunity" method="post" enctype="multipart/form-data"> 	 	
 			<input type="hidden" name="brd_num" value="${board.brd_num}">
+			<input type="hidden" value="${board.brd_md}" name="brd_md">
+			
               <div class="col-12">
                     <!-- 제목 -->
                     <div class="form-group">
@@ -66,11 +80,12 @@
       					 	 <textarea class="form-control form-control-sm" id="conts" name="conts" rows="8" required>${board.conts}</textarea>
   						</div>
 					</div>       
-                   	<!-- 이미지 업로드 -->	
+                 	    <!-- 이미지 미리보기 -->
 					<div class="form-group mb-7">
-						<label class="form-label" for="file">이미지 *</label>
-						<input class="form-control form-control-sm me-3" id="file" name="file" type="file">
-						<img id="imgPreview" style="max-width: 200px; margin-top: 10px;" />
+					<span id="imgOroot">${pageContext.request.contextPath}/upload/${board.img}</span>
+					<input type="file" name="file1" style="display: none;" id="fileInput" disabled="disabled">
+					<button type="button" onclick="fileUpdate()">파일 변경</button>
+							
 					</div>
 					    
 					    

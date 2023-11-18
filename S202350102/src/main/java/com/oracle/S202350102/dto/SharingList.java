@@ -17,10 +17,12 @@ public class SharingList {
 	
 	
 	//join
+	private String title;
 	private String user_name;
 	private String nick;
 	private String tel;
 	private String addr;
+	private String participants;
 	
 }
 

@@ -10,7 +10,7 @@
 	</insert>
 	
     <select id="sharingParticipantsInfo" parameterType="int" resultType="sharingList"> 	
-		SELECT b.brd_num, b.participants, u.nick, u.user_name, u.tel, u.addr, s.message, s.reg_date
+		SELECT b.brd_num, b.participants, u.nick, u.user_name, u.tel, u.addr, s.message, s.reg_date, s.user_num
  		FROM   sharingList s, user1 u, board b
  		WHERE  b. brd_num = #{brd_num} and s.brd_num = #{brd_num}
         AND s.user_num = u.user_num
@@ -18,6 +18,19 @@
  		AND brd_md = 102
  		AND brd_step = 0 
     </select>		
-	
+    
+	<update id="YaSharingConfirm" parameterType="sharingList">
+		UPDATE sharingList
+		SET	   state_md =101
+		WHERE  brd_num = #{brd_num}
+		AND    user_num = #{user_num}
+	</update>
+
+	<select id="YaMyJoinSharingList" parameterType="int" resultType="sharingList">
+		SELECT s.brd_num, b.title, s.state_md, s.reject_msg
+		FROM sharingList s, board b
+		WHERE s.user_num = #{user_num}
+		AND s.brd_num = b.brd_num
+	</select>	
 	
 </mapper>	

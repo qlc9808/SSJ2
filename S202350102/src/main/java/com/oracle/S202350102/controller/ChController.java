@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardReChk;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
@@ -591,9 +592,23 @@ public class ChController {
 	}
 	
 	public void commentAlaram(int brd_num) {
-		
+		System.out.println("Start commentAlaram....");
+		int result = chBoardService.commentAlarm(brd_num);
 	}
 	
+	public void myChgList(HttpSession session, Model model) {
+		System.out.println("ChController myChgList Start...");
+		
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			List<Challenge> mychgList = chChallengeService.myChgList(user_num);
+			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
+			model.addAttribute("mychgList", mychgList);
+			model.addAttribute("mychgrList", mychgrList);
+		}
+		System.out.println("ChController myChgList End...");
+		
+	}
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {

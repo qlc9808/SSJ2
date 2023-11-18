@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="header4.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,5 +9,9 @@
 </head>
 <body>
 <h1>내주변 쉐어링</h1>
+
+
+
 </body>
+<%@ include file="footer.jsp" %>
 </html>
