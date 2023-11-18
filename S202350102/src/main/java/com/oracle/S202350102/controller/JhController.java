@@ -613,12 +613,11 @@ public class JhController {
 	@RequestMapping(value = "recommendCallenge") 
 	public RecommendationResult  recommendCallenge(int chg_md){
 		System.out.println("JhController recommendCallenge Start...");
-		RecommendChg recomChg= new RecommendChg();
 		
 		List<Challenge> chgList = jhCService.recomChgList(chg_md);
-		for (Challenge challenge : chgList) {
-		    System.out.println(challenge.getTitle());
-		}
+//		for (Challenge challenge : chgList) {
+//		    System.out.println(challenge.getTitle());
+//		}
 		
 		
 		List<RecommendChg> recomChgList = new ArrayList<RecommendChg>();
@@ -627,11 +626,12 @@ public class JhController {
 		
 		 // chgList의 각 Challenge 객체를 순회하며 데이터를 추출하여 recomChgList에 추가
 	    for (Challenge challenge : chgList) {
+	    	RecommendChg recomChg = new RecommendChg();
 	        recomChg.setChg_id(challenge.getChg_id());
 	        recomChg.setTitle(challenge.getTitle());
 	        recomChg.setThumb(challenge.getThumb());
 	        recomChgList.add(recomChg);
-//		    System.out.println(recomChgList.getTitle());
+	        System.out.println(recomChgList);
 	        //다시 하기
 	    }
 		
@@ -656,6 +656,7 @@ public class JhController {
 	
 	
 	
+	
 	/*
 	 * @ResponseBody
 	 * 
@@ -677,5 +678,6 @@ public class JhController {
 	 * 
 	 * return delStatusStr; }
 	 */
+	 
 	
 }

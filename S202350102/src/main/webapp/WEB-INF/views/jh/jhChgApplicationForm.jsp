@@ -14,6 +14,7 @@
 			data: {chg_md : pChg_md},
 			dataType:'json',
 			success:function(RecommendationResult){
+				console.log("RecommendationResult -> ", RecommendationResult);
 				alert("RecommendationResult -> "+RecommendationResult.recomChgListSize);
 				 var text = recomList(RecommendationResult);
 		            $('#hiddenCard').show();
@@ -25,12 +26,46 @@
 	 function recomList(RecommendationResult){
 		 var text = "";
 	     for(var i = 0; i < RecommendationResult.recomChgListSize; i++ ){
-			alert("title -> " + RecommendationResult.recomChgList.title );
+			alert("title -> " + RecommendationResult.recomChgList[i].title );
+			text +='<div class="col px-4" style="max-width: 150px;">'
+                + '<div class="card">'
+             	 + '<div class="card-img">'
+             	 + '<button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" id="chgDetailBtn" onclick="/chgDetail?chg_id='+RecommendationResult.recomChgList[i].chg_id+'">'
+             	 + '<i class="fe fe-eye me-2 mb-1"></i> 챌린지 보러가기'
+                + '</button>'
+             	 + '<img id="recommendChgImg" class="card-img-top" src="'+RecommendationResult.recomChgList[i].thumb+'" alt="">'
+             	 + '</div>'
+                + '<div class="card-body fw-bold text-center">'
+                + '<a class="text-body" id="recommendChgTitle" href="/chgDetail?chg_id='+RecommendationResult.recomChgList[i].chg_id+'">'+RecommendationResult.recomChgList[i].title+'</a> <br>'
+                + '</div>'
+                + '</div>'
+                + '</div>';
 	      }
 	      return text;
 	   }
 				
-				
+	   
+	 /*     function recomList(RecommendationResult){
+	        var text = "";
+	         for(var i = 0; i < RecommendationResult.recomChgListSize; i++ ){
+	             text +='<div class="col px-4" style="max-width: 150px;">'
+	                 + '<div class="card">'
+	               + '<div class="card-img">'
+	               + '<button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" id="chgDetailBtn" onclick="/chgDetail?chg_id='${RecommendationResult.recomChgList.chg_id}'">'
+	               + '<i class="fe fe-eye me-2 mb-1"></i> 챌린지 보러가기'
+	                 + '</button>'
+	               + '<img id="recommendChgImg" class="card-img-top" src="'${RecommendationResult.thmb}'" alt="">
+	               + '</div>'
+	                 + '<div class="card-body fw-bold text-center">'
+	                 + '<a class="text-body" id="recommendChgTitle" href="/chgDetail?chg_id='${RecommendationResult.recomChgList.chg_id}'">'${RecommendationResult.recomChgList.title}'</a> <br>'
+	                 + '</div>'
+	                 + '</div>'
+	                 + '</div>'
+	          }
+	          return text;
+	       }
+	           */   
+		
 				
 				
 				
@@ -134,13 +169,39 @@
 			          </div>
 			        </div>
 			      </div>
-			      <div id="hiddenCard" style="display: none;">
+			      <div id="hiddenCard" >
 				      <div class="flickity-page-dots-progress" data-flickity='{"pageDots": true}'>
-				
+				 <!-- Item -->
+        <div class="col px-4" style="max-width: 300px;">
+          <div class="card">
+
+            <!-- Image -->
+            <div class="card-img">
+
+              <!-- Action -->
+              <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button">
+                <i class="fe fe-heart"></i>
+              </button>
+
+              <!-- Button -->
+              <button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" data-bs-target="#modalProduct">
+                <i class="fe fe-eye me-2 mb-1"></i> Quick View
+              </button>
+
+              <!-- Image -->
+              <img class="card-img-top" src="assets/img/products/product-6.jpg" alt="...">
+
+            </div>
+
+            <!-- Body -->
+            <div class="card-body fw-bold text-center">
+              <a class="text-body" href="product.html">Cotton floral print Dress</a> <br>
+              <span class="text-muted">$40.00</span>
+            </div>
 
 				       </div>
 			       </div>
-        
+        </div>
 				
                 <div class="col-12">
 
@@ -264,7 +325,7 @@
 		                    </div>
                     	</c:when>
                     	<c:otherwise>
-                    		<p>멤버십 가입자만 공개/비공개 설정을 할 수 있습니다~!
+                    	
 	                    	<div>
 		                      <!-- Male -->
 		                      <input class="btn-check" type="radio" name="chg_public" id="public" disabled>
@@ -302,7 +363,9 @@
                   </div>
 
                 </div>
-                
+				<div class="alert alert-warning">
+					멤버십 가입자만 공개/비공개 설정을 할 수 있습니다~!
+				</div>
                 <div class="col-12">
 
                   <!-- 챌린지명 -->
