@@ -82,7 +82,7 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 		List<Challenge> myChgList = null;
 		
 		try {
-			myChgList = session.selectList("myChgList", user_num);
+			myChgList = session.selectList("chMyChgList", user_num);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChChallengeDaoImpl myChgList e.getMessage()->" + e.getMessage());
@@ -99,7 +99,7 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 		List<Challenger> myChgrList = null;
 		
 		try {
-			myChgrList = session.selectList("myChgrList", user_num);
+			myChgrList = session.selectList("chmyChgrList", user_num);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChChallengeDaoImpl myChgrList e.getMessage()->" + e.getMessage());

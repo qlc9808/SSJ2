@@ -48,16 +48,28 @@
 	     </foreach>			
 	</delete>
 	
-	<select id="chMyChgList" parameterType="int">
-		Select *
-		From Challenge
+	<select id="chMyChgList" parameterType="int" resultType="Challenge">
+		Select a.*, c.*
+		From (Select count(*) chlgerCnt, chg_id
+		        From challenger
+		        GROUP BY chg_id) a
+		Join challenge c on c.chg_id = a.chg_id
 		Where user_num = #{user_num}
 	</select>
 	
-	<select id="myChgrList">
-		Select *
-		From Challenger
-		Where user_num = #{user_num}
+	<select id="chmyChgrList" parameterType="int" resultType="Challenge">
+		Select b.chlgerCnt, d.*
+		from (
+		    Select a.chlgerCnt , c.*
+		    From (
+		        Select count(*) as chlgerCnt, chg_id
+		        From challenger
+		        GROUP BY chg_id
+		    ) a
+		    Join challenger c on c.chg_id = a.chg_id
+		    Where c.user_num = #{user_num}
+		) b
+		join challenge d on b.chg_id = d.chg_id
 	</select>
 	
 </mapper>
