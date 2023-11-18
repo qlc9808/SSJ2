@@ -7,22 +7,65 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script type="text/javascript">
+function sh(){
+	if($("#shList").css("display") == "none" || $("#shList").css("display") == ""){
+	    $("#shList").show();
+	} else {
+	    $("#shList").hide();
+	    
+	}
+}
+</script>
+<style type="text/css">
+	#shList{
+		z-index: 999;
+		position: absolute;
+	}
+	
+	#srch_btn{
+		background-color: transparent;
+	}
+	
+	#searchVar{
+		width: 30%
+	}
+</style>
 <title>Insert title here</title>
 </head>
 <body>
-	<div id="searchVar">
+	<div id="searchVar" class="container">
 		<form action="searching">
-			<table>
-				<tr><td><label for="srch_word">검색</label></td>
-					<td><input type="text" name="srch_word" id="srch_word" value="${srch_word }" list="wordlist">
-						<datalist id="wordlist">
-							<option value="test">test</option>
-							<option value="test">test</option>
-							<option value="test">test</option>
-						</datalist>
-					<button type="submit">검색</button></td></tr>
-			</table>
+			<div class="input-group">				
+				<input type="search" name="srch_word" id="srch_word" class="form-control form-control-underline form-control-sm border-dark" onclick="sh()" >
+				<button type="submit" class="btn-underline btn-sm border-dark" id="srch_btn">
+					<i class="fe fe-search"></i>
+				</button>
+			
+			</div>			
 		</form>
+		<div class="card" id="shList" style="display: none;">
+			<c:if test="${user_num != 0 }">
+				<div class="card-body">
+					<table>
+						<c:forEach items="${shList }" var="shList">
+							<tr>
+								<td>
+									<a href="searching?srch_word=${shList.srch_word }">${shList.srch_word }</a>
+								</td>
+								<td>
+									<a href="deleteHis?srch_word=${shList.srch_word }">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+										  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+										</svg>
+									</a>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</div>
+			</c:if>
+		</div>
 	</div>
 	<h2>${srch_word }에 대한 검색결과 입니다.</h2>
 	<h4>챌린지</h4>

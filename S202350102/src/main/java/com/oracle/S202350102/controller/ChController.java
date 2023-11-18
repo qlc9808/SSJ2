@@ -281,6 +281,8 @@ public class ChController {
 						
 					}
 				}
+				List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+				model.addAttribute("shList", sh);
 				
 				
 			}
@@ -477,6 +479,7 @@ public class ChController {
 						
 					
 				}
+				myChgList(session, model);
 			}
 
 		
