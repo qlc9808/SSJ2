@@ -198,7 +198,7 @@
 </div>
 </div>
 </div>
-
+</div>
 
 
 <!-------------------------------- 참가자 조회 모달창 자바스크립트 ------------------------------------------------------------------------>
@@ -260,7 +260,7 @@
 	$(document).ready(function () {
 	    // 모달을 닫기 위한 버튼 클릭 이벤트 핸들러
 	    $('#closeModalButton').on('click', function () {
-	        $('#joinInfoModal').modal('close');
+	        $('#joinInfoModal').modal('hide');
 
 	    });
 	});

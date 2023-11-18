@@ -15,6 +15,7 @@ section.community {
   padding: 0;
 }
 
+
 body {
    font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
@@ -83,7 +84,7 @@ body {
 /* 테이블 스타일 */
 #boardtable {
   font-size: 15px;
-  height: 300px;
+  height: 500px;
   width: 100%;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -301,42 +302,39 @@ $(document).ready(function () {
 </head>
 <body>
     <section class="community">
-        <div class="page-title">
-            <div class="container">
-                <h3>자유게시판</h3>
-            </div>
-        </div>
+<div class="container text-center" style="padding-bottom: 0px; padding-top: 0px;">
+    <h3 style="margin-bottom: 5px;">자유게시판</h3>
+</div>
+
 
     <!-- 게시판 검색 (옵션 제목, 작성자)-->
-		<div class="container">
-		<div class="input-group input-group-merge">
-		            <input class="form-control-xs" id="keyword" type="search" placeholder="제목/작성자 검색" value="${srch_word}">
-		            <div class="input-group-append">
-		              <button class="btn btn-outline-border" id="searchButton">
-		                <i class="fe fe-search"></i>
-		              </button>
-		            </div>
-		          </div>
-		</div>
+<div class="container d-flex justify-content-center" style="padding-bottom: 0px;">
+    <div class="d-flex justify-content-center">
+        <div class="input-group input-group-merge">
+            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="제목/작성자 검색" value="${srch_word}">
+			<div class="input-group-append">
+			    <button class="btn btn-outline-border btn-search" id="searchButton" style="height: 40px;">
+			        <i class="fe fe-search"></i>
+			    </button>
+			</div>
 
-        <div id="searchResults">
-            
         </div>
+    </div>
+</div>
 
-    <!-- select 조회/ 게시글작성 버튼  -->
-        <div id="options">
-            <form action="writeFormCommunity" method="post">
-                <select id="sortOption" name="sortOption">
-                     <option value="view_cnt">조회수 높은순</option>
-            	     <option value="reg_date">최근 등록일 순</option>
-                </select>         
-                <input type="submit" value="글작성">
-            </form>
-        </div>
+<div id="searchResults" style=" margin-top: 20px;"></div>
+
 	
         <!-- 게시판리스트  -->
         <div id="board-list">
-            <div class="container">
+            <div class="container" style="padding-top: 0px;">
+                <!-- select 조회/ 게시글작성 버튼  -->
+            <div class="d-flex justify-content-end mb-3">
+			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
+			    <option value="reg_date">최근 게시물</option>
+			    <option value="view_cnt">조회수 높은 순</option>
+			</select>
+			</div>		
              <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 
                 <table id="boardtable">
                     <thead>
@@ -363,8 +361,41 @@ $(document).ready(function () {
                         </c:forEach>
                     </tbody>
                 </table>
-                
-				   <div class="page">
+            <form action="writeFormCommunity" method="post" class="text-end">
+			    <button class="btn btn-dark mt-1 mb-4" type="submit" style="background-color: #E56D90;">글 작성 <i class="fe fe-arrow-right ms-2"></i></button>
+			</form>
+
+			<div class="container text-center">
+			     <ul class="pagination pagination-sm justify-content-center">
+			        <c:if test="${boardPage.startPage > boardPage.pageBlock}">
+			            <li class="page-item">
+			                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">
+			                    <i class="fa fa-caret-left"></i>
+			                </a>
+			            </li>
+			        </c:if>
+			
+			        <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
+			            <li class="page-item <c:if test='${boardPage.currentPage == i}'>active</c:if>">
+			                <a class="page-link" href="listCommunity?currentPage=${i}">${i}</a>
+			            </li>
+			        </c:forEach>
+			
+			        <c:if test="${boardPage.endPage < boardPage.totalPage}">
+			            <li class="page-item">
+			                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">
+			                    <i class="fa fa-caret-right"></i>
+			                </a>
+			            </li>
+			        </c:if>
+			    </ul>
+			</div>
+
+
+
+<%-- 원래페이징
+			<div class="container text-center">
+				   <div class="page" >
 				    <c:if test="${boardPage.startPage >boardPage.pageBlock}">
 				        <a href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">[이전]</a>
 				    </c:if>
@@ -375,8 +406,10 @@ $(document).ready(function () {
 				        <a href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">[다음]</a>
 				    </c:if>
 				</div>
+            </div> --%>
             </div>
         </div>
+
     </section>
 </body>
 
