@@ -20,6 +20,15 @@
 	#searchVar{
 		width: 30%
 	}
+	.flickity-viewport {  
+	  height: 400px !important;
+	}
+	
+	.cell {
+  width: 100%; /* full width */
+  height: 160px; /* height of carousel */
+  margin-right: 10px;
+}
 </style>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
@@ -96,7 +105,10 @@
 	#searchVar{
 		width: 30%
 	}
-	
+	.flickity-viewport {  
+  height: 400px !important;
+  padding: 10px
+}
 
 </style>
 </head>
@@ -157,7 +169,7 @@
               <!-- Pane -->
               <div class="tab-pane fade show active" id="popChg">
 				
-                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
+                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true,"setGallerySize": false}'>
 
                   <!-- Item2 -->
                   <c:forEach var="chg" items="${popchgList }">
@@ -237,11 +249,11 @@
              <div class="tab-pane fade" id="popShare">
              
 			    <!-- Slider -->
-			    <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
+			    <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true,"cellAlign": left}'>
 			        <div class="row">
 			            <c:forEach var="board" items="${popShareList}">
 			                <!-- Item -->
-			                <div class="col px-4" style="max-width: 400px;">
+			                <div class="col px-4 " style="max-width: 400px;">
 			                    
 			                        <div class="card">
 			                            <!-- Image -->
@@ -285,16 +297,17 @@
 			</div>
 			<!-- Pane popShare -->
 			<div class="tab-pane fade" id="popCommu">
-				<table>
+				<table class="table">
 					<tr>
-						<td>제목</td><td>작성자</td><td>좋아요</td><td>등록일</td>
+						<td>제목</td><td>작성자</td><td>등록일</td><td>조회수</td><td>댓글수</td>
 					</tr>
 					<c:forEach var="popBoard" items="${popBoardList }">
 						<tr>
-							<td><a href="commu?brd_num=${popBoard.brd_num }">${popBoard.title }</a></td>
-							<td>${popBoard.nick }</td>
-							<td>${popBoard.like_cnt }</td>
+							<td><a href="detailCommunity?user_num=${popBoard.user_num}&brd_num=${popBoard.brd_num}">${popBoard.title }</a></td>
+							<td>${popBoard.nick }</td>							
 							<td><fmt:formatDate value="${popBoard.reg_date }" pattern="yyyy-MM-dd" /></td>
+							<td>${popBoard.view_cnt }</td>
+							<td>${popBoard.replyCount }</td>
 						</tr>
 					</c:forEach>
 				</table>
