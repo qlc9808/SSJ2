@@ -142,7 +142,7 @@ public class YaController {
 				
 		}
 
-	 // 게시글 작성 ((************************************진기)
+	 // 게시글 작성
 		@PostMapping(value="/writeCommunity") 
 		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 				System.out.println("YaController start insertCommunity... "); 
@@ -231,7 +231,7 @@ public class YaController {
 		}
 		
 		
-		// 게시글 수정 (진기)
+		// 게시글 수정 (파일업로드 진기)
 		@PostMapping(value="/updateCommunity")
 		public String updateCommunity(HttpSession session, User1 user1, Model model, Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
 	    System.out.println("YaController updateCommunity start...");
@@ -566,11 +566,6 @@ public class YaController {
 		}	  
 			
 			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링 에서 참가자 리스트 조회 (sharingParticipantsInfo)
-			   /*@ResponseBody
-					public String sharingParticipantsInfo(SharingList sharingList, Model model, @RequestParam("brd_num") int brd_num) {
-						System.out.println("YaController sharingParticipantsInfo start.."); */
-						
-					/* brd_num= sharingList.getBrd_num(); */
 		
 		    @GetMapping(value = "/sharingParticipantsInfo")
 		    @ResponseBody
@@ -596,13 +591,16 @@ public class YaController {
 			    System.out.println("YaController sharingConfirm Received brd_num: " + brd_num);
 			    
 		    	// 참가자 승인 state_md: 101 update 
-		    	int sharingConfirm = 0;
-		    	sharingConfirm = ycs.sharingConfirm(brd_num);
+			    SharingList updatedSharingList = new SharingList();
+			    updatedSharingList.setBrd_num(brd_num);
+			    updatedSharingList.setUser_num(user_num);
 		    	
+			    int sharingConfirm = 0;
+		    	sharingConfirm = ycs.sharingConfirm(updatedSharingList);		    	
 		    	System.out.println("sharingList participants user_num?"+sharingList.getUser_num());
 		    	sharingList.setState_md(101);
 		    	System.out.println("참가자 승인 완료 :"+sharingList);
-		    	
+		    
 		        // board의 jk detail Sharing으로 participants 확인
 		        Board board = jbs.detailSharing(brd_num);
 		        System.out.println("YaController sharingConfirm board participants : "+board.getParticipants());
@@ -617,7 +615,66 @@ public class YaController {
 		        return response;
 		   
 		    }
-		     
-	
-		  
+		    // 승인처리여부 확인 (승인 완료 시, 모달창 버튼 비활성화 목적) **아직 미완성************************
+		  /*  @GetMapping("/checkApproval")
+		    @ResponseBody
+		    public Map<String, Object> checkApproval(@RequestParam("brd_num") int brd_num,
+		                                            @RequestParam("user_num") int user_num) {
+		        boolean isApproved = ycs.isParticipantApproved(brd_num, user_num);
+
+		        Map<String, Object> response = new HashMap<>();
+		        response.put("isApproved", isApproved);
+		        return response;
+		    } */
+		    
+		 // 반려처리 , 메세지 sharingList 업데이트, 참가자 승인 state_ md 104
+		 @PostMapping("/sharingReject")
+		 @ResponseBody
+		 public Map<String, Object> sharingReject(
+				 									@RequestParam("brd_num") int brd_num,
+				 									@RequestParam("user_num") int user_num,
+				 									@RequestParam("reject_msg") String reject_msg,
+				 									@ModelAttribute SharingList sharingList) 	{
+		 
+	     System.out.println("YaController sharingreject start...");
+		 Map<String, Object> result = new HashMap<>();
+		 System.out.println("YaController sharingreject Received user_num: " + user_num);
+		 System.out.println("YaController sharingreject Received brd_num: " + brd_num);
+		 System.out.println("YaController sharingreject Received reject_msg: " +reject_msg);
+
+		 try {
+		    	// 참가자 승인 state_md: 101 update & reject message null-->입력 
+			    SharingList updatedRejectSharingList = new SharingList();
+			    updatedRejectSharingList.setBrd_num(brd_num);
+			    updatedRejectSharingList.setUser_num(user_num);
+			    updatedRejectSharingList.setReject_msg(reject_msg);
+			    updatedRejectSharingList.setState_md(104);
+			  
+			    int sharingReject = 0;
+			    
+			    sharingReject= ycs.sharingReject(sharingList);
+	    	
+		    	System.out.println("rejectSharing participants user_num?"+sharingList.getUser_num());
+		    	System.out.println("참가자 반려 완료 :"+sharingList);
+		    	
+			    // board의 jk detail Sharing으로 participants 확인
+		        Board board = jbs.detailSharing(brd_num);
+		        System.out.println("YaController sharingReject board participants : "+board.getParticipants());
+		        
+		        // board의 participants -1 감소
+		       int participantsCnt = 0;
+		       ycs.downParticipantsCnt(brd_num);
+
+		            // 처리가 성공하면 결과 맵에 성공 메시지추가
+		        result.put("success", "true");
+		        result.put("message", "반려가 정상적으로 처리되었습니다.");
+		} catch (Exception e) {
+		            // 처리 중 예외가 발생하면 결과 맵에 실패 메시지 추가
+		        result.put("success", "false");
+		        result.put("message", "반려 처리 중 오류가 발생했습니다. " + e.getMessage());
+		}
+
+		  return result;
+	}
+		    			  
 }		

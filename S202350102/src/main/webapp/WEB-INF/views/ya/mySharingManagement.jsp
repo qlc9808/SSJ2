@@ -10,7 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-</body>
+
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
@@ -28,6 +28,7 @@
             </div>
              <div class="col-md-9 profile-form">
 <!-- 필수!! -->
+
 <!--내가 개설한 쉐어링 제목 누르면  brd_num으로 해당하는 상세페이지로 이동시키게 설정하기----------------------------------------------------- -->
     <section class="myUploadSharing">
         <div class="page-title">
@@ -44,8 +45,9 @@
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
                             <th scope="col" class="th-applicants">모집인원</th>
+                            <th scope="col" class="th-particpants">승인처리한참가인원</th>
                             <th scope="col" class="th-bank_duedate">입금기한</th>
-                            <th scope="col" class="th-check">참가자</th>
+                            <th scope="col" class="th-check">지원자</th>
                         </tr>
                     </thead>                 
                     <tbody>
@@ -53,9 +55,10 @@
                             <tr>
                                 <td>${board.brd_num}</td>
                                 <td><a href="detailSharing?brd_num=${board.brd_num}">${board.title}</a></td>
-                                <td>${board.applicants}</td>                  
+                                <td>${board.applicants}</td>            
+                                <td>${board.participants}</td>      
                                 <td>${board.bank_duedate}</td>
-				         		<td><button type="button" class="btn btn-dark btn-sm" id="openModalButton" data-toggle="modal" data-target="#joinInfoModal" 
+				         		<td><button type="button" class="btn btn-dark btn-sm openModalButton" data-toggle="modal" data-target="#joinInfoModal" 
 				         					data-brd_num="${board.brd_num}"> 조회</button></td>       
                             </tr>
                         </c:forEach>
@@ -65,7 +68,7 @@
         </div>
     </section>
     
-<!--내가 신청한 쉐어링 joinsharingList ----------------------------------------------------- -->
+<!--내가 신청한 쉐어링 joinsharingList ------------------------------------------------------------------------------ -->
 	    <section class="myJoinSharing">
         <div class="page-title">
             <div class="container">
@@ -106,7 +109,7 @@
         </div>
     </section>
     
- <!--승인완료된 쉐어링 정보 -------------------입금액(총금액/모집인원   ?? ------------------------------------- -->   
+ <!--승인완료된 쉐어링 정보 -------------------입금액(총금액/모집인원   ?? ------------------------------------------------------------- -->   
     <section class="myUploadSharing">
         <div class="page-title">
        		 <div class="container">
@@ -157,7 +160,7 @@
 
             <div class="modal-body">
             	<input type="hidden" name="brd_num" value="${board.brd_num}"> 
-            	<h6>총 참가자 수 : ${sharingList.participants}</h6>
+            	<h6 id="totalParticipants">총 지원자 수 : </h6>
             	<table class="table table-hover" id="joinInfoForm" >		
                     <thead class="table-light" >
                         <tr>
@@ -182,29 +185,60 @@
                                 <td id="reg_date">${sharingList.reg_date}</td>                              
 				         		<td><div class="btn-group" role="group" aria-label="Basic example">
 				         			<button type="button" class="btn btn-dark btn-sm confirmModalButton" data-brd_num="${sharingList.brd_num}" data-user_num="${sharingList.user_num}">승인</button>
-        							<button type="button" class="btn btn-dark btn-sm rejectModalButton" data-brd_num="${sharingList.brd_num}" data-user_num="${sharingList.user_num}">반려</button>
+        							<button type="button" class="btn btn-dark btn-sm rejectModalButton" data-brd_num="${sharingList.brd_num}" data-user_num="${sharingList.user_num}"
+        														data-reject_msg="${sharingList.reject_msg}">반려</button>
 				         		</div></td>       
                             </tr>
                         </c:forEach>
-                    </tbody>                            
+                    </tbody>                           
                 </table>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark btn-sm" id="closeModalButton" data-bs-dismiss="modal" >닫기</button>
+                <button type="button" class="btn btn-dark btn-sm" id="closeModalButton" data-bs-dismiss="modal">닫기</button>
      	  	 </div>
         </div>	  	 
     </div>
 </div>
 </div>
+
+
+<!-- 반려시 모달창 띄우기------------------------------------------------------------------------------------------------------------>
+<div class="modal" tabindex="-1" role="dialog" id="rejectReasonModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">반려사유 입력</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="rejectReasonForm">
+                    <div class="form-group">
+                        <label for="rejectReason">반려 사유:</label>
+                        <textarea class="form-control" id="reject_msg" name="reject_msg" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">확인</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 </div>
 </div>
 
 
-<!-------------------------------- 참가자 조회 모달창 자바스크립트 ------------------------------------------------------------------------>
+<!-------------------------------- 참가자 조회 모달창 자바스크립트 (중복 승인/반려 막기 해야함 ) ------------------------------------------------------------------------>
 <script type="text/javascript">
 //모달 창을 열 때의 스크립트 부분
-	$('#openModalButton').on('click', function () {
+$(document).on('click', '.openModalButton', function () {
 	    // 버튼의 데이터 속성에서 게시글 번호
 	    var brd_num = $(this).data('brd_num');
 
@@ -240,7 +274,7 @@
 	                        '<td>' + formattedRegDate + '</td>' +
 	                        '<td>' + '<div class="btn-group" role="group" aria-label="Basic example">'+
 	                        '<button type="button" class="btn btn-dark btn-sm confirmModalButton" data-brd_num="' + sharingList.brd_num + '" data-user_num="' + sharingList.user_num + '">승인</button>' +
-	                        '<button type="button" class="btn btn-dark btn-sm rejectModalButton" data-brd_num="' + sharingList.brd_num + '" data-user_num="' + sharingList.user_num + '">반려</button>' +
+	                        '<button type="button" class="btn btn-dark btn-sm rejectModalButton" data-brd_num="' + sharingList.brd_num + '" data-user_num="' + sharingList.user_num + '" >반려</button>' +
 	                        '</td>' + '</div>'
 	                        '</tr>';
 	                    tbody.append(row);
@@ -248,7 +282,26 @@
 	            } else {
 	                console.error('Received JSON data is not in the expected format:', data);
 	            }
+	            // 동적으로 버튼 상태 설정
+                data.forEach(sharingList => {
+                    var confirmButton = document.querySelector(`.confirmModalButton[data-brd_num="${sharingList.brd_num}"][data-user_num="${sharingList.user_num}"]`);
 
+                    if (confirmButton) {
+                        fetch(`/checkApproval?brd_num=${sharingList.brd_num}&user_num=${sharingList.user_num}`)
+                            .then(response => response.json())
+                            .then(approvalData => {
+                                if (approvalData.isApproved) {
+                                    confirmButton.textContent = '승인완료';
+                                    confirmButton.classList.remove('confirmModalButton');
+                                    confirmButton.classList.add('btn-secondary', 'disabled');
+                                    confirmButton.disabled = true;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error checking approval:', error);
+                            });
+                    }
+                });
 	            // 모달을 표시합니다.
 	            $('#joinInfoModal').modal('show');
 	        })
@@ -257,34 +310,37 @@
 	        });
 	});
 
-	$(document).ready(function () {
-	    // 모달을 닫기 위한 버튼 클릭 이벤트 핸들러
-	    $('#closeModalButton').on('click', function () {
-	        $('#joinInfoModal').modal('hide');
-
-	    });
-	});
-   
+	
 
  <!--참가 승인 완료 (update staet_md 101 & board.participants +1) 모달창 띄우기---------------------------------------------------------->
  document.getElementById('joinInfoForm').addEventListener('click', function (event) {
-	    // 버튼의 데이터 속성에서 필요한 정보를 가져옵니다.
-	    var brd_num = event.target.getAttribute('data-brd_num');
-	    var user_num = event.target.getAttribute('data-user_num');
-	    console.log('brd_num:', brd_num);
-	    console.log('user_num:', user_num);
+	    // 클릭된 요소가 버튼인지 확인
+	    if (event.target.tagName === 'BUTTON') {
+	        // 버튼의 속성 출력
+	        console.log('Button attributes:', event.target.attributes);
+
+	        // 버튼의 데이터 속성에서 필요한 정보를 가져옵니다.
+	        var brd_num = event.target.dataset.brd_num;
+	        var user_num = event.target.dataset.user_num;
+	       /*  var brd_num = event.target.data('data-brd_num');
+	        var user_num = event.target.data('data-user_num'); */
+
+	        console.log('brd_num:', brd_num);
+	        console.log('user_num:', user_num);
+	    }
 	    // 승인 버튼이 클릭된 경우
 	    if (event.target.classList.contains('confirmModalButton')) {
 	        var formData = new FormData();
 	    	formData.append('brd_num', parseInt(brd_num, 10));
-	    	formData.append('brd_num', parseInt(user_num, 10));
+	    	formData.append('user_num', parseInt(user_num, 10));
+	    
 	    	// 서버로 데이터를 전송하는 fetch API 사용
 	        fetch('/sharingConfirm', {
 	            method: 'POST',
-	            headers: {
+	             headers: {
 	                'Content-Type': 'application/x-www-form-urlencoded',
 	            },
-	            body: 'brd_num=' + encodeURIComponent(brd_num) + '&user_num=' + encodeURIComponent(user_num),
+	            body:  'brd_num=' + encodeURIComponent(brd_num) + '&user_num=' + encodeURIComponent(user_num),  
 	        })
 	        .then(response => response.json())
 	        .then(data => {
@@ -296,7 +352,9 @@
 	                // 버튼의 텍스트를 "승인완료"로 변경합니다.
 	                event.target.textContent = '승인완료';
 	                // 버튼의 클릭 이벤트를 비활성화합니다.
-	                event.target.disabled = true;                       
+                        event.target.classList.remove('confirmModalButton'); // 버튼 클래스 제거
+                        event.target.classList.add('btn-secondary', 'disabled');
+                        event.target.disabled = true         
 	            } else {
 	                // 처리에 실패한 경우
 	                alert(data.message); // "승인 실패되었습니다" 메시지를 띄웁니다.
@@ -308,19 +366,71 @@
 	        });
 	    }
 
-	    // 반려 버튼이 클릭된 경우
+	 // 반려 버튼이 클릭된 경우
 	    else if (event.target.classList.contains('rejectModalButton')) {
-	        // 반려 처리에 필요한 로직 작성
-	        // ...
+	        var brd_num = event.target.dataset.brd_num;
+	        var user_num = event.target.dataset.user_num;
+
+	        // 반려 이유 모달을 표시합니다.
+	        $('#rejectReasonModal').modal('show');
+
+	        // 반려 이유 폼 제출을 처리합니다.
+	        $('#rejectReasonForm').on('submit', function (e) {
+	            e.preventDefault();
+	            var reject_msg = $('#reject_msg').val();
+
+	            // 서버에 반려 이유를 전송합니다.
+	            fetch('/sharingReject', {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/x-www-form-urlencoded',
+	                },
+	                body: 'brd_num=' + encodeURIComponent(brd_num) + '&user_num=' + encodeURIComponent(user_num) + '&reject_msg=' + encodeURIComponent(reject_msg),
+	            })
+	            .then(response => response.json())
+	            .then(data => {
+	                if (data.success) {
+	                    alert(data.message); // 성공 메시지를 표시합니다.
+	                    $('#rejectReasonModal').modal('hide'); // 반려 이유 모달을 닫습니다.
+	                    // 필요한 경우 추가 로직을 수행합니다.
+	                } else {
+	                    alert(data.message); // 실패 메시지를 표시합니다.
+	                }
+	            })
+	            .catch(error => {
+	                alert("서버 오류가 발생했습니다.");
+	            });
+	        });
+	        // 반려 이유 모달 닫기 버튼 클릭 이벤트 핸들러
+	        document.getElementById('closeRejectReasonModalButton').addEventListener('click', function () {
+	            $('#rejectReasonModal').modal('hide');
+	        });
 	    }
-	});
  
         // 모달을 닫기 위한 버튼 클릭 이벤트 핸들러
         document.getElementById('closeModalButton').addEventListener('click', function () {
             $('#joinInfoModal').modal('hide');
         }); 
+ }); 
+</script>
+<!--참가자 조회 총 지원자 인원수 업데이트  -->
+<script type="text/javascript">
+$(document).ready(function () {
+    // 페이지 로드시 총 참가자 수 업데이트
+    updateTotalParticipants();
 
+    // 승인 또는 반려 이후에도 총 참가자 수 업데이트
+    $('#joinInfoForm').on('click', '.confirmModalButton, .rejectModalButton', function () {
+        updateTotalParticipants();
+    });
+
+    function updateTotalParticipants() {
+        var totalParticipants = $('#joinInfoForm tbody tr').length;
+        $('#totalParticipants').text('총 참가자 수: ' + totalParticipants);
+    }
+});
 </script>
 
 <%@ include file="../footer.jsp" %>
+</body>
 </html>

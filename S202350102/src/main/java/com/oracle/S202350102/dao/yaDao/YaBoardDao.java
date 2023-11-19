@@ -35,10 +35,17 @@ public interface YaBoardDao {
 	int         	  saveSharing(SharingList sharingList);
 	List<Board>       myUploadSharingList(int user_num);
 	List<SharingList> sharingParticipantsList(int brd_num);
-	int         	  sharingConfirm(int brd_num);
+	int         	  sharingConfirm(SharingList sharingList);
 	void              upParticipantsCnt(int brd_num);
 	List<SharingList> myJoinSharingList(int user_num);
 	List<Board>       myConfirmSharingList(int user_num);
+	int               sharingReject(SharingList sharingList);
+	void              downParticipantsCnt(int brd_num);
+	
+	
+	
+	
+	// int 			  isParticipantApprovalStatus(int brd_num, int user_num);
 	
 
 
