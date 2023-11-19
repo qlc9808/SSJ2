@@ -62,11 +62,14 @@ public interface JhCallengeService {
 	List<Challenge> 	recomChgList(int chg_md);
 
 
-	List<Comm> 		category(int categoryLd);
+	List<Comm> 			category(int categoryLd);
+
+
+	int 				chgApplication(Challenge chg);
  
 
 	
-      
+       
        
  
 

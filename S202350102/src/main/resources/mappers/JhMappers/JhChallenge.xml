@@ -166,7 +166,52 @@
 	    ]]>
 	</select>
 	
+	<insert id="jhChgApplication" parameterType="Challenge" >
+	INSERT INTO challenge (	chg_id, 
+							user_num, 
+							chg_lg, 
+							chg_md, 
+							title, 
+							chg_capacity, 
+							chg_conts, 
+							state_lg, 
+							state_md,
+                        	upload, 
+                        	sample_img, 
+                        	freq, 
+                        	chg_public, 
+                        	priv_pswd, 
+                        	thumb, 
+                        	reg_date, 
+                        	end_date
+                        	)
+	VALUES (chg_id_seq.nextval, 
+			#{user_num}, 
+			#{chg_lg}, 
+			#{chg_md}, 
+			#{title}, 
+			#{chg_capacity}, 
+			#{chg_conts},
+        	#{state_lg}, 
+        	#{state_md}, 
+        	#{upload}, 
+        	#{sample_img}, 
+        	#{freq}, 
+        	#{chg_public}, 
+        	<choose>
+      			<when test="chg_public == 0">
+        			null,
+      			</when>
+      			<otherwise>
+        			#{priv_pswd},
+      			</otherwise>
+    		</choose> 
+        	#{thumb}, 
+        	sysdate, 
+        	#{end_date}
+        	)
 	
+	</insert>
 	
 	
 	

@@ -68,6 +68,13 @@
 	    return flkty;
 	}
 
+		
+		
+		
+	function chk(){
+		return confirm("챌린지를 신청하시겠습니까?");
+		 
+	}	
 /* 	$(document).ready(function() {
 	    // 페이지 로딩 후 초기 설정
 	    if ($('#exercise').prop('checked')) {
@@ -150,8 +157,12 @@
          
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
 			<h5>${user.nick }님이 원하시는 챌린지는?</h5>
+			
+			
+			
+			
             <!-- Form -->
-            <form>
+            <form action="/chgApplication" onsubmit="return chk()" method="post" enctype="multipart/form-data">
               <input type="hidden" name="user_num" value="${user.user_num}">
               <input type="hidden" name="contextPath" id="contextPath" value="${pageContext.request.contextPath}/upload/">
 <%-- 필요한가
@@ -262,7 +273,7 @@
                 </div>
                 
                 
-
+				<!-- 종료 날짜를 오늘 이후 날짜로 입력하게 하기 -->
                 <div class="col-12">
                   <!--  -->
                   <div class="form-group">
@@ -331,7 +342,7 @@
                     <label class="form-label" for="sample_img">
                       	인증 예시
                     </label>
-					<input type="file" class="form-control" id="sample_img" name="sample_img">
+					<input type="file" class="form-control" id="sample_img" name="sampleImgFile" required>
                   </div>
 
                 </div>
@@ -345,14 +356,14 @@
                     <label class="form-label">공개 여부</label>
                     <!-- Inputs -->
                     <c:choose>
-                    	<c:when test="{user.status_md = 101}">
+                    	<c:when test="${user.status_md == 101}">
 	                    	<div>
 		                      <!-- Male -->
-		                      <input class="btn-check" type="radio" name="chg_public" id="public" checked>
+		                      <input class="btn-check" type="radio" name="chg_public" id="public" value="0" checked>
 		                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
 		
 		                      <!-- Female -->
-		                      <input class="btn-check" type="radio" name="chg_public" id="private">
+		                      <input class="btn-check" type="radio" name="chg_public" id="private" value="1">
 		                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
 		
 		                    </div>
@@ -385,12 +396,12 @@
                       	비밀번호
                     </label>
                      <c:choose>
-                    	<c:when test="{user.status_md = 101}">
-							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  required="required">
+                    	<c:when test="${user.status_md == 101}">
+							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요."  required="required">
 					 	</c:when>
 					
                      	<c:otherwise>
-							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  disabled required="required">
+							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  disabled>
 					 	</c:otherwise>
                     </c:choose>
                   </div>
@@ -401,12 +412,12 @@
 				</div>
                 <div class="col-12">
 
-                  <!-- 챌린지명 -->
+                  <!-- 썸네일 -->
                   <div class="form-group">
                     <label class="form-label" for="thumb">
                       	썸네일
                     </label>
-					<input type="file" class="form-control" id="thumb" name="thumb">
+					<input type="file" class="form-control" id="thumb" name="thumbFile">
                   </div>
 
                 </div>
@@ -415,7 +426,7 @@
                 <div class="col-12">
 
                   <!-- Button -->
-                  <button class="btn btn-dark" type="submit">Save Changes</button>
+                  <button class="btn btn-dark" type="submit" onsubmit="return chk()">Save Changes</button>
 
                 </div>
               </div>

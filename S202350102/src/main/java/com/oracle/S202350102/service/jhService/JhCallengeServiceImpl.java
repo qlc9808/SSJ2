@@ -176,6 +176,13 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return category;
 	}
 
+	@Override
+	public int chgApplication(Challenge chg) {
+		System.out.println("JhCallengeServiceImpl chgApplication Start...");
+		int result = jhChgDao.chgApplication(chg);
+		return result;
+	}
+
 
 	
 	

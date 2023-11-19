@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -21,16 +23,14 @@ public class Challenge {
 	private String 	sample_img;		// 인증예시사진
 	private int 	freq;			// 인증빈도
 	private int 	chg_public;		// 공개여부
-	private int 	chg_password;	// 비밀번호
+	private int 	priv_pswd;		// 비밀번호
 	private String 	thumb;			// 썸네일
 	private int 	return_lg;		// 반려사유(대분류)
 	private int 	return_md;		// 반려사유(중분류)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date 	reg_date;		// 챌린지신청일
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date 	create_date;	// 챌린지 개설일
 	private Date 	start_date;		// 챌린지시작일
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	end_date;		// 챌린지마감일
 	
 	

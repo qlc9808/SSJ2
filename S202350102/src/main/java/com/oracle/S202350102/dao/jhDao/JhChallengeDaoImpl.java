@@ -313,6 +313,18 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return category;
 	}
 
+	@Override
+	public int chgApplication(Challenge chg) {
+		System.out.println("JhChallengeDaoImpl chgApplication Start...");
+		int result = 0;
+		try {
+			result = session.insert("jhChgApplication", chg);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl chgApplication e.getMessage() -> " + e.getMessage());
+		}
+		return result;
+	}
+
 
 
 }

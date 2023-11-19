@@ -2,6 +2,7 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -472,22 +475,68 @@ public class JhController {
 		
 	
 	//챌린지 신청 등록
-	@RequestMapping(value = "chgApplication")
-	public String chgApplication (@ModelAttribute Challenge chg, @ModelAttribute User1 user, @RequestParam String userStatus,  Model model) {
-		System.out.println("JhController chgApplication Start...");
+	@PostMapping(value = "chgApplication")
+	public String chgApplication (@ModelAttribute Challenge chg, Model model,@RequestParam(value = "sampleImgFile", required = false) MultipartFile sampleImgFile, @RequestParam("thumbFile") MultipartFile thumbFile, HttpServletRequest request) throws IOException  {
+		/*
+		 * public String chgApplication (@RequestBody Challenge chg, Model
+		 * model, @RequestParam(value = "sample_img", required = false) MultipartFile
+		 * sample_img, HttpServletRequest request) throws IOException {
+		 */		System.out.println("JhController chgApplication Start...");
 		System.out.println("JhController chgApplication chg -> " + chg);		
 		
-//		Date start_date = chg.getStart_date();
-//		Date end_date = chg.getEnd_date();
-//		
+		//유저 번호 저장
+		HttpSession session = request.getSession();
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgApplication userNum -> " + userNum);
+		} 
+		chg.setUser_num(userNum);
 		
-	
+		//공통코드 저장
+		int chgLg = 200;
+		chg.setChg_lg(chgLg);
+		int stateLg = 300;
+		chg.setState_lg(stateLg);
+		int stateMd = 100;
+		chg.setState_md(stateMd);
+
+		  //저장 경로 생성 
+		String uploadPath =  request.getSession().getServletContext().getRealPath("/upload/");
+		  log.info("originalName: " + sampleImgFile.getOriginalFilename());
+		  log.info("size: " +sampleImgFile.getSize()); log.info("contentType : " +  sampleImgFile.getContentType()); log.info("uploadPath : " + uploadPath);
+		  
+		 //진짜 저장 
+		  //인증예시 사진
+		  String sampleSaveName = uploadFile(sampleImgFile.getOriginalFilename(), sampleImgFile.getBytes(), uploadPath); 
+		  chg.setSample_img(sampleSaveName);
+		  
+		  //썸네일
+		  String thumbSaveName 	= null;
+		  if(thumbFile != null && !thumbFile.isEmpty()) {
+			  thumbSaveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath); 
+			  chg.setThumb(thumbSaveName);
+		  } else {
+			String chgDefaultImg = "assets/img/chgDfaultImg.png";
+			chg.setThumb(chgDefaultImg);
+		}
+		 
+		 log.info("Return sampleSaveName: " + sampleSaveName); model.addAttribute("sampleSaveName", sampleSaveName);
+		 log.info("Return thumbSaveName: " + thumbSaveName); model.addAttribute("thumbSaveName", thumbSaveName);
+		 
+		 int result = jhCService.chgApplication(chg);
+		 
+		 System.out.println("JhController chgApplication result -> " + result);
+		 
 		//임시로 챌린지 목록으로 이동하게 함
 		//나중에 내가 신청한 챌린지 목록으로 이동할 것
 		return "listChallenge";
 		
 	}
 	
+//		Date start_date = chg.getStart_date();
+//		Date end_date = chg.getEnd_date();
+//		
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
 		System.out.println("JhController uploadFile Start...");
