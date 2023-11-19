@@ -6,7 +6,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
 <script type="text/javascript">
 	function ajaxRecommendList(pChg_md){
 		$.ajax({
@@ -14,10 +13,22 @@
 			data: {chg_md : pChg_md},
 			dataType:'json',
 			success:function (recomChgList) {
-				 var text = recomList(recomChgList);
-				 $('#topSellersTab .flickity-buttons-lg').html(text);
-				 
+				 var text;
+		          if (recomChgList.length === 0) {
+		                // 만약 결과 값이 없을 때의 처리
+		                text = '<div class="col text-center">아직 개설된 챌린지가 없습니다.<p>새로운 챌린지를 개설해 주세요! </div>';
+		            } else {
+		                text = recomList(recomChgList);
+		            }
+
+				 $('#recomSlider').html(text);
+				    // Flickity 인스턴스 제거
+		            var flkty = $('#recomSlider').data('flickity');
+		            if (flkty) {
+		                flkty.destroy();
+		            }
 				 initFlickity();
+				 
 	        }
 	    });
 	}
@@ -27,12 +38,11 @@
 	    for (var i = 0; i < recomChgList.length; i++) {
 	        var item = recomChgList[i];
 	        var contextPath = $('#contextPath').val();
-	        alert("item -> " + item.chg_id + item.title);
 	        text += '<div class="col px-4" style="max-width: 200px;">';
 	        text += '<div class="card">';
 	        text += '<img class="card-img-top" id="recomChgThumb' + i + '" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="' + contextPath + item.thumb + '" alt="이미지 불러오기에 실패했습니다">';
-	        text += '<div class="card-body py-4 px-0 text-center">';
-	        text += '<a class="stretched-link text-body" id="rcomChgUrl' + i + '" href="/chgDetail?chg_id=' + item.chg_id + '">';
+	        text += '<div class="card-body py-4 px-0 text-center">';															
+	        text += '<a class="stretched-link text-body" id="rcomChgUrl' + i + '" href="/chgDetail?chg_id=' + item.chg_id + '" onclick="return confirm(\'페이지를 이동하시면 작성중인 내용이 사라질 수 있습니다. 이동하시겠습니까?\');">';
 	        text += '<label class="form-check-label" id="recomChgTitle' + i + '" for="rcomChgUrl">' + item.title + '</label>';
 	        text += '</a>';
 	        text += '</div>';
@@ -42,15 +52,21 @@
 	    return text;
 	}
 	
-	// Flickity 초기화 함수
+		// Flickity 초기화 함수
 	function initFlickity() {
-	    $('.flickity-buttons-lg').flickity({
-	        // 옵션 설정
-	        prevNextButtons: true,
-	        // 다른 필요한 옵션들을 추가로 설정할 수 있습니다.
+	
+	    // Flickity 초기화 초기화 위해 객체 생성
+	    var flkty = new Flickity('#recomSlider', {
+	        prevNextButtons: true, // 이전 및 다음 버튼 활성화
+	        draggable: true, // 드래깅 활성화
+	        // 필요한 경우 더 많은 옵션을 추가할 수 있습니다.
+	         contain: true ,// 부모 요소에 캐러셀을 포함시킵니다.
+	         cellAlign: 'left',
+	         pageDots: false
 	    });
+	    //리턴값을 줘서 사용(없어도 됨)
+	    return flkty;
 	}
-	    // 생성된 HTML을 어떤 엘리먼트에 추가할지 결정 (예시로 body에 추가)
 
 /* 	$(document).ready(function() {
 	    // 페이지 로딩 후 초기 설정
@@ -190,7 +206,7 @@
               <div class="tab-pane fade show active" id="topSellersTab">
 
                 <!-- Slider -->
-                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
+                <div id="recomSlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}' >
 
                     <c:forEach var="recomgList" items="${recomChgList }" varStatus="status">
 	                  <!-- Item -->
@@ -204,7 +220,7 @@
 	                      <div class="card-body py-4 px-0 text-center">
 	
 	                        <!-- Heading -->
-	                        <a class="stretched-link text-body" id="rcomChgUrl${status.index}" href="/chgDetail?chg_id=${recomgList.chg_id }">
+	                        <a class="stretched-link text-body" id="rcomChgUrl${status.index}" href="/chgDetail?chg_id=${recomgList.chg_id }" onclick="return confirm('페이지를 이동하시면 작성중인 내용이 사라질 수 있습니다. 이동하시겠습니까?');">
 	                        <label class="form-check-label" id="recomChgTitle${status.index}" for="rcomChgUrl">${recomgList.title }</label>
 	                        </a>
 	

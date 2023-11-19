@@ -150,6 +150,7 @@
 		                    SELECT      chg_id, thumb, title
 		                    FROM        challenge
 		                    WHERE       chg_md = #{chg_md}
+		                    AND			state_md = 102
 		                    ORDER BY    create_date desc
 		                ) a
 		)
