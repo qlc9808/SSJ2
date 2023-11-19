@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header4.jsp" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -11,15 +12,7 @@
 <script src="./js/jquery.js"></script>
 <script type="text/javascript">
 
-	$(document).ready(function(){
-	    $(document).on('click', '.nav-link1', function(){
-	    	$('.nav-link1').removeClass('active');	    	
-	        $(this).addClass('active');
-	        
-	    });
-	});
-
-
+	
 	function myContsDelete(brd_md, brd_num){
 		var brdMd = brd_md;
 		var brdNum = brd_num;
@@ -270,9 +263,12 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
     margin-right: 5px;
 }
 
-
+.flickity-viewport {  
+  height: 400px !important;
+}
 
 </style>
+
 <body>
 <div class="container">
 	<div class="row profile">
@@ -303,7 +299,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		            	<!-- Pane -->
 		            	<div class="tab-pane fade show active" id="myParty">
 		            	  <!-- Slider -->
-			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true,"setGallerySize": false}'>			
 							
 			                  
 
@@ -354,7 +350,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		            	</div> <!-- topSellertsTab -->
 		            	<div class="tab-pane fade" id="myApllyChg">
 		            	  <!-- Slider -->
-			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true, "setGallerySize": false}'>			
 							
 			                  
 

@@ -26,8 +26,7 @@ public class ChSearchDaoImpl implements ChSearchDao {
 		try {
 			saveResult = session.insert("saveWord", sh);
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("ChSearchImpl saveWord e.getMessage()->" + e.getMessage());
+			saveResult = 0;
 		}		
 		
 		return saveResult;

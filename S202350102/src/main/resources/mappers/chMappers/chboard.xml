@@ -53,7 +53,7 @@
 	
 	<select id="popBoardList" resultType="Board">
 		Select ROWNUM, a.*
-		From    (Select b.*, u.nick
+		From    (Select b.*, u.nick, replyCount(b.brd_num) replyCount
 			     From  board b, user1 u
 			     Where brd_lg = 700
 			     and   b.user_num = u.user_num
@@ -86,7 +86,7 @@
         WHERE b.brd_md = 103
         AND	  b.brd_Group = b.brd_num
         AND   (b.title like '%' || #{srch_word} || '%' 
-        	Or b.conts like '%' || #{srch_word} || '%')
+        	Or user1.nick like '%' || #{srch_word} || '%')
         ORDER BY b.reg_date DESC
 	</select>
 	
