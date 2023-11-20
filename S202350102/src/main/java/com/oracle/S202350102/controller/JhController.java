@@ -32,6 +32,7 @@ import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 
@@ -46,6 +47,9 @@ public class JhController {
 	
 	private final JhCallengeService jhCService;
 	private final UserService userService;
+	
+	private final ThChgService tcs;
+	
 	// yr 작성
 	private final YrChallengerService ycs;
 	private final YrChallengePickService ycps;
@@ -449,6 +453,11 @@ public class JhController {
 			
 		}
 		
+		List<Comm> chgCategoryList = tcs.listChgCategory();
+		model.addAttribute("chgCategoryList", chgCategoryList);
+
+		
+		
 		model.addAttribute("recomChgList", recomChgList);
 		
 		model.addAttribute("user", user);
@@ -530,7 +539,7 @@ public class JhController {
 		 
 		//임시로 챌린지 목록으로 이동하게 함
 		//나중에 내가 신청한 챌린지 목록으로 이동할 것
-		return "listChallenge";
+		return "redirect:/mypage";
 		
 	}
 	
