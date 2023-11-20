@@ -211,6 +211,10 @@ public class JhController {
 		
 		// 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
 		board.setChg_id(chg_id);
+		
+		// yr 작성
+		// 로그인 된 정보를 넣기 위함
+		board.setB_user_num(userNum);
 		  
 		// 페이징 작업 
 		// 인증 글 개수			mapper 키: certTotal
