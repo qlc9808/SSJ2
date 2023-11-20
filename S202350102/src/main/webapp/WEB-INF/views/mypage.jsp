@@ -11,7 +11,6 @@
     <title>Insert title here</title>
 <script src="./js/jquery.js"></script>
 <script type="text/javascript">
-
 	
 	function myContsDelete(brd_md, brd_num){
 		var brdMd = brd_md;
@@ -289,7 +288,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		            <!-- Nav -->
 		            <div class="nav justify-content-center mb-10">
 		            	<a class="nav-link active" href="#myParty" data-bs-toggle="tab">참여 챌린지</a>
-		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab">신청한 챌린지</a>
+		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab"   onclick="sizeReload()">신청한 챌린지</a>
 		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">최근 본 챌린지</a>
 		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">찜한 챌린지</a>
 		            </div>	
@@ -303,7 +302,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 							
 			                  
 
-                  <!-- Item2 -->
+                  <!-- Item2 참여한 챌린지 -->
 			                  <c:forEach items="${mychgrList }" var="chg">
 			                  <div class="col px-4" style="max-width: 400px;">
 			                    <div class="card">
@@ -348,15 +347,18 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                </div> <!-- slider -->
 		
 		            	</div> <!-- topSellertsTab -->
-		            	<div class="tab-pane fade" id="myApllyChg">
-		            	  <!-- Slider -->
-			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true, "setGallerySize": false}'>			
+		            	
+		            	
+		            	<div class="tab-pane fade" id="myApllyChg"  onfocus="sizeOnfocus()">
+		            	  	<!-- Slider -->
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
 							
 			                  
 
-                  <!-- Item2 -->
-			                  <c:forEach items="${mychgList }" var="chg">
-			                  <div class="col px-4" style="max-width: 400px;">
+                  				<!-- Item2 신청한 챌린지 -->
+			                  <c:forEach items="${mychgList }" var="chg" >
+			                  <div class="col px-4" style="max-width: 400px; position: absolute;">
+			                  
 			                    <div class="card">
 			
 			                      <!-- Image -->

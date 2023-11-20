@@ -29,6 +29,7 @@ public class Board {
 	private int 	brd_step;		// 댓글순서
 	private int 	loc_brd_num;	// 지도목록코드번호
 	private int 	loc_num;		// 지역코드번호
+	private String	zipCode;		// 우편번호
 	
 	// 페이징 조회용    //검색타입						 //검색 내용
 	private String search;   	private String keyword;

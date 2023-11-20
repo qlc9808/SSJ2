@@ -5,8 +5,8 @@
 <mapper namespace="com.oracle.S202350102.ThUser1Mapper">
 
 	<insert id="thInsertUser1" parameterType="User1">
-		INSERT INTO user1(user_num, user_id, user_pswd, nick, user_name, email, birth, addr, tel, gender)
-				    VALUES(USER_NUM_SEQ.nextval, #{user_id}, #{user_pswd}, #{nick}, #{user_name}, #{email}, #{birth}, #{addr}, #{tel}, #{gender} )
+		INSERT INTO user1(user_num, user_id, user_pswd, nick, user_name, email, birth, addr, tel, gender, zipCode)
+				    VALUES(USER_NUM_SEQ.nextval, #{user_id}, #{user_pswd}, #{nick}, #{user_name}, #{email}, #{birth}, #{addr}, #{tel}, #{gender}, LPAD(${zipCode}, 5, '0'))
 	</insert>
 
 	<select id="thLogin" parameterType="User1" resultType="User1">

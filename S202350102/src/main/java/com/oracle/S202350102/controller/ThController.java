@@ -85,6 +85,7 @@ public class ThController {
 		// 형변환한 생년월일을 user1에 담음
 		user1.setBirth(strToDate);
 		
+		System.out.println("user1.getZipCode() --> " + user1.getZipCode());
 		
 		int insertResult = us1.insertUser1(user1);
 		model.addAttribute("insertResult",insertResult);
