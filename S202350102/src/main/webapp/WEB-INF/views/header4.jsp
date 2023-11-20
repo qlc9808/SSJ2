@@ -205,7 +205,6 @@
 
 <!--  jquery.js-->
 <script src="./js/jquery.js"></script>
-<a href="detailCommunity?user_num=4&brd_num=11"></a>
 
 <!--  font -->
 <link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">

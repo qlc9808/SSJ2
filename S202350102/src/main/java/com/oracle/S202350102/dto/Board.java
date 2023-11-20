@@ -59,4 +59,8 @@ public class Board {
 	
 	//Challenge_Review_Insert_Proc 리턴 값 저장
 	private int resultCount;
+	
+	// 좋아요 유무 판단용
+	private int likeyn;
+	private int b_user_num;
 }

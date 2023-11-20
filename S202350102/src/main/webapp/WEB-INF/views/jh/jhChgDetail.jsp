@@ -99,7 +99,8 @@
 
 		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
-		$('#displayUserImg').text(user_img);
+		$('#displayUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img);
+
 			
 		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
@@ -153,8 +154,10 @@
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
 					$("#chgPick").removeClass("btn-outline-dark").addClass("btn-dark");
+					alert("찜 성공");
 				} else {
 					$("#chgPick").removeClass("btn-dark").addClass("btn-outline-dark");
+					alert("찜 취소");
 				}
 
 			},
@@ -165,6 +168,7 @@
 	}
 
 	// 좋아요 버튼
+	// 작성 중
 	function likePro(p_index) {
 		var brd_num = $('#brd_num' + p_index).val();
 		alert("brd_num -> " + brd_num);
@@ -1836,7 +1840,7 @@
 										<div class="col-12 col-md-auto">
 											<div class="avatar avatar-xxl mb-6 mb-md-0">
 												<span class="avatar-title rounded-circle">
-													<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+													<img src="${pageContext.request.contextPath}/upload/${ssj.img}" alt="profile" class="avatar-title rounded-circle">
 												</span>
 											</div>
 										</div>
@@ -2276,11 +2280,16 @@
 								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }&chg_id=${chg.chg_id}&tap=3">
 								        <i class="fa fa-caret-left"></i>
 								      </a>
-					              </c:if>
 								    </li>
+					              </c:if>
 						          <c:forEach var="i" begin="${reviewPage.startPage }" end="${reviewPage.endPage }">
-								    <li class="page-item active">
-								      <a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3">${i}</a>
+								    <li class="page-item">
+								    	<c:if test="${i == reviewPage.currentPage}">
+								      		<a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3"><b class="text-primary">${i}</b></a>
+								    	</c:if>
+								    	<c:if test="${i != reviewPage.currentPage}"> 
+								     		<a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3">${i}</a>
+								    	</c:if>
 								    </li>
 						          </c:forEach>
 						          <c:if test="${reviewPage.endPage < reviewPage.totalPage }">

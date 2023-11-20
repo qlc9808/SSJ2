@@ -37,6 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardLike;
+import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.jkService.JkBoardService;
@@ -46,6 +48,7 @@ import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
+import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +65,7 @@ public class JkController {
 	private final ChController chcont;
 	private final Level1Service ls;
 	private final UserService us;
+	private final YrBoardLikeService ybls;
 	
 	
 	//좋아요 기능 컨트롤러
@@ -109,8 +113,6 @@ public class JkController {
 	@RequestMapping(value="/sharing")
 	public String Sharing(Board board, Model model, HttpSession session) {
 		System.out.println("JkController Sharing start...");
-		List<Board> sharing = jbs.sharing(board);
-		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
@@ -118,6 +120,13 @@ public class JkController {
 		}
 		
 		User1 user1 = jbs.userSelect(user_num);
+		
+		// yr 작성
+		// 쉐어링 찜 여부 판단용
+		board.setB_user_num(user_num);
+		
+		List<Board> sharing = jbs.sharing(board);
+		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		model.addAttribute("user1", user1);
 		model.addAttribute("sharing", sharing);
@@ -159,15 +168,24 @@ public class JkController {
 		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
+		
+		// yr 작성
+		// 찜 여부 판단용
+		BoardLike brdl = new BoardLike();
+		brdl.setBrd_num(brd_num);
+		brdl.setUser_num(user_num);
+		int brdLike = ybls.selectBrdLikeYN(brdl);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("brdLike", brdLike);
 	
 	
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
 	    System.out.println("replyCount:" +board.getReplyCount());
+	    
 		return"jk/detailSharing";
 				
 	}
@@ -589,5 +607,16 @@ public class JkController {
 	        return "forward:/mypage.jsp";
 	    }
 	}
-}   
+	
+	@RequestMapping(value ="nearbySharing")
+	public String nearbySharing(Board board, Model model, HttpSession session) {
+		System.out.println("MainController nearbySharing Start...");
+		List<Board> sharingResult = jbs.sharingResult(board);
+		
+		
+		return "nearbySharing";
+	}	
+	}
+
+   
 	
