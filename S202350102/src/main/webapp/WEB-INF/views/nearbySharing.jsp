@@ -178,15 +178,7 @@
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9fb99f45a47c1c87ebbcfc532e1f831f&libraries=services"></script>
 </head>
 <body>
-	<script>
-		var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(33.450701, 126.570667),
-			level: 3
-		};
 
-		var map = new kakao.maps.Map(container, options);
-	</script>
 
     <!-- HEADER -->
     <section class=" pb-8">
@@ -214,7 +206,7 @@
         text-align: center;
       "
     >
-    <button onclick="getLocation()">Try It</button>
+    <button onclick="getLocation()">내 위치</button>
 
 <p id="pos"></p>
       <div id="menu_wrap" class="bg_white">
@@ -222,7 +214,7 @@
           <div>
             <form onsubmit="searchPlaces(); return false;">
               <div class="input-group input-group-merge">
-              <input class="form-control" type="search" placeholder="검색어를 입력해주세요">
+              <input class="form-control" type="search" id="keyword" name="keyword" placeholder="검색어를 입력해주세요.">
               <div class="input-group-append">
                 <button class="btn btn-outline-border" type="submit" style="margin-left: 0px;">
                   <i class="fe fe-search"></i>
@@ -251,12 +243,25 @@ var markers = [];
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(37.5605672, 126.9433486), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };  
 
 // 지도를 생성합니다    
 var map = new kakao.maps.Map(mapContainer, mapOption); 
+
+// 마커생성
+var markerPosition  = new kakao.maps.LatLng(37.5605672, 126.9433486); 
+
+var marker = new kakao.maps.Marker({
+    position: markerPosition
+});
+
+//마커 지도에 추가
+
+
+// 마커 배열에 추가
+markers.push(marker);
 
 // 장소 검색 객체를 생성합니다
 var ps = new kakao.maps.services.Places();  
@@ -265,24 +270,48 @@ var ps = new kakao.maps.services.Places();
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 
-
-
-
 </script>	
 
 
 
 <script>
 var x = document.getElementById("pos");
+var map = null;
 
 function getLocation() {
     navigator.geolocation.getCurrentPosition(showPosition);
 }
 
 function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude + 
-  "<br>Longitude: " + position.coords.longitude;
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;
+
+    // 지도에 마커 표시
+    if (!map) {
+        // 지도를 생성할 때 한 번만 실행
+        map = new kakao.maps.Map(document.getElementById('map'), {
+            center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            level: 15 // 지도의 확대 레벨
+        });
+    }
+
+    var markerPosition = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    // 기존 마커 제거
+    map.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
+    map.removeOverlayMapTypeId(kakao.maps.MapTypeId.BICYCLE);
+    map.removeOverlayMapTypeId(kakao.maps.MapTypeId.HYBRID);
+    map.removeOverlayMapTypeId(kakao.maps.MapTypeId.USE_DISTRICT);
+
+    // 새로운 마커 추가
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    // 마커 지도에 추가
+    marker.setMap(map);
 }
+</script>
 </script>
 	
 	

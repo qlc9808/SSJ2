@@ -114,7 +114,7 @@
                     <div class="col-6">
                       <div class="form-group">
                        	<div class="form-floating mb-3">
-                        	<input class="form-control form-control-sm" type="text" id="sample6_postcode" name="zipCode" placeholder="우편번호">
+                        	<input class="form-control form-control-sm" type="text" id="sample6_postcode" name="zipCode" value="" placeholder="우편번호">
                         	<label for="floatingInput">우편번호</label>
                         </div>
                       </div>
