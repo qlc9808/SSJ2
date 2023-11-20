@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
@@ -77,12 +78,12 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 	}
 
 	@Override
-	public List<Challenge> myChgList(int user_num) {
+	public List<Challenge> myChgList(Board board) {
 		System.out.println("ChChallengeDaoImpl myChgList Start...");
 		List<Challenge> myChgList = null;
 		
 		try {
-			myChgList = session.selectList("chMyChgList", user_num);
+			myChgList = session.selectList("chMyChgList", board);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChChallengeDaoImpl myChgList e.getMessage()->" + e.getMessage());

@@ -48,7 +48,7 @@
 	     </foreach>			
 	</delete>
 	
-	<select id="chMyChgList" parameterType="int" resultType="Challenge">
+	<select id="chMyChgList" parameterType="Board" resultType="Challenge">
 		Select b.*, c.*
 		From (  Select Count(*) chlgerCnt, a.chg_id
 		        From (Select *
@@ -57,6 +57,7 @@
 		        left JOIN challenger g on a.chg_id = g.chg_id
 		        GROUP BY a.chg_id) b
 		join challenge c on b.chg_id = c.chg_id
+		Order By c.reg_date DESC
 	</select>
 	
 	<select id="chmyChgrList" parameterType="int" resultType="Challenge">

@@ -77,6 +77,8 @@
 			}		
 		);
 		
+		
+		
 	})
 	
 	function likePost(brd_num) {
@@ -106,9 +108,9 @@
 		width: 30%
 	}
 	.flickity-viewport {  
-  height: 400px !important;
-  padding: 10px
-}
+	  height: 400px !important;
+	  padding: 10px
+	}
 
 </style>
 </head>
