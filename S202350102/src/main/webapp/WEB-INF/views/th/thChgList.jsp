@@ -160,7 +160,6 @@
 			                 </div>
 			                <div>참여인원: ${chg.chlgerCnt}명</div>
 			                <div>찜수: ${chg.pick_cnt }</div>
-			                
 			              </div>
 							
 			            </div>
