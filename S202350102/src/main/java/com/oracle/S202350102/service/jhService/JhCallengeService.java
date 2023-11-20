@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 
 public interface JhCallengeService {
 
@@ -61,8 +62,14 @@ public interface JhCallengeService {
 	List<Challenge> 	recomChgList(int chg_md);
 
 
+	List<Comm> 			category(int categoryLd);
+
+
+	int 				chgApplication(Challenge chg);
+ 
+
 	
-      
+       
        
  
 

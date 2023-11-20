@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header4.jsp" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -11,15 +12,7 @@
 <script src="./js/jquery.js"></script>
 <script type="text/javascript">
 
-	$(document).ready(function(){
-	    $(document).on('click', '.nav-link1', function(){
-	    	$('.nav-link1').removeClass('active');	    	
-	        $(this).addClass('active');
-	        
-	    });
-	});
-
-
+	
 	function myContsDelete(brd_md, brd_num){
 		var brdMd = brd_md;
 		var brdNum = brd_num;
@@ -270,9 +263,12 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
     margin-right: 5px;
 }
 
-
+.flickity-viewport {  
+  height: 400px !important;
+}
 
 </style>
+
 <body>
 <div class="container">
 	<div class="row profile">
@@ -292,8 +288,8 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 	            
 		            <!-- Nav -->
 		            <div class="nav justify-content-center mb-10">
-		            	<a class="nav-link active" href="#topSellersTab" data-bs-toggle="tab">참여 챌린지</a>
-		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">신청한 챌린지</a>
+		            	<a class="nav-link active" href="#myParty" data-bs-toggle="tab">참여 챌린지</a>
+		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab">신청한 챌린지</a>
 		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">최근 본 챌린지</a>
 		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">찜한 챌린지</a>
 		            </div>	
@@ -301,34 +297,142 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 	            	<!-- Content -->
 		            <div class="tab-content">	
 		            	<!-- Pane -->
-		            	<div class="tab-pane fade show active" id="topSellersTab">
+		            	<div class="tab-pane fade show active" id="myParty">
 		            	  <!-- Slider -->
-			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
-				
-			                  <!-- Item -->
-			            		<div class="col px-4" style="max-width: 200px;">
-				                    
-				                    <div class="card">				
-				                      <!-- Image -->
-				                      <img class="card-img-top" src="assets/img/products/product-26.jpg" alt="...">
-				
-				                      <!-- Body -->
-				                <div class="card-body py-4 px-2 text-center">
-								    <!-- Heading -->
-								    <a class="stretched-link text-body" href="shop.html">
-								        <a class="fs-base mb-0">챌린지명(35)</a>
-								        <p class="fs-xs mb-0">1111.11.11~1111.11.11</p>
-								        <p class="fs-base mb-0">참여인원 : 111</p>
-								    </a>
-								</div>
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true,"setGallerySize": false}'>			
+							
+			                  
+
+                  <!-- Item2 -->
+			                  <c:forEach items="${mychgrList }" var="chg">
+			                  <div class="col px-4" style="max-width: 400px;">
+			                    <div class="card">
 			
-				                    </div>
-				                    
-			                	</div>	<!-- item -->
-			                		          
+			                      <!-- Image -->
+			                     
+			
+				                  <!-- Button -->
+				                  <button class="btn btn-xs w-100 btn-dark card-btn">
+				                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
+				                  </button>
+				
+				                  
+				                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
+				                  <c:if test="${chg.thumb != null}">
+				                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+				                  </c:if>
+				                  <c:if test="${chg.thumb == null}">
+				                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+				                  </c:if>
+								  </a>
+			
+			                      <!-- Body -->
+			                      <div class="card-body py-4 px-0 text-center">
+			
+					                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+					                <div class="text-muted"> 
+					                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+					                  ~ 
+					                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+					                 </div>
+					                <div class="text-muted">참여인원: ${chg.chlgerCnt}
+					            	</div>
+						            	
+			                      </div>
+			
+			                    </div>
+			                  </div>
+			                  </c:forEach>
+
+			                	         
 			                </div> <!-- slider -->
 		
 		            	</div> <!-- topSellertsTab -->
+		            	<div class="tab-pane fade" id="myApllyChg">
+		            	  <!-- Slider -->
+			                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true, "setGallerySize": false}'>			
+							
+			                  
+
+                  <!-- Item2 -->
+			                  <c:forEach items="${mychgList }" var="chg">
+			                  <div class="col px-4" style="max-width: 400px;">
+			                    <div class="card">
+			
+			                      <!-- Image -->
+			                      <c:choose>
+									<c:when test="${sessionScope.user_num != null}">
+										<!-- 로그인 한 상태 -->
+										<c:choose>
+											<c:when test="${chg.pickyn > 0}">
+												<!-- 찜하기 있음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:when>
+								
+											<c:otherwise>
+												<!-- 찜하기 없음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+								
+									<c:otherwise>
+										<!-- 로그인 안 한 상태 -->
+										<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button"
+											onclick="location.href='/loginForm'">
+											<i class="fe fe-heart"></i>
+										</button>
+									</c:otherwise>
+								</c:choose>
+			
+				                  <!-- Button -->
+				                  <button class="btn btn-xs w-100 btn-dark card-btn">
+				                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
+				                  </button>
+				
+				                  
+				                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
+				                  <c:if test="${chg.thumb != null}">
+				                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+				                  </c:if>
+				                  <c:if test="${chg.thumb == null}">
+				                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+				                  </c:if>
+								  </a>
+			
+			                      <!-- Body -->
+			                      <div class="card-body py-4 px-0 text-center">
+			
+					                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+					                <div class="text-muted"> 
+					                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+					                  ~ 
+					                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+					                 </div>
+					                <div class="text-muted">참여인원: ${chg.chlgerCnt}
+					            	</div>
+					            	<c:if test="${chg.state_md==100 || chg.state_md==104}">
+				                    	<a href="myChgUpdate?chg_id=${chg.chg_id }">
+				                    		<button type="button">수정</button>
+				                    	</a>
+			                    	</c:if>
+						            	
+			                      </div>
+			
+			                    </div>
+			                    
+			                  </div>
+			                  </c:forEach>
+
+			                	         
+			                </div> <!-- slider -->
+		
+		            	</div> <!-- topSellertsTab -->
+		            	
 		        	</div> <!-- tab-content -->
 				</div> <!-- col-12 -->
 			</div> <!-- row -->

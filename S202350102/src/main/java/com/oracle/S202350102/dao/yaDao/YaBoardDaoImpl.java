@@ -1,6 +1,8 @@
 package com.oracle.S202350102.dao.yaDao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -285,36 +287,6 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		return sharingParticipantsList;
 	}
 
-
-	// 마이페이지 - 승인처리
-	@Override
-	public int sharingConfirm(int brd_num) {
-		System.out.println("YaBoardDaoImpl sharingConfirm start...");
-		int sharingConfirm = 0;
-		try {
-			
-			sharingConfirm = session.update("YaSharingConfirm", brd_num);
-		} catch (Exception e) {
-			System.out.println("YaBoardDaoImpl sharingConfirm e.getMessage()?"+e.getMessage());
-		}				
-		return sharingConfirm;
-	}
-
-
-	// 마이페이지 쉐어링 승인시 참가자 수 증가
-	@Override
-	public void upParticipantsCnt(int brd_num) {
-		System.out.println("YaBoardDaoImpl upParticipantsCnt start...");
-	 	
-		try {
-			session.update("YaUpParticipantsCnt" , brd_num);
-		} catch (Exception e) {
-			System.out.println("YaUpParticipantsCnt void ParticipantsCnt e.getMessage)?"+e.getMessage());
-		}
-		
-	}
-
-
 	//마이페이지 내가 참가한 쉐어링 조회
 	@Override
 	public List<SharingList> myJoinSharingList(int user_num) {
@@ -347,6 +319,85 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		return myConfirmSharingList;
 
 	}
+	
+	// 마이페이지 - 승인처리
+	@Override
+	public int sharingConfirm(SharingList sharingList) {
+		System.out.println("YaBoardDaoImpl sharingConfirm start...");
+		int sharingConfirm = 0;
+		try {
+			
+			sharingConfirm = session.update("YaSharingConfirm", sharingList);
+			if (sharingConfirm >0) {
+				System.out.println("쿼리가 성공적으로 업데이트 되었습니다.");
+			}
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl sharingConfirm e.getMessage()?"+e.getMessage());
+		}				
+		return sharingConfirm;
+	}
+
+
+	// 마이페이지 쉐어링 승인시 참가자 수 증가
+	@Override
+	public void upParticipantsCnt(int brd_num) {
+		System.out.println("YaBoardDaoImpl upParticipantsCnt start...");
+	 	
+		try {
+			session.update("YaUpParticipantsCnt" , brd_num);
+		} catch (Exception e) {
+			System.out.println("YaUpParticipantsCnt void ParticipantsCnt e.getMessage)?"+e.getMessage());
+		}
+		
+	}
+
+
+	// 마이페이지 참가자 승인 state_md: 101 update & reject message null-->입력 
+	@Override
+	public int sharingReject(SharingList sharingList) {
+		System.out.println("YaBoardDaoImpl sharingReject start...");
+		int sharingReject = 0;
+		try {
+			
+			sharingReject = session.update("YasharingReject", sharingList);
+
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl sharingReject e.getMessage()?"+e.getMessage());
+		}				
+		return sharingReject;
+	}
+
+
+	//반려시 board의 participants -1 감소
+	@Override
+	public void downParticipantsCnt(int brd_num) {
+		System.out.println("YaBoardDaoImpl downParticipantsCnt start...");
+	 	
+		try {
+			session.update("YaDownParticipantsCnt" , brd_num);
+		} catch (Exception e) {
+			System.out.println("YaDownParticipantsCntt void ParticipantsCnt e.getMessage)?"+e.getMessage());
+		}		
+	}
+
+
+
+
+
+	
+	 /* 
+	@Override
+	public int isParticipantApprovalStatus(int brd_num, int user_num) {
+		  Map<String, Object> params = new HashMap<>();
+		    params.put("brd_num", brd_num);
+		    params.put("user_num", user_num);
+
+		    return session.selectOne("YaGetApprovalStatus", params);
+
+	} */
+		    
+	
+	
 }
 
 	

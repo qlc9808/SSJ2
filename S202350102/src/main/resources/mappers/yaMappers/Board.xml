@@ -150,6 +150,11 @@
   		UPDATE board set participants=participants+1 
   		WHERE brd_num=#{brd_num}
   	</update>  	
+  	
+  	<update id="YaDownParticipantsCnt" parameterType="int">
+  	  	UPDATE board set participants=participants-1
+  		WHERE brd_num=#{brd_num}
+  	</update>
 	
 	<select id="YaMyConfirmSharingList" parameterType="int" resultType="Board">
 		SELECT s.brd_num, b.title, b.bank_info, b.bank_duedate, b.addr, b.applicants, b.price

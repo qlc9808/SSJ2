@@ -2,6 +2,7 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,11 +26,13 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
+import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 
@@ -42,6 +47,9 @@ public class JhController {
 	
 	private final JhCallengeService jhCService;
 	private final UserService userService;
+	
+	private final ThChgService tcs;
+	
 	// yr 작성
 	private final YrChallengerService ycs;
 	private final YrChallengePickService ycps;
@@ -430,6 +438,28 @@ public class JhController {
 		//유저의 회원상태 가져옴
 		String userStatus = jhCService.userStatus(userNum);
 		
+		//챌린지 카테고리 중분류 번호 가져오기
+		//챌린지 카테고리 대분류
+		int categoryLd = 200;
+		List<Comm> category = jhCService.category(categoryLd);
+		
+		model.addAttribute("category", category);
+		
+		List<Challenge> recomChgList = null;
+		if (!category.isEmpty()) {
+		    int firstMdValue = category.get(0).getMd();
+		    
+		    recomChgList = recommendCallenge(firstMdValue);
+			
+		}
+		
+		List<Comm> chgCategoryList = tcs.listChgCategory();
+		model.addAttribute("chgCategoryList", chgCategoryList);
+
+		
+		
+		model.addAttribute("recomChgList", recomChgList);
+		
 		model.addAttribute("user", user);
 		model.addAttribute("userStatus", userStatus);
 		
@@ -438,23 +468,84 @@ public class JhController {
 	}
 	
 	
-	//챌린지 신청 등록
-	@RequestMapping(value = "chgApplication")
-	public String chgApplication (@ModelAttribute Challenge chg, @ModelAttribute User1 user, @RequestParam String userStatus,  Model model) {
-		System.out.println("JhController chgApplication Start...");
-		System.out.println("JhController chgApplication chg -> " + chg);		
-		
-//		Date start_date = chg.getStart_date();
-//		Date end_date = chg.getEnd_date();
-//		
+		@ResponseBody
+		@RequestMapping(value = "recommendCallenge") 
+		public List<Challenge>  recommendCallenge(int chg_md){
+			System.out.println("JhController recommendCallenge Start...");
+			
+			List<Challenge> recomChgList = jhCService.recomChgList(chg_md);
+//			for (Challenge challenge : chgList) {
+//			    System.out.println(challenge.getTitle());
+//			}
+			
+
+			return recomChgList;
+		}
 		
 	
+	//챌린지 신청 등록
+	@PostMapping(value = "chgApplication")
+	public String chgApplication (@ModelAttribute Challenge chg, Model model,@RequestParam(value = "sampleImgFile", required = false) MultipartFile sampleImgFile, @RequestParam("thumbFile") MultipartFile thumbFile, HttpServletRequest request) throws IOException  {
+		/*
+		 * public String chgApplication (@RequestBody Challenge chg, Model
+		 * model, @RequestParam(value = "sample_img", required = false) MultipartFile
+		 * sample_img, HttpServletRequest request) throws IOException {
+		 */		System.out.println("JhController chgApplication Start...");
+		System.out.println("JhController chgApplication chg -> " + chg);		
+		
+		//유저 번호 저장
+		HttpSession session = request.getSession();
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgApplication userNum -> " + userNum);
+		} 
+		chg.setUser_num(userNum);
+		
+		//공통코드 저장
+		int chgLg = 200;
+		chg.setChg_lg(chgLg);
+		int stateLg = 300;
+		chg.setState_lg(stateLg);
+		int stateMd = 100;
+		chg.setState_md(stateMd);
+
+		  //저장 경로 생성 
+		String uploadPath =  request.getSession().getServletContext().getRealPath("/upload/");
+		  log.info("originalName: " + sampleImgFile.getOriginalFilename());
+		  log.info("size: " +sampleImgFile.getSize()); log.info("contentType : " +  sampleImgFile.getContentType()); log.info("uploadPath : " + uploadPath);
+		  
+		 //진짜 저장 
+		  //인증예시 사진
+		  String sampleSaveName = uploadFile(sampleImgFile.getOriginalFilename(), sampleImgFile.getBytes(), uploadPath); 
+		  chg.setSample_img(sampleSaveName);
+		  
+		  //썸네일
+		  String thumbSaveName 	= null;
+		  if(thumbFile != null && !thumbFile.isEmpty()) {
+			  thumbSaveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath); 
+			  chg.setThumb(thumbSaveName);
+		  } else {
+			String chgDefaultImg = "assets/img/chgDfaultImg.png";
+			chg.setThumb(chgDefaultImg);
+		}
+		 
+		 log.info("Return sampleSaveName: " + sampleSaveName); model.addAttribute("sampleSaveName", sampleSaveName);
+		 log.info("Return thumbSaveName: " + thumbSaveName); model.addAttribute("thumbSaveName", thumbSaveName);
+		 
+		 int result = jhCService.chgApplication(chg);
+		 
+		 System.out.println("JhController chgApplication result -> " + result);
+		 
 		//임시로 챌린지 목록으로 이동하게 함
 		//나중에 내가 신청한 챌린지 목록으로 이동할 것
-		return "listChallenge";
+		return "redirect:/mypage";
 		
 	}
 	
+//		Date start_date = chg.getStart_date();
+//		Date end_date = chg.getEnd_date();
+//		
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
 		System.out.println("JhController uploadFile Start...");
@@ -609,50 +700,24 @@ public class JhController {
 		return "jh/modify";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "recommendCallenge") 
-	public RecommendationResult  recommendCallenge(int chg_md){
-		System.out.println("JhController recommendCallenge Start...");
-		RecommendChg recomChg= new RecommendChg();
-		
-		List<Challenge> chgList = jhCService.recomChgList(chg_md);
-		for (Challenge challenge : chgList) {
-		    System.out.println(challenge.getTitle());
-		}
-		
-		
-		List<RecommendChg> recomChgList = new ArrayList<RecommendChg>();
-		
-		
-		
-		 // chgList의 각 Challenge 객체를 순회하며 데이터를 추출하여 recomChgList에 추가
-	    for (Challenge challenge : chgList) {
-	        recomChg.setChg_id(challenge.getChg_id());
-	        recomChg.setTitle(challenge.getTitle());
-	        recomChg.setThumb(challenge.getThumb());
-	        recomChgList.add(recomChg);
-//		    System.out.println(recomChgList.getTitle());
-	        //다시 하기
-	    }
-		
-	    
-		
-		return new RecommendationResult (recomChgList, recomChgList.size());
-	}
+	
 	
 	@Data
-	private class RecommendChg {
+	public class RecommendChg {
 		private int 	chg_id;
 		private String 	title;
 		private String	thumb;
 		
 	}
+	
+
 	 
 	@Data
-	private static class RecommendationResult {
-	    private final List<RecommendChg> recomChgList;
-	    private final int recomChgListSize;
+	private static class Result {
+	    private final List<?> List;
+	    private final int listSize;
 	}
+	
 	
 	
 	
@@ -677,5 +742,6 @@ public class JhController {
 	 * 
 	 * return delStatusStr; }
 	 */
+	 
 	
 }

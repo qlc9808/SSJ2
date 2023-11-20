@@ -19,18 +19,32 @@
  		AND brd_step = 0 
     </select>		
     
-	<update id="YaSharingConfirm" parameterType="sharingList">
-		UPDATE sharingList
-		SET	   state_md =101
-		WHERE  brd_num = #{brd_num}
-		AND    user_num = #{user_num}
-	</update>
-
 	<select id="YaMyJoinSharingList" parameterType="int" resultType="sharingList">
 		SELECT s.brd_num, b.title, s.state_md, s.reject_msg
 		FROM sharingList s, board b
 		WHERE s.user_num = #{user_num}
 		AND s.brd_num = b.brd_num
 	</select>	
+    
+	<update id="YaSharingConfirm" parameterType="sharingList">
+		UPDATE sharingList
+		SET	   state_md =101
+		WHERE  brd_num = #{brd_num}
+		AND    user_num = #{user_num}
+	</update>
 	
+	<update id="YasharingReject" parameterType="sharingList">
+	    UPDATE sharingList
+		SET	   state_md =104, reject_msg = #{reject_msg}
+		WHERE  brd_num = #{brd_num}
+		AND    user_num = #{user_num}	
+	</update>
+		
+<!-- 	<select id="YaGetApprovalStatus"  resultType="int">
+    SELECT state_md
+    FROM sharingList
+    WHERE brd_num = #{brd_num}
+    AND user_num = #{user_num}
+</select>
+ -->	
 </mapper>	

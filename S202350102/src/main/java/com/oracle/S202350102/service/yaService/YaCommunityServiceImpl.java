@@ -192,31 +192,7 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		}
 		return sharingParticipantsList;
 	}
-
-
-	//마이페이지 - 내가올린 쉐어링 참가자 승인처리 (state_md 101)
-	@Override
-	public int sharingConfirm(int brd_num) {
-		System.out.println("YaControllerServiceImpl sharingConfirm  start....");
-		int sharingConfirm = 0;
-		try {
-			sharingConfirm = ybd.sharingConfirm(brd_num);
-		} catch (Exception e) {
-			System.out.println("YaControllerServiceImpl shairngConfirm e.getMessage?"+e.getMessage());
-		}
-
-		return sharingConfirm;
-	}
-
-
-	// 마이페이지 - 승인 처리 후 참가자 수 증가 
-	@Override
-	public  void upParticipantsCnt(int brd_num) {
-		System.out.println("YaControllerService upParticipantsCnt start...");
-		
-		ybd.upParticipantsCnt(brd_num);
-	}
-
+	
 	// 마이페이지 - 내가참여한 쉐어링 조회
 	@Override
 	public List<SharingList> myJoinSharingList(int user_num) {
@@ -230,7 +206,7 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return myJoinSharingList;
 	}
 
-
+	// 마이페이지 - 승인완료  쉐어링 조회
 	@Override
 	public List<Board> myConfirmSharingList(int user_num) {
 		System.out.println("YaControllerService   myConfirmSharingList start...");
@@ -242,5 +218,61 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		}
 		return myConfirmSharingList;
 	}
+
+
+	//마이페이지 - 내가올린 쉐어링 참가자 승인처리 (state_md 101)
+	@Override
+	public int sharingConfirm(SharingList sharingList) {
+		System.out.println("YaControllerServiceImpl sharingConfirm  start....");
+		int sharingConfirm = 0;
+		try {
+			sharingConfirm = ybd.sharingConfirm(sharingList);
+		} catch (Exception e) {
+			System.out.println("YaControllerServiceImpl shairngConfirm e.getMessage?"+e.getMessage());
+		}
+
+		return sharingConfirm;
+	}
+
+	// 마이페이지 - 승인 처리 후 참가자 수 증가 
+	@Override
+	public  void upParticipantsCnt(int brd_num) {
+		System.out.println("YaControllerService upParticipantsCnt start...");
+		
+		ybd.upParticipantsCnt(brd_num);
+	}
+
+	// 참가자 승인 state_md: 101 update & reject message null-->입력 
+	@Override
+	public int sharingReject(SharingList sharingList) {
+		System.out.println("YaControllersERVICE Impl SharingReject start...");
+		int sharingReject = 0;
+		try {
+			sharingReject = ybd.sharingReject(sharingList);
+		} catch (Exception e) {
+			System.out.println("YaControllerServiceImpl sharingReject e.getMessage?"+e.getMessage());
+		}
+		return sharingReject;
+	}
+
+
+	// board의 participants -1 감소
+	@Override
+	public void downParticipantsCnt(int brd_num) {
+		System.out.println("YaControllerService downParticipantsCnt start...");
+		
+		ybd.downParticipantsCnt(brd_num);
+	}
+
+
+	
+	
+/*
+	@Override
+	  public boolean isParticipantApproved(int brd_num, int user_num) {
+        // 여기에 해당 사용자의 승인 여부를 확인하는 로직을 구현
+       
+		return ybd.isParticipantApprovalStatus(brd_num, user_num) == 101; 
+    }*/
 }
 
