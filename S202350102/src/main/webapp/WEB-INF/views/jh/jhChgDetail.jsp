@@ -2278,11 +2278,16 @@
 								      <a class="page-link page-link-arrow" href="chgDetail?currentPage=${reviewPage.startPage-reviewPage.pageBlock }&chg_id=${chg.chg_id}&tap=3">
 								        <i class="fa fa-caret-left"></i>
 								      </a>
-					              </c:if>
 								    </li>
+					              </c:if>
 						          <c:forEach var="i" begin="${reviewPage.startPage }" end="${reviewPage.endPage }">
-								    <li class="page-item active">
-								      <a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3">${i}</a>
+								    <li class="page-item">
+								    	<c:if test="${i == reviewPage.currentPage}">
+								      		<a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3"><b class="text-primary">${i}</b></a>
+								    	</c:if>
+								    	<c:if test="${i != reviewPage.currentPage}"> 
+								     		<a class="page-link" href="chgDetail?currentPage=${i}&chg_id=${chg.chg_id}&tap=3">${i}</a>
+								    	</c:if>
 								    </li>
 						          </c:forEach>
 						          <c:if test="${reviewPage.endPage < reviewPage.totalPage }">

@@ -15,7 +15,7 @@
                 <li class="nav-item">
 
                   <!-- Toggle -->
-                  <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6" data-bs-toggle="collapse" href="/listUserAdmin" id="listUserAdmin">
+                  <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6"   href="/listUserAdmin" id="listUserDropDown">
                     	회원 관리
                   </a>
 
