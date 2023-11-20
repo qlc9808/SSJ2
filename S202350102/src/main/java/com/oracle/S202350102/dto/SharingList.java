@@ -23,6 +23,6 @@ public class SharingList {
 	private String tel;
 	private String addr;
 	private String participants;
-	
+	private String applicants;
 }
 
