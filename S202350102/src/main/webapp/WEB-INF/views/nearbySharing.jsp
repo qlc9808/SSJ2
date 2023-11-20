@@ -213,6 +213,7 @@ $(document).ready(function () {
 
 
         $.each(data.srch_shareResult, function (index, shrResultList) {
+        	console.log(shrResultList);
             if (index < 5) { // 최대 5개까지만 표시
                 var fullImageUrl = "${pageContext.request.contextPath}/upload/" + shrResultList.img;
                 html += "<div class='row align-items-center position-relative mb-4' style='padding: 10px; height: 150px;'>" +
@@ -222,10 +223,13 @@ $(document).ready(function () {
                     "<div class='col-9 col-md-9'>" +
                     "<p class='mb-0 fw-bold' style='font-size: 16px;'>" +
                     "<a class='stretched-link text-body' href='detailSharing?user_num=" + shrResultList.user_num + "&brd_num=" + shrResultList.brd_num + "'>" +
-                    shrResultList.title +
+                    shrResultList.title + shrResultList.zipCode +
                     "</a>" +
                     "</p>" +
                     "<p class='mb-0 text-muted' style='font-size: 16px;'>" + new Date(shrResultList.reg_date).toLocaleDateString() + " | " + shrResultList.nick + "</p>" +
+                    "</div>" +
+                    "<div class='col-12'>" +
+                    "<button class='btn btn-primary float-end'>위치 검색</button>" +
                     "</div>" +
                     "</div>";
             }
@@ -234,6 +238,8 @@ $(document).ready(function () {
         searchResultsContainer.html(html);
 
     }
+    
+    
 });
 
 </script>
@@ -245,11 +251,11 @@ $(document).ready(function () {
     <section class=" pb-8">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+          <div class="col-12 col-md-10 col-lg-8 col-xl-8">
 
             <!-- Heading -->
             <h3 class="mb-5 text-center">내주변 쉐어링</h3>
-			<p class="mb-0 text-muted">검색어를 입력하면 지도 상에서 해당 지역에 등록된 물품이 마커로 표시됩니다.</p>
+			<p class="mb-0 text-muted text-center" >검색어를 입력하면 지도 상에서 해당 지역에 등록된 물품이 마커로 표시됩니다.</p>
             <!-- Search -->
             
           </div>
@@ -267,9 +273,9 @@ $(document).ready(function () {
         text-align: center;
       "
     >
-    <button onclick="getLocation()">내 위치</button>
 
-<p id="pos"></p>
+
+	
       <div id="menu_wrap" class="bg_white">
         <div class="option">
           <div>
@@ -278,7 +284,9 @@ $(document).ready(function () {
               <input class="form-control" type="search" id="srch_sharing" name="srch_sharing" placeholder="검색어를 입력해주세요.">
               <div class="input-group-append">
                 <button class="btn btn-outline-border" type="submit" style="margin-left: 0px;">
-                  <i class="fe fe-search"></i>
+                  <i class="fe fe-search"></i></div> 
+                <button class="btn btn-outline-border"  onclick="getLocation()" style="margin-left: 0px;">   
+                  <i class="fa-solid fa-location-crosshairs" onclick="getLocation()"></i>
                 </button>
               </div>
             </div>
@@ -298,7 +306,7 @@ $(document).ready(function () {
 			<table>
 				<c:set var="num" value="1"/>
 				<c:forEach items="${srch_shareResult }" var="shrResultList" varStatus="status">
-					<c:if test="${num < 6 }">
+					<c:if test="${num < 3 }">
 						<tr>
 							<td>
 								<a href="detailSharing?user_num=${shrResultList.user_num}&brd_num=${shrResultList.brd_num}">${shrResultList.img} ${shrResultList.title }</a>
@@ -314,24 +322,6 @@ $(document).ready(function () {
 </div>    
     
     
-        <!-- Items -->
-        <div class="row align-items-center position-relative mb-5">
-          <div class="col-4 col-md-3">
-    
-            <!-- Image -->
-            <img class="img-fluid" src="./assets/img/products/product-5.jpg" alt="...">
-    
-          </div>
-          <div class="col position-static">
-    
-            <!-- Text -->
-            <p class="mb-0 fw-bold">
-              <a class="stretched-link text-body" href="./product.html">Leather mid-heel Sandals</a> <br>
-              <span class="text-muted">$129.00</span>
-            </p>
-    
-          </div>
-        </div>
        
       </div>
 
@@ -355,7 +345,7 @@ var markers = [];
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(37.5605672, 126.9433486), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: 5 // 지도의 확대 레벨
     };  
 
 // 지도를 생성합니다    
@@ -394,15 +384,14 @@ function getLocation() {
 }
 
 function showPosition(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude;
+   
 
     // 지도에 마커 표시
     if (!map) {
         // 지도를 생성할 때 한 번만 실행
         map = new kakao.maps.Map(document.getElementById('map'), {
             center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            level: 15 // 지도의 확대 레벨
+            level: 3 // 지도의 확대 레벨
         });
     }
 
