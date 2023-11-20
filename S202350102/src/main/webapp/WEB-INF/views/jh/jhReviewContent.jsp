@@ -122,7 +122,12 @@
 </script>
 </head>
 <body>
-
+ <section>
+      <div class="container">
+        <div class="row">
+        
+        
+        
  <!-- 글 수정 모달 창 -->
     <div class="modal fade" id="updateFormModal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -400,7 +405,7 @@
 		</div>
      </c:forEach>
 </div>
-
+								
 <!-- Pagination -->
 <nav class="d-flex justify-content-center mt-9">
   <ul class="pagination pagination-sm text-gray-400">
@@ -412,8 +417,13 @@
     </li>
   </c:if>
         <c:forEach var="i" begin="${replyPage.startPage }" end="${replyPage.endPage }">
-    <li class="page-item active">
+    <li class="page-item">
+    	<c:if test="${i == replyPage.currentPage}">
+      <a class="page-link" href="reviewContent?currentPage=${i}&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}"><b class="text-primary">${i}</b></a>
+    	</c:if>
+    	<c:if test="${i != replyPage.currentPage}"> 
       <a class="page-link" href="reviewContent?currentPage=${i}&brd_num=${reviewContent.brd_num}&chg_id=${chg_id}">${i}</a>
+    	</c:if>
     </li>
         </c:forEach>
         <c:if test="${replyPage.endPage < replyPage.totalPage }">
@@ -425,7 +435,10 @@
         </c:if>
   </ul>
 </nav>
-
+</div>
+</div>
+    </section>
 
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>
