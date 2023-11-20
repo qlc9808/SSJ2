@@ -199,7 +199,7 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		List<Board> sharingResult = null;
 		System.out.println("JkBoardDaoImpl sharingResult start...");
 		try {
-			sharingResult = session.selectList("sharing", board);
+			sharingResult = session.selectList("sharingResult", board);
 			System.out.println("JkBoardDaoImpl sharingResult.size()-->"+sharingResult.size());
 		} catch (Exception e) {
 			System.out.println("JkBoardDaoImpl sharingResult e.getMessage()?"+e.getMessage());

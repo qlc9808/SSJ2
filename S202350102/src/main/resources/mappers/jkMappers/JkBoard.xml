@@ -127,5 +127,12 @@
 	</select>
 	
 	
+	<select id="sharingResult" parameterType="int" resultType="Board">
+		Select *
+		From board
+		Where user_num = #{user_num}
+		Order By srch_date	DESC
+	</select>
+	
 </mapper>
 
