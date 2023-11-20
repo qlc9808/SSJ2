@@ -1261,38 +1261,36 @@
 													<div class="rate">
 														<c:choose>
 															<c:when test="${sessionScope.user_num != null }">
-															<!-- 로그인 한 상태 -->
-
-																<%-- <c:choose>
-																	<c:when test="${certBoard.like_cnt > 0}"> --%>
-																	<!-- 좋아요 눌렀을 때 -->
-																		<!-- <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button" onclick="likePro()">
+																<!-- 로그인 한 상태 -->
+														
+																<c:choose>
+																	<c:when test="${certBoard.likeyn == 1}">
+																		<!-- 좋아요 눌렀을 때 -->
+																		<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
 																			좋아요 <i class="fa-solid fa-thumbs-up"></i>
-																		</a> -->
-																	<%-- </c:when>
-
-																	<c:otherwise> --%>
-																	<!-- 좋아요 안 눌렀을 때 -->
-																
-																	
-																<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})" id="like${status.index}">
-																	좋아요 <i class="fa-regular fa-thumbs-up"></i>												
-																</a>
-																
-																
-																	<%-- </c:otherwise>
-
-																</c:choose> --%>
-
+																		</a>
+																	</c:when>
+														
+																	<c:otherwise>
+																		<!-- 좋아요 안 눌렀을 때 -->
+																		<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
+																			좋아요 <i class="fa-regular fa-thumbs-up"></i>
+																		</a>
+														
+														
+																	</c:otherwise>
+														
+																</c:choose>
+														
 															</c:when>
-															
+														
 															<c:otherwise>
-															<!-- 로그인 안 한 상태 -->
-																<a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
+																<!-- 로그인 안 한 상태 -->
+																<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
 																	좋아요 <i class="fa-regular fa-thumbs-up"></i>
 																</a>
 															</c:otherwise>
-
+														
 														</c:choose>
 
 														<a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">

@@ -24,7 +24,6 @@ public class Board {
 	private int 	participants;	// 쉐어링 참여인원
 	private String 	user_tel;		// 쉐어링 연락처정보
 	private String 	memo;			// 쉐어링 전달할메모
-	private int 	like_cnt;		// 게시판 좋아요수
 	private int 	brd_group;		// 게시글그룹
 	private int 	brd_step;		// 댓글순서
 	private int 	loc_brd_num;	// 지도목록코드번호
@@ -63,4 +62,5 @@ public class Board {
 	// 좋아요 유무 판단용
 	private int likeyn;
 	private int b_user_num;
+	private int like_cnt;
 }
