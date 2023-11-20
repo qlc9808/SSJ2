@@ -24,6 +24,7 @@ public interface ThUser1Service {
 	int 			updateUserLoginDate(int user_num);
 	int 			deleteUserByAdmin(int user_num);
 	int 			activeUserByAdmin(int user_num);
+	int 			updateUserAdmin(User1 user1);
 
 	
 	

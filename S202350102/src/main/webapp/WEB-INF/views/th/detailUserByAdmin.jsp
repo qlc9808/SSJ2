@@ -81,7 +81,7 @@
 		</table>
 		<div class="d-flex justify-content-start mt-5">
 			<button class="btn btn-sm btn-dark mx-1" onclick="location.href='listUserAdmin?currentPage=${pageNum}'">목록</button>
-			<button class="btn btn-sm btn-dark mx-1">수정</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="location.href='updateUserFormAdmin?user_num=${user1.user_num }&pageNum=${pageNum}'">수정</button>
 			<!-- 탈퇴여부에따라 보이는 버튼이 탈퇴 / 활성화로 바뀜  -->
 			<c:if test="${user1.delete_yn == 'N' }">			      
 				<button class="btn btn-sm btn-dark mx-1" id="delBtn" onclick="fn_delCheck(${user1.user_num},'${user1.delete_yn }', '${pageNum }')">탈퇴</button>

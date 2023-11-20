@@ -322,8 +322,8 @@ function listComment() {
                 <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
                   	댓글 작성
                 </a>
-              </div>
-            </div>
+           </div>
+        </div>
             <!-- New Review -->
             <div class="collapse" id="reviewForm">
               <!-- Divider -->
@@ -353,8 +353,8 @@ function listComment() {
               </form>
 
             </div>
-</div>
-</section>
+	</div>
+	</section>
 <!-- Reviews -->
   </c:otherwise> 
 </c:choose> 
