@@ -632,7 +632,7 @@ public class JkController {
 	
 	@GetMapping("srchSharing")
 	@ResponseBody
-	public Map<String, Object> srchSharing(String srch_sharing, HttpSession session, Model model) {
+	public Map<String, Object> srchSharing(String srch_sharing, Board board, HttpSession session, Model model) {
 		System.out.println("JkController srchSharing Start...");
 		
 		String replSrch_word = srch_sharing.replace(" ", "");
@@ -660,9 +660,6 @@ public class JkController {
 			// 입력된 키워드에 따라 검색 
 			srch_shareResult = chSearchService.shareSearching(replSrch_word);
 		}
-		
-		model.addAttribute("srch_sharing",srch_sharing);
-		model.addAttribute("srch_shareResult",srch_shareResult);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 	    resultMap.put("srch_sharing", srch_sharing);
