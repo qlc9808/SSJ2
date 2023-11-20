@@ -25,6 +25,9 @@ public interface JkBoardDao {
 	void 				commentDeleteSharing(Board board);
 	int					commentCountSharing(int brd_num);
 	
+	// 내주변 쉐어링
+	List<Board>			sharingResult(Board board);
+	
 	
 	
 

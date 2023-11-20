@@ -189,4 +189,14 @@ public class JkBoardServiceImpl implements JkBoardService {
 		int commentCountSharing = jbd.commentCountSharing(brd_num);
 		return commentCountSharing;
 	}
+
+	@Override
+	public List<Board> sharingResult(Board board) {
+		List<Board> sharingResult = null;
+		System.out.println("JkNearby sharingResult start...");
+		sharingResult = jbd.sharingResult(board);
+		System.out.println("JkNearby sharingResult.size()-->"+sharingResult.size());
+		return sharingResult ;
+		
+	}
 }
