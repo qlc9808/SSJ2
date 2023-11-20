@@ -28,6 +28,7 @@ public class User1 {
 	private int 	user_exp;		// 경험치
 	private int 	report_cnt;		// 신고횟수
 	private int 	subs_amount;	// 결제금액
+	private String	zipCode;		// 우편번호
 	
 	// board 작성일자 출력용
 	private Date brd_reg_date;
