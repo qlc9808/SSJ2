@@ -10,21 +10,22 @@ public interface JhChallengeDao {
 
 	Challenge 			chgDetail(int chg_id);
 
+	//아래 리스트 두개 합칠 수 없나?
 	List<Board> 		chgReviewList(Board board);
+	
+	List<Board>			reviewReplyList(Board board);
 
 	String 				userStatus(int userNum);
 
 	Board 				reviewContent(int brd_num);
 
-	List<Board>			reviewReplyList(Board board);
-
 	int 				reviewTotal(int chg_id);
 
 	int 				ingChgListTotal();
 
-	List<Challenge> 	ingChgRecentList(Challenge challenge);
+//	List<Challenge> 	ingChgRecentList(Challenge challenge);
 
-	List<Challenge> 	ingChgPickList(Challenge challenge);
+//	List<Challenge> 	ingChgPickList(Challenge challenge);
  
 	void 				replyInsert(Board board);
 
@@ -46,7 +47,9 @@ public interface JhChallengeDao {
 
 	List<Comm> 			category(int categoryLd);
 
-	int 				chgApplication(Challenge chg);    
+	int 				chgApplication(Challenge chg);
+
+	List<Challenge> 	chgAdminList(Challenge challenge);    
     
-}     
+}      
    

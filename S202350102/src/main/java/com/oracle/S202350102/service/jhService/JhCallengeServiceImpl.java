@@ -81,19 +81,17 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return chgListTotal;
 	}
 
-	@Override
-	public List<Challenge> ingChgRecentList(Challenge challenge) {
-		System.out.println("JhCallengeServiceImpl ingChgRecentList Start...");
-		List<Challenge> ingChgRecList = jhChgDao.ingChgRecentList(challenge);
-		return ingChgRecList;
-	}
-
-	@Override
-	public List<Challenge> ingChgPickList(Challenge challenge) {
-		System.out.println("JhCallengeServiceImpl ingChgPickList Start...");
-		List<Challenge> ingChgPicList = jhChgDao.ingChgPickList(challenge);
-		return ingChgPicList;
-	}
+	/*삭제 예정
+	 * @Override public List<Challenge> ingChgRecentList(Challenge challenge) {
+	 * System.out.println("JhCallengeServiceImpl ingChgRecentList Start...");
+	 * List<Challenge> ingChgRecList = jhChgDao.ingChgRecentList(challenge); return
+	 * ingChgRecList; }
+	 * 
+	 * @Override public List<Challenge> ingChgPickList(Challenge challenge) {
+	 * System.out.println("JhCallengeServiceImpl ingChgPickList Start...");
+	 * List<Challenge> ingChgPicList = jhChgDao.ingChgPickList(challenge); return
+	 * ingChgPicList; }
+	 */
 
 	@Override
 	public void replyInsert(Board board) {
@@ -181,6 +179,14 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		System.out.println("JhCallengeServiceImpl chgApplication Start...");
 		int result = jhChgDao.chgApplication(chg);
 		return result;
+	}
+
+	@Override
+	public List<Challenge> chgAdminList(Challenge challenge) {
+		System.out.println("JhCallengeServiceImpl chgAdminList Start...");
+		List<Challenge> chgAdminList = jhChgDao.chgAdminList(challenge);
+		
+		return chgAdminList;
 	}
 
 
