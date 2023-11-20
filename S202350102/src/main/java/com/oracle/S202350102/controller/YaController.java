@@ -604,7 +604,16 @@ public class YaController {
 		        // board의 jk detail Sharing으로 participants 확인
 		        Board board = jbs.detailSharing(brd_num);
 		        System.out.println("YaController sharingConfirm board participants : "+board.getParticipants());
+		        board.getApplicants();
 		        
+		        // applicants를 초과하면 에러 반환
+		        if (board.getApplicants() <= board.getParticipants() ) {
+		            Map<String, Object> response = new HashMap<>();
+		            response.put("success", false);
+		            response.put("message", "승인 인원이 모집 인원을 초과하였습니다.");
+		            return response;
+		        }
+ 
 		        // board의 participants +1 증가
 		       int participantsCnt = 0;
 		       ycs.upParticipantsCnt(brd_num);
@@ -615,18 +624,7 @@ public class YaController {
 		        return response;
 		   
 		    }
-		    // 승인처리여부 확인 (승인 완료 시, 모달창 버튼 비활성화 목적) **아직 미완성************************
-		  /*  @GetMapping("/checkApproval")
-		    @ResponseBody
-		    public Map<String, Object> checkApproval(@RequestParam("brd_num") int brd_num,
-		                                            @RequestParam("user_num") int user_num) {
-		        boolean isApproved = ycs.isParticipantApproved(brd_num, user_num);
-
-		        Map<String, Object> response = new HashMap<>();
-		        response.put("isApproved", isApproved);
-		        return response;
-		    } */
-		    
+		
 		 // 반려처리 , 메세지 sharingList 업데이트, 참가자 승인 state_ md 104
 		 @PostMapping("/sharingReject")
 		 @ResponseBody
@@ -661,9 +659,10 @@ public class YaController {
 		        Board board = jbs.detailSharing(brd_num);
 		        System.out.println("YaController sharingReject board participants : "+board.getParticipants());
 		        
-		        // board의 participants -1 감소
-		       int participantsCnt = 0;
-		       ycs.downParticipantsCnt(brd_num);
+				/*
+				 * // board의 participants -1 감소 int participantsCnt = 0;
+				 * ycs.downParticipantsCnt(brd_num);
+				 */
 
 		            // 처리가 성공하면 결과 맵에 성공 메시지추가
 		        result.put("success", "true");
@@ -676,5 +675,6 @@ public class YaController {
 
 		  return result;
 	}
-		    			  
+		 
+	
 }		

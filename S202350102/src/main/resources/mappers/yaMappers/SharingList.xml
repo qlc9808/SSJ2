@@ -10,7 +10,7 @@
 	</insert>
 	
     <select id="sharingParticipantsInfo" parameterType="int" resultType="sharingList"> 	
-		SELECT b.brd_num, b.participants, u.nick, u.user_name, u.tel, u.addr, s.message, s.reg_date, s.user_num
+		SELECT b.brd_num, b.participants, u.nick, u.user_name, u.tel, u.addr, s.message, s.reg_date, s.user_num, b.applicants, s.state_md
  		FROM   sharingList s, user1 u, board b
  		WHERE  b. brd_num = #{brd_num} and s.brd_num = #{brd_num}
         AND s.user_num = u.user_num
