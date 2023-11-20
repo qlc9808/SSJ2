@@ -172,6 +172,15 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 	}
 
 
+	@Override
+	public int updateUserAdmin(User1 user1) {
+		System.out.println("ThUser1ServiceImpl updateUserAdmin Start...");
+		int updateResult = ud1.updateUserAdmin(user1);
+		System.out.println("ThUser1ServiceImpl updateResult --> " + updateResult);
+		return updateResult;
+	}
+
+
 	
 
 }
