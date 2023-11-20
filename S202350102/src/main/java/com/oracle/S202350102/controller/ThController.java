@@ -423,16 +423,34 @@ public class ThController {
     	System.out.println("thController deleteResult --> " + deleteResult);
 //    	model.addAttribute("pageNum", pageNum);
     	
-		return "forward:/detailUserByAdmin?user_num="+user1.getUser_num()+"&pageNum="+pageNum;
+		return "forward:/detailUserByAdmin?user_num="+user1.getUser_num();
     }
     
     @GetMapping(value = "/detailUserByAdmin")
-    public String detailUserByAdmin(User1 user1, int user_num, int pageNum, Model model) {
+    public String detailUserByAdmin(User1 user1, int user_num, String pageNum, Model model) {
     	System.out.println("thController detailUserByAdmin Start...");
     	user1 = jbs.userSelect(user_num);
     	model.addAttribute("user1", user1);
     	model.addAttribute("pageNum",pageNum);
     	return "th/detailUserByAdmin";
     }
-
+    
+    @GetMapping(value = "updateUserFormAdmin")
+    public String updateUserFormAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    	System.out.println("thController updateUserFormAdmin Start...");
+    	user1 = jbs.userSelect(user_num);
+    	model.addAttribute("user1", user1);
+    	model.addAttribute("pageNum", pageNum);
+    	return "th/updateUserFormAdmin";
+    }
+    
+    @GetMapping(value = "/updateUserAdmin")
+    public String updateUserAdmin(User1 user1, String pageNum, Model model) {
+    	System.out.println("thController updateUserAdmin Start...");
+    	int updateResult = us1.updateUserAdmin(user1);
+    	System.out.println("thController updateUserAdmin updateResult -->" + updateResult);
+    	if (updateResult == 1) { return "forward:/detailUserByAdmin?user_num="+user1.getUser_num(); }
+    	else { return "redirect:/updateUserFormAdmin?user_num="+user1.getUser_num(); }
+    	
+    }
 }
