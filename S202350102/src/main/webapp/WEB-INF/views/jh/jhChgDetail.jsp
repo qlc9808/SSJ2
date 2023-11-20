@@ -99,7 +99,8 @@
 
 		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
-		$('#displayUserImg').text(user_img);
+		$('#displayUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img);
+
 			
 		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
@@ -165,6 +166,7 @@
 	}
 
 	// 좋아요 버튼
+	// 작성 중
 	function likePro(p_index) {
 		var brd_num = $('#brd_num' + p_index).val();
 		alert("brd_num -> " + brd_num);
@@ -1836,7 +1838,7 @@
 										<div class="col-12 col-md-auto">
 											<div class="avatar avatar-xxl mb-6 mb-md-0">
 												<span class="avatar-title rounded-circle">
-													<img src="${ssj.img}" alt="profile" class="avatar-title rounded-circle">
+													<img src="${pageContext.request.contextPath}/upload/${ssj.img}" alt="profile" class="avatar-title rounded-circle">
 												</span>
 											</div>
 										</div>

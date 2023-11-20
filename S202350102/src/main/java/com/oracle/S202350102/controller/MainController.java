@@ -27,12 +27,7 @@ public class MainController {
 		
 		return "listChallenge";
 	}
-	@RequestMapping(value ="nearbySharing")
-	public String nearbySharing() {
-		System.out.println("MainController nearbySharing Start...");
-		
-		return "nearbySharing";
-	}
+
 	/*
 	 * @RequestMapping(value ="Sharing") public String Sharing() {
 	 * System.out.println("MainController Sharing Start...");

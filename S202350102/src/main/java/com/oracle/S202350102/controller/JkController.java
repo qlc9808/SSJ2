@@ -589,5 +589,14 @@ public class JkController {
 	        return "forward:/mypage.jsp";
 	    }
 	}
-}   
+	
+	@RequestMapping(value ="nearbySharing")
+	public String nearbySharing() {
+		System.out.println("MainController nearbySharing Start...");
+		
+		return "nearbySharing";
+	}	
+	}
+
+   
 	
