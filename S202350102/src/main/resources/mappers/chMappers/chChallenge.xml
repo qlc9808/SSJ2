@@ -49,12 +49,14 @@
 	</delete>
 	
 	<select id="chMyChgList" parameterType="int" resultType="Challenge">
-		Select a.*, c.*
-		From (Select count(*) chlgerCnt, chg_id
-		        From challenger
-		        GROUP BY chg_id) a
-		Join challenge c on c.chg_id = a.chg_id
-		Where user_num = #{user_num}
+		Select b.*, c.*
+		From (  Select Count(*) chlgerCnt, a.chg_id
+		        From (Select *
+		              From challenge
+		              Where user_num = #{user_num}) a
+		        left JOIN challenger g on a.chg_id = g.chg_id
+		        GROUP BY a.chg_id) b
+		join challenge c on b.chg_id = c.chg_id
 	</select>
 	
 	<select id="chmyChgrList" parameterType="int" resultType="Challenge">

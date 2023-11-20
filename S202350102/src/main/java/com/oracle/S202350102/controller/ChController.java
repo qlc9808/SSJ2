@@ -303,17 +303,22 @@ public class ChController {
 	}
 	
 	@RequestMapping(value = "srchcommunity")
-	public String srchcommunity(String srch_word,Model model) {
+	public String srchcommunity(String srch_word,Model model, String currentPage) {
 		System.out.println("ChController srchcommunity Start...");
+		
 		String searchTerm = srch_word.replace(" ", "");
+		Board board = new Board();
+		board.setSearch(searchTerm);
 		
 		if(srch_word == null || srch_word=="") {
 			return "redirect:searching";
 		}
 		List<Board> srch_brdResult = chSearchService.brdSearching(searchTerm); // 자유게시판
+		Paging boardPage = new Paging(srch_brdResult.size(), currentPage);
 		
 		model.addAttribute("listCommunity",srch_brdResult);
 		model.addAttribute("srch_word",searchTerm);
+		model.addAttribute("boardPage",boardPage);
 		
 		return "listCommunity";
 	}
@@ -604,7 +609,9 @@ public class ChController {
 		
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
+			// 내가 신청한 챌린지
 			List<Challenge> mychgList = chChallengeService.myChgList(user_num);
+			// 참여 중인 챌린지
 			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
 			model.addAttribute("mychgList", mychgList);
 			model.addAttribute("mychgrList", mychgrList);

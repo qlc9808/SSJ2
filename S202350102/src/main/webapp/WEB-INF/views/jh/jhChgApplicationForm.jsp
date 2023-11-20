@@ -7,6 +7,21 @@
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript">
+
+	// 페이지 로딩 시 실행되는 함수
+    $(document).ready(function () {
+        // 비공개 라디오 버튼이 변경될 때의 이벤트 처리
+        $('input[name="chg_public"]').change(function () {
+            if ($('#private').prop('checked')) {
+                // 비공개가 선택되었을 때만 비밀번호 입력란 활성화
+                $('#priv_pswd').prop('disabled', false);
+            } else {
+                // 그 외의 경우에는 비밀번호 입력란 비활성화
+                $('#priv_pswd').prop('disabled', true);
+            }
+        });
+    });
+
 	function ajaxRecommendList(pChg_md){
 		$.ajax({
 			url: '/recommendCallenge',
@@ -14,7 +29,7 @@
 			dataType:'json',
 			success:function (recomChgList) {
 				 var text;
-		          if (recomChgList.length === 0) {
+		          if (recomChgList.length == 0) {
 		                // 만약 결과 값이 없을 때의 처리
 		                text = '<div class="col text-center">아직 개설된 챌린지가 없습니다.<p>새로운 챌린지를 개설해 주세요! </div>';
 		            } else {
@@ -27,6 +42,7 @@
 		            if (flkty) {
 		                flkty.destroy();
 		            }
+		          //Flickity 초기화
 				 initFlickity();
 				 
 	        }
@@ -72,69 +88,11 @@
 		
 		
 	function chk(){
-		return confirm("챌린지를 신청하시겠습니까?");
+		return confirm("챌린지를 신청하시겠습니까? \n 관리자 승인까진 3~5일이 소요됩니다.");
 		 
 	}	
-/* 	$(document).ready(function() {
-	    // 페이지 로딩 후 초기 설정
-	    if ($('#exercise').prop('checked')) {
-	        ajaxChallengeList(100);
-	    }
-	}
-
 	
-	function recomList(RecommendationResult) {
-	    var text = "";
-	    for (var i = 0; i < RecommendationResult.recomChgListSize; i++) {
-	        var chg_id = RecommendationResult.recomChgList[i].chg_id;
-	        var thumb = RecommendationResult.recomChgList[i].thumb;
-	        var title = RecommendationResult.recomChgList[i].title;
-
-	        text += '<div class="col px-4" style="max-width: 200px;">';
-	        text += '<div class="card">';
-
-	        // Image
-	        text += '<img class="card-img-top" src="' + thumb + '" alt="...">';
-
-	        // Body
-	        text += '<div class="card-body py-4 px-0 text-center">';
-	        text += '<a class="stretched-link text-body" href="/chgDetail?chg_id=' + chg_id + '">';
-	        text += '<label class="form-check-label" for="rcomChgUrl">' + title + '</label>';
-	        text += '</a>';
-	        text += '</div>';
-
-	        text += '</div>';
-	        text += '</div>';
-	    }
-	    return text;
-	} */
-				
-	   
-	 /*     function recomList(RecommendationResult){
-	        var text = "";
-	         for(var i = 0; i < RecommendationResult.recomChgListSize; i++ ){
-	             text +='<div class="col px-4" style="max-width: 150px;">'
-	                 + '<div class="card">'
-	               + '<div class="card-img">'
-	               + '<button class="btn btn-xs w-100 btn-dark card-btn" data-bs-toggle="modal" id="chgDetailBtn" onclick="/chgDetail?chg_id='${RecommendationResult.recomChgList.chg_id}'">'
-	               + '<i class="fe fe-eye me-2 mb-1"></i> 챌린지 보러가기'
-	                 + '</button>'
-	               + '<img id="recommendChgImg" class="card-img-top" src="'${RecommendationResult.thmb}'" alt="">
-	               + '</div>'
-	                 + '<div class="card-body fw-bold text-center">'
-	                 + '<a class="text-body" id="recommendChgTitle" href="/chgDetail?chg_id='${RecommendationResult.recomChgList.chg_id}'">'${RecommendationResult.recomChgList.title}'</a> <br>'
-	                 + '</div>'
-	                 + '</div>'
-	                 + '</div>'
-	          }
-	          return text;
-	       }
-	           */   
-		
-				
-				
-				
-			
+	
 </script>
 <title>당신만의 챌린지를 신청하세요</title>
 </head>
@@ -153,7 +111,7 @@
         
         <div class="row">
         <!-- 나중에 진짜 사이드바 만들면 추가하기 -->
-         <%@ include file="/WEB-INF/views/jh/side.jsp" %>
+         <%@ include file="/WEB-INF/views/chgSidebar.jsp" %>
          
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
 			<h5>${user.nick }님이 원하시는 챌린지는?</h5>
@@ -371,11 +329,9 @@
                     	<c:otherwise>
                     	
 	                    	<div>
-		                      <!-- Male -->
 		                      <input class="btn-check" type="radio" name="chg_public" id="public" disabled>
 		                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
 		
-		                      <!-- Female -->
 		                      <input class="btn-check" type="radio" name="chg_public" id="private" disabled>
 		                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
 		                    </div>
@@ -395,15 +351,8 @@
                     <label class="form-label" for="priv_pswd">
                       	비밀번호
                     </label>
-                     <c:choose>
-                    	<c:when test="${user.status_md == 101}">
-							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요."  required="required">
-					 	</c:when>
-					
-                     	<c:otherwise>
-							<input type="password" class="form-control" id="priv_pswd" name="priv_pswd"  disabled>
-					 	</c:otherwise>
-                    </c:choose>
+					<input type="password" class="form-control" id="priv_pswd" name="priv_pswd" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." disabled required>
+		
                   </div>
 
                 </div>
