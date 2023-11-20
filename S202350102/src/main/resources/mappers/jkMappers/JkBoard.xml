@@ -33,8 +33,8 @@
   
   
 	<insert id="writeFormSharing" parameterType="Board">
-	    INSERT INTO board (brd_num, user_num, brd_lg, brd_md, title, conts, img, view_cnt, reg_date, price, bank_info, bank_duedate, addr, applicants, participants, user_tel, like_cnt, brd_group, brd_step)
-	    VALUES (BRD_NUM_SEQ.nextval, #{user_num}, 700, 102, #{title}, #{conts}, #{img}, 0, sysdate, #{price}, #{bank_info}, #{bank_duedate}, #{addr}, #{applicants}, 0, #{user_tel}, 0, BRD_NUM_SEQ.nextval, 0)
+	    INSERT INTO board (brd_num, user_num, brd_lg, brd_md, title, conts, img, view_cnt, reg_date, price, bank_info, bank_duedate, addr, applicants, participants, user_tel, like_cnt, brd_group, brd_step, zipCode)
+	    VALUES (BRD_NUM_SEQ.nextval, #{user_num}, 700, 102, #{title}, #{conts}, #{img}, 0, sysdate, #{price}, #{bank_info}, #{bank_duedate}, #{addr}, #{applicants}, 0, #{user_tel}, 0, BRD_NUM_SEQ.nextval, 0, #{zipCode})
 	  
 	</insert>
 

@@ -1,6 +1,13 @@
 server:
   port: 8222
-
+  ssl:
+   enabled: true
+   key-store: classpath:keystore.p12  
+   key-store-password: tiger01
+   key-password: tiger01
+   client-auth: NONE
+   protocol: TLS
+    
 # Oracle Connect
 spring:
 
