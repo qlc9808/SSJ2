@@ -100,5 +100,19 @@
 		WHERE	user_num = #{user_num}
 	</update>
 	
+	<update id="thUpdateUserAdmin" parameterType="User1">
+		UPDATE 	user1
+		SET		user_level 	=	#{user_level},
+				user_exp	=	#{user_exp},
+				nick		=	#{nick},
+				status_md	=	#{status_md},
+				email		=	#{email},
+				birth		=	#{birth},
+				gender		=	#{gender},
+				addr		=	#{addr},
+				tel			=	#{tel}
+		WHERE	user_num 	=	#{user_num}
+	</update>
+	
 </mapper>
 
