@@ -188,7 +188,7 @@ $("#sortOption").change(function() {
                         <c:when test="${sessionScope.user_num != null}">
                             <!-- 로그인 한 상태 -->
                             <c:choose>
-                                <c:when test="${board.like_cnt > 0}">
+                                <c:when test="${board.likeyn > 0}">
                                     <!-- 찜하기 있음 -->
                                     <button type="button"
                                         class="btn btn-xs btn-circle btn-primary card-action card-action-end"

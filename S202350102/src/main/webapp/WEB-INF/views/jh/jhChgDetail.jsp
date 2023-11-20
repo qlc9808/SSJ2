@@ -154,8 +154,10 @@
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
 					$("#chgPick").removeClass("btn-outline-dark").addClass("btn-dark");
+					alert("찜 성공");
 				} else {
 					$("#chgPick").removeClass("btn-dark").addClass("btn-outline-dark");
+					alert("찜 취소");
 				}
 
 			},
