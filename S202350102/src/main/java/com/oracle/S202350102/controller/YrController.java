@@ -187,8 +187,8 @@ public class YrController {
 	// 좋아요 기능
 	@ResponseBody
 	@RequestMapping(value = "likePro")
-	public int likePro(@RequestParam("brd_num") int brd_num
-					, HttpSession session) {
+	public Map<String, Object> likePro(@RequestParam("brd_num") int brd_num
+									, HttpSession session) {
 
 		System.out.println("YrController likePro Start...");
 		System.out.println("YrController likePro brd_num -> " + brd_num);
@@ -202,10 +202,13 @@ public class YrController {
 		BoardLike brdLike = new BoardLike();
 		brdLike.setBrd_num(brd_num);
 		brdLike.setUser_num(userNum);
+		
+		Map<String, Object> likeResult = new HashMap<>();
 		int likeProResult = ybls.likePro(brdLike);
 		System.out.println("YrController likePro likeProResult -> " + likeProResult);
+		likeResult.put("likeProResult", likeProResult);
 		
-		return likeProResult;
+		return likeResult;
 	}
 	
 }
