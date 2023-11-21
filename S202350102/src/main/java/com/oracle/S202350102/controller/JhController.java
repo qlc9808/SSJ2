@@ -723,7 +723,8 @@ public class JhController {
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
 		int totalChg = 0;
 		List<Challenge> chgList = null;
-		List<Comm> category = jhCService.category(challenge.getChg_lg());
+		int chgLg = 200;
+		List<Comm> category = jhCService.category(chgLg);
 		Paging page = null;
 		
 		//진행중,종료 챌린지일 경우
@@ -767,15 +768,15 @@ public class JhController {
 		}
 		
 		
-		
 		model.addAttribute("totalChg", totalChg);
 		model.addAttribute("chgList", chgList);
 		model.addAttribute("page", page);
 		model.addAttribute("category",category); //카테고리별 조회용
 		model.addAttribute("state_lg",challenge.getState_lg()); //챌린지 진행 상태 대분류
 		model.addAttribute("state_md",challenge.getState_md()); //챌린지 진행 상태 중분류
-		model.addAttribute("chg_lg",challenge.getChg_lg()); //챌린지 진행 상태
-		System.out.println("category -> "+category);
+		model.addAttribute("chg_lg", 200); //챌린지 카테고리
+		model.addAttribute("chg_md", challenge.getChg_md()); //챌린지 카테고리
+		System.out.println("chg_md -> "+challenge.getChg_md());
 		
 		
 		/*
@@ -791,8 +792,12 @@ public class JhController {
 		
 	}
 	
-	
-	
+	@RequestMapping(value = "chgAdminDetail")
+	public String chgAdminDetail() {
+		
+		return "jh/chgAdminDetail";
+		
+	}
 	
 	
 	

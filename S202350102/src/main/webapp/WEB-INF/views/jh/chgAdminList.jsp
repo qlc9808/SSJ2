@@ -9,11 +9,11 @@
 <script type="text/javascript">
 	function fn_sortOpt(){
 		var sortOpt = $('#sortOpt').val()
-			var state_md 	= 	${chg.state_md}
-			var chg_lg 		= 	${chg.chg_lg}
-			var chg_md 		= 	${chg.chg_md}
+		var state_md 	= 	${state_md }
+		var chg_lg 		= 	${chg_lg }
+		var chg_md 		= 	$('.nav-link.active').data('md');
 	
-		location.href= 'thChgList?state_md='+state_md
+		location.href= '/chgAdminList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt;
@@ -58,9 +58,9 @@
             <!-- Categories -->
             <nav class="nav nav-overflow mb-6 mb-md-0">
             <!-- chg_lg=${chg_lg }때문에 전체 조회 안됨 -->
-              <a class="nav-link active" href="/chgAdminList?state_md=${state_md }&chg_lg=${chg_lg }">전체</a>
+              <a class="nav-link  ${chg_md eq 0 ? 'active' : ''}" href="/chgAdminList?state_md=${state_md }" data-md="0">전체</a>
               <c:forEach var="ctg" items="${category }" varStatus="status">
-              	<a class="nav-link"  href="/chgAdminList?state_md=${state_md }&chg_lg=${chg_lg }&chg_md=${ctg.md }">${ctg.ctn}</a>
+              	<a class="nav-link ${ctg.md eq chg_md ? 'active' : ''}" href="/chgAdminList?state_md=${state_md }&chg_lg=${chg_lg }&chg_md=${ctg.md }" data-md="${ctg.md}">${ctg.ctn}</a>
               </c:forEach>
             </nav>
 
@@ -87,25 +87,34 @@
 					<th>번호</th>
 					<th>카테고리명</th>
 					<th>챌린지명</th>
-					<th>신청자</th>
-					<th>신청일</th>
-					<th class="text-center"> 승인 </th>
-					<th class="text-center"> 반려 </th>
+					<th>개설자</th>
+					<th>공개여부</th>
+					<th>시작일</th>
+					<th>종료일</th>
+					<th>참여자</th>
+					<th>찜수</th>
+<!-- 					<th>상세보기</th> -->
 				</tr>
 			  </thead>
 			  <tbody>
 				<c:forEach var="chgList" items="${chgList }" varStatus="status">
 					<tr class="text-center" id="chgList${status.index }">
 						<td>${num }</td>
-						<td></td>
-						<td>${chgList.title }</td>
+						<td>${chgList.ctn }</td>
+						<td><a href="/chgAdminDetail?chg_id=${chgList.chg_id}">${chgList.title }</td>
 						<td>${chgList.nick }</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xs" onclick="location.href='/detailUserByAdmin?user_num=&pageNum='">상세보기</button>
+						<td>
+							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
+							<c:if test="${chgList.chg_public == 1 }">비공개</c:if>
 						</td>
+						<td><fmt:formatDate value="${chgList.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+						<td><fmt:formatDate value="${chgList.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+						<td>${chgList.chlgerCnt }</td>
+						<td>${chgList.pick_cnt }</td>
+						
+						<!-- <td class="justify-content-center">
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/detailUserByAdmin?user_num=&pageNum='">상세보기</button>
+						</td> -->
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
 				</c:forEach>
