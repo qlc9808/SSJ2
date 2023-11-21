@@ -29,14 +29,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
-//import com.oracle.S202350102.dto.KakaoPayApprovalVO;
+import com.oracle.S202350102.dto.Order1;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
-//import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
 import com.oracle.S202350102.service.thService.ThUser1Service;
 
@@ -174,22 +173,37 @@ public class ThController {
 		return "th/userSubMng";
 	}
 	
-	@RequestMapping(value = "thKakaoPayForm")
+	@RequestMapping(value = "thkakaoPayForm")
 	public String thKakaoPayForm(HttpSession session, Model model) {
 		if(session.getAttribute("user_num") == null) {
 			return "loginForm";
 		} 
-		return "th/thKakaoPayForm";
+		return "th/thkakaoPayForm";
 	}
 	
 	@GetMapping("/thKakaoPay")
 	public void thKakaoPayGet() {
-		
+		System.out.println("ThController thKakaoPay Get Start...");
 	}
 	
 	@PostMapping("/thKakaoPay")
-	public String thKakaoPay() {
-		System.out.println("ThController thKakaoPay Start...");
+	public String thKakaoPay(Order1 order1, HttpSession session) {
+		System.out.println("ThController thKakaoPay Post Start...");
+		System.out.println("ThController thKakaoPay Post order1.getMem_num --> "+ order1.getMem_num());
+    	
+		//세션에서 user_num 가져와서, order1 dto에 저장(set)
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			System.out.println("ThController user_num --> " + user_num);
+		} 
+		order1.setUser_num(user_num);
+		System.out.println("ThController thKakaoPay Post order1.getUser_num()--> "+ order1.getUser_num());
+		//결제시 멤버쉽번호(=상품번호) 가져오면서 주문테이블에 INSERT
+		int insertResult = os1.insertOrder(order1);
+		System.out.println("ThController thKakaoPay Post order1table insertResult --> " + insertResult);
+
+		System.out.println("thKakaoPay.kakaoPayReady() --> " + thKakaoPay.kakaoPayReady());
 		return "redirect:" + thKakaoPay.kakaoPayReady();
 	}
 	
@@ -212,21 +226,16 @@ public class ThController {
         log.info("kakaoPaySuccess updateCount : " + updateCount);
        
         Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token);
-
-        // 주문정보(order1)테이블에 값 넣기
-        int insertResult = os1.insertOrder1(user_num, kakaoSucInfo);
-        log.info("kakaoPaySuccess insertResult : " + insertResult);
-        
-        
-        
+                
         model.addAttribute("info", kakaoSucInfo);
         return "th/kakaoPaySuccess";
     }
 	
-    @PostMapping("/kakaoPayCancel")
+    @GetMapping("/kakaoPayCancel")
     public String kakaoPayCancel() {
     	
-    	return "home2";
+    	return "th/thkakaoPayForm";
+    	
     }
 
     // 아작스 아이디 중복체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
