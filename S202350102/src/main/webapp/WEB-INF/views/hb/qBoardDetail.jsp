@@ -12,36 +12,48 @@
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
 	<i class="fa-sharp fa-light fa-image"></i>
-	<div id="qbd-main">
-		<div id="qbd-title">
-			<p>${board.title }
-					<a href="qBoardUpdateForm?brd_num=${board.brd_num }">수정</a>
-					<a href="javascript:void(0);" onclick="confirmDelete(${board.brd_num}, '${board.img}');">삭제</a>
-					<a href="qBoardList?board=${board }">목록</a></p>
-				
-		</div>
-		<hr width="100%">
-		<div class="qbd-content">
-			<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>
-			<span>${board.conts }</span>
-		</div>
-		<hr width="100%">
-		<div class="qbd-rp">
-			<div class="qbd-rp-write">
-				<form  name="boardTrans"   id="boardTrans">
-				    <input type="hidden"  id="brd_num"  name="brd_num" value="${board.brd_num }">
-				    <input type="hidden"  id="img"  name="img" value="${board.img }">
-				    <input type="hidden"  id="brd_md" 	 name="brd_md" value="${board.brd_md }">
-				    <input type="hidden"  id="brd_group"  name="brd_group" value="${board.brd_num }">
-				    <textarea rows="4" cols="50" name="conts" id="conts" placeholder="댓글을 입력하세요." required="required"></textarea><p>
-					<input type="button" value="입력" onclick="commentWriteBtn()">
-				</form>
+	<div id="qbd-main" class="qbd-main">
+		<div class="qbd-mainbody">
+			<div id="qbd-title" class="qbd-title">
+				<div class="qbd-title-content">
+					<span class="title-text">${board.title }</span>
+				</div>
+				<div class="qbd-object">
+						<a href="qBoardUpdateForm?brd_num=${board.brd_num }">수정</a>
+						<a href="javascript:void(0);" onclick="confirmDelete(${board.brd_num}, '${board.img}');">삭제</a>
+						<a href="qBoardList?board=${board }">목록</a></p>
+				</div>	
 			</div>
-			<div class="qbd-rp-list">
-				<ul class="qbd-rp-group" id="qBoardCommentList">
-				</ul>
+			<div class="qbd-line">
+				<div class="qbd-line-li"></div>
 			</div>
-	
+			
+			<div class="qbd-content">
+				<div class="qbd-content text">
+					<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>				
+					<span>${board.conts }</span>
+				</div>
+
+			</div>
+			<div class="qbd-line">
+				<div class="qbd-line-li"></div>
+			</div>
+			<div class="qbd-rp">
+				<div class="qbd-rp-write">
+					<form  name="boardTrans"   id="boardTrans">
+					    <input type="hidden"  id="brd_num"  name="brd_num" value="${board.brd_num }">
+					    <input type="hidden"  id="img"  name="img" value="${board.img }">
+					    <input type="hidden"  id="brd_md" 	 name="brd_md" value="${board.brd_md }">
+					    <input type="hidden"  id="brd_group"  name="brd_group" value="${board.brd_num }">
+					    <textarea rows="3" cols="50" name="conts" id="conts" placeholder="댓글을 입력하세요." required="required"></textarea><p>
+						<input type="button" value="입력" onclick="commentWriteBtn()">
+					</form>
+				</div>
+				<div class="qbd-rp-list">
+					<ul class="qbd-rp-group" id="qBoardCommentList">
+					</ul>
+				</div>
+			</div>			
 		</div>
 	</div>
 <c:import url="/WEB-INF/views/footer.jsp"/>
@@ -68,7 +80,7 @@
 	                var commentList = data[i];
 	                var isEditable = ${sessionScope.user_num} === commentList.user_num || ${user1.status_md} == 102;
 	                var commentItem = $("<li>", { class: "comment_item", id: `comment${i}` });
-	                var span = $("<span>", { id: "data-conts", text: commentList.conts });
+	                var span = $("<span>", { id: "data-conts", text: commentList.conts, class: "comment_item-text" });
 	                var commentInfo = $("<div>", { class: "comment_info" });
 	                var img = $("<img>", {
 	                    title: `Lv.`+commentList.user_level+` | exp.`+commentList.user_exp+`(`+commentList.percentage+`%)`,
@@ -170,7 +182,7 @@
 	        var brd_num = $(this).data('brd-num');
 
 	        var originalContent = commentList.find('span').text();
-	        var inputField = $('<input>', { type: 'text', value: originalContent });
+	        var inputField = $('<input class="updateArea">', { type: 'text', value: originalContent });
 	        commentList.find('span').replaceWith(inputField);
 
 	        var saveButton = $('<button type="button" class="saveBtn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');

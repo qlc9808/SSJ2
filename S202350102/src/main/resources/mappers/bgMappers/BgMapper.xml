@@ -19,7 +19,7 @@
 	<![CDATA[
 		Select Rownum As rn, b.*
 		FROM	(
-		        Select b.*, u.nick, replyCount(b.brd_num) replyCount,
+		        Select b.*, u.nick, u.img as user_img, replyCount(b.brd_num) replyCount,
 		                count_like(b.brd_num) as like_cnt
 		                , (SELECT 	COUNT(*)
 		                   FROM   	board_like bl

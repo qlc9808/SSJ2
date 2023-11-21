@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.ChallengPick;
+import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
+import com.oracle.S202350102.service.yrService.YrChallengeService;
 import com.oracle.S202350102.service.yrService.YrChallengerService;
 import com.oracle.S202350102.service.yrService.YrFollowingService;
 
@@ -33,6 +35,7 @@ public class YrController {
 	private final YrFollowingService 		yfis;
 	private final YrChallengePickService 	ycps;
 	private final YrBoardLikeService		ybls;
+	private final YrChallengeService		ychs;
 	
 //	@RequestMapping(value = "checkBoard")
 //	public String checkBoard() {
@@ -209,6 +212,49 @@ public class YrController {
 		likeResult.put("likeProResult", likeProResult);
 		
 		return likeResult;
+	}
+	
+	// 좋아요 유무 판단용
+	@ResponseBody
+	@RequestMapping(value = "boardLikeCheck")
+	public Map<String, Object> boardLikeCheck(@RequestParam("brd_num") int brd_num
+							 , HttpSession session) {
+		
+		System.out.println("YrController boardLikeCheck Start...");
+		System.out.println("YrController boardLikeCheck brd_num -> " + brd_num);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController boardLikeCheck userNum -> " + userNum);
+		}
+		
+		BoardLike brdLike = new BoardLike();
+		brdLike.setBrd_num(brd_num);
+		brdLike.setUser_num(userNum);
+		int brdLickYN = ybls.selectBrdLikeYN(brdLike);
+		
+		Map<String, Object> brdChk = new HashMap<>();
+		brdChk.put("brdChk", brdLickYN);
+		
+		return brdChk;
+	}
+	
+	@RequestMapping(value = "chgPickList")
+	public String chgPickList(HttpSession session, Model model) {
+		
+		// session에 저장된 로그인 정보값 가져오기
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController followList userNum -> " + userNum);
+		}
+		
+		List<Challenge> chgPickList = ychs.selectChgPick(userNum);
+		
+		model.addAttribute("chgPickList", chgPickList);
+		
+		return "yr/chgPickList";
 	}
 	
 }
