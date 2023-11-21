@@ -15,6 +15,14 @@ public class SharingList {
 	private String 	message;	// 전달메세지
 	
 	
+	// 페이징 조회용    //검색타입						 //검색 내용
+	private String search;   	private String keyword;
+	private String pageNum;
+	private int start; 		 	private int end;
+	private String searchType;
+	private String category;
+	
+	
 	
 	//join
 	private String title;

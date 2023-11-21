@@ -38,9 +38,15 @@ public interface YaCommunityService {
 	int 					 sharingReject(SharingList updatedRejectSharingList);
 	void 					 downParticipantsCnt(int brd_num);
 	
+	//my sharing 페이징   count
+	int                      totalMyUploadsharing(int user_num);
+	int                      totalJoinSharing(int user_num);
+	int                      totalConfirmSharing(int user_num);
+
 	
 	
-	//boolean                  isParticipantApproved(int brd_num, int user_num);
+	
+	
 
 
 	
