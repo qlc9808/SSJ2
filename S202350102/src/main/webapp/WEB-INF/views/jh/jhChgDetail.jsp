@@ -173,7 +173,7 @@
 	// 좋아요 버튼
 	function likePro(p_index) {
 		var brd_num = $('#brd_num' + p_index).val();
-		alert("brd_num -> " + brd_num);
+//		alert("brd_num -> " + brd_num);
 
 		$.ajax({
             url: "/likePro",
