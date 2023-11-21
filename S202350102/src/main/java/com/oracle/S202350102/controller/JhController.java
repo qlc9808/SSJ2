@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
@@ -205,7 +206,6 @@ public class JhController {
 		int chgPickYN = ycps.selectChgPickYN(chgPick);
 		System.out.println("JhController chgDetail chgPickYN -> " + chgPickYN);
 		model.addAttribute("chgPickYN", chgPickYN);
-
 		
 		// bg 작성
 		
@@ -264,6 +264,7 @@ public class JhController {
 //		        }
 //		     }
 //		}
+		
 		return "jh/jhChgDetail";
 	}
 	
@@ -703,7 +704,7 @@ public class JhController {
 	
 	
 	@RequestMapping(value = "chgAdminList")
-	public String chgAdminList(Challenge challenge, Model model, HttpSession session) {
+	public String chgAdminList(Challenge challenge, String currentPage, @RequestParam(value = "sortOpt", required=false) String sortOpt,Model model, HttpSession session) {
 		System.out.println("JhController chgAdminList Start...");
 		//카테고리 명 보내기
 		//chg_md랑 state_md 파라미터 조건으로 넣어서 카테고리별, 진행상태별 챌린지 한번에 가져오기(쿼리 재활용)
@@ -714,18 +715,75 @@ public class JhController {
 //		
 //		int stateLg = 300;
 //		challenge.setState_lg(stateLg);
-//		
+		
+		
+		System.out.println("state_md -> " + challenge.getState_md());
+		
+		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
+		int totalChg = 0;
+		List<Challenge> listChg = null;
 		List<Comm> category = jhCService.category(challenge.getChg_lg());
-		model.addAttribute("category",category);
+		Paging page = null;
 		
-		List<Challenge> chgAdminList = jhCService.chgAdminList(challenge);
+		//진행중,종료 챌린지일 경우
+		if(challenge.getState_md() != 100) {
+			
+			//진행중 챌린지 총수
+			if (challenge.getState_md() ==102) {
+				totalChg = tcs.totalChgIng(challenge);
+				System.out.println("tcs.totalChgIng(challenge) --> " + totalChg);
+				
+				//종료 챌린지 총수
+			} else if (challenge.getState_md() == 103) {
+				totalChg = tcs.totalChgFin(challenge);
+				System.out.println("tcs.totalChgFin(challenge) --> " + totalChg);
+			}
+			
+			
+			//진행중,종료 공통
+			
+			//페이지네이션
+			page = new Paging(totalChg, currentPage);
+			challenge.setStart(page.getStart());
+			challenge.setEnd(page.getEnd());
+			
+			//조회 필터 셋팅(
+			if(sortOpt != null) {
+				challenge.setSortOpt(sortOpt);
+				System.out.println("ThController thChgList sortOption --> " + sortOpt);
+				model.addAttribute("sortOpt", sortOpt); //필터(찜순, 최근등록순, 참여자순)
+			}
+				
+			//리스트
+			listChg = tcs.listChg(challenge);
+			System.out.println("thController list listChg.size() --> " + listChg.size());
+			System.out.println("chg_lg --> " + challenge.getChg_lg());
+			System.out.println("chg_md --> " + challenge.getChg_md());
+
+			
+		} else {
+			
+		}
 		
-		//총합도 카테고리별, 진행상태별 조건으로 동적쿼리 만들어서 한번에 가져오기
-		int chgApcTotal = 0;
 		
-		model.addAttribute("chgAdminList", chgAdminList);
 		
-		return "jh/chgAdminList";
+		model.addAttribute("totalChg", totalChg);
+		model.addAttribute("listChg", listChg);
+		model.addAttribute("page", page);
+		model.addAttribute("category",category); //카테고리별 조회용
+		System.out.println("category -> "+category);
+		
+		
+		/*
+		 * List<Challenge> chgAdminList = jhCService.chgAdminList(challenge);
+		 * 
+		 * //총합도 카테고리별, 진행상태별 조건으로 동적쿼리 만들어서 한번에 가져오기 int chgApcTotal = 0;
+		 * 
+		 * model.addAttribute("chgAdminList", chgAdminList);
+		 */
+		
+		if(challenge.getState_md() != 100) return "jh/chgAdminList";
+		else return "jh/chgApplicationAdminList";
 		
 	}
 	

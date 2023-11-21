@@ -64,7 +64,7 @@
 		
 		                <!-- Button -->
 		                <form method="post" action="/thKakaoPay">
-			                <button class="btn btn-sm btn-outline-dark" type="submit">
+			                <button class="btn btn-sm btn-outline-dark" type="submit" name="mem_num" value="1">
 			                 	결제하기
 			                </button>
 						</form>

@@ -36,11 +36,10 @@
 				
 				<!-- 필터 만들기 전체 조회일 때 어떻게 할지 생각하기  -->
                 <!-- 필터 조회 -->
-                <select class="form-select form-select-xs" id="categoryFilter" onchange="categoryFilterFn()"> 
-                  <option value=""<c:if test="">	selected="selected"</c:if>>{ctg.ctn}</option>
+                <select class="form-select form-select-xs" id="categoryFilter" name="" onchange="categoryFilterFn()"> 
+                  <option value="0"<c:if test="">	selected="selected"</c:if>>카테고리</option>
                 <c:forEach var="ctg" items="${category }" varStatus="status">
-                  <option value="${ctg.md }"	<c:if test="">	selected="selected"</c:if>>{ctg.ctn}</option>
-                
+                  <option value="${ctg.md }"	<c:if test="">	selected="selected"</c:if>>${ctg.ctn}</option>
                 </c:forEach>
                   
                 </select>
