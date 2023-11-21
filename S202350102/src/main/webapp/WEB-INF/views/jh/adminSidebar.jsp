@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<div class="col-12 col-md-3">
+	<div class="col-12 col-md-2">
 
             <!-- Filters -->
             <form class="mb-10 mb-md-0">
@@ -38,12 +38,12 @@
                           </a>
                         </li>
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/chgAdminList?state_lg=300&state_md=102">
+                          <a class="list-styled-link" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=102">
                             	진행중 챌린지
                           </a>
                         </li>
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/chgAdminList?state_lg=300&state_md=103">
+                          <a class="list-styled-link" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=103">
                             	종료된 챌린지
                           </a>
                         </li>
