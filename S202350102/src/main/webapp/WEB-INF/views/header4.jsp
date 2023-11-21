@@ -207,7 +207,7 @@
 <script src="./js/jquery.js"></script>
 
 <!--  font -->
-<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
 <style type="text/css">
     body{ font-family: 'Noto Sans KR', sans-serif; } 
 </style>

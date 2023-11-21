@@ -30,7 +30,7 @@
 		}
 	} 
 
- 	
+/*  	없어도 되나
  	function fileUpdate(){
 		   var fileInput = document.getElementById('fileInput');
 		   if(fileInput.style.display == "none"){
@@ -43,13 +43,12 @@
 		      fileInput.setAttribute('disabled', 'true');
 		      $("#imgOroot").show();
 		   }
-	} 
+	}  */
  	
  	
 /* 	function replyUpdate(${reply.brd_num}){
 		/* 아작스 하는 중 함수형태랑 파라미터 이게 맞는지 확인하고 시작하기 */
 		
-	} */
 	
 	
 	
@@ -95,7 +94,7 @@
           }
       });  */
       
-    /* 이건 왜 안됨? 제이쿼리 떄문에 버튼 안먹힘*/
+    /* 이건 왜 안됨? 제이쿼리 떄문에 버튼 안먹힘 아작스로 바꾸면 삭제해도 될듯 수정하고 돌어왔을 때 스크롤 움직이게 하는 것*/
      $(document).ready(function() {
 	        var flag = $("#updateFlag").val();
 	        if (flag == 'flag') {
@@ -407,7 +406,7 @@
 </div>
 								
 <!-- Pagination -->
-<nav class="d-flex justify-content-center mt-9">
+<nav class="d-flex justify-content-center mt-2 mb-5">
   <ul class="pagination pagination-sm text-gray-400">
   <c:if test="${replyPage.startPage > replyPage.pageBlock}">
     <li class="page-item">

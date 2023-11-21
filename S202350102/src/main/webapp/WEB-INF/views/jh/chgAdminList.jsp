@@ -7,10 +7,16 @@
 <meta charset="UTF-8">
 <title>챌린지 관리자 페이지</title>
 <script type="text/javascript">
-	function categoryFilterFn(){
-		var category = $('#categoryFilter').val();
-		
-		
+	function fn_sortOpt(){
+		var sortOpt = $('#sortOpt').val()
+			var state_md 	= 	${chg.state_md}
+			var chg_lg 		= 	${chg.chg_lg}
+			var chg_md 		= 	${chg.chg_md}
+	
+		location.href= 'thChgList?state_md='+state_md
+								+'&chg_lg='+chg_lg
+								+'&chg_md='+chg_md
+								+'&sortOpt='+sortOpt;
 	}
 
 </script>
@@ -24,29 +30,56 @@
 			
             <!-- Heading -->
             <div class="pt-10 pb-5">
-            	<h3 class="mb-10">신청 챌린지 관리</h3>
+            
+            	<h3 class="mb-10">
+            	<c:choose>
+            		<c:when test="${state_md ==102 }">
+		            	진행중 
+            		</c:when>
+            		<c:otherwise>
+            			종료
+            		</c:otherwise>
+            	</c:choose>
+            	챌린지 관리</h3>
             </div>
 
           </div>
         </div>
         
         <div class="row">
-    		<%@ include file="adminSidebar.jsp" %>
-    		<div class="col-12 col-md-auto">
-				
-				<!-- 필터 만들기 전체 조회일 때 어떻게 할지 생각하기  -->
-                <!-- 필터 조회 -->
-                <select class="form-select form-select-xs" id="categoryFilter" name="" onchange="categoryFilterFn()"> 
-                  <option value="0"<c:if test="">	selected="selected"</c:if>>카테고리</option>
-                <c:forEach var="ctg" items="${category }" varStatus="status">
-                  <option value="${ctg.md }"	<c:if test="">	selected="selected"</c:if>>${ctg.ctn}</option>
-                </c:forEach>
-                  
-                </select>
+        <!--사이드바   -->
+        <%@ include file="adminSidebar.jsp" %>
+          
+       <!--  <div class="row align-items-center col-md-10"> -->
+       <div class="col-md-10 ">
+       <div class="row mb-5">
+          <div class="col-12 col-md-9 text-center mb-5">
 
-              </div>
-		<div class="col-10">
-		<c:set var="num" value=""></c:set>
+            <!-- Categories -->
+            <nav class="nav nav-overflow mb-6 mb-md-0">
+            <!-- chg_lg=${chg_lg }때문에 전체 조회 안됨 -->
+              <a class="nav-link active" href="/chgAdminList?state_md=${state_md }&chg_lg=${chg_lg }">전체</a>
+              <c:forEach var="ctg" items="${category }" varStatus="status">
+              	<a class="nav-link"  href="/chgAdminList?state_md=${state_md }&chg_lg=${chg_lg }&chg_md=${ctg.md }">${ctg.ctn}</a>
+              </c:forEach>
+            </nav>
+
+          </div>
+          
+          <div class="col-12 col-md-3 text-center">
+
+             <select class="form-select form-select-xs" id="sortOpt" onchange="fn_sortOpt()"> 
+                  <option value="create_date" 	<c:if test="${sortOpt eq 'create_date' }">	selected="selected"</c:if>>최신등록순</option>
+                  <option value="pick_cnt" 		<c:if test="${sortOpt eq 'pick_cnt' }">		selected="selected"</c:if>>찜순</option>
+                  <option value="participants" 	<c:if test="${sortOpt eq 'participants' }">	selected="selected"</c:if>>참여자순</option>
+             </select>
+
+                  
+          </div>
+        </div>
+        
+		<div class="col-12">
+		<c:set var="num" value="${page.total-page.start+1 }"></c:set>
 		
 			<table class="table table-bordered table-sm mb-0">
 			  <thead>
@@ -61,26 +94,20 @@
 				</tr>
 			  </thead>
 			  <tbody>
-				<c:forEach var="chgApcList" items="" varStatus="status">
-					<tr class="text-center" id="user">
-						<input type="hidden" id="user_num" value="">
-						<input type="hidden" id="delete_yn" value="">
+				<c:forEach var="chgList" items="${chgList }" varStatus="status">
+					<tr class="text-center" id="chgList${status.index }">
+						<td>${num }</td>
+						<td></td>
+						<td>${chgList.title }</td>
+						<td>${chgList.nick }</td>
 						<td></td>
 						<td></td>
-						<td></td>
-						<td>}</td>
-						<c:choose>
-							<c:when test=""><td>일반</td></c:when>
-							<c:when test=""><td>멤버쉽</td></c:when>
-							<c:when test=""><td>관리자</td></c:when>
-							<c:when test=""><td></td></c:when>
-						</c:choose>						
 						<td></td>
 						<td class="justify-content-center">
 							<button type="button" class="btn btn-secondary btn-xs" onclick="location.href='/detailUserByAdmin?user_num=&pageNum='">상세보기</button>
 						</td>
 					</tr>
-					<c:set var="num" value=""></c:set>
+					<c:set var="num" value="${num -1 }"></c:set>
 				</c:forEach>
 			 </tbody>
 			</table>
@@ -88,26 +115,26 @@
 				<!-- 페이지네이션  -->
 					 <nav class="d-flex justify-content-center justify-content-md-center mt-3">
 	      	   		 <ul class="pagination pagination-lg text-gray-400">
-					  	<c:if test="">
+					  	<c:if test="${page.startPage > page.pageBlock }">
 					  		<li class="page-item">
-								<a class="page-link page-link-arrow" href="listUserAdmin?currentPage=">
+								<a class="page-link page-link-arrow" href="listUserAdmin?currentPage=${page.startPage-page.pageBlock }">
 								<i class="fa fa-caret-left">이전</i></a>
 							</li>
 						</c:if>
 						
-					    <c:forEach var="i" begin="" end="">
+					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 							<li class="page-item">
-								<c:if test="">
-									<a class="page-link px-2" href="listUserAdmin?currentPage="><b class="text-primary"></b></a>
+								<c:if test="${i == page.currentPage }">
+									<a class="page-link px-2" href="listUserAdmin?currentPage=${i }"><b class="text-primary">${i}</b></a>
 								</c:if>
-								<c:if test="">
-									<a class="page-link px-2" href="listUserAdmin?currentPage="></a>
+								<c:if test="${i != page.currentPage }">
+									<a class="page-link px-2" href="listUserAdmin?currentPage=${i }">${i}</a>
 								</c:if>
 							</li>
 						</c:forEach>
-					    <c:if test="">
+					    <c:if test="${page.endPage < page.totalPage }">
 					    	<li class="page-item">
-								<a class="page-link page-link-arrow" href="listUserAdmin?currentPage=">
+								<a class="page-link page-link-arrow" href="listUserAdmin?currentPage=${page.startPage + page.pageBlock }">
 								<i class="fa fa-caret-right">다음</i></a>
 							</li>
 						</c:if>
@@ -115,9 +142,9 @@
 			  		</nav>
 			  </div>
 		  	</div>
+		  	</div>
+		  	</div>
 		  	<div class="py-10"></div>	
-		  </div>
-		  
 		 </section>
 </body>
 <%@ include file="/WEB-INF/views/footer.jsp" %>

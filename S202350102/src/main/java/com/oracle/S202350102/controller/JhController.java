@@ -716,11 +716,12 @@ public class JhController {
 //		challenge.setState_lg(stateLg);
 		
 		
+		
 		System.out.println("state_md -> " + challenge.getState_md());
 		
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
 		int totalChg = 0;
-		List<Challenge> listChg = null;
+		List<Challenge> chgList = null;
 		List<Comm> category = jhCService.category(challenge.getChg_lg());
 		Paging page = null;
 		
@@ -754,8 +755,8 @@ public class JhController {
 			}
 				
 			//리스트
-			listChg = tcs.listChg(challenge);
-			System.out.println("thController list listChg.size() --> " + listChg.size());
+			chgList = tcs.listChg(challenge);
+			System.out.println("thController list listChg.size() --> " + chgList.size());
 			System.out.println("chg_lg --> " + challenge.getChg_lg());
 			System.out.println("chg_md --> " + challenge.getChg_md());
 
@@ -767,9 +768,12 @@ public class JhController {
 		
 		
 		model.addAttribute("totalChg", totalChg);
-		model.addAttribute("listChg", listChg);
+		model.addAttribute("chgList", chgList);
 		model.addAttribute("page", page);
 		model.addAttribute("category",category); //카테고리별 조회용
+		model.addAttribute("state_lg",challenge.getState_lg()); //챌린지 진행 상태 대분류
+		model.addAttribute("state_md",challenge.getState_md()); //챌린지 진행 상태 중분류
+		model.addAttribute("chg_lg",challenge.getChg_lg()); //챌린지 진행 상태
 		System.out.println("category -> "+category);
 		
 		
