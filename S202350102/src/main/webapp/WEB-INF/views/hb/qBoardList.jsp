@@ -22,7 +22,7 @@
 	      <div class="qe_extra_box">
 	      	<div class="qe_select_box">
 	      		<c:if test="${user1.status_md == 102 }">
-			      	<select name="brd_md" id="brd_md">
+			      	<select name="brd_md" id="brd_md" onchange="categoryList()">
 			      		<option value="all" selected="selected">전체</option>
 			      		<option value="user">회원관련</option>
 			      		<option value="buggy">버그</option>
@@ -35,7 +35,7 @@
 	      	</div>
 	      	<div class="qe_write_box">
 		        <c:if test="${user1.user_id != null }">
-					<a href="qBoardWriteForm"><span>글쓰기</span></a>
+					<a href="qBoardWriteForm"><span>글작성</span></a>
 				</c:if>	      	
 	      	</div>
 
@@ -99,7 +99,7 @@
 			</c:if>
 			<c:if test="${user1.status_md == 102 }">
 			<div class="search">
-				<div>
+				<div class="select">
 					<select id="search-select">
 						<option value="title">제목</option>
 						<option value="conts">내용</option>
@@ -231,5 +231,78 @@
             window.location.href = 'qBoardList?currentPage=' + targetPage + '&keyword=' + keyword+'&searchType='+searchType+'&category='+category;
         });
     });
+    
+    function categoryList() {
+		var category = $('#brd_md').val();
+		$.ajax({
+			url: "qboardListSearch",
+			type: "GET",
+			data: { category: category },
+			dataType: "json",
+			success: function(result) {
+                $('#page').empty();
+                $('#search-list').empty();
+                var list = result.list;
+                var page = result.page;
+                console.log(page);
+                console.log(list);
+
+                if (list && list.length > 0) {
+                    for (var i = 0; i < list.length; i++) {
+                        var result = list[i];
+                        var str = '<tr>';
+                        console.log(result);
+                        var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
+                        
+                        str += "<td>" + (page.total - i) + "</td>";
+                        str += "<td><a href='qBoardDetail?brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
+                        str += "<td>" +img+result.nick + "</td>";
+                        str += "<td>"+result.category+"</td>";
+                        var formatDate = new Date(result.reg_date);
+                        formatDate.setHours(formatDate.getHours()+9);
+                        var day = formatDate.getDate();
+                        var month = formatDate.getMonth() + 1;
+                        var year = formatDate.getFullYear() % 100;
+    					var hours = formatDate.getHours();
+    					var minutes = formatDate.getMinutes();
+    					
+                        day = (day < 10) ? '0' + day : day;
+                        month = (month < 10) ? '0' + month : month;
+                        year = (year < 10) ? '0' + year : year;
+    					hours = (hours < 10) ? '0' + hours : hours;
+    					minutes = (minutes < 10) ? '0' + minutes : minutes;
+    					var sysdate = new Date();
+    					if (sysdate.getDate() === formatDate.getDate()) {
+    					    // 날짜가 sysdate와 다르면 시간을 표시
+    					    str += "<td>" + hours + ":" + minutes + "</td>";
+    					} else {
+    					    // 날짜가 sysdate와 같으면 날짜를 표시
+    					    str += "<td>" + year + '-' + month + '-' + day + "</td>";
+    					}
+                        str += "<td>" + result.view_cnt + "</td>";
+                        str += "</tr>";
+                        $('#search-list').append(str);
+                    }
+
+                    // 페이지 링크 추가
+                    if (page.startPage > page.pageBlock) {
+                        var prevPage = page.startPage - page.pageBlock;
+                        $('#page').append('<a href="#" id="page-link" data-page="' + prevPage + '">[이전]</a>');
+                    }
+
+                    for (var i = page.startPage; i <= page.endPage; i++) {
+                        $('#page').append('<a href="#" id="page-link" data-page="' + i + '">[' + i + ']</a>');
+                    }
+
+                    if (page.endPage < page.totalPage) {
+                        var nextPage = page.startPage + page.pageBlock;
+                        $('#page').append('<a href="#" id="page-link" data-page="' + nextPage + '" >[다음]</a>');
+                    }
+			  }
+			}
+		});
+    	
+    }
+    
 </script>
 </html>

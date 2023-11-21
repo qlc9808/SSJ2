@@ -50,10 +50,10 @@
 						</div>
 						<div class="userInfoBox2">
 							<span class="user_exp">
-								<label>현재 경험치: ${user1.user_exp }</label>
+								<label>현재 경험치 ${user1.user_exp }</label>
 							</span>
 							<span class="remain_exp">
-								<label>남은 경험치: ${user1.remain_exp }</label>
+								<label>남은 경험치 ${user1.remain_exp }</label>
 							</span>
 						</div>
 
