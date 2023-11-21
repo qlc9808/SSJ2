@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9fb99f45a47c1c87ebbcfc532e1f831f&libraries=services"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
   <style>
@@ -175,7 +176,8 @@
         color: #ffffff;
       }
     </style>
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9fb99f45a47c1c87ebbcfc532e1f831f&libraries=services"></script>
+
+
 <script>
 $(document).ready(function () {
     $("#srchSharing").submit(function (e) {
@@ -284,20 +286,26 @@ $(document).ready(function () {
               <input class="form-control" type="search" id="srch_sharing" name="srch_sharing" placeholder="검색어를 입력해주세요.">
               <div class="input-group-append">
                 <button class="btn btn-outline-border" type="submit" style="margin-left: 0px;">
-                  <i class="fe fe-search"></i></div> 
+                  <i class="fe fe-search"></i></button>
+                  </div>
                 <button class="btn btn-outline-border"  onclick="getLocation()" style="margin-left: 0px;">   
                   <i class="fa-solid fa-location-crosshairs" onclick="getLocation()"></i>
                 </button>
               </div>
-            </div>
             </form>
+            </div>
+           
           </div>
         </div>
         <!-- 여기리스트 -->
         <div id="searchResults">
         <div class="offcanvas-body border-top fs-sm">
         <!-- Heading -->
-        <p>에 대한 검색결과 입니다.</p>
+        			<div id="addrList">
+    		
+       			 <span>${addr}</span>
+    	
+			</div>
     
     <div class="container">
 			<c:if test="${empty srch_shareResult }">
@@ -318,6 +326,8 @@ $(document).ready(function () {
 					</c:if>
 				</c:forEach>
 			</table>
+			
+
 		</div>
 </div>    
     
@@ -329,7 +339,7 @@ $(document).ready(function () {
         
         <div id="pagination"></div>
       </div>
-    </div>
+ 
 
     <div
       class="map_wrap"
@@ -339,59 +349,121 @@ $(document).ready(function () {
 
 
 <script>
-// 마커를 담을 배열입니다
-var markers = [];
 
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = {
-        center: new kakao.maps.LatLng(37.5605672, 126.9433486), // 지도의 중심좌표
-        level: 5 // 지도의 확대 레벨
-    };  
+//지도 옵션 설정
+ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+          mapOption = {
+            center: new kakao.maps.LatLng(37.5605672, 126.9433486), // 지도의 중심좌표
+            level: 9 // 지도의 확대 레벨
+          };
 
-// 지도를 생성합니다    
-var map = new kakao.maps.Map(mapContainer, mapOption); 
+//지도 생성
+var map = new kakao.maps.Map(mapContainer, mapOption);
 
-// 마커생성
-var markerPosition  = new kakao.maps.LatLng(37.5605672, 126.9433486); 
+// 지도 생성
+var mapContainer = document.getElementById('map');
+var mapOption = {
+    center: new daum.maps.LatLng(37.5605672, 126.9433486),
+    level: 8
+};
+var map = new daum.maps.Map(mapContainer, mapOption);
 
-var marker = new kakao.maps.Marker({
-    position: markerPosition
+//주소-좌표로 변환
+var data = JSON.parse('${addrJson}');
+console.log(data);
+
+var geocoder = new kakao.maps.services.Geocoder();
+
+// 비동기 처리를 위해 Promise 사용
+function geocodeData(dataItem) {
+    return new Promise(function (resolve) {
+        geocoder.addressSearch(dataItem.addr, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                // Resolve with the coordinates and title
+                resolve({
+                    coords: new kakao.maps.LatLng(result[0].y, result[0].x),
+                    title: dataItem.title,
+                    addr: dataItem.addr,
+                    user_num: dataItem.user_num,
+                    brd_num: dataItem.brd_num,
+                    img:dataItem.img
+                 
+                });
+
+                console.log("user_num: " + dataItem.user_num + ", brd_num: " + dataItem.brd_num);
+
+            } else {
+                // Resolve with null if geocoding fails
+                resolve(null);
+            }
+        });
+    });
+}
+//Promise 배열 생성
+var geocodePromises = data.map(function (dataItem) {
+    return geocodeData(dataItem);
 });
 
-//마커 지도에 추가
+//Promise.all을 사용하여 모든 데이터에 대한 좌표를 얻은 후 처리
+Promise.all(geocodePromises)
+    .then(function (dataWithCoords) {
+        // 모든 좌표를 얻은 후 처리
+        dataWithCoords.forEach(function (item) {
+            if (item) {
+                // 좌표가 유효하면 커스텀 오버레이 생성
+// 예제에서는 가로 길이의 최소 값을 200px로 설정하였습니다.
+var minWidth = 3;
+var fullImageUrl = "${pageContext.request.contextPath}/upload/" + item.img;
+
+var customOverlay = new kakao.maps.CustomOverlay({
+    position: item.coords,
+    content: '<div class="customOverlay" style="background-color: white; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 3px 3px 5px #888888; display: flex; min-width: ' + minWidth + '20px;">' +
+        '<div style="flex: 0 0 40%; padding-right: 10px;">' +
+            '<img src="' + fullImageUrl + '" alt="이미지" style="width: 100%; height: auto;">' +
+        '</div>' +
+        '<div style="flex: 1; max-width: 200px; overflow: hidden;">' +
+            '<div style="font-weight: bold; margin-bottom: 5px;">' + item.title + '</div>' +
+            '<div style="margin-bottom: 15px;">' + item.addr + '</div>' +
+            '<div style="text-align: right;">' +
+                '<button class="btn btn-dark btn-xxs" style="width: 120px;" onclick="location.href=\'detailSharing?user_num=' + item.user_num + '&brd_num=' + item.brd_num + '\'">자세히 보기</button>' +
+            '</div>' +
+        '</div>' +
+    '</div>',
+});
+
+// CustomOverlay가 지도에 추가되기 전에 각 데이터의 가로 길이를 계산하고 minWidth를 조절하도록 하십시오.
 
 
-// 마커 배열에 추가
-markers.push(marker);
+                customOverlay.setMap(map);
 
-// 장소 검색 객체를 생성합니다
-var ps = new kakao.maps.services.Places();  
+                // 커스텀 오버레이를 클릭할 때의 이벤트 핸들러 함수
+                function overlayClickHandler() {
+                    console.log("Marker or Custom Overlay clicked! User_num: " + item.user_num + ", Brd_num: " + item.brd_num);
+                    // 클릭한 마커 또는 오버레이의 정보를 사용하여 페이지 이동
+                    location.href = 'detailSharing?user_num=' + item.user_num + '&brd_num=' + item.brd_num;
+                }
 
-// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
-
-</script>	
-
-
-
-<script>
-var x = document.getElementById("pos");
-var map = null;
+                // 커스텀 오버레이를 클릭할 때의 이벤트 핸들러를 추가
+                kakao.maps.event.addListener(customOverlay, 'click', overlayClickHandler);
+            }
+        });
+    });
 
 function getLocation() {
     navigator.geolocation.getCurrentPosition(showPosition);
 }
 
 function showPosition(position) {
-   
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;  
 
     // 지도에 마커 표시
     if (!map) {
         // 지도를 생성할 때 한 번만 실행
+  map.panTo(currentPos);
         map = new kakao.maps.Map(document.getElementById('map'), {
             center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            level: 3 // 지도의 확대 레벨
+            level: 2 // 지도의 확대 레벨
         });
     }
 
@@ -411,6 +483,7 @@ function showPosition(position) {
     // 마커 지도에 추가
     marker.setMap(map);
 }
+
 </script>
 
 	
