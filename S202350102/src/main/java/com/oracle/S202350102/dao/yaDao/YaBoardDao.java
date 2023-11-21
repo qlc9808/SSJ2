@@ -42,12 +42,15 @@ public interface YaBoardDao {
 	int               sharingReject(SharingList sharingList);
 	void              downParticipantsCnt(int brd_num);
 	
+	//mySharing 페이징
+	int               totalMyUploadsharing(int user_num);
+	int               totalJoinSharing(int user_num);
+	int               totalConfirmSharing(int user_num);
 	
 	
 	
-	// int 			  isParticipantApprovalStatus(int brd_num, int user_num);
 	
-
+	
 
 	
 	

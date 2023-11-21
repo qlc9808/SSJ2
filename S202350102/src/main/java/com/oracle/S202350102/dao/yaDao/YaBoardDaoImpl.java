@@ -381,21 +381,52 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	}
 
 
-
-
-
-	
-	 /* 
+	// myTotalUploadSharing 
 	@Override
-	public int isParticipantApprovalStatus(int brd_num, int user_num) {
-		  Map<String, Object> params = new HashMap<>();
-		    params.put("brd_num", brd_num);
-		    params.put("user_num", user_num);
+	public int totalMyUploadsharing(int user_num) {
+		System.out.println("YaBoardDaoImpl totalMyUploadsharing start....");
+		int totalMyUploadsharing = 0;
+		try {
+			totalMyUploadsharing = session.selectOne("YaMyUploadsharing",user_num);
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl totalMyUploadsharing e.getmmessage?"+e.getMessage());
+		}
+		return totalMyUploadsharing;
+	}
+	
+	//jointShairng
+	@Override
+	public int totalJoinSharing(int user_num) {
+		System.out.println("YaBoardDaoImpl totalJoinSharing start....");
+		int totalJoinSharing = 0;
+		try {
+			totalJoinSharing = session.selectOne("YaJoinSharing",user_num);
+		} catch (Exception e) {
+			
+			System.out.println("YaBoardDaoImpl totalJoinSharing e.getmmessage?"+e.toString());
+		}
+		return totalJoinSharing;
+		
+	}
 
-		    return session.selectOne("YaGetApprovalStatus", params);
 
-	} */
-		    
+
+	@Override
+	public int totalConfirmSharing(int user_num) {
+		System.out.println("YaBoardDaoImpl totalConfirmSharing start....");
+		int totalConfirmSharing = 0;
+		try {
+			totalConfirmSharing = session.selectOne("YaConfirmSharing",user_num);
+		} catch (Exception e) {
+			
+			System.out.println("YaBoardDaoImpltotalConfirmSharing e.getmmessage?"+e.toString());
+		}
+		return totalConfirmSharing;
+	
+	}
+
+
+
 	
 	
 }

@@ -735,12 +735,12 @@ public class JhController {
 			//진행중 챌린지 총수
 			if (challenge.getState_md() ==102) {
 				totalChg = tcs.totalChgIng(challenge);
-				System.out.println("tcs.totalChgIng(challenge) --> " + totalChg);
+				System.out.println("JhController chgAdminList tcs.totalChgIng(challenge) --> " + totalChg);
 				
 				//종료 챌린지 총수
 			} else if (challenge.getState_md() == 103) {
 				totalChg = tcs.totalChgFin(challenge);
-				System.out.println("tcs.totalChgFin(challenge) --> " + totalChg);
+				System.out.println("JhController chgAdminList tcs.totalChgFin(challenge) --> " + totalChg);
 			}
 			
 			
@@ -754,15 +754,15 @@ public class JhController {
 			//조회 필터 셋팅(
 			if(sortOpt != null) {
 				challenge.setSortOpt(sortOpt);
-				System.out.println("ThController thChgList sortOption --> " + sortOpt);
+				System.out.println("JhController chgAdminList sortOption --> " + sortOpt);
 				model.addAttribute("sortOpt", sortOpt); //필터(찜순, 최근등록순, 참여자순)
 			}
 				
 			//리스트
 			chgList = tcs.listChg(challenge);
-			System.out.println("thController list listChg.size() --> " + chgList.size());
-			System.out.println("chg_lg --> " + challenge.getChg_lg());
-			System.out.println("chg_md --> " + challenge.getChg_md());
+			System.out.println("JhController chgAdminList listChg.size() --> " + chgList.size());
+			System.out.println("JhController chgAdminList chg_lg --> " + challenge.getChg_lg());
+			System.out.println("JhController chgAdminList chg_md --> " + challenge.getChg_md());
 
 			
 		//신청 챌린지인 경우	
@@ -770,6 +770,8 @@ public class JhController {
 //			파라미터 chg_lg=200&state_lg=300&state_md=100
 			totalChg = jhCService.chgListTotal(state_md);
 			chgList = jhCService.chgAplList(challenge);
+			System.out.println("JhController chgAdminList listChg.size() --> " + chgList.size());
+			System.out.println("JhController chgAdminList totalChg --> " + totalChg);
 			
 			page = new Paging(totalChg, currentPage);
 			challenge.setStart(page.getStart());

@@ -40,11 +40,11 @@
 		AND    user_num = #{user_num}	
 	</update>
 		
-<!-- 	<select id="YaGetApprovalStatus"  resultType="int">
-    SELECT state_md
-    FROM sharingList
-    WHERE brd_num = #{brd_num}
-    AND user_num = #{user_num}
-</select>
- -->	
+	<select id="YaJoinSharing" parameterType="int" resultType="int">
+		SELECT count(*)
+		FROM sharingList
+		WHERE user_num = #{user_num}	
+	</select>
+	
+	
 </mapper>	

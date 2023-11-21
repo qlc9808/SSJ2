@@ -25,8 +25,6 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return listCommunity ;
 	}
 	
-
-	
 	//게시글 상세보기
 	@Override
 	public Board detailCommunity(int brd_num) {
@@ -42,8 +40,6 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		System.out.println("YaCommunityServiceImpl upViewCnt start..");
 		ybd.upViewCnt(brd_num);
 	}
-
-
 
 	@Override
 	public int insertCommunity(Board board) {
@@ -256,7 +252,7 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	}
 
 
-	// board의 participants -1 감소
+	// board의 participants -1 감소 ** 필요없어서 안씀
 	@Override
 	public void downParticipantsCnt(int brd_num) {
 		System.out.println("YaControllerService downParticipantsCnt start...");
@@ -264,15 +260,30 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		ybd.downParticipantsCnt(brd_num);
 	}
 
+	// 페이징 카운트 수
+	@Override
+	public int totalMyUploadsharing(int user_num) {
+		System.out.println("YaCommunityServiceImpl totalMyUploadsharing start...");
+		int totalMyUploadsharing = ybd.totalMyUploadsharing( user_num);
+		return totalMyUploadsharing;
+	}
+	// 페이징 카운트 수
+	@Override
+	public int totalJoinSharing(int user_num) {
+		System.out.println("YaCommunityServiceImpl totalJoinSharing start...");
+		int totalJoinSharing = ybd.totalJoinSharing(user_num);
+		return totalJoinSharing;
+	}
+	// 페이징 카운트 수
+	@Override
+	public int totalConfirmSharing(int user_num) {
+		System.out.println("YaCommunityServiceImpl totalConfirmSharing start...");
+		int totalConfirmSharing = ybd.totalConfirmSharing(user_num);
+		return totalConfirmSharing;
+	}
+
 
 	
 	
-/*
-	@Override
-	  public boolean isParticipantApproved(int brd_num, int user_num) {
-        // 여기에 해당 사용자의 승인 여부를 확인하는 로직을 구현
-       
-		return ybd.isParticipantApprovalStatus(brd_num, user_num) == 101; 
-    }*/
 }
 

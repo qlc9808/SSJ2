@@ -161,9 +161,25 @@
 		FROM board b, sharingList s
 		WHERE s.user_num = #{user_num} 
 		AND b.brd_num = s.brd_num
+		AND s.state_md = 101 
+	</select>
+	
+	<select id="YaMyUploadsharing" parameterType="int" resultType="int">
+		SELECT count(*) 
+		FROM board b, user1 u
+		WHERE b.user_num = #{user_num} AND u.user_num = #{user_num} 
+		AND brd_lg = 700 
+		AND brd_md = 102
+		AND brd_step = 0 
+	</select>	
+	
+	<select id="YaConfirmSharing" parameterType="int" resultType="int">
+		SELECT count(*) 
+		FROM board b, sharingList s
+		WHERE s.user_num = #{user_num}  
+		AND b.brd_num = s.brd_num
 		AND s.state_md = 101
 	</select>
-
 	
 
 </mapper>
