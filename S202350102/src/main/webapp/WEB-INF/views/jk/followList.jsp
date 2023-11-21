@@ -106,164 +106,182 @@
 </script>
 </head>
 <body>
+  <div class="container">
+    <div class="row profile">
+      
+      <div class="col-md-3">
+        <%@ include file="/WEB-INF/views/mypageMenu.jsp" %>
+      </div>
 
-  <!-- Nav -->
-  <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
-    <a class="nav-link active" data-bs-toggle="tab" href="#followingList">
-      팔로잉
-    </a>
-    <a class="nav-link" data-bs-toggle="tab" href="#followerList">
-      팔로워
-    </a>
-  </div>
-
-  <div class="tab-content">
-    <!-- followingList -->
-    <div class="tab-pane fade show active" id="followingList">
-      <div class="row justify-content-center py-9">
-        <div class="col-12 col-lg-10 col-xl-8">
-          <div class="row">
-            <div class="col-12">
+      <div class="col-md-9 profile-form">
+        <!-- Nav -->
+        <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
+          <a class="nav-link active" data-bs-toggle="tab" href="#followingList">
+            팔로잉
+          </a>
+          <a class="nav-link" data-bs-toggle="tab" href="#followerList">
+            팔로워
+          </a>
+        </div>
   
-              <!-- content -->
-              <div class="review">
-                <!-- Body -->
-                <c:forEach var="following" items="${followingList }" varStatus="status">
-                  <div class="review-body">
-                    <div class="row">
-                      <!-- img -->
-                      <div class="col-12 col-md-auto">
-                        <div class="avatar avatar-xxl mb-6 mb-md-0">
-                          <span class="avatar-title rounded-circle">
-                            <img src="${pageContext.request.contextPath}/upload/${following.img}" alt="profile" class="avatar-title rounded-circle">
-                          </span>
-                        </div>
-                      </div>
+        <div class="tab-content">
+          <!-- followingList -->
+          <div class="tab-pane fade show active" id="followingList">
+            <div class="row justify-content-center py-9">
+              <div class="col-12 col-lg-10 col-xl-8">
+                <div class="row">
+                  <div class="col-12">
   
-                      <!-- nick -->
-                      <div class="col-12 col-md">
-                        <div class="row mb-6">
-                          <div class="col-12">
-                            <span>${following.nick}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md">
+                    <!-- content -->
+                    <div class="review">
+                      <!-- Body -->
+                      <c:forEach var="following" items="${followingList }" varStatus="status">
+                        <div class="review-body">
+                          <div class="row">
+                            <!-- img -->
+                            <div class="col-12 col-md-auto">
+                              <div class="avatar avatar-xxl mb-6 mb-md-0">
+                                <span class="avatar-title rounded-circle">
+                                  <img src="${pageContext.request.contextPath}/upload/${following.img}" alt="profile"
+                                    class="avatar-title rounded-circle">
+                                </span>
+                              </div>
+                            </div>
   
-                        <!-- following & sendMessage -->
-                        <div class="row mb-6">
-                          <div class="col-12">
-                            <div class="row align-items-center">
-                              <div class="col-auto">
-                                
-                                <!-- following -->
-                                <button type="button" class="btn btn-light" onclick="following(${status.index})" id="following${status.index}">팔로잉</button>
-                                <form id="followingForm">
-                                  <input type="hidden" value="${following.following_id}" name="user_num">
-                                </form>
-
-                                <!-- sendMessage -->
-                                <button type="button" class="btn btn-info" onclick="sendMessageFollowing()">쪽지보내기</button>
-                                <form id="sendMessageFormFollowing">
-                                  <input type="hidden" value="${following.following_id}" name="user_num">
-                                </form>
+                            <!-- nick -->
+                            <div class="col-12 col-md">
+                              <div class="row mb-6">
+                                <div class="col-12">
+                                  <span>${following.nick}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md">
   
+                              <!-- following & sendMessage -->
+                              <div class="row mb-6">
+                                <div class="col-12">
+                                  <div class="row align-items-center">
+                                    <div class="col-auto">
+  
+                                      <!-- following -->
+                                      <button type="button" class="btn btn-light" onclick="following(${status.index})"
+                                        id="following${status.index}">팔로잉</button>
+                                      <form id="followingForm">
+                                        <input type="hidden" value="${following.following_id}" name="user_num">
+                                      </form>
+  
+                                      <!-- sendMessage -->
+                                      <button type="button" class="btn btn-info"
+                                        onclick="sendMessageFollowing()">쪽지보내기</button>
+                                      <form id="sendMessageFormFollowing">
+                                        <input type="hidden" value="${following.following_id}" name="user_num">
+                                      </form>
+  
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </c:forEach>
                     </div>
-                  </div>
-                </c:forEach>
-              </div>
   
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-
-
-    <!-- followerList -->
-    <div class="tab-pane fade" id="followerList">
-      <div class="row justify-content-center py-9">
-        <div class="col-12 col-lg-10 col-xl-8">
-          <div class="row">
-            <div class="col-12">
-    
-              <!-- content -->
-              <div class="review">
-                <!-- Body -->
-                <c:forEach var="follower" items="${followerList }" varStatus="status">
-                  <div class="review-body">
-                    <div class="row">
-                      <!-- img -->
-                      <div class="col-12 col-md-auto">
-                        <div class="avatar avatar-xxl mb-6 mb-md-0">
-                          <span class="avatar-title rounded-circle">
-                            <img src="${pageContext.request.contextPath}/upload/${follower.img}" alt="profile" class="avatar-title rounded-circle">
-                          </span>
-                        </div>
-                      </div>
-    
-                      <!-- nick -->
-                      <div class="col-12 col-md">
-                        <div class="row mb-6">
-                          <div class="col-12">
-                            <span>${follower.nick}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md">
-    
-                        <!-- follower & sendMessage -->
-                        <div class="row mb-6">
-                          <div class="col-12">
-                            <div class="row align-items-center">
-                              <div class="col-auto">
-                                <!-- follower -->
-                                <c:choose>
-                                  <c:when test="${follower.matpal == 1 }">
-                                    <!-- 맞팔인 경우 -->
-                                    <button type="button" class="btn btn-light" onclick="followerMatpal(${status.index})" id="followerMatpal${status.index}">팔로잉</button>
-                                  </c:when>
-                        
-                                  <c:otherwise>
-                                    <!-- 맞팔이 아닌 경우 -->
-                                    <button type="button" class="btn btn-danger" onclick="follower(${status.index})" id="follower${status.index}">팔로우</button>
-                                  </c:otherwise>
-                                </c:choose>
-                                
-                                <form id="followerForm">
-                                  <input type="hidden" value="${follower.user_num}" name="user_num">
-                                </form>
-
-                                <!-- sendMessage -->
-                                <button type="button" class="btn btn-info" onclick="sendMessageFollower()">쪽지보내기</button>
-                                <form id="sendMessageFormFollower">
-                                  <input type="hidden" value="${follower.user_num}" name="user_num">
-                                </form>
-                        
+  
+  
+  
+          <!-- followerList -->
+          <div class="tab-pane fade" id="followerList">
+            <div class="row justify-content-center py-9">
+              <div class="col-12 col-lg-10 col-xl-8">
+                <div class="row">
+                  <div class="col-12">
+  
+                    <!-- content -->
+                    <div class="review">
+                      <!-- Body -->
+                      <c:forEach var="follower" items="${followerList }" varStatus="status">
+                        <div class="review-body">
+                          <div class="row">
+                            <!-- img -->
+                            <div class="col-12 col-md-auto">
+                              <div class="avatar avatar-xxl mb-6 mb-md-0">
+                                <span class="avatar-title rounded-circle">
+                                  <img src="${pageContext.request.contextPath}/upload/${follower.img}" alt="profile"
+                                    class="avatar-title rounded-circle">
+                                </span>
+                              </div>
+                            </div>
+  
+                            <!-- nick -->
+                            <div class="col-12 col-md">
+                              <div class="row mb-6">
+                                <div class="col-12">
+                                  <span>${follower.nick}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md">
+  
+                              <!-- follower & sendMessage -->
+                              <div class="row mb-6">
+                                <div class="col-12">
+                                  <div class="row align-items-center">
+                                    <div class="col-auto">
+                                      <!-- follower -->
+                                      <c:choose>
+                                        <c:when test="${follower.matpal == 1 }">
+                                          <!-- 맞팔인 경우 -->
+                                          <button type="button" class="btn btn-light"
+                                            onclick="followerMatpal(${status.index})"
+                                            id="followerMatpal${status.index}">팔로잉</button>
+                                        </c:when>
+  
+                                        <c:otherwise>
+                                          <!-- 맞팔이 아닌 경우 -->
+                                          <button type="button" class="btn btn-danger" onclick="follower(${status.index})"
+                                            id="follower${status.index}">팔로우</button>
+                                        </c:otherwise>
+                                      </c:choose>
+  
+                                      <form id="followerForm">
+                                        <input type="hidden" value="${follower.user_num}" name="user_num">
+                                      </form>
+  
+                                      <!-- sendMessage -->
+                                      <button type="button" class="btn btn-info"
+                                        onclick="sendMessageFollower()">쪽지보내기</button>
+                                      <form id="sendMessageFormFollower">
+                                        <input type="hidden" value="${follower.user_num}" name="user_num">
+                                      </form>
+  
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </c:forEach>
                     </div>
+  
                   </div>
-                </c:forEach>
+                </div>
               </div>
-    
             </div>
           </div>
+  
+  
+  
         </div>
       </div>
     </div>
-
-
-
   </div>
 </body>
 <%@ include file="../footer.jsp" %>

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
@@ -205,7 +206,6 @@ public class JhController {
 		int chgPickYN = ycps.selectChgPickYN(chgPick);
 		System.out.println("JhController chgDetail chgPickYN -> " + chgPickYN);
 		model.addAttribute("chgPickYN", chgPickYN);
-
 		
 		// bg 작성
 		
@@ -264,6 +264,7 @@ public class JhController {
 //		        }
 //		     }
 //		}
+		
 		return "jh/jhChgDetail";
 	}
 	

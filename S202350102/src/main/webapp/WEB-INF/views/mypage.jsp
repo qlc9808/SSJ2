@@ -324,6 +324,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 	<div class="row profile">
 		<div class="col-md-3">
         	<%@ include file="mypageMenu.jsp" %>
+        	
 		</div>
       	<div class="col-md-9 profile-form">
 			<!-- 필수!! -->
@@ -341,7 +342,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		            	<a class="nav-link active" href="#myParty" data-bs-toggle="tab">참여 챌린지</a>
 		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab"   onclick="clickLoad()">신청한 챌린지</a>
 		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">최근 본 챌린지</a>
-		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">찜한 챌린지</a>
+		            	<a class="nav-link" href="#chgPickTab" data-bs-toggle="tab">찜한 챌린지</a>
 		            </div>	
 		            
 	            	<!-- Content -->
@@ -351,7 +352,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		            	  <!-- Slider -->
 			                <div id="recomSlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			                  
 
-                  <!-- Item2 참여한 챌린지 -->
+                  			<!-- Item2 참여한 챌린지 -->
 			                  <c:forEach items="${mychgrList }" var="chg">
 				                  <div class="col px-4" style="max-width: 400px;">
 				                    <div class="card">
@@ -480,9 +481,12 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                  </c:forEach>
 
 			                	         
-			                </div> <!-- slider --> --%>
+			            </div> <!-- slider --> --%>
 		
-		            	</div> <!-- topSellertsTab -->
+						<!-- chgPickTab start -->
+						<div class="tab-pane fade" id="chgPickTab">	
+							<%@ include file="/WEB-INF/views/yr/chgPickList.jsp" %>
+		            	</div> <!-- chgPickTab end -->
 		            	
 		        	</div> <!-- tab-content -->
 				</div> <!-- col-12 -->

@@ -12,10 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.ChallengPick;
@@ -617,6 +620,7 @@ public class JkController {
 
 		int user_num = 0;
 		List<SearchHistory> sHList = null; 
+		
 		// 로그인 회원이면
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
@@ -624,11 +628,34 @@ public class JkController {
 			model.addAttribute("shList", sh);
 			
 		}
-		model.addAttribute("user_num", user_num);
+		System.out.println("user_num"+user_num);
+		List<Board> sharing = jbs.sharing(board);
+		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
-		
-		return "nearbySharing";
-	}	
+	    model.addAttribute("user_num", user_num);
+	    
+	    List<Map<String, Object>> data = sharing.stream()
+	            .map(b -> {
+	                Map<String, Object> map = new HashMap<>();
+	                map.put("addr", b.getAddr());
+	                map.put("title", b.getTitle());
+	                map.put("user_num", b.getUser_num());  // user_num 추가
+	                map.put("brd_num", b.getBrd_num());    // brd_num 추가
+	                map.put("img", b.getImg());
+	                return map;
+	            })
+	            .collect(Collectors.toList());	
+	    
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	        String addrJson = objectMapper.writeValueAsString(data);
+	        model.addAttribute("addrJson", addrJson);
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	    }
+
+	    return "nearbySharing";
+	}
 	
 	@GetMapping("srchSharing")
 	@ResponseBody

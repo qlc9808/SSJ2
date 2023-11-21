@@ -41,9 +41,6 @@
 	        
 	}); 
 
-
-
-
 	// yr 작성	
 	// 챌린지 신청
 	function cJoin() {
@@ -68,11 +65,19 @@
 	}
 
 	// 유저 닉네임 클릭 시 modal 창 띄우기
-	function userInfoModal(index) {
+	function userInfoModal(tap, index) {
 		// 모달창에 넘겨줄 값을 저장 
-		var user_num = $("#ssjUserNum" + index).val();
-		var user_nick = $("#ssjNick" + index).val();
-		var user_img = $("#ssjImg" + index).val();
+		var user_num, user_nick, user_img;
+
+		if(tap == '인증') {
+			user_num = $("#user_num" + index).val();
+			user_nick = $("#nick" + index).val();
+			user_img = $("#user_img" + index).val();
+		} else { // tap == '소세지들'
+			user_num = $("#ssjUserNum" + index).val();
+			user_nick = $("#ssjNick" + index).val();
+			user_img = $("#ssjImg" + index).val();
+		}
 		
 		// DB에 있는지 존재 유무 체크
 		$.ajax({
@@ -110,7 +115,6 @@
 		$('#userShowModal').modal('show');
 	}
 
-
 	// 팔로우 하기 버튼
 	function following() {
 		var sendData = $('#followingForm').serialize();	// user_num=?
@@ -140,7 +144,6 @@
 		
 	}
 
-
 	// 챌린지 찜하기
 	function chgPick(p_index) {
 		// var chg_id = p_chg_id;
@@ -168,14 +171,10 @@
 	}
 	
 	// 좋아요 버튼
-	// 작성 중
 	function likePro(p_index) {
 		var brd_num = $('#brd_num' + p_index).val();
 		alert("brd_num -> " + brd_num);
-		// $('#like' + p_index).addClass('btn');  // 바뀌는거 확인됨
-		// $('#like' + p_index).text("싫어요");	// 바뀌는거 확인됨
-		
-		
+
 		$.ajax({
             url: "/likePro",
             type: "POST",
@@ -188,10 +187,6 @@
                 alert("좋아요 에러");
             }
         });
-		
-		
-		// class="fa-solid fa-thumbs-up"	// 좋아요 눌렀을 때
-		// class="fa-regular fa-thumbs-up" 	// 좋아요 안 눌렀을 때
 	}
 
 
@@ -276,7 +271,8 @@
 		var conts		=	$("#conts"+index).val();  
 		var img			=	$("#img"+index).val();  
 		var brd_step	=	$("#brd_step"+index).val();
-		
+		var user_img	=	$("#user_img"+index).val();
+
 		// alert("img -> " + img);
 		// alert("${pageContext.request.contextPath}/upload/"+img);
 		
@@ -290,6 +286,7 @@
 		// 이미지 설정
 		$('#updateImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
 		$('#moreImage').attr('src', '${pageContext.request.contextPath}/upload/'+img);
+		$('#moerUserImg').attr('src', '${pageContext.request.contextPath}/upload/'+user_img);
 		 
 		//  글 수정 모달 창 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayNick').text(nick);     
@@ -307,7 +304,8 @@
 		$('#editBrd_num').val(brd_num);     
 		$('#editNick').val(nick);     
 		$('#editTitle').val(title);     
-		$('#editConts').val(conts);     
+		$('#editConts').val(conts);    
+		$('#editUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img); 
 		
 		
 		if (type == 'edit') {
@@ -1227,6 +1225,9 @@
 						                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
 						                  	<input type="hidden" id="brd_step${status.index}"	value="${certBoard.brd_step }">
                                             <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
+											<input type="hidden" id="user_img${status.index}"	value="${certBoard.user_img}">
+											<input type="hidden" id="user_num${status.index}"	value="${certBoard.user_num}">
+											<input type="hidden" id="like_cnt${status.index}"	value="${certBoard.like_cnt}">
 						                  	
 						                  	<div class="col-5 col-md-3 col-xl-2">
 												<!-- 인증샷 Image -->
@@ -1234,23 +1235,25 @@
 						                    </div>
 						                    
 						                    
-						                    <div class="col-12 col-md">
-						                    
+						                    <div class="col-12 col-md">												
 												<!-- Avatar -->
 						                    	<div class="avatar avatar-lg">
-												  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+													<img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
 												</div>
-						                    
-						                      <!-- Header -->
-						                      <div class="row mb-6">
-						                        <div class="col-12">
-						                          <!-- Time -->
-						                          <span class="fs-xs text-muted">
-						                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
-						                          </span>
-						                        </div>
-						                      </div>
-						                      
+												
+												<!-- Header -->
+												<div class="row mb-6">
+													<div class="col-12">
+													<!-- Time -->
+													<span class="fs-xs text-muted">
+														<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+															<span style="color: black;">${certBoard.nick}</span>
+														</a>
+														
+														<time datetime="2019-07-25">${certBoard.reg_date }</time>
+													</span>
+													</div>
+												</div>
 						
 						                      <!-- Title -->
 						                      <p class="mb-2 fs-lg fw-bold">
@@ -1305,7 +1308,10 @@
 															<c:otherwise>
 																<!-- 로그인 안 한 상태 -->
 																<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
-																	좋아요 <i class="fa-regular fa-thumbs-up"></i>
+																	좋아요 
+																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+																		<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+																	</svg>
 																</a>
 															</c:otherwise>
 														
@@ -1378,14 +1384,15 @@
 								                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
 								                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
 		                                            <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
-								                  	
+													<input type="hidden" id="user_img${status.index}"	value="${certBoard.user_img}">
+													<input type="hidden" id="user_num${status.index}"	value="${certBoard.user_num}">
 								                  	
 								                  	
 													<div class="col-12 col-md-auto">
 								                        <!-- Avatar -->
 								                        <div class="avatar avatar-xxl mb-6 mb-md-0">
 								                          <span class="avatar-title rounded-circle">
-								                            <i class="fa fa-user"></i>
+								                            <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
 								                          </span>
 								                        </div>
 													</div>
@@ -1400,7 +1407,13 @@
 								                        <div class="col-12">
 								                          <!-- Time -->
 								                          <span class="fs-xs text-muted">
-								                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
+															
+															<!-- <a href="#" data-bs-toggle="modal" onclick="userInfoModalBoard(${status.index})"> -->
+															<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+																<span style="color: black;">${certBoard.nick}</span>
+															</a>
+
+															<time datetime="2019-07-25">${certBoard.reg_date }</time>
 								                          </span>
 								                        </div>
 								                      </div>
@@ -1461,9 +1474,11 @@
 																	</c:when>
 																
 																	<c:otherwise>
-																		<!-- 로그인 안 한 상태 -->
 																		<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
-																			좋아요 <i class="fa-regular fa-thumbs-up"></i>
+																			좋아요 
+																			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+																				<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+																			</svg>
 																		</a>
 																	</c:otherwise>
 																
@@ -1627,8 +1642,9 @@
 					              </form>
 					
 					            </div>
-				            
+
 							</c:forEach>
+
 			            </div>
 			            
 			            
@@ -1658,7 +1674,7 @@
 						              <input type="hidden" name="nick" id="editNick">
 						                
 										<div class="avatar avatar-xl">
-										  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+										  <img src="" alt="profile" class="avatar-img rounded-circle" id="editUserImg">
 										</div>
 					                      
 					                      
@@ -1756,7 +1772,7 @@
 						              <input type="hidden" name="nick" id="editNick">
 						                
 										<div class="avatar avatar-xl">
-										  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+											<img src="" alt="profile" class="avatar-img rounded-circle" id="moerUserImg">
 										</div>
 					                      
 					                      
@@ -1797,66 +1813,6 @@
 						                    	<!-- <h4 class="mb-3" id="moreConts"></h4> -->
 						                  </div>
 						                </div>
-						                
-						                <div class="form-group mb-0">
-						                    <div class="row gx-2">
-						                    
-						                    	<div class="rate">
-													<c:choose>
-														<c:when test="${sessionScope.user_num != null }">
-															<!-- 로그인 한 상태 -->
-													
-															<%--<c:choose>
-																 <c:when test="${certBoard.likeyn > 0}">
-																	<!-- 좋아요 눌렀을 때 -->
-																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
-																		onclick="likePro(${status.index})">
-																		좋아요
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-																			class="bi bi-heart-fill" viewBox="0 0 16 16">
-																			<path fill-rule="evenodd"
-																				d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-																		</svg>
-																	</a>
-																</c:when>
-													
-																<c:otherwise> --%>
-																	<!-- 좋아요 안 눌렀을 때 -->
-																	<a class="rate-item" data-toggle="vote" data-count="100" href="#" role="button"
-																		onclick="#">
-																		좋아요
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-																			class="bi bi-heart" viewBox="0 0 16 16">
-																			<path
-																				d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-																		</svg>
-																	</a>
-													
-													
-																<%-- </c:otherwise>
-													
-															</c:choose> --%>
-													
-														</c:when>
-													
-														<c:otherwise>
-															<!-- 로그인 안 한 상태 -->
-															<a class="rate-item" data-toggle="vote" data-count="100" href="#" role="button">
-																좋아요 <i class="fa-regular fa-thumbs-up"></i>
-															</a>
-														</c:otherwise>
-													
-													</c:choose>
-																
-													<a class="rate-item" data-toggle="vote" data-count="0" href="#" role="button">
-														태우기 <i class="fa-solid fa-fire"></i>
-													</a>
-												</div>
-												
-						                      
-						                    </div>
-										</div>
-						                
 						            </form>
 								
 								
@@ -1919,233 +1875,239 @@
 			            </div>
             
             
-			  <!-- 소세지들 -->
-			  <!-- 스크롤 내릴 때 내용이 나중에 나타나는 모션? 추가할 예정 -->
-              <div class="tab-pane fade" id="ssjFriendsTab">
-
-
-                <div class="row justify-content-center py-9">
-                  <div class="col-12 col-lg-10 col-xl-8">
-                    <div class="row">
-                      <div class="col-12">
-
-                        <!-- content -->
-						<div class="review">
-							<!-- Body -->
-							<c:forEach var="ssj" items="${listSsj}" varStatus="status">
-								<div class="review-body">
-									<div class="row" id="ssj${status.index}">
-										<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
-										<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
-										<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
-										<!-- profile -->
-										<div class="col-12 col-md-auto">
-											<div class="avatar avatar-xxl mb-6 mb-md-0">
-												<span class="avatar-title rounded-circle">
-													<img src="${pageContext.request.contextPath}/upload/${ssj.img}" alt="profile" class="avatar-title rounded-circle">
-												</span>
-											</div>
-										</div>
-						
-										<!-- nick -->
-										<div class="col-12 col-md">
-											<div class="row mb-6">
-												<div class="col-12">
-													<a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})">
-														<span>${ssj.nick}</span>
-													</a>
-													<!-- 글씨 빨간색으로 나옴 -> 검은색으로 나오게 수정해야함 -->
-												</div>
-											</div>
-										</div>
-						
-										<!-- reg_date & fork -->
-										<div class="col-12 col-md">
-											<!-- reg_date -->
-											<div class="row mb-6">
-												<div class="col-12">
-						
-													<!-- 오늘 날짜 -->
-													<jsp:useBean id="javaDate" class="java.util.Date" />
-													<fmt:formatDate var="nowDateFd" value="${javaDate }" pattern="yyyy-MM-dd" /><br>
-						
-													<!-- 마지막 인증 게시판 작성일자 -->
-													<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }" pattern="yyyy-MM-dd" /><br>
-						
-													<c:if test="${ssj.brd_reg_date != null }">
-						
-														<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd" />
-														<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd" />
-						
-														<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }"
-															integerOnly="true" />
-														<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }"
-															integerOnly="true" />
-						
-														<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
-						
-														<span>
-															${dDay }일 전
-														</span>
-													</c:if>
-						
-												</div>
-											</div>
-						
-											<c:choose>
-												<c:when test="${sessionScope.user_num != null}">
-													<!-- 로그인 한 상태 -->
-													<!-- fork -->
-													<div class="row align-items-center">
-														<div class="col-auto">
-															<!-- Button -->
-															<a class="btn btn-xs btn-outline-border" 
-																href="#!" 
-																onclick="forkModalCall(${status.index})">찌르기</a>
-														</div>
-													</div>
-												</c:when>
-						
-												<c:when test="${sessionScope.user_num == null}">
-													<!-- 로그인 안 한 상태 -->
-													<!-- loginForm으로 이동 -->
-													<div class="row align-items-center">
-														<div class="col-auto">
-															<!-- Button -->
-															<a class="btn btn-xs btn-outline-border" href="/loginForm">찌르기</a>
-														</div>
-													</div>
-												</c:when>
-						
-											</c:choose>
-										</div>
-						
-									</div>
-						
-								</div>
-						
-							</c:forEach>
-						
-							<!-- nick 클릭 시 나타나는 modal -->
-							<!-- Modal -->
-							<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-body">
-											<div class="col-12 col-md-auto">
-												<div class="avatar avatar-xxl mb-6 mb-md-0">
-													<span class="avatar-title rounded-circle">
-														<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
-														<!-- img 불러와지는지 확인해야함 -->
-													</span>
-												</div>
-											</div>
-											<div class="col-12 col-md">
-												<div class="row mb-6">
-													<div class="col-12">
-														<p id="displayUserNick"></p>
-													</div>
-												</div>
-											</div>
-										</div>
-						
-										<div class="modal-footer">
-											
-											<button type="button" class="btn btn-danger" name="user_num" onclick="following(${status.index})" id="follow">팔로우</button>
-											<form id="followingForm">
-												<input type="hidden" id="inputUserNum1" name="user_num">
-											</form>
-											
-											<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
-											<form id="sendMessageForm">
-												<input type="hidden" id="inputUserNum2" name="user_num">
-											</form>
-
-										</div>
-									</div>
-								</div>
-							</div>
-						
-
-							<!-- BG 찌르기 fork 기능 모달창	 Wait List 를 참고함 -->
-							<div class="modal fade" id="modalfork" tabindex="-1" role="dialog" aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered" role="document">
-									<div class="modal-content">
-										<input type="hidden" name="ssjUserNum" 			id="ssjUserNum">
-										<input type="hidden" name="sendMailUser_num"	id="sendMailUser_num">
-						
-										<!-- Close -->
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-											<i class="fe fe-x" aria-hidden="true"></i>
-										</button>
-						
-										<!-- Header-->
-										<div class="modal-header lh-fixed fs-lg">
-											<strong class="mx-auto">찌르기</strong>
-										</div>
-						
+				<!-- 소세지들 -->
+				<!-- 스크롤 내릴 때 내용이 나중에 나타나는 모션? 추가할 예정 -->
+				<div class="tab-pane fade" id="ssjFriendsTab">
+					<div class="row justify-content-center py-9">
+						<div class="col-12 col-lg-10 col-xl-8">
+							<div class="row">
+								<div class="col-12">
+				
+									<!-- content -->
+									<div class="review">
 										<!-- Body -->
-										<div class="modal-body">
+										<c:forEach var="ssj" items="${listSsj}" varStatus="status">
+											<div class="review-body">
+												<div class="row" id="ssj${status.index}">
+													<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
+													<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
+													<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
+													<!-- profile -->
+													<div class="col-12 col-md-auto">
+														<div class="avatar avatar-xxl mb-6 mb-md-0">
+															<span class="avatar-title rounded-circle">
+																<img src="${pageContext.request.contextPath}/upload/${ssj.img}"
+																	alt="profile" class="avatar-title rounded-circle">
+															</span>
+														</div>
+													</div>
+				
+													<!-- nick -->
+													<div class="col-12 col-md">
+														<div class="row mb-6">
+															<div class="col-12">
+																<a href="#" data-bs-toggle="modal"
+																	onclick="userInfoModal('소세지들', ${status.index})">
+																	<span style="color: black;">${ssj.nick}</span>
+																</a>
+															</div>
+														</div>
+													</div>
+				
+													<!-- reg_date & fork -->
+													<div class="col-12 col-md">
+														<!-- reg_date -->
+														<div class="row mb-6">
+															<div class="col-12">
+				
+																<!-- 오늘 날짜 -->
+																<jsp:useBean id="javaDate" class="java.util.Date" />
+																<fmt:formatDate var="nowDateFd" value="${javaDate }"
+																	pattern="yyyy-MM-dd" /><br>
+				
+																<!-- 마지막 인증 게시판 작성일자 -->
+																<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }"
+																	pattern="yyyy-MM-dd" /><br>
+				
+																<c:if test="${ssj.brd_reg_date != null }">
+				
+																	<fmt:parseDate var="nowDatePd" value="${nowDateFd }"
+																		pattern="yyyy-MM-dd" />
+																	<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }"
+																		pattern="yyyy-MM-dd" />
+				
+																	<fmt:parseNumber var="nowDatePn"
+																		value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true" />
+																	<fmt:parseNumber var="lastRegDatePn"
+																		value="${lastRegDatePd.time/(1000*60*60*24) }"
+																		integerOnly="true" />
+				
+																	<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
+				
+																	<span>
+																		${dDay }일 전
+																	</span>
+																</c:if>
+				
+															</div>
+														</div>
+				
+														<c:choose>
+															<c:when test="${sessionScope.user_num != null}">
+																<!-- 로그인 한 상태 -->
+																<!-- fork -->
+																<div class="row align-items-center">
+																	<div class="col-auto">
+																		<!-- Button -->
+																		<a class="btn btn-xs btn-outline-border" href="#!"
+																			onclick="forkModalCall(${status.index})">찌르기</a>
+																	</div>
+																</div>
+															</c:when>
+				
+															<c:when test="${sessionScope.user_num == null}">
+																<!-- 로그인 안 한 상태 -->
+																<!-- loginForm으로 이동 -->
+																<div class="row align-items-center">
+																	<div class="col-auto">
+																		<!-- Button -->
+																		<a class="btn btn-xs btn-outline-border"
+																			href="/loginForm">찌르기</a>
+																	</div>
+																</div>
+															</c:when>
+				
+														</c:choose>
+													</div>
+				
+												</div>
+				
+											</div>
+				
+										</c:forEach>
+
+										<!-- BG 찌르기 fork 기능 모달창	 Wait List 를 참고함 -->
+										<div class="modal fade" id="modalfork" tabindex="-1" role="dialog" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered" role="document">
+												<div class="modal-content">
+													<input type="hidden" name="ssjUserNum" id="ssjUserNum">
+													<input type="hidden" name="sendMailUser_num" id="sendMailUser_num">
 										
-											<!-- <div class="row mb-6"> -->
-												<!-- <div class="col-12 col-md-3"> -->
-													<!-- 아바타 부분 보류 Image -->
-													<!-- <a href="./product.html">
-														<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
-													</a>
-												</div> -->
-												
-												<!-- 보류 칸 <div class="col-12 col-md-9"> -->
-													<!-- Label -->
-													<!-- <p>
-														<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
-													</p>
-												</div> -->
-											<!-- </div> -->
-											
-											
-											<div class="row">
-												<div class="col-12">
-													<!-- Text -->
-													<p class="fs-sm text-center text-charcol-400">
-														인증 활동이 뜸한 참가자들에게 격려 메일을 보내보세요!
-													</p>
+													<!-- Close -->
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+														<i class="fe fe-x" aria-hidden="true"></i>
+													</button>
+										
+													<!-- Header-->
+													<div class="modal-header lh-fixed fs-lg">
+														<strong class="mx-auto">찌르기</strong>
+													</div>
+										
+													<!-- Body -->
+													<div class="modal-body">
+										
+														<!-- <div class="row mb-6"> -->
+														<!-- <div class="col-12 col-md-3"> -->
+														<!-- 아바타 부분 보류 Image -->
+														<!-- <a href="./product.html">
+																<img class="img-fluid mb-7 mb-md-0" src="./assets/img/products/product-6.jpg" alt="...">
+															</a>
+														</div> -->
+										
+														<!-- 보류 칸 <div class="col-12 col-md-9"> -->
+														<!-- Label -->
+														<!-- <p>
+																<a class="fw-bold text-body" href="./product.html">Cotton floral print Dress</a>
+															</p>
+														</div> -->
+														<!-- </div> -->
+										
+										
+														<div class="row">
+															<div class="col-12">
+																<!-- Text -->
+																<p class="fs-sm text-center text-charcol-400">
+																	인증 활동이 뜸한 참가자들에게 격려 메일을 보내보세요!
+																</p>
+															</div>
+														</div>
+										
+										
+														<div class="row gx-5 mb-2">
+															<!-- Form group -->
+															<div class="form-group">
+																<textarea class="form-control form-control-sm" id="cheerUpMsg" name="conts" rows="4"
+																	required></textarea>
+															</div>
+														</div>
+										
+										
+														<div class="row">
+															<div class="col-12 text-center">
+																<!-- Button -->
+																<button class="btn btn-dark" type="submit" onclick="sendMail()">메일 보내기</button>
+															</div>
+														</div>
+										
+													</div>
+										
 												</div>
+										
 											</div>
-											
-											
-											<div class="row gx-5 mb-2">
-												<!-- Form group -->
-												<div class="form-group">
-													<textarea class="form-control form-control-sm" id="cheerUpMsg" name="conts" rows="4" required></textarea>
-												</div>
-											</div>
-											
-											
-											<div class="row">
-												<div class="col-12 text-center">
-													<!-- Button -->
-													<button class="btn btn-dark" type="submit" onclick="sendMail()">메일 보내기</button>
-												</div>
-											</div>
-											
 										</div>
-						
 									</div>
-						
+				
+								</div>
+				
+							</div>
+						</div>
+					</div>
+				
+				
+				</div>
+
+			  	<!-- nick 클릭 시 나타나는 modal -->
+				<!-- 인증게시판, 소세지들 사용 -->
+				<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="col-12 col-md-auto">
+									<div class="avatar avatar-xxl mb-6 mb-md-0">
+										<span class="avatar-title rounded-circle">
+											<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+										</span>
+									</div>
+								</div>
+								<div class="col-12 col-md">
+									<div class="row mb-6">
+										<div class="col-12">
+											<p id="displayUserNick"></p>
+										</div>
+									</div>
 								</div>
 							</div>
-						
+				
+							<div class="modal-footer">
+				
+								<button type="button" class="btn btn-danger" name="user_num" onclick="following(${status.index})"
+									id="follow">팔로우</button>
+								<form id="followingForm">
+									<input type="hidden" id="inputUserNum1" name="user_num">
+								</form>
+				
+								<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
+								<form id="sendMessageForm">
+									<input type="hidden" id="inputUserNum2" name="user_num">
+								</form>
+				
+							</div>
 						</div>
-
-                      </div>
-                      
-                    </div>
-                  </div>
-                </div>
-
-
-              </div>
+					</div>
+				</div>
+				
+				
+				
             
             
             <!-- jh 후기글   -->
