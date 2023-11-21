@@ -24,4 +24,18 @@ public class ThOrder1DaoImpl implements ThOrder1Dao {
 		}
 		return insertResult;
 	}
+
+	@Override
+	public Order1 selectOrder(Order1 order1) {
+		System.out.println("ThOrder1DaoImpl selectOrder start...");
+		Order1 orderResult = null;
+		try {
+			orderResult = session.selectOne("thOrderSelect", order1);
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl orderResult  Exception --> " + e.getMessage());
+		}
+		return orderResult;
+	}
+	
+	
 }

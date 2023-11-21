@@ -20,4 +20,11 @@ public class ThOrder1ServiceImpl implements ThOrder1Service {
 		return insertResult;
 	}
 
+	@Override
+	public Order1 selectOrder(Order1 order1) {
+		System.out.println("ThOrder1ServiceImpl selectOrder Start...");
+		Order1 orderResult = od1.selectOrder(order1);
+		return orderResult;
+	}
+
 }

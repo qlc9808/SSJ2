@@ -15,4 +15,5 @@ public class Message {
 	private Date 	send_date;		// 알림 발생 일시
 	private Date 	read_date;		// 알림 확인 일시
 	private int 	msg_read;		// 읽음 여부
+	private	String	tid;			// TID (가맹점 고유번호)
 }

@@ -12,11 +12,12 @@
  		var state_md 	= 	${chg.state_md}
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
-
+		var currentPage	=	${page.currentPage}
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
-								+'&sortOpt='+sortOpt;
+								+'&sortOpt='+sortOpt
+								+'&currentPage='+currentPage;
 	}
 
 	// yr 작성
@@ -142,11 +143,17 @@
 			                  <!-- Image -->
 			                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
 			                  <c:if test="${chg.thumb != null}">
-			                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+			             		<c:if test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
+			                  		<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+			                  	</c:if>
+			                  	<c:if test="${chg.thumb != 'assets/img/chgDfaultImg.png'}">
+			                  		<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+			                  	</c:if>
 			                  </c:if>
 			                  <c:if test="${chg.thumb == null}">
 			                  	<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
 			                  </c:if>
+
 							  </a>
 			              </div>
 			

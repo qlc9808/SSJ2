@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import com.oracle.S202350102.dao.thDao.ThOrder1Dao;
 import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.KakaoPayReadyVO;
+import com.oracle.S202350102.dto.Order1;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class ThKakaoPayImpl implements ThKakaoPay {
 
     
     //결제 요청및 인증
-    public String kakaoPayReady() {
+    public String kakaoPayReady(Order1 order1) {
     	System.out.println("ThKakaoPayImpl kakaoPayReady Start...");
 
         RestTemplate restTemplate = new RestTemplate();
@@ -47,7 +48,7 @@ public class ThKakaoPayImpl implements ThKakaoPay {
         params.add("cid", "TC0ONETIME");
         params.add("partner_order_id", "1001");
         params.add("item_code", "1002");
-        params.add("partner_user_id", "gorany");
+        params.add("partner_user_id", "Ssj");
         params.add("item_name", "프리미엄 구독");
         params.add("quantity", "1");
         params.add("total_amount", "5000");
@@ -62,14 +63,12 @@ public class ThKakaoPayImpl implements ThKakaoPay {
             kakaoPayReadyVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReadyVO.class);
             
             log.info("" + kakaoPayReadyVO);
-            
+            System.out.println("kakaoPayReadyVO.getNext_redirect_pc_url() --> " + kakaoPayReadyVO.getNext_redirect_pc_url());
             return kakaoPayReadyVO.getNext_redirect_pc_url();
  
         } catch (RestClientException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -95,7 +94,7 @@ public class ThKakaoPayImpl implements ThKakaoPay {
         params.add("cid", "TC0ONETIME");
         params.add("tid", kakaoPayReadyVO.getTid());
         params.add("partner_order_id", "1001");
-        params.add("partner_user_id", "gorany");
+        params.add("partner_user_id", "J.JSsj");
         params.add("item_code", "1002");
         params.add("pg_token", pg_token);
         params.add("total_amount", "5000");

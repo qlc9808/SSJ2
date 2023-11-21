@@ -8,5 +8,12 @@
 		INSERT INTO order1(order_num, user_num, mem_num, pay_type, create_date, rslt_status)
 			   		VALUES(ORDER_NUM_SEQ.nextval, #{user_num}, #{mem_num}, '카카오페이', SYSDATE, '0')
 	</insert>
-
+	
+	<insert id="thOrderSelect" parameterType="Order1">
+		SELECT	*
+		FROM	order1
+		WHERE	order_num 	= #{order_num}
+		AND		user_num	= #{user_num}
+		AND		mem_num		= #{mem_num}
+	</insert>
 </mapper>

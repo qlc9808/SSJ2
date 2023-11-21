@@ -199,12 +199,16 @@ public class ThController {
 		} 
 		order1.setUser_num(user_num);
 		System.out.println("ThController thKakaoPay Post order1.getUser_num()--> "+ order1.getUser_num());
-		//결제시 멤버쉽번호(=상품번호) 가져오면서 주문테이블에 INSERT
+		// 결제시 멤버쉽번호(=상품번호) 가져오면서 주문테이블에 INSERT
 		int insertResult = os1.insertOrder(order1);
+		
+		// 
 		System.out.println("ThController thKakaoPay Post order1table insertResult --> " + insertResult);
-
-		System.out.println("thKakaoPay.kakaoPayReady() --> " + thKakaoPay.kakaoPayReady());
-		return "redirect:" + thKakaoPay.kakaoPayReady();
+		
+		
+		
+		System.out.println("thKakaoPay.kakaoPayReady(order1) --> " + thKakaoPay.kakaoPayReady(order1));
+		return "redirect:" + thKakaoPay.kakaoPayReady(order1);
 	}
 	
 // 왜 GetMaping만 되지??
