@@ -211,4 +211,30 @@ public class YrController {
 		return likeResult;
 	}
 	
+	// 좋아요 유무 판단용
+	@ResponseBody
+	@RequestMapping(value = "boardLikeCheck")
+	public Map<String, Object> boardLikeCheck(@RequestParam("brd_num") int brd_num
+							 , HttpSession session) {
+		
+		System.out.println("YrController boardLikeCheck Start...");
+		System.out.println("YrController boardLikeCheck brd_num -> " + brd_num);
+		
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController boardLikeCheck userNum -> " + userNum);
+		}
+		
+		BoardLike brdLike = new BoardLike();
+		brdLike.setBrd_num(brd_num);
+		brdLike.setUser_num(userNum);
+		int brdLickYN = ybls.selectBrdLikeYN(brdLike);
+		
+		Map<String, Object> brdChk = new HashMap<>();
+		brdChk.put("brdChk", brdLickYN);
+		
+		return brdChk;
+	}
+	
 }
