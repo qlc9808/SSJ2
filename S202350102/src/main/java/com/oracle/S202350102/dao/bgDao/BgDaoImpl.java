@@ -87,12 +87,12 @@ public class BgDaoImpl implements BgDao {
 	}
 
 	@Override
-	public int deleteCertBrd(int brd_num) {
+	public int deleteCertBrd(Board board) {
 		System.out.println("BgDaoImpl delete Start...");
-		System.out.println("BgDaoImpl delete brd_num -> "+brd_num);
+		System.out.println("BgDaoImpl delete getBrd_num -> "+board.getBrd_num());
 		int result = 0;
 		try {
-			result = session.delete("deleteCertBrd", brd_num);
+			result = session.delete("deleteCertBrd", board);
 			System.out.println("BgDaoImpl delete result -> "+result);
 		} catch (Exception e) {
 			System.out.println("BgDaoImpl delete Exception -> "+e.getMessage());
@@ -123,6 +123,43 @@ public class BgDaoImpl implements BgDao {
 		System.out.println("BgDaoImpl commentInsert Start..."+board.getResultCount());
 	}
 
+
+	@Override
+	public int srchCrtBdCnt(Board board) {
+		int crtBdCntSrch = 0;
+		System.out.println("BgDaoImpl srchCrtBdCnt Start...");
+		
+		try {
+			crtBdCntSrch = session.selectOne("srchCrtBdCnt", board);
+			System.out.println("BgDaoImpl srchCrtBdCnt crtBdCntSrch -> "+crtBdCntSrch);
+		} catch (Exception e) {
+			System.out.println("BgDaoImpl srchCrtBdCnt Exception -> "+e.getMessage());
+		}
+		
+		return crtBdCntSrch;
+	}
+	
+	
+	@Override
+	public List<Board> searchCrtBd(Board board) {
+		List<Board> crtBdSearch = null;
+		System.out.println("BgDaoImpl searchCrtBd Start...");
+		System.out.println("BgDaoImpl searchCrtBd board.getKeyword() -> "	+board.getKeyword());
+		System.out.println("BgDaoImpl searchCrtBd board.getSearchType() -> "+board.getSearchType());
+		System.out.println("BgDaoImpl searchCrtBd board.getSortBy() -> "	+board.getSortBy());
+		try {
+			crtBdSearch = session.selectList("searchCrtBd", board);
+			for(Board board1   : crtBdSearch) {
+				System.out.println("BgDaoImpl searchCrtBd board1->"+board1);
+			}
+		} catch (Exception e) {
+			System.out.println("BgDaoImpl searchCrtBd Exception -> "+e.getMessage());
+		}
+		return crtBdSearch;
+	}
+
+
+	
 
 
 

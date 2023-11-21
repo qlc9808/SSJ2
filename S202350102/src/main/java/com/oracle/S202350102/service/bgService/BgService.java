@@ -12,8 +12,10 @@ public interface BgService {
 	Challenge   bgChgDetail(int chg_id);
 	List<Board> certBoard(Board board);
 	int         updateCertBrd(Board board);
-	int         deleteCertBrd(int brd_num);
+	int         deleteCertBrd(Board board);
 	int         certTotal(int chg_id);
 	void        commentInsert(Board board);
+	int			srchCrtBdCnt(Board board);
+	List<Board> searchCrtBd(Board board);
 
 }

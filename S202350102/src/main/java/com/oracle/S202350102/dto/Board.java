@@ -34,8 +34,11 @@ public class Board {
 	private String search;   	private String keyword;
 	private String pageNum;
 	private int start; 		 	private int end;
+	private int idx;
 	private String searchType;
 	private String category;
+	private String sortBy;	// 정렬 조회
+	
 	
 	//파일 업로드
 	private int delStatus;

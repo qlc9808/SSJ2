@@ -66,8 +66,8 @@ public class BgServiceImpl implements BgService {
 	}
 
 	@Override
-	public int deleteCertBrd(int brd_num) {
-		int result = bd.deleteCertBrd(brd_num);
+	public int deleteCertBrd(Board board) {
+		int result = bd.deleteCertBrd(board);
 		System.out.println("BgServiceImpl delete Start...");
 		return result;
 	}
@@ -85,6 +85,30 @@ public class BgServiceImpl implements BgService {
 		System.out.println("BgServiceImpl commentInsert Start...");
 		bd.commentInsert(board);
 	}
+
+
+	@Override
+	public int srchCrtBdCnt(Board board) {
+		System.out.println("BgServiceImpl srchCrtBdCnt Start...");
+		int crtBdCntSrch = bd.srchCrtBdCnt(board);
+		System.out.println("BgServiceImpl srchCrtBdCnt crtBdCntSrch -> "+crtBdCntSrch);
+		return crtBdCntSrch;
+	}
+	
+	
+	@Override
+	public List<Board> searchCrtBd(Board board) {
+		List<Board> crtBdSearch = null;
+		System.out.println("BgServiceImpl searchCrtBd Start...");
+		System.out.println("BgServiceImpl searchCrtBd board.getKeyword() -> "	+board.getKeyword());
+		System.out.println("BgServiceImpl searchCrtBd board.getSearchType() -> "+board.getSearchType());
+		System.out.println("BgServiceImpl searchCrtBd board.getSortBy() -> "	+board.getSortBy());
+		crtBdSearch = bd.searchCrtBd(board);
+		System.out.println("BgServiceImpl searchCrtBd crtBdSearch.size()  -> "+crtBdSearch.size());
+		return crtBdSearch;
+	}
+
+
 
 
 
