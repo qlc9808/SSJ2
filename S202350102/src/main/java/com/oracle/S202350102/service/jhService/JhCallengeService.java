@@ -70,10 +70,16 @@ public interface JhCallengeService {
 
 
 	List<Challenge> 	chgAdminList(Challenge challenge);
-  
 
+
+	List<Challenge> 	chgAplList(Challenge challenge);
+
+
+	int 				chgListTotal(int state_md);
+  
+ 
 	
-       
+        
        
  
 

@@ -721,12 +721,14 @@ public class JhController {
 		System.out.println("state_md -> " + challenge.getState_md());
 		
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
-		int totalChg = 0;
+		int totalChg 			= 0;
 		List<Challenge> chgList = null;
-		int chgLg = 200;
-		List<Comm> category = jhCService.category(chgLg);
-		Paging page = null;
-		
+		int chgLg 				= 200;
+		List<Comm> category 	= jhCService.category(chgLg);
+		Paging page 			= null;
+		int state_lg 			= challenge.getState_lg();
+		int state_md 			= challenge.getState_md();
+		int chg_md 				= challenge.getChg_md();
 		//진행중,종료 챌린지일 경우
 		if(challenge.getState_md() != 100) {
 			
@@ -763,8 +765,15 @@ public class JhController {
 			System.out.println("chg_md --> " + challenge.getChg_md());
 
 			
+		//신청 챌린지인 경우	
 		} else {
+//			파라미터 chg_lg=200&state_lg=300&state_md=100
+			totalChg = jhCService.chgListTotal(state_md);
+			chgList = jhCService.chgAplList(challenge);
 			
+			page = new Paging(totalChg, currentPage);
+			challenge.setStart(page.getStart());
+			challenge.setEnd(page.getEnd());
 		}
 		
 		
