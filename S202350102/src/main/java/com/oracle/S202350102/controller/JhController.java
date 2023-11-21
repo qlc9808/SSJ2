@@ -211,6 +211,10 @@ public class JhController {
 		
 		// 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
 		board.setChg_id(chg_id);
+		
+		// yr 작성
+		// 로그인 된 정보를 넣기 위함
+		board.setB_user_num(userNum);
 		  
 		// 페이징 작업 
 		// 인증 글 개수			mapper 키: certTotal
@@ -435,8 +439,8 @@ public class JhController {
 		User1 user = userService.userSelect(userNum);
 		System.out.println("JhController chgDetail userNum -> " + user);
 		
-		//유저의 회원상태 가져옴
-		String userStatus = jhCService.userStatus(userNum);
+		//유저의 회원상태 가져옴 필요 없는듯
+//		String userStatus = jhCService.userStatus(userNum);
 		
 		//챌린지 카테고리 중분류 번호 가져오기
 		//챌린지 카테고리 대분류
@@ -453,6 +457,7 @@ public class JhController {
 			
 		}
 		
+		//태현 카테고리 리스트
 		List<Comm> chgCategoryList = tcs.listChgCategory();
 		model.addAttribute("chgCategoryList", chgCategoryList);
 
@@ -461,26 +466,26 @@ public class JhController {
 		model.addAttribute("recomChgList", recomChgList);
 		
 		model.addAttribute("user", user);
-		model.addAttribute("userStatus", userStatus);
+//		model.addAttribute("userStatus", userStatus);
 		
 		
 		return "jh/jhChgApplicationForm";
 	}
 	
 	
-		@ResponseBody
-		@RequestMapping(value = "recommendCallenge") 
-		public List<Challenge>  recommendCallenge(int chg_md){
-			System.out.println("JhController recommendCallenge Start...");
-			
-			List<Challenge> recomChgList = jhCService.recomChgList(chg_md);
+	//추천 챌린지 ajax
+	@ResponseBody
+	@RequestMapping(value = "recommendCallenge") 
+	public List<Challenge>  recommendCallenge(int chg_md){
+		System.out.println("JhController recommendCallenge Start...");
+		
+		List<Challenge> recomChgList = jhCService.recomChgList(chg_md);
 //			for (Challenge challenge : chgList) {
 //			    System.out.println(challenge.getTitle());
 //			}
-			
 
-			return recomChgList;
-		}
+		return recomChgList;
+	}
 		
 	
 	//챌린지 신청 등록
@@ -547,6 +552,7 @@ public class JhController {
 //		Date end_date = chg.getEnd_date();
 //		
 	
+	//파일 업로드용
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
 		System.out.println("JhController uploadFile Start...");
 		
@@ -570,6 +576,7 @@ public class JhController {
 	}
 	
 	
+	//후기 작성
 	@RequestMapping(value = "reviewPost")
 	public String reviewPost(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1, Model model) throws IOException {
 		System.out.println("JhController reviewPost Start...");
@@ -600,7 +607,7 @@ public class JhController {
 		
 	}
 	
-	//리뷰 수정
+	//후기 수정
 	@RequestMapping(value = "reviewUpdate")
 	// public String reviewUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 	public String reviewUpdate(Board board, HttpServletRequest request, MultipartFile file1) throws Exception {
@@ -652,7 +659,7 @@ public class JhController {
 		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
 	}
 
-	//리뷰삭제
+	//후기 삭제
 	@RequestMapping(value = "reviewDelete")
 	public String reviewDelete(int brd_num, int chg_id, String img, HttpServletRequest request) throws Exception {
 		System.out.println("JhController reviewDelete Start...");
@@ -694,30 +701,118 @@ public class JhController {
 		return result;
 	}
 	
-	@RequestMapping(value = "modify")
-	 public String modify() {
+	
+	@RequestMapping(value = "chgAdminList")
+	public String chgAdminList(Challenge challenge, String currentPage, @RequestParam(value = "sortOpt", required=false) String sortOpt,Model model, HttpSession session) {
+		System.out.println("JhController chgAdminList Start...");
+		//카테고리 명 보내기
+		//chg_md랑 state_md 파라미터 조건으로 넣어서 카테고리별, 진행상태별 챌린지 한번에 가져오기(쿼리 재활용)
+		//신청한 챌린지 리스트 가져오기-페이지네이션 포함/필터 적용 포함
 		
-		return "jh/modify";
-	}
-	
-	
-	
-	@Data
-	public class RecommendChg {
-		private int 	chg_id;
-		private String 	title;
-		private String	thumb;
+//		int chgLg = 200;
+//		challenge.setChg_lg(chgLg);
+//		
+//		int stateLg = 300;
+//		challenge.setState_lg(stateLg);
 		
-	}
-	
+		
+		System.out.println("state_md -> " + challenge.getState_md());
+		
+		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
+		int totalChg = 0;
+		List<Challenge> listChg = null;
+		List<Comm> category = jhCService.category(challenge.getChg_lg());
+		Paging page = null;
+		
+		//진행중,종료 챌린지일 경우
+		if(challenge.getState_md() != 100) {
+			
+			//진행중 챌린지 총수
+			if (challenge.getState_md() ==102) {
+				totalChg = tcs.totalChgIng(challenge);
+				System.out.println("tcs.totalChgIng(challenge) --> " + totalChg);
+				
+				//종료 챌린지 총수
+			} else if (challenge.getState_md() == 103) {
+				totalChg = tcs.totalChgFin(challenge);
+				System.out.println("tcs.totalChgFin(challenge) --> " + totalChg);
+			}
+			
+			
+			//진행중,종료 공통
+			
+			//페이지네이션
+			page = new Paging(totalChg, currentPage);
+			challenge.setStart(page.getStart());
+			challenge.setEnd(page.getEnd());
+			
+			//조회 필터 셋팅(
+			if(sortOpt != null) {
+				challenge.setSortOpt(sortOpt);
+				System.out.println("ThController thChgList sortOption --> " + sortOpt);
+				model.addAttribute("sortOpt", sortOpt); //필터(찜순, 최근등록순, 참여자순)
+			}
+				
+			//리스트
+			listChg = tcs.listChg(challenge);
+			System.out.println("thController list listChg.size() --> " + listChg.size());
+			System.out.println("chg_lg --> " + challenge.getChg_lg());
+			System.out.println("chg_md --> " + challenge.getChg_md());
 
-	 
-	@Data
-	private static class Result {
-	    private final List<?> List;
-	    private final int listSize;
+			
+		} else {
+			
+		}
+		
+		
+		
+		model.addAttribute("totalChg", totalChg);
+		model.addAttribute("listChg", listChg);
+		model.addAttribute("page", page);
+		model.addAttribute("category",category); //카테고리별 조회용
+		System.out.println("category -> "+category);
+		
+		
+		/*
+		 * List<Challenge> chgAdminList = jhCService.chgAdminList(challenge);
+		 * 
+		 * //총합도 카테고리별, 진행상태별 조건으로 동적쿼리 만들어서 한번에 가져오기 int chgApcTotal = 0;
+		 * 
+		 * model.addAttribute("chgAdminList", chgAdminList);
+		 */
+		
+		if(challenge.getState_md() != 100) return "jh/chgAdminList";
+		else return "jh/chgApplicationAdminList";
+		
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * @RequestMapping(value = "modify") public String modify() {
+	 * 
+	 * return "jh/modify"; }
+	 */
+	
+	
+	/*
+	 * @Data public class RecommendChg { private int chg_id; private String title;
+	 * private String thumb;
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 * @Data private static class Result { private final List<?> List; private final
+	 * int listSize; }
+	 */
 	
 	
 	

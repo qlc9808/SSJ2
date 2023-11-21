@@ -8,7 +8,7 @@
 	    <result property="thumb" column="thumb"/>
 	</resultMap>
 
-	<!-- 챌린지 테이블, 유저테이블, 공통 테이블 한번에 조인 -> 챌린지 상세정보, 닉네임, 카테고리명, 챌린지 진행상테 조회  -->
+	<!-- 챌린지 상세정보 챌린지 테이블, 유저테이블, 공통 테이블 한번에 조인 -> 챌린지 상세정보, 닉네임, 카테고리명, 챌린지 진행상테 조회  -->
 	<select id="jhChgDetail" parameterType="int" resultType="Challenge">
 		SELECT u.nick, c1.ctn ctn, c2.ctn stateCtn, ch.*
 		FROM challenge ch 
@@ -19,7 +19,7 @@
 		WHERE ch.chg_id = #{chg_id}
 	</select>
 	
-	
+	<!--챌린지 후기 총 갯수  -->
 	<select id="jhReviewTotal" parameterType="int" resultType="int">
 		SELECT 	COUNT(*)
 		FROM 	board b
@@ -30,6 +30,7 @@
 		AND 	brd_step = 0
 	</select>
 	
+	<!-- 챌린지 후기 리스트 -->
 	<select id="jhChgReviewList" parameterType="Board" resultType="Board">
 		SELECT * 
 		FROM (
@@ -48,6 +49,7 @@
 		WHERE rn BETWEEN #{start} AND #{end}  
 	</select>
 	
+	<!-- 필요한가? -->
 	<select id="jhUserStatus" parameterType="int" resultType="java.lang.String">
 		SELECT 	c.ctn
 		FROM 	user1 u
@@ -55,12 +57,14 @@
 		WHERE 	u.user_num = #{user_num}
 	</select>
 
+	<!-- 조회수 올리기 -->
 	<update id="jhViewCntUp" parameterType="int">
 		UPDATE board
 		SET    view_cnt = view_cnt+1
 		WHERE  brd_num  = #{brd_num}
 	</update>
 
+	<!-- 후기 내용 -->
 	<select id="jhReviewContent" parameterType="int" resultType="Board">
 		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.user_num, u.nick, b.view_cnt, replyCount(b.brd_num) replyCount
 		FROM 	board b
@@ -68,6 +72,7 @@
 		WHERE 	b.brd_num = #{brd_num}
 	</select>
 	
+	<!-- 후기 댓글 리스트 -->
 	<select id="jhReviewReplyList" parameterType="Board" resultType="Board">
 		SELECT * 
 		FROM (
@@ -79,10 +84,10 @@
 						WHERE 	 b.brd_group = #{brd_num}
 						AND 	 b.brd_step > 0
 						ORDER BY b.brd_num DESC ) a
-		)
-		WHERE rn BETWEEN #{start} AND #{end} 
+		) WHERE rn BETWEEN #{start} AND #{end} 
 	</select>
 	
+	<!-- 후기 댓글 입력 -->
 	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
 		{
 			call Challenge_Review_Insert_Proc(
@@ -96,11 +101,14 @@
 		
 	</select>
 	
+	<!-- 후기랑 댓글 수정 삭제 하나의 쿼리에 조건문 주고 가능한지 생각해보기 -->
+	<!-- 후기 댓글 삭제 -->
 	<delete id="jhReplyDelete" parameterType="int">
 		DELETE 	FROM board
 		WHERE 	brd_num = #{brd_num}
 	</delete>
 	
+	<!-- 후기 댓글 수정-->
 	<update id="jhReplyUpdate" parameterType="Board">
 		UPDATE board
 		SET    conts = #{conts}, reg_date = SYSDATE
@@ -108,11 +116,13 @@
 	</update>
 	
 
+	<!-- 후기 입력 -->
 	<insert id="jhReviewPost" parameterType="Board" >
 		INSERT INTO board (brd_num, chg_id, user_num, brd_lg, brd_md, title, conts, img, reg_date , brd_group, brd_step)
 		VALUES (brd_num_seq.NEXTVAL, #{chg_id}, #{user_num}, 700, 101, #{title}, #{conts}, #{img}, SYSDATE, brd_num_seq.NEXTVAL, 0)
 	</insert>
 	
+	<!-- 후기 수정 -->
 	<update id="jhReviewUpdate" parameterType="Board">
       UPDATE  board
       SET     title = #{title} 
@@ -130,18 +140,21 @@
       WHERE   brd_num = #{brd_num}
    </update>
 	
+	<!-- 후기 삭제 -> 댓글도 같이 삭제 되게 할 것인가? -->
 	<delete id="jhReviewDelete" parameterType="int">
 		DELETE	FROM board
 		WHERE 	brd_num = #{brd_num}
 		<!-- OR		brd_group = #{brd_num} -->
 	</delete>
 	
+	<!-- 후기 이미지 삭제 -->
 	<update id="jhBoardImgDelete" parameterType="int">
 		UPDATE  board
 		SET 	img = null
 		WHERE	brd_num = #{brd_num}
 	</update>
 	
+	<!-- 추천 챌린지 -->
 	<select id="jhRecommendChgList" parameterType="int" resultMap="RecommendChg">
 		SELECT * 
 		FROM (
@@ -155,9 +168,9 @@
 		                ) a
 		)
 		WHERE rn BETWEEN 1 AND 10 
-	
 	</select>
-	
+
+	<!-- 카테고리 가져오기 -->	
 	<select id="jhCategory" parameterType="int" resultType="Comm">
 	    <![CDATA[
 	    SELECT md, ctn
@@ -166,6 +179,7 @@
 	    ]]>
 	</select>
 	
+	<!-- 챌린지 신청 -->
 	<insert id="jhChgApplication" parameterType="Challenge" >
 	INSERT INTO challenge (	chg_id, 
 							user_num, 
@@ -210,10 +224,27 @@
         	sysdate, 
         	#{end_date}
         	)
-	
 	</insert>
 	
-	
+	<!-- 챌린지 관리자 리스트 - 카테고리별 + 진행상태별 한번에 처리하기 위함 -->
+	<select id="jhChgAdminList" parameterType="Challenge" resultType="Challenge">
+	<!-- 챌린저 수, 좋아요 수도 가져오기 -->
+		SELECT  *
+		FROM    (   SELECT  ROWNUM AS rn, chgCtg.* 
+		            FROM    (
+		                        SELECT      *
+		                        FROM        challenge
+		                        WHERE       chg_lg = #{chg_lg}
+		                        
+		                        AND         chg_md != 999
+		                        AND         chg_md = #{chg_md}
+		                        ORDER BY 	reg_date desc
+		                     )chgCtg
+		            WHERE   state_lg = 300
+		            AND     state_md != 999
+		            AND     state_md = 100
+		) WHERE rn BETWEEN 1 AND 10  
+	</select>
 	
 	
 	
@@ -232,17 +263,6 @@
 		AND state_md = #{state_md}
 	</select>
 	
-	<select id="jhChgRecentList" parameterType="Challenge" resultType="Challenge">
-		SELECT * 
-		FROM (
-				SELECT ROWNUM AS rn, chg_id, chg_lg, chg_md, title, chg_capacity, state_lg, state_md, pick_cnt, chg_public, priv_pswd, thumb, create_date, start_date, end_date
-				FROM challenge
-				WHERE state_lg = 300
-				AND state_md = #{state_md}
-				ORDER BY 	create_date desc
-			 )
-		WHERE rn BETWEEN #{start} AND #{end}  
-	</select>
 	
 	<select id="jhChgPickList" parameterType="Challenge" resultType="Challenge">
 		SELECT * 

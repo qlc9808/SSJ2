@@ -17,7 +17,6 @@
 </head>
 <body>
 	<%@ include file="../adminMenu.jsp" %>
-<%-- 	<%@ include file="../jh/adminSidebar.jsp" %> --%>
 		<div class="col-10">
 		<c:set var="num" value="${page.total-page.start+1 }"></c:set>
 		

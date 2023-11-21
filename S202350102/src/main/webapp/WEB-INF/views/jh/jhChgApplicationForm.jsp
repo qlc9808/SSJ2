@@ -22,6 +22,8 @@
         });
     });
 
+	
+	//추천 챌린지 리스트 가져오기
 	function ajaxRecommendList(pChg_md){
 		$.ajax({
 			url: '/recommendCallenge',
@@ -48,7 +50,8 @@
 	        }
 	    });
 	}
-
+	
+	//ajax 성공시 추천 챌린지 목록 보여주기
 	function recomList(recomChgList) {
 	    var text = "";
 	    for (var i = 0; i < recomChgList.length; i++) {
@@ -68,7 +71,7 @@
 	    return text;
 	}
 	
-		// Flickity 초기화 함수
+		// Flickity 초기화 함수 - slider활용하기 위한 것
 	function initFlickity() {
 	
 	    // Flickity 초기화 초기화 위해 객체 생성
@@ -86,7 +89,7 @@
 
 		
 		
-		
+	//챌린지 신청 전 확인 알림	
 	function chk(){
 		return confirm("챌린지를 신청하시겠습니까? \n 관리자 승인까진 3~5일이 소요됩니다.");
 		 
@@ -123,11 +126,8 @@
             <form action="/chgApplication" onsubmit="return chk()" method="post" enctype="multipart/form-data">
               <input type="hidden" name="user_num" value="${user.user_num}">
               <input type="hidden" name="contextPath" id="contextPath" value="${pageContext.request.contextPath}/upload/">
-<%-- 필요한가
-			  <input type="hidden" name="userStatus" value="${userStatus}">
- --%>              
+              
  			  <div class="row">
- 			  
  			  
                 <div class="col-12">
 				
@@ -345,7 +345,8 @@
                 
                 
                 <div class="col-12 col-md-6">
-
+					
+				<!-- 비공개 선택했을 때만 활성화 -->
                   <!-- Password -->
                   <div class="form-group mb-3">
                     <label class="form-label" for="priv_pswd">

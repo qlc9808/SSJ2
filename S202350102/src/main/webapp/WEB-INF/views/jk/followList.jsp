@@ -135,7 +135,7 @@
                       <div class="col-12 col-md-auto">
                         <div class="avatar avatar-xxl mb-6 mb-md-0">
                           <span class="avatar-title rounded-circle">
-                            <img src="${following.img}" alt="profile" class="avatar-title rounded-circle">
+                            <img src="${pageContext.request.contextPath}/upload/${following.img}" alt="profile" class="avatar-title rounded-circle">
                           </span>
                         </div>
                       </div>
@@ -203,7 +203,7 @@
                       <div class="col-12 col-md-auto">
                         <div class="avatar avatar-xxl mb-6 mb-md-0">
                           <span class="avatar-title rounded-circle">
-                            <img src="${follower.img}" alt="profile" class="avatar-title rounded-circle">
+                            <img src="${pageContext.request.contextPath}/upload/${follower.img}" alt="profile" class="avatar-title rounded-circle">
                           </span>
                         </div>
                       </div>

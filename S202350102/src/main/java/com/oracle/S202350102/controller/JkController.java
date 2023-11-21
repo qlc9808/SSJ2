@@ -40,7 +40,9 @@ import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.chService.ChSearchService;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
@@ -66,6 +68,7 @@ public class JkController {
 	private final Level1Service ls;
 	private final UserService us;
 	private final YrBoardLikeService ybls;
+	private final ChSearchService 		chSearchService;
 	
 	
 	//좋아요 기능 컨트롤러
@@ -610,13 +613,60 @@ public class JkController {
 	
 	@RequestMapping(value ="nearbySharing")
 	public String nearbySharing(Board board, Model model, HttpSession session) {
-		System.out.println("MainController nearbySharing Start...");
-		List<Board> sharingResult = jbs.sharingResult(board);
+		System.out.println("JkController nearbySharing Start...");
+
+		int user_num = 0;
+		List<SearchHistory> sHList = null; 
+		// 로그인 회원이면
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+			model.addAttribute("shList", sh);
+			
+		}
+		model.addAttribute("user_num", user_num);
 		
 		
 		return "nearbySharing";
 	}	
-	}
+	
+	@GetMapping("srchSharing")
+	@ResponseBody
+	public Map<String, Object> srchSharing(String srch_sharing, Board board, HttpSession session, Model model) {
+		System.out.println("JkController srchSharing Start...");
+		
+		String replSrch_word = srch_sharing.replace(" ", "");
+		int user_num = 0;
+		List<Board> srch_shareResult = null; // sharing 검색 결과 List
+		
+		if(srch_sharing != "" && srch_sharing != null) { // 검색어가 null이 아니면 
+			if(session.getAttribute("user_num") != null) {
+				if(srch_sharing != null) {
+					user_num = (int) session.getAttribute("user_num");
+					User1 user1 = jbs.userSelect(user_num);
+					SearchHistory sh = new SearchHistory();
+					sh.setSrch_word(replSrch_word);
+					sh.setUser_num(user1.getUser_num());
+					int result = chSearchService.saveWord(sh);
+					if(result == 0) {
+						chSearchService.updateHistory(sh);
+						
+					}
+				}
+				List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+				model.addAttribute("shList", sh);
+				
+			}
+			// 입력된 키워드에 따라 검색 
+			srch_shareResult = chSearchService.shareSearching(replSrch_word);
+		}
+		
+		Map<String, Object> resultMap = new HashMap<>();
+	    resultMap.put("srch_sharing", srch_sharing);
+	    resultMap.put("srch_shareResult", srch_shareResult);
 
+		    return resultMap;
+	}
+	}
    
 	

@@ -11,16 +11,17 @@ public interface JhCallengeService {
 	Challenge 			chgDetail(int chg_id);
 
 
+	//chgReviewList랑 reviewReplyList를 합칠 수 없는가 생각해보기
 	List<Board> 		chgReviewList(Board board);
 
+	
+	List<Board>			reviewReplyList(Board board);
+	
 
 	String 				userStatus(int userNum);
 
 
 	Board 				reviewContent(int brd_num);
-
-
-	List<Board>			reviewReplyList(Board board);
 
 
 	int 				reviewTotal(int chg_id);
@@ -29,10 +30,10 @@ public interface JhCallengeService {
 	int 				ingChgListTotal();
 
 
-	List<Challenge> 	ingChgRecentList(Challenge challenge);
+//	List<Challenge> 	ingChgRecentList(Challenge challenge);
 
 
-	List<Challenge> 	ingChgPickList(Challenge challenge);
+//	List<Challenge> 	ingChgPickList(Challenge challenge);
 
 
 	void 				replyInsert(Board board);
@@ -66,7 +67,10 @@ public interface JhCallengeService {
 
 
 	int 				chgApplication(Challenge chg);
- 
+
+
+	List<Challenge> 	chgAdminList(Challenge challenge);
+  
 
 	
        

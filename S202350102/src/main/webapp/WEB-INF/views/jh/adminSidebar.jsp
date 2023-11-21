@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<div class="col-12 col-md-4 col-lg-3">
+	<div class="col-12 col-md-2">
 
             <!-- Filters -->
             <form class="mb-10 mb-md-0">
@@ -33,18 +33,18 @@
                     <div class="form-group">
                       <ul class="list-styled mb-0" id="listChg">
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="#">
+                          <a class="list-styled-link" data-bs-target="#challengeAdmin" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=100">
                             	신청 챌린지
                           </a>
                         </li>
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="#">
-                            	종료된 챌린지
+                          <a class="list-styled-link" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=102">
+                            	진행중 챌린지
                           </a>
                         </li>
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="#">
-                            	진행중 챌린지
+                          <a class="list-styled-link" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=103">
+                            	종료된 챌린지
                           </a>
                         </li>
                       </ul>
@@ -99,7 +99,6 @@
 			</ul>
 		</form>
 	</div>
-    
           
 </body>
 </html>

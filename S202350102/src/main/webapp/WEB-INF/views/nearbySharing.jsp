@@ -176,6 +176,73 @@
       }
     </style>
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9fb99f45a47c1c87ebbcfc532e1f831f&libraries=services"></script>
+<script>
+$(document).ready(function () {
+    $("#srchSharing").submit(function (e) {
+        e.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: "GET",
+            url: "/srchSharing",
+            data: formData,
+            success: function (data) {
+                // 서버에서 받은 JSON 데이터를 이용하여 동적으로 HTML 생성
+                generateHtml(data);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+
+    function generateHtml(data) {
+        // 검색 결과를 표시할 곳의 DOM 요소를 선택
+        var searchResultsContainer = $("#searchResults");
+
+        // 검색 결과가 없는 경우
+        if (data.srch_shareResult.length === 0) {
+            searchResultsContainer.html("<h6>검색결과가 없습니다.</h6>");
+            return;
+        }
+
+        // 검색 결과가 있는 경우
+        var html = "<table>";
+        var num = 1;
+
+
+        $.each(data.srch_shareResult, function (index, shrResultList) {
+        	console.log(shrResultList);
+            if (index < 5) { // 최대 5개까지만 표시
+                var fullImageUrl = "${pageContext.request.contextPath}/upload/" + shrResultList.img;
+                html += "<div class='row align-items-center position-relative mb-4' style='padding: 10px; height: 150px;'>" +
+                    "<div class='col-3 col-md-3'>" +
+                    "<img class='img-fluid' src='" + fullImageUrl + "' alt='Image' style='width: 100px; max-width: 150px; max-height: 150px;'>" +
+                    "</div>" +
+                    "<div class='col-9 col-md-9'>" +
+                    "<p class='mb-0 fw-bold' style='font-size: 16px;'>" +
+                    "<a class='stretched-link text-body' href='detailSharing?user_num=" + shrResultList.user_num + "&brd_num=" + shrResultList.brd_num + "'>" +
+                    shrResultList.title + shrResultList.zipCode +
+                    "</a>" +
+                    "</p>" +
+                    "<p class='mb-0 text-muted' style='font-size: 16px;'>" + new Date(shrResultList.reg_date).toLocaleDateString() + " | " + shrResultList.nick + "</p>" +
+                    "</div>" +
+                    "<div class='col-12'>" +
+                    "<button class='btn btn-primary float-end'>위치 검색</button>" +
+                    "</div>" +
+                    "</div>";
+            }
+        });
+
+        searchResultsContainer.html(html);
+
+    }
+    
+    
+});
+
+</script>
 </head>
 <body>
 
@@ -184,11 +251,11 @@
     <section class=" pb-8">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+          <div class="col-12 col-md-10 col-lg-8 col-xl-8">
 
             <!-- Heading -->
             <h3 class="mb-5 text-center">내주변 쉐어링</h3>
-			<p class="mb-0 text-muted">검색어를 입력하면 지도 상에서 해당 지역에 등록된 물품이 마커로 표시됩니다.</p>
+			<p class="mb-0 text-muted text-center" >검색어를 입력하면 지도 상에서 해당 지역에 등록된 물품이 마커로 표시됩니다.</p>
             <!-- Search -->
             
           </div>
@@ -206,26 +273,60 @@
         text-align: center;
       "
     >
-    <button onclick="getLocation()">내 위치</button>
 
-<p id="pos"></p>
+
+	
       <div id="menu_wrap" class="bg_white">
         <div class="option">
           <div>
-            <form onsubmit="searchPlaces(); return false;">
+            <form id="srchSharing">
               <div class="input-group input-group-merge">
-              <input class="form-control" type="search" id="keyword" name="keyword" placeholder="검색어를 입력해주세요.">
+              <input class="form-control" type="search" id="srch_sharing" name="srch_sharing" placeholder="검색어를 입력해주세요.">
               <div class="input-group-append">
                 <button class="btn btn-outline-border" type="submit" style="margin-left: 0px;">
-                  <i class="fe fe-search"></i>
+                  <i class="fe fe-search"></i></div> 
+                <button class="btn btn-outline-border"  onclick="getLocation()" style="margin-left: 0px;">   
+                  <i class="fa-solid fa-location-crosshairs" onclick="getLocation()"></i>
                 </button>
               </div>
             </div>
             </form>
           </div>
         </div>
-        <hr />
-        <ul id="placesList"></ul>
+        <!-- 여기리스트 -->
+        <div id="searchResults">
+        <div class="offcanvas-body border-top fs-sm">
+        <!-- Heading -->
+        <p>에 대한 검색결과 입니다.</p>
+    
+    <div class="container">
+			<c:if test="${empty srch_shareResult }">
+				<h6>검색결과가 없습니다.</h6>
+			</c:if>
+			<table>
+				<c:set var="num" value="1"/>
+				<c:forEach items="${srch_shareResult }" var="shrResultList" varStatus="status">
+					<c:if test="${num < 3 }">
+						<tr>
+							<td>
+								<a href="detailSharing?user_num=${shrResultList.user_num}&brd_num=${shrResultList.brd_num}">${shrResultList.img} ${shrResultList.title }</a>
+							</td>
+							<td><fmt:formatDate value="${shrResultList.reg_date }" pattern="yyyy-MM-dd"/></td>
+							<td>${shrResultList.nick }</td>
+						</tr>
+						<c:set var="num" value="${num+1 }"/>
+					</c:if>
+				</c:forEach>
+			</table>
+		</div>
+</div>    
+    
+    
+       
+      </div>
+
+			
+        
         <div id="pagination"></div>
       </div>
     </div>
@@ -244,7 +345,7 @@ var markers = [];
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(37.5605672, 126.9433486), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: 5 // 지도의 확대 레벨
     };  
 
 // 지도를 생성합니다    
@@ -283,15 +384,14 @@ function getLocation() {
 }
 
 function showPosition(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude;
+   
 
     // 지도에 마커 표시
     if (!map) {
         // 지도를 생성할 때 한 번만 실행
         map = new kakao.maps.Map(document.getElementById('map'), {
             center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            level: 15 // 지도의 확대 레벨
+            level: 3 // 지도의 확대 레벨
         });
     }
 
@@ -312,7 +412,7 @@ function showPosition(position) {
     marker.setMap(map);
 }
 </script>
-</script>
+
 	
 	
 
