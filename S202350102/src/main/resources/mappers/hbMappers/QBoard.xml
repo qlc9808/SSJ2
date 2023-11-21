@@ -112,10 +112,9 @@
         	<otherwise></otherwise>
         </choose>
         AND     brd_step = 0
-        AND 
-        <if test="searchType == 'title'">title like '%' || #{keyword} || '%' </if>
-        <if test="searchType == 'conts'">conts like '%' || #{keyword} || '%' </if>
-        <if test="searchType == 'nick'">nick like '%' || #{keyword} || '%' </if>
+        <if test="searchType == 'title'">AND title like '%' || #{keyword} || '%' </if>
+        <if test="searchType == 'conts'">AND conts like '%' || #{keyword} || '%' </if>
+        <if test="searchType == 'nick'">AND nick like '%' || #{keyword} || '%' </if>
         ORDER BY b.reg_date DESC
                    ) m
         ) b
@@ -149,11 +148,10 @@
         	<otherwise></otherwise>
         </choose>
 		AND      brd_step = 0
-		AND      b.user_num = u.user_num
-		AND 
-		<if test="searchType == 'title'">title like '%' || #{keyword} || '%' </if>
-        <if test="searchType == 'conts'">conts like '%' || #{keyword} || '%' </if>
-        <if test="searchType == 'nick'">nick like '%' || #{keyword} || '%' </if>
+		AND      b.user_num = u.user_num 
+		<if test="searchType == 'title'">AND title like '%' || #{keyword} || '%' </if>
+        <if test="searchType == 'conts'">AND conts like '%' || #{keyword} || '%' </if>
+        <if test="searchType == 'nick'">AND nick like '%' || #{keyword} || '%' </if>
 	</select>
 	
 	<!-- 댓글 -->

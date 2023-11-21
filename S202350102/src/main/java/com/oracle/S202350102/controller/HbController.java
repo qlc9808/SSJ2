@@ -59,14 +59,8 @@ public class HbController {
 	public String qBoardList(@ModelAttribute Board board, 
 							 Model model,
 							 String currentPage,
-//							 String keyword,
-//							 String searchType,
-//							 String category,
 							 HttpSession session) {
-//		board.setKeyword(keyword);
-//		board.setSearchType(searchType);
-//		board.setCategory(category);
-		String keyword = board.getKeyword(); 
+		String keyword = board.getKeyword();
 		if ( keyword == null ) {
 			// 유저 세션 불러오기
 			int user_num = 0;
