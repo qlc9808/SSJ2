@@ -38,7 +38,7 @@
                           </a>
                         </li>
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/chgAdminList?state_lg=300&state_md=102">
+                          <a class="list-styled-link" href="/chgAdminList?state_md=102">
                             	진행중 챌린지
                           </a>
                         </li>
