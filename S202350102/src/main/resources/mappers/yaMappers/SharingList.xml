@@ -19,11 +19,14 @@
  		AND brd_step = 0 
     </select>		
     
-	<select id="YaMyJoinSharingList" parameterType="int" resultType="sharingList">
+	<select id="YaMyJoinSharingList" parameterType="sharingList" resultType="sharingList">
 		SELECT s.brd_num, b.title, s.state_md, s.reject_msg
-		FROM sharingList s, board b
+		FROM sharingList s
+		INNER JOIN board b ON s.brd_num = b.brd_num
 		WHERE s.user_num = #{user_num}
-		AND s.brd_num = b.brd_num
+		ORDER BY s.brd_num DESC
+
+   
 	</select>	
     
 	<update id="YaSharingConfirm" parameterType="sharingList">

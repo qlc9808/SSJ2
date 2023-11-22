@@ -91,29 +91,22 @@
 	                      <a class="text-body" href="product.html">내용</a> <br>
 	                      <span class="text-muted">${board.conts}</span>
 	                    </p>
-                        <form>
-                            <div class="form-group">
-                                <!-- Labels for Applicants, Participants, and Content -->
-                                <!-- ... -->
-                                <!-- Submit Buttons -->
+                       
+        
+        
+                                  <!-- Submit Buttons -->
                                 <div class="row"> 
                                     <input type="hidden" name="brd_num" value="${board.brd_num}"> 
                                     <input type="hidden" name="b_user_num" value="${board.user_num}">
                                     <input type="hidden" name="user_num" value="${sessionScope.user_num}">		
                                     <div class="col-lg-6 mb-2">
-                                        <!--   <button id="openModalButton" class="btn btn-dark w-100" data-toggle="button">
-                                                                                <i class="fe fe-mail me-2"></i> 구매신청
-                                                                            </button>     -->
+                                       
                                         <!--ya 쉐어링 참가신청 test -------------------------------------------------------------------------->
                                         <button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#infoModal"
                                             data-user_num="${sessionScope.user_num}" data-brd_num="${board.brd_num}">
                                             <i class="fe fe-mail me-2"> 참가신청 </i></button>
                                     </div>
-                                </div>
-                            </div>
-                        </form>
-                        
-                        <!-- yr 작성 -->
+                                         <!-- yr 작성 -->
                         <!-- 쉐어링 찜하기 -->
                         <div class="col-lg-6 mb-2">
 
@@ -157,7 +150,12 @@
                 </div>
             </div>
         </div>
-    </div>   
+   
+                                </div>
+                            </div>
+                       
+                        
+                   
 </section>
 <!----------------------Ya 쉐어링 신청 모달창 띄우기 test------------------------------------------------------------------------------------------>
 <div class="modal" id="infoModal">

@@ -323,19 +323,17 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return result;
 	}
 
-	@Override
-	public List<Challenge> chgAdminList(Challenge challenge) {
-		System.out.println("JhChallengeDaoImpl jhChgAdminList Start...");
-		
-		List<Challenge> chgAdminList = null;
-		try {
-			chgAdminList = session.selectList("chgAdminList", challenge);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl chgAdminList e.getMessage() -> " + e.getMessage());
-			
-		}
-		return chgAdminList;
-	}
+	/* 삭제 예정
+	 * @Override public List<Challenge> chgAdminList(Challenge challenge) {
+	 * System.out.println("JhChallengeDaoImpl jhChgAdminList Start...");
+	 * 
+	 * List<Challenge> chgAdminList = null; try { chgAdminList =
+	 * session.selectList("chgAdminList", challenge); } catch (Exception e) {
+	 * System.out.println("JhChallengeDaoImpl chgAdminList e.getMessage() -> " +
+	 * e.getMessage());
+	 * 
+	 * } return chgAdminList; }
+	 */
 
 	@Override
 	public List<Challenge> chgAplList(Challenge challenge) {
@@ -343,20 +341,24 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		
 		List<Challenge> chgAplList = null;
 		try {
+			System.out.println("JhChallengeDaoImpl chgAplList challenge.getStart()-> " + challenge.getStart());
+			System.out.println("JhChallengeDaoImpl chgAplList challenge.getEnd()-> " + challenge.getEnd());
+			System.out.println("JhChallengeDaoImpl chgAplList challenge.getState_md()-> " + challenge.getState_md());
 			chgAplList = session.selectList("jhChgAplList", challenge);
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl chgAplList e.getMessage() -> " + e.getMessage());
-			
 		}
+		System.out.println("JhChallengeDaoImpl chgAplList chgAplList.size() -> " + chgAplList.size());
+		System.out.println("JhChallengeDaoImpl chgAplList jhChgAplList -> " + chgAplList);
 		return chgAplList;
 	}
 
 	@Override
-	public int chgListTotal(int state_md) {
+	public int chgListTotal(Challenge challenge) {
 		System.out.println("JhChallengeDaoImpl chgAplList Start...");
 		int chgListTotal = 0;
 		try {
-			chgListTotal = session.selectOne("jhChgListTotal", state_md);
+			chgListTotal = session.selectOne("jhChgListTotal", challenge);
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl chgListTotal e.getMessage() -> " + e.getMessage());
 		}

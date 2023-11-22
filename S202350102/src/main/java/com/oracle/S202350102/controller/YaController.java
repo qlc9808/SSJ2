@@ -551,16 +551,17 @@ public class YaController {
 					model.addAttribute("user1", user1);		
 				
 				//myUploadSharingList 게시글 총 수 ----------------------------------------------------------------------------
-				int totalMyUploadsharing = ycs.totalMyUploadsharing(user_num);
+				int totalMyUploadsharing =0;
+				totalMyUploadsharing =ycs.totalMyUploadsharing(user_num);
 				model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
 				System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
 				
 				//페이징처리 
 				Paging myUploadSharingPaging = new Paging(totalMyUploadsharing, currentPage);
-				board.setUser_num(user_num);
+				board.setUser_num((int) session.getAttribute("user_num"));
 				board.setStart(myUploadSharingPaging.getStart());
 				board.setEnd(myUploadSharingPaging.getEnd());
-				model.addAttribute(" myUploadSharingPaging" ,  myUploadSharingPaging);
+				model.addAttribute("myUploadSharingPaging" , myUploadSharingPaging);
 				System.out.println("YaController myUploadSharingPage start?"+myUploadSharingPaging.getStart());
 				System.out.println(" YaControlloermyUploadSharingPaging total?"+myUploadSharingPaging.getTotal());
 				System.out.println("myUploadSharingPaging End?"+myUploadSharingPaging.getEnd());
@@ -570,8 +571,8 @@ public class YaController {
 				List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(user_num);
 				System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
 				model.addAttribute("myUploadSharingList", myUploadSharingList);				
-				//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------
 				
+				//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------				
 				int totalJoinSharing = 0;
 				totalJoinSharing = ycs.totalJoinSharing(user_num);		
 				System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
@@ -728,6 +729,82 @@ public class YaController {
 
 		  return result;
 	}
+		 // 관리자 페이지 커뮤니티 게시글 전체 조회 
+		 @RequestMapping(value="/communityAdminList")
+			public String communityAdminList(Board board, Model model,String currentPage ) {
+			
+			 System.out.println("YaController communityAdminList start....");
+				
+				//전체 게시글 총 수 
+				int totalCommunity = ycs.totalCommunity(board);
+				model.addAttribute("totalCommunity", totalCommunity);		
+				System.out.println("YaContorller totalCommunity->"+totalCommunity);
+				
+				//페이징처리
+				Paging boardPage = new Paging(totalCommunity, currentPage);
+				board.setStart(boardPage.getStart());
+			    board.setEnd(boardPage.getEnd());
+			    model.addAttribute("boardPage", boardPage);
+				System.out.println(" YaController boardPage start?"+boardPage.getStart());
+				System.out.println(" YaControlloer boardpage total?"+boardPage.getTotal());
+				System.out.println("boardPage End?"+boardPage.getEnd());
+				
+				List<Board> listCommunity = ycs.listCommunity(board);
+				System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
+				model.addAttribute("listCommunity", listCommunity);	
+	
+				return "ya/communityAdmin"; 
+			 			 
+		 }
 		 
+		 // 관리자 페이지 쉐어링 게시글 전체 조회  ----jk 컨트롤러 따옴
+			@RequestMapping(value="/sharAdminList")
+			public String Sharing(Board board, Model model, HttpSession session) {
+				System.out.println("JkController Sharing start...");
+				
+				int user_num = 0;
+				if(session.getAttribute("user_num") != null) {
+					user_num = (int) session.getAttribute("user_num");
+				}
+				
+				User1 user1 = jbs.userSelect(user_num);
+				
+				// yr 작성
+				// 쉐어링 찜 여부 판단용
+				board.setB_user_num(user_num);
+				
+				List<Board> sharing = jbs.sharing(board);
+				System.out.println("JkController list Sharing.size()?"+sharing.size());
+				
+				model.addAttribute("user1", user1);
+				model.addAttribute("sharing", sharing);
+				
+				return "ya/sharAdmin";
+				
+				}
+		  
+			//관리자 페이지 자유게시판 게시글 삭제
+			@GetMapping(value="/deleteCommunityAdmin")
+			public String deleteCommunityAdmin(@RequestParam int brd_num, Model model) {				
+			
+				System.out.println("YaController ycs.deleteCommunity start....");
+				int deleteResult = ycs.deleteCommunity(brd_num);
+				model.addAttribute("deleteResult", deleteResult);
+				System.out.println("YaController deleteResult: " + deleteResult);
+				return "redirect:/communityAdminList";
+				
+			}	
+			
+			//관리자 페이지 쉐어링게시판 게시글 삭제
+			@GetMapping(value="/deleteShareAdmin")
+			public String deleteShareAdmin(@RequestParam int brd_num, Model model) {				
+			
+				System.out.println("YaController ycs.deleteCommunity start....");
+				int deleteResult = ycs.deleteCommunity(brd_num);
+				model.addAttribute("deleteResult", deleteResult);
+				System.out.println("YaController deleteResult: " + deleteResult);
+				return "redirect:/sharAdminList";
+				
+			}
 	
 }		
