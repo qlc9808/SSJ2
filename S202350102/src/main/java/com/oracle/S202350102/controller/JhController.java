@@ -718,8 +718,6 @@ public class JhController {
 		
 		
 		
-		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
-		System.out.println("JhController chgAdminList state_md -> " + challenge.getState_md());
 		
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
 		int totalChg 			= 0;
@@ -728,6 +726,8 @@ public class JhController {
 		//카테고리 전체일 경우 chg_lg/chg_md = 0
 		int chg_md 				= challenge.getChg_md();
 		int chg_lg 				= challenge.getChg_lg();
+		System.out.println("JhController chgAdminList state_md -> " + challenge.getState_md());
+		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
 		System.out.println("JhController chgAdminList chg_md --> " + chg_md);
 		System.out.println("JhController chgAdminList chg_lg --> " + chg_lg);
 		
@@ -793,6 +793,7 @@ public class JhController {
 			//페이지 셋팅
 			challenge.setStart(page.getStart());
 			challenge.setEnd(page.getEnd());
+			System.out.println("JhController chgAdminList page --> " + page);
 			
 			chgList = jhCService.chgAplList(challenge);
 			
@@ -801,6 +802,8 @@ public class JhController {
 			
 			
 		}
+		
+		System.out.println("JhController chgAdminList page --> " + page);
 		
 		
 		model.addAttribute("sortOpt", sortOpt); 	//필터(찜순, 최근등록순, 참여자순)
@@ -831,8 +834,23 @@ public class JhController {
 	public String chgAdminDetail(Challenge challenge, HttpSession session, Model model) {
 		System.out.println("JhController chgAdminDetail Start...");
 		
+		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = challenge.getState_md();
 		
+		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것
+		String pageNum = challenge.getPageNum();
+		
+		int chg_id = challenge.getChg_id();
+		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
+		
+		challenge = jhCService.chgDetail(chg_id);
+		
+		int chgrParti = ycs.selectChgrParti(chg_id);
+		System.out.println("JhController chgDetail chgrParti -> " + chgrParti);
+		model.addAttribute("chgrParti", chgrParti);
+		
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("chg", challenge);
 		model.addAttribute("state_md", state_md);
 		return "jh/chgAdminDetail";
 		

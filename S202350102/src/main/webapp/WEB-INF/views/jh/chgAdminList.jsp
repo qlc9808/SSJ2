@@ -19,6 +19,14 @@
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt;
 	}
+	
+	/* 페이지네이션 수정중 */
+	function pageNavigation(state_md, chg_lg, chg_md, sortOpt, currentPage){
+		if(!chg_lg && !chg_md && !sortOpt){
+			location.href = "chgAdminList?state_md="+state_md+"&currentPage="+currentPage;
+			
+		}
+	}
 
 </script>
 
@@ -137,7 +145,7 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }'">상세보기</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&pageNum=${page.currentPage}'">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
@@ -150,7 +158,7 @@
 	      	   		 <ul class="pagination pagination-lg text-gray-400">
 					  	<c:if test="${page.startPage > page.pageBlock }">
 					  		<li class="page-item">
-								<a class="page-link page-link-arrow" href="listUserAdmin?currentPage=${page.startPage-page.pageBlock }">
+								<a class="page-link page-link-arrow" href="chgAdminList?currentPage=${page.startPage-page.pageBlock }">
 								<i class="fa fa-caret-left">이전</i></a>
 							</li>
 						</c:if>
@@ -158,16 +166,16 @@
 					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 							<li class="page-item">
 								<c:if test="${i == page.currentPage }">
-									<a class="page-link px-2" href="listUserAdmin?currentPage=${i }"><b class="text-primary">${i}</b></a>
+									<a class="page-link px-2" href="chgAdminList?currentPage=${i }"><b class="text-primary">${i}</b></a>
 								</c:if>
 								<c:if test="${i != page.currentPage }">
-									<a class="page-link px-2" href="listUserAdmin?currentPage=${i }">${i}</a>
+									<a class="page-link px-2" onclick="pageNavigation(${state_md}, ${chg_lg }, ${chg_md}, ${sortOpt}, ${i })" href="chgAdminList?currentPage=${i }">${i}</a>
 								</c:if>
 							</li>
 						</c:forEach>
 					    <c:if test="${page.endPage < page.totalPage }">
 					    	<li class="page-item">
-								<a class="page-link page-link-arrow" href="listUserAdmin?currentPage=${page.startPage + page.pageBlock }">
+								<a class="page-link page-link-arrow" href="chgAdminList?currentPage=${page.startPage + page.pageBlock }">
 								<i class="fa fa-caret-right">다음</i></a>
 							</li>
 						</c:if>
