@@ -745,6 +745,27 @@ public class ChController {
 		int result = chBoardService.commentAlarm(brd_num);
 	}
 	
+	@RequestMapping(value = "myParty")
+	@ResponseBody
+	public ModelAndView myParty(HttpSession session, ModelAndView mav) {
+		
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			// 내가 신청한 챌린지
+			
+			Board board = new Board();
+			board.setUser_num(user_num);		
+			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
+			mav.addObject("mychgrList",mychgrList);
+			mav.setViewName("ch/ajaxPage/myPartyChg");
+		
+		
+		}
+		
+		return mav;
+	}
+	
+	
 	public void myChgList(HttpSession session, Model model) {
 		System.out.println("ChController myChgList Start...");
 		Paging page = new Paging(0, null);

@@ -41,6 +41,19 @@ function clickLoad(index) {
 	
 	if(index == 1) {
 		// 참여 챌린지
+		$.ajax(
+				{
+					
+					url: "myParty",
+					dataType:"html",
+					success:function(data){
+						$("#mySlider").html(data);
+						
+				        //Flickity 초기화
+						initFlickity();
+					}
+				}		
+			);
 		
 	} else if(index == 2) {
 		// 신청한 챌린지
