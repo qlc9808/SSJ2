@@ -222,6 +222,31 @@ public class JkController {
 				return "jk/mySharing";
 			}
 		
+	// 쉐어링 찜한 목록
+		@RequestMapping("/myLikeSharing")
+		public String myLikeSharing(Board board, Model model, HttpSession session) {
+			System.out.println("JkController myLikeSharing start...");
+			
+			int user_num = 0;
+			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
+			}
+			else {
+				model.addAttribute("msg", "로그인한 사용자만 이용할 수 있는 페이지입니다.");
+				return "redirect:/loginForm";
+			}
+			
+			List<Board> mySharing = jbs.sharing(board);
+			System.out.println("JkController list mySharing.size()?" + mySharing.size());
+			
+		
+			User1 user1 = jbs.userSelect(user_num);
+			System.out.println("usernum"+user_num);
+			model.addAttribute("user1", user1);
+			model.addAttribute("mySharing", mySharing);
+			
+				return "jk/myLikeSharing";
+			}	
 	//쉐어링 내가 쓴 글 상세
 	@GetMapping(value="/myDetailSharing")
 	public String myDetailSharing(int brd_num, Model model, HttpSession session) {

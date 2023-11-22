@@ -44,10 +44,10 @@
                 <a class="list-group-item list-group-item-action dropend-toggle " href="../sharing">
                   	전체 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
+                <a class="list-group-item list-group-item-action dropend-toggle active" href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle active" href="/mySharing">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
                  	내가 쓴 글
                 </a>
                <a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
