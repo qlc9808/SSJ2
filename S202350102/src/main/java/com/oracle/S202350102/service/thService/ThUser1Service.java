@@ -21,6 +21,10 @@ public interface ThUser1Service {
 	int 			user1PswdUpdate(Map<String, Object> map);
 	int 			totalUser();
 	List<User1> 	listUser(User1 user1);
+	int 			updateUserLoginDate(int user_num);
+	int 			deleteUserByAdmin(int user_num);
+	int 			activeUserByAdmin(int user_num);
+	int 			updateUserAdmin(User1 user1);
 
 	
 	

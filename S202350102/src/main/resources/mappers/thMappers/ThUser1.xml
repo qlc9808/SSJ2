@@ -5,8 +5,8 @@
 <mapper namespace="com.oracle.S202350102.ThUser1Mapper">
 
 	<insert id="thInsertUser1" parameterType="User1">
-		INSERT INTO user1(user_num, user_id, user_pswd, nick, user_name, email, birth, addr, tel, gender)
-				    VALUES(USER_NUM_SEQ.nextval, #{user_id}, #{user_pswd}, #{nick}, #{user_name}, #{email}, #{birth}, #{addr}, #{tel}, #{gender} )
+		INSERT INTO user1(user_num, user_id, user_pswd, nick, user_name, email, birth, addr, tel, gender, zipCode)
+				    VALUES(USER_NUM_SEQ.nextval, #{user_id}, #{user_pswd}, #{nick}, #{user_name}, #{email}, #{birth}, #{addr}, #{tel}, #{gender}, LPAD(${zipCode}, 5, '0'))
 	</insert>
 
 	<select id="thLogin" parameterType="User1" resultType="User1">
@@ -18,7 +18,7 @@
 	
 	<update id="thDeleteUser1" parameterType="User1">
 		UPDATE 	user1
-		SET	   	delete_yn = 'Y'
+		SET	   	delete_yn = 'Y', end_date = SYSDATE
 		WHERE  	user_num   = #{user_num}
 		AND		user_pswd = #{user_pswd}	
 	</update>
@@ -69,7 +69,7 @@
 		FROM	user1
 	</select>
 	
-	<select id="tkUserListAll" parameterType="User1" resultType="User1">
+	<select id="thUserListAll" parameterType="User1" resultType="User1">
 		SELECT * 
 		FROM 
 			(
@@ -80,5 +80,39 @@
 		WHERE rn BETWEEN #{start} AND #{end}
 		
 	</select>
+	
+	<update id="thUpdateUserLoginDate" parameterType="int">
+		UPDATE	user1
+		SET		last_lgn_date = SYSDATE
+		WHERE	user_num = #{user_num}
+	</update>
+	
+	<update id="thDeleteUserByAdmin" parameterType="int">
+		UPDATE	user1
+		SET		delete_yn = 'Y', 
+				end_date = SYSDATE
+		WHERE	user_num = #{user_num}
+	</update>
+	
+	<update id="thActiveUserByAdmin" parameterType="int">
+		UPDATE	user1
+		SET		delete_yn = 'N'
+		WHERE	user_num = #{user_num}
+	</update>
+	
+	<update id="thUpdateUserAdmin" parameterType="User1">
+		UPDATE 	user1
+		SET		user_level 	=	#{user_level},
+				user_exp	=	#{user_exp},
+				nick		=	#{nick},
+				status_md	=	#{status_md},
+				email		=	#{email},
+				birth		=	#{birth},
+				gender		=	#{gender},
+				addr		=	#{addr},
+				tel			=	#{tel}
+		WHERE	user_num 	=	#{user_num}
+	</update>
+	
 </mapper>
 

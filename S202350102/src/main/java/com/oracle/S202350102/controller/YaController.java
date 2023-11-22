@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.mail.Session;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +21,7 @@ import org.springframework.beans.propertyeditors.URLEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.dto.Board;
@@ -121,9 +125,9 @@ public class YaController {
 		return"ya/detailCommunity";
 	}
 	
-	// 커뮤니티 게시글 작성폼으로 이동
+	// 커뮤니티 게시글 작성폼으로 이동 (************************************진기)
 	@RequestMapping(value="/writeFormCommunity")
-	public String writeFormCommunity(HttpSession session, Model model ) {
+	public String writeFormCommunity(Board board, HttpSession session, Model model ) {
 		System.out.println("YaController writeFormCommunity Start... ");
 	
 		int user_num=0;
@@ -140,8 +144,7 @@ public class YaController {
 
 	 // 게시글 작성
 		@PostMapping(value="/writeCommunity") 
-		public String insertCommunity(@ModelAttribute Board board, Model model,HttpSession session ) {
-				
+		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 				System.out.println("YaController start insertCommunity... "); 
 				
 				int user_num = 0;
@@ -149,6 +152,7 @@ public class YaController {
 					user_num = (int) session.getAttribute("user_num");
 				}
 				board.setUser_num(user_num);
+				/*
 				// 게시글 작성 (본글 설정)
 				board.setBrd_group(board.getBrd_num());
 				board.setBrd_step(0);
@@ -166,15 +170,57 @@ public class YaController {
 						 model.addAttribute("msg", "작성 실패, 확인해보세요");
 					 }
 				return "forward:writeCommunity";
-			 }
+			 }*/
+				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");  // 저장경로 생성
+				System.out.println("realPath" + uploadPath);
+				log.info("originalName : " + file1.getOriginalFilename());
+				
+				String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);  // 진짜 저장
+				board.setImg(saveName);
+				System.out.println("brd_md->"+ board.getBrd_md());
+				int result = ycs.insertCommunity(board);
+				System.out.println("Insert result->" + result);	
+				
+				return "forward:listCommunity";		
+				
+			}
 			
+			
+		// 파일 업로드 (************************************진기)
+		private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
+			UUID uid = UUID.randomUUID();
+			System.out.println("uploadPath->" + uploadPath);
+			File fileDirectory = new File(uploadPath);  
+			if (!fileDirectory.exists()) {
+				fileDirectory.mkdirs(); 
+				System.out.println("시스템 업로드용 폴더 생성 :" + uploadPath);	
+			}
+			
+			String savedName = uid.toString() + "_" + originalName;
+			log.info("saveName : " + savedName); 
+			File target = new File(uploadPath, savedName);
+			FileCopyUtils.copy(fileData, target); 
+			
+			return savedName;
+		}
 		
 		// 게시글 수정폼이동 
 		@GetMapping(value="/updateCommunityForm")
-		public String updateCommunity(int brd_num, Model model) {
+		public String updateCommunity(int brd_num, Model model, HttpSession session) {
 			System.out.println("YaController updaetCommunityForm start...");
 			
+			int user_num = 0;
+			if(session.getAttribute("user_num") != null) {
+				user_num = (int) session.getAttribute("user_num");
+			}
+			
 			Board board = ycs.detailCommunity(brd_num);
+			model.addAttribute("board", board);
+			
+			User1 user1 = jbs.userSelect(user_num);
+			model.addAttribute("user1", user1);
+			
+			
 			// 수정전
 			System.out.println("title :"+board.getTitle());
 			System.out.println("conts :"+board.getConts());
@@ -185,21 +231,44 @@ public class YaController {
 		}
 		
 		
-		// 게시글 수정
-		@GetMapping(value="/updateCommunity")
-		public String updateCommunity(Board board, Model model) {
-	
+		// 게시글 수정 (파일업로드 진기)
+		@PostMapping(value="/updateCommunity")
+		public String updateCommunity(HttpSession session, User1 user1, Model model, Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
+	    System.out.println("YaController updateCommunity start...");
+		
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	    }
+	    user1.setUser_num(user_num);
+	    
+		ServletContext servletContext = request.getSession().getServletContext();
+		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath->" + realPath);
+	 
+		if(file1 != null) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
 			
-			int updateCommunity = ycs.updateCommunity(board);
-			
-			System.out.println("YaController ycs.updateCommunity updateBoard updateCommunity?"+updateCommunity);
-			model.addAttribute("updateCommunity", updateCommunity);
-			//수정후
-			System.out.println("title update:"+board.getTitle());
-			System.out.println("conts update:"+board.getConts());
-			
-			return "forward:listCommunity";
+			board.setImg(saveName);	
 		}
+	    
+	    int updateCommunity = ycs.updateCommunity(board);
+		
+		System.out.println("YaController ycs.updateCommunity updateBoard updateCommunity?"+updateCommunity);
+		model.addAttribute("updateResult", updateCommunity);
+		//수정후
+		System.out.println("title update:"+board.getTitle());
+		System.out.println("conts update:"+board.getConts());
+		System.out.println("updateResult->" + updateCommunity);
+		
+		if (updateCommunity > 0) {
+	       
+	        return "redirect:/listCommunity";
+	    } else {
+	        model.addAttribute("msg", "수정 실패 확인해 보세요");
+	        return "forward:/mypage.jsp";
+	    }
+	}
 		
 		//게시글 삭제
 		@GetMapping(value="/deleteCommunity")
@@ -468,45 +537,197 @@ public class YaController {
 		        return result;
 		    }
 		  
-		//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing)  리스트 조회  - 내가 참가한 쉐어링(myJoinSharing)  		
-		@RequestMapping(value="/sharingManagement")
-		public String myUploadSharingList(HttpSession session, Board board,  Model model) {
-			System.out.println("YaController myUploadSharingList start...");
-			
-			int user_num=0;
-			if(session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
+			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing), 내가 참가한 쉐어링(myJoinSharing)  		
+			@RequestMapping(value="/sharingManagement")
+			public String SharingManagement(HttpSession session, Board board, SharingList sharingList,  Model model,
+					@RequestParam(name = "currentPage", defaultValue = "1") String currentPage) {
 				
-				User1 user1 = ycs.userSelect(user_num);
-				model.addAttribute("user1", user1);		
+				System.out.println("YaController myUploadSharingList start...");
+				
+				int user_num=0;
+				if(session.getAttribute("user_num") != null) {
+					user_num = (int) session.getAttribute("user_num");					
+					User1 user1 = ycs.userSelect(user_num);
+					model.addAttribute("user1", user1);		
+				
+				//myUploadSharingList 게시글 총 수 ----------------------------------------------------------------------------
+				int totalMyUploadsharing = ycs.totalMyUploadsharing(user_num);
+				model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
+				System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
+				
+				//페이징처리 
+				Paging myUploadSharingPaging = new Paging(totalMyUploadsharing, currentPage);
+				board.setUser_num(user_num);
+				board.setStart(myUploadSharingPaging.getStart());
+				board.setEnd(myUploadSharingPaging.getEnd());
+				model.addAttribute(" myUploadSharingPaging" ,  myUploadSharingPaging);
+				System.out.println("YaController myUploadSharingPage start?"+myUploadSharingPaging.getStart());
+				System.out.println(" YaControlloermyUploadSharingPaging total?"+myUploadSharingPaging.getTotal());
+				System.out.println("myUploadSharingPaging End?"+myUploadSharingPaging.getEnd());
+	
+				
+				//myUploadShairngList 조회
+				List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(user_num);
+				System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
+				model.addAttribute("myUploadSharingList", myUploadSharingList);				
+				//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------
+				
+				int totalJoinSharing = 0;
+				totalJoinSharing = ycs.totalJoinSharing(user_num);		
+				System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
+				
+				//페이징처리 
+				Paging myJoinSharingPaging = new Paging(totalJoinSharing, currentPage);
+				sharingList.setUser_num((int) session.getAttribute("user_num"));
+				sharingList.setStart(myJoinSharingPaging.getStart());
+				sharingList.setEnd(myJoinSharingPaging.getEnd());
+				model.addAttribute("myJoinSharingPaging" ,  myJoinSharingPaging);
+				
+				System.out.println("YaController myJoinSharingPaging start?"+myJoinSharingPaging.getStart());
+				System.out.println(" YaControlloermyJoinSharingPaging total?"+myJoinSharingPaging.getTotal());
+				System.out.println("myJoinSharingPaging End?"+myUploadSharingPaging.getEnd());
+				
+				//myJoinSharingList 조회 
+				List<SharingList> myJoinSharingList = ycs.myJoinSharingList(user_num);
+				System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
+				model.addAttribute("myJoinSharingList", myJoinSharingList);
+				
+				//myConfirmSharingList 게시글 총 수 -----------------------------------------------------------------------------
+				int totalConfirmSharing = 0;
+				 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
+				System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
+				
+				//페이징처리 
+				Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage);
+				board.setUser_num((int) session.getAttribute("user_num"));
+				board.setStart(myConfirmSharingPaging.getStart());
+				board.setEnd(myConfirmSharingPaging.getEnd());
+				model.addAttribute("myConfirmSharingPaging" , myConfirmSharingPaging);
+				System.out.println("YaController myConfirmSharingPaging start?"+myConfirmSharingPaging.getStart());
+				System.out.println(" YaControlloer myConfirmSharingPaging total?"+myConfirmSharingPaging.getTotal());
+				System.out.println("myConfirmSharingPaging End?"+myConfirmSharingPaging.getEnd());
+									
+				//myConfirmSharingList 조회 
+				List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(user_num);
+				System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
+				model.addAttribute("myConfirmSharingList", myConfirmSharingList);
 			
-			List<Board> myUploadSharingList = ycs.myUploadSharingList(user_num);
+			}
+				return "ya/mySharingManagement";
+				
+		}	  
 			
-			System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
-			model.addAttribute("myUploadSharingList", myUploadSharingList);
-		}
-			return "ya/mySharingManagement";
-	}	  
+			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링 에서 참가자 리스트 조회 (sharingParticipantsInfo)
 		
-		//마이페이지 쉐어링 관리 - 내가 올린 쉐어링 에서 참가자 리스트 조회 (sharingParticipantsInfo)
-		   /*@ResponseBody
-				public String sharingParticipantsInfo(SharingList sharingList, Model model, @RequestParam("brd_num") int brd_num) {
-					System.out.println("YaController sharingParticipantsInfo start.."); */
-					
-				/* brd_num= sharingList.getBrd_num(); */
+		    @GetMapping(value = "/sharingParticipantsInfo")
+		    @ResponseBody
+		    public List<SharingList>sharingParticipantsList(@RequestParam("brd_num") int brd_num, Model model) {
+		        System.out.println("YaController sharingParticipantsInfo start..");
+		      
+		        System.out.println("Ya sharingParticipantsInfo Received brd_num: " + brd_num);
+		        
+		        List<SharingList> sharingParticipantsList = ycs.sharingParticipantsList(brd_num);
+		        model.addAttribute("sharingParticipantsList", sharingParticipantsList);
+		
+		        return sharingParticipantsList;
+		    }
+		    
+		    //마이페이지 쉐어링 관리(내가 올린 쉐어링)-참가자 승인(state_md:101 업데이트), board의 participants가 1씩 증가 
+		    @PostMapping("/sharingConfirm")
+		    @ResponseBody
+		    public Map<String, Object>sharingConfirm (@RequestParam("brd_num") int brd_num, 
+		    										  @RequestParam("user_num") int user_num, 
+		    										  @ModelAttribute SharingList sharingList) {
+		    	System.out.println("YaController sharingConfirm start...");
+		        System.out.println("YaController sharingConfirm Received user_num: " + user_num);
+			    System.out.println("YaController sharingConfirm Received brd_num: " + brd_num);
+			    
+
+		        // board의 jk detail Sharing으로 participants 확인
+		        Board board = jbs.detailSharing(brd_num);
+		        System.out.println("YaController sharingConfirm board participants : "+board.getParticipants());
+		        board.getApplicants();
+		        
+		        // applicants를 초과하면 에러 반환
+		        if (board.getApplicants() <= board.getParticipants() ) {
+		            Map<String, Object> response = new HashMap<>();
+		            response.put("success", false);
+		            response.put("message", "승인 인원이 모집 인원을 초과하였습니다.");
+		            return response;
+		        }
+ 
+		    	// 참가자 승인 state_md: 101 update 
+			    SharingList updatedSharingList = new SharingList();
+			    updatedSharingList.setBrd_num(brd_num);
+			    updatedSharingList.setUser_num(user_num);
+		    	
+			    int sharingConfirm = 0;
+		    	sharingConfirm = ycs.sharingConfirm(updatedSharingList);		    	
+		    	System.out.println("sharingList participants user_num?"+sharingList.getUser_num());
+		    	sharingList.setState_md(101);
+		    	System.out.println("참가자 승인 완료 :"+sharingList);
+		    
+		        // board의 participants +1 증가
+		       int participantsCnt = 0;
+		       ycs.upParticipantsCnt(brd_num);
+		       
+		        Map<String, Object> response = new HashMap<>();
+		        response.put("success", true);
+		        response.put("message", "승인처리가 완료되었습니다.");
+		        return response;
+		   
+		    }
+		
+		 // 반려처리 , 메세지 sharingList 업데이트, 참가자 승인 state_ md 104
+		 @PostMapping("/sharingReject")
+		 @ResponseBody
+		 public Map<String, Object> sharingReject(
+				 									@RequestParam("brd_num") int brd_num,
+				 									@RequestParam("user_num") int user_num,
+				 									@RequestParam("reject_msg") String reject_msg,
+				 									@ModelAttribute SharingList sharingList) 	{
+		 
+	     System.out.println("YaController sharingreject start...");
+		 Map<String, Object> result = new HashMap<>();
+		 System.out.println("YaController sharingreject Received user_num: " + user_num);
+		 System.out.println("YaController sharingreject Received brd_num: " + brd_num);
+		 System.out.println("YaController sharingreject Received reject_msg: " +reject_msg);
+
+		 try {
+		    	// 참가자 승인 state_md: 101 update & reject message null-->입력 
+			    SharingList updatedRejectSharingList = new SharingList();
+			    updatedRejectSharingList.setBrd_num(brd_num);
+			    updatedRejectSharingList.setUser_num(user_num);
+			    updatedRejectSharingList.setReject_msg(reject_msg);
+			    updatedRejectSharingList.setState_md(104);
+			  
+			    int sharingReject = 0;
+			    
+			    sharingReject= ycs.sharingReject(sharingList);
+	    	
+		    	System.out.println("rejectSharing participants user_num?"+sharingList.getUser_num());
+		    	System.out.println("참가자 반려 완료 :"+sharingList);
+		    	
+			    // board의 jk detail Sharing으로 participants 확인
+		        Board board = jbs.detailSharing(brd_num);
+		        System.out.println("YaController sharingReject board participants : "+board.getParticipants());
+		        
+				/*
+				 * // board의 participants -1 감소 int participantsCnt = 0;
+				 * ycs.downParticipantsCnt(brd_num);
+				 */
+
+		            // 처리가 성공하면 결과 맵에 성공 메시지추가
+		        result.put("success", "true");
+		        result.put("message", "반려가 정상적으로 처리되었습니다.");
+		} catch (Exception e) {
+		            // 처리 중 예외가 발생하면 결과 맵에 실패 메시지 추가
+		        result.put("success", "false");
+		        result.put("message", "반려 처리 중 오류가 발생했습니다. " + e.getMessage());
+		}
+
+		  return result;
+	}
+		 
 	
-	    @GetMapping(value = "/sharingParticipantsInfo")
-	    @ResponseBody
-	    public List<SharingList>sharingParticipantsList(@RequestParam("brd_num") int brd_num, Model model) {
-	        System.out.println("YaController sharingParticipantsInfo start..");
-	      
-	        System.out.println("Ya sharingParticipantsInfo Received brd_num: " + brd_num);
-	        
-	        List<SharingList> sharingParticipantsList = ycs.sharingParticipantsList(brd_num);
-	        model.addAttribute("sharingParticipantsList", sharingParticipantsList);
-	        System.out.println("sharingParticipantsList: "+sharingParticipantsList);
-	        return sharingParticipantsList;
-	    }
-	
-		  
 }		

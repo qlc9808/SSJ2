@@ -12,10 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +37,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.BoardLike;
+import com.oracle.S202350102.dto.ChallengPick;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.chService.ChSearchService;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
@@ -46,6 +53,7 @@ import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
+import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +70,8 @@ public class JkController {
 	private final ChController chcont;
 	private final Level1Service ls;
 	private final UserService us;
+	private final YrBoardLikeService ybls;
+	private final ChSearchService 		chSearchService;
 	
 	
 	//좋아요 기능 컨트롤러
@@ -109,8 +119,6 @@ public class JkController {
 	@RequestMapping(value="/sharing")
 	public String Sharing(Board board, Model model, HttpSession session) {
 		System.out.println("JkController Sharing start...");
-		List<Board> sharing = jbs.sharing(board);
-		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
@@ -118,6 +126,13 @@ public class JkController {
 		}
 		
 		User1 user1 = jbs.userSelect(user_num);
+		
+		// yr 작성
+		// 쉐어링 찜 여부 판단용
+		board.setB_user_num(user_num);
+		
+		List<Board> sharing = jbs.sharing(board);
+		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 		model.addAttribute("user1", user1);
 		model.addAttribute("sharing", sharing);
@@ -159,15 +174,24 @@ public class JkController {
 		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
+		
+		// yr 작성
+		// 찜 여부 판단용
+		BoardLike brdl = new BoardLike();
+		brdl.setBrd_num(brd_num);
+		brdl.setUser_num(user_num);
+		int brdLike = ybls.selectBrdLikeYN(brdl);
 			
 		model.addAttribute("board", board);
 		model.addAttribute("upbiewCnt", upViewCnt);
 		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("loggedIn", user_num!=0);
+		model.addAttribute("brdLike", brdLike);
 	
 	
 	    System.out.println("sessionScope.usernum: " + session.getAttribute("user_num"));
 	    System.out.println("replyCount:" +board.getReplyCount());
+	    
 		return"jk/detailSharing";
 				
 	}
@@ -256,6 +280,7 @@ public class JkController {
 		@PostMapping("/updateSharing2")
 		public String updateSharing2(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
 		    System.out.println("JkController updateSharing2 start...");
+		    
 		    int result = 0;
 			ServletContext servletContext = request.getSession().getServletContext();
 			String realPath = servletContext.getRealPath("/upload/");
@@ -588,5 +613,87 @@ public class JkController {
 	        return "forward:/mypage.jsp";
 	    }
 	}
-}   
+	
+	@RequestMapping(value ="nearbySharing")
+	public String nearbySharing(Board board, Model model, HttpSession session) {
+		System.out.println("JkController nearbySharing Start...");
+
+		int user_num = 0;
+		List<SearchHistory> sHList = null; 
+		
+		// 로그인 회원이면
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+			model.addAttribute("shList", sh);
+			
+		}
+		System.out.println("user_num"+user_num);
+		List<Board> sharing = jbs.sharing(board);
+		System.out.println("JkController list Sharing.size()?"+sharing.size());
+		
+	    model.addAttribute("user_num", user_num);
+	    
+	    List<Map<String, Object>> data = sharing.stream()
+	            .map(b -> {
+	                Map<String, Object> map = new HashMap<>();
+	                map.put("addr", b.getAddr());
+	                map.put("title", b.getTitle());
+	                map.put("user_num", b.getUser_num());  // user_num 추가
+	                map.put("brd_num", b.getBrd_num());    // brd_num 추가
+	                map.put("img", b.getImg());
+	                return map;
+	            })
+	            .collect(Collectors.toList());	
+	    
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	        String addrJson = objectMapper.writeValueAsString(data);
+	        model.addAttribute("addrJson", addrJson);
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	    }
+
+	    return "nearbySharing";
+	}
+	
+	@GetMapping("srchSharing")
+	@ResponseBody
+	public Map<String, Object> srchSharing(String srch_sharing, Board board, HttpSession session, Model model) {
+		System.out.println("JkController srchSharing Start...");
+		
+		String replSrch_word = srch_sharing.replace(" ", "");
+		int user_num = 0;
+		List<Board> srch_shareResult = null; // sharing 검색 결과 List
+		
+		if(srch_sharing != "" && srch_sharing != null) { // 검색어가 null이 아니면 
+			if(session.getAttribute("user_num") != null) {
+				if(srch_sharing != null) {
+					user_num = (int) session.getAttribute("user_num");
+					User1 user1 = jbs.userSelect(user_num);
+					SearchHistory sh = new SearchHistory();
+					sh.setSrch_word(replSrch_word);
+					sh.setUser_num(user1.getUser_num());
+					int result = chSearchService.saveWord(sh);
+					if(result == 0) {
+						chSearchService.updateHistory(sh);
+						
+					}
+				}
+				List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+				model.addAttribute("shList", sh);
+				
+			}
+			// 입력된 키워드에 따라 검색 
+			srch_shareResult = chSearchService.shareSearching(replSrch_word);
+		}
+		
+		Map<String, Object> resultMap = new HashMap<>();
+	    resultMap.put("srch_sharing", srch_sharing);
+	    resultMap.put("srch_shareResult", srch_shareResult);
+
+		    return resultMap;
+	}
+	}
+   
 	

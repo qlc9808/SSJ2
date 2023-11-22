@@ -19,13 +19,19 @@
 	<![CDATA[
 		Select Rownum As rn, b.*
 		FROM	(
-		        Select b.*, u.nick, replyCount(b.brd_num) replyCount, 
-		                Row_Number() Over (Order By brd_group Desc, brd_step) As row_num                
+		        Select b.*, u.nick, u.img as user_img, replyCount(b.brd_num) replyCount,
+		                count_like(b.brd_num) as like_cnt
+		                , (SELECT 	COUNT(*)
+		                   FROM   	board_like bl
+		                   WHERE 	bl.brd_num = b.brd_num
+		                   AND 		bl.user_num = #{b_user_num}
+		                  ) AS likeyn
+		                , Row_Number() Over (Order By brd_group Desc, brd_step) As row_num
 		        From    board b
 		                INNER JOIN  user1 u On  b.user_num = u.user_num
-		        Where   brd_md				= 	100
-		                and     brd_lg		=	700
-		                and     chg_id		=	#{chg_id}
+		        Where   brd_md	= 	100
+                and     brd_lg	=	700
+                and     chg_id	=	#{chg_id}
 		        ) b
 		Where b.row_num Between #{start} 
 						And 	#{end}

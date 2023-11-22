@@ -27,6 +27,9 @@ public interface JkBoardService {
 	void			commentDeleteSharing(Board board);
 	int 			commentCountSharing(int brd_num);
 	
+	// 주변 쉐어링
+	List<Board> 	sharingResult(Board board);
+	
 	
 
 	

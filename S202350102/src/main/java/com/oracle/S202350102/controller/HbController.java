@@ -56,16 +56,11 @@ public class HbController {
 	
 	// 문의게시판 리스트
 	@RequestMapping("qBoardList")
-	public String qBoardList(Board board, 
+	public String qBoardList(@ModelAttribute Board board, 
 							 Model model,
 							 String currentPage,
-							 String keyword,
-							 String searchType,
-							 String category,
 							 HttpSession session) {
-		board.setKeyword(keyword);
-		board.setSearchType(searchType);
-		board.setCategory(category);
+		String keyword = board.getKeyword();
 		if ( keyword == null ) {
 			// 유저 세션 불러오기
 			int user_num = 0;
@@ -182,19 +177,27 @@ public class HbController {
 	
 	// 문의게시판 수정로직
 	@RequestMapping("qBoardUpdate")
-	public String qBoardUpdate(Board board, HttpServletRequest request) {
-		System.out.println("qBoardUpdate contoller start...");
-		int result = 0;
-		result = qbs.qBoardUpdate(board);
+	public String qBoardUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/qBoard/");
+		int delResult = 0;
+		if (file1.getSize() != 0 ) {
+			String deleteFile = uploadPath + board.getImg();
+			delResult = fileDelete(deleteFile);
+		}
 		
-		request.setAttribute("brd_num", board.getBrd_num());
+		if (delResult != 0) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			board.setImg(saveName);
+		}
+		int result = qbs.qBoardUpdate(board);
 		
-		return "forward:qBoardDetail";
+		return "forward:qBoardDetail?&brd_num="+board.getBrd_num();
 	}
 	
 	// 글작성 페이지
 	@RequestMapping("qBoardWriteForm")
 	public String qBoardInsertForm(Model model, HttpSession session) {
+		
 		
 		int user_num = 0;
 		if (session.getAttribute("user_num") != null) {
@@ -215,7 +218,7 @@ public class HbController {
 											 HttpServletRequest request,
 											 @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {	
 		
-		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/qBoard/");
 		System.out.println("uploadPath->" + uploadPath);
 		System.out.println("originalName : " + file1.getOriginalFilename());
 		System.out.println("fileByte : " + file1.getBytes());
@@ -242,18 +245,43 @@ public class HbController {
 	
 	// 글삭제
 	@RequestMapping("qBoardDelete")
-	public String qBoardDelete(int brd_num, Model model, HttpSession session) {
+	public String qBoardDelete(@ModelAttribute Board board, Model model, HttpSession session, HttpServletRequest request) {
+		int brd_num = board.getBrd_num();
+		String img = board.getImg();
 		int user_num = 0;
 		if (session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
 		int result = qbs.qBoardDelete(brd_num);
 		
+		if ( result > 0 ) {
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/qBoard/");
+			String deleteFile = uploadPath + img;
+			int delResult = fileDelete(deleteFile);
+			
+			System.out.println("delResult -> " + delResult);
+		}
+		
 		model.addAttribute("result",result);
 		
 		return "forward:qBoardList";
 	}
 	
+	private int fileDelete(String deleteFile) {
+		int result = 0;
+		File file = new File(deleteFile);
+		if (file.exists()) {
+			if (file.delete()) {
+				result = 1;
+			} else {
+				result = 0;
+			}
+		} else {
+			result = -1;
+		}
+		return result;
+	}
+
 	// 레벨 리스트
 	@RequestMapping("level")
 	public String levelView(Model model, HttpSession session) {
@@ -374,4 +402,8 @@ public class HbController {
 		return savedName;
 	}
 	
+	@RequestMapping(value = "test2")
+	public String test() {
+		return "hb/test2";
+	}
 }

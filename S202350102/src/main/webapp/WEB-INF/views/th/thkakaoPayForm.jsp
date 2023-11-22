@@ -6,10 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>구독하기</title>
-<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif;} 
-</style>
 </head>
 <body>
 
@@ -68,7 +64,7 @@
 		
 		                <!-- Button -->
 		                <form method="post" action="/thKakaoPay">
-			                <button class="btn btn-sm btn-outline-dark" type="submit">
+			                <button class="btn btn-sm btn-outline-dark" type="submit" name="mem_num" value="1">
 			                 	결제하기
 			                </button>
 						</form>

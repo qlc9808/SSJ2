@@ -4,60 +4,82 @@ import java.util.List;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 
 public interface JhCallengeService {
 
-	Challenge 		chgDetail(int chg_id);
+	Challenge 			chgDetail(int chg_id);
 
 
-	List<Board> 	chgReviewList(Board board);
+	//chgReviewList랑 reviewReplyList를 합칠 수 없는가 생각해보기
+	List<Board> 		chgReviewList(Board board);
+
+	
+	List<Board>			reviewReplyList(Board board);
+	
+
+	String 				userStatus(int userNum);
 
 
-	String 			userStatus(int userNum);
+	Board 				reviewContent(int brd_num);
 
 
-	Board 			reviewContent(int brd_num);
+	int 				reviewTotal(int chg_id);
 
 
-	List<Board>		reviewReplyList(Board board);
+	int 				ingChgListTotal();
 
 
-	int 			reviewTotal(int chg_id);
+//	List<Challenge> 	ingChgRecentList(Challenge challenge);
 
 
-	int 			ingChgListTotal();
+//	List<Challenge> 	ingChgPickList(Challenge challenge);
 
 
-	List<Challenge> ingChgRecentList(Challenge challenge);
+	void 				replyInsert(Board board);
 
 
-	List<Challenge> ingChgPickList(Challenge challenge);
+	int 				replyDelete(int brd_num);
 
 
-	void 			replyInsert(Board board);
+	void 				viewCntUp(int brd_num);
 
 
-	int 			replyDelete(int brd_num);
+	int 				replyUpdate(Board board);
 
 
-	void 			viewCntUp(int brd_num);
+	int 				reviewPost(Board board);
 
 
-	int 			replyUpdate(Board board);
+	int 				reviewUpdate(Board board);
 
 
-	int 			reviewPost(Board board);
+	int 				reviewDelete(int brd_num);
 
 
-	int 			reviewUpdate(Board board);
+	int 				boardImgDelete(int brd_num);
 
 
-	int 			reviewDelete(int brd_num);
+	List<Challenge> 	recomChgList(int chg_md);
 
 
-	int 			boardImgDelete(int brd_num); 
+	List<Comm> 			category(int categoryLd);
+
+
+	int 				chgApplication(Challenge chg);
+
+
+	List<Challenge> 	chgAdminList(Challenge challenge);
+
+
+	List<Challenge> 	chgAplList(Challenge challenge);
+
+
+	int 				chgListTotal(int state_md);
+  
  
-      
+	
+        
        
  
 

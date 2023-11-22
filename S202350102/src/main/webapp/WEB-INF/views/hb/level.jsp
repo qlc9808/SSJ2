@@ -6,11 +6,32 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- CSS start -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+<!-- Favicon -->
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+
+<!-- Libs CSS -->
+<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+
+<!-- Theme CSS -->
+<link rel="stylesheet" href="./assets/css/theme.bundle.css" />    
+    
+<!-- JAVASCRIPT -->
+<!-- Map (replace the API key to enable) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnKt8_N4-FKOnhI_pSaDL7g_g-XI1-R9E"></script>
+
+<!-- Vendor JS -->
+<script src="./assets/js/vendor.bundle.js"></script>
+
+<!-- Theme JS -->
+<script src="./assets/js/theme.bundle.js"></script>
 <link rel="stylesheet" href="css/level.css">
 </head>
 <body>
 
-       	<button id="modalOpenBtn">열기</button>
+       	<button id="modalOpenBtn">경험치 정보</button>
 		<div id="modal">
 			<div class="hidden" id="modalContainer">
 				<div id="modalContent">
@@ -29,15 +50,15 @@
 						</div>
 						<div class="userInfoBox2">
 							<span class="user_exp">
-								<label>현재 경험치: ${user1.user_exp }</label>
+								<label>현재 경험치 ${user1.user_exp }</label>
 							</span>
 							<span class="remain_exp">
-								<label>남은 경험치: ${user1.remain_exp }</label>
+								<label>남은 경험치 ${user1.remain_exp }</label>
 							</span>
 						</div>
 
 					</div>
-					<button id="levelInfoBtn">레벨정보</button>
+					<button id="levelInfoBtn">레벨표 보기</button>
 					<div class="hidden" id="level_info_container">
 						<table border="1" style="width:500px;">
 							<thead>

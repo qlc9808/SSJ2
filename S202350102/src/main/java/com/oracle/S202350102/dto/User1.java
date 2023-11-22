@@ -2,6 +2,8 @@ package com.oracle.S202350102.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -13,6 +15,7 @@ public class User1 {
 	private String 	nick;			// 닉네임
 	private String 	user_name;		// 이름
 	private String 	email;			// 이메일
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date   	birth;			// 생년월일
 	private String 	addr;			// 주소
 	private String 	tel;			// 전화번호
@@ -28,6 +31,7 @@ public class User1 {
 	private int 	user_exp;		// 경험치
 	private int 	report_cnt;		// 신고횟수
 	private int 	subs_amount;	// 결제금액
+	private String	zipCode;		// 우편번호
 	
 	// board 작성일자 출력용
 	private Date brd_reg_date;

@@ -1,10 +1,10 @@
 package com.oracle.S202350102.controller;
 
-import static org.hamcrest.CoreMatchers.nullValue;
+
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardReChk;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
@@ -41,7 +42,9 @@ import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.chService.ChSearchService;
 import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
+import com.oracle.S202350102.service.thService.ThChgService;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +60,9 @@ public class ChController {
 	private final ChSearchService 		chSearchService;
 	private final ChChallengeService	chChallengeService;
 	private final UserService			userService;
+	private final JhCallengeService 	jhCService;
+	private final ThChgService 			tcs;
+	
 	
 	// notice List 조회 
 	@RequestMapping("/notice")
@@ -280,6 +286,8 @@ public class ChController {
 						
 					}
 				}
+				List<SearchHistory> sh = chSearchService.sHistoryList(user_num);
+				model.addAttribute("shList", sh);
 				
 				
 			}
@@ -300,17 +308,22 @@ public class ChController {
 	}
 	
 	@RequestMapping(value = "srchcommunity")
-	public String srchcommunity(String srch_word,Model model) {
+	public String srchcommunity(String srch_word,Model model, String currentPage) {
 		System.out.println("ChController srchcommunity Start...");
+		
 		String searchTerm = srch_word.replace(" ", "");
+		Board board = new Board();
+		board.setSearch(searchTerm);
 		
 		if(srch_word == null || srch_word=="") {
 			return "redirect:searching";
 		}
 		List<Board> srch_brdResult = chSearchService.brdSearching(searchTerm); // 자유게시판
+		Paging boardPage = new Paging(srch_brdResult.size(), currentPage);
 		
 		model.addAttribute("listCommunity",srch_brdResult);
 		model.addAttribute("srch_word",searchTerm);
+		model.addAttribute("boardPage",boardPage);
 		
 		return "listCommunity";
 	}
@@ -476,6 +489,7 @@ public class ChController {
 						
 					
 				}
+				myChgList(session, model);
 			}
 
 		
@@ -590,10 +604,97 @@ public class ChController {
 		return result;
 	}
 	
-	public void commentAlaram(int brd_num) {
-		
+	
+	@ResponseBody
+	@RequestMapping(value = "fuckingTryShit")
+	public ModelAndView myApplychg(HttpSession session, ModelAndView mav) {
+		System.out.println("ChController myApplychg Start...");
+		Paging page = new Paging(0, null);
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			// 내가 신청한 챌린지
+			
+			Board board = new Board();
+			board.setUser_num(user_num);
+			board.setStart(page.getStart());			
+			board.setEnd(page.getEnd());
+			List<Challenge> mychgList = chChallengeService.myChgList(board);
+			
+			mav.addObject("mychgList", mychgList);
+			mav.setViewName("ch/myApplychg");
+		}
+		return mav;
 	}
 	
+	@RequestMapping("myChgUpdate")
+	public String myChgUpdate(int chg_id,HttpSession session, Model model) {
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			Challenge chg = jhCService.chgDetail(chg_id);
+			if(user_num != chg.getUser_num()) {
+				return "ch/notAnAdmin";
+			}
+			User1 user = userService.userSelect(user_num);
+			model.addAttribute("user", user);
+			model.addAttribute("chg", chg);
+			
+			
+			int categoryLd = 200;
+			List<Comm> category = jhCService.category(categoryLd);
+			
+			model.addAttribute("category", category);
+			
+			List<Challenge> recomChgList = null;
+			if (!category.isEmpty()) {
+			    int firstMdValue = category.get(0).getMd();
+			    
+			    recomChgList = recommendCallenge(firstMdValue);
+				
+			}
+			
+			List<Comm> chgCategoryList = tcs.listChgCategory();
+			model.addAttribute("chgCategoryList", chgCategoryList);
+
+			
+			
+			model.addAttribute("recomChgList", recomChgList);
+			
+			model.addAttribute("user", user);
+			
+			
+			
+		}
+		
+		return "ch/myChgUpdateForm";
+	}
+	
+	
+	public void commentAlaram(int brd_num) {
+		System.out.println("Start commentAlaram....");
+		int result = chBoardService.commentAlarm(brd_num);
+	}
+	
+	public void myChgList(HttpSession session, Model model) {
+		System.out.println("ChController myChgList Start...");
+		Paging page = new Paging(0, null);
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			// 내가 신청한 챌린지
+			
+			Board board = new Board();
+			board.setUser_num(user_num);
+			board.setStart(page.getStart());			
+			board.setEnd(page.getEnd());
+			List<Challenge> mychgList = chChallengeService.myChgList(board);
+			
+			// 참여 중인 챌린지
+			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
+			model.addAttribute("mychgList", mychgList);
+			model.addAttribute("mychgrList", mychgrList);
+		}
+		System.out.println("ChController myChgList End...");
+		
+	}
 	
 	
 	private String uploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
@@ -626,7 +727,17 @@ public class ChController {
 		private Paging page;
 	}
 	
-	
+	public List<Challenge>  recommendCallenge(int chg_md){
+		System.out.println("JhController recommendCallenge Start...");
+		
+		List<Challenge> recomChgList = jhCService.recomChgList(chg_md);
+//		for (Challenge challenge : chgList) {
+//		    System.out.println(challenge.getTitle());
+//		}
+		
+
+		return recomChgList;
+	}
 	
 	
 }

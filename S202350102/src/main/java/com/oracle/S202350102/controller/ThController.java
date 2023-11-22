@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,13 +29,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
-//import com.oracle.S202350102.dto.KakaoPayApprovalVO;
+import com.oracle.S202350102.dto.Order1;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
-//import com.oracle.S202350102.service.thService.ThKakaoPayImpl;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
 import com.oracle.S202350102.service.thService.ThUser1Service;
 
@@ -54,6 +55,7 @@ public class ThController {
 	private final JavaMailSender mailSender;
 	private final Level1Service ls;
 	private final ThChgService tcs;
+	private final JkBoardService jbs;
 	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
@@ -82,6 +84,7 @@ public class ThController {
 		// 형변환한 생년월일을 user1에 담음
 		user1.setBirth(strToDate);
 		
+		System.out.println("user1.getZipCode() --> " + user1.getZipCode());
 		
 		int insertResult = us1.insertUser1(user1);
 		model.addAttribute("insertResult",insertResult);
@@ -105,7 +108,12 @@ public class ThController {
 				session.setAttribute("user_num", loginResult.getUser_num());
 		         int user_num = (int) session.getAttribute("user_num");
 		         ls.userLevelCheck(user_num);
-				System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
+		         
+		         //로그인 성공시 마지막 로그인 날짜 SYSDATE로 업데이트
+		         int updateResult = us1.updateUserLoginDate(user_num);
+		         System.out.println("Thcontroller login updateResult --> " + updateResult);
+		         
+				 System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
 				return "home2";
 			// 탈퇴처리된 아이디 인경우		
 			} else {
@@ -146,7 +154,8 @@ public class ThController {
 	@PostMapping(value = "/deleteUser1")
 	public String deleteUser1(User1 user1, HttpSession session, Model model) {
 		System.out.println("ThController deleteUser1 Start... ");
-		int deleteUserCnt = us1.deleteUser(user1); // 회원상태 탈퇴여부 N에서 Y로 변경
+		// 회원상태 탈퇴여부 N에서 Y로 변경, 탈퇴일자 추가
+		int deleteUserCnt = us1.deleteUser(user1); 
 		System.out.println("ThController deleteUserCnt result --> " + deleteUserCnt);
 		if (deleteUserCnt > 0) {
 			model.addAttribute("deleteUserCnt",deleteUserCnt);
@@ -164,23 +173,42 @@ public class ThController {
 		return "th/userSubMng";
 	}
 	
-	@RequestMapping(value = "thKakaoPayForm")
+	@RequestMapping(value = "thkakaoPayForm")
 	public String thKakaoPayForm(HttpSession session, Model model) {
 		if(session.getAttribute("user_num") == null) {
 			return "loginForm";
 		} 
-		return "th/thKakaoPayForm";
+		return "th/thkakaoPayForm";
 	}
 	
 	@GetMapping("/thKakaoPay")
 	public void thKakaoPayGet() {
-		
+		System.out.println("ThController thKakaoPay Get Start...");
 	}
 	
 	@PostMapping("/thKakaoPay")
-	public String thKakaoPay() {
-		System.out.println("ThController thKakaoPay Start...");
-		return "redirect:" + thKakaoPay.kakaoPayReady();
+	public String thKakaoPay(Order1 order1, HttpSession session) {
+		System.out.println("ThController thKakaoPay Post Start...");
+		System.out.println("ThController thKakaoPay Post order1.getMem_num --> "+ order1.getMem_num());
+    	
+		//세션에서 user_num 가져와서, order1 dto에 저장(set)
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			System.out.println("ThController user_num --> " + user_num);
+		} 
+		order1.setUser_num(user_num);
+		System.out.println("ThController thKakaoPay Post order1.getUser_num()--> "+ order1.getUser_num());
+		// 결제시 멤버쉽번호(=상품번호) 가져오면서 주문테이블에 INSERT
+		int insertResult = os1.insertOrder(order1);
+		
+		// 
+		System.out.println("ThController thKakaoPay Post order1table insertResult --> " + insertResult);
+		
+		
+		
+		System.out.println("thKakaoPay.kakaoPayReady(order1) --> " + thKakaoPay.kakaoPayReady(order1));
+		return "redirect:" + thKakaoPay.kakaoPayReady(order1);
 	}
 	
 // 왜 GetMaping만 되지??
@@ -202,21 +230,16 @@ public class ThController {
         log.info("kakaoPaySuccess updateCount : " + updateCount);
        
         Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token);
-
-        // 주문정보(order1)테이블에 값 넣기
-        int insertResult = os1.insertOrder1(user_num, kakaoSucInfo);
-        log.info("kakaoPaySuccess insertResult : " + insertResult);
-        
-        
-        
+                
         model.addAttribute("info", kakaoSucInfo);
         return "th/kakaoPaySuccess";
     }
 	
-    @PostMapping("/kakaoPayCancel")
+    @GetMapping("/kakaoPayCancel")
     public String kakaoPayCancel() {
     	
-    	return "home2";
+    	return "th/thkakaoPayForm";
+    	
     }
 
     // 아작스 아이디 중복체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
@@ -395,5 +418,52 @@ public class ThController {
     	
     	return	"th/listUserAdmin";
     }
+    
+    @GetMapping(value = "/delUserByAdmin")
+    public String delUserByAdmin(User1 user1, Model model, String pageNum) {
+    	System.out.println("thController delUserByAdmin Start...");
+    	System.out.println("thController user1.getUser_num() --> " + user1.getUser_num());
+    	System.out.println("thController user1.getDelete_yn() --> " + user1.getDelete_yn());
+    	int deleteResult = 0;
 
+    	// 유저의 탈퇴여부가 N이면 탈퇴 시킴 
+    	if(user1.getDelete_yn().equals("N")) {			// user_num 파라미터 넘겨줌
+    		deleteResult = us1.deleteUserByAdmin(user1.getUser_num());
+    	// 유저의 탈퇴여부가 Y면 다시 활성화 	
+    	} else if (user1.getDelete_yn().equals("Y")) {
+    		deleteResult = us1.activeUserByAdmin(user1.getUser_num());
+		}
+    	System.out.println("thController deleteResult --> " + deleteResult);
+//    	model.addAttribute("pageNum", pageNum);
+    	
+		return "forward:/detailUserByAdmin?user_num="+user1.getUser_num();
+    }
+    
+    @GetMapping(value = "/detailUserByAdmin")
+    public String detailUserByAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    	System.out.println("thController detailUserByAdmin Start...");
+    	user1 = jbs.userSelect(user_num);
+    	model.addAttribute("user1", user1);
+    	model.addAttribute("pageNum",pageNum);
+    	return "th/detailUserByAdmin";
+    }
+    
+    @GetMapping(value = "updateUserFormAdmin")
+    public String updateUserFormAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    	System.out.println("thController updateUserFormAdmin Start...");
+    	user1 = jbs.userSelect(user_num);
+    	model.addAttribute("user1", user1);
+    	model.addAttribute("pageNum", pageNum);
+    	return "th/updateUserFormAdmin";
+    }
+    
+    @GetMapping(value = "/updateUserAdmin")
+    public String updateUserAdmin(User1 user1, String pageNum, Model model) {
+    	System.out.println("thController updateUserAdmin Start...");
+    	int updateResult = us1.updateUserAdmin(user1);
+    	System.out.println("thController updateUserAdmin updateResult -->" + updateResult);
+    	if (updateResult == 1) { return "forward:/detailUserByAdmin?user_num="+user1.getUser_num(); }
+    	else { return "redirect:/updateUserFormAdmin?user_num="+user1.getUser_num(); }
+    	
+    }
 }

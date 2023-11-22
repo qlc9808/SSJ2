@@ -4,60 +4,59 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="/css/qBoardWrite.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript">
-	$(function() {
-	    $('submit').click(function(event) {
-	        var contsValue = $('#conts').val();
-	        $('input[name="conts"]').val(contsValue);
-	    });
-	});
-</script>
 </head>
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
-	<form action="qBoardUpdate" method="post">
-		<input type="hidden" value="${board.brd_num  }" name="brd_num">
-		<input type="hidden" value="${board.brd_md  }" name="brd_md">
-		<table border="1">
-			<tr>
-				<td>글 번호 </td>
-				<td>${board.brd_num }</td>
-			</tr>
-			<tr>
-				<td>제목</td>
-				<td>
-					<input type="text" value="${board.title }" name="title">
-				</td>
-			</tr>
-			<tr>
-				<td>작성자</td>
-				<td>${board.nick }</td>
-				<td><input type="hidden" value="${board.user_num }" name="user_num"></td>
-			</tr>
-	<%-- 	<tr> 파일들어가야됨 근데 난이도높아서 나중에 ㄱㄱ
-				<td>
-					<input type="file" accept="assets/img/${board.img }">
-				</td>
-			</tr> --%>
-			<tr>
-				<td>내용</td>
-				<td>
-					<textarea rows="30" cols="30" id="conts" name="conts">
-						${board.conts }
-					</textarea>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="submit" value="확인" id="submit">
-					<input type="button" value="취소" onclick="location.href='qBoardDetail?brd_num=${board.brd_num}'">
-				</td>
-			</tr>
-		</table>
-	</form>
+	<div class="main">
+		<form class="brd" action="qBoardUpdate" method="post" enctype="multipart/form-data">
+			<input type="hidden" value="${board.brd_num  }" name="brd_num">
+			<input type="hidden" value="${board.brd_md  }" name="brd_md">
+			<input type="hidden" value="${board.img  }" name="img">
+			<input type="hidden" value="${board.user_num }" name="user_num">
+			<input type="hidden" name="brd_lg" value="400">
+			<table class="brd-tb">
+				<tr class="brd-title">
+					<td>제목</td>
+					<td><input type="text" name="title" value="${board.title }" name="title" required="required"></td>
+				</tr>
+				<tr class="brd-line"></tr>
+				<tr class="brd-option">
+					<td>파일</td>
+					<td>
+						<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>
+						<%@ include file="/WEB-INF/views/hb/test.jsp" %>
+					</td>
+					<td>카테고리</td>
+					<td>
+					    <select name="brd_md">
+					        <option value="100" ${board.brd_md == 100 ? 'selected' : ''}>회원관련</option>
+					        <option value="101" ${board.brd_md == 101 ? 'selected' : ''}>버그</option>
+					        <option value="102" ${board.brd_md == 102 ? 'selected' : ''}>챌린지</option>
+					        <option value="103" ${board.brd_md == 103 ? 'selected' : ''}>쉐어링</option>
+					        <option value="104" ${board.brd_md == 104 ? 'selected' : ''}>팔로워</option>
+					        <option value="105" ${board.brd_md == 105 ? 'selected' : ''}>기타/건의</option>
+					    </select>
+					</td>
+				</tr>
+				<tr class="brd-line"></tr>
+				<tr class="brd-conts">
+					<td>내용</td>
+					<td><textarea id="conts" name="conts" required="required">${board.conts }</textarea></td>
+				</tr>
+				<tr class="brd-line"></tr>
+				<tr class="brd-btn">
+					<td colspan="2">
+						<input type="submit" value="확인" id="submit">
+						<input type="button" value="취소" onclick="location.href='qBoardDetail?brd_num=${board.brd_num}'">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
 <c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
 </html>

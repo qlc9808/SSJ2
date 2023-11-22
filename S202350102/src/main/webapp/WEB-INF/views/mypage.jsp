@@ -1,15 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header4.jsp" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
     <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <title>Insert title here</title>
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <script src="./js/jquery.js"></script>
 <script type="text/javascript">
+	$(function(){
+		alert('test');
+		$.ajax(
+				{
+					
+					url: "fuckingTryShit",
+					dataType:"html",
+					success:function(data){
+						
+						$("#myApllyChg").html(data);
+					}
+				}		
+			);
+		
+		
+		
+	})
+	
+
+	function clickLoad() {
+		 var flkty = $('#recomSlider').data('flickity');
+         if (flkty) {
+             flkty.destroy();
+         }
+       //Flickity 초기화
+		 initFlickity();
+	}
+	function initFlickity() {
+		
+	    // Flickity 초기화 초기화 위해 객체 생성
+	    var flkty = new Flickity('#recomSlider', {
+	        prevNextButtons: true,
+	        cellAlign: 'left',
+	        
+	    });
+	    //리턴값을 줘서 사용(없어도 됨)
+	    return flkty;
+	}
+	
+	
 	function myContsDelete(brd_md, brd_num){
 		var brdMd = brd_md;
 		var brdNum = brd_num;
@@ -260,327 +303,446 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
     margin-right: 5px;
 }
 
+.flickity-viewport {  
+	  height: 400px !important;	  
+	}
 
+.flickity-cell {
+  width: 50%; /* half-width */
+  height: 400px;
+  margin-right: 10px;
+}
+
+ #recomSlider .flickity-slider{
+	width: 100% !important; /* half-width */
+}
 
 </style>
-<body>
- <div class="container">
-         <div class="row profile">
-            <div class="col-md-3">
-                <%@ include file="mypageMenu.jsp" %>
-            </div>
-             <div class="col-md-9 profile-form">
-<!-- 필수!! -->
 
+<body>
+<div class="container">
+	<div class="row profile">
+		<div class="col-md-3">
+        	<%@ include file="mypageMenu.jsp" %>
+        	
+		</div>
+      	<div class="col-md-9 profile-form">
+			<!-- 필수!! -->
+		
 		 <!-- CATEGORIES -->
 
-      <div class="container" style="width : 75%">
-        <div class="row">
-          <div class="col-12">
+		<div class="container">
+	        <div class="row">
+	        	<div class="col-12">	
+	            	<!-- Heading -->
+	            	<h5 class="mb-4">챌린지 목록</h5>
+	            
+		            <!-- Nav -->
+		            <div class="nav justify-content-center mb-10">
+		            	<a class="nav-link active" href="#myParty" data-bs-toggle="tab">참여 챌린지</a>
+		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab"   onclick="clickLoad()">신청한 챌린지</a>
+		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">최근 본 챌린지</a>
+		            	<a class="nav-link" href="#chgPickTab" data-bs-toggle="tab">찜한 챌린지</a>
+		            </div>	
+		            
+	            	<!-- Content -->
+		            <div class="tab-content">	
+		            	<!-- Pane -->
+		            	<div class="tab-pane fade show active" id="myParty">
+		            	  <!-- Slider -->
+			                <div id="recomSlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			                  
 
-            <!-- Heading -->
-            <h5 class="mb-4">챌린지 목록</h5>
-            <!-- Nav -->
-            <div class="nav justify-content-center mb-10">
-              <a class="nav-link active" href="#topSellersTab" data-bs-toggle="tab">참여 챌린지</a>
-              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">신청한 챌린지</a>
-              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">최근 본 챌린지</a>
-              <a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">찜한 챌린지</a>
-            </div>
+                  			<!-- Item2 참여한 챌린지 -->
+			                  <c:forEach items="${mychgrList }" var="chg">
+				                  <div class="col px-4" style="max-width: 400px;">
+				                    <div class="card">
+				
+				                      <!-- Image -->
+				                     
+				
+					                  <!-- Button -->
+					                  <button class="btn btn-xs w-100 btn-dark card-btn">
+					                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
+					                  </button>
+					
+					                  
+					                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
+					                  <c:if test="${chg.thumb != null}">
+					                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+					                  </c:if>
+					                  <c:if test="${chg.thumb == null}">
+					                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+					                  </c:if>
+									  </a>
+				
+				                      <!-- Body -->
+				                      <div class="card-body py-4 px-0 text-center">
+				
+						                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+						                <div class="text-muted"> 
+						                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+						                  ~ 
+						                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+						                 </div>
+						                <div class="text-muted">참여인원: ${chg.chlgerCnt}
+						            	</div>
+							            	
+				                      </div>
+				
+				                    </div>
+				                  </div>
+			                  </c:forEach>
 
-            <!-- Content -->
-            <div class="tab-content">
+			                	         
+			                </div> <!-- slider -->
+		
+		            	</div> <!-- topSellertsTab -->
+		            	
+		            	
+		            	<div class="tab-pane fade" id="myApllyChg">
+		            	  	<!-- Slider -->
+			               <%--  <div id="recomSlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
+							
+			                  
 
-              <!-- Pane -->
-              <div class="tab-pane fade show active" id="topSellersTab">
+                  				<!-- Item2 신청한 챌린지 -->
+			                  <c:forEach items="${mychgList }" var="chg" >
+			                  <div class="col px-4" style="max-width: 400px;">
+			                  
+			                    <div class="card">
+			
+			                      <!-- Image -->
+			                      <c:choose>
+									<c:when test="${sessionScope.user_num != null}">
+										<!-- 로그인 한 상태 -->
+										<c:choose>
+											<c:when test="${chg.pickyn > 0}">
+												<!-- 찜하기 있음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:when>
+								
+											<c:otherwise>
+												<!-- 찜하기 없음 -->
+												<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
+													<i class="fe fe-heart"></i>
+												</button>
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+								
+									<c:otherwise>
+										<!-- 로그인 안 한 상태 -->
+										<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button"
+											onclick="location.href='/loginForm'">
+											<i class="fe fe-heart"></i>
+										</button>
+									</c:otherwise>
+								</c:choose>
+			
+				                  <!-- Button -->
+				                  <button class="btn btn-xs w-100 btn-dark card-btn">
+				                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
+				                  </button>
+				
+				                  
+				                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
+				                  <c:if test="${chg.thumb != null}">
+				                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+				                  </c:if>
+				                  <c:if test="${chg.thumb == null}">
+				                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+				                  </c:if>
+								  </a>
+			
+			                      <!-- Body -->
+			                      <div class="card-body py-4 px-0 text-center">
+			
+					                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+					                <div class="text-muted"> 
+					                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+					                  ~ 
+					                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+					                 </div>
+					                <div class="text-muted">참여인원: ${chg.chlgerCnt}
+					            	</div>
+					            	<c:if test="${chg.state_md==100 || chg.state_md==104}">
+				                    	<a href="myChgUpdate?chg_id=${chg.chg_id }">
+				                    		<button type="button">수정</button>
+				                    	</a>
+			                    	</c:if>
+						            	
+			                      </div>
+			
+			                    </div>
+			                    
+			                  </div>
+			                  </c:forEach>
 
-                <!-- Slider -->
-                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
+			                	         
+			            </div> <!-- slider --> --%>
+		
+						<!-- chgPickTab start -->
+						<div class="tab-pane fade" id="chgPickTab">	
+							<%@ include file="/WEB-INF/views/yr/chgPickList.jsp" %>
+		            	</div> <!-- chgPickTab end -->
+		            	
+		        	</div> <!-- tab-content -->
+				</div> <!-- col-12 -->
+			</div> <!-- row -->
+		</div> <!-- container -->
 
 	
-                  <!-- Item -->
-               <div class="col px-4" style="max-width: 200px;">
-                    <div class="card">
-
-                      <!-- Image -->
-                      <img class="card-img-top" src="assets/img/products/product-26.jpg" alt="...">
-
-                      <!-- Body -->
-                      <div class="card-body py-4 px-0 text-center">
-
-                        <!-- Heading -->
-                        <a class="stretched-link text-body" href="shop.html">
-                          <h7>챌린지명 <small>(35)</small></h7>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-          
-                </div>
-                    </div>
-                  </div>
-		</div>
-
+	
       <div class="container"style="margin-top: 60px;">
         <div class="row">
           <div class="col-12">
 
             <!-- Heading -->
-            <h5 class="mb-4">내가 쓴 글</h5>
+            <h5 class="mb-4">내가 쓴 글 </h5>
             <!-- Nav -->
-            <div class="nav justify-content-center mb-10">
-              <a class="nav-link active" href="#myCert-list" data-bs-toggle="tab">인증글</a>
-              <a class="nav-link" href="#myReview-list" data-bs-toggle="tab">후기글</a>
-              <a class="nav-link" href="#myCommu-list" data-bs-toggle="tab">자유글</a>
-              <a class="nav-link" href="#myShare-list" data-bs-toggle="tab">쉐어링</a>
-            </div>
+            <nav class="nav justify-content-center mb-10">
+              <a class="nav-link px-100 active" href="#myCert-list" data-bs-toggle="tab">인증글</a>
+              <a class="nav-link px-100 " href="#myReview-list" data-bs-toggle="tab">후기글</a>
+              <a class="nav-link px-100 " href="#myCommu-list" data-bs-toggle="tab">자유글</a>
+              <a class="nav-link px-100 " href="#myShare-list" data-bs-toggle="tab">쉐어링</a>
+            </nav>
 
             <!-- Content -->
-               <!-------------------------------- 인증글리스트 --------------------------------------->
-        <div class="tab-pane fade show active" id="myCert-list">
-			<div id="myCert">
-				<div class="container">
-					<c:choose>
-		            	<c:when test="${not empty myCertiList }">
-		            		<c:set var="num" value="${myCertiPage.total - myCertiPage.start+1 }"></c:set> 
-			                <table class="boardtable">
-			                    <thead>
-			                        <tr>
-			                            <th scope="col" class="th-num">번호</th>
-			                            <th scope="col" class="th-title">제목</th>
-			                            <th scope="col" class="th-nick">작성자</th>
-			                            <th scope="col" class="th-date">등록일</th>
-			                            <th scope="col" class="th-view_cnt">조회수</th>
-			                            <th  scope="col" class="th-replyCount">댓글수</th>
-			                            <th  scope="col" ></th>
-			                            <th></th>
-			                        </tr>
-			                    </thead>                 
-			                    <tbody id="body${Certi_md }">
-			                        <c:forEach items="${myCertiList }" var="myCertiList">
-			                            <tr id="row${myCertiList.brd_num}">
-			                                <td>${num}</td>
-			                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
-			                                <td>${myCertiList.nick}</td>
-			                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
-			                                <td>${myCertiList.view_cnt}</td>
-							         		<td>${myCertiList.replyCount}</td>
-							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a></td>
-							         		<c:set var="num" value="${num-1}"></c:set> 			       
-			                            </tr>
-			                        </c:forEach>
-			                    </tbody>
-			                </table>
-			                
-							   <div class="page">
-							    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
-							        <a href="listCommunity?currentPage=${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
-							    </c:if>
-							    <c:forEach var="i" begin="${myCertiPage.startPage}" end="${myCertiPage.endPage}">					        
-							        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${i }); return false;" >[${i}]</a>
-							    </c:forEach>
-							    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">
-							        <a href="listCommunity?currentPage=${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
-							    </c:if>
-							</div>            	
-		            	</c:when> 
-		            	
-		            	<c:otherwise>
-		            		<h3>작성한 글이 없습니다.</h3>
-		            	</c:otherwise>
-		            	
-					</c:choose>					
+            <div class="tab-content">
+            	 <!-------------------------------- 인증글리스트 --------------------------------------->
+        		<div class="tab-pane fade show active" id="myCert-list">
+					<div id="myCert">				
+							<c:choose>
+				            	<c:when test="${not empty myCertiList }">
+				            		<c:set var="num" value="${myCertiPage.total - myCertiPage.start+1 }"></c:set> 
+					                <table class="boardtable">
+					                    <thead>
+					                        <tr>
+					                            <th scope="col" class="th-num">번호</th>
+					                            <th scope="col" class="th-title">제목</th>
+					                            <th scope="col" class="th-nick">작성자</th>
+					                            <th scope="col" class="th-date">등록일</th>
+					                            <th scope="col" class="th-view_cnt">조회수</th>
+					                            <th  scope="col" class="th-replyCount">댓글수</th>
+					                            <th  scope="col" ></th>
+					                            <th></th>
+					                        </tr>
+					                    </thead>                 
+					                    <tbody id="body${Certi_md }">
+					                        <c:forEach items="${myCertiList }" var="myCertiList">
+					                            <tr id="row${myCertiList.brd_num}">
+					                                <td>${num}</td>
+					                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
+					                                <td>${myCertiList.nick}</td>
+					                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
+					                                <td>${myCertiList.view_cnt}</td>
+									         		<td>${myCertiList.replyCount}</td>
+									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a></td>
+									         		<c:set var="num" value="${num-1}"></c:set> 			       
+					                            </tr>
+					                        </c:forEach>
+					                    </tbody>
+					                </table>
+					                
+									   <div class="page">
+										    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
+										        <a href="listCommunity?currentPage=${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
+										    </c:if>
+										    <c:forEach var="i" begin="${myCertiPage.startPage}" end="${myCertiPage.endPage}">					        
+										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${i }); return false;" >[${i}]</a>
+										    </c:forEach>
+										    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">
+										        <a href="listCommunity?currentPage=${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
+										    </c:if>
+										</div> 
+									           	
+				            	</c:when> 
+				            	
+				            	<c:otherwise>
+				            		<h3>작성한 글이 없습니다.</h3>
+				            	</c:otherwise>
+				            	
+							</c:choose>			
+					</div>	<!-- myCert -->				
+				</div>   <!-- myCert-list -->
+				<!--------------------------------후기 리스트 --------------------------------------->
+				<div class="tab-pane fade" id="myReview-list">
+					<div id="myReview">				
+						<c:choose>
+			            	<c:when test="${not empty myReviewList }">
+			            		<c:set var="num" value="${myReviewPage.total - myReviewPage.start+1 }"></c:set> 
+				                <table class="boardtable">
+				                    <thead>
+				                        <tr>
+				                            <th scope="col" class="th-num">번호</th>
+				                            <th scope="col" class="th-title">제목</th>
+				                            <th scope="col" class="th-nick">작성자</th>
+				                            <th scope="col" class="th-date">등록일</th>
+				                            <th scope="col" class="th-view_cnt">조회수</th>
+				                            <th  scope="col" class="th-replyCount">댓글수</th>
+				                        </tr>
+				                    </thead>                 
+				                    <tbody id="body${Review_md}">
+				                        <c:forEach items="${myReviewList }" var="myReviewList">
+				                            <tr id="row${myReviewList.brd_num }">
+				                                <td>${num}</td>
+				                                <td><a href="reviewContent?brd_num=${myReviewList.brd_num }&chg_id=${myReviewList.chg_id }">${myReviewList.title}</a></td>
+				                                <td>${myReviewList.nick}</td>
+				                                <td><fmt:formatDate value="${myReviewList.reg_date}" pattern="yyyy-MM-dd"/></td>
+				                                <td>${myReviewList.view_cnt}</td>
+								         		<td>${myReviewList.replyCount}</td>
+								         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Review_md},${myReviewList.brd_num })">삭제</a></td>
+								         		<c:set var="num" value="${num-1}"></c:set> 			       
+				                            </tr>
+				                        </c:forEach>
+				                    </tbody>
+				                </table>
+				                
+								<div class="page">
+								    <c:if test="${myReviewPage.startPage >myReviewPage.pageBlock}">					        
+								        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage-myReviewPage.pageBlock}); return false;" >[이전]</a>
+								    </c:if>
+								    <c:forEach var="i" begin="${myReviewPage.startPage}" end="${myReviewPage.endPage}">					    	
+								        <a href="javascript:void(0);" onclick="pageMove(${Review_md}, ${i }); return false;" >[${i}]</a>
+								    </c:forEach>
+								    <c:if test="${myReviewPage.endPage < myReviewPage.totalPage}">					        
+								        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>
+								    </c:if>
+								</div>            	
+			            	</c:when> 
+			            	
+			            	<c:otherwise>
+			            		<h3>작성한 글이 없습니다.</h3>
+			            	</c:otherwise>
+			            	
+						</c:choose>
+						
+					</div>	<!-- myReview -->
+				</div><!-- myReview-list -->
+				<!--------------------------------쉐어링 리스트 --------------------------------------->
+				<div class="tab-pane fade" id="myShare-list">
+					<div id="myShare">					
+						<c:choose>
+			            	<c:when test="${not empty myShareList }">
+			            		<c:set var="num" value="${mySharePage.total - mySharePage.start+1 }"></c:set> 
+				                <table class="boardtable">
+				                    <thead>
+				                        <tr>
+				                            <th scope="col" class="th-num">번호</th>
+				                            <th scope="col" class="th-title">제목</th>
+				                            <th scope="col" class="th-nick">작성자</th>
+				                            <th scope="col" class="th-date">등록일</th>
+				                            <th scope="col" class="th-view_cnt">조회수</th>
+				                            <th  scope="col" class="th-replyCount">댓글수</th>
+				                            <th  scope="col" ></th>
+				                        </tr>
+				                    </thead>                 
+				                    <tbody id="body${Share_md }">
+				                        <c:forEach items="${myShareList }" var="myShareList">
+				                            <tr id="row${myShareList.brd_num }">
+				                                <td>${num}</td>
+				                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>
+				                                <td>${myShareList.nick}</td>
+				                                <td><fmt:formatDate value="${myShareList.reg_date}" pattern="yyyy-MM-dd"/></td>
+				                                <td>${myShareList.view_cnt}</td>
+								         		<td>${myShareList.replyCount}</td>
+								         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Share_md},${myShareList.brd_num })">삭제</a></td>
+								         		<c:set var="num" value="${num-1}"></c:set> 			       
+				                            </tr>
+				                        </c:forEach>
+				                    </tbody>
+				                </table>
+				                
+								   <div class="page">
+								    <c:if test="${mySharePage.startPage >mySharePage.pageBlock}">
+								        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage-mySharePage.pageBlock}); return false;" >[이전]</a>
+								    </c:if>
+								    <c:forEach var="i" begin="${mySharePage.startPage}" end="${mySharePage.endPage}">
+								        <a href="javascript:void(0);" onclick="pageMove(${Share_md}, ${i }); return false;" >[${i}]</a>
+								    </c:forEach>
+								    <c:if test="${mySharePage.endPage < mySharePage.totalPage}">
+								        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage+mySharePage.pageBlock}); return false;" >[다음]</a>
+								    </c:if>
+								</div>            	
+			            	</c:when> 
+			            	
+			            	<c:otherwise>
+			            		<h3>작성한 글이 없습니다.</h3>
+			            	</c:otherwise>
+			            	
+						</c:choose>
+						
+					</div> <!-- myShare -->
+				</div> <!-- myShare-list -->
+			  
+				<!--------------------------------자유글 리스트 --------------------------------------->
+				<div class="tab-pane fade" id="myCommu-list">
+					<div id="myCommu">
+						
+							<c:choose>
+				            	<c:when test="${not empty myCommuList }">
+				            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
+					                <table class="boardtable">
+					                    <thead>
+					                        <tr>
+					                            <th scope="col" class="th-num">번호</th>
+					                            <th scope="col" class="th-title">제목</th>
+					                            <th scope="col" class="th-nick">작성자</th>
+					                            <th scope="col" class="th-date">등록일</th>
+					                            <th scope="col" class="th-view_cnt">조회수</th>
+					                            <th  scope="col" class="th-replyCount">댓글수</th>
+					                            <th></th>
+					                        </tr>
+					                    </thead>                 
+					                    <tbody id="body${commu_bd }">
+					                        <c:forEach items="${myCommuList }" var="myCommuList">
+					                            <tr>
+					                                <td>${num}</td>
+					                                <td><a href="detailCommunity?user_num=${myCommuList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
+					                                <td>${myCommuList.nick}</td>
+					                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
+					                                <td>${myCommuList.view_cnt}</td>
+									         		<td>${myCommuList.replyCount}</td>
+									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${commu_bd},${myCommuList.brd_num})">삭제</a></td>
+									         		<c:set var="num" value="${num-1}"></c:set> 			       
+					                            </tr>
+					                        </c:forEach>
+					                    </tbody>
+					                </table>
+					                
+									   <div class="page">
+									    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
+									        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
+									    </c:if>
+									    <c:forEach var="i" begin="${myCommuPage.startPage}" end="${myCommuPage.endPage}">					        
+									        <a href="javascript:void(0);" onclick="pageMove(${commu_bd}, ${i }); return false;" >[${i}]</a>
+									    </c:forEach>
+									    <c:if test="${myCommuPage.endPage < myCommuPage.totalPage}">					        
+									        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>					        
+									    </c:if>
+									</div>            	
+				            	</c:when> 
+				            	
+				            	<c:otherwise>
+				            		<h3>작성한 글이 없습니다.</h3>
+				            	</c:otherwise>
+				            	
+							</c:choose>  
+					</div>
 				</div>
-			</div>
-			<!--------------------------------후기 리스트 --------------------------------------->
-			<div class="tab-pane fade" id="myReview-list">
-				<div id="myReview">				
-					<c:choose>
-		            	<c:when test="${not empty myReviewList }">
-		            		<c:set var="num" value="${myReviewPage.total - myReviewPage.start+1 }"></c:set> 
-			                <table class="boardtable">
-			                    <thead>
-			                        <tr>
-			                            <th scope="col" class="th-num">번호</th>
-			                            <th scope="col" class="th-title">제목</th>
-			                            <th scope="col" class="th-nick">작성자</th>
-			                            <th scope="col" class="th-date">등록일</th>
-			                            <th scope="col" class="th-view_cnt">조회수</th>
-			                            <th  scope="col" class="th-replyCount">댓글수</th>
-			                        </tr>
-			                    </thead>                 
-			                    <tbody id="body${Review_md}">
-			                        <c:forEach items="${myReviewList }" var="myReviewList">
-			                            <tr id="row${myReviewList.brd_num }">
-			                                <td>${num}</td>
-			                                <td><a href="reviewContent?brd_num=${myReviewList.brd_num }&chg_id=${myReviewList.chg_id }">${myReviewList.title}</a></td>
-			                                <td>${myReviewList.nick}</td>
-			                                <td><fmt:formatDate value="${myReviewList.reg_date}" pattern="yyyy-MM-dd"/></td>
-			                                <td>${myReviewList.view_cnt}</td>
-							         		<td>${myReviewList.replyCount}</td>
-							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Review_md},${myReviewList.brd_num })">삭제</a></td>
-							         		<c:set var="num" value="${num-1}"></c:set> 			       
-			                            </tr>
-			                        </c:forEach>
-			                    </tbody>
-			                </table>
-			                
-							<div class="page">
-							    <c:if test="${myReviewPage.startPage >myReviewPage.pageBlock}">					        
-							        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage-myReviewPage.pageBlock}); return false;" >[이전]</a>
-							    </c:if>
-							    <c:forEach var="i" begin="${myReviewPage.startPage}" end="${myReviewPage.endPage}">					    	
-							        <a href="javascript:void(0);" onclick="pageMove(${Review_md}, ${i }); return false;" >[${i}]</a>
-							    </c:forEach>
-							    <c:if test="${myReviewPage.endPage < myReviewPage.totalPage}">					        
-							        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>
-							    </c:if>
-							</div>            	
-		            	</c:when> 
-		            	
-		            	<c:otherwise>
-		            		<h3>작성한 글이 없습니다.</h3>
-		            	</c:otherwise>
-		            	
-					</c:choose>
-					
-			</div>
-			<!--------------------------------쉐어링 리스트 --------------------------------------->
-			<div class="tab-pane fade" id="myShare-list">
-				<div id="myShare">
 				
-					<c:choose>
-		            	<c:when test="${not empty myShareList }">
-		            		<c:set var="num" value="${mySharePage.total - mySharePage.start+1 }"></c:set> 
-			                <table class="boardtable">
-			                    <thead>
-			                        <tr>
-			                            <th scope="col" class="th-num">번호</th>
-			                            <th scope="col" class="th-title">제목</th>
-			                            <th scope="col" class="th-nick">작성자</th>
-			                            <th scope="col" class="th-date">등록일</th>
-			                            <th scope="col" class="th-view_cnt">조회수</th>
-			                            <th  scope="col" class="th-replyCount">댓글수</th>
-			                            <th  scope="col" ></th>
-			                        </tr>
-			                    </thead>                 
-			                    <tbody id="body${Share_md }">
-			                        <c:forEach items="${myShareList }" var="myShareList">
-			                            <tr id="row${myShareList.brd_num }">
-			                                <td>${num}</td>
-			                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>
-			                                <td>${myShareList.nick}</td>
-			                                <td><fmt:formatDate value="${myShareList.reg_date}" pattern="yyyy-MM-dd"/></td>
-			                                <td>${myShareList.view_cnt}</td>
-							         		<td>${myShareList.replyCount}</td>
-							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Share_md},${myShareList.brd_num })">삭제</a></td>
-							         		<c:set var="num" value="${num-1}"></c:set> 			       
-			                            </tr>
-			                        </c:forEach>
-			                    </tbody>
-			                </table>
-			                
-							   <div class="page">
-							    <c:if test="${mySharePage.startPage >mySharePage.pageBlock}">
-							        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage-mySharePage.pageBlock}); return false;" >[이전]</a>
-							    </c:if>
-							    <c:forEach var="i" begin="${mySharePage.startPage}" end="${mySharePage.endPage}">
-							        <a href="javascript:void(0);" onclick="pageMove(${Share_md}, ${i }); return false;" >[${i}]</a>
-							    </c:forEach>
-							    <c:if test="${mySharePage.endPage < mySharePage.totalPage}">
-							        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage+mySharePage.pageBlock}); return false;" >[다음]</a>
-							    </c:if>
-							</div>            	
-		            	</c:when> 
-		            	
-		            	<c:otherwise>
-		            		<h3>작성한 글이 없습니다.</h3>
-		            	</c:otherwise>
-		            	
-					</c:choose>
-					
-				</div>
-			</div>
-			<!--------------------------------자유글 리스트 --------------------------------------->
-			<div class="tab-pane fade" id="myCommu-list">
-			<div id="myCommu">
-				
-					<c:choose>
-		            	<c:when test="${not empty myCommuList }">
-		            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
-			                <table class="boardtable">
-			                    <thead>
-			                        <tr>
-			                            <th scope="col" class="th-num">번호</th>
-			                            <th scope="col" class="th-title">제목</th>
-			                            <th scope="col" class="th-nick">작성자</th>
-			                            <th scope="col" class="th-date">등록일</th>
-			                            <th scope="col" class="th-view_cnt">조회수</th>
-			                            <th  scope="col" class="th-replyCount">댓글수</th>
-			                            <th></th>
-			                        </tr>
-			                    </thead>                 
-			                    <tbody id="body${commu_bd }">
-			                        <c:forEach items="${myCommuList }" var="myCommuList">
-			                            <tr>
-			                                <td>${num}</td>
-			                                <td><a href="detailCommunity?user_num=${myCommuList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
-			                                <td>${myCommuList.nick}</td>
-			                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
-			                                <td>${myCommuList.view_cnt}</td>
-							         		<td>${myCommuList.replyCount}</td>
-							         		<td><a href="javascript:void(0);" onclick="myContsDelete(${commu_bd},${myCommuList.brd_num})">삭제</a></td>
-							         		<c:set var="num" value="${num-1}"></c:set> 			       
-			                            </tr>
-			                        </c:forEach>
-			                    </tbody>
-			                </table>
-			                
-							   <div class="page">
-							    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
-							        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
-							    </c:if>
-							    <c:forEach var="i" begin="${myCommuPage.startPage}" end="${myCommuPage.endPage}">					        
-							        <a href="javascript:void(0);" onclick="pageMove(${commu_bd}, ${i }); return false;" >[${i}]</a>
-							    </c:forEach>
-							    <c:if test="${myCommuPage.endPage < myCommuPage.totalPage}">					        
-							        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage+myCommuPage.pageBlock}); return false;" >[다음]</a>					        
-							    </c:if>
-							</div>            	
-		            	</c:when> 
-		            	
-		            	<c:otherwise>
-		            		<h3>작성한 글이 없습니다.</h3>
-		            	</c:otherwise>
-		            	
-					</c:choose>
-					
-			</div>
-       
-       		<!-- Content -->
-			</div>
-	
-	
-	
-	       </div>
-	            
-	            
-	
-	       </div>
-	    </div>
-	    
-		</div>
-        </div>
-    
-</div>
-</div>
+				  
+            </div>     <!-- tab-content -->               
+	     </div><!-- col-12 -->	    
+	    </div> <!-- row -->
+     		</div>
+    	</div>	
+    </div>
 </div>
 
-</div>
-</div>
+
     <button type="button" class="btn btn-primary" onclick="location.href='/chgCommManagement'">챌린지 카테고리 관리</button><p>
     <button type="button" class="btn btn-primary" onclick="location.href='/myConts'">내가 쓴 글 </button><p>
 </body>

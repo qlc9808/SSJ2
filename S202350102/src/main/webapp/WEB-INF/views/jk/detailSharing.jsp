@@ -1,24 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <!-- CSS -->
-<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-    @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -109,29 +97,62 @@
                                 <!-- ... -->
                                 <!-- Submit Buttons -->
                                 <div class="row"> 
-                                <input type="hidden" name="brd_num" value="${board.brd_num}"> 
-                                <input type="hidden" name="b_user_num" value="${board.user_num}">
-								<input type="hidden" name="user_num" value="${sessionScope.user_num}">		
-                                    <div class="col-lg-6 mb-2">			 
-                                      <!--   <button id="openModalButton" class="btn btn-dark w-100" data-toggle="button">
-                                            <i class="fe fe-mail me-2"></i> 구매신청
-                                        </button>     -->
-                                        <!--ya 쉐어링 참가신청 test -------------------------------------------------------------------------->
-   										<button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#infoModal" 
-								  			data-user_num="${sessionScope.user_num}" data-brd_num="${board.brd_num}"> 
-								  			<i class="fe fe-mail me-2"> 참가신청 </i></button>
-  
-    	                             </div>
+                                    <input type="hidden" name="brd_num" value="${board.brd_num}"> 
+                                    <input type="hidden" name="b_user_num" value="${board.user_num}">
+                                    <input type="hidden" name="user_num" value="${sessionScope.user_num}">		
                                     <div class="col-lg-6 mb-2">
-                                        <button class="btn btn-outline-dark w-100" data-toggle="button">
-                                        		    찜하기 <i class="fe fe-heart ms-2"></i>
-                                        </button>
+                                        <!--   <button id="openModalButton" class="btn btn-dark w-100" data-toggle="button">
+                                                                                <i class="fe fe-mail me-2"></i> 구매신청
+                                                                            </button>     -->
+                                        <!--ya 쉐어링 참가신청 test -------------------------------------------------------------------------->
+                                        <button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#infoModal"
+                                            data-user_num="${sessionScope.user_num}" data-brd_num="${board.brd_num}">
+                                            <i class="fe fe-mail me-2"> 참가신청 </i></button>
                                     </div>
                                 </div>
-                                <!-- Additional Text with Registration Link -->
-                                <span class="text-gray-500">마음에 드시는 물건이 있으신가요?<a class="text-reset text-decoration-underline" data-bs-toggle="modal" href="../loginForm"> 회원가입 후 이용하실 수 있습니다!</a></span>
                             </div>
                         </form>
+                        
+                        <!-- yr 작성 -->
+                        <!-- 쉐어링 찜하기 -->
+                        <div class="col-lg-6 mb-2">
+
+                            <c:choose>
+                                <c:when test="${sessionScope.user_num != null}">
+                                    <!-- 로그인 한 상태 -->
+                                    <c:choose>
+                                    
+                                        <c:when test="${brdLike == 1}">
+                                            <!-- 찜 기록 있을 때 -->
+                                            <button class="btn btn-dark w-100 mb-2" data-toggle="button" onclick="sharingPick(${board.brd_num})" id="sharingPick">
+                                                찜하기 <i class="fe fe-heart ms-2"></i>
+                                            </button>	
+                                        </c:when>
+                                        
+                                        <c:otherwise>
+                                            <!-- 찜 기록 없을 때 -->
+                                            <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="sharingPick(${board.brd_num})" id="sharingPick">
+                                                찜하기 <i class="fe fe-heart ms-2"></i>
+                                            </button>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </c:when>
+                                
+                                <c:otherwise>
+                                    <!-- 로그인 안 한 상태 -> 로그인 페이지로 이동 -->
+                                    <button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="location.href='/loginForm'" id="sharingPick">
+                                        찜하기 <i class="fe fe-heart ms-2"></i>
+                                    </button>
+                                </c:otherwise>
+
+                            </c:choose>
+
+                        </div>
+
+                        <!-- Additional Text with Registration Link -->
+                        <span class="text-gray-500">마음에 드시는 물건이 있으신가요?<a class="text-reset text-decoration-underline" data-bs-toggle="modal" href="../loginForm"> 회원가입 후 이용하실 수 있습니다!</a></span>
+                        
                     </div>
                 </div>
             </div>
@@ -242,7 +263,7 @@
 		                console.log('Message:', message);
 
 		                if (result.status === 'success') {
-		                    alert('신청이 완료되었습니다 마이페이지에서 쉐어링 승인상태를 확인해주세요.');
+		                    alert('신청이 완료되었습니다 마이페이지에서 승인상태를 확인해주세요.');
 		                } else {
 		                    alert('신청 저장에 실패했습니다.');
 		                }
@@ -251,9 +272,35 @@
 		                console.error('Error saving sharing info:', error);
 		            });
 		    });
-		});	  
+		});
+
+    
+    // yr 작성
+    // 찜하기 기능
+    function sharingPick(p_index) {
+        // alert("sharingPick" + p_index);
+
+        $.ajax({
+            url: "/likePro",
+            type: "POST",
+            data: { brd_num: p_index },
+            dataType: 'json',
+            success: function (likeResult) {
+                if (likeResult.likeProResult > 0) {
+                    $("#sharingPick").removeClass("btn-outline-dark").addClass("btn-dark");
+                    alert("찜 성공");
+                } else {
+                    $("#sharingPick").removeClass("btn-dark").addClass("btn-outline-dark");
+                    alert("찜 취소");
+                }
+
+            },
+            error: function () {
+                alert("찜하기 오류");
+            }
+        });
+    }
 </script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

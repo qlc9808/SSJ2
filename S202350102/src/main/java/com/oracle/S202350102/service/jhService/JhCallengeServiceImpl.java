@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.oracle.S202350102.dao.jhDao.JhChallengeDao;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Comm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -80,19 +81,17 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return chgListTotal;
 	}
 
-	@Override
-	public List<Challenge> ingChgRecentList(Challenge challenge) {
-		System.out.println("JhCallengeServiceImpl ingChgRecentList Start...");
-		List<Challenge> ingChgRecList = jhChgDao.ingChgRecentList(challenge);
-		return ingChgRecList;
-	}
-
-	@Override
-	public List<Challenge> ingChgPickList(Challenge challenge) {
-		System.out.println("JhCallengeServiceImpl ingChgPickList Start...");
-		List<Challenge> ingChgPicList = jhChgDao.ingChgPickList(challenge);
-		return ingChgPicList;
-	}
+	/*삭제 예정
+	 * @Override public List<Challenge> ingChgRecentList(Challenge challenge) {
+	 * System.out.println("JhCallengeServiceImpl ingChgRecentList Start...");
+	 * List<Challenge> ingChgRecList = jhChgDao.ingChgRecentList(challenge); return
+	 * ingChgRecList; }
+	 * 
+	 * @Override public List<Challenge> ingChgPickList(Challenge challenge) {
+	 * System.out.println("JhCallengeServiceImpl ingChgPickList Start...");
+	 * List<Challenge> ingChgPicList = jhChgDao.ingChgPickList(challenge); return
+	 * ingChgPicList; }
+	 */
 
 	@Override
 	public void replyInsert(Board board) {
@@ -157,6 +156,53 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		
 	}
 
+	@Override
+	public List<Challenge> recomChgList(int chg_md) {
+		System.out.println("JhCallengeServiceImpl recomChgList Start...");
+		
+		List<Challenge> chgList = jhChgDao.recomChgList(chg_md);
+		
+		return chgList;
+	}
+
+	@Override
+	public List<Comm> category(int categoryLd) {
+		System.out.println("JhCallengeServiceImpl category Start...");
+		List<Comm> category = jhChgDao.category(categoryLd);
+		
+		
+		return category;
+	}
+
+	@Override
+	public int chgApplication(Challenge chg) {
+		System.out.println("JhCallengeServiceImpl chgApplication Start...");
+		int result = jhChgDao.chgApplication(chg);
+		return result;
+	}
+
+	@Override
+	public List<Challenge> chgAdminList(Challenge challenge) {
+		System.out.println("JhCallengeServiceImpl chgAdminList Start...");
+		List<Challenge> chgAdminList = jhChgDao.chgAdminList(challenge);
+		
+		return chgAdminList;
+	}
+
+	@Override
+	public List<Challenge> chgAplList(Challenge challenge) {
+		System.out.println("JhCallengeServiceImpl chgAplList Start...");
+		List<Challenge> chgAplList = jhChgDao.chgAplList(challenge);
+		return chgAplList;
+	}
+
+	@Override
+	public int chgListTotal(int state_md) {
+		System.out.println("JhCallengeServiceImpl chgListTotal Start...");
+		int chgListTotal = jhChgDao.chgListTotal(state_md);
+		return chgListTotal;
+	}
+ 
 
 	
 	
