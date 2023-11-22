@@ -291,10 +291,22 @@ public class ChController {
 				
 				
 			}
+			Board srchChg = new Board();
+			Board srchShare = new Board();
+			Board srchCommu = new Board();
+			Board[] srchList = {srchChg, srchShare, srchCommu};
+			
+			for(Board i : srchList) {
+				i.setKeyword(replSrch_word);			
+				i.setStart(1);
+				i.setEnd(5);
+			}
+			
 			// 입력된 키워드에 따라 검색 
-			srch_chgResult = chSearchService.chgSearching(replSrch_word); // 챌린지
-			srch_brdResult = chSearchService.brdSearching(replSrch_word); // 자유게시판
-			srch_shareResult = chSearchService.shareSearching(replSrch_word);
+			srch_chgResult = chSearchService.chgSearching(srchChg); // 챌린지
+			srch_shareResult = chSearchService.shareSearching(srchShare); // 쉐어링			
+			srch_brdResult = chSearchService.brdSearching(srchCommu); // 자유게시판
+			
 		}
 		
 		model.addAttribute("srch_word",replSrch_word);
@@ -313,12 +325,12 @@ public class ChController {
 		
 		String searchTerm = srch_word.replace(" ", "");
 		Board board = new Board();
-		board.setSearch(searchTerm);
+		board.setKeyword(searchTerm);
 		
 		if(srch_word == null || srch_word=="") {
 			return "redirect:searching";
 		}
-		List<Board> srch_brdResult = chSearchService.brdSearching(searchTerm); // 자유게시판
+		List<Board> srch_brdResult = chSearchService.brdSearching(board); // 자유게시판
 		Paging boardPage = new Paging(srch_brdResult.size(), currentPage);
 		
 		model.addAttribute("listCommunity",srch_brdResult);
@@ -606,7 +618,7 @@ public class ChController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "fuckingTryShit")
+	@RequestMapping(value = "myApplychgAjax")
 	public ModelAndView myApplychg(HttpSession session, ModelAndView mav) {
 		System.out.println("ChController myApplychg Start...");
 		Paging page = new Paging(0, null);
@@ -625,6 +637,68 @@ public class ChController {
 		}
 		return mav;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "clickChgResult")
+	public ModelAndView clickChgResult(HttpSession session, ModelAndView mav, Board board, String currentPage) {
+		Paging page = null;
+		System.out.println("ChController clickChgResult Start...->" + board.getKeyword());		
+		board.setKeyword(board.getKeyword().replace(" ", ""));
+		switch (board.getBrd_md()) {
+		case 200:
+			int totalChg = chSearchService.chgSrchTot(board);
+			page = new Paging(totalChg, currentPage);
+			board.setStart(page.getStart());
+			board.setEnd(page.getEnd());
+			List<Challenge> srch_chgResult = null; // chg 검색 결과 List
+			srch_chgResult = chSearchService.chgSearching(board); // 챌린지
+			mav.addObject("srch_chgResult", srch_chgResult);
+			mav.addObject("page", page);
+			mav.setViewName("ch/srch_Result");
+			break;
+			
+		case 102:
+			int totalShare = chSearchService.chgSrchTot(board);
+			page = new Paging(totalShare, currentPage);
+			board.setStart(page.getStart());
+			board.setEnd(page.getEnd());
+			List<Board> srch_ShareResult = null; // chg 검색 결과 List
+			srch_ShareResult = chSearchService.shareSearching(board); // 챌린지
+			mav.addObject("srch_chgResult", srch_ShareResult);
+			mav.addObject("page", page);
+			mav.setViewName("ch/srch_Result");
+			break;
+			
+		case 103:
+			
+			int totalCommu = chSearchService.chgSrchTot(board);
+			page = new Paging(totalCommu, currentPage);
+			board.setStart(page.getStart());
+			board.setEnd(page.getEnd());
+			List<Board> srch_CommuResult = null; // chg 검색 결과 List
+			srch_CommuResult = chSearchService.brdSearching(board); // 챌린지
+			mav.addObject("srch_chgResult", srch_CommuResult);
+			mav.addObject("page", page);
+			mav.setViewName("ch/srch_Result");
+			break;
+
+		default:
+			break;
+		}
+		/*
+		 * int totalChg = chSearchService.chgSrchTot(board); int totalShare =
+		 * chSearchService.chgSrchTot(board); int totalCommu =
+		 * chSearchService.chgSrchTot(board);
+		 */
+		
+		
+		
+				
+		
+		
+		return mav;
+	}
+	
 	
 	@RequestMapping("myChgUpdate")
 	public String myChgUpdate(int chg_id,HttpSession session, Model model) {

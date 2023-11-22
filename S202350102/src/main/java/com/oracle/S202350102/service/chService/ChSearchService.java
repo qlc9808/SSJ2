@@ -11,10 +11,11 @@ import com.oracle.S202350102.dto.SearchHistory;
 public interface ChSearchService {
 
 	int 				saveWord(SearchHistory sh);
-	List<Challenge> 	chgSearching(String srch_word);
-	List<Board> 		brdSearching(String srch_word);
-	List<Board> 		shareSearching(String srch_word);
+	List<Challenge> 	chgSearching(Board board);
+	List<Board> 		brdSearching(Board board);
+	List<Board> 		shareSearching(Board board);
 	List<SearchHistory> sHistoryList(int user_num);
 	void 				updateHistory(SearchHistory sh);
-	void 				deleteHis(SearchHistory sh);	
+	void 				deleteHis(SearchHistory sh);
+	int 				chgSrchTot(Board board);	
 }

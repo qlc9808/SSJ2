@@ -34,12 +34,12 @@ public class ChSearchDaoImpl implements ChSearchDao {
 
 
 	@Override
-	public List<Challenge> chgSearching(String srch_word) {
+	public List<Challenge> chgSearching(Board board) {
 		System.out.println("ChSearchImpl chgSearching Start..");
 		List<Challenge> srch_chgresult = null;
 		
 		try {
-			srch_chgresult = session.selectList("chgResult",srch_word);
+			srch_chgresult = session.selectList("chgResult",board);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChSearchImpl chgSearching e.getMessage()->" + e.getMessage());
@@ -50,14 +50,14 @@ public class ChSearchDaoImpl implements ChSearchDao {
 
 
 	@Override
-	public List<Board> brdSearching(String srch_word) {
+	public List<Board> brdSearching(Board board) {
 		System.out.println("ChSearchImpl brdSearching Start..");
 		
 		List<Board> srch_brdResult = null;
 		
 		
 		try {
-			srch_brdResult = session.selectList("BrdResult",srch_word);
+			srch_brdResult = session.selectList("BrdResult",board);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChSearchImpl chgSearching e.getMessage()->" + e.getMessage());
@@ -67,14 +67,14 @@ public class ChSearchDaoImpl implements ChSearchDao {
 	}
 	
 	@Override
-	public List<Board> shareSearching(String srch_word) {
+	public List<Board> shareSearching(Board board) {
 		System.out.println("ChSearchImpl shareSearching Start..");
 		
 		List<Board> shrResult = null;
 		
 		
 		try {
-			shrResult = session.selectList("shrResult",srch_word);
+			shrResult = session.selectList("shrResult",board);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChSearchImpl chgSearching e.getMessage()->" + e.getMessage());
@@ -123,6 +123,22 @@ public class ChSearchDaoImpl implements ChSearchDao {
 		
 		try {
 			result = session.delete("deleteHis", sh);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChSearchImpl deleteHis e.getMessage()->" + e.getMessage());
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public int chgSrchTot(Board board) {
+		System.out.println("ChSearchImpl deleteHis Start...");
+		int result = 0;
+		
+		try {
+			result = session.selectOne("chgReTotal",board);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ChSearchImpl deleteHis e.getMessage()->" + e.getMessage());
