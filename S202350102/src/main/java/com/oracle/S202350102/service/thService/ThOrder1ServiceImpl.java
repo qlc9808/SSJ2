@@ -21,10 +21,25 @@ public class ThOrder1ServiceImpl implements ThOrder1Service {
 	}
 
 	@Override
-	public Order1 selectOrder(Order1 order1) {
+	public int selectMaxOrderNum() {
 		System.out.println("ThOrder1ServiceImpl selectOrder Start...");
-		Order1 orderResult = od1.selectOrder(order1);
+		int max_order_num = od1.selectMaxOrderNum();
+		return max_order_num;
+	}
+
+	@Override
+	public Order1 selectOrderJoinMem(Order1 order1) {
+		System.out.println("ThOrder1ServiceImpl selectOrderJoinMem Start...");
+		Order1 orderResult = od1.selectOrderJoinMem(order1);
 		return orderResult;
+	}
+
+	@Override
+	public int updateOrderSucess(int order_num) {
+		System.out.println("ThOrder1ServiceImpl updateOrderSucess Start...");
+		int	updateResult = od1.updateOrderSucess(order_num);
+		System.out.println("ThOrder1ServiceImpl updateOrderSucess updateResult --> " + updateResult);
+		return updateResult;
 	}
 
 }

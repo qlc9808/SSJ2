@@ -29,11 +29,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
+import com.oracle.S202350102.dto.KakaoPayApprovalVO;
 import com.oracle.S202350102.dto.Order1;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.main.Level1Service;
+import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
@@ -56,7 +58,7 @@ public class ThController {
 	private final Level1Service ls;
 	private final ThChgService tcs;
 	private final JkBoardService jbs;
-	
+	private final UserService mus;
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
 													   @RequestParam("birth_year")  String birth_year,
@@ -174,11 +176,15 @@ public class ThController {
 	}
 	
 	@RequestMapping(value = "thkakaoPayForm")
-	public String thKakaoPayForm(HttpSession session, Model model) {
+	public String thKakaoPayForm(HttpSession session, Model model, User1 user1) {
 		if(session.getAttribute("user_num") == null) {
 			return "loginForm";
-		} 
-		return "th/thkakaoPayForm";
+		} else {
+			int user_num = (int) session.getAttribute("user_num");
+			user1 = mus.userSelect(user_num);
+			model.addAttribute("user1", user1);
+			return "th/thkakaoPayForm";
+		}
 	}
 	
 	@GetMapping("/thKakaoPay")
@@ -199,46 +205,71 @@ public class ThController {
 		} 
 		order1.setUser_num(user_num);
 		System.out.println("ThController thKakaoPay Post order1.getUser_num()--> "+ order1.getUser_num());
+		// 주문번호 생성
+		int order_num = 0;		
+		// 최대 주문번호 찾기
+		int max_order_num = os1.selectMaxOrderNum(); 
+		// 주문번호에 최대번호+1 부여
+		order_num = max_order_num +1;
+		// 주문번호를 order1 객체(DTO) 저장
+		order1.setOrder_num(order_num);
+		
 		// 결제시 멤버쉽번호(=상품번호) 가져오면서 주문테이블에 INSERT
 		int insertResult = os1.insertOrder(order1);
-		
-		// 
 		System.out.println("ThController thKakaoPay Post order1table insertResult --> " + insertResult);
-		
-		
-		
-		System.out.println("thKakaoPay.kakaoPayReady(order1) --> " + thKakaoPay.kakaoPayReady(order1));
-		return "redirect:" + thKakaoPay.kakaoPayReady(order1);
+
+		// 주문 관련 조회
+		Order1 orderResult = os1.selectOrderJoinMem(order1);
+		System.out.println("ThController thKakaoPay orderResult --> " + orderResult);
+				
+//		
+//		System.out.println("thKakaoPay.kakaoPayReady(order1) --> " + thKakaoPay.kakaoPayReady(orderResult));
+		// kakaoPayReady에서 orderResult를 Order1 order1으로 받음 착각하지 말기
+		return "redirect:" + thKakaoPay.kakaoPayReady(orderResult);
 	}
 	
 // 왜 GetMaping만 되지??
     @GetMapping("/kakaoPaySuccess")
-    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model, HttpSession session) {
+    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model, HttpSession session, Order1 order1, int order_num) {
         log.info("kakaoPaySuccess get............................................");
         log.info("kakaoPaySuccess pg_token : " + pg_token);
         System.out.println("kakaoPaySuccess session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
+        System.out.println("kakaoPaySuccess order_num --> " + order_num);
         
-        
-        // 세션에서 유저 번호 받아옴
-    	int user_num = 0;
-		if(session.getAttribute("user_num") != null) {
-			user_num = (int) session.getAttribute("user_num");
-			System.out.println("ThController user_num --> " + user_num);
-		} 
+
+		int	user_num = (int) session.getAttribute("user_num");
+		 
 		// 결제성공시 회원상태 구독회원으로 변경
         int updateCount = us1.updateUserPrem(user_num);
         log.info("kakaoPaySuccess updateCount : " + updateCount);
-       
-        Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token);
-                
+        
+        // 해당 주문번호의 주문상태를 성공(1)으로, 결제완료날짜를 SYSDATE로  UPDATE
+        int updateResult = os1.updateOrderSucess(order_num);
+        System.out.println("kakaoPaySuccess updateResult --> " + updateResult);
+
+        
+ 
+        
+ 		// order_num을 order1에 담고,
+ 		// 객체째로 못들고 다니므로(approval url에 객체 넣었다가 에러발생함) 주문번호만 가져옴
+ 		order1.setOrder_num(order_num);
+ 		// orderResult 객체에 order1을 담고,
+        Order1 orderResult = os1.selectOrderJoinMem(order1);
+        // kakaoPayInfo에 pg_token과 orderResult를 파라미터로 넣어줌 ( pg_token은  결제승인 api호출시 사용, 결제승인 요청을 인증하는 token 
+        //													  사용자 결제 수단 선택 완료 시, approval_url로 redirection해줄 때 pg_token을 query string으로 전달)
+        Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token, orderResult);
+           
+        
         model.addAttribute("info", kakaoSucInfo);
+        model.addAttribute("order1", orderResult);
+        
         return "th/kakaoPaySuccess";
     }
 	
     @GetMapping("/kakaoPayCancel")
     public String kakaoPayCancel() {
     	
-    	return "th/thkakaoPayForm";
+    	return "redirect:/thkakaoPayForm";
     	
     }
 
@@ -466,4 +497,15 @@ public class ThController {
     	else { return "redirect:/updateUserFormAdmin?user_num="+user1.getUser_num(); }
     	
     }
+    
+	
+	@RequestMapping("/thSubscriptManagement")
+	public String thSubscriptManagement(User1 user1, HttpSession session, Model model, Order1 order1) {
+		System.out.println("thController thSubscriptManagement start...");
+		int	user_num = (int) session.getAttribute("user_num");
+		user1 = mus.userSelect(user_num);
+		
+		model.addAttribute("user1", user1);
+		return "th/subscriptManagement";
+	}
 }

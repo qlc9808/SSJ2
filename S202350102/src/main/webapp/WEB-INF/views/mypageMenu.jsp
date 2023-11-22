@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -74,6 +75,15 @@
              };
              reader.readAsDataURL(file);
          }
+     }
+     
+     function confirmGoSub() {
+    	 if(confirm('구독 회원이 아닙니다 \n구독하기 페이지로 이동하시겠습니까?')){
+    		 location.href = 'thkakaoPayForm'
+    	 } else {
+    		 
+    	 }
+    	 
      }
  </script>
 <style type="text/css">
@@ -410,9 +420,24 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
                                팔로우 관리
                            </a>
-                           <a class="list-group-item list-group-item-action dropend-toggle " href="/subscriptionManagement">
-                               구독 관리
-                           </a>
+                           	
+                           <!-- 일반 회원일때 구독하기 페이지로 이동  -->
+                           <c:if test="${user1.status_md == 100 }">
+	                           <a class="list-group-item list-group-item-action dropend-toggle " href="#" onclick="confirmGoSub()">구독 관리</a>
+                           </c:if>
+                           <!-- 구독자일때 구독관리 창 보임  -->
+                           <c:if test="${user1.status_md == 101 }">
+	                           <a class="list-group-item list-group-item-action dropend-toggle " href="/thSubscriptManagement">구독 관리</a>
+                           </c:if>
+                           <!-- 관리자일때 안보임  -->
+                           <c:if test="${user1.status_md == 102 }">
+								
+                           </c:if>
+                           <!-- 블랙리스트일때 안보임  -->
+                            <c:if test="${user1.status_md == 103 }">
+								
+                           </c:if>
+                           
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/sharingManagement">
                                쉐어링 관리
                            </a>

@@ -34,7 +34,7 @@ public class ThKakaoPayImpl implements ThKakaoPay {
     //결제 요청및 인증
     public String kakaoPayReady(Order1 order1) {
     	System.out.println("ThKakaoPayImpl kakaoPayReady Start...");
-
+    	System.out.println("kakaoPayReady order1 --> " + order1);
         RestTemplate restTemplate = new RestTemplate();
  
         // 서버로 요청할 Header
@@ -46,14 +46,14 @@ public class ThKakaoPayImpl implements ThKakaoPay {
         // 서버로 요청할 Body
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
-        params.add("partner_order_id", "1001");
-        params.add("item_code", "1002");
-        params.add("partner_user_id", "Ssj");
-        params.add("item_name", "프리미엄 구독");
+        params.add("partner_order_id", order1.getOrder_num()+"");
+        params.add("item_code", order1.getMem_num()+"");
+        params.add("partner_user_id", order1.getUser_num()+"");
+        params.add("item_name", order1.getMem_name());
         params.add("quantity", "1");
-        params.add("total_amount", "5000");
+        params.add("total_amount", order1.getPrice()+"");
         params.add("tax_free_amount", "100");
-        params.add("approval_url", "https://localhost:8222/kakaoPaySuccess");
+        params.add("approval_url", "https://localhost:8222/kakaoPaySuccess?order_num=" + order1.getOrder_num());
         params.add("cancel_url", "https://localhost:8222/kakaoPayCancel");
         params.add("fail_url", "https://localhost:8222/kakaoPayFail");
  
@@ -63,7 +63,6 @@ public class ThKakaoPayImpl implements ThKakaoPay {
             kakaoPayReadyVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReadyVO.class);
             
             log.info("" + kakaoPayReadyVO);
-            System.out.println("kakaoPayReadyVO.getNext_redirect_pc_url() --> " + kakaoPayReadyVO.getNext_redirect_pc_url());
             return kakaoPayReadyVO.getNext_redirect_pc_url();
  
         } catch (RestClientException e) {
@@ -76,11 +75,11 @@ public class ThKakaoPayImpl implements ThKakaoPay {
     }
     
     // 결제승인후 값 가져옴
-    public KakaoPayApprovalVO kakaoPayInfo(String pg_token) {
+    public KakaoPayApprovalVO kakaoPayInfo(String pg_token, Order1 order1) {
     	 
         log.info("KakaoPayInfoVO............................................");
         log.info("-----------------------------");
-        
+        System.out.println("kakaoPayInfo order1 --> " + order1);
         RestTemplate restTemplate = new RestTemplate();
  
         // 서버로 요청할 Header
@@ -93,11 +92,11 @@ public class ThKakaoPayImpl implements ThKakaoPay {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
         params.add("tid", kakaoPayReadyVO.getTid());
-        params.add("partner_order_id", "1001");
-        params.add("partner_user_id", "J.JSsj");
-        params.add("item_code", "1002");
+        params.add("partner_order_id", order1.getOrder_num()+"");
+        params.add("partner_user_id", order1.getUser_num()+"");
+        params.add("item_code", order1.getMem_num()+"");
         params.add("pg_token", pg_token);
-        params.add("total_amount", "5000");
+        params.add("total_amount", order1.getPrice()+"");
         
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
         
@@ -115,5 +114,4 @@ public class ThKakaoPayImpl implements ThKakaoPay {
         
         return null;
     }
-    
 }
