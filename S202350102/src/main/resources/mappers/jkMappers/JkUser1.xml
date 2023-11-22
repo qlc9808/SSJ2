@@ -13,8 +13,10 @@
 	        email = #{email},
 	        birth = #{birth}, 
 	        addr = #{addr},
-	        tel = #{tel},
-	        img = #{img}
+	        tel = #{tel}
+	        <if test="img != null">
+            , img = #{img}
+        </if>
 	    WHERE user_id = #{user_id}
 	</update>
 

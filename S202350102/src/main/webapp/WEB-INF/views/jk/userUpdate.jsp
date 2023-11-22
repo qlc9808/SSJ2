@@ -86,7 +86,7 @@
 
                 <!-- Form -->
                 <form action="/updateUser1" method="post" name="frm">
-                  <div class="row">
+                   <div class="row">
                     
                      <!-- 아이디 -->
                     <div class="col-12 col-md-8">
