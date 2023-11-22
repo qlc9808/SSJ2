@@ -53,7 +53,8 @@
                                 <td>${board.view_cnt}</td>
 				         		<td>${board.replyCount}</td>
 				         		<td class="justify-content-center">
-									<button type="button" class="btn btn-secondary btn-xs"  onclick="location.href='/deleteCommunityAdmin?brd_num=${board.brd_num}'">삭제</button>
+									<button type="button" class="btn btn-secondary btn-xs" onclick="confirmDelete(${board.brd_num})">삭제</button>
+									<%-- <button type="button" class="btn btn-secondary btn-xs"  onclick="location.href='/deleteCommunityAdmin?brd_num=${board.brd_num}'">삭제</button> --%>
 								</td>
 				         		<c:set var="num" value="${num-1}"></c:set> 			       
                             </tr>
@@ -90,52 +91,17 @@
 		</div>
 	</div>		
 </div>
-		<!--삭제확인 모달창----------------------------------------------------------------------------------------------------------------->
-		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-		    <div class="modal-dialog modal-sm" role="document"> <!-- 모달 사이즈를 조절 -->
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <h5 class="modal-title" id="deleteModalLabel">게시물 삭제</h5>
-		            </div>
-		            <div class="modal-body">
-		                게시물을 삭제하시겠습니까?
-		            </div>
-		            <div class="modal-footer">
-		                <button type="button" class="btn btn-secondary btn-xs" onclick="clickDel(formInfo)">삭제하기</button> 
-		                <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">취소하기</button>             
-		            </div>
-		        </div>
-		    </div>
-		</div>
-				<form name="formInfo">
-			<input type="hidden" name="brd_num" value="${board.brd_num}">
-		</form>	
-				
-		<script>
-		    // 버튼 클릭 시 모달 열기
-		    document.getElementById('openModalButton').addEventListener('click', function() {
-	
-		        $('#deleteModal').modal('show');
 
-		    });
-		    
-		    // 삭제 시 수행 후 
-		    function clickDel(formInfo) {
-		        // 모달에서 저장한 데이터를 가져와 사용
-		        var brdNum = $('#deleteModal').data('brdNum');
-		        var pageNum = $('#deleteModal').data('pageNum');
-		        // 삭제 작업 수행 후 페이지 이동
- 		    	formInfo.action = "/deleteCommunityAdmin?brd_num=${board.brd_num}" ;
-		    	formInfo.method = "GET";
-		    	formInfo.submit(); 
-		    
-		    }
-		    
-		    // 취소 버튼 클릭 시 모달 닫기
-		    document.querySelector('.modal-footer button[data-dismiss="modal"]').addEventListener('click', function() {
-		        $('#deleteModal').modal('hide');
-		    });
-		</script>		
+<script>
+    function confirmDelete(brd_num) {
+        if (confirm("게시글을 삭제하시겠습니까?")) {
+            // 사용자가 확인을 클릭하면 삭제를 진행합니다.
+            location.href = '/deleteCommunityAdmin?brd_num=' + brd_num;
+        } else {
+            // 사용자가 취소를 클릭하면 아무 일도 일어나지 않습니다.
+        }
+    }
+</script>
 
 
 <div class="py-10"></div>
