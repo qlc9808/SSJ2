@@ -38,7 +38,10 @@
 		            	진행중 
             		</c:when>
             		<c:when test="${state_md ==103 }">
-            			종료
+            			종료된
+            		</c:when>
+            		<c:when test="${state_md ==104 }">
+            			반려된
             		</c:when>
             		<c:otherwise>
             			신청
@@ -92,10 +95,19 @@
 					<th>챌린지명</th>
 					<th>개설자</th>
 					<th>공개여부</th>
-					<th>시작일</th>
+					<c:choose>
+						<c:when test="${state_md == 100 || state_md == 104}">
+							<th>신청일</th>
+						</c:when>
+						<c:otherwise>
+							<th>시작일</th>
+						</c:otherwise>
+					</c:choose>
 					<th>종료일</th>
-					<th>참여자</th>
-					<th>찜수</th>
+					<c:if test="${state_md == 100 || state_md == 104 }">
+						<th>신청 상태</th>
+					</c:if>
+					<th>상세보기</th>
 <!-- 					<th>상세보기</th> -->
 				</tr>
 			  </thead>
@@ -104,20 +116,29 @@
 					<tr class="text-center" id="chgList${status.index }">
 						<td>${num }</td>
 						<td>${chgList.ctn }</td>
-						<td><a href="/chgAdminDetail?chg_id=${chgList.chg_id}">${chgList.title }</td>
+						<td><a href="/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }">${chgList.title }</td>
 						<td>${chgList.nick }</td>
 						<td>
 							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
 							<c:if test="${chgList.chg_public == 1 }">비공개</c:if>
 						</td>
-						<td><fmt:formatDate value="${chgList.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+						<c:choose>
+						<c:when test="${state_md == 100 || state_md == 104}">
+							<td><fmt:formatDate value="${chgList.reg_date }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+						</c:when>
+						<c:otherwise>
+							<td><fmt:formatDate value="${chgList.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+						</c:otherwise>
+						</c:choose>
 						<td><fmt:formatDate value="${chgList.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
-						<td>${chgList.chlgerCnt }</td>
-						<td>${chgList.pick_cnt }</td>
 						
-						<!-- <td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/detailUserByAdmin?user_num=&pageNum='">상세보기</button>
-						</td> -->
+						<c:if test="${state_md == 100 || state_md == 104}">
+							<td>${chgList.stateCtn }</td>
+						</c:if>
+												
+						<td class="justify-content-center">
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }'">상세보기</button>
+						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
 				</c:forEach>

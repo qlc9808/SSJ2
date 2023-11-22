@@ -40,13 +40,16 @@
             <!-- Nav -->
             <nav class="mb-10 mb-md-0">
               <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-                <a class="list-group-item list-group-item-action dropend-toggle " href="account-orders.html">
+                <a class="list-group-item list-group-item-action dropend-toggle active" href="../sharing">
                   	전체 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="account-wishlist.html">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-               <a class="btn w-100 btn-dark mb-2" href="checkout.html" style=" margin-top: 50px;">게시글 작성하기
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
+                 	내가 쓴 글
+                </a>
+               <a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
                </a>
                 
               </div>
@@ -103,7 +106,7 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label class="form-label" for="bank_duedate">입금기한 *</label>
-                                        <input class="form-control form-control-sm" id="bank_duedate" name="bank_duedate" type="text" value="" required>
+                                        <input class="form-control form-control-sm" id="bank_duedate" name="bank_duedate" type="text" placeholder="예시) 2023-11-22" value="" required>
                                     </div>
                                 </div>
                             </div>
