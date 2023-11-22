@@ -86,12 +86,6 @@
     	 
      }
  </script>
-<style type="text/css">
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-body{
-    font-family: 'Noto Sans KR', sans-serif;
-}
-</style>
 <style>
 
 .profile {

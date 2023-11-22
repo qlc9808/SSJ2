@@ -189,6 +189,20 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return chgAdminList;
 	}
 
+	@Override
+	public List<Challenge> chgAplList(Challenge challenge) {
+		System.out.println("JhCallengeServiceImpl chgAplList Start...");
+		List<Challenge> chgAplList = jhChgDao.chgAplList(challenge);
+		return chgAplList;
+	}
+
+	@Override
+	public int chgListTotal(int state_md) {
+		System.out.println("JhCallengeServiceImpl chgListTotal Start...");
+		int chgListTotal = jhChgDao.chgListTotal(state_md);
+		return chgListTotal;
+	}
+ 
 
 	
 	

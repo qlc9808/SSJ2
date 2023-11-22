@@ -539,27 +539,79 @@ public class YaController {
 		  
 			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing), 내가 참가한 쉐어링(myJoinSharing)  		
 			@RequestMapping(value="/sharingManagement")
-			public String SharingManagement(HttpSession session, Board board,  Model model) {
+			public String SharingManagement(HttpSession session, Board board, SharingList sharingList,  Model model,
+					@RequestParam(name = "currentPage", defaultValue = "1") String currentPage) {
+				
 				System.out.println("YaController myUploadSharingList start...");
 				
 				int user_num=0;
 				if(session.getAttribute("user_num") != null) {
-					user_num = (int) session.getAttribute("user_num");
-					
+					user_num = (int) session.getAttribute("user_num");					
 					User1 user1 = ycs.userSelect(user_num);
 					model.addAttribute("user1", user1);		
 				
-				List<Board> 	  myUploadSharingList = ycs.myUploadSharingList(user_num);
-				List<SharingList> myJoinSharingList = ycs.myJoinSharingList(user_num);
-				List<Board>		  myConfirmSharingList = ycs.myConfirmSharingList(user_num);
+				//myUploadSharingList 게시글 총 수 ----------------------------------------------------------------------------
+				int totalMyUploadsharing = ycs.totalMyUploadsharing(user_num);
+				model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
+				System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
 				
+				//페이징처리 
+				Paging myUploadSharingPaging = new Paging(totalMyUploadsharing, currentPage);
+				board.setUser_num(user_num);
+				board.setStart(myUploadSharingPaging.getStart());
+				board.setEnd(myUploadSharingPaging.getEnd());
+				model.addAttribute(" myUploadSharingPaging" ,  myUploadSharingPaging);
+				System.out.println("YaController myUploadSharingPage start?"+myUploadSharingPaging.getStart());
+				System.out.println(" YaControlloermyUploadSharingPaging total?"+myUploadSharingPaging.getTotal());
+				System.out.println("myUploadSharingPaging End?"+myUploadSharingPaging.getEnd());
+	
+				
+				//myUploadShairngList 조회
+				List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(user_num);
 				System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
-				model.addAttribute("myUploadSharingList", myUploadSharingList);
+				model.addAttribute("myUploadSharingList", myUploadSharingList);				
+				//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------
+				
+				int totalJoinSharing = 0;
+				totalJoinSharing = ycs.totalJoinSharing(user_num);		
+				System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
+				
+				//페이징처리 
+				Paging myJoinSharingPaging = new Paging(totalJoinSharing, currentPage);
+				sharingList.setUser_num((int) session.getAttribute("user_num"));
+				sharingList.setStart(myJoinSharingPaging.getStart());
+				sharingList.setEnd(myJoinSharingPaging.getEnd());
+				model.addAttribute("myJoinSharingPaging" ,  myJoinSharingPaging);
+				
+				System.out.println("YaController myJoinSharingPaging start?"+myJoinSharingPaging.getStart());
+				System.out.println(" YaControlloermyJoinSharingPaging total?"+myJoinSharingPaging.getTotal());
+				System.out.println("myJoinSharingPaging End?"+myUploadSharingPaging.getEnd());
+				
+				//myJoinSharingList 조회 
+				List<SharingList> myJoinSharingList = ycs.myJoinSharingList(user_num);
 				System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
 				model.addAttribute("myJoinSharingList", myJoinSharingList);
+				
+				//myConfirmSharingList 게시글 총 수 -----------------------------------------------------------------------------
+				int totalConfirmSharing = 0;
+				 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
+				System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
+				
+				//페이징처리 
+				Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage);
+				board.setUser_num((int) session.getAttribute("user_num"));
+				board.setStart(myConfirmSharingPaging.getStart());
+				board.setEnd(myConfirmSharingPaging.getEnd());
+				model.addAttribute("myConfirmSharingPaging" , myConfirmSharingPaging);
+				System.out.println("YaController myConfirmSharingPaging start?"+myConfirmSharingPaging.getStart());
+				System.out.println(" YaControlloer myConfirmSharingPaging total?"+myConfirmSharingPaging.getTotal());
+				System.out.println("myConfirmSharingPaging End?"+myConfirmSharingPaging.getEnd());
+									
+				//myConfirmSharingList 조회 
+				List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(user_num);
 				System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
 				model.addAttribute("myConfirmSharingList", myConfirmSharingList);
-				
+			
 			}
 				return "ya/mySharingManagement";
 				
@@ -590,17 +642,7 @@ public class YaController {
 		        System.out.println("YaController sharingConfirm Received user_num: " + user_num);
 			    System.out.println("YaController sharingConfirm Received brd_num: " + brd_num);
 			    
-		    	// 참가자 승인 state_md: 101 update 
-			    SharingList updatedSharingList = new SharingList();
-			    updatedSharingList.setBrd_num(brd_num);
-			    updatedSharingList.setUser_num(user_num);
-		    	
-			    int sharingConfirm = 0;
-		    	sharingConfirm = ycs.sharingConfirm(updatedSharingList);		    	
-		    	System.out.println("sharingList participants user_num?"+sharingList.getUser_num());
-		    	sharingList.setState_md(101);
-		    	System.out.println("참가자 승인 완료 :"+sharingList);
-		    
+
 		        // board의 jk detail Sharing으로 participants 확인
 		        Board board = jbs.detailSharing(brd_num);
 		        System.out.println("YaController sharingConfirm board participants : "+board.getParticipants());
@@ -614,6 +656,17 @@ public class YaController {
 		            return response;
 		        }
  
+		    	// 참가자 승인 state_md: 101 update 
+			    SharingList updatedSharingList = new SharingList();
+			    updatedSharingList.setBrd_num(brd_num);
+			    updatedSharingList.setUser_num(user_num);
+		    	
+			    int sharingConfirm = 0;
+		    	sharingConfirm = ycs.sharingConfirm(updatedSharingList);		    	
+		    	System.out.println("sharingList participants user_num?"+sharingList.getUser_num());
+		    	sharingList.setState_md(101);
+		    	System.out.println("참가자 승인 완료 :"+sharingList);
+		    
 		        // board의 participants +1 증가
 		       int participantsCnt = 0;
 		       ycs.upParticipantsCnt(brd_num);

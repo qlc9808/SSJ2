@@ -15,7 +15,6 @@
 		INNER JOIN user1 u ON ch.user_num = u.user_num
 		INNER JOIN comm c1 ON ch.chg_lg   = c1.lg   AND ch.chg_md 	= c1.md
 		INNER JOIN comm c2 ON ch.state_lg = c2.lg   AND ch.state_md = c2.md
-
 		WHERE ch.chg_id = #{chg_id}
 	</select>
 	
@@ -173,7 +172,7 @@
 	<!-- 카테고리 가져오기 -->	
 	<select id="jhCategory" parameterType="int" resultType="Comm">
 	    <![CDATA[
-	    SELECT md, ctn
+	    SELECT lg, md, ctn
 	    FROM comm
 	    WHERE lg = #{lg} AND md != 999
 	    ]]>
@@ -226,9 +225,35 @@
         	)
 	</insert>
 	
-	<!-- 챌린지 관리자 리스트 - 카테고리별 + 진행상태별 한번에 처리하기 위함 -->
+	
+	<!-- 신청 챌린지 리스트 -->
+	<select id="jhChgAplList" parameterType="Challenge" resultType="Challenge">
+		SELECT * 
+		FROM (
+		        SELECT rownum rn, chg.*
+		        FROM (
+		                    SELECT  u.nick, u.user_name, ch.*, cc.ctn ctn, cs.ctn stateCtn
+		                    FROM    challenge ch
+		                    INNER JOIN user1 u ON ch.user_num = u.user_num
+		                    INNER JOIN comm cc ON ch.chg_lg = cc.lg AND ch.chg_md = cc.md
+		                    INNER JOIN comm cs ON ch.state_lg = cs.lg   AND ch.state_md = cs.md
+		                    WHERE  ch.state_md =  #{state_md}
+		                    ORDER  BY ch.reg_date desc
+		             ) chg
+		      ) WHERE rn BETWEEN #{start} AND #{end} 
+	</select>
+	
+	<!-- 신청 챌린지 수 -->
+	<select id="jhChgListTotal" parameterType="int" resultType="int">
+		SELECT  COUNT(*)
+		FROM challenge
+		WHERE state_lg = 300
+		AND state_md = #{state_md}
+	</select>
+	
+<!-- 삭제 예정	챌린지 관리자 리스트 - 카테고리별 + 진행상태별 한번에 처리하기 위함
 	<select id="jhChgAdminList" parameterType="Challenge" resultType="Challenge">
-	<!-- 챌린저 수, 좋아요 수도 가져오기 -->
+	챌린저 수, 좋아요 수도 가져오기
 		SELECT  *
 		FROM    (   SELECT  ROWNUM AS rn, chgCtg.* 
 		            FROM    (
@@ -244,8 +269,7 @@
 		            AND     state_md != 999
 		            AND     state_md = 100
 		) WHERE rn BETWEEN 1 AND 10  
-	</select>
-	
+	</select> -->
 	
 	
 	
@@ -256,12 +280,6 @@
 	
 	
 	<!-- 챌린지 목록 관련 미완 -->
-	<select id="jhChgListTotal" parameterType="int" resultType="int">
-		SELECT  COUNT(*)
-		FROM challenge
-		WHERE state_lg = 300
-		AND state_md = #{state_md}
-	</select>
 	
 	
 	<select id="jhChgPickList" parameterType="Challenge" resultType="Challenge">
