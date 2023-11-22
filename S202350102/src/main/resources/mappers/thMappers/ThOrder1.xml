@@ -9,11 +9,22 @@
 			   		VALUES(ORDER_NUM_SEQ.nextval, #{user_num}, #{mem_num}, '카카오페이', SYSDATE, '0')
 	</insert>
 	
-	<insert id="thOrderSelect" parameterType="Order1">
-		SELECT	*
-		FROM	order1
-		WHERE	order_num 	= #{order_num}
-		AND		user_num	= #{user_num}
-		AND		mem_num		= #{mem_num}
-	</insert>
+	<select id="thSelectMaxOrderNum" resultType="int">
+		SELECT  MAX(order_num)
+		FROM    order1
+	</select>
+	
+	<select id="thSelectOrderJoinMem" parameterType="Order1" resultType="Order1">
+		SELECT 	o.*, m.mem_name AS mem_name, m.price AS price
+		FROM	order1 o, membership m
+		WHERE	o.mem_num = m.mem_num
+		AND		order_num = #{order_num}
+	</select>
+	
+	<update id="thUpdateOrderSucess" parameterType="int">
+		UPDATE	order1
+		SET		rslt_status = '1', 
+				suc_date	= SYSDATE
+		WHERE	order_num	= #{order_num}
+	</update>
 </mapper>

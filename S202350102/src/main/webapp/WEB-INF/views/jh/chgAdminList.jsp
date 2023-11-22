@@ -8,11 +8,12 @@
 <title>챌린지 관리자 페이지</title>
 <script type="text/javascript">
 	function fn_sortOpt(){
+		//카테고리 전체일 경우 chg_lg=0, chg_md=0이어야 함
 		var sortOpt = $('#sortOpt').val()
 		var state_md 	= 	${state_md }
 		var chg_lg 		= 	${chg_lg }
-		var chg_md 		= 	$('.nav-link.active').data('md');
-	
+		var chg_md 		= 	$('.nav-link.active').data('md'); //이것 때문에 "전체"에  data-md="0"필요 없으면 string -> int 에러남
+		
 		location.href= '/chgAdminList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
@@ -36,8 +37,11 @@
             		<c:when test="${state_md ==102 }">
 		            	진행중 
             		</c:when>
-            		<c:otherwise>
+            		<c:when test="${state_md ==103 }">
             			종료
+            		</c:when>
+            		<c:otherwise>
+            			신청
             		</c:otherwise>
             	</c:choose>
             	챌린지 관리</h3>
@@ -57,25 +61,24 @@
 
             <!-- Categories -->
             <nav class="nav nav-overflow mb-6 mb-md-0">
-            <!-- chg_lg=${chg_lg }때문에 전체 조회 안됨 -->
               <a class="nav-link  ${chg_md eq 0 ? 'active' : ''}" href="/chgAdminList?state_md=${state_md }" data-md="0">전체</a>
               <c:forEach var="ctg" items="${category }" varStatus="status">
-              	<a class="nav-link ${ctg.md eq chg_md ? 'active' : ''}" href="/chgAdminList?state_md=${state_md }&chg_lg=${chg_lg }&chg_md=${ctg.md }" data-md="${ctg.md}">${ctg.ctn}</a>
+              	<a class="nav-link ${ctg.md eq chg_md ? 'active' : ''}" href="/chgAdminList?state_md=${state_md }&chg_lg=${ctg.lg }&chg_md=${ctg.md }" data-md="${ctg.md}">${ctg.ctn}</a>
               </c:forEach>
             </nav>
 
           </div>
           
+          <c:if test="${state_md == 102 || state_md == 103}">
           <div class="col-12 col-md-3 text-center">
-
              <select class="form-select form-select-xs" id="sortOpt" onchange="fn_sortOpt()"> 
                   <option value="create_date" 	<c:if test="${sortOpt eq 'create_date' }">	selected="selected"</c:if>>최신등록순</option>
                   <option value="pick_cnt" 		<c:if test="${sortOpt eq 'pick_cnt' }">		selected="selected"</c:if>>찜순</option>
                   <option value="participants" 	<c:if test="${sortOpt eq 'participants' }">	selected="selected"</c:if>>참여자순</option>
              </select>
-
-                  
           </div>
+          </c:if>
+          
         </div>
         
 		<div class="col-12">

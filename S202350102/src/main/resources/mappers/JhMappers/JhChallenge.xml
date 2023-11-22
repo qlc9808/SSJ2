@@ -172,7 +172,7 @@
 	<!-- 카테고리 가져오기 -->	
 	<select id="jhCategory" parameterType="int" resultType="Comm">
 	    <![CDATA[
-	    SELECT md, ctn
+	    SELECT lg, md, ctn
 	    FROM comm
 	    WHERE lg = #{lg} AND md != 999
 	    ]]>
@@ -226,6 +226,7 @@
 	</insert>
 	
 	
+	<!-- 신청 챌린지 리스트 -->
 	<select id="jhChgAplList" parameterType="Challenge" resultType="Challenge">
 		SELECT * 
 		FROM (
@@ -242,6 +243,7 @@
 		      ) WHERE rn BETWEEN #{start} AND #{end} 
 	</select>
 	
+	<!-- 신청 챌린지 수 -->
 	<select id="jhChgListTotal" parameterType="int" resultType="int">
 		SELECT  COUNT(*)
 		FROM challenge
