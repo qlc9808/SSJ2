@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +26,12 @@
 				</div>	
 			</div>
 			<div class="qbd-line">
-				<div class="qbd-line-li"></div>
+				<div class="qbd-line-box">
+					<span class="qbd-line-box-text">작성자: ${board.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="qbd-line-box-text">작성일: <fmt:formatDate value="${board.reg_date }" pattern="yyyy-MM-dd"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="qbd-line-box-text">카테고리: ${board.category }</span>
+				</div>
+				<!-- <div class="qbd-line-li"></div> -->
 			</div>
 			
 			<div class="qbd-content">
