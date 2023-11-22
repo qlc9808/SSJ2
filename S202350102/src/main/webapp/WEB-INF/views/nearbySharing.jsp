@@ -8,6 +8,55 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
   <style>
+
+#searchResults {
+  max-height: 800px;
+  overflow-y: auto;
+  border: 1px solid #ddd; /* 테두리 선 추가 */
+  border-radius: 8px; /* 테두리 선 둥글게 */
+  padding: 10px; /* 내부 여백 추가 */
+  background-color: #fff; /* 배경색 추가 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+#searchResults h6 {
+  font-size: 18px; /* 헤딩의 글꼴 크기 변경 */
+  margin-bottom: 15px; /* 아래 여백 추가 */
+}
+
+#searchResults .card {
+  margin-bottom: 20px; /* 카드 사이의 간격 조정 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 각 카드에 그림자 효과 추가 */
+}
+
+#searchResults .card img {
+  border-radius: 8px; /* 이미지를 둥글게 */
+}
+
+#searchResults .card a {
+  text-decoration: none; /* 링크 밑줄 제거 */
+  color: #333; /* 링크 색상 변경 */
+}
+
+#searchResults .card a:hover {
+  color: #FFCCE5; /* 호버 시 링크 색상 변경 */
+}
+
+#searchResults p {
+  margin-top: 8px; /* 문단 위 여백 추가 */
+  font-size: 14px; /* 문단 글꼴 크기 변경 */
+}
+
+#searchResults .btn-outline-dark {
+  transition: background-color 0.3s, color 0.3s; /* 버튼 호버 시 색상 전환 효과 추가 */
+}
+
+#searchResults .btn-outline-dark:hover {
+  background-color: #E56D90; /* 버튼 호버 시 배경색 변경 */
+  color: #fff; /* 버튼 호버 시 글자색 변경 */
+}
+
+
       .map_wrap,
       .map_wrap * {
         margin: 0;
@@ -216,32 +265,36 @@ $(document).ready(function () {
 
         $.each(data.srch_shareResult, function (index, shrResultList) {
         	console.log(shrResultList);
-            if (index < 5) { // 최대 5개까지만 표시
+            if (index < 100) { // 최대 5개까지만 표시
                 var fullImageUrl = "${pageContext.request.contextPath}/upload/" + shrResultList.img;
-                html += "<div class='row align-items-center position-relative mb-4' style='padding: 10px; height: 150px;'>" +
-                    "<div class='col-3 col-md-3'>" +
-                    "<img class='img-fluid' src='" + fullImageUrl + "' alt='Image' style='width: 100px; max-width: 150px; max-height: 150px;'>" +
-                    "</div>" +
-                    "<div class='col-9 col-md-9'>" +
-                    "<p class='mb-0 fw-bold' style='font-size: 16px;'>" +
-                    "<a class='stretched-link text-body' href='detailSharing?user_num=" + shrResultList.user_num + "&brd_num=" + shrResultList.brd_num + "'>" +
-                    shrResultList.title + shrResultList.zipCode +
-                    "</a>" +
-                    "</p>" +
-                    "<p class='mb-0 text-muted' style='font-size: 16px;'>" + new Date(shrResultList.reg_date).toLocaleDateString() + " | " + shrResultList.nick + "</p>" +
-                    "</div>" +
-                    "<div class='col-12'>" +
-                    "<button class='btn btn-primary float-end'>위치 검색</button>" +
-                    "</div>" +
+                html +=
+                    "<div class='card card-lg mb-5 border' style='padding: 10px; overflow: hidden;'>" +
+                        "<div class='row'>" +
+                            "<div class='col-3 col-md-3'>" +
+                                "<img class='img-fluid' src='" + fullImageUrl + "' alt='Image' style='width: 150%; height: 100%; object-fit: cover;'>" +
+                            "</div>" +
+                            "<div class='col-9 col-md-9 simplebar' style='max-height: 400px;'> <!-- simplebar 클래스 추가 및 최대 높이 설정 -->" +
+                                "<div class='d-flex flex-column justify-content-between h-100'>" +
+                                    "<div class='text-left'>" +
+                                        "<a href='detailSharing?user_num=" + shrResultList.user_num + "&brd_num=" + shrResultList.brd_num + "' class='text-body fw-bold' style='font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>" +
+                                            shrResultList.title + "<p class='fs-xs' style='margin-bottom: 10px;'>" + "모집인원 : " + shrResultList.applicants +  " / 참여인원 : " + shrResultList.participants + " / 가격 : " + shrResultList.price + "원" + "</p>" + 
+                                        "</a>" + "<p class='fs-xs' style='margin-bottom: 10px;'>" + shrResultList.addr + "</p>" +
+
+                                    "</div>" +
+                                    "<div class='d-flex justify-content-between' style='margin-top: 10px; overflow: hidden;'>" +
+                                        "<p class='mb-0 text-muted' style='font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>" + new Date(shrResultList.reg_date).toLocaleDateString() +" 판매자:  "+ shrResultList.nick + "</p>" +
+                                        "<a class='btn btn-sm btn-outline-dark' href='detailSharing?user_num=" + shrResultList.user_num + "&brd_num=" + shrResultList.brd_num + "'>자세히 보기</a>" +
+                                    "</div>" +
+                                "</div>" +
+                            "</div>" +
+                        "</div>" +
                     "</div>";
             }
         });
 
         searchResultsContainer.html(html);
-
     }
-    
-    
+     
 });
 
 </script>
@@ -256,7 +309,7 @@ $(document).ready(function () {
           <div class="col-12 col-md-10 col-lg-8 col-xl-8">
 
             <!-- Heading -->
-            <h3 class="mb-5 text-center">내주변 쉐어링</h3>
+            <h3 class="mb-5 text-center">내주변 쉐어</h3>
 			<p class="mb-0 text-muted text-center" >검색어를 입력하면 지도 상에서 해당 지역에 등록된 물품이 마커로 표시됩니다.</p>
             <!-- Search -->
             
@@ -298,14 +351,10 @@ $(document).ready(function () {
           </div>
         </div>
         <!-- 여기리스트 -->
-        <div id="searchResults">
-        <div class="offcanvas-body border-top fs-sm">
+        <div id="searchResults" style="margin-right: 30px;margin-left: 30px;">
+   
         <!-- Heading -->
-        			<div id="addrList">
-    		
-       			 <span>${addr}</span>
-    	
-			</div>
+
     
     <div class="container">
 			<c:if test="${empty srch_shareResult }">
@@ -329,7 +378,7 @@ $(document).ready(function () {
 			
 
 		</div>
-</div>    
+
     
     
        
@@ -344,8 +393,7 @@ $(document).ready(function () {
     <div
       class="map_wrap"
       id="map"
-      style="width: 65%; height: 100%; position: relative; overflow: hidden"
-    ></div>
+      style="width: 65%; height: 100%; position: relative; overflow: hidden; margin-bottom: 100px;"></div>
 
 
 <script>
@@ -399,19 +447,20 @@ function geocodeData(dataItem) {
         });
     });
 }
+
 //Promise 배열 생성
 var geocodePromises = data.map(function (dataItem) {
     return geocodeData(dataItem);
 });
 
 //Promise.all을 사용하여 모든 데이터에 대한 좌표를 얻은 후 처리
-Promise.all(geocodePromises)
-    .then(function (dataWithCoords) {
-        // 모든 좌표를 얻은 후 처리
-        dataWithCoords.forEach(function (item) {
-            if (item) {
-                // 좌표가 유효하면 커스텀 오버레이 생성
-// 예제에서는 가로 길이의 최소 값을 200px로 설정하였습니다.
+	Promise.all(geocodePromises)
+	    .then(function (dataWithCoords) {
+	        // 모든 좌표를 얻은 후 처리
+	        dataWithCoords.forEach(function (item) {
+	            if (item) {
+	                // 좌표가 유효하면 커스텀 오버레이 생성
+	// 예제에서는 가로 길이의 최소 값을 200px로 설정하였습니다.
 var minWidth = 3;
 var fullImageUrl = "${pageContext.request.contextPath}/upload/" + item.img;
 
@@ -429,13 +478,33 @@ var customOverlay = new kakao.maps.CustomOverlay({
             '</div>' +
         '</div>' +
     '</div>',
+    yAnchor: -0.1
+
 });
 
 // CustomOverlay가 지도에 추가되기 전에 각 데이터의 가로 길이를 계산하고 minWidth를 조절하도록 하십시오.
 
 
                 customOverlay.setMap(map);
+             
+             // 마커 이미지 변경
+             	var imageUrl = "/images/jk/icon02.png";
 
+				var markerImage = new kakao.maps.MarkerImage(
+				    imageUrl,
+				    new kakao.maps.Size(50, 50),
+				    { offset: new kakao.maps.Point(25, 35) }
+				);
+
+                // 마커 생성
+                var marker = new kakao.maps.Marker({
+                    position: item.coords,
+                    map: map,
+                    image: markerImage // 변경된 마커 이미지 적용
+                    
+                });
+				
+				
                 // 커스텀 오버레이를 클릭할 때의 이벤트 핸들러 함수
                 function overlayClickHandler() {
                     console.log("Marker or Custom Overlay clicked! User_num: " + item.user_num + ", Brd_num: " + item.brd_num);
@@ -482,8 +551,17 @@ function showPosition(position) {
 
     // 마커 지도에 추가
     marker.setMap(map);
-}
+    map.panTo(markerPosition);
+	
+	}
 
+function moveToMarker(index) {
+    var marker = markers[index].marker;
+    var position = marker.getPosition();
+
+    // 해당 마커의 위치로 지도 이동
+    map.panTo(position);
+}
 </script>
 
 	
