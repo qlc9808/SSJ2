@@ -503,9 +503,16 @@ public class ThController {
 	public String thSubscriptManagement(User1 user1, HttpSession session, Model model, Order1 order1) {
 		System.out.println("thController thSubscriptManagement start...");
 		int	user_num = (int) session.getAttribute("user_num");
+		
+		// 메인에서 유저 정보 가져옴 --> 마이페이지 사이드바에서 사용(구독관리에대한 조건)
 		user1 = mus.userSelect(user_num);
 		
+		// 주문(order1)테이블에서 해당 유저번호를 가지고, 결제 상태가 1(성공)인 값을  조회함
+		order1 = os1.selectOrderSucess(user_num);
+		System.out.println("thController thSubscriptManagement order1 --> " + order1);
+		
 		model.addAttribute("user1", user1);
+		model.addAttribute("order1", order1);
 		return "th/subscriptManagement";
 	}
 }

@@ -27,4 +27,13 @@
 				suc_date	= SYSDATE
 		WHERE	order_num	= #{order_num}
 	</update>
+	
+	<select id="thSelectOrderSucess" parameterType="int" resultType="Order1">
+		SELECT 	o.*, m.mem_name AS mem_name, m.price AS price
+		FROM	order1 o, membership m
+		WHERE	o.mem_num = m.mem_num
+		AND		user_num = #{user_num}
+		AND		rslt_status = '1'
+	</select>
+	
 </mapper>
