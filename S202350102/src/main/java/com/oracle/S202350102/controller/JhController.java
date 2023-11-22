@@ -718,7 +718,8 @@ public class JhController {
 		
 		
 		
-		System.out.println("state_md -> " + challenge.getState_md());
+		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
+		System.out.println("JhController chgAdminList state_md -> " + challenge.getState_md());
 		
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
 		int totalChg 			= 0;
@@ -745,7 +746,7 @@ public class JhController {
 		
 		
 		//진행중,종료 챌린지일 경우
-		if(challenge.getState_md() != 100) {
+		if(challenge.getState_md() == 102 || challenge.getState_md() == 103) {
 			
 			//진행중 챌린지 총수
 			if (challenge.getState_md() ==102  ) {
@@ -764,6 +765,7 @@ public class JhController {
 			//진행중,종료 공통 부분들
 			//페이지네이션
 			page = new Paging(totalChg, currentPage);
+			//페이지 셋팅
 			challenge.setStart(page.getStart());
 			challenge.setEnd(page.getEnd());
 			
@@ -771,7 +773,6 @@ public class JhController {
 			if(sortOpt != null) {
 				challenge.setSortOpt(sortOpt);
 				System.out.println("JhController chgAdminList sortOption --> " + sortOpt);
-				model.addAttribute("sortOpt", sortOpt); //필터(찜순, 최근등록순, 참여자순)
 			}
 				
 			//리스트
@@ -785,17 +786,24 @@ public class JhController {
 		} else {
 			System.out.println("JhController chgAdminList 신청 챌린지 ");
 //			파라미터 chg_lg=200&state_lg=300&state_md=100
-			totalChg = jhCService.chgListTotal(state_md);
-			chgList = jhCService.chgAplList(challenge);
-			System.out.println("JhController chgAdminList listChg.size() --> " + chgList.size());
-			System.out.println("JhController chgAdminList totalChg --> " + totalChg);
+			totalChg = jhCService.chgListTotal(challenge);
 			
+			//페이지 네이션
 			page = new Paging(totalChg, currentPage);
+			//페이지 셋팅
 			challenge.setStart(page.getStart());
 			challenge.setEnd(page.getEnd());
+			
+			chgList = jhCService.chgAplList(challenge);
+			
+			System.out.println("JhController chgAdminList 신청 listChg.size() --> " + chgList.size());
+			System.out.println("JhController chgAdminList 신청 totalChg --> " + totalChg);
+			
+			
 		}
 		
 		
+		model.addAttribute("sortOpt", sortOpt); 	//필터(찜순, 최근등록순, 참여자순)
 		model.addAttribute("totalChg", totalChg); 	//전체 챌린지 수 (신청/진행/종료 공통)
 		model.addAttribute("chgList", chgList);		//챌린지 리스트 (신청/진행/종료 공통)
 		model.addAttribute("page", page);			//페이지네이션  (신청/진행/종료 공통)
@@ -820,8 +828,12 @@ public class JhController {
 	}
 	
 	@RequestMapping(value = "chgAdminDetail")
-	public String chgAdminDetail() {
+	public String chgAdminDetail(Challenge challenge, HttpSession session, Model model) {
+		System.out.println("JhController chgAdminDetail Start...");
 		
+		int state_md = challenge.getState_md();
+		
+		model.addAttribute("state_md", state_md);
 		return "jh/chgAdminDetail";
 		
 	}

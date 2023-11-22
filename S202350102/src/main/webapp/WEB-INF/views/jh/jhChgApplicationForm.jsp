@@ -100,7 +100,6 @@
 <title>당신만의 챌린지를 신청하세요</title>
 </head>
 <body>
-<button onclick="location.href='/modify'"></button>
  <section class="pt-7 pb-12">
       <div class="container">
         <div class="row">

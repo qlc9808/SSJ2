@@ -69,13 +69,13 @@ public interface JhCallengeService {
 	int 				chgApplication(Challenge chg);
 
 
-	List<Challenge> 	chgAdminList(Challenge challenge);
+//	List<Challenge> 	chgAdminList(Challenge challenge);
 
 
 	List<Challenge> 	chgAplList(Challenge challenge);
 
 
-	int 				chgListTotal(int state_md);
+	int 				chgListTotal(Challenge challenge);
   
  
 	

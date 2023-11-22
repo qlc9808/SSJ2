@@ -237,18 +237,32 @@
 		                    INNER JOIN user1 u ON ch.user_num = u.user_num
 		                    INNER JOIN comm cc ON ch.chg_lg = cc.lg AND ch.chg_md = cc.md
 		                    INNER JOIN comm cs ON ch.state_lg = cs.lg   AND ch.state_md = cs.md
-		                    WHERE  ch.state_md =  #{state_md}
+		                    WHERE  
+		                    <choose>
+		                    	<when test="state_md == 100"> ch.state_md = 100</when>
+		                    	<when test="state_md == 104"> ch.state_md = 104</when>
+		                    </choose>
+		                    
+		                    <choose>
+		                    	<when test="chg_md == 100"> AND ch.chg_md = 100 </when>
+		                    	<when test="chg_md == 101"> AND ch.chg_md = 101 </when>
+		                    	<when test="chg_md == 102"> AND ch.chg_md = 102 </when>
+		                    	<when test="chg_md == 103"> AND ch.chg_md = 103 </when>
+		                    </choose>
 		                    ORDER  BY ch.reg_date desc
 		             ) chg
 		      ) WHERE rn BETWEEN #{start} AND #{end} 
 	</select>
 	
 	<!-- 신청 챌린지 수 -->
-	<select id="jhChgListTotal" parameterType="int" resultType="int">
+	<select id="jhChgListTotal" parameterType="Challenge" resultType="int">
 		SELECT  COUNT(*)
 		FROM challenge
 		WHERE state_lg = 300
 		AND state_md = #{state_md}
+		<choose>
+			<when test="chg_md != 0"> AND chg_md = #{chg_md} </when>
+		</choose>
 	</select>
 	
 <!-- 삭제 예정	챌린지 관리자 리스트 - 카테고리별 + 진행상태별 한번에 처리하기 위함
