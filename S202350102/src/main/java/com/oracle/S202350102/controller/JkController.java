@@ -546,14 +546,6 @@ public class JkController {
 		 }
 	
 
-	
-	@RequestMapping("/subscriptionManagement")
-	public String subscriptionManagementManagement() {
-		System.out.println("JkController subscriptionManagement start...");
-		
-		return "jk/subscriptionManagement";
-	}
-	
 	@GetMapping("/mypage")
 	public String mypage(HttpSession session, User1 user1, Challenge chg, Board board, Model model) {
 	    System.out.println("JkController mypage start...");
