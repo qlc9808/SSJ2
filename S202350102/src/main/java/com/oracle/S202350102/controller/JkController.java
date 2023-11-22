@@ -702,7 +702,7 @@ public class JkController {
 				
 			}
 			// 입력된 키워드에 따라 검색 
-			srch_shareResult = chSearchService.shareSearching(replSrch_word);
+//			srch_shareResult = chSearchService.shareSearching(replSrch_word);
 		}
 		
 		Map<String, Object> resultMap = new HashMap<>();

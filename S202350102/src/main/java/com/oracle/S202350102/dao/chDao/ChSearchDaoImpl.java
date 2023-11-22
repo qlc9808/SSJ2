@@ -134,14 +134,30 @@ public class ChSearchDaoImpl implements ChSearchDao {
 
 	@Override
 	public int chgSrchTot(Board board) {
-		System.out.println("ChSearchImpl deleteHis Start...");
+		System.out.println("ChSearchImpl chgSrchTot Start...");
 		int result = 0;
 		
 		try {
 			result = session.selectOne("chgReTotal",board);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("ChSearchImpl deleteHis e.getMessage()->" + e.getMessage());
+			System.out.println("ChSearchImpl chgSrchTot e.getMessage()->" + e.getMessage());
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public int chgSrchBTot(Board board) {
+		System.out.println("ChSearchImpl chgSrchBTot Start...");
+		int result = 0;
+		
+		try {
+			result = session.selectOne("chgSrchBTot",board);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChSearchImpl chgSrchBTot e.getMessage()->" + e.getMessage());
 		}
 		
 		return result;
