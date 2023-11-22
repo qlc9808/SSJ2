@@ -573,7 +573,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						<c:choose>
 			            	<c:when test="${not empty myReviewList }">
 			            		<c:set var="num" value="${myReviewPage.total - myReviewPage.start+1 }"></c:set> 
-				                <table class="boardtable">
+				                <table class="table">
 				                    <thead>
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>

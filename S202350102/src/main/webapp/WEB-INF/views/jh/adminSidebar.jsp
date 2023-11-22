@@ -33,8 +33,13 @@
                     <div class="form-group">
                       <ul class="list-styled mb-0" id="listChg">
                         <li class="list-styled-item">
-                          <a class="list-styled-link" data-bs-target="#challengeAdmin" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=100">
+                          <a class="list-styled-link" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=100">
                             	신청 챌린지
+                          </a>
+                        </li>
+                        <li class="list-styled-item">
+                          <a class="list-styled-link" href="/chgAdminList?chg_lg=200&state_lg=300&state_md=104">
+                            	반려된 챌린지
                           </a>
                         </li>
                         <li class="list-styled-item">

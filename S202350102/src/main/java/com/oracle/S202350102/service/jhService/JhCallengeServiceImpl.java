@@ -181,13 +181,13 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return result;
 	}
 
-	@Override
-	public List<Challenge> chgAdminList(Challenge challenge) {
-		System.out.println("JhCallengeServiceImpl chgAdminList Start...");
-		List<Challenge> chgAdminList = jhChgDao.chgAdminList(challenge);
-		
-		return chgAdminList;
-	}
+	/* 삭제 예정
+	 * @Override public List<Challenge> chgAdminList(Challenge challenge) {
+	 * System.out.println("JhCallengeServiceImpl chgAdminList Start...");
+	 * List<Challenge> chgAdminList = jhChgDao.chgAdminList(challenge);
+	 * 
+	 * return chgAdminList; }
+	 */
 
 	@Override
 	public List<Challenge> chgAplList(Challenge challenge) {
@@ -197,9 +197,9 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	}
 
 	@Override
-	public int chgListTotal(int state_md) {
+	public int chgListTotal(Challenge challenge) {
 		System.out.println("JhCallengeServiceImpl chgListTotal Start...");
-		int chgListTotal = jhChgDao.chgListTotal(state_md);
+		int chgListTotal = jhChgDao.chgListTotal(challenge);
 		return chgListTotal;
 	}
  
