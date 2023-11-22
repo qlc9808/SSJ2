@@ -28,13 +28,10 @@
                 <a class="list-group-item list-group-item-action dropend-toggle " href="/listChgAdmin">
                  	챌린지 관리
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/listShrAdmin">
-                 	쉐어링 관리
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/listCommuintyAdmin">
+                 	커뮤니티 관리
                 </a>
-                 <a class="list-group-item list-group-item-action dropend-toggle " href="/listFrBoardAdmin">
-                 	자유게시판 관리
-                </a>
-              
+
                 
               </div>
             </nav>
