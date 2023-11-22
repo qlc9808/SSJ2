@@ -60,6 +60,18 @@ public class ThOrder1DaoImpl implements ThOrder1Dao {
 		}
 		return updateResult;
 	}
+
+	@Override
+	public Order1 selectOrderSucess(int user_num) {
+		System.out.println("ThOrder1DaoImpl selectOrderSucess start...");
+		Order1 order1 = null;
+		try {
+			order1 = session.selectOne("thSelectOrderSucess",user_num);
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl selectOrderSucess Exception --> " + e.getMessage());
+		}
+		return order1;
+	}
 	
 	
 }

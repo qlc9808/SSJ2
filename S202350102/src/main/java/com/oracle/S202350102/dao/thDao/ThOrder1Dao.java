@@ -8,6 +8,7 @@ public interface ThOrder1Dao {
 	int				selectMaxOrderNum();
 	Order1 			selectOrderJoinMem(Order1 order1);
 	int 			updateOrderSucess(int order_num);
+	Order1 			selectOrderSucess(int user_num);
 	
 
 }

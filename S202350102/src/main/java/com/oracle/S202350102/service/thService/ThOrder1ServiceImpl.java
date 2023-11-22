@@ -42,4 +42,12 @@ public class ThOrder1ServiceImpl implements ThOrder1Service {
 		return updateResult;
 	}
 
+
+	@Override
+	public Order1 selectOrderSucess(int user_num) {
+		System.out.println("ThOrder1ServiceImpl selectOrderSucess Start...");
+		Order1 order1 = od1.selectOrderSucess(user_num);
+		return order1;
+	}
+
 }

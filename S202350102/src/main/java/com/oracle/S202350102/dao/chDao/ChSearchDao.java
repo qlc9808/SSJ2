@@ -16,4 +16,5 @@ public interface ChSearchDao {
 	int				deleteHis(SearchHistory sh);
 	List<Board>  	shareSearching(Board board);
 	int 			chgSrchTot(Board board);
+	int 			chgSrchBTot(Board board);
 }

@@ -87,6 +87,14 @@ public class ChSearchServiceImpl implements ChSearchService {
 	}
 
 
+	@Override
+	public int chgSrchBTot(Board board) {
+		System.out.println("ChSearchServiceImpl deleteHis Start...");
+		int result = chSearchDao.chgSrchBTot(board);
+		return result;
+	}
+
+
 	
 
 }

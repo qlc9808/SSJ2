@@ -56,13 +56,14 @@ function listComment() {
             console.log("listcomment sessionUserNum :" + sessionUserNum)
 
             $.each(result, function (index, board) {
+            	var fullImageUrl = "${pageContext.request.contextPath}/upload/" + board.img;
                 var listItem = $("<li class='list-group-item'></li>");
                 var reviewContainer = $("<div class='review' style='padding-bottom:20px'></div>");
-                var reviewBody = $("<div class='review-body style='padding-bottom:20px'></div>");
+                var reviewBody = $("<div class='review-body style='padding-bottom:0px' style='padding-bottom :0px;'></div>");
                 var row = $("<div class='row'></div>");
                 var colMdAuto = $("<div class='col-12 col-md-auto'></div>");
                 var avatar = $("<div class='avatar avatar-xxl mb-6 mb-md-0'></div>");
-                avatar.append("<span class='avatar-title rounded-circle'><i class='fa fa-user'></i></span>");
+                avatar.append("<span class='avatar-title rounded-circle'> <img class='img-fluid' src='" + fullImageUrl + "' alt='Image' style='width: 150%; height: 100%; object-fit: cover;'> </span>");
                 colMdAuto.append(avatar);
                 var colMd = $("<div class='col-12 col-md'></div>");
                 var headerRow = $("<div class='row mb-6'></div>");
