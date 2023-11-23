@@ -108,20 +108,22 @@
 		left join (Select Count(*), brd_num
 			  From board_like
 			  Group By brd_num) c on a.brd_num = c.brd_num
-		Where a.rn BETWEEN #{start} and #{end}
+		<if test="start >= 1"> Where a.rn BETWEEN #{start} and #{end}</if>
 	</select>
 	
 	<select id="chgSrchBTot" parameterType="Board" resultType="int">
 	SELECT Count(*)
 	FROM board b
 	JOIN user1 ON b.user_num = user1.user_num
-	WHERE b.brd_md = #{brd_md}
+	WHERE b.brd_md = #{brd_md}	
 	AND	  b.brd_Group = b.brd_num
+	<if test="keyword != null">
 	AND   (b.title like '%' || #{keyword} || '%' 
 		   Or user1.nick like '%' || #{keyword} || '%'
 		   <if test="brd_md == 102">
 		   Or b.addr like '%' || #{keyword} || '%'
 		   </if>)
+	</if>
 	
 	</select>
 	

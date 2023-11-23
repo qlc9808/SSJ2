@@ -32,6 +32,7 @@ import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
+import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
@@ -56,6 +57,9 @@ public class JhController {
 	private final YrChallengePickService ycps;
 	
 	private final BgBoardService bBoardD;
+	
+	private final Level1Service ls;
+	
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -244,6 +248,7 @@ public class JhController {
 			
 			// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
 			List<Board> certBoard = bBoardD.certBoard(board);
+			certBoard = userService.boardWriterLevelInfo(certBoard);
 			System.out.println("BgController certBoard.size() -> "+certBoard.size());
 			model.addAttribute("certBoard", certBoard);
 			
@@ -278,6 +283,7 @@ public class JhController {
 			// R
 			// mapper key: searchCrtBd		 검색 결과 리스트 R
 			List<Board> srchResult = bBoardD.searchCrtBd(board);
+			srchResult = userService.boardWriterLevelInfo(srchResult);
 			System.out.println("srchResult.size() -> "+srchResult.size());
 			
 			
@@ -564,7 +570,8 @@ public class JhController {
 		chg.setState_lg(stateLg);
 		int stateMd = 100;
 		chg.setState_md(stateMd);
-
+		
+		
 		  //저장 경로 생성 
 		String uploadPath =  request.getSession().getServletContext().getRealPath("/upload/");
 		  log.info("originalName: " + sampleImgFile.getOriginalFilename());
@@ -588,7 +595,15 @@ public class JhController {
 		 log.info("Return sampleSaveName: " + sampleSaveName); model.addAttribute("sampleSaveName", sampleSaveName);
 		 log.info("Return thumbSaveName: " + thumbSaveName); model.addAttribute("thumbSaveName", thumbSaveName);
 		 
+		 //챌린지 신청
 		 int result = jhCService.chgApplication(chg);
+		 
+		 
+			/* 챌린지 개설 될 경우 경험치 상승
+			 * if(result > 0) { ls.userExp(userNum, chgLg, chg.getChg_md());
+			 * ls.userLevelCheck(userNum); }
+			 */
+		 
 		 
 		 System.out.println("JhController chgApplication result -> " + result);
 		 
@@ -787,6 +802,7 @@ public class JhController {
 		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
 		System.out.println("JhController chgAdminList chg_md --> " + chg_md);
 		System.out.println("JhController chgAdminList chg_lg --> " + chg_lg);
+		System.out.println("JhController chgAdminList chg_lg --> " + currentPage);
 		
 		//전체 카테고리 때문에 challenge.getChg_lg()로 안가져오고 chgLg를 따로 넣음 카테고리 가져올 때 lg, md, ctn 
 		//첨에 lg안 가져오고 직접 int chg_lg = 200으로 해서 전체카테고리 할 때 찜순같은 필터가 적용이 안됨(일단  tcs.totalChgIng에서 chg_lg=200이라 조건을 타지만 chg_md값이 없어서 총 개수가 0이 나옴)

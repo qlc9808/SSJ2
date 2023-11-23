@@ -482,7 +482,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                            <th scope="col" class="th-date">등록일</th>
 					                            <th scope="col" class="th-view_cnt">조회수</th>
 					                            <th  scope="col" class="th-replyCount">댓글수</th>
-					                            <th  scope="col" ></th>
+					                            <th  scope="col" >비고</th>
 					                            <th></th>
 					                        </tr>
 					                    </thead>                 
@@ -538,6 +538,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
+				                            <th  scope="col" class="th-replyCount">비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Review_md}">
@@ -592,7 +593,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
-				                            <th  scope="col" ></th>
+				                            <th  scope="col" >비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Share_md }">

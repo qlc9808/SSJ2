@@ -610,7 +610,8 @@ public class ChController {
 		System.out.println("ChController myContsDelete board.getBrd_num() -> "+brd_num);
 		int result = 0;
 		
-		result = chBoardService.deleteNotice(brd_num);
+		
+		result = jhCService.reviewDelete(brd_num);
 		
 		
 		return result;
