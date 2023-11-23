@@ -136,10 +136,6 @@ public class JkController {
 	      
 	      Paging2 sharBoardPage = new Paging2(totalSharing, currentPage);
 	      
-	      
-	      
-
-	      board.setRowPage(sharBoardPage.getRowPage());
 	      board.setStart(sharBoardPage.getStart());
 	      board.setEnd(sharBoardPage.getEnd());
 	      model.addAttribute("sharBoardPage", sharBoardPage);
