@@ -233,7 +233,7 @@
 		FROM (
 		        SELECT rownum rn, chg.*
 		        FROM (
-		                    SELECT  u.nick, u.user_name, ch.*, cc.ctn ctn, cs.ctn stateCtn
+		                    SELECT  u.nick, u.user_id, u.user_name, ch.*, cc.ctn ctn, cs.ctn stateCtn
 		                    FROM    challenge ch
 		                    INNER JOIN user1 u ON ch.user_num = u.user_num
 		                    INNER JOIN comm cc ON ch.chg_lg = cc.lg AND ch.chg_md = cc.md
@@ -269,7 +269,7 @@
 		<!-- 챌린지 승인(챌린저에 개설자 추가) / 반려 -->
 	<select id="jhApprovReturnPro" parameterType="java.util.Map" statementType="CALLABLE" >
 		{
-			call Approval_Return_Pro(
+			call Chg_Approval_Return_Pro(
 						 #{chg_id , 		mode=IN , jdbcType=INTEGER}
 						,#{user_num, 		mode=IN , jdbcType=INTEGER}
 						,#{approvReturn, 	mode=IN , jdbcType=INTEGER}
@@ -280,7 +280,9 @@
 		
 	</select>
 	
-	
+	<resultMap id="resultMap" type="java.util.Map">
+    <result property="resultCount" column="resultCount" jdbcType="INTEGER"/>
+	</resultMap>
 	
 	
 	
