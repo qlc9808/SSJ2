@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header4.jsp" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>챌린지 리스트</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <script type="text/javascript">
 	function fn_sortOpt(){
 		var sortOpt = $('#sortOpt').val()
@@ -43,20 +44,17 @@
 			}
 		});
 	}
-	
-	function confirmPswd(){
-		var input_priv_pswd = $('#input_priv_pswd').val()
-		var chg_priv_pswd 	= $('#chg_priv_pswd').val();
-		var chg_id			= $('#chg_id').val();
-		alert('chg_id2 --> ' + chg_id2)
-		alert('index --> ' + index)
-		alert('chg_id --> ' + chg_id)
-		alert('chg_priv_pswd --> ' + chg_priv_pswd)
+
+	// 비공개방 비밀번호 확인
+	function confirmPswd(p_index){
+		var input_priv_pswd = $('#input_priv_pswd'+p_index).val()
+		var chg_priv_pswd 	= $('#chg_priv_pswd'+p_index).val();
+		var chg_id			= $('#chg_id'+p_index).val();
 		if(input_priv_pswd == chg_priv_pswd){
 			location.href = "chgDetail?chg_id="+chg_id
 		} else {
 			alert('비밀번호가 틀렸습니다');
-			$('#modalMatchPswd').modal('hide');
+			$('#modalMatchPswd'+p_index).modal('hide');
 			return false;
 		}	
 	}
@@ -92,64 +90,10 @@
 	}
 
 </script>
-<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif; } 
-</style>
 </head>
 
 <body>
-	<!-- MODAL -->
-	    <!-- 아이디 찾기 MODAL  -->
-    
-     <div class="modal fade" id="modalMatchPswd" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-    
-          <!-- Close -->
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fe fe-x" aria-hidden="true"></i>
-          </button>
-    
-          <!-- Header-->
-          <div class="modal-header lh-fixed fs-lg">
-            <strong class="mx-auto">비공개 방</strong>
-          </div>
-    
-          <!-- Body -->
-          <div class="modal-body text-center">
-    
-            <!-- Text -->
-            <p class="mb-7 fs-sm text-gray-500">
-              	비밀번호를 입력해 주세요 
-              	
-            </p>
-    
-            <!-- Form -->
-<!--             <form action="findId"> -->
-    			
-    		  <!-- 아이디 -->
-              <div class="form-group">
-                <label class="visually-hidden" for="user_name">
-                  	비밀번호 *
-                </label>
-                <input class="form-control form-control-sm" id="input_priv_pswd" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
-                <input class="form-control form-control-sm" id="modal_chg_priv_pswd" name="modal_chg_priv_pswd" type="hidden">
-                <input class="form-control form-control-sm" id="modal_chg_id" name="modal_chg_id" type="hidden">
-              </div>
-     
-              <button class="btn btn-sm btn-dark" onclick="return confirmPswd()">
-                	확인
-              </button>
-    
-<!--             </form> -->
-    
-          </div>
-    
-        </div>
-    
-      </div>
-    </div>
+
     
     
     <section class="py-11">
@@ -196,10 +140,6 @@
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }" varStatus="status">
-	            		<c:if test="${chg.chg_public == 1 }">
-	            			<input type="hidden" id="chg_priv_pswd" name="chg_priv_pswd" value="${chg.priv_pswd }">
-	            			<input type="hidden" id="chg_id" name="chg_id" value="${chg.chg_id }">
-	            		</c:if>
 			            <div class="col-6 col-md-4">
 						
 			               <!-- Card -->
@@ -240,11 +180,10 @@
 								</c:choose>
 			
 			                  <!-- Button -->
-			                  <button class="btn btn-xs w-100 btn-dark card-btn" id="test1${status.index }" 
+			                  <button class="btn btn-xs w-100 btn-dark card-btn" 
 			                  	<c:if test="${chg.chg_public == 1 }"> 
 			                  		data-bs-toggle="modal" 
-			                  		data-bs-target="#modalMatchPswd"
-			                  		data-chg-id="${chg.chg_id}"
+			                  		data-bs-target="#modalMatchPswd${status.index }"
 			                  	</c:if>
 			                  	<c:if test="${chg.chg_public == 0 }"> 
 			                  		onclick ="location.href='chgDetail?chg_id=${chg.chg_id }'"
@@ -254,7 +193,7 @@
 			                  </button>
 			
 			                  <!-- Image -->
-			                  <a class="text-body" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd" data-bs-toggle="modal"</c:if>
+			                  <a class="text-body" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd${status.index }" data-bs-toggle="modal"</c:if>
 			                  					   <c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
 			                  					   >
 			                  <c:if test="${chg.thumb != null}">
@@ -274,7 +213,7 @@
 			              
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body fw-bolder fs-6" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd" data-bs-toggle="modal"</c:if>
+			                <a class="text-body fw-bolder fs-6" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd${status.index }" data-bs-toggle="modal"</c:if>
 			                									<c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
 			                									id="title">${chg.title }</a>
 			                <div> 
@@ -290,6 +229,57 @@
 			            	
 					  </div>
 					  <c:set var="num" value="${num -1 }"></c:set>
+					  
+					 <!-- MODAL -->
+					 <!-- 비공개방  -->
+				     <div class="modal fade" id="modalMatchPswd${status.index }" tabindex="-1" role="dialog" aria-hidden="true">
+				      <div class="modal-dialog modal-dialog-centered" role="document">
+				        <div class="modal-content">
+				    
+				          <!-- Close -->
+				          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+				            <i class="fe fe-x" aria-hidden="true"></i>
+				          </button>
+				    
+				          <!-- Header-->
+				          <div class="modal-header lh-fixed fs-lg">
+				            <strong class="mx-auto">비공개 방</strong>
+				          </div>
+				    
+				          <!-- Body -->
+				          <div class="modal-body text-center">
+				    
+				            <!-- Text -->
+				            <p class="mb-7 fs-sm text-gray-500">
+				              	비밀번호를 입력해 주세요 
+				              	
+				            </p>
+				    
+				
+				    			
+				    		  <!-- 모달 -->
+				              <div class="form-group">
+				                <label class="visually-hidden" for="input_priv_pswd${status.index }">
+				                  	비밀번호 *
+				                </label>
+				                <input class="form-control form-control-sm" id="input_priv_pswd${status.index }" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
+				                <c:if test="${chg.chg_public == 1 }">
+				                	<input class="form-control form-control-sm" id="chg_priv_pswd${status.index }" name="chg_priv_pswd" type="hidden" value="${chg.priv_pswd }">
+				                	<input class="form-control form-control-sm" id="chg_id${status.index }" name="chg_id" type="hidden" value="${chg.chg_id }">
+				                </c:if>
+				              </div>
+				     
+				              <button class="btn btn-sm btn-dark" onclick="return confirmPswd(${status.index })">
+				                	확인
+				              </button>
+				    
+				    
+				          </div>
+				    
+				        </div>
+				    
+				      </div>
+				    </div>
 				</c:forEach>
 				
 				<!-- 페이지네이션  -->
@@ -327,6 +317,6 @@
     </div>
   </div>
 </section>
-<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

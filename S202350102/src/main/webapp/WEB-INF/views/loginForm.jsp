@@ -315,7 +315,7 @@
 	   		e = e || window.event;    
 	   		if(wasPressed) return;     
 	   		if(e.key == 'F5'){        
-	   		location.href = "/loginForm";    
+	   		location.href = "/";    
 	   		}
 	  }
    </script>  

@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../header4.jsp" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>전체 유저 조회</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <script type="text/javascript">
 	function fn_delCheck(p_index){
 		var p_user_num 		= $("#user_num"+p_index).val();
@@ -104,10 +105,9 @@
 	
 		  	<div class="py-10"></div>	
 </div>
-</section>
-<%@ include file="/WEB-INF/views/footer.jsp" %>		  		
+</section>	  		
 
 </body>
-
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 
 </html>
