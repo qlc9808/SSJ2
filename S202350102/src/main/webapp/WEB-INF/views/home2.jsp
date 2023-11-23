@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-    
-    <!-- Title -->
-    <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
+<meta charset="utf-8">
+<title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 	<script type="text/javascript">
 		// 팔로우 하기 버튼
 		function following(p_index) {
@@ -71,7 +70,7 @@
 	</script>
 </head>
 <body>
-	<c:import url="/WEB-INF/views/header4.jsp"/>
+
 
 	<!-- yr 작성 -->
 	<!-- 최신 인증글 -->
@@ -165,9 +164,6 @@
 																	<!-- 좋아요 눌렀을 때 -->
 																	<a class="rate-item" data-toggle="vote" data-count="${certList.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
 																		좋아요 
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-																			<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-																		</svg>
 																		<img alt="heart-fill" src="./images/yr/heart-fill.png">
 																	</a>
 																</c:when>
@@ -176,9 +172,6 @@
 																	<!-- 좋아요 안 눌렀을 때 -->
 																	<a class="rate-item" data-toggle="vote" data-count="${certList.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
 																		좋아요 
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																			<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																		</svg>
 																		<img alt="heart" src="./images/yr/heart.png">
 																	</a>
 													
@@ -193,9 +186,6 @@
 															<!-- 좋아요 -->
 															<a class="rate-item" data-toggle="vote" data-count="${certList.like_cnt}" href="/loginForm" role="button">
 																좋아요 
-																<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																	<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																</svg>
 																<img alt="heart" src="./images/yr/heart.png">
 															</a>															
 														</c:otherwise>
@@ -293,6 +283,6 @@
 	
 	
 	
-	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

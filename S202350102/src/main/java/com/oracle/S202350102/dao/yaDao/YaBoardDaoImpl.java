@@ -427,6 +427,19 @@ public class YaBoardDaoImpl implements YaBoardDao {
 
 
 
+	@Override
+	public int totalSharing(Board board) {
+		System.out.println("YaBoardDaoImpltotalSharing( start....");
+		int totalSharing = 0;
+		try {
+			totalSharing = session.selectOne("YaTotalSharing");
+		} catch (Exception e) {
+			System.out.println("YaBoardDao YaTotalSharing e.getmmessage?"+e.getMessage());
+		}
+		return totalSharing;
+	}
+
+
 	
 	
 }

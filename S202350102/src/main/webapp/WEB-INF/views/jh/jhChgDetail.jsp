@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header4.jsp" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +11,7 @@
     }
 </style>
 <title>챌린지 상세 페이지</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <script type="text/javascript">
 /* 	//jh 작성 -> 보류(챌린지 후기 10개 이상 쓰고 다시 해보기)
  * 일단 리뷰에만 적용되게 하고 추후에 변경하기 1페이지 누르면 아래 적용 안됨
