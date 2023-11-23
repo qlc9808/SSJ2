@@ -53,6 +53,7 @@ import com.oracle.S202350102.service.jkService.JkUserService;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
+import com.oracle.S202350102.service.yaService.Paging2;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 
@@ -117,45 +118,52 @@ public class JkController {
 	
 	
 	//쉐어링 게시글 전체조회
-	@RequestMapping(value="/sharing")
-	public String Sharing(Board board, String currentPage, Model model, HttpSession session) {
-		System.out.println("JkController Sharing start...");
-		
-		int user_num = 0;
-		if(session.getAttribute("user_num") != null) {
-			user_num = (int) session.getAttribute("user_num");
-		}
-		
-		User1 user1 = jbs.userSelect(user_num);
-		
-		//ya 쉐어링 전체 게시글 총 수, 페이징 처리 작업 
-		int totalSharing = ycs.totalSharing(board);
-		model.addAttribute("totalSharing", totalSharing);
-		System.out.println("JkController Ya totalSharing->"+totalSharing);
-		
-		Paging boardPage = new Paging(totalSharing, currentPage);
-		board.setStart(boardPage.getStart());
-	    board.setEnd(boardPage.getEnd());
-	    model.addAttribute("boardPage", boardPage);
-		System.out.println(" YaController boardPage start?"+boardPage.getStart());
-		System.out.println(" YaControlloer boardpage total?"+boardPage.getTotal());
-		System.out.println("boardPage End?"+boardPage.getEnd());
-		
-		
-		
-		// yr 작성
-		// 쉐어링 찜 여부 판단용
-		board.setB_user_num(user_num);
-		
-		List<Board> sharing = jbs.sharing(board);
-		System.out.println("JkController list Sharing.size()?"+sharing.size());
-		
-		model.addAttribute("user1", user1);
-		model.addAttribute("sharing", sharing);
-		
-		return "sharing";
-		}
+	   @RequestMapping(value="/sharing")
+	   public String Sharing(Board board, String currentPage, Model model, HttpSession session) {
+	      System.out.println("JkController Sharing start...");
+	      
+	      int user_num = 0;
+	      if(session.getAttribute("user_num") != null) {
+	         user_num = (int) session.getAttribute("user_num");
+	      }
+	      
+	      User1 user1 = jbs.userSelect(user_num);
+	      
+	      //ya 쉐어링 전체 게시글 총 수, 페이징 처리 작업 
+	      int totalSharing = ycs.totalSharing(board);
+	      model.addAttribute("totalSharing", totalSharing);
+	      System.out.println("JkController Ya totalSharing->"+totalSharing);
+	      
+	      Paging2 sharBoardPage = new Paging2(totalSharing, currentPage);
+	      
+	      
+	      
+
+	      board.setRowPage(sharBoardPage.getRowPage());
+	      board.setStart(sharBoardPage.getStart());
+	      board.setEnd(sharBoardPage.getEnd());
+	      model.addAttribute("sharBoardPage", sharBoardPage);
+	      System.out.println("YaController boardPage rowPage?"+sharBoardPage.getRowPage());
+	      System.out.println(" YaController boardPage start?"+sharBoardPage.getStart());
+	      System.out.println("YaControlller boardPage end?"+sharBoardPage.getEnd());
+	      System.out.println(" YaControlloer boardpage total?"+sharBoardPage.getTotal());
 	
+	      
+	      
+	      
+	      // yr 작성
+	      // 쉐어링 찜 여부 판단용
+	      board.setB_user_num(user_num);
+	      
+	      List<Board> sharing = jbs.sharing(board);
+	      System.out.println("JkController list Sharing.size()?"+sharing.size());
+	      
+	      model.addAttribute("user1", user1);
+	      model.addAttribute("sharing", sharing);
+	      
+	      return "sharing";
+	      }
+
 	//쉐어링 조회 필터
 	@GetMapping("/loadSortedPosts")
 	@ResponseBody

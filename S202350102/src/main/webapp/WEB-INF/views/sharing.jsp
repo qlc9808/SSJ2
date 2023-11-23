@@ -7,18 +7,10 @@
 <head>
 <!--  CSS  -->
 <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
  <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-    	body{
-    	font-family: 'Noto Sans KR', sans-serif;} 
-			
-    </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -250,7 +242,33 @@ $("#sortOption").change(function() {
 </div>
 
 
-           
+
+
+ <div class="container text-center">
+    <ul class="pagination pagination-sm justify-content-center">
+        <c:if test="${sharBoardPage.startPage > sharBoardPage.pageBlock}">
+            <li class="page-item">
+                <a class="page-link page-link-arrow" href="sharing?currentPage=${sharBoardPage.startPage-sharBoardPage.pageBlock}">
+                    <i class="fa fa-caret-left"></i>
+                </a>
+            </li>
+        </c:if>
+
+        <c:forEach var="i" begin="${sharBoardPage.startPage}" end="${sharBoardPage.endPage}">
+            <li class="page-item <c:if test='${sharBoardPage.currentPage == i}'>active</c:if>">
+                <a class="page-link" href="sharing?currentPage=${i}">${i}</a>
+            </li>
+        </c:forEach>
+
+        <c:if test="${sharBoardPage.endPage < sharBoardPage.totalPage}">
+            <li class="page-item">
+                <a class="page-link page-link-arrow" href="sharing?currentPage=${sharBoardPage.startPage+sharBoardPage.pageBlock}">
+                    <i class="fa fa-caret-right"></i>
+                </a>
+            </li>
+        </c:if>
+    </ul>
+</div> 
 
           </div>
         </div>
