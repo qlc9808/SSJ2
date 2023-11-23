@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-    
-    <!-- Title -->
-    <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
+<meta charset="utf-8">
+<title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 	<script type="text/javascript">
 		// 팔로우 하기 버튼
 		function following(p_index) {
@@ -71,7 +70,7 @@
 	</script>
 </head>
 <body>
-	<c:import url="/WEB-INF/views/header4.jsp"/>
+
 
 	<!-- yr 작성 -->
 	<!-- 최신 인증글 -->
@@ -293,6 +292,6 @@
 	
 	
 	
-	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>
