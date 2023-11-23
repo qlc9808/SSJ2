@@ -149,7 +149,8 @@
                 <h6 class="mb-7">로그인</h6>
 
                 <!-- Form -->
-                <form action="login" method="post">
+                <!-- ajax로 사용하려고 잠시 form 지움 -->
+<!--                 <form action="login" method="post"> -->
                   <div class="row">
                     
                     <div class="col-12">
@@ -165,10 +166,10 @@
 					<div class="col-12">
                       <!-- Password -->
                       <div class="form-group">
-                        <label class="visually-hidden" for="loginPassword">
+                        <label class="visually-hidden" for="user_pswd">
                           	비밀번호 *
                         </label>
-                        <input class="form-control form-control-sm" id="loginPassword" type="password" name="user_pswd" placeholder="Password *" required>
+                        <input class="form-control form-control-sm" id="user_pswd" type="password" name="user_pswd" placeholder="Password *" required>
                       </div>
                     </div>
                    
@@ -197,13 +198,14 @@
                     
                     <div class="col-12">
                       <!-- Button -->
-                      <button class="btn btn-sm btn-dark" type="submit" >
+                      <button class="btn btn-sm btn-dark" id="loginBtn">
                         	로그인
                       </button>				  
                     </div>
                   </div>
                  
-                </form>
+                 <!-- ajax로 수정하기위해 지움 -->
+<!--                 </form> -->
 
               </div>
             </div>
@@ -215,7 +217,7 @@
 
     <!-- JAVASCRIPT -->
 	<script type="text/javascript">
-
+	// 아이디 찾기
 	function findId_click(){
 		var user_name 	= $('#user_name').val()
 		var email 		= $('#email').val()
@@ -256,7 +258,7 @@
 			}
 		});
 	};
-	
+	// 아이디 찾기 - 이름, 이메일 유효성 검사
 	function chk(){
 		var user_name 	= document.getElementById('user_name').value;
 		var email		= document.getElementById('email').value;
@@ -283,42 +285,30 @@
 			return true;
 		}
 	}
+	
+	// Ajax 통한 로그인
+	$('#loginBtn').click(function() {
+			var user_id 	= $('#user_id').val();
+			var user_pswd 	= $('#user_pswd').val();
+			$.ajax({
+				type		: 	"POST",
+				url			:	"/login",
+				data		:	{"user_id" : user_id, "user_pswd" : user_pswd},
+				dataType	:	"text",
+				success		:	function(data){
+					if (data == 'wrongValue') {
+						alert('아이디 또는 비밀번호가 틀립니다');
+					} else if (data == 'delId') {
+						alert('탈퇴한 회원입니다')
+					} else {
+						alert('로그인 되었습니다 메인페이지로 이동합니다')
+						location.href = '/'
+					}
+				}
+			});
+		});
 	</script>
 	 
-	 <!-- JSTL + onload 이벤트를 통해 로그인 검증 구현  -->
-	 <c:choose>
-     	<c:when test="${ result == 'wrongValue'}">
-	     	<script type="text/javascript">
-	     		window.onload=function() {
-	     			alert("아이디나 비밀번호가 틀렸습니다. 다시 로그인 해주세요");
-	     		}
-	     	</script>
-     	</c:when>
-     </c:choose>
-     <c:choose>
-     	<c:when test="${ result == 'delId'}">
-	     	<script type="text/javascript">
-	     		window.onload=function() {
-	     			alert("탈퇴한 회원입니다 ");
-	     		}
-	     	</script>
-     	</c:when>
-    </c:choose>
-     
-   <!-- F5(새로고침)시 loginForm으로 이동  -->  
-   <script type="text/javascript">
-	   document.onkeydown 	= fkey;
-	   document.onkeypress 	= fkey;
-	   document.onkeyup 	= fkey; 
-	   var wasPressed = false; 
-	   function fkey(e){    
-	   		e = e || window.event;    
-	   		if(wasPressed) return;     
-	   		if(e.key == 'F5'){        
-	   		location.href = "/";    
-	   		}
-	  }
-   </script>  
      
   <!--  아이디 기억하기 -->
   <script type="text/javascript">
