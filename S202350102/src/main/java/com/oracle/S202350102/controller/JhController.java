@@ -234,6 +234,7 @@ public class JhController {
 		  
 		// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
 		List<Board> certBoard = bs.certBoard(board);
+		certBoard = userService.boardWriterLevelInfo(certBoard);
 		System.out.println("BgController certBoard.size() -> "+certBoard.size());
 		model.addAttribute("certBoard", certBoard);
 		  
@@ -738,6 +739,7 @@ public class JhController {
 		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
 		System.out.println("JhController chgAdminList chg_md --> " + chg_md);
 		System.out.println("JhController chgAdminList chg_lg --> " + chg_lg);
+		System.out.println("JhController chgAdminList chg_lg --> " + currentPage);
 		
 		//전체 카테고리 때문에 challenge.getChg_lg()로 안가져오고 chgLg를 따로 넣음 카테고리 가져올 때 lg, md, ctn 
 		//첨에 lg안 가져오고 직접 int chg_lg = 200으로 해서 전체카테고리 할 때 찜순같은 필터가 적용이 안됨(일단  tcs.totalChgIng에서 chg_lg=200이라 조건을 타지만 chg_md값이 없어서 총 개수가 0이 나옴)

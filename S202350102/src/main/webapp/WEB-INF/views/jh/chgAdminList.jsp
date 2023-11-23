@@ -21,11 +21,15 @@
 	}
 	
 	/* 페이지네이션 수정중 */
-	function pageNavigation(state_md, chg_lg, chg_md, sortOpt, currentPage){
-		//if(!chg_lg && !chg_md && !sortOpt){
-			location.href = "chgAdminList?state_md="+state_md+"&currentPage="+currentPage;
+	function pageNavigation(pageNum){
+	 	var state_md = ${state_md};
+	    var chg_lg = ${chg_lg};
+	    var chg_md = ${chg_md};
+	    var sortOpt = ${sortOpt};
+	    var currentPage = pageNum;
+	    
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+currentPage;
 			
-		//}
 	}
 
 </script>
@@ -169,7 +173,7 @@
 									<a class="page-link px-2" href="chgAdminList?currentPage=${i }"><b class="text-primary">${i}</b></a>
 								</c:if>
 								<c:if test="${i != page.currentPage }">
-									<a class="page-link px-2" onclick="pageNavigation(${state_md}, ${chg_lg }, ${chg_md}, ${sortOpt}, ${i })" href="chgAdminList?currentPage=${i }">${i}</a>
+									<a class="page-link px-2" onclick="pageNavigation(${i })" href="chgAdminList?currentPage=${i }">${i}</a>
 								</c:if>
 							</li>
 						</c:forEach>
