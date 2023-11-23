@@ -600,7 +600,7 @@ public class JhController {
 			log.info("Return savedName: " + saveName);
 			model.addAttribute("savedName", saveName);
 			
-			
+			//글 등록
 			int result = jhCService.reviewPost(board);
 			System.out.println("JhController chgApplication result -> " + result);		
 			
@@ -623,10 +623,11 @@ public class JhController {
 			System.out.println("file1 == null ");
 		}
 		
-		
+		//파일삭제 여부 확인용
 		int delStatus = board.getDelStatus();
 		System.out.println("delStatus -> " +delStatus);
 		
+		//파일 삭제를 위한 기초 작업
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		String deleteFile = uploadPath + board.getImg();
 		
@@ -652,7 +653,7 @@ public class JhController {
 		}//새이미지 올리지 않고 기존 이미지 원하는 경우 board dto에 기존 img값 유지
 		
 		
-		//진짜 이미지 업데이트
+		//진짜 이미지 및 글 업데이트
 		int result = jhCService.reviewUpdate(board);
 		
 		System.out.println("result -> " + result);
@@ -663,15 +664,22 @@ public class JhController {
 	//후기 삭제
 	@RequestMapping(value = "reviewDelete")
 	public String reviewDelete(int brd_num, int chg_id, String img, HttpServletRequest request) throws Exception {
+		
+		//파라미터 : brd_num -> 이미지 삭제 위함, chg_id -> redirect로 이동하기 위함, img -> 이미지 삭제 위함
+		
 		System.out.println("JhController reviewDelete Start...");
 		
 		//글 삭제(이미지는 upload폴더에 그대로 남아 있음)
 		int reviewDel = jhCService.reviewDelete(brd_num);
 		
+		//글이 삭제 되면 이미지도 같이 삭제 
 		if(reviewDel > 0) {
-			//upload에 담김 파일 삭제
+			
+			//이미지 삭제를 위한 작업
 			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 			String deleteFile = uploadPath + img;
+			
+			//실제 upload에 담김 파일 이미지 삭제
 			int delResult= upFileDelete(deleteFile);
 			
 			System.out.println("JhController reviewDelete delResult -> " + delResult);

@@ -22,10 +22,10 @@
 	
 	/* 페이지네이션 수정중 */
 	function pageNavigation(state_md, chg_lg, chg_md, sortOpt, currentPage){
-		if(!chg_lg && !chg_md && !sortOpt){
+		//if(!chg_lg && !chg_md && !sortOpt){
 			location.href = "chgAdminList?state_md="+state_md+"&currentPage="+currentPage;
 			
-		}
+		//}
 	}
 
 </script>

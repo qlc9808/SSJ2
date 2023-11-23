@@ -37,7 +37,7 @@ public class Board {
 	private String searchType;
 	private String category;
 	
-	//파일 업로드
+	//파일 업로드 -> 파일 삭제 여부 확인용
 	private int delStatus;
 	// 게시판 유저 정보 조회용
 	private String icon;
