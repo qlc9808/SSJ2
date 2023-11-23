@@ -633,13 +633,13 @@ public class ChController {
 			List<Challenge> mychgList = chChallengeService.myChgList(board);
 			
 			mav.addObject("mychgList", mychgList);
-			mav.setViewName("ch/myApplychg");
+			mav.setViewName("ch/ajaxPage/myApplychg");
 		}
 		return mav;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "clickChgResult")
+	@RequestMapping(value = "clickSrchResult")
 	public ModelAndView clickChgResult(HttpSession session, ModelAndView mav, Board board, String currentPage) {
 		Paging page = null;
 		System.out.println("ChController clickChgResult Start...->" + board.getKeyword());		
@@ -654,45 +654,42 @@ public class ChController {
 			srch_chgResult = chSearchService.chgSearching(board); // 챌린지
 			mav.addObject("srch_chgResult", srch_chgResult);
 			mav.addObject("page", page);
-			mav.setViewName("ch/srch_Result");
+			mav.setViewName("ch/ajaxPage/srch_Result");
 			break;
 			
 		case 102:
-			int totalShare = chSearchService.chgSrchTot(board);
+			int totalShare = chSearchService.chgSrchBTot(board);
+			System.out.println("----------------------totalCommu-------------" + totalShare);
 			page = new Paging(totalShare, currentPage);
 			board.setStart(page.getStart());
-			board.setEnd(page.getEnd());
-			List<Board> srch_ShareResult = null; // chg 검색 결과 List
-			srch_ShareResult = chSearchService.shareSearching(board); // 챌린지
-			mav.addObject("srch_chgResult", srch_ShareResult);
+			board.setEnd(page.getEnd());			
+			List<Board> srch_ShareResult = null; // share 검색 결과 List
+			srch_ShareResult = chSearchService.shareSearching(board); // share
+			mav.addObject("srch_ShareResult", srch_ShareResult);
 			mav.addObject("page", page);
-			mav.setViewName("ch/srch_Result");
+			mav.setViewName("ch/ajaxPage/srch_ResultShare");
 			break;
 			
 		case 103:
 			
-			int totalCommu = chSearchService.chgSrchTot(board);
+			int totalCommu = chSearchService.chgSrchBTot(board);
+			System.out.println("----------------------totalCommu-------------" + totalCommu);
 			page = new Paging(totalCommu, currentPage);
 			board.setStart(page.getStart());
 			board.setEnd(page.getEnd());
-			List<Board> srch_CommuResult = null; // chg 검색 결과 List
-			srch_CommuResult = chSearchService.brdSearching(board); // 챌린지
-			mav.addObject("srch_chgResult", srch_CommuResult);
+			List<Board> srch_CommuResult = null; // commu 검색 결과 List
+			srch_CommuResult = chSearchService.brdSearching(board); // commu
+			mav.addObject("srch_CommuResult", srch_CommuResult);
 			mav.addObject("page", page);
-			mav.setViewName("ch/srch_Result");
+			mav.setViewName("ch/ajaxPage/srch_ResultCommu");
 			break;
 
 		default:
 			break;
 		}
-		/*
-		 * int totalChg = chSearchService.chgSrchTot(board); int totalShare =
-		 * chSearchService.chgSrchTot(board); int totalCommu =
-		 * chSearchService.chgSrchTot(board);
-		 */
 		
 		
-		
+		mav.addObject("srch_word", board.getKeyword());
 				
 		
 		
@@ -747,6 +744,27 @@ public class ChController {
 		System.out.println("Start commentAlaram....");
 		int result = chBoardService.commentAlarm(brd_num);
 	}
+	
+	@RequestMapping(value = "myParty")
+	@ResponseBody
+	public ModelAndView myParty(HttpSession session, ModelAndView mav) {
+		
+		if(session.getAttribute("user_num") != null) {
+			int user_num = (int) session.getAttribute("user_num");
+			// 내가 신청한 챌린지
+			
+			Board board = new Board();
+			board.setUser_num(user_num);		
+			List<Challenger> mychgrList = chChallengeService.myChgrList(user_num);
+			mav.addObject("mychgrList",mychgrList);
+			mav.setViewName("ch/ajaxPage/myPartyChg");
+		
+		
+		}
+		
+		return mav;
+	}
+	
 	
 	public void myChgList(HttpSession session, Model model) {
 		System.out.println("ChController myChgList Start...");
