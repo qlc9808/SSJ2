@@ -27,29 +27,29 @@ public class ChSearchServiceImpl implements ChSearchService {
 
 
 	@Override
-	public List<Challenge> chgSearching(String srch_word) {
+	public List<Challenge> chgSearching(Board board) {
 		System.out.println("ChSearchServiceImpl chgSearching Start...");
 		
-		List<Challenge> srch_chgresult = chSearchDao.chgSearching(srch_word);
+		List<Challenge> srch_chgresult = chSearchDao.chgSearching(board);
 		
 		return srch_chgresult;
 	}
 
 
 	@Override
-	public List<Board> brdSearching(String srch_word) {
+	public List<Board> brdSearching(Board board) {
 		System.out.println("ChSearchServiceImpl chgSearching Start...");
 		
-		List<Board> srch_brdResult = chSearchDao.brdSearching(srch_word);
+		List<Board> srch_brdResult = chSearchDao.brdSearching(board);
 		
 		return srch_brdResult;
 	}
 	
 	@Override
-	public List<Board> shareSearching(String srch_word) {
+	public List<Board> shareSearching(Board board) {
 		System.out.println("ChSearchServiceImpl shareSearching Start...");
 		
-		List<Board> srch_shrResult = chSearchDao.shareSearching(srch_word);
+		List<Board> srch_shrResult = chSearchDao.shareSearching(board);
 		
 		return srch_shrResult;
 	}
@@ -75,6 +75,23 @@ public class ChSearchServiceImpl implements ChSearchService {
 		System.out.println("ChSearchServiceImpl deleteHis Start...");
 		int result = chSearchDao.deleteHis(sh);
 		
+	}
+
+
+	@Override
+	public int chgSrchTot(Board board) {
+		System.out.println("ChSearchServiceImpl deleteHis Start...");
+		int result = chSearchDao.chgSrchTot(board);
+		
+		return result;
+	}
+
+
+	@Override
+	public int chgSrchBTot(Board board) {
+		System.out.println("ChSearchServiceImpl deleteHis Start...");
+		int result = chSearchDao.chgSrchBTot(board);
+		return result;
 	}
 
 

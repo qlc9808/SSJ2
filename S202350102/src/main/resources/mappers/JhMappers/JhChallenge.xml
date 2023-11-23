@@ -10,11 +10,12 @@
 
 	<!-- 챌린지 상세정보 챌린지 테이블, 유저테이블, 공통 테이블 한번에 조인 -> 챌린지 상세정보, 닉네임, 카테고리명, 챌린지 진행상테 조회  -->
 	<select id="jhChgDetail" parameterType="int" resultType="Challenge">
-		SELECT u.nick, c1.ctn ctn, c2.ctn stateCtn, ch.*
+		SELECT u.nick, u.user_name userName, ct.ctn ctn, cs.ctn stateCtn, cr.ctn rejectionReason, ch.*, count_pick(#{chg_id}) pick_cnt
 		FROM challenge ch 
 		INNER JOIN user1 u ON ch.user_num = u.user_num
-		INNER JOIN comm c1 ON ch.chg_lg   = c1.lg   AND ch.chg_md 	= c1.md
-		INNER JOIN comm c2 ON ch.state_lg = c2.lg   AND ch.state_md = c2.md
+		INNER JOIN comm ct ON ch.chg_lg   = ct.lg   AND ch.chg_md 	= ct.md
+		INNER JOIN comm cs ON ch.state_lg = cs.lg   AND ch.state_md = cs.md
+		LEFT JOIN comm cr ON ch.return_lg = cr.lg AND ch.return_md = cr.md
 		WHERE ch.chg_id = #{chg_id}
 	</select>
 	
@@ -172,7 +173,7 @@
 	<!-- 카테고리 가져오기 -->	
 	<select id="jhCategory" parameterType="int" resultType="Comm">
 	    <![CDATA[
-	    SELECT md, ctn
+	    SELECT lg, md, ctn
 	    FROM comm
 	    WHERE lg = #{lg} AND md != 999
 	    ]]>
@@ -226,6 +227,7 @@
 	</insert>
 	
 	
+	<!-- 신청 챌린지 리스트 -->
 	<select id="jhChgAplList" parameterType="Challenge" resultType="Challenge">
 		SELECT * 
 		FROM (
@@ -236,17 +238,32 @@
 		                    INNER JOIN user1 u ON ch.user_num = u.user_num
 		                    INNER JOIN comm cc ON ch.chg_lg = cc.lg AND ch.chg_md = cc.md
 		                    INNER JOIN comm cs ON ch.state_lg = cs.lg   AND ch.state_md = cs.md
-		                    WHERE  ch.state_md =  #{state_md}
+		                    WHERE  
+		                    <choose>
+		                    	<when test="state_md == 100"> ch.state_md = 100</when>
+		                    	<when test="state_md == 104"> ch.state_md = 104</when>
+		                    </choose>
+		                    
+		                    <choose>
+		                    	<when test="chg_md == 100"> AND ch.chg_md = 100 </when>
+		                    	<when test="chg_md == 101"> AND ch.chg_md = 101 </when>
+		                    	<when test="chg_md == 102"> AND ch.chg_md = 102 </when>
+		                    	<when test="chg_md == 103"> AND ch.chg_md = 103 </when>
+		                    </choose>
 		                    ORDER  BY ch.reg_date desc
 		             ) chg
 		      ) WHERE rn BETWEEN #{start} AND #{end} 
 	</select>
 	
-	<select id="jhChgListTotal" parameterType="int" resultType="int">
+	<!-- 신청 챌린지 수 -->
+	<select id="jhChgListTotal" parameterType="Challenge" resultType="int">
 		SELECT  COUNT(*)
 		FROM challenge
 		WHERE state_lg = 300
 		AND state_md = #{state_md}
+		<choose>
+			<when test="chg_md != 0"> AND chg_md = #{chg_md} </when>
+		</choose>
 	</select>
 	
 <!-- 삭제 예정	챌린지 관리자 리스트 - 카테고리별 + 진행상태별 한번에 처리하기 위함

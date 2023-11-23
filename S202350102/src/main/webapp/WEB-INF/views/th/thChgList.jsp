@@ -13,6 +13,7 @@
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
 		var currentPage	=	${page.currentPage}
+		
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
@@ -42,6 +43,49 @@
 			}
 		});
 	}
+	
+	function confirmPswd(){
+		var input_priv_pswd = $('#input_priv_pswd').val()
+		var chg_priv_pswd 	= $('#chg_priv_pswd').val()
+		var chg_id			= $('#chg_id').val()
+// 		alert('input_priv_pswd --> ' + input_priv_pswd )
+// 		alert('chg_priv_pswd --> ' + chg_priv_pswd)
+		if(input_priv_pswd == chg_priv_pswd){
+			location.href = "chgDetail?chg_id="+chg_id
+		} else {
+			alert('비밀번호가 틀렸습니다');
+			$('#modalMatchPswd').modal('hide');
+			return false;
+		}	
+	}
+	// 현재 페이지 그대로 이동
+	function moveCurrentPage() {
+		var sortOpt 	= 	$('#sortOpt').val()
+ 		var state_md 	= 	${chg.state_md}
+ 		var chg_lg 		= 	${chg.chg_lg}
+ 		var chg_md 		= 	${chg.chg_md}
+		var currentPage	=	${page.currentPage}
+		
+		location.href= 'thChgList?state_md='+state_md
+								+'&chg_lg='+chg_lg
+								+'&chg_md='+chg_md
+								+'&sortOpt='+sortOpt
+								+'&currentPage='+currentPage;
+	}
+	// 다른 페이지로 이동
+	function movePage() {
+		var sortOpt 	= 	$('#sortOpt').val()
+ 		var state_md 	= 	${chg.state_md}
+ 		var chg_lg 		= 	${chg.chg_lg}
+ 		var chg_md 		= 	${chg.chg_md}
+		var pageNum		=	document.getElementById('movePage').innerText
+
+		location.href= 'thChgList?state_md='+state_md
+								+'&chg_lg='+chg_lg
+								+'&chg_md='+chg_md
+								+'&sortOpt='+sortOpt
+								+'&currentPage='+pageNum;
+	}
 
 </script>
 <link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
@@ -51,7 +95,57 @@
 </head>
 
 <body>
-<%-- <h4>챌린지 목록 전체 챌린지개수 : ${totalChg } , ${pageContext.request.contextPath}</h4> --%>
+	<!-- MODAL -->
+	    <!-- 아이디 찾기 MODAL  -->
+    
+     <div class="modal fade" id="modalMatchPswd" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+    
+          <!-- Close -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+    
+          <!-- Header-->
+          <div class="modal-header lh-fixed fs-lg">
+            <strong class="mx-auto">비공개 방</strong>
+          </div>
+    
+          <!-- Body -->
+          <div class="modal-body text-center">
+    
+            <!-- Text -->
+            <p class="mb-7 fs-sm text-gray-500">
+              	비밀번호를 입력해 주세요 
+              	
+            </p>
+    
+            <!-- Form -->
+<!--             <form action="findId"> -->
+    			
+    		  <!-- 아이디 -->
+              <div class="form-group">
+                <label class="visually-hidden" for="user_name">
+                  	비밀번호 *
+                </label>
+                <input class="form-control form-control-sm" id="input_priv_pswd" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
+              </div>
+     
+              <button class="btn btn-sm btn-dark" onclick="return confirmPswd()">
+                	확인
+              </button>
+    
+<!--             </form> -->
+    
+          </div>
+    
+        </div>
+    
+      </div>
+    </div>
+    
+    
     <section class="py-11">
       <div class="container">
         <div class="row">
@@ -96,6 +190,10 @@
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
 	            	<c:forEach var="chg" items="${listChg }">
+	            		<c:if test="${chg.chg_public == 1 }">
+	            			<input type="hidden" id="chg_priv_pswd" name="chg_priv_pswd" value="${chg.priv_pswd }">
+	            			<input type="hidden" id="chg_id" name="chg_id" value="${chg.chg_id }">
+	            		</c:if>
 			            <div class="col-6 col-md-4">
 						
 			               <!-- Card -->
@@ -136,12 +234,16 @@
 								</c:choose>
 			
 			                  <!-- Button -->
-			                  <button class="btn btn-xs w-100 btn-dark card-btn">
+			                  <button class="btn btn-xs w-100 btn-dark card-btn" <c:if test="${chg.chg_public == 1 }"> data-bs-toggle="modal" data-bs-target="#modalMatchPswd"</c:if>
+			                  													 <c:if test="${chg.chg_public == 0 }"> onclick ="location.href='chgDetail?chg_id=${chg.chg_id }'"</c:if>
+			                  													>
 			                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
 			                  </button>
 			
 			                  <!-- Image -->
-			                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
+			                  <a class="text-body" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd" data-bs-toggle="modal"</c:if>
+			                  					   <c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
+			                  					   >
 			                  <c:if test="${chg.thumb != null}">
 			             		<c:if test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
 			                  		<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
@@ -156,10 +258,12 @@
 
 							  </a>
 			              </div>
-			
+			              
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body fw-bolder fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
+			                <a class="text-body fw-bolder fs-6" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd" data-bs-toggle="modal"</c:if>
+			                									<c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
+			                									id="title">${chg.title }</a>
 			                <div> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 
@@ -188,10 +292,10 @@
 				    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 						<li class="page-item">
 							<c:if test="${i == page.currentPage }">
-								<a class="page-link" href="thChgList?currentPage=${i }"><b class="text-primary">${i}</b></a>
+								<a class="page-link" onclick="moveCurrentPage()" href="#" id="moveCurrentPage"><b class="text-primary">${i}</b></a>
 							</c:if>
 							<c:if test="${i != page.currentPage }">
-								<a class="page-link" href="thChgList?currentPage=${i }">${i}</a>
+								<a class="page-link" onclick="movePage()" href="#" id="movePage">${i}</a>
 							</c:if>
 						</li>
 					</c:forEach>

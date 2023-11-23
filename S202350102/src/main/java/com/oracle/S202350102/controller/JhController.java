@@ -767,36 +767,54 @@ public class JhController {
 		
 		
 		
-		System.out.println("state_md -> " + challenge.getState_md());
 		
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
 		int totalChg 			= 0;
 		List<Challenge> chgList = null;
-		int chgLg 				= 200;
-		List<Comm> category 	= jhCService.category(chgLg);
-		Paging page 			= null;
-		int state_lg 			= challenge.getState_lg();
-		int state_md 			= challenge.getState_md();
+		
+		//카테고리 전체일 경우 chg_lg/chg_md = 0
 		int chg_md 				= challenge.getChg_md();
+		int chg_lg 				= challenge.getChg_lg();
+		System.out.println("JhController chgAdminList state_md -> " + challenge.getState_md());
+		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
+		System.out.println("JhController chgAdminList chg_md --> " + chg_md);
+		System.out.println("JhController chgAdminList chg_lg --> " + chg_lg);
+		
+		//전체 카테고리 때문에 challenge.getChg_lg()로 안가져오고 chgLg를 따로 넣음 카테고리 가져올 때 lg, md, ctn 
+		//첨에 lg안 가져오고 직접 int chg_lg = 200으로 해서 전체카테고리 할 때 찜순같은 필터가 적용이 안됨(일단  tcs.totalChgIng에서 chg_lg=200이라 조건을 타지만 chg_md값이 없어서 총 개수가 0이 나옴)
+		int chgLg = 200;
+		List<Comm> category 	= jhCService.category(chgLg);
+		System.out.println("JhController chgAdminList category --> " + category);
+		
+		//진행상태(대분류는 따로 값을 넣는 부분이 없어서 뺌)
+		int state_md 			= challenge.getState_md();
+		System.out.println("JhController chgAdminList state_md --> " + state_md);
+		
+		//페이지
+		Paging page 			= null;
+		
+		
 		//진행중,종료 챌린지일 경우
-		if(challenge.getState_md() != 100) {
+		if(challenge.getState_md() == 102 || challenge.getState_md() == 103) {
 			
 			//진행중 챌린지 총수
-			if (challenge.getState_md() ==102) {
+			if (challenge.getState_md() ==102  ) {
+				System.out.println("JhController chgAdminList 진행 챌린지 ");
 				totalChg = tcs.totalChgIng(challenge);
 				System.out.println("JhController chgAdminList tcs.totalChgIng(challenge) --> " + totalChg);
 				
 				//종료 챌린지 총수
 			} else if (challenge.getState_md() == 103) {
+				System.out.println("JhController chgAdminList 종료 챌린지 ");
 				totalChg = tcs.totalChgFin(challenge);
 				System.out.println("JhController chgAdminList tcs.totalChgFin(challenge) --> " + totalChg);
 			}
 			
 			
-			//진행중,종료 공통
-			
+			//진행중,종료 공통 부분들
 			//페이지네이션
 			page = new Paging(totalChg, currentPage);
+			//페이지 셋팅
 			challenge.setStart(page.getStart());
 			challenge.setEnd(page.getEnd());
 			
@@ -804,7 +822,6 @@ public class JhController {
 			if(sortOpt != null) {
 				challenge.setSortOpt(sortOpt);
 				System.out.println("JhController chgAdminList sortOption --> " + sortOpt);
-				model.addAttribute("sortOpt", sortOpt); //필터(찜순, 최근등록순, 참여자순)
 			}
 				
 			//리스트
@@ -816,27 +833,36 @@ public class JhController {
 			
 		//신청 챌린지인 경우	
 		} else {
+			System.out.println("JhController chgAdminList 신청 챌린지 ");
 //			파라미터 chg_lg=200&state_lg=300&state_md=100
-			totalChg = jhCService.chgListTotal(state_md);
-			chgList = jhCService.chgAplList(challenge);
-			System.out.println("JhController chgAdminList listChg.size() --> " + chgList.size());
-			System.out.println("JhController chgAdminList totalChg --> " + totalChg);
+			totalChg = jhCService.chgListTotal(challenge);
 			
+			//페이지 네이션
 			page = new Paging(totalChg, currentPage);
+			//페이지 셋팅
 			challenge.setStart(page.getStart());
 			challenge.setEnd(page.getEnd());
+			System.out.println("JhController chgAdminList page --> " + page);
+			
+			chgList = jhCService.chgAplList(challenge);
+			
+			System.out.println("JhController chgAdminList 신청 listChg.size() --> " + chgList.size());
+			System.out.println("JhController chgAdminList 신청 totalChg --> " + totalChg);
+			
+			
 		}
 		
+		System.out.println("JhController chgAdminList page --> " + page);
 		
-		model.addAttribute("totalChg", totalChg);
-		model.addAttribute("chgList", chgList);
-		model.addAttribute("page", page);
-		model.addAttribute("category",category); //카테고리별 조회용
-		model.addAttribute("state_lg",challenge.getState_lg()); //챌린지 진행 상태 대분류
-		model.addAttribute("state_md",challenge.getState_md()); //챌린지 진행 상태 중분류
-		model.addAttribute("chg_lg", 200); //챌린지 카테고리
-		model.addAttribute("chg_md", challenge.getChg_md()); //챌린지 카테고리
-		System.out.println("chg_md -> "+challenge.getChg_md());
+		
+		model.addAttribute("sortOpt", sortOpt); 	//필터(찜순, 최근등록순, 참여자순)
+		model.addAttribute("totalChg", totalChg); 	//전체 챌린지 수 (신청/진행/종료 공통)
+		model.addAttribute("chgList", chgList);		//챌린지 리스트 (신청/진행/종료 공통)
+		model.addAttribute("page", page);			//페이지네이션  (신청/진행/종료 공통)
+		model.addAttribute("category",category); 	//카테고리별 조회용
+		model.addAttribute("state_md",state_md); 	//챌린지 진행 상태 중분류
+		model.addAttribute("chg_lg", chg_lg); 		//챌린지 카테고리 대분류
+		model.addAttribute("chg_md", chg_md); 		//챌린지 카테고리 중분류
 		
 		
 		/*
@@ -847,14 +873,34 @@ public class JhController {
 		 * model.addAttribute("chgAdminList", chgAdminList);
 		 */
 		
-		if(challenge.getState_md() != 100) return "jh/chgAdminList";
-		else return "jh/chgApplicationAdminList";
+//		if(challenge.getState_md() != 100) 
+			return "jh/chgAdminList"; //진행/종료 챌린지 리턴
+//		else return "jh/chgApplicationAdminList";					 //신청 챌린지 리턴
 		
 	}
 	
 	@RequestMapping(value = "chgAdminDetail")
-	public String chgAdminDetail() {
+	public String chgAdminDetail(Challenge challenge, HttpSession session, Model model) {
+		System.out.println("JhController chgAdminDetail Start...");
 		
+		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
+		int state_md = challenge.getState_md();
+		
+		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것
+		String pageNum = challenge.getPageNum();
+		
+		int chg_id = challenge.getChg_id();
+		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
+		
+		challenge = jhCService.chgDetail(chg_id);
+		
+		int chgrParti = ycs.selectChgrParti(chg_id);
+		System.out.println("JhController chgDetail chgrParti -> " + chgrParti);
+		model.addAttribute("chgrParti", chgrParti);
+		
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("chg", challenge);
+		model.addAttribute("state_md", state_md);
 		return "jh/chgAdminDetail";
 		
 	}

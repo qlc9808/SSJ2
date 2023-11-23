@@ -29,15 +29,22 @@
 }
 .qbd-main > .qbd-mainbody >.qbd-title > .qbd-title-content {
 	display: flex; align-items: center; justify-content: start;
-	width: 85%; margin-left: 30px;
+	width: 85%;
 }
 .qbd-main > .qbd-mainbody > .qbd-line {
 	width: 100%; height: 50px;
-	display: flex; align-items: center;
+	display: inline-grid; align-items: center; 
+	vertical-align: middle;
 }
 .qbd-main > .qbd-mainbody > .qbd-line > .qbd-line-li {
 	width: 80%; height: 2px; background-color: gray;
 	margin: auto;
+}
+.qbd-main > .qbd-mainbody > .qbd-line > .qbd-line-box {
+	width: 80%; margin: auto;
+}
+.qbd-line-box-text {
+	font-size: 0.8em; font-weight: 500;
 }
 .qbd-main > .qbd-mainbody > .qbd-content {
 	width: 80%; height: 100%;
@@ -45,7 +52,7 @@
 	margin: auto;
 }
 .title-text {
-	margin-left: 30px; margin-top: 20px; font-size: 1.8em;
+	margin-left: 30px; margin-top: 20px; font-size: 1.8em; font-weight: bold;
 }
 .qbd-title a {
     margin-right: 10px;

@@ -206,9 +206,10 @@ public class YrController {
 		brdLike.setBrd_num(brd_num);
 		brdLike.setUser_num(userNum);
 		
-		Map<String, Object> likeResult = new HashMap<>();
 		int likeProResult = ybls.likePro(brdLike);
 		System.out.println("YrController likePro likeProResult -> " + likeProResult);
+		
+		Map<String, Object> likeResult = new HashMap<>();
 		likeResult.put("likeProResult", likeProResult);
 		
 		return likeResult;

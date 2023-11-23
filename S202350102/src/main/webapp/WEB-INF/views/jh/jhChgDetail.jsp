@@ -182,6 +182,8 @@
             dataType: 'json',
             success: function (likeResult) {
                 location.reload();
+                // 좋아요 없음 <img alt="heart" src="./images/yr/heart.png">
+                // 좋아요 있음 <img alt="heart-fill" src="./images/yr/heart-fill.png">
             },
             error: function () {
                 alert("좋아요 에러");

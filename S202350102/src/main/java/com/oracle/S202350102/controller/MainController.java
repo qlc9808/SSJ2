@@ -2,10 +2,14 @@ package com.oracle.S202350102.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.service.main.BoardService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +18,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class MainController {
+	private final BoardService bs;
 	
 	@RequestMapping(value ="/")
-	public String index() {
+	public String index(HttpSession session, Model model) {
 		System.out.println("MainController index Start...");
+		
+		// yr 작성
+		// session에 저장된 로그인 정보값 가져오기
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("MainController index userNum -> " + userNum);
+		}
+		
+		// 인증게시판 출력
+		List<Board> chgCert = bs.selectChgCert(userNum);
+		System.out.println("MainController index chgCert -> " + chgCert);
+		
+		model.addAttribute("chgCertList", chgCert);
 		
 		return "home2";
 	}
+	
 	@RequestMapping(value ="listChallenge")
 	public String listChallenge() {
 		System.out.println("MainController listChallenge Start...");

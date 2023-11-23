@@ -7,14 +7,16 @@
     <select id="listCommunity" parameterType="Board" resultType="Board">
  		 SELECT *
  		 FROM (
- 		 		SELECT ROWNUM AS rn,  b.brd_num, b.title, u.nick, u.user_num, b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
- 		 		FROM   board b
- 		 		INNER JOIN user1 u  ON b.user_num = u.user_num
- 		 	    WHERE b.user_num = u.user_num
-        		AND b.brd_lg = 700
-        		AND b.brd_md = 103
-       		    AND b.brd_step =0
-      		    ORDER BY b.reg_date DESC
+ 		 		SELECT  ROWNUM AS rn, a.* 
+ 		 		FROM (
+		 		 		SELECT  b.brd_num, b.title, u.nick, u.user_num, b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount, u.user_name, u.user_id
+		 		 		FROM   board b
+		 		 		INNER JOIN user1 u  ON b.user_num = u.user_num
+		 		 	    WHERE b.user_num = u.user_num
+		        		AND b.brd_lg = 700
+		        		AND b.brd_md = 103
+		       		    AND b.brd_step =0
+		      		     ORDER BY 	b.brd_num DESC) a
  		 )
  		 WHERE rn BETWEEN #{start} AND #{end}  
     </select>

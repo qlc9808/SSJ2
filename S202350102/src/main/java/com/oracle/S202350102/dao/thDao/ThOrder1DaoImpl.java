@@ -26,15 +26,51 @@ public class ThOrder1DaoImpl implements ThOrder1Dao {
 	}
 
 	@Override
-	public Order1 selectOrder(Order1 order1) {
+	public int selectMaxOrderNum() {
 		System.out.println("ThOrder1DaoImpl selectOrder start...");
+		int max_order_num = 0;
+		try {
+			max_order_num = session.selectOne("thSelectMaxOrderNum");
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl max_order_num Exception --> " + e.getMessage());
+		}
+		return max_order_num;
+	}
+
+	@Override
+	public Order1 selectOrderJoinMem(Order1 order1) {
+		System.out.println("ThOrder1DaoImpl selectOrderJoinMem start...");
 		Order1 orderResult = null;
 		try {
-			orderResult = session.selectOne("thOrderSelect", order1);
+			orderResult = session.selectOne("thSelectOrderJoinMem",order1);
 		}catch (Exception e) {
-			System.out.println("ThOrder1DaoImpl orderResult  Exception --> " + e.getMessage());
+			System.out.println("ThOrder1DaoImpl selectOrderJoinMem Exception --> " + e.getMessage());
 		}
 		return orderResult;
+	}
+
+	@Override
+	public int updateOrderSucess(int order_num) {
+		System.out.println("ThOrder1DaoImpl updateOrderSucess start...");
+		int updateResult = 0;
+		try {
+			updateResult = session.selectOne("thUpdateOrderSucess",order_num);
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl updateOrderSucess Exception --> " + e.getMessage());
+		}
+		return updateResult;
+	}
+
+	@Override
+	public Order1 selectOrderSucess(int user_num) {
+		System.out.println("ThOrder1DaoImpl selectOrderSucess start...");
+		Order1 order1 = null;
+		try {
+			order1 = session.selectOne("thSelectOrderSucess",user_num);
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl selectOrderSucess Exception --> " + e.getMessage());
+		}
+		return order1;
 	}
 	
 	

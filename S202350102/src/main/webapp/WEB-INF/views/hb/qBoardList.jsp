@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,13 +11,12 @@
 	<link rel="stylesheet" href="/css/qBoardList.css">
 </head>
 <body>
-	
 	<c:import url="/WEB-INF/views/header4.jsp"/>
 	<div class="mainBody">
 	  <div class="qe_body">
 	    <div class="qe_box">
 	      <div class="qe_text_box">
-	        <span>문의게시판${keyword }</span>
+	        <span>문의게시판</span>
 	      </div>
 	      <div class="qe_extra_box">
 	      	<div class="qe_select_box">
@@ -63,7 +62,20 @@
 								<img title="Lv.${board.user_level } | exp.${board.user_exp}(${board.percentage }%)" src="/images/level/${board.icon}.gif">${board.nick}
 							</td>
 							<td>${board.category }</td>
-							<td><fmt:formatDate value="${board.reg_date }" pattern="yy-MM-dd"/></td>
+							<td>
+								<jsp:useBean id="today" class="java.util.Date"></jsp:useBean>
+								  <fmt:parseNumber value="${today.time / (1000 * 60 * 60 * 24)}" var="nowDays" integerOnly="true" />
+								  <fmt:parseNumber value="${(board.reg_date.time + (9 * 60 * 60 * 1000)) / (1000 * 60 * 60 * 24)}" var="regDays" integerOnly="true" />
+								  <c:set value="${nowDays - regDays }" var="dayDiff" />
+								  <c:choose>
+								    <c:when test="${dayDiff == 0 }">
+								    	<fmt:formatDate value="${board.reg_date }" pattern="HH:mm"/>
+								    </c:when>
+								    <c:otherwise>
+								        <fmt:formatDate value="${board.reg_date }" pattern="yy.MM.dd"/>
+								    </c:otherwise>
+								  </c:choose>
+							</td>
 							<td>${board.view_cnt}</td>
 							<c:set var="num" value="${num-1 }"></c:set>
 						</tr>
@@ -303,6 +315,9 @@
 		});
     	
     }
+    
+    
+    
     
 </script>
 </html>

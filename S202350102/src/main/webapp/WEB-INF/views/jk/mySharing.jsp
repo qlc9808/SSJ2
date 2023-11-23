@@ -41,13 +41,13 @@
             <!-- Nav -->
             <nav class="mb-10 mb-md-0">
               <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-                <a class="list-group-item list-group-item-action dropend-toggle active" href="../sharing">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="../sharing">
                   	전체 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="account-wishlist.html">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
+                <a class="list-group-item list-group-item-action dropend-toggle active" href="/mySharing">
                  	내가 쓴 글
                 </a>
                <a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
@@ -64,12 +64,7 @@
             <div class="d-flex justify-content-between mb-3">
                 <!-- 공간을 벌리기 위해 클래스 추가 -->
             </div>
-            <div class="d-flex justify-content-end mb-3">
-              <select class="form-select form-select-xxs w-auto">
-                  <option value="1">최근 게시물</option>
-                  <option value="1">조회수 높은 순</option>
-              </select>
-            </div>
+            
             </div>
   <div class="row">
   	<c:set var="usernum" value="${sessionScope.user_num}" />
@@ -79,9 +74,7 @@
         <div class="col-6 col-md-4" style="padding-left: 8px; padding-right: 8px;">
             <div class="card mb-7">
                 <div class="card-img">
-                    <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" onclick="likePost(${board.brd_num})">
-                        <i class="fe fe-heart"></i>
-                    </button>
+                  
                    <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='myDetailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
 				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 					</button>

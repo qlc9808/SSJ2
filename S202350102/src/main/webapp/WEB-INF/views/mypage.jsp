@@ -13,44 +13,86 @@
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <script src="./js/jquery.js"></script>
 <script type="text/javascript">
-	$(function(){
-		alert('test');
+//Flickity 초기화 함수 - slider활용하기 위한 것
+function initFlickity() {
+
+    // Flickity 초기화 초기화 위해 객체 생성
+    var flkty = new Flickity('#mySlider', {
+        prevNextButtons: true, // 이전 및 다음 버튼 활성화
+        draggable: true, // 드래깅 활성화
+        // 필요한 경우 더 많은 옵션을 추가할 수 있습니다.
+         contain: true ,// 부모 요소에 캐러셀을 포함시킵니다.
+         cellAlign: 'left',
+         pageDots: false
+    });
+    
+    //리턴값을 줘서 사용(없어도 됨)
+    return flkty;
+}
+
+function clickLoad(index) {
+	
+	// Flickity 인스턴스 제거
+    var flkty = $('#mySlider').data('flickity');
+    if (flkty) {
+        flkty.destroy();
+    }
+    
+	
+	if(index == 1) {
+		// 참여 챌린지
 		$.ajax(
 				{
 					
-					url: "fuckingTryShit",
+					url: "myParty",
 					dataType:"html",
 					success:function(data){
+						$("#mySlider").html(data);
 						
-						$("#myApllyChg").html(data);
+				        //Flickity 초기화
+						initFlickity();
 					}
 				}		
 			);
 		
+	} else if(index == 2) {
+		// 신청한 챌린지
+		$.ajax(
+				{
+					
+					url: "myApplychgAjax",
+					dataType:"html",
+					success:function(data){
+						$("#mySlider").html(data);
+						
+				        //Flickity 초기화
+						initFlickity();
+					}
+				}		
+			);
 		
-		
-	})
-	
+	} else if(index == 3) {
+		// 찜한 챌린지
+		$.ajax(
+				{
+					url: "/chgPickList",
+					dataType:"html",
+					success:function(data){
+						$("#mySlider").html(data);
+						
+				        //Flickity 초기화
+						initFlickity();
+					}
+				}		
+			);
 
-	function clickLoad() {
-		 var flkty = $('#recomSlider').data('flickity');
-         if (flkty) {
-             flkty.destroy();
-         }
-       //Flickity 초기화
-		 initFlickity();
-	}
-	function initFlickity() {
+	} else {
+		// 최근 본 챌린지
+		// 일단 보류
 		
-	    // Flickity 초기화 초기화 위해 객체 생성
-	    var flkty = new Flickity('#recomSlider', {
-	        prevNextButtons: true,
-	        cellAlign: 'left',
-	        
-	    });
-	    //리턴값을 줘서 사용(없어도 됨)
-	    return flkty;
 	}
+	
+}
 	
 	
 	function myContsDelete(brd_md, brd_num){
@@ -168,7 +210,7 @@
 
 </head>
 <style type="text/css">
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+@import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css); 
     	body{
     	font-family: 'Noto Sans KR', sans-serif;} 
 			
@@ -339,18 +381,20 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 	            
 		            <!-- Nav -->
 		            <div class="nav justify-content-center mb-10">
-		            	<a class="nav-link active" href="#myParty" data-bs-toggle="tab">참여 챌린지</a>
-		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab"   onclick="clickLoad()">신청한 챌린지</a>
-		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">최근 본 챌린지</a>
-		            	<a class="nav-link" href="#chgPickTab" data-bs-toggle="tab">찜한 챌린지</a>
+		            	<a class="nav-link active" href="#my" data-bs-toggle="tab" onclick="clickLoad(1)">참여 챌린지</a>
+		            	<a class="nav-link" href="#my" data-bs-toggle="tab"   onclick="clickLoad(2)">신청한 챌린지</a>
+		            	<a class="nav-link" href="#my" data-bs-toggle="tab" onclick="clickLoad(3)">찜한 챌린지</a>
+		            	<!-- 최근 본 챌린지는 일단 보류. 나중에 시간나면 추가할 예정 -->
+		            	<!-- <a class="nav-link" href="#my" data-bs-toggle="tab" onclick="clickLoad(4)">최근 본 챌린지</a> -->
 		            </div>	
 		            
 	            	<!-- Content -->
 		            <div class="tab-content">	
 		            	<!-- Pane -->
-		            	<div class="tab-pane fade show active" id="myParty">
+		            	<div class="tab-pane fade show active" id="my">
 		            	  <!-- Slider -->
-			                <div id="recomSlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			                  
+			                <div id="mySlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>
+			                <!--  이 안에서 tab에 해당하는 내용을 ajax로 출력 -->			                  
 
                   			<!-- Item2 참여한 챌린지 -->
 			                  <c:forEach items="${mychgrList }" var="chg">
@@ -394,99 +438,11 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 			                  </c:forEach>
 
 			                	         
-			                </div> <!-- slider -->
+			                </div> 
+			                <!-- slider -->
 		
-		            	</div> <!-- topSellertsTab -->
-		            	
-		            	
-		            	<div class="tab-pane fade" id="myApllyChg">
-		            	  	<!-- Slider -->
-			               <%--  <div id="recomSlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-6" data-flickity='{"prevNextButtons": true}'>			
-							
-			                  
-
-                  				<!-- Item2 신청한 챌린지 -->
-			                  <c:forEach items="${mychgList }" var="chg" >
-			                  <div class="col px-4" style="max-width: 400px;">
-			                  
-			                    <div class="card">
-			
-			                      <!-- Image -->
-			                      <c:choose>
-									<c:when test="${sessionScope.user_num != null}">
-										<!-- 로그인 한 상태 -->
-										<c:choose>
-											<c:when test="${chg.pickyn > 0}">
-												<!-- 찜하기 있음 -->
-												<button type="button" class="btn btn-xs btn-circle btn-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
-													<i class="fe fe-heart"></i>
-												</button>
-											</c:when>
-								
-											<c:otherwise>
-												<!-- 찜하기 없음 -->
-												<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick${chg.chg_id}">
-													<i class="fe fe-heart"></i>
-												</button>
-											</c:otherwise>
-										</c:choose>
-									</c:when>
-								
-									<c:otherwise>
-										<!-- 로그인 안 한 상태 -->
-										<button type="button" class="btn btn-xs btn-circle btn-white-primary card-action card-action-end" data-toggle="button"
-											onclick="location.href='/loginForm'">
-											<i class="fe fe-heart"></i>
-										</button>
-									</c:otherwise>
-								</c:choose>
-			
-				                  <!-- Button -->
-				                  <button class="btn btn-xs w-100 btn-dark card-btn">
-				                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
-				                  </button>
-				
-				                  
-				                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
-				                  <c:if test="${chg.thumb != null}">
-				                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
-				                  </c:if>
-				                  <c:if test="${chg.thumb == null}">
-				                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
-				                  </c:if>
-								  </a>
-			
-			                      <!-- Body -->
-			                      <div class="card-body py-4 px-0 text-center">
-			
-					                <a class="text-body fw-bolder text-muted fs-6" href="chgDetail?chg_id=${chg.chg_id }">${chg.title }</a>
-					                <div class="text-muted"> 
-					                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
-					                  ~ 
-					                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
-					                 </div>
-					                <div class="text-muted">참여인원: ${chg.chlgerCnt}
-					            	</div>
-					            	<c:if test="${chg.state_md==100 || chg.state_md==104}">
-				                    	<a href="myChgUpdate?chg_id=${chg.chg_id }">
-				                    		<button type="button">수정</button>
-				                    	</a>
-			                    	</c:if>
-						            	
-			                      </div>
-			
-			                    </div>
-			                    
-			                  </div>
-			                  </c:forEach>
-
-			                	         
-			            </div> <!-- slider --> --%>
-		
-						<!-- chgPickTab start -->
-						<div class="tab-pane fade" id="chgPickTab">	
-							<%@ include file="/WEB-INF/views/yr/chgPickList.jsp" %>
-		            	</div> <!-- chgPickTab end -->
+		            	</div>  
+		            	<!-- topSellertsTab -->
 		            	
 		        	</div> <!-- tab-content -->
 				</div> <!-- col-12 -->
@@ -548,13 +504,13 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                
 									   <div class="page">
 										    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
-										        <a href="listCommunity?currentPage=${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
+										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
 										    </c:if>
 										    <c:forEach var="i" begin="${myCertiPage.startPage}" end="${myCertiPage.endPage}">					        
 										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${i }); return false;" >[${i}]</a>
 										    </c:forEach>
-										    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">
-										        <a href="listCommunity?currentPage=${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
+										    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">										        
+										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
 										    </c:if>
 										</div> 
 									           	
@@ -573,7 +529,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						<c:choose>
 			            	<c:when test="${not empty myReviewList }">
 			            		<c:set var="num" value="${myReviewPage.total - myReviewPage.start+1 }"></c:set> 
-				                <table class="boardtable">
+				                <table class="table">
 				                    <thead>
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>

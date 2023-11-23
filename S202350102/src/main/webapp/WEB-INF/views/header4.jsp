@@ -148,12 +148,6 @@
 	            </c:when>
               </c:choose>
             </li>
-
-            <li class="nav-item ms-lg-n4">
-              <a class="nav-link" href="./account-wishlist.html">
-                <i class="fe fe-heart"></i>
-              </a>
-            </li>
             <li class="nav-item ms-lg-n4">
               <a class="nav-link" data-bs-toggle="offcanvas" href= "#" id="alarmpopup">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16" >

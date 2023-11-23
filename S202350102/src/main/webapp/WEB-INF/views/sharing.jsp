@@ -146,7 +146,7 @@ $("#sortOption").change(function() {
                 <a class="list-group-item list-group-item-action dropend-toggle active" href="../sharing">
                   	전체 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="account-wishlist.html">
+                <a class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
                 <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
