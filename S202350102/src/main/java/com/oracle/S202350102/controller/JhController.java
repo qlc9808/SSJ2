@@ -920,6 +920,8 @@ public class JhController {
 	public String chgAdminDetail(Challenge challenge, HttpSession session, Model model) {
 		System.out.println("JhController chgAdminDetail Start...");
 		
+		
+		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = challenge.getState_md();
 		

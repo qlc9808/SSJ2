@@ -33,26 +33,38 @@
 		var user_num		= ${chg.user_num}
 		
 		if(approvReturn == 1){
-			alert("pApprovReturn 승인 -> " + pApprovReturn);
+			var confirmResult = confirm("챌린지를 승인하시겠습니까?");
 			
-			location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&user_num="+user_num+"&approvReturn="+approvReturn;
-			
+			if(confirmResult){
+				location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&user_num="+user_num+"&approvReturn="+approvReturn;
+			} 
 		} else{
-			alert("pApprovReturn 반려 -> " + pApprovReturn);
 			
 			$('#returnModal').modal('show')
 		}
 	}
 	
-	
-	/* function chk(pApprovReturn){
+	function chk(){
+/* 		alert("pApprovReturn 반려 -> " + pApprovReturn);
 		var approvReturn	= pApprovReturn
-		var return_md		= ${rtnReason.md }
+		var return_md		= $('#return_md').val();
+		alert('return_md --> ' + return_md)
 		var chg_id			= ${chg.chg_id}
-		var state_md		= ${chg.state_md}
+		var state_md		= ${chg.state_md} */
 		
-		location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&return_md="+return_md+"&approvReturn="+approvReturn;
-	} */
+		var confirmResult = confirm("챌린지를 반려 하시겠습니까?");
+		
+		if(confirmResult){
+			//location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&return_md="+return_md+"&approvReturn="+approvReturn;
+			
+			return true;
+		} else {
+	        // 취소 버튼을 눌렀을 때 아무 동작도 하지 않고 모달을 열어둠
+	        return false;
+	    }
+		
+	} 
+	
 </script>
 </head>
 <body>
@@ -83,10 +95,13 @@
                 </p>
     
                 <!-- Form -->
-                <form action="/approvReturn" onsubmit="return chk(0)">
+                <form action="/approvReturn" onsubmit="return chk()">
                   <div class="row gx-5">
                     <div class="col">
-    
+                    
+    				<input type="hidden" name="approvReturn" value="0">
+    				<input type="hidden" name="chg_id" value="${chg.chg_id}">
+    				<input type="hidden" name="state_md" value="${chg.state_md}">
                       <!-- Input -->
                       <select class="form-select" id="return_md" name="return_md" required="required">
                       	<c:forEach var="rtnReason" items="${returnReason }" varStatus="status">
@@ -166,8 +181,8 @@
 				  </td>
 			    </tr>
 			    <tr>
-			      <th scope="row">개설자 닉네임</th>
-			      <td>${chg.nick }</td>
+			      <th scope="row">개설자 아이디 / 개설자 닉네임</th>
+			      <td> / ${chg.nick }</td>
 			    </tr>
 			    <tr>
 			      <th scope="row">개설자 이름</th>

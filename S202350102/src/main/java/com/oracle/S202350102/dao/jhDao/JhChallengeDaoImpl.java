@@ -371,15 +371,16 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		System.out.println("JhChallengeDaoImpl approvReturn Start...");
 		System.out.println("JhChallengeDaoImpl approvReturn apvRtnParaMap -> " + apvRtnParaMap);
 		
-		int result = 0;
+		int resultCount = 0;
 		try {
-			result = session.selectOne("jhApprovReturnPro", apvRtnParaMap);
+			session.selectOne("jhApprovReturnPro", apvRtnParaMap);
 		} catch (Exception e) {
 			System.out.println("JhChallengeDaoImpl approvReturn e.getMessage() -> " + e.getMessage());
 
 		}
-		System.out.println("JhChallengeDaoImpl approvReturn result -> " + result);
-		return result;
+		resultCount = (int) apvRtnParaMap.get("resultCount");
+		System.out.println("JhChallengeDaoImpl approvReturn resultCount -> " + resultCount);
+		return resultCount;
 	}
 
 
