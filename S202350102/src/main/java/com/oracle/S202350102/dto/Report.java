@@ -19,4 +19,6 @@ public class Report {
 	private int  state_lg;	 // 신고처리상태(대분류)
 	private int  state_md;	 // 신고처리상태(중분류)
 	
+	// 과거 신고 여부 조회
+	private int burningRecord;
 }

@@ -29,7 +29,7 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.User1;
-import com.oracle.S202350102.service.bgService.BgService;
+import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
@@ -55,7 +55,7 @@ public class JhController {
 	private final YrChallengerService ycs;
 	private final YrChallengePickService ycps;
 	
-	private final BgService bs;
+	private final BgBoardService bBoardD;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -229,7 +229,7 @@ public class JhController {
 		if (searchType == null && sortBy == null ) {
 			
 			// 카운팅
-			int certTotal = bs.certTotal(chg_id);
+			int certTotal = bBoardD.certTotal(chg_id);
 			model.addAttribute("certTotal", certTotal);
 			System.out.println("certTotal -> " + certTotal);
 			
@@ -243,13 +243,13 @@ public class JhController {
 			System.out.println("certBrdPage.getTotal() -> "+certBrdPage.getTotal());
 			
 			// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
-			List<Board> certBoard = bs.certBoard(board);
+			List<Board> certBoard = bBoardD.certBoard(board);
 			System.out.println("BgController certBoard.size() -> "+certBoard.size());
 			model.addAttribute("certBoard", certBoard);
 			
 			
 			// bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
-			Challenge chg = bs.bgChgDetail(chg_id);
+			Challenge chg = bBoardD.bgChgDetail(chg_id);
 			System.out.println("BgController bgChgDetail chg -> "+chg);
 			model.addAttribute("chg", chg);
 			
@@ -264,7 +264,7 @@ public class JhController {
 			
 			// 카운팅
 			// mapper key: srchCrtBdCnt		 검색 결과 counting 후, 페이징 작업
-			int searchCnt = bs.srchCrtBdCnt(board);
+			int searchCnt = bBoardD.srchCrtBdCnt(board);
 			System.out.println("searchCnt3 -> "+searchCnt);
 			
 			// 페이징
@@ -277,7 +277,7 @@ public class JhController {
 			
 			// R
 			// mapper key: searchCrtBd		 검색 결과 리스트 R
-			List<Board> srchResult = bs.searchCrtBd(board);
+			List<Board> srchResult = bBoardD.searchCrtBd(board);
 			System.out.println("srchResult.size() -> "+srchResult.size());
 			
 			

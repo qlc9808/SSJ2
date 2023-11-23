@@ -529,6 +529,44 @@
 				+	'&sortBy=' + sortBy;
 	}
 	
+	
+	// 태우기 버튼 -> 로그인을 해야
+	function Burning(p_index) {
+		
+		
+		var burning_cnt = $('#burning_cnt' + p_index).val();
+		var brd_num		= $('#brd_num' + p_index).val();
+		
+		var confirmationMsg = "이 글을 신고하시겠습니까?\n\n현재 신고 온도: " + burning_cnt + "°C";
+		
+		var isConfirmed = window.confirm(confirmationMsg);
+		
+		if(isConfirmed) {
+			
+			var jsonData = JSON.stringify({brd_num: brd_num});
+	         
+	         $.ajax({
+	             url:   "/Burning"
+	            ,type:   "POST"
+	            ,data:   jsonData
+	            ,contentType:   'application/json'
+	            ,dataType:   'json'
+	            ,success:   function (burningResult) {
+	               alert("태우기 성공");
+	               location.reload();
+	               
+	            },
+	            error:   function() {
+	               alert("태우기 실패하였습니다;")
+	            }
+	         });
+			
+		} else {
+			return;
+		}
+		
+	}
+	
 
 	
 	
@@ -1259,14 +1297,18 @@
 					              <div class="review" id="review${status.index}">
 					                <div class="review-body">
 					                  <div class="row" id="certBoard${status.index}">
-					                  	<input type="hidden" id="brd_num${status.index}"	value="${certBoard.brd_num }">
-					                  	<input type="hidden" id="nick${status.index}"		value="${certBoard.nick }">
-					                  	<input type="hidden" id="reg_date${status.index}"	value="${certBoard.reg_date }">
-					                  	<input type="hidden" id="title${status.index}"		value="${certBoard.title }">
-					                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
-					                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
-					                  	<input type="hidden" id="brd_step${status.index}"	value="${certBoard.brd_step }">
-                                           <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
+					                  	<input type="hidden" id="brd_num${status.index}"		value="${certBoard.brd_num }">
+					                  	<input type="hidden" id="nick${status.index}"			value="${certBoard.nick }">
+					                  	<input type="hidden" id="reg_date${status.index}"		value="${certBoard.reg_date }">
+					                  	<input type="hidden" id="title${status.index}"			value="${certBoard.title }">
+					                  	<input type="hidden" id="conts${status.index}"			value="${certBoard.conts }">
+					                  	<input type="hidden" id="img${status.index}"			value="${certBoard.img }">
+					                  	<input type="hidden" id="brd_step${status.index}"		value="${certBoard.brd_step }">
+                                        <input type="hidden" id="brd_group${status.index}"  	value="${certBoard.brd_group }">
+                                        <input type="hidden" id="user_img${status.index}"		value="${certBoard.user_img}">
+										<input type="hidden" id="user_num${status.index}"		value="${certBoard.user_num}">
+                                        <input type="hidden" id="like_cnt${status.index}"		value="${certBoard.like_cnt}">
+                                        <input type="hidden" id="burning_cnt${status.index}"	value="${certBoard.burning_cnt}">
 				   						                  	
 					                  	
 					                  	<div class="col-5 col-md-3 col-xl-2">
@@ -1279,16 +1321,19 @@
 					                    
 											<!-- Avatar -->
 					                    	<div class="avatar avatar-lg">
-											  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+											  <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
 											</div>
 					                    
 					                      <!-- Header -->
 					                      <div class="row mb-6">
 					                        <div class="col-12">
-					                          <!-- Time -->
-					                          <span class="fs-xs text-muted">
-					                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
-					                          </span>
+					                         	<!-- Time -->
+					                         	<span class="fs-xs text-muted">
+													<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+														<span style="color: black;">${certBoard.nick}</span>
+													</a>
+													<time datetime="2019-07-25">${certBoard.reg_date }</time>
+												</span>
 					                        </div>
 					                      </div>
 					                      
@@ -1312,13 +1357,53 @@
 					                        
 						                        <!-- Rate -->
 						                        <div class="rate">
-						                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-				                            		좋아요 <i class="fe fe-thumbs-up"></i>
-						                          </a>
-						                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-				                            		태워요 <i class="fa-solid fa-fire"></i>
-						                          </a>
-						                        </div>
+													<c:choose>
+														<c:when test="${sessionScope.user_num != null }">
+															<!-- 로그인 한 상태 -->
+													
+															<c:choose>
+																<c:when test="${certBoard.likeyn > 0}">
+																	<!-- 좋아요 눌렀을 때 -->
+																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
+																		좋아요 
+																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+																			<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+																		</svg>
+																	</a>
+																</c:when>
+													
+																<c:otherwise>
+																	<!-- 좋아요 안 눌렀을 때 -->
+																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
+																		좋아요 
+																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+																			<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+																		</svg>
+																	</a>
+													
+													
+																</c:otherwise>
+													
+															</c:choose>
+													
+														</c:when>
+													
+														<c:otherwise>
+															<!-- 로그인 안 한 상태 -->
+															<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
+																좋아요 
+																<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+																	<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+																</svg>
+															</a>
+														</c:otherwise>
+													
+													</c:choose>
+
+													<a class="rate-item" data-toggle="vote" data-count="(${certBoard.burning_cnt }°C)" href="#" role="button" onclick="Burning(${status.index})">
+														태워요 <i class="fa-solid fa-fire"></i>
+													</a>
+												</div>
 						                        
 					                        </div>
 					                        
@@ -1382,14 +1467,15 @@
 							                  	<input type="hidden" id="conts${status.index}"		value="${certBoard.conts }">
 							                  	<input type="hidden" id="img${status.index}"		value="${certBoard.img }">
 	                                            <input type="hidden" id="brd_group${status.index}"  value="${certBoard.brd_group }">
-							                  	
+	                                            <input type="hidden" id="user_img${status.index}"	value="${certBoard.user_img}">
+												<input type="hidden" id="user_num${status.index}"	value="${certBoard.user_num}">
 							                  	
 							                  	
 												<div class="col-12 col-md-auto">
 							                        <!-- Avatar -->
 							                        <div class="avatar avatar-xxl mb-6 mb-md-0">
 							                          <span class="avatar-title rounded-circle">
-							                            <i class="fa fa-user"></i>
+							                            <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
 							                          </span>
 							                        </div>
 												</div>
@@ -1404,7 +1490,13 @@
 							                        <div class="col-12">
 							                          <!-- Time -->
 							                          <span class="fs-xs text-muted">
-							                            ${certBoard.nick}, <time datetime="2019-07-25">${certBoard.reg_date }</time>
+															
+														<!-- <a href="#" data-bs-toggle="modal" onclick="userInfoModalBoard(${status.index})"> -->
+														<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+															<span style="color: black;">${certBoard.nick}</span>
+														</a>
+
+														<time datetime="2019-07-25">${certBoard.reg_date }</time>
 							                          </span>
 							                        </div>
 							                      </div>
@@ -1427,12 +1519,57 @@
 							                      	<div class="col-auto me-auto">
 							                      		<!-- Rate -->
 								                        <div class="rate">
-								                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-						                            		좋아요 <i class="fe fe-thumbs-up"></i>
-								                          </a>
-								                          <a class="rate-item" data-toggle="vote" data-count="3" href="#" role="button">
-						                            		태워요 <i class="fa-solid fa-fire"></i>
-								                          </a>
+															<c:choose>
+																<c:when test="${sessionScope.user_num != null }">
+																	<!-- 로그인 한 상태 -->
+															
+																	<c:choose>
+																		<c:when test="${certBoard.likeyn > 0}">
+																			<!-- 좋아요 눌렀을 때 -->
+																			<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
+																				onclick="likePro(${status.index})">
+																				좋아요
+																				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+																					class="bi bi-heart-fill" viewBox="0 0 16 16">
+																					<path fill-rule="evenodd"
+																						d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+																				</svg>
+																			</a>
+																		</c:when>
+															
+																		<c:otherwise>
+																			<!-- 좋아요 안 눌렀을 때 -->
+																			<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
+																				onclick="likePro(${status.index})">
+																				좋아요
+																				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+																					class="bi bi-heart" viewBox="0 0 16 16">
+																					<path
+																						d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+																				</svg>
+																			</a>
+															
+															
+																		</c:otherwise>
+															
+																	</c:choose>
+															
+																</c:when>
+															
+																<c:otherwise>
+																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
+																		좋아요 
+																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+																			<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+																		</svg>
+																	</a>
+																</c:otherwise>
+															
+															</c:choose>
+
+															<a class="rate-item" data-toggle="vote" data-count="(30°C)" href="#" role="button">
+																태워요 <i class="fa-solid fa-fire"></i>
+															</a>
 								                        </div>
 							                      	</div>
 							                      
@@ -1621,7 +1758,7 @@
 					              <input type="hidden" name="chg_id" 	value="${chg.chg_id }">
 					                
 									<div class="avatar avatar-xl">
-									  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+									  <img src="" alt="profile" class="avatar-img rounded-circle" id="editUserImg">
 									</div>
 				                      
 				                      
@@ -1719,7 +1856,7 @@
 					              <input type="hidden" name="nick" id="editNick">
 					                
 									<div class="avatar avatar-xl">
-									  <img src="../assets/img/avatars/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+									  <img src="" alt="profile" class="avatar-img rounded-circle" id="moerUserImg">
 									</div>
 				                      
 				                      

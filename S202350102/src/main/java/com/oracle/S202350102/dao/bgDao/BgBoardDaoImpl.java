@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class BgDaoImpl implements BgDao {
+public class BgBoardDaoImpl implements BgBoardDao {
 	
 	private final SqlSession session;
 	
