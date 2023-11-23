@@ -260,26 +260,35 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		ybd.downParticipantsCnt(brd_num);
 	}
 
-	// 페이징 카운트 수
+	// 페이징 카운트 수(1)
 	@Override
 	public int totalMyUploadsharing(int user_num) {
 		System.out.println("YaCommunityServiceImpl totalMyUploadsharing start...");
 		int totalMyUploadsharing = ybd.totalMyUploadsharing( user_num);
 		return totalMyUploadsharing;
 	}
-	// 페이징 카운트 수
+	// 페이징 카운트 수(2)
 	@Override
 	public int totalJoinSharing(int user_num) {
 		System.out.println("YaCommunityServiceImpl totalJoinSharing start...");
 		int totalJoinSharing = ybd.totalJoinSharing(user_num);
 		return totalJoinSharing;
 	}
-	// 페이징 카운트 수
+	// 페이징 카운트 수(3)
 	@Override
 	public int totalConfirmSharing(int user_num) {
 		System.out.println("YaCommunityServiceImpl totalConfirmSharing start...");
 		int totalConfirmSharing = ybd.totalConfirmSharing(user_num);
 		return totalConfirmSharing;
+	}
+	
+	//쉐어링 전체게시글 수 구하기  
+	@Override
+	public int totalSharing(Board board) {
+		System.out.println("YaCommunityServiceImpl totalSharing start...");
+		int totalSharing = ybd.totalSharing(board);
+		
+		return totalSharing;
 	}
 
 
