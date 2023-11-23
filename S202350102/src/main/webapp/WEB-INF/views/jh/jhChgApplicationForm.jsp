@@ -376,7 +376,7 @@
                 <div class="col-12">
 
                   <!-- Button -->
-                  <button class="btn btn-dark" type="submit" onsubmit="return chk()">Save Changes</button>
+                  <button class="btn btn-dark" type="submit" >신청하기</button>
 
                 </div>
               </div>

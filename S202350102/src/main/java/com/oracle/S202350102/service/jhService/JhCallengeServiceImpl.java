@@ -205,10 +205,10 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 	}
 
 	@Override
-	public int approvReject(Map<String, Object> apvRjtParaMap) {
-		System.out.println("JhCallengeServiceImpl approvReject Start...");
+	public int approvReturn(Map<String, Object> apvRtnParaMap) {
+		System.out.println("JhCallengeServiceImpl approvReturn Start...");
 		
-		int result = jhChgDao.approvReject(apvRjtParaMap);
+		int result = jhChgDao.approvReturn(apvRtnParaMap);
 		return result;
 	}
  

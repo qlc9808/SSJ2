@@ -79,7 +79,7 @@ public interface JhCallengeService {
 	int 				chgListTotal(Challenge challenge);
 
 
-	int 				approvReject(Map<String, Object> apvRjtParaMap);
+	int 				approvReturn(Map<String, Object> apvRtnParaMap);
   
   
 	

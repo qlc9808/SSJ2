@@ -38,7 +38,7 @@ public class Challenge {
 	private String userName; 		//챌린지 개설자 이름
 	private String nick; 			//챌린지 개설자 닉네임
 	private String stateCtn; 		//챌린지 진행상태
-	private String rejectionReason; //챌린지 반려사유
+	private String returnReason; 	//챌린지 반려사유
 	
 	// 페이징 조회용    //검색타입		//검색 내용
 	private String search;   	private String keyword;

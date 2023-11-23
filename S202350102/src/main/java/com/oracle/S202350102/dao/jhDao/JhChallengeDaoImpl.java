@@ -367,17 +367,18 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 	}
 
 	@Override
-	public int approvReject(Map<String, Object> apvRjtParaMap) {
-		System.out.println("JhChallengeDaoImpl approvReject Start...");
+	public int approvReturn(Map<String, Object> apvRtnParaMap) {
+		System.out.println("JhChallengeDaoImpl approvReturn Start...");
+		System.out.println("JhChallengeDaoImpl approvReturn apvRtnParaMap -> " + apvRtnParaMap);
 		
 		int result = 0;
 		try {
-			result = session.selectOne("jhApprovRejectPro", apvRjtParaMap);
+			result = session.selectOne("jhApprovReturnPro", apvRtnParaMap);
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl approvReject e.getMessage() -> " + e.getMessage());
+			System.out.println("JhChallengeDaoImpl approvReturn e.getMessage() -> " + e.getMessage());
 
 		}
-		System.out.println("JhChallengeDaoImpl approvReject result -> " + result);
+		System.out.println("JhChallengeDaoImpl approvReturn result -> " + result);
 		return result;
 	}
 

@@ -26,29 +26,39 @@
 			
 	} */
 	
-	function approvRejectFn(pApprovReject){
+	function approvReturnFn(pApprovReturn){
+		var approvReturn	= pApprovReturn
+		var chg_id			= ${chg.chg_id}
+		var state_md		= ${chg.state_md}
+		var user_num		= ${chg.user_num}
 		
-		var approvReject	= pApprovReject
-		var chg_id			= ${chg_id}
-		var state_md		= ${state_md}
-		var user_num		= ${user_num}
-		var return_md		= ${return_md}
-		
-		if(approvReject == 1){
-			location.href = "approvReject?chg_id="+chg_id+"&state_md="+state_md+"&user_num="+user_num+"&approvReject="+approvReject;
+		if(approvReturn == 1){
+			alert("pApprovReturn 승인 -> " + pApprovReturn);
+			
+			location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&user_num="+user_num+"&approvReturn="+approvReturn;
 			
 		} else{
+			alert("pApprovReturn 반려 -> " + pApprovReturn);
 			
-			$('#rejectModal').modal('show')
+			$('#returnModal').modal('show')
 		}
 	}
 	
+	
+	/* function chk(pApprovReturn){
+		var approvReturn	= pApprovReturn
+		var return_md		= ${rtnReason.md }
+		var chg_id			= ${chg.chg_id}
+		var state_md		= ${chg.state_md}
+		
+		location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&return_md="+return_md+"&approvReturn="+approvReturn;
+	} */
 </script>
 </head>
 <body>
 <!-- MODALS -->
     <!-- Newsletter: Horizontal -->
-    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
     
@@ -59,63 +69,42 @@
     
           <!-- Content -->
           <div class="row gx-0">
-            <div class="col-12 col-lg-5">
-    
-              <!-- Image -->
-              <img class="img-fluid" src="./assets/img/covers/cover-25.jpg" alt="...">
-    
-            </div>
-            <div class="col-12 col-lg-7 d-flex flex-column px-md-8">
+            <div class="col-12 col-lg-12 d-flex flex-column px-md-8">
     
               <!-- Body -->
               <div class="modal-body my-auto py-10">
     
                 <!-- Heading -->
-                <h4>Subscribe to Newsletter and get 15% Discount</h4>
+                <h4>챌린지 신청 반려</h4>
     
                 <!-- Text -->
                 <p class="mb-7 fs-lg">
-                  On your next purchase
+                  	반려 사유를 선택해 주세요
                 </p>
     
                 <!-- Form -->
-                <form>
+                <form action="/approvReturn" onsubmit="return chk(0)">
                   <div class="row gx-5">
                     <div class="col">
     
                       <!-- Input -->
-                      <label class="visually-hidden" for="modalNewsletterHorizontalEmail">Enter Email *</label>
-                      <input class="form-control form-control-sm" id="modalNewsletterHorizontalEmail" type="email" placeholder="Enter Email *">
+                      <select class="form-select" id="return_md" name="return_md" required="required">
+                      	<c:forEach var="rtnReason" items="${returnReason }" varStatus="status">
+                      		<option value="${rtnReason.md }">${rtnReason.ctn }</option>
+                      	</c:forEach>
+                      </select>
     
                     </div>
                     <div class="col-auto">
     
                       <!-- Button -->
-                      <button class="btn btn-sm btn-dark" type="submit">
+                      <button class="btn btn-sm btn-dark" type="submit" >
                         <i class="fe fe-send"></i>
                       </button>
     
                     </div>
                   </div>
                 </form>
-    
-              </div>
-    
-              <!-- Footer -->
-              <div class="modal-footer pt-0">
-    
-                <!-- Checkbox -->
-                <div class="form-check">
-    
-                  <!-- Input -->
-                  <input class="form-check-input" id="modalNewsletterHorizontalCheckbox" type="checkbox">
-    
-                  <!-- Label -->
-                  <label class="form-check-label fs-xs" for="modalNewsletterHorizontalCheckbox">
-                    Prevent this Pop-up
-                  </label>
-    
-                </div>
     
               </div>
     
@@ -193,7 +182,7 @@
 			    <tr>
 			    	<c:if test='${chg.state_md == 104 }'>
 				      <th scope="row">반려사유</th>
-				      <td colspan="3">${chg.rejectionReason }</td>
+				      <td colspan="3">${chg.returnReason }</td>
 			    	</c:if>
 			    </tr>
 			    <tr>
@@ -247,14 +236,19 @@
 		</table>
 		<div class="d-flex justify-content-start mt-5">
 			<button class="btn btn-sm btn-dark mx-1" onclick="currentPageMove()">목록</button>
-			<button class="btn btn-sm btn-dark mx-1" onclick="approvRejectFn(1)" id="approval"  >승인</button>
-			<button class="btn btn-sm btn-dark mx-1" onclick="approvRejectFn(0)" id="rejection" >반려</button>
+			
+			<c:choose>
+				<c:when test="${chg.state_md == 100 }">
+					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
+					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
+				</c:when>
+			</c:choose>
 			<!-- 탈퇴여부에따라 보이는 버튼이 탈퇴 / 활성화로 바뀜  -->
-			<c:if test="">			      
-				<button class="btn btn-sm btn-dark mx-1" id="delBtn" onclick="fn_delCheck(,'', '')">탈퇴</button>
+			<c:if test="${chg.state_md == 102 }">			      
+				<button class="btn btn-sm btn-dark mx-1" id="updateBtn" onclick="updateFn()">수정</button>
 			</c:if>
-			<c:if test="">
-				<button class="btn btn-sm btn-info mx-1" id="actBtn" onclick="fn_delCheck(,'', '')">활성화</button>
+			<c:if test="${chg.state_md == 102 || chg.state_md == 103}">
+				<button class="btn btn-sm btn-info mx-1" id="deleteBtn" onclick="deleteFn()">삭제</button>
 			</c:if>
 		</div>	
 		</div>
