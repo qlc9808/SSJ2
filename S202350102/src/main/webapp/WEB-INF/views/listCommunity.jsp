@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header4.jsp" %>
-<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%> 
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -166,10 +166,12 @@ $(document).ready(function () {
                     if (data && data.length > 0) { // 결과가 비어있지 않은 경우에만 처리
                     	 for (var i = 0; i < data.length; i++) {
                              var result = data[i];
+                             console.log(result);
+                             var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
                              var str = '<tr>';
                              str += "<td>" + result.brd_num + "</td>";
                              str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
-                             str += "<td>" + result.nick + "</td>";
+                             str += "<td>" + img + result.nick + "</td>";
                              // 날짜 형식 변환
                              var formattedDate = new Date(result.reg_date);
                              var day = formattedDate.getDate();
@@ -219,9 +221,10 @@ $(document).ready(function () {
                for (var i = 0; i < data.length; i++) {
                       var result = data[i];
                       var str = '<tr>';
+             //       var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
                       str += "<td>" + result.brd_num + "</td>";
                       str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
-                      str += "<td>" + result.nick + "</td>";
+                      str += "<td>" + result.nick + "</td>"; // 한빛 : + img + result.nick + 이런식으로 추가해야됨
                       // 날짜 형식 변환
                       var formattedDate = new Date(result.reg_date);
                       var day = formattedDate.getDate();
@@ -309,7 +312,7 @@ $(document).ready(function () {
                             <tr>
                                 <td>${num}</td>
                                 <td><a href="detailCommunity?user_num=${board.user_num}&brd_num=${board.brd_num}">${board.title}</a></td>
-                                <td>${board.nick}</td>
+                                <td><img title="Lv.${board.user_level } | exp.${board.user_exp}(${board.percentage }%)" src="/images/level/${board.icon}.gif">${board.nick}</td>
                                 <td><fmt:formatDate value="${board.reg_date}" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
 				         		<td>${board.replyCount}</td>

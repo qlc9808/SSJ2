@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +63,6 @@
 			</div>			
 		</div>
 	</div>
-<c:import url="/WEB-INF/views/footer.jsp"/>
 <script type="text/javascript">
 	$(document).ready(function(){
 		qBoardCommentList();
@@ -237,5 +237,5 @@
 
 </script>
 </body>
-
+<c:import url="/WEB-INF/views/footer.jsp"/>
 </html>

@@ -10,62 +10,65 @@
 	<script type="text/javascript">
 		// 팔로우 하기 버튼
 		function following(p_index) {
-			alert("user_num -> " + p_index);
-		
-			// following 작동 테스트하기
-		/*
-		$.ajax({
-			url : "/followingPro",
-			type : "POST",
-			data : {user_num : p_index},
-			dataType : 'json',
-			success : function(followResult) {
-
-				if(followResult.following > 0) {
-					$("#follow" + p_index).removeClass("btn-danger");
-					$("#follow" + p_index).addClass("btn-light");
-					$("#follow" + p_index).text("팔로잉");
-				} else {
-					$("#follow" + p_index).removeClass("btn-light");
-					$("#follow" + p_index).addClass("btn-danger");
-					$("#follow" + p_index).text("팔로우");
+			$.ajax({
+				url : "/followingPro",
+				type : "POST",
+				data : {user_num : p_index},
+				dataType : 'json',
+				success : function(followResult) {
+	
+					if(followResult.following > 0) {
+						$(".follow" + p_index).removeClass("btn-danger");
+						$(".follow" + p_index).addClass("btn-light");
+						$(".follow" + p_index).text("팔로잉");
+					} else if(followResult.following == 0) {
+						$(".follow" + p_index).removeClass("btn-light");
+						$(".follow" + p_index).addClass("btn-danger");
+						$(".follow" + p_index).text("팔로우");
+					} else {
+						alert("자신의 계정은 팔로우 할 수 없습니다");
+					}
+				},
+				error : function() {
+					alert("팔로우 오류");
 				}
-			},
-			error : function() {
-				alert("팔로우 오류");
-			}
+	
+			});
+			
+		}
 
-		});
-		*/
-		
-	}
+		// 좋아요 버튼
+		function likePro(p_index) {
+			var brd_num = $('#brd_num' + p_index).val();
+			var like_cnt = $('#like_cnt' + p_index).val();
+			var inputLikeCnt = parseInt(like_cnt) + 1;
+			alert("inputLikeCnt -> " + inputLikeCnt);
 
-	// 좋아요 버튼
-	function likePro(p_index) {
-		var brd_num = $('#brd_num' + p_index).val();
-		alert("brd_num -> " + brd_num);
-
-		// likePro 작동되는지 테스트하기
-		/*
-		$.ajax({
-            url: "/likePro",
-            type: "POST",
-            data: { brd_num: brd_num },
-            dataType: 'json',
-            success: function (likeResult) {
-                location.reload();
-            },
-            error: function () {
-                alert("좋아요 에러");
-            }
-        });
-		*/
-	}
-
-	// 댓글 버튼
-	function comment(p_index) {
-		
-	}
+			$.ajax({
+	            url: "/likePro",
+	            type: "POST",
+	            data: { brd_num: brd_num },
+	            dataType: 'json',
+	            success: function (likeResult) {
+	            	if(likeResult.likeProResult > 0) {
+	            		// 좋아요 insert
+	            		$('#likeBtn' + p_index).attr('src', './images/yr/heart-fill.png');
+	            		$('#inputLikeCnt')
+	            	} else {
+	            		// 좋아요 delete
+	            		$('#likeBtn' + p_index).attr('src', './images/yr/heart.png');
+	            	}
+	            },
+	            error: function () {
+	                alert("좋아요 에러");
+	            }
+	        });
+		}
+	
+		// 댓글 버튼
+		function comment(p_index) {
+			
+		}
 
 	</script>
 </head>
@@ -88,6 +91,7 @@
 					<!-- 인증글 시작 -->
 					<c:forEach var="certList" items="${chgCertList }" varStatus="status">
 						<input type="hidden" id="brd_num${status.index}" value="${certList.brd_num}">
+						<input type="hidden" id="like_cnt${status.index }" value="${certList.like_cnt }">
 					
 						<c:if test="${certList.brd_step == 0 }">
 
@@ -124,16 +128,43 @@
 															<span>
 																<!-- Nick -->
 																<span style="color: black;">${certList.nick}</span>
-	
+																<br>
 																<!-- Date -->
-																<span>, ${certList.reg_date }</span>
+																<!-- 오늘 날짜 -->
+																<jsp:useBean id="javaDate" class="java.util.Date" />
+																<fmt:formatDate var="nowDateFd" value="${javaDate }" pattern="yyyy-MM-dd" />
+																<fmt:parseDate var="nowDatePd" value="${nowDateFd }" pattern="yyyy-MM-dd" />
+																<fmt:parseNumber var="nowDatePn" value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true" />
+																
+																<!-- 마지막 작성일자 -->
+																<fmt:formatDate var="lastRegDateFd" value="${certList.reg_date }" pattern="yyyy-MM-dd" />
+																<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }" pattern="yyyy-MM-dd" />
+																<fmt:parseNumber var="lastRegDatePn" value="${lastRegDatePd.time/(1000*60*60*24) }" integerOnly="true" />
+			
+																<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
+			
+																<span>
+																	${dDay }일 전
+																</span>
 															</span>
 															
+															<!-- follow -->
 															<span>
-																<!-- follow -->
-																<button type="button" class="btn btn-danger btn-xxs" onclick="following(${certList.user_num})" id="follow${certList.user_num}">
-																	팔로우
-																</button>
+																<c:choose>
+																	<c:when test="${certList.followyn == 1}">
+																	<!-- 팔로잉 -->
+																		<button type="button" class="btn btn-light btn-xxs follow${certList.user_num}" onclick="following(${certList.user_num})">
+                                        									팔로잉
+                                        								</button>
+																	</c:when>
+																	
+																	<c:otherwise>
+																	<!-- 팔로우 -->
+																		<button type="button" class="btn btn-danger btn-xxs follow${certList.user_num}" onclick="following(${certList.user_num})">
+																			팔로우
+																		</button>
+																	</c:otherwise>
+																</c:choose>
 															</span>
 														</span>
 													</div>
@@ -158,32 +189,27 @@
 													<c:choose>
 														<c:when test="${sessionScope.user_num != null }">
 															<!-- 로그인 한 상태 -->
-															<!-- 좋아요 -->
-															<c:choose>
-																<c:when test="${certList.likeyn > 0}">
+															
+															<a class="rate-item" data-toggle="vote" href="#" role="button" onclick="likePro(${status.index})">
+																좋아요 
+																<c:choose>
+																	<c:when test="${certList.likeyn > 0}">
 																	<!-- 좋아요 눌렀을 때 -->
-																	<a class="rate-item" data-toggle="vote" data-count="${certList.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
-																		좋아요 
-																		<img alt="heart-fill" src="./images/yr/heart-fill.png">
-																	</a>
-																</c:when>
-													
-																<c:otherwise>
+																		<img alt="heart-fill" src="./images/yr/heart-fill.png" id="likeBtn${status.index }">
+																	</c:when>
+														
+																	<c:otherwise>
 																	<!-- 좋아요 안 눌렀을 때 -->
-																	<a class="rate-item" data-toggle="vote" data-count="${certList.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
-																		좋아요 
-																		<img alt="heart" src="./images/yr/heart.png">
-																	</a>
-													
-													
-																</c:otherwise>
-													
-															</c:choose>
+																		<img alt="heart" src="./images/yr/heart.png" id="likeBtn${status.index }">
+																	</c:otherwise>
+														
+																</c:choose>
+																<span id="inputLikeCnt">${certList.like_cnt}</span>
+															</a>
 														</c:when>
 													
 														<c:otherwise>
 															<!-- 로그인 안 한 상태 -->
-															<!-- 좋아요 -->
 															<a class="rate-item" data-toggle="vote" data-count="${certList.like_cnt}" href="/loginForm" role="button">
 																좋아요 
 																<img alt="heart" src="./images/yr/heart.png">

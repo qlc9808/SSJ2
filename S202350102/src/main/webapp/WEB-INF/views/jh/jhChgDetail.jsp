@@ -1335,7 +1335,7 @@
 													<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
 														<span style="color: black;">${certBoard.nick}</span>
 													</a>
-													<time datetime="2019-07-25">${certBoard.reg_date }</time>
+													<time datetime="2019-07-25"><img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">${certBoard.reg_date }</time>
 												</span>
 					                        </div>
 					                      </div>
@@ -1496,7 +1496,7 @@
 															
 														<!-- <a href="#" data-bs-toggle="modal" onclick="userInfoModalBoard(${status.index})"> -->
 														<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
-															<span style="color: black;">${certBoard.nick}</span>
+															<span style="color: black;"><img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">${certBoard.nick}</span>
 														</a>
 
 														<time datetime="2019-07-25">${certBoard.reg_date }</time>

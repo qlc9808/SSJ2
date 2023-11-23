@@ -130,7 +130,7 @@ public class MainController {
 	
 	@RequestMapping(value ="loginForm")
 	public String logInForm() {
-		System.out.println("MainController logIn Start...");
+		System.out.println("MainController loginForm Start...");
 		
 		return "loginForm";
 	}
