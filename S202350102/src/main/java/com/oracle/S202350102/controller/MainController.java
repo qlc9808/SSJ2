@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.service.main.BoardService;
+import com.oracle.S202350102.service.main.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MainController {
 	private final BoardService bs;
+	private final UserService us;
 	
 	@RequestMapping(value ="/")
 	public String index(HttpSession session, Model model) {
@@ -34,6 +36,9 @@ public class MainController {
 		
 		// 인증게시판 출력
 		List<Board> chgCert = bs.selectChgCert(userNum);
+		
+		chgCert = us.boardWriterLevelInfo(chgCert);
+		
 		System.out.println("MainController index chgCert -> " + chgCert);
 		
 		model.addAttribute("chgCertList", chgCert);
