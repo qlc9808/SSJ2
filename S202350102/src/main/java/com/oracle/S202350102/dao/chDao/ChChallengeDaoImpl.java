@@ -111,4 +111,20 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 		return myChgrList;
 	}
 
+	@Override
+	public int chgUpdate(Challenge chg) {
+		System.out.println("ChChallengeDaoImpl chgUpdate Start...");
+		int result = 0;
+		
+		try {
+			result = session.update("chgUpdate",chg);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ChChallengeDaoImpl myChgrList e.getMessage()->" + e.getMessage());
+			result = 0;
+		}
+		
+		return result;
+	}
+
 }

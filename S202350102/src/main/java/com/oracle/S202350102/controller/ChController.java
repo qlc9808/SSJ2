@@ -4,7 +4,8 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -732,13 +734,16 @@ public class ChController {
 	public String myChgUpdate(int chg_id,HttpSession session, Model model) {
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
-			Challenge chg = jhCService.chgDetail(chg_id);
+			Challenge chg = jhCService.chgDetail(chg_id);	
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String endDate = dateFormat.format(chg.getEnd_date());			
 			if(user_num != chg.getUser_num()) {
 				return "ch/notAnAdmin";
 			}
 			User1 user = userService.userSelect(user_num);
 			model.addAttribute("user", user);
 			model.addAttribute("chg", chg);
+			model.addAttribute("endDate", endDate);
 			
 			
 			int categoryLd = 200;
@@ -795,6 +800,68 @@ public class ChController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value = "chChgUpDate", method = RequestMethod.POST)
+	public String chChgUpDate(Challenge chg,
+							  HttpServletRequest request,
+							  @RequestParam(value = "sampleImgFile", required = false) MultipartFile sampleImgFile,
+							  @RequestParam("thumbFile") MultipartFile thumbFile) throws Exception {
+		
+		
+		System.out.println("chChgUpDate start...");
+		/*************유저 확인*************/
+		HttpSession session = request.getSession();
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			
+			
+			 			
+			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
+			
+			/*************유저 권한 확인*************/
+			if(user_num == chg.getUser_num() || user.getStatus_md() == 102) { //관리자나 작성자이면
+				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+				/*************샘플이 바뀌었다면 기존 이미지 삭제 후 샘플 저장*************/
+				if(sampleImgFile != null) {
+					String deleteFile = uploadPath + chg.getSample_img();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					String saveName = uploadFile(sampleImgFile.getOriginalFilename(), sampleImgFile.getBytes(), uploadPath);
+					chg.setSample_img(saveName);
+				}			
+				
+				int delStatus = chg.getDelStatus();
+				/*************썸네일 기존 이미지 삭제 여부 확인*************/
+				if(delStatus == 1 || thumbFile != null) {
+					String deleteFile = uploadPath + chg.getThumb();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					/*************삭제가 아닌 업데이트라면 새 이미지 저장*************/
+					if(thumbFile != null) {
+						String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
+						chg.setThumb(saveName);
+					} else {
+						String saveName = "assets/img/chgDfaultImg.png";
+						chg.setThumb(saveName);
+					}
+					
+				}
+				
+				int result = chChallengeService.chgUpdate(chg);		
+				
+				if(result > 0 ) {
+					return "redirect:/mypage";
+				}
+				
+			}
+		} 
+		
+		
+		
+		return "ch/notAnAdmin";
+	}
+	
 	
 	
 	public void myChgList(HttpSession session, Model model) {

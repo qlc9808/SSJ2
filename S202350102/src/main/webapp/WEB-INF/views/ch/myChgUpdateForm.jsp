@@ -92,9 +92,37 @@
 		
 		
 	function chk(){
-		return confirm("챌린지를 신청하시겠습니까? \n 관리자 승인까진 3~5일이 소요됩니다.");
+		return confirm("챌린지를 수정하시겠습니까? \n 관리자 승인까진 3~5일이 소요됩니다.");
 		 
 	}	
+	
+	function appendInput(){		
+		if($("#sample_img").css("display") == "none"){
+			$("#sample_img").show();
+		} else {
+			$("#sample_img").hide();
+		}
+	}
+	
+	function thumbUpdate(){
+		if($("#thumb").css("display") == "none"){
+			$("#thumb").show();
+		} else {
+			$("#thumb").hide();
+		}
+	}
+	
+	function Deletethumb(){
+		if($("#thumbImg").css("display") != "none"){
+			$("#thumbImg").hide();
+			$("#delBtn").html("취소");
+			$("#delStatus").val(1);
+		} else{
+			$("#thumbImg").show();
+			$("#delBtn").html("삭제");
+			$("#delStatus").val(0);
+		}
+	}
 	
 	
 </script>
@@ -124,7 +152,7 @@
 			
 			
             <!-- Form -->
-            <form action="/chgApplication" onsubmit="return chk()" method="post" enctype="multipart/form-data">
+            <form action="chChgUpDate" onsubmit="return chk()" method="post" enctype="multipart/form-data">
               <input type="hidden" name="user_num" value="${user.user_num}">
               <input type="hidden" name="contextPath" id="contextPath" value="${pageContext.request.contextPath}/upload/">
 <%-- 필요한가
@@ -150,7 +178,7 @@
 								       id="category${status.index}"
 								       ${status.index == 0 ? 'checked' : ''} 
 								       value="${category.md }" 
-								       <c:if test="${category.md == chg.status_md }">
+								       <c:if test="${category.md == chg.chg_md }">
 								       checked
 								       </c:if> 
 								       required="required"
@@ -233,7 +261,7 @@
                       	챌린지 소개
                     </label>
                     <textarea class="form-control form-control-sm" rows="5" id="chg_conts" type="text" name="chg_conts" required placeholder="예) 건강을 위해서 우리 다함께 매일 만보를 걷는 챌린지를 해봐요~">
-                    	${chg.conts }
+                    	${chg.chg_conts }
                     </textarea>
                   </div>
 
@@ -251,7 +279,7 @@
 						관리자가 승인하면 그때부터 챌린지가 시작됩니다!<br>
 						승인까지 3~5일이 소요되니 이 점 유의하시고 종료 날짜를 선택해 주시길 바랍니다.
 					</div>
-                    <input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${chg.end_date }">
+                    <input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${endDate }">
                   </div>
 
                 </div>
@@ -265,7 +293,7 @@
                     <label class="form-label" for="chg_capacity">
                       	참여 인원
                     </label>
-                    <input type="number" class="form-control" name="chg_capacity" id="chg_capacity" max="50" min="1"  required="required">
+                    <input type="number" class="form-control" name="chg_capacity" id="chg_capacity" max="50" min="1"  required="required" value="${chg.chg_capacity }">
                   </div>
 
                 </div>
@@ -276,14 +304,15 @@
                      	인증 빈도
                     </label>
 					<select class="form-select" id="freq" name="freq" required="required">
-				    <option selected value="${chg.freq }" selected disabled hidden>일주일에 인증할 횟수를 선택해 주세요</option>
-				    <option value="1">1일</option>
-				    <option value="2">2일</option>
-				    <option value="3">3일</option>
-				    <option value="4">4일</option>
-				    <option value="5">5일</option>
-				    <option value="6">6일</option>
-				    <option value="7">매일</option>
+					    <c:forEach var="i" begin="1" end="7">
+					    	<c:if test="${i == freq}">
+					    		<option value="${i }" selected="selected">${i }일</option>
+					    	</c:if>
+					    	<c:if test="${i != freq }">
+					    		<option value="${i }">${i }일</option>
+					    	</c:if>
+					    </c:forEach>					    
+					    
 				  	</select>
                   </div>
 
@@ -306,11 +335,14 @@
                 <div class="col-12">
 
                   <!-- 인증예시 사진 -->
-                  <div class="form-group">
+                  <div class="form-group" id="sampleUpdate">
                     <label class="form-label" for="sample_img">
                       	인증 예시
+                      	<img alt="이미지 불러오기에 실패했습니다." src="${pageContext.request.contextPath}/upload/${chg.sample_img}">
+                      	<input type="hidden" value="${chg.sample_img}" name="sample_img">
                     </label>
-					<input type="file" class="form-control" id="sample_img" name="sampleImgFile" required value="${chg.img }">
+                    <button type="button" onclick="appendInput()" id="apply">수정</button>                    
+                    <input type="file" class="form-control" id="sample_img" name="sampleImgFile" style="display: none;">
                   </div>
 
                 </div>
@@ -326,13 +358,23 @@
                     <c:choose>
                     	<c:when test="${user.status_md == 101}">
 	                    	<div>
-		                      <!-- Male -->
-		                      <input class="btn-check" type="radio" name="chg_public" id="public" value="0" checked>
-		                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
-		
-		                      <!-- Female -->
-		                      <input class="btn-check" type="radio" name="chg_public" id="private" value="1">
-		                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
+		                      <c:choose>
+		                      	<c:when test="${chg.chg_public == 0}">
+		                      	  <input class="btn-check" type="radio" name="chg_public" id="public" value="0" checked>
+			                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
+			                      <input class="btn-check" type="radio" name="chg_public" id="private" value="1">
+			                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>
+		                      	</c:when>
+		                      	
+		                      	<c:otherwise>
+		                      	  <input class="btn-check" type="radio" name="chg_public" id="public" value="0">
+			                      <label class="btn btn-sm btn-outline-border" for="public">공개</label>
+			                      <input class="btn-check" type="radio" name="chg_public" id="private" value="1" checked>
+			                      <label class="btn btn-sm btn-outline-border" for="private">비공개</label>		                      	
+		                      	</c:otherwise>
+		                      
+		                      </c:choose>
+		                      
 		
 		                    </div>
                     	</c:when>
@@ -361,7 +403,15 @@
                     <label class="form-label" for="priv_pswd">
                       	비밀번호
                     </label>
-					<input type="password" class="form-control" id="priv_pswd" name="priv_pswd" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." disabled required value="${chg_PRIV_PSWD }">
+                    <c:choose>
+                     	<c:when test="${chg.chg_public == 1}">
+                    		<input type="password" class="form-control" id="priv_pswd" name="priv_pswd" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." required value="${chg.priv_pswd }">
+                    	</c:when>
+                    	<c:otherwise>
+                    		<input type="password" class="form-control" id="priv_pswd" name="priv_pswd" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." required disabled="disabled">
+                    	</c:otherwise>
+		            </c:choose>
+					
 		
                   </div>
 
@@ -375,8 +425,13 @@
                   <div class="form-group">
                     <label class="form-label" for="thumb">
                       	썸네일
+                      	<img alt="이미지 불러오기에 실패했습니다." src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg">
+                      	<input type="hidden" name="thumb" value="${chg.thumb}">
                     </label>
-					<input type="file" class="form-control" id="thumb" name="thumbFile" value="${chg.thumb }">
+                    <button  type="button" onclick="thumbUpdate()">수정</button>
+                    <button  type="button" onclick="Deletethumb()" id="delBtn">삭제</button>
+                    <input type="hidden" name="delStatus" value="0" id="delStatus">
+					<input type="file" class="form-control" id="thumb" name="thumbFile" style="display: none;">
                   </div>
 
                 </div>
