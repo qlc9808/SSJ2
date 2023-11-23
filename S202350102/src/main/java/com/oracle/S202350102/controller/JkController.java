@@ -666,7 +666,7 @@ public class JkController {
 			
 		}
 		System.out.println("user_num"+user_num);
-		List<Board> sharing = jbs.sharing(board);
+		List<Board> sharing = jbs.sharing2(board);
 		System.out.println("JkController list Sharing.size()?"+sharing.size());
 		
 	    model.addAttribute("user_num", user_num);
@@ -687,6 +687,7 @@ public class JkController {
 	    try {
 	        String addrJson = objectMapper.writeValueAsString(data);
 	        model.addAttribute("addrJson", addrJson);
+	        System.out.println("addrJson: " + addrJson);
 	    } catch (JsonProcessingException e) {
 	        e.printStackTrace();
 	    }
@@ -700,6 +701,7 @@ public class JkController {
 		System.out.println("JkController srchSharing Start...");
 		
 		String replSrch_word = srch_sharing.replace(" ", "");
+		board.setKeyword(replSrch_word);
 		int user_num = 0;
 		List<Board> srch_shareResult = null; // sharing 검색 결과 List
 		
@@ -722,7 +724,7 @@ public class JkController {
 				
 			}
 			// 입력된 키워드에 따라 검색 
-//			srch_shareResult = chSearchService.shareSearching(replSrch_word);
+			srch_shareResult = chSearchService.shareSearching(board);
 		}
 		
 		Map<String, Object> resultMap = new HashMap<>();

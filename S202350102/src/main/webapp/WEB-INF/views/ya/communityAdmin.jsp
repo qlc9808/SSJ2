@@ -10,7 +10,7 @@
 </head>
 <body>
 <section class="py-11">
- <div class="container">            
+ <div class="container" style=" margin-left: 300px;">            
         <div class="row">
           <div class="col-12 text-center">			
             <!-- Heading -->
@@ -29,7 +29,7 @@
         <!-- 게시판리스트    user_id에 회원정보 상세보기 링크 걸어두기 -->
             <div class="col-12">	
              <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 
-                <table class="table table-bordered table-sm mb-0">
+                <table class="table table-bordered table-sm mb-0" style="width:1200px">
                     <thead>
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>

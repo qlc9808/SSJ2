@@ -14,7 +14,7 @@
 }
 .qbd-main > .qbd-mainbody{
 	width: 60%; height: 100%;
-	border: 0px solid red; margin: auto; position:relative;
+	border: 0px solid red; margin: auto;
 }
 
 .qbd-main > .qbd-mainbody >.qbd-title {
@@ -47,7 +47,7 @@
 	font-size: 0.8em; font-weight: 500;
 }
 .qbd-main > .qbd-mainbody > .qbd-content {
-	width: 80%; height: 100%; position: absolute; bottom: 0px;
+	width: 80%; height: 100%;
 /* 	border-left: 1px solid black; border-right: 1px solid black; */
 	margin: auto;
 }
