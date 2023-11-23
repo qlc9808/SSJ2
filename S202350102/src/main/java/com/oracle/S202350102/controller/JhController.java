@@ -29,7 +29,7 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.User1;
-import com.oracle.S202350102.service.bgService.BgService;
+import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
@@ -55,7 +55,7 @@ public class JhController {
 	private final YrChallengerService ycs;
 	private final YrChallengePickService ycps;
 	
-	private final BgService bs;
+	private final BgBoardService bBoardD;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -132,6 +132,9 @@ public class JhController {
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
 	public String chgDetail(@RequestParam int chg_id
+						  , @RequestParam(value = "sortBy", required = false) String sortBy
+						  , @RequestParam(value = "searchType", required = false) String searchType
+						  , @RequestParam(value = "keyword", required = false) String keyword
 						  , HttpSession session
 						  , Model model
 						  , String currentPage
@@ -211,6 +214,8 @@ public class JhController {
 		
 		// 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
 		board.setChg_id(chg_id);
+		board.setSearchType(searchType);
+		board.setSortBy(sortBy);
 		
 		// yr 작성
 		// 로그인 된 정보를 넣기 위함
@@ -218,32 +223,76 @@ public class JhController {
 		  
 		// 페이징 작업 
 		// 인증 글 개수			mapper 키: certTotal
-		int certTotal = bs.certTotal(chg_id);
-		model.addAttribute("certTotal", certTotal);
-		System.out.println("certTotal -> " + certTotal);
+		System.out.println("JhController board.getKeyword() -> "+board.getKeyword());
+		System.out.println("JhController board.getSortBy() -> "+board.getSortBy());
+		// 
+		if (searchType == null && sortBy == null ) {
+			
+			// 카운팅
+			int certTotal = bBoardD.certTotal(chg_id);
+			model.addAttribute("certTotal", certTotal);
+			System.out.println("certTotal -> " + certTotal);
+			
+			// 페이징
+			Paging certBrdPage = new Paging(certTotal, currentPage);
+			board.setStart(certBrdPage.getStart()); 
+			board.setEnd(certBrdPage.getEnd());
+			model.addAttribute("certTotal", certTotal);
+			model.addAttribute("certBrdPage", certBrdPage);
+			System.out.println("certBrdPage.getStart() -> "+certBrdPage.getStart());
+			System.out.println("certBrdPage.getTotal() -> "+certBrdPage.getTotal());
+			
+			// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
+			List<Board> certBoard = bBoardD.certBoard(board);
+			System.out.println("BgController certBoard.size() -> "+certBoard.size());
+			model.addAttribute("certBoard", certBoard);
+			
+			
+			// bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
+			Challenge chg = bBoardD.bgChgDetail(chg_id);
+			System.out.println("BgController bgChgDetail chg -> "+chg);
+			model.addAttribute("chg", chg);
+			
+		} 
 		
-		Paging certBrdPage = new Paging(certTotal, currentPage);
-		board.setStart(certBrdPage.getStart()); 
-		board.setEnd(certBrdPage.getEnd());
-		model.addAttribute("certTotal", certTotal);
-		model.addAttribute("certBrdPage", certBrdPage);
-		System.out.println("certBrdPage.getStart() -> "+certBrdPage.getStart());
-		System.out.println("certBrdPage.getTotal() -> "+certBrdPage.getTotal());
+		// 키워드가 있을 때
+		else {
+			System.out.println("keyword3 -> "+keyword);
+			System.out.println("searchType3 -> "+searchType);
+			System.out.println("chg_id3 -> "+chg_id);
+			System.out.println("sortBy3 -> "+sortBy);
+			
+			// 카운팅
+			// mapper key: srchCrtBdCnt		 검색 결과 counting 후, 페이징 작업
+			int searchCnt = bBoardD.srchCrtBdCnt(board);
+			System.out.println("searchCnt3 -> "+searchCnt);
+			
+			// 페이징
+			Paging page = new Paging(searchCnt, currentPage);
+			board.setStart(page.getStart());	// 시작 시 1
+			board.setEnd(page.getEnd());		// 시작 시 10
+			System.out.println("sortBy3 page.getStart()-> "+page.getStart());
+			System.out.println("sortBy3 page.getEnd()-> "+page.getEnd());
+			System.out.println("sortBy3 page.getEndPage()-> "+page.getEndPage());
+			
+			// R
+			// mapper key: searchCrtBd		 검색 결과 리스트 R
+			List<Board> srchResult = bBoardD.searchCrtBd(board);
+			System.out.println("srchResult.size() -> "+srchResult.size());
+			
+			
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("certTotal", searchCnt);
+			model.addAttribute("certBoard", srchResult);
+			/// 가공 후 페이지가 안 보이므로 명칭 통일
+			model.addAttribute("certBrdPage", page);
+			
+			
+		}
 		
-		  
-		  
-		// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
-		List<Board> certBoard = bs.certBoard(board);
 		certBoard = userService.boardWriterLevelInfo(certBoard);
-		System.out.println("BgController certBoard.size() -> "+certBoard.size());
-		model.addAttribute("certBoard", certBoard);
-		  
-		  
-		// bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
-		Challenge chg = bs.bgChgDetail(chg_id);
-		System.out.println("BgController bgChgDetail chg -> "+chg);
-		model.addAttribute("chg", chg);
-		
 		
 		
 		//작성자 이름옆에 레벨아이콘이 나오게 하기 위한 것 추후 추가할 것!! 카톡 게시글 231107에 등록된 글 확인

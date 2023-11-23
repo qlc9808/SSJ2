@@ -191,7 +191,7 @@ $(document).ready(function () {
                      }
                  },
                  error: function (xhr, status, error) {
-                     console.log("Ajax 호출 실패: " + error);
+                     console.log('Ajax 호출 실패: ', error);
                  }
              });
          } else {
