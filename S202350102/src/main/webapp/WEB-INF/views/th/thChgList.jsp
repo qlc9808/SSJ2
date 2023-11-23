@@ -1,13 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>챌린지 리스트</title>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
+
 <script type="text/javascript">
+	
+	// 모달 값 지우기
+	// 모달창을 끌 때, hidden.bs.modal이라는 이벤트가 발생하고 이때 함수를 실행시킨다
+	// 해당모달의 input창의 모든 값을 비운다
+	// $(document).ready(function() : 이부분을 사용하지않으면 문서가 모달 이벤트 수신할 때 아래코드가 준비되지 않아 작동 안할수있음, 문서가준비된 이후 코드가 작동하도록 보장하기위해 jQuery의 document.ready 이벤트 사용
+	$(document).ready(function() {
+		$('.modal').on('hidden.bs.modal', function(e) {
+			$(this).find('input').val('');
+		});
+	});
+	
+	// 필터별 정렬
 	function fn_sortOpt(){
 		var sortOpt = $('#sortOpt').val()
  		var state_md 	= 	${chg.state_md}
@@ -60,6 +72,7 @@
 	}
 	
 	
+	
 	// 현재 페이지 그대로 이동
 	function moveCurrentPage() {
 		var sortOpt 	= 	$('#sortOpt').val()
@@ -75,13 +88,14 @@
 								+'&currentPage='+currentPage;
 	}
 	// 다른 페이지로 이동
-	function movePage() {
+	function movePage(p_index) {
 		var sortOpt 	= 	$('#sortOpt').val()
  		var state_md 	= 	${chg.state_md}
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
-		var pageNum		=	document.getElementById('movePage').innerText
-
+		//	movaPage에 index를 넣어서 페이지이동 시킴
+ 		var pageNum		=	document.getElementById('movePage'+p_index).innerText
+		
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
@@ -118,6 +132,7 @@
 								+'&sortOpt='+sortOpt
 								+'&currentPage='+pageNum;
 	}
+	
 
 </script>
 </head>
@@ -245,7 +260,7 @@
 			              <div class="card-body fw-bold text-start px-0 py-2">
 			                <a class="text-body fw-bolder fs-6" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd${status.index }" data-bs-toggle="modal"</c:if>
 			                									<c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
-			                									id="title">${chg.title }</a>
+			                									id="title">${num}.${chg.title }</a>
 			                <div> 
 			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                  ~ 
@@ -258,7 +273,7 @@
 			            </div>
 			            	
 					  </div>
-					  <c:set var="num" value="${num -1 }"></c:set>
+					 
 					  
 					 <!-- MODAL -->
 					 <!-- 비공개방  -->
@@ -310,6 +325,7 @@
 				    
 				      </div>
 				    </div>
+				     <c:set var="num" value="${num -1 }"></c:set>
 				</c:forEach>
 				
 				<!-- 페이지네이션  -->
@@ -323,13 +339,13 @@
 						</li>
 					</c:if>
 					
-				    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
+				    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }" varStatus="status">
 						<li class="page-item">
 							<c:if test="${i == page.currentPage }">
 								<a class="page-link" onclick="moveCurrentPage()" href="#" id="moveCurrentPage"><b class="text-primary">${i}</b></a>
 							</c:if>
 							<c:if test="${i != page.currentPage }">
-								<a class="page-link" onclick="movePage()" href="#" id="movePage">${i}</a>
+								<a class="page-link" onclick="movePage(${status.index })" href="#" id="movePage${status.index }">${i}</a>
 							</c:if>
 						</li>
 					</c:forEach>

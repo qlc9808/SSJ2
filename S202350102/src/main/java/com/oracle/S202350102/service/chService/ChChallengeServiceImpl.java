@@ -90,4 +90,16 @@ public class ChChallengeServiceImpl implements ChChallengeService {
 		return myChgList;
 	}
 
+
+
+	@Override
+	public int chgUpdate(Challenge chg) {
+		System.out.println("ChChallengeServiceImpl chgUpdate Start...");
+		int result = 0;
+		
+		result = chChallengeService.chgUpdate(chg);
+		
+		return result;
+	}
+
 }

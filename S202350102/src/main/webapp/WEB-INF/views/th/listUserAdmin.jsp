@@ -1,20 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>전체 유저 조회</title>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
-<script type="text/javascript">
-	function fn_delCheck(p_index){
-		var p_user_num 		= $("#user_num"+p_index).val();
-		var p_delete_yn 	= $("#delete_yn"+p_index).val();
-		location.href = "/delUserByAdmin?user_num="+p_user_num+"&delete_yn="+p_delete_yn
-	}
-	
-</script>
 </head>
 <body>
 <section class="py-11">

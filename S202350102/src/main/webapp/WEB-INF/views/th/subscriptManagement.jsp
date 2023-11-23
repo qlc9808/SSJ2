@@ -1,19 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>구독관리</title>
-<style type="text/css">
-
-</style>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <body>
 
-	<c:import url="/WEB-INF/views/header4.jsp"/>
 	 <div class="container">
          <div class="row profile">
 			<!-- 마이페이지 사이드바  -->         
@@ -60,6 +56,6 @@
 		</div>
 	</div>
 
-<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

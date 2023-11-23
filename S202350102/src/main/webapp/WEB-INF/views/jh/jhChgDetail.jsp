@@ -131,10 +131,12 @@
 					$("#follow").removeClass("btn-danger");
 					$("#follow").addClass("btn-light");
 					$("#follow").text("팔로잉");
-				} else {
+				} else if(followResult.following == 0) {
 					$("#follow").removeClass("btn-light");
 					$("#follow").addClass("btn-danger");
 					$("#follow").text("팔로우");
+				} else {
+					alert("자신의 계정은 팔로우 할 수 없습니다");
 				}
 			},
 			error : function() {

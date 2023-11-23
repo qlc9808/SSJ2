@@ -40,6 +40,7 @@ import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
 import com.oracle.S202350102.service.thService.ThUser1Service;
+import com.oracle.S202350102.service.yaService.Paging2;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -144,7 +145,7 @@ public class ThController {
 		System.out.println("ThController logout session --> " + session);
 		session.invalidate();
 		System.out.println("ThController logout session --> " + session);
-		return "home2";
+		return "redirect:/";
 	}
 	
 	@GetMapping(value = "/deleteUser1Form")
@@ -386,8 +387,10 @@ public class ThController {
 		
 		
 		// 						전체 챌린지수가 아니라  조회된 챌린지수로 페이징 작업을 해야한다. (= listChg.size() 사용)
-		// Paging 작업			  	7			0 
-		Paging page = new Paging(totalChg, currentPage);
+		// Paging 작업			  	7			0	   rowPage값 입력(한페이지에 리스트 몇개 출력할지)	
+		Paging page = new Paging(totalChg, currentPage, 9);
+		System.out.println(" page --> " + page);
+		
 		
 
 		chg.setStart(page.getStart());

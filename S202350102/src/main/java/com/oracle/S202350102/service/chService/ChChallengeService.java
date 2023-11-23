@@ -14,4 +14,5 @@ public interface ChChallengeService {
 	int 			chgDeleteComm(String[] ctn);
 	List<Challenge> myChgList(Board board);
 	List<Challenger> myChgrList(int user_num);
+	int 			chgUpdate(Challenge chg);
 }

@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>결제 성공</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <body>
-	<c:import url="/WEB-INF/views/header4.jsp"/>
 <!-- CONTENT -->
     <section class="py-12">
       <div class="container">
@@ -58,6 +57,6 @@
 
 <%-- 	<p>${info}</p> --%>
 
-	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>
