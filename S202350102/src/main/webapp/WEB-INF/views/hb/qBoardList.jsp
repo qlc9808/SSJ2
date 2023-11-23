@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -161,10 +162,9 @@
                     if (list && list.length > 0) {
                         for (var i = 0; i < list.length; i++) {
                             var result = list[i];
+                            var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
                             var str = '<tr>';
                             console.log(result);
-                            var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
-                            
                             str += "<td>" + (page.total - i) + "</td>";
                             str += "<td><a href='qBoardDetail?brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                             str += "<td>" +img+result.nick + "</td>";
@@ -289,7 +289,7 @@
     					    str += "<td>" + hours + ":" + minutes + "</td>";
     					} else {
     					    // 날짜가 sysdate와 같으면 날짜를 표시
-    					    str += "<td>" + year + '-' + month + '-' + day + "</td>";
+    					    str += "<td>" + year + '.' + month + '.' + day + "</td>";
     					}
                         str += "<td>" + result.view_cnt + "</td>";
                         str += "</tr>";

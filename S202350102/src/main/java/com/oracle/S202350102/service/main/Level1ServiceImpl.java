@@ -88,21 +88,21 @@ public class Level1ServiceImpl implements Level1Service {
 		int user_exp = user1.getUser_exp();
 		String combineValue = lg+"-"+md;
 		
-		if ( user1.getStatus_md() == 100 ) { // 일반회원
+		if ( user1.getStatus_md() != 101 ) { // 일반회원
 		    if (combineValue.startsWith("200-")) {
-				user1.setUser_exp(user_exp+10);
+				user1.setUser_exp(user_exp+50);
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("600-101")) {
-		    	user1.setUser_exp(user_exp+5);
+		    	user1.setUser_exp(user_exp+25);
 		    	ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-100")) {
-				user1.setUser_exp(user_exp+1);
+				user1.setUser_exp(user_exp+5);
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-101")) {
-				user1.setUser_exp(user_exp+3);
+				user1.setUser_exp(user_exp+15);
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-103")) {
-				user1.setUser_exp(user_exp+1);
+				user1.setUser_exp(user_exp+5);
 				ud.userExpUp(user1);
 		    } 
 //		    else if (combineValue.startsWith("400-")) { // 테스트용
@@ -113,19 +113,19 @@ public class Level1ServiceImpl implements Level1Service {
 //			}
 		} else if ( user1.getStatus_md() == 101 ) { // 프리미엄회원
 		    if (combineValue.startsWith("200-")) {
-				user1.setUser_exp(user_exp+(10*3));
+				user1.setUser_exp(user_exp+(50*3));
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("600-101")) {
-		    	user1.setUser_exp(user_exp+(5*3));
+		    	user1.setUser_exp(user_exp+(25*3));
 		    	ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-100")) {
-				user1.setUser_exp(user_exp+(1*3));
+				user1.setUser_exp(user_exp+(5*3));
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-101")) {
-				user1.setUser_exp(user_exp+(3*3));
+				user1.setUser_exp(user_exp+(15*3));
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-103")) {
-				user1.setUser_exp(user_exp+(1*3));
+				user1.setUser_exp(user_exp+(5*3));
 				ud.userExpUp(user1);
 		    }
 		}

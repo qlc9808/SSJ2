@@ -34,6 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
+import com.oracle.S202350102.service.main.Level1Service;
+import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
@@ -49,6 +51,8 @@ public class YaController {
 	
 	private final YaCommunityService ycs;
 	private final JkBoardService jbs;
+	private final UserService us;
+	private final Level1Service ls;
 	
 	//커뮤니티 게시글 전체조회
 	@RequestMapping(value="/listCommunity")
@@ -70,6 +74,8 @@ public class YaController {
 		System.out.println("boardPage End?"+boardPage.getEnd());
 		
 		List<Board> listCommunity = ycs.listCommunity(board);
+		// 한빛 : 리스트에 유저정보 추가하는 메소드
+		listCommunity = us.boardWriterLevelInfo(listCommunity);
 		System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
 		model.addAttribute("listCommunity", listCommunity);
 		
@@ -180,6 +186,13 @@ public class YaController {
 				System.out.println("brd_md->"+ board.getBrd_md());
 				int result = ycs.insertCommunity(board);
 				System.out.println("Insert result->" + result);	
+				
+				// 한빛 : 자유게시판 글작성 시 유저의 경험치가 오르는 로직
+				// 많이 쓸것같으면 메소드로 만들어서 쓸 것.
+				if ( result > 0 ) {
+					ls.userExp(user_num, 700, 103); // lg, mg 값을 넣어야함 자유게시판은 700,103
+					ls.userLevelCheck(user_num); // 경험치가 올랐기 때문에 현재 레벨이 맞는지 체크하는 메소드
+				}
 				
 				return "forward:listCommunity";		
 				
@@ -294,6 +307,8 @@ public class YaController {
 		    
 		   
 		    List<Board> listSearchBoard = ycs.listSearchBoard(keyword);
+		    // 한빛 : 유저의 레벨정보를 불러오는 메소드
+		    listSearchBoard = us.boardWriterLevelInfo(listSearchBoard);
 		    System.out.println("YaController listSearchBoard.size?" + listSearchBoard.size());
 
 		    return listSearchBoard;
@@ -306,7 +321,8 @@ public class YaController {
 			String sortOption = request.getParameter("sort");
 			
 			List<Board> listSortedBoard = ycs.listBoardSort(sortOption);
-		
+			// 한빛 : 리스트에 유저정보 추가하는 메소드
+			// listSortedBoard = us.boardWriterLevelInfo(listSortedBoard);
 		    return listSortedBoard;
 		}
 		
