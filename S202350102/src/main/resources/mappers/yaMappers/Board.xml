@@ -57,7 +57,7 @@
     </delete>
     
     <select id="YaBoardSearhList" parameterType="String" resultType="Board">
-		SELECT b.brd_num, b.title, u.nick,b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
+		SELECT b.brd_num, b.title, b.user_num, u.nick,b.reg_date, b.view_cnt, replyCount(b.brd_num) replyCount
         FROM board b ,user1 u
         WHERE b.user_num = u.user_num
         AND b.brd_lg = 700
