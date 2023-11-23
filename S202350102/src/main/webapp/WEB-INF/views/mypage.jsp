@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header4.jsp" %>
-
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -41,13 +41,26 @@ function clickLoad(index) {
 	
 	if(index == 1) {
 		// 참여 챌린지
+		$.ajax(
+				{
+					
+					url: "myParty",
+					dataType:"html",
+					success:function(data){
+						$("#mySlider").html(data);
+						
+				        //Flickity 초기화
+						initFlickity();
+					}
+				}		
+			);
 		
 	} else if(index == 2) {
 		// 신청한 챌린지
 		$.ajax(
 				{
 					
-					url: "fuckingTryShit",
+					url: "myApplychgAjax",
 					dataType:"html",
 					success:function(data){
 						$("#mySlider").html(data);
@@ -469,7 +482,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                            <th scope="col" class="th-date">등록일</th>
 					                            <th scope="col" class="th-view_cnt">조회수</th>
 					                            <th  scope="col" class="th-replyCount">댓글수</th>
-					                            <th  scope="col" ></th>
+					                            <th  scope="col" >비고</th>
 					                            <th></th>
 					                        </tr>
 					                    </thead>                 
@@ -491,13 +504,13 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                
 									   <div class="page">
 										    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
-										        <a href="listCommunity?currentPage=${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
+										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
 										    </c:if>
 										    <c:forEach var="i" begin="${myCertiPage.startPage}" end="${myCertiPage.endPage}">					        
 										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${i }); return false;" >[${i}]</a>
 										    </c:forEach>
-										    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">
-										        <a href="listCommunity?currentPage=${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
+										    <c:if test="${myCertiPage.endPage < myCertiPage.totalPage}">										        
+										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${myCertiPage.startPage+myCommuPage.pageBlock}">[다음]</a>
 										    </c:if>
 										</div> 
 									           	
@@ -525,6 +538,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
+				                            <th  scope="col" class="th-replyCount">비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Review_md}">
@@ -579,7 +593,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
-				                            <th  scope="col" ></th>
+				                            <th  scope="col" >비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Share_md }">

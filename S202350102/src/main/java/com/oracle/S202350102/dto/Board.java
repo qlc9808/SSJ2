@@ -34,10 +34,13 @@ public class Board {
 	private String search;   	private String keyword;
 	private String pageNum;
 	private int start; 		 	private int end;
+	private int idx;
 	private String searchType;
 	private String category;
+	private String sortBy;	// 정렬 조회
 	
-	//파일 업로드
+	
+	//파일 업로드 -> 파일 삭제 여부 확인용
 	private int delStatus;
 	// 게시판 유저 정보 조회용
 	private String icon;
@@ -63,4 +66,7 @@ public class Board {
 	private int likeyn;
 	private int b_user_num;
 	private int like_cnt;
+	
+	// 각 brd_num 마다의 총 신고 cnt 값
+	private int burning_cnt;	
 }

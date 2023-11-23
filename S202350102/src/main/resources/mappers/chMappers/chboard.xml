@@ -79,25 +79,52 @@
 	
 	
 	<select id="BrdResult" parameterType="Board" resultType="Board">		
-		SELECT b.*, user1.nick, replyCount(b.brd_num) replyCount
-        FROM board b
-        JOIN user1 ON b.user_num = user1.user_num
-        WHERE b.brd_md = 103
-        AND	  b.brd_Group = b.brd_num
-        AND   (b.title like '%' || #{srch_word} || '%' 
-        	Or user1.nick like '%' || #{srch_word} || '%')
-        ORDER BY b.reg_date DESC
+		Select a.*
+		FROM	(SELECT rownum rn, b.*, user1.nick, replyCount(b.brd_num) replyCount
+		        FROM board b
+		        JOIN user1 ON b.user_num = user1.user_num
+		        WHERE b.brd_md = 103
+		        AND	  b.brd_Group = b.brd_num
+		        AND   (b.title like '%' || #{keyword} || '%' 
+		        	Or user1.nick like '%' || #{keyword} || '%')
+		        ORDER BY b.reg_date DESC) a
+        left join (Select Count(*), brd_num
+			  From board_like
+			  Group By brd_num) c on a.brd_num = c.brd_num
+		Where a.rn BETWEEN #{start} and #{end}
 	</select>
 	
 	<select id="shrResult" parameterType="Board" resultType="Board">		
-		SELECT b.*, user1.nick
-        FROM board b
-        JOIN user1 ON b.user_num = user1.user_num
-        WHERE b.brd_md = 102
-        AND	  b.brd_Group = b.brd_num
-        AND   (b.title like '%' || #{srch_word} || '%' 
-        	Or user1.nick like '%' || #{srch_word} || '%')
-        ORDER BY b.reg_date DESC
+		Select a.*
+		From	(SELECT rownum rn, b.*, user1.nick, replyCount(b.brd_num) replyCount
+		        FROM board b
+		        JOIN user1 ON b.user_num = user1.user_num
+		        WHERE b.brd_md = 102
+		        AND	  b.brd_Group = b.brd_num
+		        AND   (b.title like '%' || #{keyword} || '%' 
+		        	Or user1.nick like '%' || #{keyword} || '%'
+		        	Or b.addr like '%' || #{keyword} || '%')
+		        ORDER BY b.reg_date DESC) a
+		left join (Select Count(*), brd_num
+			  From board_like
+			  Group By brd_num) c on a.brd_num = c.brd_num
+		<if test="start >= 1"> Where a.rn BETWEEN #{start} and #{end}</if>
+	</select>
+	
+	<select id="chgSrchBTot" parameterType="Board" resultType="int">
+	SELECT Count(*)
+	FROM board b
+	JOIN user1 ON b.user_num = user1.user_num
+	WHERE b.brd_md = #{brd_md}	
+	AND	  b.brd_Group = b.brd_num
+	<if test="keyword != null">
+	AND   (b.title like '%' || #{keyword} || '%' 
+		   Or user1.nick like '%' || #{keyword} || '%'
+		   <if test="brd_md == 102">
+		   Or b.addr like '%' || #{keyword} || '%'
+		   </if>)
+	</if>
+	
 	</select>
 	
 	<select id="alarmchk" parameterType="int" resultType="BoardReChk">

@@ -18,6 +18,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +29,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Report;
 import com.oracle.S202350102.dto.User1;
-import com.oracle.S202350102.service.bgService.BgService;
+import com.oracle.S202350102.service.bgService.BgBoardService;
+import com.oracle.S202350102.service.bgService.BgReportService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.UserService;
 
@@ -41,7 +44,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BgController {
 
-	private final BgService bs;
+	private final BgBoardService bBoardD;
+	private final BgReportService bReportD;
 	private final UserService userService;
 	private final JavaMailSender mailSender;
 
@@ -134,7 +138,7 @@ public class BgController {
 		List<Board> boardCert = null;
 
 		try {
-			boardCert = bs.boardCert(board);
+			boardCert = bBoardD.boardCert(board);
 			result.put("status", "OK");
 			result.put("boardCert", boardCert);
 		} catch (Exception e) {
@@ -151,9 +155,9 @@ public class BgController {
 	@ResponseBody
 	@RequestMapping(value = "writeCertBrd", method = RequestMethod.POST)
 	public String writeCertBrd(@RequestParam("chg_id") int chg_id,
-			                     @RequestParam("screenshot") MultipartFile screenshot, 
-								 Board board, Model model, 
-								 HttpSession session, HttpServletRequest request) 
+			                   @RequestParam("screenshot") MultipartFile screenshot, 
+							   Board board, Model model, 
+							   HttpSession session, HttpServletRequest request) 
 										 throws IOException, Exception {
 		System.out.println("BgController writeCertBrd Start...");
 		System.out.println("BgController writeCertBrd board.getConts() -> " + board.getConts());
@@ -207,7 +211,7 @@ public class BgController {
 
 		try {
 			System.out.println("BgController writeCertBrd board -> "+board);
-			insertResult = bs.insertCertBrd(board);
+			insertResult = bBoardD.insertCertBrd(board);
 			// if (insertResult > 0) boardList = bs.boardCert(board);
 
 			if (insertResult > 0) {
@@ -259,9 +263,11 @@ public class BgController {
 	// mapper key:	updateCertBrd
 	@PostMapping(value = "updateCertBrd")
 	public String updateCertBrd(Board board, Model model, HttpServletRequest request,
+								@RequestParam("chg_id") int chg_id,
 								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
 										throws IOException {
 		log.info("updateCertBrd Start...");
+		System.out.println("chg_id -> "+chg_id);
 		
 		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
 		
@@ -277,13 +283,13 @@ public class BgController {
 		System.out.println("realPath -> "+realPath);
 		System.out.println("board.getImg() -> "+board.getImg());
 		
-		int updateCount = bs.updateCertBrd(board);
+		int updateCount = bBoardD.updateCertBrd(board);
 		System.out.println("BgController bs.updateCertBrd updateCount -> "+updateCount);
 		
 		model.addAttribute("uptCnt", updateCount);
 		model.addAttribute("kk3", "Message Test");
 		
-		return "redirect";
+		return "redirect:chgDetail?chg_id="+chg_id;
 	}
 	
 	
@@ -291,9 +297,9 @@ public class BgController {
 	@RequestMapping(value = "deleteCertBrd")
 	public String deleteCertBrd(int brd_num, Model model) {
 		System.out.println("BgController Start delete...");
-		int result = bs.deleteCertBrd(brd_num);
+		//int result = bs.deleteCertBrd(brd_num);
 		
-		return "redirect:ChgDetail";
+		return "redirect:chgDetail";
 	}
 	
 	
@@ -301,22 +307,22 @@ public class BgController {
 	// ajax로 인증 게시판 삭제하기		deleteCertBrd
 	@ResponseBody
 	@RequestMapping(value = "/brdNumDelete")
-	public String brdNumDelete( @RequestParam("brd_num") int brd_num,
-								@RequestParam("img") String img,
+	public String brdNumDelete( Board board,
 								HttpServletRequest request) {
 		System.out.println("BgController brdNumDelete Start");
-		System.out.println("BgController brdNumDelete brd_num -> "+brd_num);
-		System.out.println("BgController brdNumDelete img -> "+img);
+		System.out.println("BgController brdNumDelete getBrd_num -> "+board.getBrd_num());
+		System.out.println("BgController brdNumDelete getImg -> "+board.getImg());
+		System.out.println("BgController brdNumDelete getBrd_group -> "+board.getBrd_group());
 		
-		int delStatus = bs.deleteCertBrd(brd_num);
+		int delStatus = bBoardD.deleteCertBrd(board);
 		
-		if (delStatus == 1) {
+		if (delStatus > 0 && board.getImg() != null ) {
 			
 			// 1. 파일 업로드 경로를 얻어옵니다
 			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 			
 			// 2. 삭제할 파일의 경로를 지정합니다. 
-			String deleteFile = uploadPath + img;
+			String deleteFile = uploadPath + board.getImg();
 			
 			// 로그에 삭제할 파일의 경로를 출력합니다.
 			log.info("deleteFile: " + deleteFile);
@@ -432,19 +438,87 @@ public class BgController {
 		}
 		
 		// 챌린지 메인 페이지 만들어야 제대로 넣을 수 있음
-		return "sendMail";
+		return "redirect:chgDetail";
 	}
 	
 	
 	
 	// mapper key:	commentInsert
 	@RequestMapping(value = "commentInsert")
-	public String commentInsert(Board board, HttpSession session, Model model) {
+	public String commentInsert(Board board, HttpSession session, Model model,
+								@RequestParam("chg_id") int chg_id) {
 		System.out.println("BgController commentInsert Start...");
+		System.out.println("BgController commentInsert chg_id -> "+chg_id);
 		
-		 bs.commentInsert(board);
+		bBoardD.commentInsert(board);
 		
-		return "redirect";
+		return "redirect:chgDetail?chg_id="+chg_id;
 	}
+	
+	
+	
+	// 검색 및 정렬 Ajax
+	@ResponseBody
+	@RequestMapping(value = "/searchAndSort")
+	public String searchCrtBd(Board board, String currentPage,  Model model,
+								String searchType, String sortBy
+								, HttpSession session) {
+		System.out.println("BgController searchCrtBd Start...");
+		System.out.println("BgController searchCrtBd board.getKeyword() -> "+board.getKeyword());
+		System.out.println("BgController searchCrtBd board.getSearchType() -> "+board.getSearchType());
+		System.out.println("BgController searchCrtBd board.getChg_id() -> "+board.getChg_id());
+		System.out.println("BgController searchCrtBd board.getSortBy() -> "+board.getSortBy());
+		
+		
+		// mapper key: srchCrtBdCnt		 검색 결과 counting 후, 페이징 작업
+		int searchCnt = bBoardD.srchCrtBdCnt(board);
+		System.out.println("BgController searchCrtBd searchCnt -> "+searchCnt);
+		
+		Paging page = new Paging(searchCnt, currentPage);
+		board.setStart(page.getStart());	// 시작 시 1
+		board.setEnd(page.getEnd());		// 시작 시 10
+		
+		// mapper key: searchCrtBd		 검색 결과 리스트 R
+		List<Board> srchResult = bBoardD.searchCrtBd(board);
+		System.out.println("BgController searchCrtBd srchResult.size() -> "+srchResult.size());
+		
+		model.addAttribute("certTotal", searchCnt);
+		model.addAttribute("certBoard", srchResult);
+		model.addAttribute("page", page);
+		
+		return "bg/searchAndSort";
+	}
+	
+	
+	
+	// 태우기 (신고) 버튼 작동 Ajax
+	@ResponseBody
+	@RequestMapping(value = "Burning")
+	public Map<String, Object> Burning(@RequestParam("brd_num") int brd_num
+										,HttpSession session) {
+		System.out.println("BgController Burning Start...");
+		System.out.println("BgController Burning brd_num -> "+brd_num);
+		
+		int user_num = 0;
+		if (session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			System.out.println("BgController Burning brd_num -> "+user_num);
+		}
+		
+		Report burning = new Report();
+		burning.setBrd_num(brd_num);
+		burning.setUser_num(user_num);
+		
+		Map<String, Object> burningResult = new HashMap<>();
+		int result = bReportD.burning(burning);
+		System.out.println("BgController Burning result -> "+result);
+		burningResult.put("result", result);
+		
+		return burningResult;
+	}
+	
+	
+	
+	
 }
 

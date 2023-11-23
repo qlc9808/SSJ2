@@ -19,19 +19,60 @@
 	}
 	
 	function clickChgResult(srch_word, brd_md) {		
-		/* alert(srchWord); */		
+		
 		$.ajax(
 				{
 					data: {"keyword" : srch_word, brd_md : brd_md},
-					url: "clickChgResult",
+					url: "clickSrchResult",
 					dataType:"html",
 					success:function(data){
 						
-						$("#myApllyChg").html(data);
+						$("#tab"+brd_md).html(data);
 					}
 				}		
 			);
 	}
+	
+	function clickChgResult(srch_word, brd_md,currentPage) {		
+		
+		$.ajax(
+				{
+					data: {"keyword" : srch_word, brd_md : brd_md, "currentPage" : currentPage},
+					url: "clickSrchResult",
+					dataType:"html",
+					success:function(data){
+						
+						$("#tab"+brd_md).html(data);
+					}
+				}		
+			);
+	}
+	
+	function moveAndLoadTab(brd_md, srch_word) {
+		
+		$(".nav-link").removeClass("active");
+	    $(".tab-pane.fade").removeClass("show");
+	    $(".tab-pane.fade").removeClass("active");
+	    switch(brd_md){
+	    	case(200):
+	    		$("#nav"+brd_md).addClass("active");
+	    		$("#tab"+brd_md).addClass("show active");		    	
+	    		break;
+	    	case(102):
+	    		$("#nav"+brd_md).addClass("active");
+	    		$("#tab"+brd_md).addClass("show active");		    	
+	    		break;
+	    	case(103):
+	    		$("#nav"+brd_md).addClass("active");
+	    		$("#tab"+brd_md).addClass("show active");		    	
+	    		break;
+	    }
+	   
+	    clickChgResult(srch_word,brd_md);
+	}
+
+	
+	
 </script>
 <style type="text/css">
 	#shList{
@@ -53,7 +94,8 @@
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				
-				<input type="search" name="srch_word" id="srch_word" class="form-control form-control-underline form-control-sm border-dark" onclick="sh()" >
+				<input type="search" name="srch_word" id="srch_word" class="form-control form-control-underline form-control-sm border-dark" onclick="sh()" value="${srch_word }"
+				>
 				<button type="submit" class="btn-underline btn-sm border-dark" id="srch_btn">
 					<i class="fe fe-search"></i>
 				</button>
@@ -93,9 +135,9 @@
 		            <!-- Nav -->
 		            <div class="nav justify-content-center mb-10">
 		            	<a class="nav-link active" href="#allResult" data-bs-toggle="tab">통합</a>
-		            	<a class="nav-link" href="#myApllyChg" data-bs-toggle="tab"   onclick="clickChgResult('${srch_word }',200)">챌린지</a>
-		            	<a class="nav-link" href="#topSellersTab" data-bs-toggle="tab">쉐어링</a>
-		            	<a class="nav-link" href="#chgPickTab" data-bs-toggle="tab">자유글</a>
+		            	<a class="nav-link" href="#tab200" data-bs-toggle="tab"   onclick="clickChgResult('${srch_word }',200)" id="nav200">챌린지</a>
+		            	<a class="nav-link" href="#tab102" data-bs-toggle="tab" onclick="clickChgResult('${srch_word }',102)" id="nav102">쉐어링</a>
+		            	<a class="nav-link" href="#tab103" data-bs-toggle="tab" onclick="clickChgResult('${srch_word }',103)" id="nav103">자유글</a>
 		            </div>	
 		            
 	            	<!-- Content -->
@@ -108,10 +150,8 @@
 									<c:if test="${empty srch_chgResult }">
 										<h6>검색결과가 없습니다.</h6>
 									</c:if>
-									<div class="row">
-									<c:set var="num" value="1"/>
-									<c:forEach items="${srch_chgResult }" var="chg" varStatus="status">
-										<c:if test="${num < 6 }">
+									<div class="row">									
+									<c:forEach items="${srch_chgResult }" var="chg" varStatus="status">										
 											
 								            <div class="col-6 col-md-2">
 											
@@ -189,14 +229,10 @@
 								            </div>
 								            	
 										  </div>
-					  
-				
-										<c:set var="num" value="${num+1 }"/>
-										</c:if>	
 									</c:forEach>
 									</div>
 								</div>
-							
+							<button onclick="moveAndLoadTab(200, '${srch_word}')">더보기</button>
 							</section>
 							
 							<hr>
@@ -206,23 +242,82 @@
 									<c:if test="${empty srch_shareResult }">
 										<h6>검색결과가 없습니다.</h6>
 									</c:if>
-									<table>
-										
-										<c:set var="num" value="1"/>
-										<c:forEach items="${srch_shareResult }" var="shrResultList" varStatus="status">
-											<c:if test="${num < 6 }">
-												<tr>
-													<td>
-														<a href="detailCommunity?user_num=${shrResultList.user_num}&brd_num=${shrResultList.brd_num}">${shrResultList.title }</a>
-													</td>
-													<td><fmt:formatDate value="${shrResultList.reg_date }" pattern="yyyy-MM-dd"/></td>
-													<td>${shrResultList.nick }</td>
-												</tr>
-												<c:set var="num" value="${num+1 }"/>
-											</c:if>
-										</c:forEach>
-									</table>
+									
+										<div class="row">										
+										<c:forEach var="board" items="${srch_shareResult}">
+	    					
+									        <div class="col-6 col-md-2" style="padding-left: 8px; padding-right: 8px;">
+									            <div class="card">
+									                <div class="card-img">
+									    
+									                    <!-- YR 작성 -->
+									                    <!-- 쉐어링 찜하기 -->
+									                    <c:choose>
+									                        <c:when test="${sessionScope.user_num != null}">
+									                            <!-- 로그인 한 상태 -->
+									                            <c:choose>
+									                                <c:when test="${board.likeyn > 0}">
+									                                    <!-- 찜하기 있음 -->
+									                                    <button type="button"
+									                                        class="btn btn-xs btn-circle btn-primary card-action card-action-end"
+									                                        data-toggle="button" onclick="sharingPick(${board.brd_num})"
+									                                        id="sharingPick${board.brd_num}">
+									                                        <i class="fe fe-heart"></i>
+									                                    </button>
+									                                </c:when>
+									    
+									                                <c:otherwise>
+									                                    <!-- 찜하기 없음 -->
+									                                    <button type="button"
+									                                        class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
+									                                        data-toggle="button" onclick="sharingPick(${board.brd_num})"
+									                                        id="sharingPick${board.brd_num}">
+									                                        <i class="fe fe-heart"></i>
+									                                    </button>
+									                                </c:otherwise>
+									                            </c:choose>
+									                        </c:when>
+									    
+									                        <c:otherwise>
+									                            <!-- 로그인 안 한 상태 -->
+									                            <button type="button"
+									                                class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
+									                                data-toggle="button" onclick="location.href='/loginForm'">
+									                                <i class="fe fe-heart"></i>
+									                            </button>
+									                        </c:otherwise>
+									                    </c:choose>
+									    
+									                    <button class="btn btn-xs w-100 btn-dark card-btn"
+									                        onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
+									                        <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
+									                    </button>
+									    
+									                    <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${board.img}" alt="..."
+									                        style="width: 100%; height: 200;">
+									                </div>
+									                
+									                <div class="card-body fw-bold text-center">
+									                    <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+									                        ${board.title}
+									                    </a>
+									                    <p>
+									                        <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+									                            ${board.price}원</a>
+									                    <p>
+									                        <a class="text-primary" id="likeCnt${board.brd_num}">
+									                            <i class="fas fa-heart me-1"></i> ${board.like_cnt}
+									                        </a>
+									                        <i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
+									                        <i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}
+									                </div>
+									    
+									            </div>
+									        </div>
+									    </c:forEach>
+									    </div>							
 								</div>
+							<button onclick="moveAndLoadTab(102, '${srch_word}')">더보기</button>
 							</section>
 							
 							<hr>
@@ -249,22 +344,23 @@
 										</c:forEach>
 										
 									</table>
-									<a href="srchcommunity?srch_word=${srch_word }">더보기</a>
+									<%-- <a href="srchcommunity?srch_word=${srch_word }">더보기</a> --%>
 								</div>
+								<button onclick="moveAndLoadTab(103, '${srch_word}')">더보기</button>
 							</section>
 		            	</div> 
 		            	
 		            	
 		            	
-		            	<div class="tab-pane fade" id="myApllyChg">
+		            	<div class="tab-pane fade" id="tab200">
 		            	 
 		            	</div>
 		            	
-		            	<div class="tab-pane fade" id="myApllyChg">
+		            	<div class="tab-pane fade" id="tab102">
 		            	 
 		            	</div>
 		            	
-		            	<div class="tab-pane fade" id="myApllyChg">
+		            	<div class="tab-pane fade" id="tab103">
 		            	 
 		            	</div>
 						

@@ -89,7 +89,7 @@
 	</select>
 	
 	<select id="listComment" resultType="Board" parameterType="int">
-		SELECT b.brd_num, b.user_num, b.conts, u.nick, b.reg_date, b.brd_step, b.brd_group
+		SELECT b.brd_num, b.user_num, b.conts, u.nick, b.reg_date, b.brd_step, b.brd_group, u.img
 		FROM board b, user1 u
 		Where b.brd_group = #{brd_num}
 		AND b.user_num = u.user_num
@@ -182,6 +182,15 @@
 		AND b.brd_num = s.brd_num
 		AND s.state_md = 101
 	</select>
+	
+	<select id="YaTotalSharing" parameterType="Board" resultType="int">
+		SELECT count(*) 
+		FROM board 
+		WHERE brd_lg = 700 
+		AND brd_md=102
+		AND brd_step = 0
+	</select>
+	
 	
 
 </mapper>

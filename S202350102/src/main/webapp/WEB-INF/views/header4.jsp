@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
-
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white" id="nav">
       <div class="container">
@@ -148,6 +146,7 @@
 	            </c:when>
               </c:choose>
             </li>
+
             <li class="nav-item ms-lg-n4">
               <a class="nav-link" data-bs-toggle="offcanvas" href= "#" id="alarmpopup">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16" >
@@ -172,39 +171,6 @@
  
       </div>
     </nav>
-
-
-
-<!-- CSS start -->
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-<!-- Favicon -->
-<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-
-<!-- Libs CSS -->
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-
-<!-- Theme CSS -->
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />    
-    
-<!-- JAVASCRIPT -->
-<!-- Map (replace the API key to enable) -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnKt8_N4-FKOnhI_pSaDL7g_g-XI1-R9E"></script>
-
-<!-- Vendor JS -->
-<script src="./assets/js/vendor.bundle.js"></script>
-
-<!-- Theme JS -->
-<script src="./assets/js/theme.bundle.js"></script>
-
-<!--  jquery.js-->
-<script src="./js/jquery.js"></script>
-
-<!--  font -->
-<link href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif; } 
-</style>
 
 <style>
 	#alarmPopText{
@@ -350,4 +316,3 @@
 </script>
 
 <body onload="alarmchk()"></body>
-

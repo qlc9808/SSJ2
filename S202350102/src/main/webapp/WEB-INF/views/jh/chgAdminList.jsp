@@ -21,11 +21,28 @@
 	}
 	
 	/* 페이지네이션 수정중 */
-	function pageNavigation(state_md, chg_lg, chg_md, sortOpt, currentPage){
-		if(!chg_lg && !chg_md && !sortOpt){
-			location.href = "chgAdminList?state_md="+state_md+"&currentPage="+currentPage;
+	/* 현재 페이지 클릭시 */
+	function currentPageMove(){
+	 	var state_md = ${state_md}
+	    var chg_lg = ${chg_lg}
+	    var chg_md = ${chg_md}
+	    var sortOpt = $('#sortOpt').val()
+	    var currentPage = ${page.currentPage}
+	    
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+currentPage;
 			
-		}
+	}
+	
+	/* 다른 페이지로 이동시 */
+	function pageMove(){
+	 	var state_md = ${state_md}
+	    var chg_lg = ${chg_lg}
+	    var chg_md = ${chg_md}
+	    var sortOpt = $('#sortOpt').val()
+	    var currentPage = document.getElementById('pageMove').innerText
+	    
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+currentPage;
+			
 	}
 
 </script>
@@ -166,10 +183,10 @@
 					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 							<li class="page-item">
 								<c:if test="${i == page.currentPage }">
-									<a class="page-link px-2" href="chgAdminList?currentPage=${i }"><b class="text-primary">${i}</b></a>
+									<a class="page-link px-2" onclick="currentPageMove()"><b class="text-primary">${i}</b></a>
 								</c:if>
 								<c:if test="${i != page.currentPage }">
-									<a class="page-link px-2" onclick="pageNavigation(${state_md}, ${chg_lg }, ${chg_md}, ${sortOpt}, ${i })" href="chgAdminList?currentPage=${i }">${i}</a>
+									<a class="page-link px-2" onclick="pageMove()" id="pageMove" >${i}</a>
 								</c:if>
 							</li>
 						</c:forEach>

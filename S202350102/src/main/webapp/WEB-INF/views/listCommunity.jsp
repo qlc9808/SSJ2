@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header4.jsp" %>
-<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%> 
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -141,54 +141,6 @@ body {
   display: none;
 }
 
-/*버튼  */
-.btn {
-  height: 49.5px; 
-  display: inline-block;
-  padding: 0 30px;
-  font-size: 15px;
-  font-weight: 400;
-  background: transparent;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  border: 1px solid transparent;
-  text-transform: uppercase;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-}
-
-.btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.btn-dark:hover, .btn-dark:focus {
-  background: #373737;
-  border-color: #373737;
-  color: #fff;
-}
-
-.btn-dark {
-  background: #555;
-  color: #fff;
-}
-
-.btn-dark:hover, .btn-dark:focus {
-  background: #373737;
-  border-color: #373737;
-  color: #fff;
-}
-
 </style>
 <meta charset="UTF-8">
 <title>커뮤니티 게시판</title>
@@ -239,7 +191,7 @@ $(document).ready(function () {
                      }
                  },
                  error: function (xhr, status, error) {
-                     console.log("Ajax 호출 실패: " + error);
+                     console.log('Ajax 호출 실패: ', error);
                  }
              });
          } else {
@@ -301,7 +253,7 @@ $(document).ready(function () {
 
 </head>
 <body>
-    <section class="community">
+<section class="community">
 <div class="container text-center" style="padding-bottom: 0px; padding-top: 0px;">
     <h3 style="margin-bottom: 5px;">자유게시판</h3>
 </div>
@@ -334,7 +286,12 @@ $(document).ready(function () {
 			    <option value="reg_date">최근 게시물</option>
 			    <option value="view_cnt">조회수 높은 순</option>
 			</select>
-			</div>		
+			</div>
+			  <div class="d-flex mb-3" style="justify-content: flex-start;">
+			<form id="options" action="writeFormCommunity" method="post" class="text-end">
+			    <button class="btn btn-secondary btn-xs" type="submit" style="background-color: #E56D90;">글 작성 <i class="fe fe-arrow-right ms-2"></i></button>
+			</form>
+			</div>	
              <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 
                 <table id="boardtable">
                     <thead>
@@ -361,9 +318,6 @@ $(document).ready(function () {
                         </c:forEach>
                     </tbody>
                 </table>
-            <form action="writeFormCommunity" method="post" class="text-end">
-			    <button class="btn btn-dark mt-1 mb-4" type="submit" style="background-color: #E56D90;">글 작성 <i class="fe fe-arrow-right ms-2"></i></button>
-			</form>
 
 			<div class="container text-center">
 			     <ul class="pagination pagination-sm justify-content-center">
@@ -390,34 +344,17 @@ $(document).ready(function () {
 			        </c:if>
 			    </ul>
 			</div>
-
-
-
-<%-- 원래페이징
-			<div class="container text-center">
-				   <div class="page" >
-				    <c:if test="${boardPage.startPage >boardPage.pageBlock}">
-				        <a href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">[이전]</a>
-				    </c:if>
-				    <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
-				        <a href="listCommunity?currentPage=${i}">[${i}]</a>
-				    </c:forEach>
-				    <c:if test="${boardPage.endPage < boardPage.totalPage}">
-				        <a href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">[다음]</a>
-				    </c:if>
-				</div>
-            </div> --%>
             </div>
         </div>
-
-    </section>
+ </section>
 </body>
+
 
 <!--비로그인 자가 글작성 시도시 알람창 띄우면서 로그인 페이지로 넘겨버리기  ---------->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const submitButton = document.querySelector('#options input[type="submit"]');
-        submitButton.addEventListener('click', function (event) {
+    	  const form = document.getElementById('options');
+          form.addEventListener('submit', function (event) {
             // 세션의 user_num 값 확인
             const userNum = <%= session.getAttribute("user_num") %>;
 

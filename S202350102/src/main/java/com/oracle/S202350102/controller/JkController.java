@@ -46,6 +46,7 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.chService.ChSearchService;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
 import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
@@ -117,7 +118,7 @@ public class JkController {
 	
 	//쉐어링 게시글 전체조회
 	@RequestMapping(value="/sharing")
-	public String Sharing(Board board, Model model, HttpSession session) {
+	public String Sharing(Board board, String currentPage, Model model, HttpSession session) {
 		System.out.println("JkController Sharing start...");
 		
 		int user_num = 0;
@@ -126,6 +127,21 @@ public class JkController {
 		}
 		
 		User1 user1 = jbs.userSelect(user_num);
+		
+		//ya 쉐어링 전체 게시글 총 수, 페이징 처리 작업 
+		int totalSharing = ycs.totalSharing(board);
+		model.addAttribute("totalSharing", totalSharing);
+		System.out.println("JkController Ya totalSharing->"+totalSharing);
+		
+		Paging boardPage = new Paging(totalSharing, currentPage);
+		board.setStart(boardPage.getStart());
+	    board.setEnd(boardPage.getEnd());
+	    model.addAttribute("boardPage", boardPage);
+		System.out.println(" YaController boardPage start?"+boardPage.getStart());
+		System.out.println(" YaControlloer boardpage total?"+boardPage.getTotal());
+		System.out.println("boardPage End?"+boardPage.getEnd());
+		
+		
 		
 		// yr 작성
 		// 쉐어링 찜 여부 판단용
@@ -702,7 +718,7 @@ public class JkController {
 				
 			}
 			// 입력된 키워드에 따라 검색 
-			srch_shareResult = chSearchService.shareSearching(replSrch_word);
+//			srch_shareResult = chSearchService.shareSearching(replSrch_word);
 		}
 		
 		Map<String, Object> resultMap = new HashMap<>();

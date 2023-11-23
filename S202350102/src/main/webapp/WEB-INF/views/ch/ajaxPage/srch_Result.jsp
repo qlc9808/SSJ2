@@ -100,33 +100,17 @@
 				</c:forEach>
 				
 				<!-- 페이지네이션  -->
-				 <nav class="d-flex justify-content-center justify-content-md-center">
-      	   		 <ul class="pagination pagination-sm text-gray-400">
-				  	<c:if test="${page.startPage > page.pageBlock }">
-				  		<li class="page-item">
-							<a class="page-link page-link-arrow" href="thChgList?currentPage=${page.startPage-page.pageBlock }">
-							<i class="fa fa-caret-left">이전</i></a>
-						</li>
-					</c:if>
-					
-				    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
-						<li class="page-item">
-							<c:if test="${i == page.currentPage }">
-								<a class="page-link" href="thChgList?currentPage=${i }"><b class="text-primary">${i}</b></a>
-							</c:if>
-							<c:if test="${i != page.currentPage }">
-								<a class="page-link" href="thChgList?currentPage=${i }">${i}</a>
-							</c:if>
-						</li>
-					</c:forEach>
-				    <c:if test="${page.endPage < page.totalPage }">
-				    	<li class="page-item">
-							<a class="page-link page-link-arrow" href="thChgList?currentPage=${page.startPage + page.pageBlock }">
-							<i class="fa fa-caret-right">다음</i></a>
-						</li>
-					</c:if>
-				 </ul>
-		  		</nav>
+				  <div class="page">
+				    <c:if test="${page.startPage >page.pageBlock}">					        
+				        <a href="javascript:void(0);" onclick="clickChgResult('${srch_word }',200,'${page.startPage-page.pageBlock}'); return false;" >[이전]</a>
+				    </c:if>
+				    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">					    	
+				        <a href="javascript:void(0);" onclick="clickChgResult('${srch_word }',200,'${i}'); return false;" >[${i}]</a>
+				    </c:forEach>
+				    <c:if test="${page.endPage < page.totalPage}">					        
+				        <a href="javascript:void(0);" onclick="clickChgResult('${srch_word }',200,'${page.startPage+page.pageBlock}'); return false;" >[다음]</a>
+				    </c:if>
+				  </div> 
 			</div>
 		</div>
 								

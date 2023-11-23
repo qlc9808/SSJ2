@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,8 +103,8 @@
                                     <div class="col-lg-6 mb-2">
                                        
                                         <!--ya 쉐어링 참가신청 test -------------------------------------------------------------------------->
-                                        <button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#infoModal"
-                                            data-user_num="${sessionScope.user_num}" data-brd_num="${board.brd_num}">
+                                        <button type="button" class="btn btn-dark w-100" id="participateBtn" data-toggle="modal" data-target="#infoModal"
+                                            data-user_num="${sessionScope.user_num}" data-brd_num="${board.brd_num}" data-participants="${board.participants}" data-applicants="${board.applicants }">
                                             <i class="fe fe-mail me-2"> 참가신청 </i></button>
                                     </div>
                                          <!-- yr 작성 -->
@@ -203,12 +204,34 @@
 </div>
 <!-------------------------------- 모달창 자바스크립트 ------------------------------------------------------------------------>
 <script type="text/javascript">
-    // 모달창열기
+    // 참가신청버튼 클릭 모달창열기
     document.addEventListener('DOMContentLoaded', function() {
         const modalBtn = document.querySelector('[data-target="#infoModal"]');
+        const participateBtn = document.getElementById('participateBtn');
+        
         modalBtn.addEventListener('click', function() {
         	const user_num = parseInt(modalBtn.getAttribute('data-user_num'), 10);
         	const brd_num = parseInt(modalBtn.getAttribute('data-brd_num'), 10);
+            const participants = parseInt(participateBtn.getAttribute('data-participants'), 10);
+            const applicants = parseInt(participateBtn.getAttribute('data-applicants'), 10);
+            
+        	// 비로그인 상태 확인
+            if (isNaN(user_num)) {
+                // 비로그인일 경우 알림창 띄우고 로그인 페이지로 이동
+                alert('로그인 후 이용해주세요!');
+                window.location.href = '/loginForm'; // 로그인 페이지로 이동
+                return;
+            }
+       
+
+            // 참여인원이 모집인원을 초과하는 경우 참가하기 버튼 비활성화
+            if (participants >= applicants) {
+            	alert('모집인원이 마감되었습니다.');
+                participateBtn.disabled = true;
+            } else {
+                participateBtn.disabled = false;
+            }
+        	
         	const url = `/sharingParticipate?user_num=${user_num}&brd_num=${board.brd_num}`;
        		console.log("login user_num :"+user_num);
        		console.log("board brd_num  :"+brd_num);
@@ -223,6 +246,8 @@
                     document.getElementById('user_name').value = userData.user1.user_name;
                     document.getElementById('tel').value = userData.user1.tel;
                     document.getElementById('addr').value = userData.user1.addr;
+
+                    
                     console.log("userData :" +userData)
                     console.log("participate user_num :" + user_num);
                 	console.log("board brd_num :" + brd_num);
@@ -239,7 +264,6 @@
 		        const user_num = document.getElementById('user_num').value;
 		        const message = document.getElementById('message').value;
 		
-
 		        // 데이터를 서버에 전송
 		        const saveUrl = `/saveSharingInfo?user_num=${user_num}&brd_num=${board.brd_num}&message=${message}`;
 		        fetch(saveUrl, {

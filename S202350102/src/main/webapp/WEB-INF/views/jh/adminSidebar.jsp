@@ -60,50 +60,31 @@
     
                 <li class="nav-item">
 
-                  <!-- Toggle -->
-                  <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6" data-bs-toggle="collapse" href="/listShrAdmin" id="listShrDropDown">
-                    	쉐어링 관리
+   	 		 <!-- Toggle -->
+    	             <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6" data-bs-toggle="collapse" href="#listComAdmin"  id="listComDropDown">
+                    	커뮤니티 관리
                   </a>
 
-                  <!-- Collapse -->
-                  <div class="collapse" id="sharingAdmin">
+                   <!-- Collapse -->
+                  <div class="collapse" id="listComAdmin">
                     <div class="form-group">
-                      <ul class="list-styled mb-0" id="listShr">
+                      <ul class="list-styled mb-0" id="listCom">
+                         <li class="list-styled-item">
+                          <a class="list-styled-link"  href="/sharAdminList">
+                            	쉐어링
+                          </a>
+                        </li>
                         <li class="list-styled-item">
-                          <a class="list-styled-link" href="/thChgList?state_md=102">
-                            	전체
+                          <a class="list-styled-link" href="/communityAdminList">
+                            	자유게시판
                           </a>
                         </li>
                       </ul>
                     </div>
-    			  </div>
-    			  
-    			</li>
-    			
-                <li class="nav-item">
-
-                  <!-- Toggle -->
-                  <a class="nav-link dropdown-toggle fs-lg text-reset border-bottom mb-6" data-bs-toggle="collapse" href="/listFrBoardAdmin" id="listFrBoardDropDown">
-                    	자유게시판 관리
-                  </a>
-
-                  <!-- Collapse -->
-                  <div class="collapse" id="freBoardAdmin">
-                    <div class="form-group">
-                      <ul class="list-styled mb-0" id="listFreBoard">
-                        <li class="list-styled-item">
-                          <a class="list-styled-link" href="#">
-                            	전체
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-    			  </div>
-    			  
+    			    </div>    
     			</li>
 			</ul>
 		</form>
 	</div>
-          
 </body>
 </html>

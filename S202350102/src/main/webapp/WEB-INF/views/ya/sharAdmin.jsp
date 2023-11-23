@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header4.jsp" %>    
+<%@ include file="/WEB-INF/views/header4.jsp" %>   
+<%@ include file="/WEB-INF/views/topBar.jsp" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +39,8 @@
                             <th scope="col" class="th-date">등록일</th>
                             <th scope="col" class="th-view_cnt">조회수</th>
                             <th scope="col" class="th-replyCount">댓글수</th>
+                            <th scope="col" class="th-applicants">모집인원</th>
+                            <th scope="col" class="th-participants">참가인원</th>
                             <th scope="col"  class="text-center">삭제처리</th>
                         </tr>
                     </thead>                 
@@ -51,8 +54,14 @@
                                 <td><fmt:formatDate value="${board.reg_date}" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
 				         		<td>${board.replyCount}</td>
+				         		<td>${board.applicants}</td>
+				         		<td>${board.participants}</td>
 				         		<td class="justify-content-center">
-									<button type="button" class="btn btn-secondary btn-xs"  onclick="location.href='/deleteShareAdmin?brd_num=${board.brd_num}'">삭제</button>
+				         		 <!-- 참가자 수 0인경우에만 삭제버튼 표시, 쉐어링리스트 참조무결성위반 -->
+				         		<c:if test="${board.participants == 0}"> 
+				         			<button type="button" class="btn btn-secondary btn-xs" onclick="deleteShare(${board.brd_num})">삭제</button>
+									<%-- <button type="button" class="btn btn-secondary btn-xs"  onclick="location.href='/deleteShareAdmin?brd_num=${board.brd_num}'">삭제</button> --%>
+								</c:if>
 								</td>
 				         		<c:set var="num" value="${num-1}"></c:set> 			       
                             </tr>
@@ -89,6 +98,18 @@
 		</div>
 	</div>		
 </div>
+
+<script>
+    function deleteShare(brd_num) {
+        if (confirm("게시글을 삭제하시겠습니까?")) {
+            // 사용자가 확인을 클릭하면 삭제를 진행합니다.
+            location.href = '/deleteShareAdmin?brd_num=' + brd_num;
+        } else {
+            // 사용자가 취소를 클릭하면 아무 일도 일어나지 않습니다.
+        }
+    }
+</script>
+
 	
 <div class="py-10"></div>
 </section>			
