@@ -39,6 +39,7 @@ import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.yaService.Paging2;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -187,6 +188,7 @@ public class YaController {
 				int result = ycs.insertCommunity(board);
 				System.out.println("Insert result->" + result);	
 				
+				
 				// 한빛 : 자유게시판 글작성 시 유저의 경험치가 오르는 로직
 				// 많이 쓸것같으면 메소드로 만들어서 쓸 것.
 				if ( result > 0 ) {
@@ -300,14 +302,13 @@ public class YaController {
 		public List<Board> listBoardSearch(HttpServletRequest request) {
 			System.out.println("YaController ycs.listSearchBoardart....");
 			String keyword = request.getParameter("keyword");
-			
+		
 			System.out.println("사용자 검색한 키워드: " + keyword);
-		    
-			
-		    
-		   
 		    List<Board> listSearchBoard = ycs.listSearchBoard(keyword);
-		    // 한빛 : 유저의 레벨정보를 불러오는 메소드
+		    
+		    
+		    
+		    // 한빛 : 유저의 레벨정보를 불러오는 메소드		    
 		    listSearchBoard = us.boardWriterLevelInfo(listSearchBoard);
 		    System.out.println("YaController listSearchBoard.size?" + listSearchBoard.size());
 
@@ -322,7 +323,7 @@ public class YaController {
 			
 			List<Board> listSortedBoard = ycs.listBoardSort(sortOption);
 			// 한빛 : 리스트에 유저정보 추가하는 메소드
-			// listSortedBoard = us.boardWriterLevelInfo(listSortedBoard);
+			listSortedBoard = us.boardWriterLevelInfo(listSortedBoard);
 		    return listSortedBoard;
 		}
 		
@@ -775,7 +776,7 @@ public class YaController {
 		 
 		 // 관리자 페이지 쉐어링 게시글 전체 조회  ----jk 컨트롤러 따옴
 			@RequestMapping(value="/sharAdminList")
-			public String Sharing(Board board, Model model, HttpSession session) {
+			public String Sharing(Board board, Model model, String currentPage, HttpSession session) {
 				System.out.println("JkController Sharing start...");
 				
 				int user_num = 0;
@@ -784,7 +785,21 @@ public class YaController {
 				}
 				
 				User1 user1 = jbs.userSelect(user_num);
-				
+				  
+				//ya 쉐어링 전체 게시글 총 수, 페이징 처리 작업 
+			     int totalSharing = ycs.totalSharing(board);
+			     model.addAttribute("totalSharing", totalSharing);
+			     System.out.println("JkController Ya totalSharing->"+totalSharing);
+			      
+			     Paging2 sharBoardPage = new Paging2(totalSharing, currentPage);		
+			    
+			     board.setStart(sharBoardPage.getStart());
+			     board.setEnd(sharBoardPage.getEnd());
+			     model.addAttribute("sharBoardPage", sharBoardPage);
+			     System.out.println(" YaController boardPage start?"+sharBoardPage.getStart());
+			     System.out.println("YaControlller boardPage end?"+sharBoardPage.getEnd());
+			     System.out.println(" YaControlloer boardpage total?"+sharBoardPage.getTotal());
+									
 				// yr 작성
 				// 쉐어링 찜 여부 판단용
 				board.setB_user_num(user_num);

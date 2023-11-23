@@ -131,10 +131,12 @@
 					$("#follow").removeClass("btn-danger");
 					$("#follow").addClass("btn-light");
 					$("#follow").text("팔로잉");
-				} else {
+				} else if(followResult.following == 0) {
 					$("#follow").removeClass("btn-light");
 					$("#follow").addClass("btn-danger");
 					$("#follow").text("팔로우");
+				} else {
+					alert("자신의 계정은 팔로우 할 수 없습니다");
 				}
 			},
 			error : function() {
@@ -2429,7 +2431,10 @@
 									          <tr>
 									            <td>${num }</td>
 									            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
-									            <td>${review.nick }</td>
+									            <td>
+									            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
+													${review.nick }
+												</td>
 									            <td>${review.view_cnt }</td>
 									            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
 									          </tr>

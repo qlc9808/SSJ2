@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../header4.jsp" %>
+<%@ include file="/WEB-INF/views/header4.jsp" %>    
 <%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -9,9 +9,8 @@
 <!-- CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>게시글 상세내용</title>
 </head>
-
 <body>
 <section class="pt-7 pb-12">
       <div class="container">
@@ -58,12 +57,12 @@
 					<div class="form-group mb-7">
     					<label class="form-label" for="conts">내용</label>
     					<div class="d-flex align-items-start" style="margin-top: 10px;">
-      					 	 <textarea class="form-control form-control-sm"  rows="8"  readonly>${board.conts}</textarea>
+      					 	 <textarea class="form-control form-control-sm"  rows="12"  readonly >${board.conts}</textarea>
   						</div>
 					</div>       
                     <!-- 이미지 업로드 -->	
 					<div class="form-group mb-7">
-						<label class="form-label" for="file">이미지 *</label>
+						<label class="form-label" for="file">이미지 </label>
 						<a href="${pageContext.request.contextPath}/upload/${board.img}">
                             <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top">
                         </a>
@@ -130,7 +129,6 @@
 </div>
 </section>
 
-	
 <%@ include file="./commentForm2.jsp" %>
 <%@ include file="../footer.jsp" %>
 </body>

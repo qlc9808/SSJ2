@@ -104,4 +104,20 @@
 		join challenge d on b.chg_id = d.chg_id
 	</select>
 	
+	<select id="chgUpdate" parameterType="Challenge">
+		Update Challenge
+		Set title = #{title}, 
+			chg_capacity = #{chg_capacity}, 
+			chg_conts = #{chg_conts},
+			chg_md = #{chg_md},
+           	upload = #{upload}, 
+           	<if test="sample_img != null">sample_img = #{sample_img},</if> 
+           	freq = #{freq}, 
+           	chg_public = #{chg_public}, 
+           	<if test="priv_pswd != null">priv_pswd = #{priv_pswd},</if> 
+           	<if test="thumb != null">thumb = #{thumb}, </if>
+           	end_date = #{end_date}
+        Where chg_id = #{chg_id}
+	</select>
+	
 </mapper>

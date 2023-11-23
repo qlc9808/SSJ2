@@ -10,7 +10,7 @@
 </head>
 <body>
 <section class="py-11">
- <div class="container">            
+ <div class="container" style=" margin-left: 300px;">            
         <div class="row">
           <div class="col-12 text-center">			
             <!-- Heading -->
@@ -28,8 +28,8 @@
         </div>
         <!-- 게시판리스트    user_id에 회원정보 상세보기 링크 걸어두기 -->
             <div class="col-12">	
-             <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 
-                <table class="table table-bordered table-sm mb-0">
+             <c:set var="num" value="${sharBoardPage.total - sharBoardPage.start+1 }"></c:set> 
+                <table class="table table-bordered table-sm mb-0" style="width:1200px">
                     <thead>
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
@@ -54,8 +54,8 @@
                                 <td><fmt:formatDate value="${board.reg_date}" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
 				         		<td>${board.replyCount}</td>
-				         		<td>${board.applicants}</td>
-				         		<td>${board.participants}</td>
+				         		<td>${board.applicants}명</td>
+				         		<td>${board.participants}명</td>
 				         		<td class="justify-content-center">
 				         		 <!-- 참가자 수 0인경우에만 삭제버튼 표시, 쉐어링리스트 참조무결성위반 -->
 				         		<c:if test="${board.participants == 0}"> 
@@ -69,33 +69,32 @@
                     </tbody>
                 </table>
                </div>
- 			
-				<nav class="d-flex justify-content-center justify-content-md-center mt-3">
+ 				<nav class="d-flex justify-content-center justify-content-md-center mt-3">
 			     <ul class="pagination pagination-lg text-gray-400">
-			        <c:if test="${boardPage.startPage > boardPage.pageBlock}">
+			        <c:if test="${sharBoardPage.startPage > sharBoardPage.pageBlock}">
 			            <li class="page-item">
-			                <a class="page-link page-link-arrow" href="communityAdminList?currentPage=${boardPage.startPage-boardPage.pageBlock}">
+			                <a class="page-link page-link-arrow" href="sharAdminList?currentPage=${sharBoardPage.startPage-sharBoardPage.pageBlock}">
 			                    <i class="fa fa-caret-left"></i>
 			                </a>
 			            </li>
 			        </c:if>
 			
-			        <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
+			        <c:forEach var="i" begin="${sharBoardPage.startPage}" end="${sharBoardPage.endPage}">
 			            <li class="page-item <c:if test='${boardPage.currentPage == i}'>active</c:if>">
-			                <a class="page-link" href="communityAdminList?currentPage=${i}">${i}</a>
+			                <a class="page-link" href="sharAdminList?currentPage=${i}">${i}</a>
 			            </li>
 			        </c:forEach>
 			
-			        <c:if test="${boardPage.endPage < boardPage.totalPage}">
+			        <c:if test="${sharBoardPage.endPage < sharBoardPage.totalPage}">
 			            <li class="page-item">
-			                <a class="page-link page-link-arrow" href="communityAdminList?currentPage=${boardPage.startPage+boardPage.pageBlock}">
+			                <a class="page-link page-link-arrow" href="sharAdminList?currentPage=${sharBoardPage.startPage+sharBoardPage.pageBlock}">
 			                    <i class="fa fa-caret-right"></i>
 			                </a>
 			            </li>
 			        </c:if>
 			    </ul>
 			   </nav>	
-		</div>
+			</div>
 	</div>		
 </div>
 

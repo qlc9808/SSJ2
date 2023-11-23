@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>회원 탈퇴</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <script type="text/javascript">
 	function chk(){
@@ -76,6 +76,6 @@
       </div>
     </section>
 
-<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

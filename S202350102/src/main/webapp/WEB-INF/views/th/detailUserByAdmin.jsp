@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../header4.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>회원 상세 조회</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <script type="text/javascript">
 	// 유저 탈퇴 함수
 	function fn_delCheck(user_num, delete_yn, pageNum){
@@ -109,6 +109,6 @@
 			<div class="py-10"></div>
 	</div>		
 </section>
-	<%@ include file="/WEB-INF/views/footer.jsp" %> <!-- 이렇게해야 푸터가 꽉차게 들어감 -->
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

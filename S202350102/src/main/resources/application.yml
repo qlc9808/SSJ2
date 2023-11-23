@@ -8,8 +8,16 @@ server:
    client-auth: NONE
    protocol: TLS
     
-# Oracle Connect
+# cache
 spring:
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 10000s
+          no-cache: false
+          no-store: false
+          must-revalidate: true
 
   #File Size
   servlet:
@@ -47,7 +55,6 @@ spring:
           auth: true
           starttls.enable: true
 
-      
 # Mybatis
 #mybatis: # classpath는  resources를 의미함(위치)
 #  mapper-locations: classpath:configuration.xml
@@ -61,3 +68,4 @@ mybatis:
 
 logging.level:
   org.hibernate.sql: debug # logger를 통해 하이버네이트 실행 SQL
+  

@@ -1,15 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../header4.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>유저 수정양식</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <script type="text/javascript" src="js/th/updateUserFormAdmin.js"></script>
 <body>
-	<%@ include file="../adminMenu.jsp" %>
+<section class="py-11">
+ 	<div class="container">
+ 	
+ 	<!-- TITLE  -->
+ 	<div class="col-12 text-center">
+    	<div class="pt-10 pb-5">
+			<h3 class="mb-10">회원 관리</h3>
+        </div>
+    </div>
+ 	
+ 	<div class="row">
+ 	<%@ include file="../jh/adminSidebar.jsp" %>
+ 	
 	<div class="col-10">
 	
 		<table class="table table-bordered table-sm mb-0">
@@ -176,26 +188,24 @@
 			    </tr>
 				<tr style="border-bottom: none;">
 					<td colspan="2" align="right" style="border-left: none; border-right: none;" class="px-0"><button class="btn btn-sm btn-dark mx-1" onclick="return chk()">확인</button></td>
-				<div class="form-group">
+<!-- 				<div class="form-group"> -->
 					<input type="hidden" name="pageNum" value="${pageNum}">
 					<input type="hidden" name="user_num" value="${user1.user_num }">
-				</div>	
+<!-- 				</div>	 -->
 		</form>
 					<td colspan="2" align="left"  style="border-left: none; border-right: none;" class="px-0"><button class="btn btn-sm btn-dark mx-1" onclick="location.href='/detailUserByAdmin?user_num=${user1.user_num}&pageNum=${pageNum}'">취소</button></td>		
 				</tr>
 				   			    
 		</table>	
 		
-		<div class="d-flex justify-content-start mt-5">
-			 
+		<div class="d-flex justify-content-start mt-5">	 
 		</div>	
-	
-
 	</div>
 	
 		<div class="py-10"></div>	
-	</div>	<!-- adminMenu.jsp 에서 <div class="row"> 닫기 용   -->
-	</div>  <!-- adminMenu.jsp 에서 <div class="container"> 닫기용 -->
-	<%@ include file="/WEB-INF/views/footer.jsp" %> <!-- 이렇게해야 푸터가 꽉차게 들어감 -->
+</div>
+</div>
+</section>
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

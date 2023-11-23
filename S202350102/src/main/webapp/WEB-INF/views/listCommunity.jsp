@@ -221,10 +221,10 @@ $(document).ready(function () {
                for (var i = 0; i < data.length; i++) {
                       var result = data[i];
                       var str = '<tr>';
-             //       var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
-                      str += "<td>" + result.brd_num + "</td>";
+                      var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >"; // 한빛
+                      str += "<td>" + result.brd_num + "</td>"; 
                       str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
-                      str += "<td>" + result.nick + "</td>"; // 한빛 : + img + result.nick + 이런식으로 추가해야됨
+                      str += "<td>" + img + result.nick + "</td>"; // 한빛 
                       // 날짜 형식 변환
                       var formattedDate = new Date(result.reg_date);
                       var day = formattedDate.getDate();

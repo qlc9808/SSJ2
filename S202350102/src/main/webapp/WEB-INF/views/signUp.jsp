@@ -1,19 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
  <head>
  <meta charset="UTF-8">
 <script type="text/javascript" src="js/th/thSignUp.js"></script>
 <title>회원가입</title>
-<link href="http://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif; } 
-</style>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
  </head>
 <body class="bg-light">
-  	<c:import url="/WEB-INF/views/header4.jsp"/>
     <!-- CONTENT -->
     <section class="py-12">
       <div class="container">
@@ -247,28 +243,8 @@
                     </div>
                     
                
-                    <div class="col-12 col-md-auto">
 
-                      <!-- Link -->
-                      <div class="form-group fs-sm text-muted">
-                        By registering your details, you agree with our Terms & Conditions,
-                        and Privacy and Cookie Policy.
-                      </div>
-
-                    </div>
-                    <div class="col-12 col-md">
-
-                      <!-- Newsletter -->
-                      <div class="form-group">
-                        <div class="form-check">
-                          <input class="form-check-input" id="registerNewsletter" type="checkbox">
-                          <label class="form-check-label" for="registerNewsletter">
-                            Sign me up for the Newsletter!
-                          </label>
-                        </div>
-                      </div>
-
-                    </div>
+                    
                     <div class="col-12">
 
                       <!-- Button -->
@@ -347,4 +323,5 @@
     }
 </script>
   </body>
+  <%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

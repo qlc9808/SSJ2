@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -170,6 +171,7 @@
 			 </tbody>
 			</table>
 			
+			<!-- 이전 페이지 / 다음 페이지도 페이징 작업 필요 -->
 				<!-- 페이지네이션  -->
 					 <nav class="d-flex justify-content-center justify-content-md-center mt-3">
 	      	   		 <ul class="pagination pagination-lg text-gray-400">
@@ -179,7 +181,6 @@
 								<i class="fa fa-caret-left">이전</i></a>
 							</li>
 						</c:if>
-						
 					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
 							<li class="page-item">
 								<c:if test="${i == page.currentPage }">
