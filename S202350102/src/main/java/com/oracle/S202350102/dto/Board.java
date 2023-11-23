@@ -68,5 +68,6 @@ public class Board {
 	private int like_cnt;
 	
 	// 각 brd_num 마다의 총 신고 cnt 값
-	private int burning_cnt;	
+	private int burning_cnt;
+	
 }
