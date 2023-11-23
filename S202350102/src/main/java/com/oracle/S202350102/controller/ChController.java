@@ -605,15 +605,45 @@ public class ChController {
 	
 	@ResponseBody
 	@PostMapping(value = "myContsDelete")
-	public int myContsDelete(int brd_num) {
+	public int myContsDelete(int brd_num, HttpServletRequest request) throws Exception {
 		System.out.println("ChController myContsDelete Start");
 		System.out.println("ChController myContsDelete board.getBrd_num() -> "+brd_num);
 		int result = 0;
-		
+		Board board = chBoardService.noticeConts(brd_num);
 		
 		result = jhCService.reviewDelete(brd_num);
 		
-		
+		if(result >0 ) {
+			//이미지 삭제를 위한 작업
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			String deleteFile = uploadPath + board.getImg();
+			
+			//실제 upload에 담김 파일 이미지 삭제
+			int delResult= upFileDelete(deleteFile);
+			
+			System.out.println("ChController myContsDelete delResult -> " + delResult);
+		}		
+		return result;
+	}
+	
+	private int upFileDelete(String deleteFileName) throws Exception {
+		int result = 0;
+		log.info("upFileDelete result -> " + deleteFileName);
+		File file = new File(deleteFileName);
+		if (file.exists()) {
+			if (file.delete()) {
+				System.out.println("파일삭제 성공");
+				result = 1;
+				
+			} 
+			else {
+				System.out.println("파일삭제 실패");
+				result = 0;
+			}
+		} else {
+			System.out.println("삭제할 파일이 존재하지 않습니다.");
+			result = -1;
+		}
 		return result;
 	}
 	
