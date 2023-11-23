@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <body class="bg-light">
 	
@@ -131,11 +132,6 @@
       </div>
     </div>
     
-    
-    
-    <!-- NAVBAR -->
-	<c:import url="/WEB-INF/views/header4.jsp"/>
-
     <!-- NAVBAR -->
 <!--     {{> navbars/navbar classList="bg-white"}} -->
  	
@@ -216,10 +212,6 @@
         </div>
       </div>
     </section>
-
-    <!-- FOOTER -->
-    <c:import url="/WEB-INF/views/footer.jsp"/>
-
 
     <!-- JAVASCRIPT -->
 	<script type="text/javascript">
@@ -398,5 +390,5 @@
 	});
   </script>   
   </body>
-	
+<%@ include file="/WEB-INF/views/footer.jsp" %>	
 </html>
