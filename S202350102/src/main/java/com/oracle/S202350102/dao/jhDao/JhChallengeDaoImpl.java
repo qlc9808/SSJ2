@@ -1,6 +1,7 @@
 package com.oracle.S202350102.dao.jhDao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -363,6 +364,21 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 			System.out.println("JhChallengeDaoImpl chgListTotal e.getMessage() -> " + e.getMessage());
 		}
 		return chgListTotal;
+	}
+
+	@Override
+	public int approvReject(Map<String, Object> apvRjtParaMap) {
+		System.out.println("JhChallengeDaoImpl approvReject Start...");
+		
+		int result = 0;
+		try {
+			result = session.selectOne("jhApprovRejectPro", apvRjtParaMap);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl approvReject e.getMessage() -> " + e.getMessage());
+
+		}
+		System.out.println("JhChallengeDaoImpl approvReject result -> " + result);
+		return result;
 	}
 
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -12,8 +13,119 @@
 	    background-color: #FFB4B4;
 	  }
 </style>
+<script type="text/javascript">
+	/* 현재 페이지 클릭시 수정 해야함 */
+/* 	function currentPageMove(){
+	 	var state_md = ${state_md}
+	    var chg_lg = ${chg_lg}
+	    var chg_md = ${chg_md}
+	    var sortOpt = $('#sortOpt').val()
+	    var currentPage = ${page.currentPage}
+	    
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+currentPage;
+			
+	} */
+	
+	function approvRejectFn(pApprovReject){
+		
+		var approvReject	= pApprovReject
+		var chg_id			= ${chg_id}
+		var state_md		= ${state_md}
+		var user_num		= ${user_num}
+		var return_md		= ${return_md}
+		
+		if(approvReject == 1){
+			location.href = "approvReject?chg_id="+chg_id+"&state_md="+state_md+"&user_num="+user_num+"&approvReject="+approvReject;
+			
+		} else{
+			
+			$('#rejectModal').modal('show')
+		}
+	}
+	
+</script>
 </head>
 <body>
+<!-- MODALS -->
+    <!-- Newsletter: Horizontal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+    
+          <!-- Close -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fe fe-x" aria-hidden="true"></i>
+          </button>
+    
+          <!-- Content -->
+          <div class="row gx-0">
+            <div class="col-12 col-lg-5">
+    
+              <!-- Image -->
+              <img class="img-fluid" src="./assets/img/covers/cover-25.jpg" alt="...">
+    
+            </div>
+            <div class="col-12 col-lg-7 d-flex flex-column px-md-8">
+    
+              <!-- Body -->
+              <div class="modal-body my-auto py-10">
+    
+                <!-- Heading -->
+                <h4>Subscribe to Newsletter and get 15% Discount</h4>
+    
+                <!-- Text -->
+                <p class="mb-7 fs-lg">
+                  On your next purchase
+                </p>
+    
+                <!-- Form -->
+                <form>
+                  <div class="row gx-5">
+                    <div class="col">
+    
+                      <!-- Input -->
+                      <label class="visually-hidden" for="modalNewsletterHorizontalEmail">Enter Email *</label>
+                      <input class="form-control form-control-sm" id="modalNewsletterHorizontalEmail" type="email" placeholder="Enter Email *">
+    
+                    </div>
+                    <div class="col-auto">
+    
+                      <!-- Button -->
+                      <button class="btn btn-sm btn-dark" type="submit">
+                        <i class="fe fe-send"></i>
+                      </button>
+    
+                    </div>
+                  </div>
+                </form>
+    
+              </div>
+    
+              <!-- Footer -->
+              <div class="modal-footer pt-0">
+    
+                <!-- Checkbox -->
+                <div class="form-check">
+    
+                  <!-- Input -->
+                  <input class="form-check-input" id="modalNewsletterHorizontalCheckbox" type="checkbox">
+    
+                  <!-- Label -->
+                  <label class="form-check-label fs-xs" for="modalNewsletterHorizontalCheckbox">
+                    Prevent this Pop-up
+                  </label>
+    
+                </div>
+    
+              </div>
+    
+            </div>
+          </div>
+    
+        </div>
+    
+      </div>
+    </div>
 <section class="py-11">
  <div class="container">
         <div class="row">
@@ -134,8 +246,9 @@
 			    </tr>
 		</table>
 		<div class="d-flex justify-content-start mt-5">
-			<button class="btn btn-sm btn-dark mx-1" onclick="location.href='chgAdminList?currentPage=${pageNum}'">목록</button>
-			<button class="btn btn-sm btn-dark mx-1" onclick="location.href='updateUserFormAdmin?user_num=&pageNum='">수정</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="currentPageMove()">목록</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="approvRejectFn(1)" id="approval"  >승인</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="approvRejectFn(0)" id="rejection" >반려</button>
 			<!-- 탈퇴여부에따라 보이는 버튼이 탈퇴 / 활성화로 바뀜  -->
 			<c:if test="">			      
 				<button class="btn btn-sm btn-dark mx-1" id="delBtn" onclick="fn_delCheck(,'', '')">탈퇴</button>

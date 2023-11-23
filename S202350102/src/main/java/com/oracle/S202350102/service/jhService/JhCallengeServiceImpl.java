@@ -1,6 +1,7 @@
 package com.oracle.S202350102.service.jhService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -201,6 +202,14 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		System.out.println("JhCallengeServiceImpl chgListTotal Start...");
 		int chgListTotal = jhChgDao.chgListTotal(challenge);
 		return chgListTotal;
+	}
+
+	@Override
+	public int approvReject(Map<String, Object> apvRjtParaMap) {
+		System.out.println("JhCallengeServiceImpl approvReject Start...");
+		
+		int result = jhChgDao.approvReject(apvRjtParaMap);
+		return result;
 	}
  
 

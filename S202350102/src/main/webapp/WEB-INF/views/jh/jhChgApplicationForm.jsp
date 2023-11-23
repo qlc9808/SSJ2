@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 
 <!DOCTYPE html>
@@ -91,7 +92,7 @@
 		
 	//챌린지 신청 전 확인 알림	
 	function chk(){
-		return confirm("챌린지를 신청하시겠습니까? \n 관리자 승인까진 3~5일이 소요됩니다.");
+		return confirm("챌린지를 신청하시겠습니까? \n 관리자 승인까진 3~5일이 소요되며 승인 이후에는 수정이 불가합니다.");
 		 
 	}	
 	
