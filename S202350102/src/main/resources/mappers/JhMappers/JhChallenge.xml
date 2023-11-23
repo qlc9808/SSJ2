@@ -10,7 +10,7 @@
 
 	<!-- 챌린지 상세정보 챌린지 테이블, 유저테이블, 공통 테이블 한번에 조인 -> 챌린지 상세정보, 닉네임, 카테고리명, 챌린지 진행상테 조회  -->
 	<select id="jhChgDetail" parameterType="int" resultType="Challenge">
-		SELECT u.nick, u.user_name userName, ct.ctn ctn, cs.ctn stateCtn, cr.ctn rejectionReason, ch.*, count_pick(#{chg_id}) pick_cnt
+		SELECT u.nick, u.user_name userName, ct.ctn ctn, cs.ctn stateCtn, cr.ctn returnReason, ch.*, count_pick(#{chg_id}) pick_cnt
 		FROM challenge ch 
 		INNER JOIN user1 u ON ch.user_num = u.user_num
 		INNER JOIN comm ct ON ch.chg_lg   = ct.lg   AND ch.chg_md 	= ct.md
@@ -36,7 +36,7 @@
 		FROM (
 		        SELECT  ROWNUM AS rn, a.* 
 		        FROM    (
-		                    SELECT      b.brd_num , b.title, u.nick, b.view_cnt, b.reg_date, replyCount(b.brd_num) replyCount
+		                    SELECT      b.brd_num , b.title, b.user_num, u.nick, b.view_cnt, b.reg_date, replyCount(b.brd_num) replyCount
 		                    FROM 		board b
 		                    INNER JOIN 	user1 u      ON b.user_num = u.user_num
 		                    INNER JOIN 	challenge ch ON b.chg_id   = ch.chg_id
@@ -265,6 +265,32 @@
 			<when test="chg_md != 0"> AND chg_md = #{chg_md} </when>
 		</choose>
 	</select>
+	
+		<!-- 챌린지 승인(챌린저에 개설자 추가) / 반려 -->
+	<select id="jhApprovReturnPro" parameterType="java.util.Map" statementType="CALLABLE" >
+		{
+			call Approval_Return_Pro(
+						 #{chg_id , 		mode=IN , jdbcType=INTEGER}
+						,#{user_num, 		mode=IN , jdbcType=INTEGER}
+						,#{approvReturn, 	mode=IN , jdbcType=INTEGER}
+						,#{return_md , 		mode=IN , jdbcType=VARCHAR}
+						,#{resultCount, 	mode=OUT, jdbcType=INTEGER}
+						)
+		}
+		
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 <!-- 삭제 예정	챌린지 관리자 리스트 - 카테고리별 + 진행상태별 한번에 처리하기 위함
 	<select id="jhChgAdminList" parameterType="Challenge" resultType="Challenge">

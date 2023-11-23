@@ -97,9 +97,12 @@ public class ThController {
 		}
 	}
 	
+	@ResponseBody
 	@PostMapping(value = "/login")							// 로그인 유지를 위한 세션 필요
 	public String login(@ModelAttribute User1 user1, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("ThController login start... ");
+		System.out.println("ThController login user1.getUser_id() --> " + user1.getUser_id());
+		System.out.println("ThController login user1.getUser_pswd() --> " + user1.getUser_pswd());
 		User1 loginResult = us1.login(user1);
 		System.out.println("ThController loginResult -->" + loginResult);
 		// 회원정보가 존재 하는경우
@@ -116,18 +119,15 @@ public class ThController {
 		         System.out.println("Thcontroller login updateResult --> " + updateResult);
 		         
 				 System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
-				return "home2";
+				return "loginSuccess";
 			// 탈퇴처리된 아이디 인경우		
 			} else {
-				model.addAttribute("result","delId");
-				return "/loginForm";
+				return "delId";
 			}
 			
 		// 회원정보가 없는경우(아이디 비밀번호 틀린경우)
 		} else {
-			// chk에 1값을 주고 JS통해서 chk값에 따라 다른 alert창 만듬 
-			model.addAttribute("result","wrongValue");
-			return "/loginForm";
+			return "wrongValue";
 		}
 	}
 		

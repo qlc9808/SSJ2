@@ -1,6 +1,7 @@
 package com.oracle.S202350102.dao.jhDao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
@@ -53,7 +54,9 @@ public interface JhChallengeDao {
 
 	List<Challenge>		chgAplList(Challenge challenge);
 
-	int 				chgListTotal(Challenge challenge);     
+	int 				chgListTotal(Challenge challenge);
+
+	int 				approvReturn(Map<String, Object> apvRtnParaMap);     
     
-}       
+}        
    

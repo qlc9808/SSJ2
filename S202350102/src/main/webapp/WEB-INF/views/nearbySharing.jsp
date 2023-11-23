@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header4.jsp" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -419,7 +419,7 @@ var map = new daum.maps.Map(mapContainer, mapOption);
 
 //주소-좌표로 변환
 var data = JSON.parse('${addrJson}');
-console.log(data);
+console.log("jsondata"+data);
 
 var geocoder = new kakao.maps.services.Geocoder();
 

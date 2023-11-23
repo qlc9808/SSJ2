@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -184,6 +185,7 @@ public class JhController {
 		
 		//후기 목록 조회
 		List<Board> chgReviewList = jhCService.chgReviewList(board);
+		chgReviewList = userService.boardWriterLevelInfo(chgReviewList);
 		model.addAttribute("chgReviewList", chgReviewList);
 		model.addAttribute("tap", tap);
 		
@@ -649,8 +651,13 @@ public class JhController {
 		//저장 경로 생성
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		
+		int user_num = board.getUser_num();
+		board.setBrd_lg(700);
+		board.setBrd_md(101);
 		
-			
+		int lg = board.getBrd_lg();
+		int md = board.getBrd_md();
+		
 			log.info("originalName: " + file1.getOriginalFilename());
 			log.info("size: " +file1.getSize());
 			log.info("contentType : " + file1.getContentType());
@@ -666,6 +673,11 @@ public class JhController {
 			
 			//글 등록
 			int result = jhCService.reviewPost(board);
+			
+			if ( result > 0 ) {
+				ls.userExp(user_num, lg, md);
+				ls.userLevelCheck(user_num);
+			}
 			System.out.println("JhController chgApplication result -> " + result);		
 			
 			return "redirect:chgDetail?&chg_id="+board.getChg_id()+"&tap=3";
@@ -903,6 +915,7 @@ public class JhController {
 		
 	}
 	
+	//챌린지 관리자 상세보기
 	@RequestMapping(value = "chgAdminDetail")
 	public String chgAdminDetail(Challenge challenge, HttpSession session, Model model) {
 		System.out.println("JhController chgAdminDetail Start...");
@@ -910,8 +923,19 @@ public class JhController {
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = challenge.getState_md();
 		
-		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것
+		//반려사유 종류
+		int categoryLd = 500;
+		List<Comm> returnReason = jhCService.category(categoryLd);
+		model.addAttribute("returnReason", returnReason);
+		System.out.println("JhController chgAdminDetail  returnReason --> " + returnReason);
+		
+		
+		
+		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것 ->수정하기
 		String pageNum = challenge.getPageNum();
+		
+		
+		
 		
 		int chg_id = challenge.getChg_id();
 		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
@@ -930,6 +954,45 @@ public class JhController {
 	}
 	
 	
+	
+	@RequestMapping(value = "approvReturn")
+	public String approvReturn(int approvReturn, int chg_id, int state_md,@RequestParam(required = false) Integer user_num, @RequestParam(required = false) Integer return_md) {
+		System.out.println("JhController approvReturn Start...");
+		System.out.println("JhController approvReturn approvReturn -> " + approvReturn);
+		System.out.println("JhController approvReturn chg_id -> " 		+ chg_id);
+		System.out.println("JhController approvReturn state_md -> "		+ state_md);
+		System.out.println("JhController approvReturn user_num -> " 	+ user_num);
+		System.out.println("JhController approvReturn return_md-> " 	+ return_md);
+		
+		Map<String, Object> apvRtnParaMap = new HashMap<String, Object>();
+		//승인
+		if (approvReturn == 1) {
+			
+			//챌린저 테이블에 추가 할 user_num
+			apvRtnParaMap.put("user_num", user_num);
+			
+		//반려
+		} else {
+			//챌린지 테이블에 업데이트 할 반려 사유 중분류
+			apvRtnParaMap.put("return_md", return_md);
+			
+		}
+		
+		//승인/반려 선택 값
+		apvRtnParaMap.put("approvReturn", approvReturn);
+		
+		//승인/반려 할 챌린지 pk 
+		apvRtnParaMap.put("chg_id", chg_id);
+		
+		//실제 승인/반려 처리할 프로시저 호출
+		int result = jhCService.approvReturn(apvRtnParaMap);
+		
+		System.out.println("JhController approvReturn result -> " + result);
+		
+		//승인/반려 처리 후 기존 챌린지 관리 해당 페이지로 이동
+		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md;
+		
+	}
 	
 	
 	

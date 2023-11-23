@@ -46,7 +46,7 @@ public interface YaBoardDao {
 	int               totalMyUploadsharing(int user_num);
 	int               totalJoinSharing(int user_num);
 	int               totalConfirmSharing(int user_num);
-	int               totalSharing(Board board);
+	int                totalSharing(Board board);
 	
 	
 	

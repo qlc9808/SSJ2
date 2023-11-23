@@ -18,6 +18,9 @@
 	<!-- Item2 참여한 챌린지 -->
 	<c:forEach items="${mychgList }" var="chg">
 		<div class="col px-4" style="max-width: 400px;">
+			<c:if test="${chg.state_md==100 || chg.state_md==104}">
+				<a href="myChgUpdate?chg_id=${chg.chg_id}">수정</a>
+			</c:if>
 			<div class="card">
 			
 				<!-- Image -->
@@ -47,18 +50,14 @@
 						~ 
 						<fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 					</div>
-					<div class="text-muted">참여인원: ${chg.chlgerCnt}</div>
-					<c:if test="${chg.state_md==100 || chg.state_md==104}">
-						<form action="myChgUpdate">
-							<input type="hidden" name="chg_id" value="${chg.chg_id }">
-							<input type="submit" value="수정">
-						</form>
-					</c:if>
+					<div class="text-muted">참여인원: ${chg.chlgerCnt}</div>					
 				</div>
+				
 			    
 			
 			</div>
 		</div>
+		
 	</c:forEach>
 
 			                	         

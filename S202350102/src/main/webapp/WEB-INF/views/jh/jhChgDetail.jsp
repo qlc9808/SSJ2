@@ -2431,7 +2431,10 @@
 									          <tr>
 									            <td>${num }</td>
 									            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
-									            <td>${review.nick }</td>
+									            <td>
+									            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
+													${review.nick }
+												</td>
 									            <td>${review.view_cnt }</td>
 									            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
 									          </tr>

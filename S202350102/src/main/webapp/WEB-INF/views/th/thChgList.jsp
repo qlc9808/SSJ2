@@ -88,6 +88,36 @@
 								+'&sortOpt='+sortOpt
 								+'&currentPage='+pageNum;
 	}
+	
+	// 이전 블럭 이동
+	function movePrevBlock() {
+		var sortOpt 	= 	$('#sortOpt').val()
+ 		var state_md 	= 	${chg.state_md}
+ 		var chg_lg 		= 	${chg.chg_lg}
+ 		var chg_md 		= 	${chg.chg_md}
+		var pageNum		=	${page.startPage - page.pageBlock }
+
+		location.href= 'thChgList?state_md='+state_md
+								+'&chg_lg='+chg_lg
+								+'&chg_md='+chg_md
+								+'&sortOpt='+sortOpt
+								+'&currentPage='+pageNum;
+	}
+	
+	// 다음 블럭 이동
+	function moveNextBlock() {
+		var sortOpt 	= 	$('#sortOpt').val()
+ 		var state_md 	= 	${chg.state_md}
+ 		var chg_lg 		= 	${chg.chg_lg}
+ 		var chg_md 		= 	${chg.chg_md}
+		var pageNum		=	${page.startPage + page.pageBlock }
+
+		location.href= 'thChgList?state_md='+state_md
+								+'&chg_lg='+chg_lg
+								+'&chg_md='+chg_md
+								+'&sortOpt='+sortOpt
+								+'&currentPage='+pageNum;
+	}
 
 </script>
 </head>
@@ -285,10 +315,11 @@
 				<!-- 페이지네이션  -->
 				 <nav class="d-flex justify-content-center justify-content-md-center">
       	   		 <ul class="pagination pagination-sm text-gray-400">
+      	   		 <!-- 이전 블럭 이동 -->
 				  	<c:if test="${page.startPage > page.pageBlock }">
 				  		<li class="page-item">
-							<a class="page-link page-link-arrow" href="thChgList?currentPage=${page.startPage-page.pageBlock }">
-							<i class="fa fa-caret-left">이전</i></a>
+							<a class="page-link page-link-arrow" href="#" onclick="movePrevBlock()">
+							<i class="fa fa-caret-left"></i></a>
 						</li>
 					</c:if>
 					
@@ -302,10 +333,11 @@
 							</c:if>
 						</li>
 					</c:forEach>
+					<!-- 다음 블럭 이동 -->
 				    <c:if test="${page.endPage < page.totalPage }">
 				    	<li class="page-item">
-							<a class="page-link page-link-arrow" href="thChgList?currentPage=${page.startPage + page.pageBlock }">
-							<i class="fa fa-caret-right">다음</i></a>
+							<a class="page-link page-link-arrow" href="#" onclick="moveNextBlock()">
+							<i class="fa fa-caret-right"></i></a>
 						</li>
 					</c:if>
 				 </ul>
