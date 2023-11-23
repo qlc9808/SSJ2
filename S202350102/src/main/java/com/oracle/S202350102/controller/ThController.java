@@ -120,14 +120,14 @@ public class ThController {
 			// 탈퇴처리된 아이디 인경우		
 			} else {
 				model.addAttribute("result","delId");
-				return "loginForm";
+				return "/loginForm";
 			}
 			
 		// 회원정보가 없는경우(아이디 비밀번호 틀린경우)
 		} else {
 			// chk에 1값을 주고 JS통해서 chk값에 따라 다른 alert창 만듬 
 			model.addAttribute("result","wrongValue");
-			return "loginForm";
+			return "/loginForm";
 		}
 	}
 		

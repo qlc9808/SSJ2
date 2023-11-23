@@ -46,10 +46,12 @@
 	
 	function confirmPswd(){
 		var input_priv_pswd = $('#input_priv_pswd').val()
-		var chg_priv_pswd 	= $('#chg_priv_pswd').val()
-		var chg_id			= $('#chg_id').val()
-// 		alert('input_priv_pswd --> ' + input_priv_pswd )
-// 		alert('chg_priv_pswd --> ' + chg_priv_pswd)
+		var chg_priv_pswd 	= $('#chg_priv_pswd').val();
+		var chg_id			= $('#chg_id').val();
+		alert('chg_id2 --> ' + chg_id2)
+		alert('index --> ' + index)
+		alert('chg_id --> ' + chg_id)
+		alert('chg_priv_pswd --> ' + chg_priv_pswd)
 		if(input_priv_pswd == chg_priv_pswd){
 			location.href = "chgDetail?chg_id="+chg_id
 		} else {
@@ -58,6 +60,8 @@
 			return false;
 		}	
 	}
+	
+	
 	// 현재 페이지 그대로 이동
 	function moveCurrentPage() {
 		var sortOpt 	= 	$('#sortOpt').val()
@@ -130,6 +134,8 @@
                   	비밀번호 *
                 </label>
                 <input class="form-control form-control-sm" id="input_priv_pswd" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
+                <input class="form-control form-control-sm" id="modal_chg_priv_pswd" name="modal_chg_priv_pswd" type="hidden">
+                <input class="form-control form-control-sm" id="modal_chg_id" name="modal_chg_id" type="hidden">
               </div>
      
               <button class="btn btn-sm btn-dark" onclick="return confirmPswd()">
@@ -189,7 +195,7 @@
             <!-- 챌린지 리스트 조회  -->
             <div class="row">
 	            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
-	            	<c:forEach var="chg" items="${listChg }">
+	            	<c:forEach var="chg" items="${listChg }" varStatus="status">
 	            		<c:if test="${chg.chg_public == 1 }">
 	            			<input type="hidden" id="chg_priv_pswd" name="chg_priv_pswd" value="${chg.priv_pswd }">
 	            			<input type="hidden" id="chg_id" name="chg_id" value="${chg.chg_id }">
@@ -234,9 +240,16 @@
 								</c:choose>
 			
 			                  <!-- Button -->
-			                  <button class="btn btn-xs w-100 btn-dark card-btn" <c:if test="${chg.chg_public == 1 }"> data-bs-toggle="modal" data-bs-target="#modalMatchPswd"</c:if>
-			                  													 <c:if test="${chg.chg_public == 0 }"> onclick ="location.href='chgDetail?chg_id=${chg.chg_id }'"</c:if>
-			                  													>
+			                  <button class="btn btn-xs w-100 btn-dark card-btn" id="test1${status.index }" 
+			                  	<c:if test="${chg.chg_public == 1 }"> 
+			                  		data-bs-toggle="modal" 
+			                  		data-bs-target="#modalMatchPswd"
+			                  		data-chg-id="${chg.chg_id}"
+			                  	</c:if>
+			                  	<c:if test="${chg.chg_public == 0 }"> 
+			                  		onclick ="location.href='chgDetail?chg_id=${chg.chg_id }'"
+			                  	</c:if>
+			             	  >
 			                    <i class="fe me-2 mb-1"></i>챌린지에 도전하세요!
 			                  </button>
 			

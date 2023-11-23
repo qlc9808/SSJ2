@@ -315,17 +315,17 @@
      
    <!-- F5(새로고침)시 loginForm으로 이동  -->  
    <script type="text/javascript">
-   document.onkeydown = fkey;
-   document.onkeypress = fkey;
-   document.onkeyup = fkey; 
-   var wasPressed = false; 
-   function fkey(e){    
-	   e = e || window.event;    
-	   if(wasPressed) return;     
-	   if(e.keyCode == 116){        
-		   location.href = "loginForm";    
-		   }
-	   }
+	   document.onkeydown 	= fkey;
+	   document.onkeypress 	= fkey;
+	   document.onkeyup 	= fkey; 
+	   var wasPressed = false; 
+	   function fkey(e){    
+	   		e = e || window.event;    
+	   		if(wasPressed) return;     
+	   		if(e.key == 'F5'){        
+	   		location.href = "/loginForm";    
+	   		}
+	  }
    </script>  
      
   <!--  아이디 기억하기 -->
