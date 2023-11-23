@@ -188,7 +188,7 @@
 		FROM board 
 		WHERE brd_lg = 700 
 		AND brd_md=102
-		AND brd_step = 0;
+		AND brd_step = 0
 	</select>
 	
 	
