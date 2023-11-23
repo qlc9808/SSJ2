@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <!--모달창-->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -30,8 +31,8 @@
                 <h6>내가 올린 쉐어링 </h6>
             </div>
         </div>
-        
-      <!-- 게시판리스트  -->
+   <!-- 게시판리스트  -->
+      <div class="container" >
         <div class="col-12">
          <c:set var="num" value="${myUploadSharingPaging.total - myUploadSharingPaging.start+1 }"></c:set> 
                 <table class="table table-bordered  table-sm">
@@ -39,8 +40,8 @@
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
-                            <th scope="col" class="th-applicants" style="padding-left: 10px; padding-right: 10px;">모집인원</th>
-                            <th scope="col" class="th-particpants"style="padding-left: 10px; padding-right: 10px;">승인인원</th>
+                            <th scope="col" class="th-applicants" >모집인원</th>
+                            <th scope="col" class="th-particpants">승인인원</th>
                             <th scope="col" class="th-bank_duedate">입금기한</th>
                             <th scope="col" class="th-check">지원자</th>
                         </tr>
@@ -65,7 +66,8 @@
                             </tr>
                         </c:forEach>
                     </tbody>
-                </table>         
+                </table>   
+         </div>             
         </div>
         
 			<nav class="d-flex justify-content-center justify-content-md-center mt-3">
@@ -97,11 +99,12 @@
     <!--내가 신청한 쉐어링 joinsharingList ------------------------------------------------------------------------------ -->
 	    <section class="myJoinSharing" style="width: 1000px; height: 400px">
         <div class="page-title">
-            <div class="container">
+            <div class="container" >
                 <h6>내가 참가한 쉐어링 </h6>
             </div>
         </div>
       <!-- 게시판리스트  -->
+      	 <div class="container" >
          <div class="col-12">
          <c:set var="num" value="${myJoinSharingPaging.total - myJoinSharingPaging.start+1 }"></c:set> 
                 <table class="table table-bordered  table-sm">         
@@ -133,7 +136,7 @@
                     </tbody>
                 </table>  
              </div>          
-
+	
         		<nav class="d-flex justify-content-center justify-content-md-center mt-3">
 			     <ul class="pagination pagination-sm justify-content-center">
 			        <c:if test="${ myJoinSharingPaging.startPage >  myJoinSharingPaging.pageBlock}">
@@ -159,7 +162,7 @@
 			        </c:if>
 			    </ul>
 			</nav>        
-        
+       </div>
     </section>
     
  <!--승인완료된 쉐어링 정보 -------------------입금액(총금액/모집인원   ?? ------------------------------------------------------------- -->   
@@ -170,6 +173,7 @@
             </div>
         </div>
       <!-- 게시판리스트  -->
+      <div class="container" >
         <div  class="col-12">
                   <c:set var="num" value="${myConfirmSharingPaging.total - myConfirmSharingPaging.start+1 }"></c:set> 
                   <input type="hidden" value="${board.brd_num }"> 
@@ -224,7 +228,8 @@
 			            </li>
 			        </c:if>
 			    </ul>
-			</nav>       
+			</nav> 
+		</div>	      
     </section>	
 </div>
 </div>

@@ -56,7 +56,8 @@ function listcomment() {
             $.each(result, function(index, board) {
                 var listItem = $("<li class='list-group-item'></li>");
                 listItem.append(" 댓글 번호 :"+ board.brd_num);
-                listItem.append("작성자: " + board.nick + " &nbsp;&nbsp;&nbsp;&nbsp;");
+     
+                listItem.append("작성자: " +img +board.nick + " &nbsp;&nbsp;&nbsp;&nbsp;");
                 listItem.append("작성자 회원번호: " + board.user_num);
                 listItem.append("<br>댓글 그룹: " + board.brd_group);
                 listItem.append("댓글 순서: " + board.brd_step);

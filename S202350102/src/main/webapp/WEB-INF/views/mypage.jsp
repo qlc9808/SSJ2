@@ -209,12 +209,7 @@ function clickLoad(index) {
 </script>    
 
 </head>
-<style type="text/css">
-@import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-    	body{
-    	font-family: 'Noto Sans KR', sans-serif;} 
-			
-    </style>
+
 <style>
 .profile {
   margin: 20px 0;
