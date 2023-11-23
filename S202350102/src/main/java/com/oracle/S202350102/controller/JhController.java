@@ -32,6 +32,7 @@ import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
+import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
@@ -56,6 +57,9 @@ public class JhController {
 	private final YrChallengePickService ycps;
 	
 	private final BgBoardService bBoardD;
+	
+	private final Level1Service ls;
+	
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -244,6 +248,7 @@ public class JhController {
 			
 			// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
 			List<Board> certBoard = bBoardD.certBoard(board);
+			certBoard = userService.boardWriterLevelInfo(certBoard);
 			System.out.println("BgController certBoard.size() -> "+certBoard.size());
 			model.addAttribute("certBoard", certBoard);
 			
@@ -278,6 +283,7 @@ public class JhController {
 			// R
 			// mapper key: searchCrtBd		 검색 결과 리스트 R
 			List<Board> srchResult = bBoardD.searchCrtBd(board);
+			srchResult = userService.boardWriterLevelInfo(srchResult);
 			System.out.println("srchResult.size() -> "+srchResult.size());
 			
 			
@@ -292,7 +298,6 @@ public class JhController {
 			
 		}
 		
-		certBoard = userService.boardWriterLevelInfo(certBoard);
 		
 		
 		//작성자 이름옆에 레벨아이콘이 나오게 하기 위한 것 추후 추가할 것!! 카톡 게시글 231107에 등록된 글 확인
@@ -565,7 +570,8 @@ public class JhController {
 		chg.setState_lg(stateLg);
 		int stateMd = 100;
 		chg.setState_md(stateMd);
-
+		
+		
 		  //저장 경로 생성 
 		String uploadPath =  request.getSession().getServletContext().getRealPath("/upload/");
 		  log.info("originalName: " + sampleImgFile.getOriginalFilename());
@@ -589,7 +595,15 @@ public class JhController {
 		 log.info("Return sampleSaveName: " + sampleSaveName); model.addAttribute("sampleSaveName", sampleSaveName);
 		 log.info("Return thumbSaveName: " + thumbSaveName); model.addAttribute("thumbSaveName", thumbSaveName);
 		 
+		 //챌린지 신청
 		 int result = jhCService.chgApplication(chg);
+		 
+		 
+			/* 챌린지 개설 될 경우 경험치 상승
+			 * if(result > 0) { ls.userExp(userNum, chgLg, chg.getChg_md());
+			 * ls.userLevelCheck(userNum); }
+			 */
+		 
 		 
 		 System.out.println("JhController chgApplication result -> " + result);
 		 
