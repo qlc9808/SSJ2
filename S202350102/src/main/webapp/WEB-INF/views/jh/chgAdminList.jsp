@@ -118,7 +118,7 @@
 					<th>번호</th>
 					<th>카테고리명</th>
 					<th>챌린지명</th>
-					<th>개설자</th>
+					<th>개설자 ID</th>
 					<th>공개여부</th>
 					<c:choose>
 						<c:when test="${state_md == 100 || state_md == 104}">
@@ -142,7 +142,7 @@
 						<td>${num }</td>
 						<td>${chgList.ctn }</td>
 						<td><a href="/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }">${chgList.title }</td>
-						<td>${chgList.nick }</td>
+						<td>${chgList.userId }</td>
 						<td>
 							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
 							<c:if test="${chgList.chg_public == 1 }">비공개</c:if>

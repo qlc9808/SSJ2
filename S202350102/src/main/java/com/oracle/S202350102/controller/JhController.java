@@ -556,7 +556,6 @@ public class JhController {
 		 * sample_img, HttpServletRequest request) throws IOException {
 		 */		System.out.println("JhController chgApplication Start...");
 		System.out.println("JhController chgApplication chg -> " + chg);		
-		
 		//유저 번호 저장
 		HttpSession session = request.getSession();
 		int userNum = 0;
@@ -868,7 +867,7 @@ public class JhController {
 			System.out.println("JhController chgAdminList chg_md --> " + challenge.getChg_md());
 
 			
-		//신청 챌린지인 경우	
+		//신청 /반려 챌린지인 경우	
 		} else {
 			System.out.println("JhController chgAdminList 신청 챌린지 ");
 //			파라미터 chg_lg=200&state_lg=300&state_md=100
@@ -918,9 +917,8 @@ public class JhController {
 	
 	//챌린지 관리자 상세보기
 	@RequestMapping(value = "chgAdminDetail")
-	public String chgAdminDetail(Challenge challenge,  HttpSession session, Model model) {
+	public String chgAdminDetail(Challenge challenge,  HttpSession session, Model model, @RequestParam(value = "chgUpdateMode", required = false) String chgUpdateMode) {
 		System.out.println("JhController chgAdminDetail Start...");
-		
 		
 		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
@@ -955,8 +953,12 @@ public class JhController {
 		model.addAttribute("chg", challenge);
 		model.addAttribute("state_md", state_md);
 		
-		int UpdateMode = challenge.getChgUpdateMode();
-		if(UpdateMode == 1) {
+		//업데이트용 페이지
+		
+		System.out.println("JhController chgDetail chgUpdateMode -> " + chgUpdateMode);
+		
+		if(chgUpdateMode.equals("1")) {
+			System.out.println("JhController chgDetail 수정 -> " + "수정");
 			
 			//챌린지 카테고리 수정용 카테고리
 			int chgCategoryLd = 200;
@@ -964,6 +966,11 @@ public class JhController {
 			
 			model.addAttribute("category", category);
 
+			//진행상태 리스트 가져오기
+			int stateMd = 300;
+			List<Comm> stateMdCategory = jhCService.category(stateMd);
+			model.addAttribute("stateMdCategory", stateMdCategory);
+			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String end_date = dateFormat.format(challenge.getEnd_date());			
 			String reg_date = dateFormat.format(challenge.getReg_date());
@@ -1018,7 +1025,7 @@ public class JhController {
 		System.out.println("JhController approvReturn result -> " + result);
 		
 		//승인/반려 처리 후 기존 챌린지 관리 해당 페이지로 이동
-		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md;
+		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'";
 		
 	}
 	
