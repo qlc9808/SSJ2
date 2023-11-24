@@ -31,12 +31,13 @@
 	
 	<!--진행중 챌린지 조회 (choose: null(기본값), 개설일 순, 찜 순, 참가자 순 -->
 	<select id="thChgListAll" parameterType="Challenge" resultType="Challenge">
-		SELECT chl.*	, count_challenger(chg_id) 		AS chlgerCnt		<!-- 참여자 수  -->
-			           	, pickyn(chg_id,#{my_user_num}) AS pickyn			<!-- 회원별  찜 여부-->
-			           	, count_pick(chg_id) 			AS pick_cnt			<!-- 챌린지별 찜수 -->
-			           	, sel_nick(user_num) 			AS nick				<!-- 작성자 닉네임 -->
-			           	, sel_user_name(user_num) 		AS userName			<!-- 작성자 이름 -->
-			           	, ctn_by_chg_id(chg_lg,chg_md) 	AS ctn				<!-- 챌린지별 카테고리 -->
+		SELECT chl.*	, count_challenger(chl.chg_id) 		AS chlgerCnt		<!-- 참여자 수  -->
+			           	, pickyn(chl.chg_id,#{my_user_num}) AS pickyn			<!-- 회원별  찜 여부-->
+			           	, count_pick(chl.chg_id) 			AS pick_cnt			<!-- 챌린지별 찜수 -->
+			           	, sel_nick(chl.user_num) 			AS nick				<!-- 작성자 닉네임 -->
+			           	, sel_user_name(chl.user_num) 		AS userName			<!-- 작성자 이름 -->
+			           	, ctn_by_chg_id(chl.chg_lg,chg_md) 	AS ctn				<!-- 챌린지별 카테고리 -->
+			           	, sel_user_id(chl.user_num)			AS userId			<!-- 작성자 아이디 -->
 		FROM 
 		(
 			SELECT rownum rn, a.*

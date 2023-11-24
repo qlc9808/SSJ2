@@ -414,7 +414,7 @@ public class ThController {
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
 		for(int i =0; i <listChg.size(); i++) {
-//		System.out.println("챌린지리스트 체크  --> ["+ i+"] --> " + listChg.get(i).getPickyn() );
+//		System.out.println("챌린지리스트 체크  --> ["+ i+"] --> " + listChg.get(i).getUserId() );
 		}
 
 			
