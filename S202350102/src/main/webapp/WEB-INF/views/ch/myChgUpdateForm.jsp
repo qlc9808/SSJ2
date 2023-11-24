@@ -154,6 +154,7 @@
             <!-- Form -->
             <form action="chChgUpDate" onsubmit="return chk()" method="post" enctype="multipart/form-data">
               <input type="hidden" name="user_num" value="${user.user_num}">
+              <input type="hidden" name="chg_id" value="${chg.chg_id}">
               <input type="hidden" name="contextPath" id="contextPath" value="${pageContext.request.contextPath}/upload/">
 <%-- 필요한가
 			  <input type="hidden" name="userStatus" value="${userStatus}">
