@@ -8,14 +8,12 @@
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <body>
-<section class="py-11">
+<section class="pt-7 pb-12">
  	<div class="container">
  	
 	 	<!-- TITLE  -->
-	 	<div class="col-12 text-center">
-	    	<div class="pt-10 pb-5">
+	 	<div class="col-12 text-center">    
 				<h3 class="mb-10">회원 관리</h3>
-	        </div>
 	    </div>
 	    
 	    <div class="row">
