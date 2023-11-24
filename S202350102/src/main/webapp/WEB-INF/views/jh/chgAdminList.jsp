@@ -49,13 +49,13 @@
 
 </head>
 <body>
-<section class="py-11">
+<section class="pt-7 pb-12">
  <div class="container">
         <div class="row">
           <div class="col-12 text-center">
 			
             <!-- Heading -->
-            <div class="pt-10 pb-5">
+            <div class="col-12 text-center">
             
             	<h3 class="mb-10">
             	<c:choose>
@@ -112,8 +112,8 @@
 		<div class="col-12">
 		<c:set var="num" value="${page.total-page.start+1 }"></c:set>
 		
-			<table class="table table-bordered table-sm mb-0">
-			  <thead>
+			<table class="table table-bordered table-sm mb-0   table-hover">
+                    <thead class="table-dark">
 				<tr class="p-2 text-center">
 					<th>번호</th>
 					<th>카테고리명</th>

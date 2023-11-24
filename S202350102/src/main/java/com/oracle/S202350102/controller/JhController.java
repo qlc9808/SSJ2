@@ -507,6 +507,7 @@ public class JhController {
 		
 		model.addAttribute("category", category);
 		
+		//추천챌린지(카테고리별 최신 등록순)
 		List<Challenge> recomChgList = null;
 		if (!category.isEmpty()) {
 		    int firstMdValue = category.get(0).getMd();
@@ -515,9 +516,9 @@ public class JhController {
 			
 		}
 		
-		//태현 카테고리 리스트
-		List<Comm> chgCategoryList = tcs.listChgCategory();
-		model.addAttribute("chgCategoryList", chgCategoryList);
+		//태현 카테고리 리스트 -없어도 되려나?
+//		List<Comm> chgCategoryList = tcs.listChgCategory();
+//		model.addAttribute("chgCategoryList", chgCategoryList);
 
 		
 		
@@ -995,6 +996,7 @@ public class JhController {
 		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md;
 		
 	}
+	
 	
 	
 	

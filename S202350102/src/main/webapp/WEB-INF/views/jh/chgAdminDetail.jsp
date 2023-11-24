@@ -163,9 +163,10 @@
         <%@ include file="adminSidebar.jsp" %>
         
         <div class="col-10">
+        
 		<table class="table table-bordered table-sm mb-0">
 			    <tr>
-			      <th scope="row">챌린지명</th>
+			      <th scope="row" >챌린지명</th>
 			      <td>${chg.title }</td>
 			      <th rowspan="3">썸네일</th>
 				  <td rowspan="3">
@@ -251,24 +252,30 @@
 		<div class="d-flex justify-content-start mt-5">
 			<button class="btn btn-sm btn-dark mx-1" onclick="currentPageMove()">목록</button>
 			
+			<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
 			<c:choose>
 				<c:when test="${chg.state_md == 100 }">
 					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
 					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
 				</c:when>
 			</c:choose>
-			<!-- 탈퇴여부에따라 보이는 버튼이 탈퇴 / 활성화로 바뀜  -->
-			<c:if test="${chg.state_md == 102 }">			      
-				<button class="btn btn-sm btn-dark mx-1" id="updateBtn" onclick="updateFn()">수정</button>
-			</c:if>
-			<c:if test="${chg.state_md == 102 || chg.state_md == 103}">
-				<button class="btn btn-sm btn-info mx-1" id="deleteBtn" onclick="deleteFn()">삭제</button>
-			</c:if>
+			
+			
+			<!-- 챌린지 진행중, 반려 땐 수정/삭제, 종료엔 삭제 버튼만 활성화  -->
+			<c:choose>
+				<c:when test="${chg.state_md == 102 || chg.state_md == 103 || chg.state_md == 104}">
+					<button class="btn btn-sm btn-info mx-1" onclick="/myChgUpdate" id="chgUpdate"  >수정</button>
+					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
+				</c:when>
+				<c:otherwise>
+					<button class="btn btn-sm btn-info mx-1" onclick="/myChgUpdate" id="chgUpdate"  >수정</button>
+					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
+				</c:otherwise>
+			</c:choose>
+
 		</div>	
 		</div>
 		<div class="py-10"></div>	
-	</div>	<!-- adminMenu.jsp 에서 <div class="row"> 닫기 용   -->
-	</div>  <!-- adminMenu.jsp 에서 <div class="container"> 닫기용 -->
       </div>
       </div>
       </section>    
