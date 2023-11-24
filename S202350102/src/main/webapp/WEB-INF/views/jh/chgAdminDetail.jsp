@@ -182,7 +182,7 @@
 			    </tr>
 			    <tr>
 			      <th scope="row">개설자 아이디 / 개설자 닉네임</th>
-			      <td> / ${chg.nick }</td>
+			      <td>${chg.user_id } / ${chg.nick }</td>
 			    </tr>
 			    <tr>
 			      <th scope="row">개설자 이름</th>
