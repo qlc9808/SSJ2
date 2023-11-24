@@ -303,7 +303,6 @@ public class ThController {
     	System.out.println("ThController findId Start...");
     	List<User1> user_id_List = us1.findId(user1);
     	System.out.println("ThController user_id_List --> " + user_id_List);
-    	
     	model.addAttribute("user_id_List" , user_id_List);
     	
     	return user_id_List;
@@ -384,8 +383,6 @@ public class ThController {
 		
 		// 챌린지 카테고리 가져오기
 		List<Comm> chgCategoryList = tcs.listChgCategory();
-		
-		
 		// 						전체 챌린지수가 아니라  조회된 챌린지수로 페이징 작업을 해야한다. (= listChg.size() 사용)
 		// Paging 작업			  	7			0	   rowPage값 입력(한페이지에 리스트 몇개 출력할지)	
 		Paging page = new Paging(totalChg, currentPage, 9);
