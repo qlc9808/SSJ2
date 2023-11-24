@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header4.jsp" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -145,7 +144,6 @@ function clickLoad(index) {
                 	+"<td><a href='chgDetail?chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
                 	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
-                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
          		num = num - 1;            
@@ -161,6 +159,7 @@ function clickLoad(index) {
                 	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
                 	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
          		num = num - 1;            
@@ -174,7 +173,7 @@ function clickLoad(index) {
 			for(var i = 0; i< result.reCount; i++){
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
-                	+"<td><a href='detailSharing?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"                	
+                	+"<td><a href='detailSharing?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"                	
                 	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
@@ -190,7 +189,7 @@ function clickLoad(index) {
 			for(var i = 0; i< result.reCount; i++){
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
-                	+"<td><a href='detailCommunity?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
+                	+"<td><a href='detailCommunity?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
                 	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
@@ -468,17 +467,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 							<c:choose>
 				            	<c:when test="${not empty myCertiList }">
 				            		<c:set var="num" value="${myCertiPage.total - myCertiPage.start+1 }"></c:set> 
-					                <table class="boardtable">
-					                    <thead>
+					                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    					<thead class="table-dark">					                    
 					                        <tr>
 					                            <th scope="col" class="th-num">번호</th>
 					                            <th scope="col" class="th-title">제목</th>
 					                            <th scope="col" class="th-nick">작성자</th>
-					                            <th scope="col" class="th-date">등록일</th>
-					                            <th scope="col" class="th-view_cnt">조회수</th>
+					                            <th scope="col" class="th-date">등록일</th>					                            
 					                            <th  scope="col" class="th-replyCount">댓글수</th>
 					                            <th  scope="col" >비고</th>
-					                            <th></th>
 					                        </tr>
 					                    </thead>                 
 					                    <tbody id="body${Certi_md }">
@@ -488,7 +485,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
 					                                <td>${myCertiList.nick}</td>
 					                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
-					                                <td>${myCertiList.view_cnt}</td>
 									         		<td>${myCertiList.replyCount}</td>
 									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a></td>
 									         		<c:set var="num" value="${num-1}"></c:set> 			       
@@ -524,8 +520,8 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						<c:choose>
 			            	<c:when test="${not empty myReviewList }">
 			            		<c:set var="num" value="${myReviewPage.total - myReviewPage.start+1 }"></c:set> 
-				                <table class="table">
-				                    <thead>
+				                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    				<thead class="table-dark">	
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>
 				                            <th scope="col" class="th-title">제목</th>
@@ -579,8 +575,8 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						<c:choose>
 			            	<c:when test="${not empty myShareList }">
 			            		<c:set var="num" value="${mySharePage.total - mySharePage.start+1 }"></c:set> 
-				                <table class="boardtable">
-				                    <thead>
+				                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    				<thead class="table-dark">
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>
 				                            <th scope="col" class="th-title">제목</th>
@@ -636,16 +632,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 							<c:choose>
 				            	<c:when test="${not empty myCommuList }">
 				            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
-					                <table class="boardtable">
-					                    <thead>
+					                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    					<thead class="table-dark">
 					                        <tr>
 					                            <th scope="col" class="th-num">번호</th>
 					                            <th scope="col" class="th-title">제목</th>
 					                            <th scope="col" class="th-nick">작성자</th>
 					                            <th scope="col" class="th-date">등록일</th>
 					                            <th scope="col" class="th-view_cnt">조회수</th>
-					                            <th  scope="col" class="th-replyCount">댓글수</th>
-					                            <th></th>
+					                            <th  scope="col" class="th-replyCount">댓글수</th>					                            
 					                        </tr>
 					                    </thead>                 
 					                    <tbody id="body${commu_bd }">
@@ -695,8 +690,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 </div>
 
 
-    <button type="button" class="btn btn-primary" onclick="location.href='/chgCommManagement'">챌린지 카테고리 관리</button><p>
-    <button type="button" class="btn btn-primary" onclick="location.href='/myConts'">내가 쓴 글 </button><p>
+    
 </body>
 <%@ include file="footer.jsp" %>
 </html>

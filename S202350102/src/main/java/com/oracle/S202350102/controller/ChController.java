@@ -187,9 +187,19 @@ public class ChController {
 	}
 	// notice Update
 	@PostMapping("noticeUpdate")
-	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
+	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws Exception {
+		
 		System.out.println("ChController noticeUpdate Start...");
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		int result = 0;
+		if(board.getDelStatus() == 1 || file1 != null) {			
+			String deleteFile = uploadPath + board.getImg();			
+			//실제 upload에 담김 파일 이미지 삭제
+			int delResult= upFileDelete(deleteFile);
+			System.out.println("기존 파일 삭제 결과" + delResult);
+			
+		}		
+		
 		ServletContext servletContext = request.getSession().getServletContext();
 		String realPath = servletContext.getRealPath("/upload/");
 		System.out.println("realPath->" + realPath);
@@ -197,14 +207,17 @@ public class ChController {
 			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
 			
 			board.setImg(saveName);	
+		}else if(board.getDelStatus() ==1) {
+			board.setImg(null);
 		}
-		
 		
 		result = chBoardService.noticeUpdate(board);
 	
 		request.setAttribute("brd_md", board.getBrd_md());
 		return "forward:notice";
 	}
+	
+	
 	// notice 삭제 확인
 	@GetMapping("deleteNoticeForm")
 	public String deleteform(int brd_num, Model model) {
@@ -238,7 +251,7 @@ public class ChController {
 		
 	}
 	// 검색 기본 page
-	@GetMapping("search")
+	
 	public String search(Model model, HttpSession session) {
 		System.out.println("ChController search Start...");
 		List<Challenge> popchgList = chChallengeService.popchgList(); // 챌린지
@@ -737,17 +750,7 @@ public class ChController {
 			int user_num = (int) session.getAttribute("user_num");
 			Challenge chg = jhCService.chgDetail(chg_id);	
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			String endDate = dateFormat.format(chg.getEnd_date());
-			if(chg.getReg_date() != null) {
-				String reg_date = dateFormat.format(chg.getReg_date());					
-				model.addAttribute("reg_date", reg_date);				
-			}
-			
-			if(chg.getCreate_date() != null) {
-				String create_date = dateFormat.format(chg.getCreate_date());
-				model.addAttribute("create_date", create_date);
-			}
-						
+			String endDate = dateFormat.format(chg.getEnd_date());						
 			
 			User1 user = userService.userSelect(user_num);
 			model.addAttribute("user", user);
@@ -770,15 +773,10 @@ public class ChController {
 			}
 			
 			List<Comm> chgCategoryList = tcs.listChgCategory();
-			model.addAttribute("chgCategoryList", chgCategoryList);
-
+			model.addAttribute("chgCategoryList", chgCategoryList);		
+			model.addAttribute("recomChgList", recomChgList);		
+			model.addAttribute("user", user);			
 			
-			
-			model.addAttribute("recomChgList", recomChgList);
-			
-			model.addAttribute("user", user);
-			
-			if(user.getStatus_md() == 102) return "jh/jhChgAdminUpdateForm";
 			
 			
 		}
