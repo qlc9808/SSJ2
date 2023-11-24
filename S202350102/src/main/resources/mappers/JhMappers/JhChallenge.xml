@@ -233,7 +233,7 @@
 		FROM (
 		        SELECT rownum rn, chg.*
 		        FROM (
-		                    SELECT  u.nick, u.user_id, u.user_name, ch.*, cc.ctn ctn, cs.ctn stateCtn
+		                    SELECT  u.nick, u.user_id userId, u.user_name, ch.*, cc.ctn ctn, cs.ctn stateCtn
 		                    FROM    challenge ch
 		                    INNER JOIN user1 u ON ch.user_num = u.user_num
 		                    INNER JOIN comm cc ON ch.chg_lg = cc.lg AND ch.chg_md = cc.md

@@ -162,7 +162,7 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&pageNum=${page.currentPage}&chgUpdateMode=1'">상세보기</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&pageNum=${page.currentPage}&chgUpdateMode=0'">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
