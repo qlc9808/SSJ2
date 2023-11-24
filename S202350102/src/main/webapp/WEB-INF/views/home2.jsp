@@ -4,6 +4,23 @@
 <html>
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+<style type="text/css">
+	.flickity-viewport {  
+	  height: 400px !important;	  
+	}
+
+	.flickity-cell {
+	  width: 50%; /* half-width */
+	  height: 400px;
+	  margin-right: 10px;
+	}
+	
+	 #recomSlider .flickity-slider{
+		width: 100% !important; /* half-width */
+	}
+</style>
 <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 	<script type="text/javascript">
@@ -159,9 +176,34 @@
 				}		
 			);
 			
+			initFlickity(1);
 			
 			
-		})
+			
+		});
+		
+		function initFlickity(data){
+			for(i=1; i<3; i++){
+				var flkty = $('#myslider'+i).data('flickity');
+			    if (flkty) {
+			        flkty.destroy();
+				}
+			 
+		    }
+			
+			var option = {
+				    "prevNextButtons": true,
+				    "draggable": true,
+				    "contain": true,
+				    "cellAlign": "left",
+				    "pageDots": false
+				}
+			
+		   
+		    var flkty = new Flickity('#myslider'+data, option);
+		    
+			 return flkty;
+		}
 
 	</script>
 <style type="text/css">
@@ -221,22 +263,22 @@
           <div class="col-12">
 
             <!-- Heading -->
-            <h2 class="mb-4 text-center">HOT</h2>
+            <h2 class="mb-4 text-center text-primary">HOT</h2>
 
             <!-- Nav -->
             <div class="nav justify-content-center mb-10">
-              <a class="nav-link active" href="#popChg" data-bs-toggle="tab">challenge</a>
-              <a class="nav-link" href="#popShare" data-bs-toggle="tab">Share</a>              
-              <a class="nav-link" href="#popCommu" data-bs-toggle="tab">Community</a>              
+              <a class="nav-link" href="#popChg" data-bs-toggle="tab" onclick="initFlickity('1')">인기 챌린지</a>
+              <a class="nav-link active" href="#popShare" data-bs-toggle="tab" onclick="initFlickity('2')">인기 쉐어링</a>              
+              <a class="nav-link" href="#popCommu" data-bs-toggle="tab">인기 자유글</a>              
             </div>
 
             <!-- Content -->
             <div class="tab-content">
 
               <!-- Pane -->
-              <div class="tab-pane fade show active" id="popChg">
+              <div class="tab-pane fade" id="popChg">
 				
-                <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true,"setGallerySize": false}'>
+                <div id="" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
 
                   <!-- Item2 -->
                   <c:forEach var="chg" items="${popchgList }">
@@ -313,10 +355,10 @@
               </div>
               <!-- Pane -->
               <!-- Pane popShare -->
-             <div class="tab-pane fade" id="popShare">
+             <div class="tab-pane fade show active" id="popShare">
              
 			    <!-- Slider -->
-			    <div class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true,"cellAlign": left}'>
+			    <div id="myslider2" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true,"cellAlign": left}'>
 			        <div class="row">
 			            <c:forEach var="board" items="${popShareList}">
 			                <!-- Item -->
