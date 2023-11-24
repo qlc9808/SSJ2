@@ -413,6 +413,9 @@ public class ThController {
 		System.out.println("thController list listChg.size() --> " + listChg.size());
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
+		for(int i =0; i <listChg.size(); i++) {
+//		System.out.println("챌린지리스트 체크  --> ["+ i+"] --> " + listChg.get(i).getUserId() );
+		}
 
 			
 		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
