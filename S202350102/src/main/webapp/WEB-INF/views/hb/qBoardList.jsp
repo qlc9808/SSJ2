@@ -187,7 +187,7 @@
         					    str += "<td>" + hours + ":" + minutes + "</td>";
         					} else {
         					    // 날짜가 sysdate와 같으면 날짜를 표시
-        					    str += "<td>" + year + '-' + month + '-' + day + "</td>";
+        					    str += "<td>" + year + '.' + month + '.' + day + "</td>";
         					}
                             str += "<td>" + result.view_cnt + "</td>";
                             str += "</tr>";
