@@ -918,7 +918,7 @@ public class JhController {
 	
 	//챌린지 관리자 상세보기
 	@RequestMapping(value = "chgAdminDetail")
-	public String chgAdminDetail(Challenge challenge, HttpSession session, Model model) {
+	public String chgAdminDetail(Challenge challenge,  HttpSession session, Model model) {
 		System.out.println("JhController chgAdminDetail Start...");
 		
 		
@@ -926,9 +926,11 @@ public class JhController {
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = challenge.getState_md();
 		
+		
 		//반려사유 종류
-		int categoryLd = 500;
-		List<Comm> returnReason = jhCService.category(categoryLd);
+		int returnCategoryLd = 500;
+		List<Comm> returnReason = jhCService.category(returnCategoryLd);
+		
 		model.addAttribute("returnReason", returnReason);
 		System.out.println("JhController chgAdminDetail  returnReason --> " + returnReason);
 		
@@ -952,6 +954,29 @@ public class JhController {
 		model.addAttribute("pageNum", pageNum);
 		model.addAttribute("chg", challenge);
 		model.addAttribute("state_md", state_md);
+		
+		int UpdateMode = challenge.getChgUpdateMode();
+		if(UpdateMode == 1) {
+			
+			//챌린지 카테고리 수정용 카테고리
+			int chgCategoryLd = 200;
+			List<Comm> category = jhCService.category(chgCategoryLd);
+			
+			model.addAttribute("category", category);
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String end_date = dateFormat.format(challenge.getEnd_date());			
+			String reg_date = dateFormat.format(challenge.getReg_date());
+			String create_date = dateFormat.format(challenge.getCreate_date());			
+			
+			model.addAttribute("end_date", end_date);
+			model.addAttribute("reg_date", reg_date);
+			model.addAttribute("create_date", create_date);
+			
+			
+			
+			return "jh/jhChgAdminUpdateForm";
+		}
 		return "jh/chgAdminDetail";
 		
 	}

@@ -55,4 +55,8 @@ public class Challenge {
 	private int	   my_user_num;  	// user별 챌린지 리스트 찜하기 확인용
 	private int    pickyn;			// 찜하기 여부 판단용
 	private int    pick_cnt;		// 챌린지 찜수
+	
+	//챌린지 관리자 업데이트용
+	private int    chgUpdateMode;	
+	
 }

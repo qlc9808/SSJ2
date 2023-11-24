@@ -18,13 +18,13 @@
             
             	<h3 class="mb-10">
             	<c:choose>
-            		<c:when test="${chg.state_md ==102 }">
+            		<c:when test="${state_md ==102 }">
 		            	진행중 
             		</c:when>
-            		<c:when test="${chg.state_md ==103 }">
+            		<c:when test="${state_md ==103 }">
             			종료
             		</c:when>
-            		<c:when test="${chg.state_md ==104 }">
+            		<c:when test="${state_md ==104 }">
             			반려
             		</c:when>
             		<c:otherwise>
@@ -69,9 +69,21 @@
 			    </tr>
 			    <tr>
 			      <th scope="row">카테고리</th>
-			      <td>${chg.ctn }</td>
+			      <td>                    <c:forEach var="category" items="${category }" varStatus="status">
+	                    	<div class="input-group-text border-0">
+								<input class="form-check-input" 
+								       type="radio" 
+								       name="chg_md" 
+								       id="category${status.index}"
+								       ${status.index == 0 ? 'checked' : ''} 
+								       value="${category.md }"  
+								       required="required"
+								       onclick="ajaxRecommendList(${category.md })">
+	                    		<label class="form-check-label" for="category${status.index}">${category.ctn }</label>
+	                    	</div>
+	              	</c:forEach></td>
 			      <th>진행상태</th>
-			      <td><input type="" name="" value="">${chg.stateCtn }</td>
+			      <td><input type="text" name="stateCtn" value="${chg.stateCtn }">${chg.stateCtn }</td>
 			    </tr>
 			    <tr>
 			    	<c:if test='${chg.state_md == 104 }'>
@@ -81,7 +93,7 @@
 			    </tr>
 			    <tr>
 			      <th scope="row">참가자수    /  참여정원</th>
-			      <td> <input type="number" name="" value="${chgrParti }">  / <input type="number" name="" value=${chg.chg_capacity }""></td>
+			      <td> <input type="number" name="chgrParti" value="${chgrParti }">  / <input type="number" name="chg_capacity" value="${chg.chg_capacity }"></td>
 			      <th>찜수</th>
 				  <td><input type="hidden" name="pick_cnt" value="${chg.pick_cnt }">${chg.pick_cnt }</td>
 			    </tr>
@@ -120,15 +132,15 @@
 			    </tr>
 			    <tr>
 			      <th scope="row">비밀번호</th>
-			      <td><input type="text" name="" value="">${chg.priv_pswd}</td>
+			      <td><input type="number" name="priv_pswd" value="${chg.priv_pswd}">${chg.priv_pswd}</td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 신청일</th>
-			      <td colspan="3"><input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${chg.reg_date }"></td>
+			      <td colspan="3"><input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${reg_date }"></td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 개설일</th>
-			      <td colspan="3"><input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${chg.create_date }"></td>
+			      <td colspan="3"><input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${create_date }"></td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 종료일</th>
