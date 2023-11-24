@@ -25,8 +25,8 @@
 
 </head>
 <body>	
-	<div id="qbd-main" class="qbd-main">
-		<div class="qbd-mainbody">
+	<div id="qbd-main" class="qbd-main" style="height: auto;">
+		<div class="qbd-mainbody" style="height: auto;">
 			<div id="qbd-title" class="qbd-title">
 				<div class="qbd-title-content">
 					<span class="title-text">${noticeConts.title }</span>
