@@ -16,7 +16,7 @@
 	<c:if test="${brd_md == 106 }">이벤트</c:if>
 	<form action="noticeWrite" method="post" enctype="multipart/form-data">
 		<input type="hidden" value="${brd_md }" name="brd_md">
-		<table>
+		<table class="table">
 			<tr>
 				<td>제목</td>
 				<td><input type="text" name="title" required="required"></td>
