@@ -738,9 +738,7 @@ public class ChController {
 			Challenge chg = jhCService.chgDetail(chg_id);	
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String endDate = dateFormat.format(chg.getEnd_date());			
-			if(user_num != chg.getUser_num()) {
-				return "ch/notAnAdmin";
-			}
+			
 			User1 user = userService.userSelect(user_num);
 			model.addAttribute("user", user);
 			model.addAttribute("chg", chg);
