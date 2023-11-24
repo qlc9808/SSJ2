@@ -738,11 +738,15 @@ public class ChController {
 			Challenge chg = jhCService.chgDetail(chg_id);	
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String endDate = dateFormat.format(chg.getEnd_date());			
+			String reg_date = dateFormat.format(chg.getReg_date());			
+			String create_date = dateFormat.format(chg.getCreate_date());			
 			
 			User1 user = userService.userSelect(user_num);
 			model.addAttribute("user", user);
 			model.addAttribute("chg", chg);
 			model.addAttribute("endDate", endDate);
+			model.addAttribute("reg_date", reg_date);
+			model.addAttribute("create_date", create_date);
 			
 			
 			int categoryLd = 200;
