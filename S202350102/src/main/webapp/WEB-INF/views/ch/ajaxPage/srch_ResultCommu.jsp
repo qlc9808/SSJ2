@@ -43,8 +43,7 @@
 			    <a href="javascript:void(0);" onclick="clickChgResult('${srch_word }',103,'${page.startPage+page.pageBlock}'); return false;" >[다음]</a>
 			</c:if>
 		</div> 
-	</div>
-	<button onclick="moveAndLoadTab(103, '${srch_word}')">더보기</button>
+	</div>	
 </section>
 </body>
 </html>
