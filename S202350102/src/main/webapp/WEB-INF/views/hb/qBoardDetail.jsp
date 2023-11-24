@@ -36,7 +36,7 @@
 			
 			<div class="qbd-content">
 				<div class="qbd-content text">
-					<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>				
+					<c:if test="${board.img != null }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>				
 					<span>${board.conts }</span>
 				</div>
 
@@ -186,8 +186,8 @@
 	        var user_num = $(this).data('user-num');
 	        var brd_num = $(this).data('brd-num');
 
-	        var originalContent = commentList.find('span').text();
-	        var inputField = $('<input class="updateArea">', { type: 'text', value: originalContent });
+	        var originalContent = commentList.find('span').text(); // input hidden하고 textarea 밸류 받자
+	        var inputField = $('<input class="updateArea" type="text" value="'+originalContent+'">' /* { type: 'text', value: originalContent } */);
 	        commentList.find('span').replaceWith(inputField);
 
 	        var saveButton = $('<button type="button" class="saveBtn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
