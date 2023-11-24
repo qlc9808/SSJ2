@@ -22,13 +22,13 @@
 	      	<div class="qe_select_box">
 	      		<c:if test="${user1.status_md == 102 }">
 			      	<select name="brd_md" id="brd_md" onchange="categoryList()">
-			      		<option value="all" selected="selected">전체</option>
-			      		<option value="user">회원관련</option>
-			      		<option value="buggy">버그</option>
-			      		<option value="challenge">챌린지</option>
-			      		<option value="sharing">쉐어링</option>
-			      		<option value="follow">팔로워</option>
-			      		<option value="suggest">기타/건의</option>
+			      		<option value="all" <c:if test="${searchInfo.category eq 'all' }"> selected="selected" </c:if> >전체</option>
+			      		<option value="user" <c:if test="${searchInfo.category eq 'user' }"> selected="selected" </c:if> >회원관련</option>
+			      		<option value="buggy" <c:if test="${searchInfo.category eq 'buggy' }"> selected="selected" </c:if> >버그</option>
+			      		<option value="challenge" <c:if test="${searchInfo.category eq 'challenge' }"> selected="selected" </c:if> >챌린지</option>
+			      		<option value="sharing" <c:if test="${searchInfo.category eq 'sharing' }"> selected="selected" </c:if> >쉐어링</option>
+			      		<option value="follow" <c:if test="${searchInfo.category eq 'follow' }"> selected="selected" </c:if> >팔로워</option>
+			      		<option value="suggest" <c:if test="${searchInfo.category eq 'suggest' }"> selected="selected" </c:if> >기타/건의</option>
 			      	</select>
 		      	</c:if>
 	      	</div>
@@ -113,11 +113,11 @@
 			<div class="search">
 				<div class="select">
 					<select id="search-select">
-						<option value="title">제목</option>
-						<option value="conts">내용</option>
-						<option value="nick">작성자</option>
+						<option value="title" <c:if test="${searchInfo.searchType eq 'title' }"> selected="selected" </c:if>>제목</option>
+						<option value="conts" <c:if test="${searchInfo.searchType eq 'conts' }"> selected="selected" </c:if>>내용</option>
+						<option value="nick" <c:if test="${searchInfo.searchType eq 'nick' }"> selected="selected" </c:if>>작성자</option>
 					</select>
-					<input class="search-box" id="searchValue" type="text" size="20">
+					<input class="search-box" id="searchValue" type="text" size="20" <c:if test="${searchInfo.keyword != 'null' }"> value="${searchInfo.keyword }" </c:if>>
 				</div>
 				<div class="search-btn">
 					<button class="search-btn-form" type="button">검색</button>
@@ -187,7 +187,7 @@
         					    str += "<td>" + hours + ":" + minutes + "</td>";
         					} else {
         					    // 날짜가 sysdate와 같으면 날짜를 표시
-        					    str += "<td>" + year + '-' + month + '-' + day + "</td>";
+        					    str += "<td>" + year + '.' + month + '.' + day + "</td>";
         					}
                             str += "<td>" + result.view_cnt + "</td>";
                             str += "</tr>";
@@ -296,19 +296,19 @@
                     }
 
                     // 페이지 링크 추가
-                    if (page.startPage > page.pageBlock) {
-                        var prevPage = page.startPage - page.pageBlock;
-                        $('#page').append('<a href="#" id="page-link" data-page="' + prevPage + '">[이전]</a>');
-                    }
-
-                    for (var i = page.startPage; i <= page.endPage; i++) {
-                        $('#page').append('<a href="#" id="page-link" data-page="' + i + '">[' + i + ']</a>');
-                    }
-
-                    if (page.endPage < page.totalPage) {
-                        var nextPage = page.startPage + page.pageBlock;
-                        $('#page').append('<a href="#" id="page-link" data-page="' + nextPage + '" >[다음]</a>');
-                    }
+					if (page.startPage > page.pageBlock) {
+					    var prevPage = page.startPage - page.pageBlock;
+					    $('#page').append('<a href="#" id="page-link" data-page="' + prevPage + '" data-category="' + category + '">[이전]</a>');
+					}
+					
+					for (var i = page.startPage; i <= page.endPage; i++) {
+					    $('#page').append('<a href="#" id="page-link" data-page="' + i + '" data-category="' + category + '">[' + i + ']</a>');
+					}
+					
+					if (page.endPage < page.totalPage) {
+					    var nextPage = page.startPage + page.pageBlock;
+					    $('#page').append('<a href="#" id="page-link" data-page="' + nextPage + '" data-category="' + category + '">[다음]</a>');
+					}
 			  }
 			}
 		});

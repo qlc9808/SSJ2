@@ -11,7 +11,7 @@
 <body>
 <!-- Item2 참여한 챌린지 -->
 <c:forEach items="${mychgrList }" var="chg">
-	<div class="col-12 col-md-auto" style="max-width: 400px;">
+	<div class="col-12 px-4" style="max-width: 400px;">
 		<div class="card">
 			
 			  <!-- Image -->

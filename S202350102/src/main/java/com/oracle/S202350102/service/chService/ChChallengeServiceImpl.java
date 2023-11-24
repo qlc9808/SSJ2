@@ -96,7 +96,7 @@ public class ChChallengeServiceImpl implements ChChallengeService {
 	public int chgUpdate(Challenge chg) {
 		System.out.println("ChChallengeServiceImpl chgUpdate Start...");
 		int result = 0;
-		
+		System.out.println(chg.getChg_id());
 		result = chChallengeService.chgUpdate(chg);
 		
 		return result;
