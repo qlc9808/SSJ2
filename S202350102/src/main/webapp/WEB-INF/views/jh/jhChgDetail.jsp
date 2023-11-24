@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -177,6 +176,9 @@
 	function likePro(p_index) {
 		var brd_num = $('#brd_num' + p_index).val();
 //		alert("brd_num -> " + brd_num);
+	
+//		var like_cnt = $('#like_cnt' + p_index).val();
+		
 
 		$.ajax({
             url: "/likePro",
@@ -184,9 +186,16 @@
             data: { brd_num: brd_num },
             dataType: 'json',
             success: function (likeResult) {
-                location.reload();
-                // 좋아요 없음 <img alt="heart" src="./images/yr/heart.png">
-                // 좋아요 있음 <img alt="heart-fill" src="./images/yr/heart-fill.png">
+            	if (likeResult.likeProResult > 0) {
+					// 좋아요 insert
+					$('#likeBtn' + p_index).attr('src', '/images/yr/heart-fill.png');
+					// inputLikeCnt = inputLikeCnt + 1;
+
+				} else {
+					// 좋아요 delete
+					$('#likeBtn' + p_index).attr('src', '/images/yr/heart.png');
+					// inputLikeCnt = inputLikeCnt - 1;
+				}
             },
             error: function () {
                 alert("좋아요 에러");
@@ -674,11 +683,10 @@
                   </ul> 
                
                
-					<div class="form-group">
 						<div class="row gx-5 mb-7">
 							<!-- 참여하기 -->
 							<!-- YR 작성 -->
-							<div class="col-12 col-lg-auto">
+							<div class="col-auto">
 								<c:choose>
 									<c:when test="${chg.stateCtn == '진행중'}">
 							
@@ -686,7 +694,7 @@
 							
 											<c:when test="${sessionScope.user_num != null}">
 												<!-- 로그인 한 상태 -->
-												<button type="button" class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+												<button type="button" class=" btn btn-danger mb-2 btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
 													참여하기
 												</button>
 							
@@ -763,7 +771,7 @@
 							
 											<c:when test="${sessionScope.user_num == null}">
 												<!-- 로그인 안 한 상태 -->
-												<button type="button" class="btn btn-danger mb-2" onclick="location.href='/loginForm'">
+												<button type="button" class=" btn btn-danger mb-2 btn-sm" onclick="location.href='/loginForm'">
 													참여하기
 												</button>
 											</c:when>
@@ -773,7 +781,7 @@
 									</c:when>
 							
 									<c:otherwise>
-										<button type="button" class="btn btn-secondary mb-2">
+										<button type="button" class=" btn btn-secondary mb-2 btn-sm">
 											챌린지 종료
 										</button>
 									</c:otherwise>
@@ -802,7 +810,7 @@
 
 							<!-- 찜하기 -->
 							<!-- YR 작성 -->
-							<div class="col-12 col-lg">
+							<div class="col-6">
 
 								<c:choose>
 									<c:when test="${sessionScope.user_num != null}">
@@ -811,14 +819,14 @@
 										
 											<c:when test="${chgPickYN == 1}">
 												<!-- 찜 기록 있을 때 -->
-												<button class="btn btn-dark w-100 mb-2" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
+												<button class=" btn btn-dark mb-2 btn-sm" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
 													챌린지 찜 <i class="fe fe-heart ms-2"></i>
 												</button>	
 											</c:when>
 
 											<c:otherwise>
 												<!-- 찜 기록 없을 때 -->
-												<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
+												<button class=" btn btn-outline-dark mb-2 btn-sm" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
 													챌린지 찜 <i class="fe fe-heart ms-2"></i>
 												</button>
 											</c:otherwise>
@@ -828,7 +836,7 @@
 									
 									<c:otherwise>
 										<!-- 로그인 안 한 상태 -> 로그인 페이지로 이동 -->
-										<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="location.href='/loginForm'">
+										<button class=" btn btn-outline-dark mb-2 btn-sm" data-toggle="button" onclick="location.href='/loginForm'">
 											챌린지 찜 <i class="fe fe-heart ms-2"></i>
 										</button>
 									</c:otherwise>
@@ -839,21 +847,7 @@
 						</div>
 
 
-						<!-- Share -->
-						<p class="mb-0">
-						<span class="me-4">Share:</span>
-						<a class="btn btn-xxs btn-circle btn-light fs-xxxs text-gray-350" href="#!">
-							<i class="fab fa-twitter"></i>
-						</a>
-						<a class="btn btn-xxs btn-circle btn-light fs-xxxs text-gray-350" href="#!">
-							<i class="fab fa-facebook-f"></i>
-						</a>
-						<a class="btn btn-xxs btn-circle btn-light fs-xxxs text-gray-350" href="#!">
-							<i class="fab fa-pinterest-p"></i>
-						</a>
-						</p>
 
-					</div>
 
               </div>
             </div>
@@ -1363,50 +1357,40 @@
 					                        
 						                        <!-- Rate -->
 						                        <div class="rate">
+													
 													<c:choose>
 														<c:when test="${sessionScope.user_num != null }">
 															<!-- 로그인 한 상태 -->
-													
-															<c:choose>
-																<c:when test="${certBoard.likeyn > 0}">
-																	<!-- 좋아요 눌렀을 때 -->
-																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
-																		좋아요 
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-																			<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-																		</svg>
-																	</a>
-																</c:when>
-													
-																<c:otherwise>
-																	<!-- 좋아요 안 눌렀을 때 -->
-																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
-																		좋아요 
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																			<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																		</svg>
-																	</a>
-													
-													
-																</c:otherwise>
-													
-															</c:choose>
-													
+															<a class="rate-item" data-toggle="vote" role="button" onclick="likePro(${status.index})">
+																좋아요 
+																<c:choose>
+																	<c:when test="${certBoard.likeyn > 0}">
+																		<!-- 좋아요 눌렀을 때 -->
+																		<img alt="heart-fill" src="./images/yr/heart-fill.png"
+																			id="likeBtn${status.index }">
+																	</c:when>
+														
+																	<c:otherwise>
+																		<!-- 좋아요 안 눌렀을 때 -->
+																		<img alt="heart" src="./images/yr/heart.png"
+																			id="likeBtn${status.index }">
+																	</c:otherwise>
+																</c:choose>
+																<span id="inputLikeCnt${status.index}">${certBoard.like_cnt}</span>
+															</a>
 														</c:when>
 													
 														<c:otherwise>
 															<!-- 로그인 안 한 상태 -->
-															<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
+															<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" role="button">
 																좋아요 
-																<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																	<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																</svg>
+																<img alt="heart" src="./images/yr/heart.png">
 															</a>
 														</c:otherwise>
 													
 													</c:choose>
 
-													<a class="rate-item" data-toggle="vote" data-count="(${certBoard.burning_cnt }°C)" href="#" role="button" onclick="Burning(${status.index})">
+													<a class="rate-item" data-toggle="vote" data-count="(${certBoard.burning_cnt }°C)" role="button" onclick="Burning(${status.index})">
 														태워요 <i class="fa-solid fa-fire"></i>
 													</a>
 												</div>
@@ -1524,55 +1508,40 @@
 							                      	<div class="col-auto me-auto">
 							                      		<!-- Rate -->
 								                        <div class="rate">
+								                        
 															<c:choose>
 																<c:when test="${sessionScope.user_num != null }">
 																	<!-- 로그인 한 상태 -->
-															
-																	<c:choose>
-																		<c:when test="${certBoard.likeyn > 0}">
-																			<!-- 좋아요 눌렀을 때 -->
-																			<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
-																				onclick="likePro(${status.index})">
-																				좋아요
-																				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-																					class="bi bi-heart-fill" viewBox="0 0 16 16">
-																					<path fill-rule="evenodd"
-																						d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-																				</svg>
-																			</a>
-																		</c:when>
-															
-																		<c:otherwise>
-																			<!-- 좋아요 안 눌렀을 때 -->
-																			<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
-																				onclick="likePro(${status.index})">
-																				좋아요
-																				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-																					class="bi bi-heart" viewBox="0 0 16 16">
-																					<path
-																						d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-																				</svg>
-																			</a>
-															
-															
-																		</c:otherwise>
-															
-																	</c:choose>
-															
+																	<a class="rate-item" data-toggle="vote" role="button" onclick="likePro(${status.index})">
+																		좋아요 
+																		<c:choose>
+																			<c:when test="${certBoard.likeyn > 0}">
+																				<!-- 좋아요 눌렀을 때 -->
+																				<img alt="heart-fill" src="./images/yr/heart-fill.png"
+																					id="likeBtn${status.index }">
+																			</c:when>
+																
+																			<c:otherwise>
+																				<!-- 좋아요 안 눌렀을 때 -->
+																				<img alt="heart" src="./images/yr/heart.png"
+																					id="likeBtn${status.index }">
+																			</c:otherwise>
+																		</c:choose>
+																		<span id="inputLikeCnt${status.index}">${certBoard.like_cnt}</span>
+																	</a>
 																</c:when>
 															
 																<c:otherwise>
-																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
+																	<!-- 로그인 안 한 상태 -->
+																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" role="button">
 																		좋아요 
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																			<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																		</svg>
+																		<img alt="heart" src="./images/yr/heart.png">
 																	</a>
 																</c:otherwise>
-															
+													
 															</c:choose>
 
-															<a class="rate-item" data-toggle="vote" data-count="(30°C)" href="#" role="button">
+															<a class="rate-item" data-toggle="vote" data-count="(30°C)" role="button">
 																태워요 <i class="fa-solid fa-fire"></i>
 															</a>
 								                        </div>
