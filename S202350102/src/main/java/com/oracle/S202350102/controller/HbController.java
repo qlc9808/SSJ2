@@ -145,7 +145,7 @@ public class HbController {
 		if (session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
-		
+		System.out.println(board.getImg());
 		User1 user1 = us.userSelect(user_num);
 		
 		model.addAttribute("user1", user1);
@@ -223,8 +223,14 @@ public class HbController {
 		System.out.println("originalName : " + file1.getOriginalFilename());
 		System.out.println("fileByte : " + file1.getBytes());
 		System.out.println("fileSize : " + file1.getSize());
-		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
-		board.setImg(saveName);
+		if ( file1.getSize() > 0 ) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			board.setImg(saveName);
+		} else {
+			board.setImg("");
+		}
+		
+
 		
 		int user_num = 0;
 		if (session.getAttribute("user_num") != null) {

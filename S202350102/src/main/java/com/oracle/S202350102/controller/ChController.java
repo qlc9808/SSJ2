@@ -737,12 +737,23 @@ public class ChController {
 			int user_num = (int) session.getAttribute("user_num");
 			Challenge chg = jhCService.chgDetail(chg_id);	
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			String endDate = dateFormat.format(chg.getEnd_date());			
+			String endDate = dateFormat.format(chg.getEnd_date());
+			if(chg.getReg_date() != null) {
+				String reg_date = dateFormat.format(chg.getReg_date());					
+				model.addAttribute("reg_date", reg_date);				
+			}
+			
+			if(chg.getCreate_date() != null) {
+				String create_date = dateFormat.format(chg.getCreate_date());
+				model.addAttribute("create_date", create_date);
+			}
+						
 			
 			User1 user = userService.userSelect(user_num);
 			model.addAttribute("user", user);
 			model.addAttribute("chg", chg);
 			model.addAttribute("endDate", endDate);
+			
 			
 			
 			int categoryLd = 200;

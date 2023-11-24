@@ -141,24 +141,12 @@
 
     
     
-    <section class="py-11">
+    <section class="pt-7 pb-12">
       <div class="container">
         <div class="row">
-			<%@ include file="/WEB-INF/views/chgSidebar.jsp" %>
-        
-        
-        
-          
-      
-         
-		  <div class="col-12 col-md-8 col-lg-9">
-			<!-- Header -->
-            <div class="row align-items-center mb-7">
-              <div class="col-12 col-md">
-
-                <!-- Heading -->
-
-                	<h3 class="mb-1">챌린지
+       		<div class="col-12 text-center">
+				    <!-- Heading -->
+                	<h3 class="mb-10">챌린지
 		                <c:choose>
 		                	<c:when test="${chg.chg_md == ''}"></c:when>	
 		                	<c:when test="${chg.chg_md == 100}"> - 운동</c:when>
@@ -167,6 +155,12 @@
 		                	<c:when test="${chg.chg_md == 103}"> - 습관</c:when>
 		                </c:choose>
                 	</h3>
+       		</div>
+       		<%@ include file="/WEB-INF/views/chgSidebar.jsp" %>
+		  	
+		  	<div class="col-12 col-md-8 col-lg-9">
+            <div class="row align-items-center mb-4">
+              <div class="col-12 col-md">
 
               </div>
               <div class="col-12 col-md-auto">

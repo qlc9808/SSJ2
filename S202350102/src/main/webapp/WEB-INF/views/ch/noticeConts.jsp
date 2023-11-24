@@ -36,10 +36,10 @@
 						<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
 						<input type="hidden" value="${noticeConts.user_num  }" name="user_num">					
 						<c:if test="${status_md==102 }">
-							<input type="submit" value="수정" >
-							<input type="button" value="삭제" onclick="location.href='deleteNoticeForm?brd_num=${noticeConts.brd_num}'">
+							<input type="submit" value="수정" class="btn-danger btn-xxs">
+							<input type="button" value="삭제" onclick="location.href='deleteNoticeForm?brd_num=${noticeConts.brd_num}'" class="btn-danger btn-xxs">
 						</c:if>
-						<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'">
+						<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'" class="btn-danger btn-xxs">
 					</form>
 				</div>	
 			</div>
@@ -57,7 +57,7 @@
     				<div class="col-8 p-4 mt-4" >
 						<div class="qbd-content">
 						<div class="qbd-content text"  id="test">
-							<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${noticeConts.img}"><p></c:if>				
+							<c:if test="${not empty noticeConts.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}"><p></c:if>				
 							<span>${noticeConts.conts }</span>
 						</div>
 						
