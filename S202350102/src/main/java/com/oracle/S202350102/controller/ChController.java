@@ -732,6 +732,7 @@ public class ChController {
 	
 	@RequestMapping("myChgUpdate")
 	public String myChgUpdate(int chg_id,HttpSession session, Model model) {
+		
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
 			Challenge chg = jhCService.chgDetail(chg_id);	
@@ -768,6 +769,7 @@ public class ChController {
 			
 			model.addAttribute("user", user);
 			
+			if(user.getStatus_md() == 102) return "jh/jhChgAdminUpdateForm";
 			
 			
 		}

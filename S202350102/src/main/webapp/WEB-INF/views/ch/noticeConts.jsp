@@ -9,52 +9,66 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="/css/qBoardDetail.css">
+<style>
+  .custom-hr {
+    border: 1px solid #000; /* 기본 테두리 스타일 */
+    border-width: 0 0 2px 0; /* 아래쪽 테두리만 두껍게 설정 */
+  }
+  
+  #test{  
+    min-height: 200px; /* 최소 높이를 200px로 설정 */
+    max-height: 500px; /* 최대 높이를 500px로 설정 */
+    overflow: auto; /* 내용이 최대 높이를 초과할 경우 스크롤을 추가합니다. */
+  }
+</style>
+
 </head>
-<body>
-
-	<form action="noticeUpdateForm" onsubmit="return chk()">
-		<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
-		<input type="hidden" value="${noticeConts.user_num  }" name="user_num">
-		<table border="1">
-			<tr>
-				<td>글 번호 </td>
-				<td>${noticeConts.brd_num }</td>
-			</tr>
-			<tr>
-				<td>제목</td>
-				<td>${noticeConts.title }</td>
-			</tr>
-			<tr>
-				<td>조회수</td>
-				<td>${noticeConts.view_cnt }</td>
-			</tr>
-			<tr>
-				<td>작성자</td>
-				<td>${noticeConts.nick }</td>
-			</tr>
-			<tr>
-				<td>등록일</td>
-				<td><fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></td>
-			</tr>
-			<tr>
-				<td>내용</td>
-				<td>
-					<c:if test="${not empty noticeConts.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}"><p></c:if>
-					${noticeConts.conts }				
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<c:if test="${status_md==102 }">
-						<input type="submit" value="수정" >
-						<input type="button" value="삭제" onclick="location.href='deleteNoticeForm?brd_num=${noticeConts.brd_num}'">
-					</c:if>
-					<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'">
-				</td>
-			</tr>
-		</table>
-	</form>
-
+<body>	
+	<div id="qbd-main" class="qbd-main">
+		<div class="qbd-mainbody">
+			<div id="qbd-title" class="qbd-title">
+				<div class="qbd-title-content">
+					<span class="title-text">${noticeConts.title }</span>
+				</div>
+				<div class="qbd-object">
+					<form action="noticeUpdateForm" onsubmit="return chk()">
+						<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
+						<input type="hidden" value="${noticeConts.user_num  }" name="user_num">					
+						<c:if test="${status_md==102 }">
+							<input type="submit" value="수정" >
+							<input type="button" value="삭제" onclick="location.href='deleteNoticeForm?brd_num=${noticeConts.brd_num}'">
+						</c:if>
+						<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'">
+					</form>
+				</div>	
+			</div>
+			<div class="qbd-line">
+				<div class="qbd-line-box">
+					<span class="qbd-line-box-text">작성자: ${noticeConts.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="qbd-line-box-text">작성일: <fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="qbd-line-box-text">카테고리: ${noticeConts.category }</span>
+				</div>
+				<!-- <div class="qbd-line-li"></div> -->
+			</div>
+			<hr class="custom-hr">
+			<div class="container">
+    			<div class="row border">
+    				<div class="col-8 p-4 mt-4" >
+						<div class="qbd-content">
+						<div class="qbd-content text"  id="test">
+							<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${noticeConts.img}"><p></c:if>				
+							<span>${noticeConts.conts }</span>
+						</div>
+						
+						</div>
+					</div>   			
+				</div>
+			</div>
+			<hr class="custom-hr">				
+		</div>
+	</div>
+	
 </body>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>
