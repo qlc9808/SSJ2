@@ -263,14 +263,13 @@
 			
 			<!-- 챌린지 진행중, 반려 땐 수정/삭제, 종료엔 삭제 버튼만 활성화  -->
 			<c:choose>
-				<c:when test="${chg.state_md == 102 || chg.state_md == 103 || chg.state_md == 104}">
-					<button class="btn btn-sm btn-info mx-1" onclick="/myChgUpdate" id="chgUpdate"  >수정</button>
+				<c:when test="${chg.state_md == 102 || chg.state_md == 104 }">
+					<button class="btn btn-sm btn-info mx-1" onclick="location.href='/myChgUpdate?chg_id=${chg.chg_id}'" id="chgUpdate"  >수정</button>
 					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
 				</c:when>
-				<c:otherwise>
-					<button class="btn btn-sm btn-info mx-1" onclick="/myChgUpdate" id="chgUpdate"  >수정</button>
+				<c:when test="${chg.state_md == 103 }">
 					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
-				</c:otherwise>
+				</c:when>
 			</c:choose>
 
 		</div>	
