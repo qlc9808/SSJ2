@@ -13,6 +13,11 @@
 		       WHERE 	bl.brd_num = b.brd_num
 		       AND 		bl.user_num = #{user_num}
 		      ) AS likeyn
+		    , (SELECT count(*)
+               FROM challenger c
+               WHERE user_num = 90
+               AND c.chg_id = b.chg_id
+              ) AS chgryn
 		From    board b
 		        INNER JOIN  user1 u On  b.user_num = u.user_num
 		Where   brd_md	= 	100

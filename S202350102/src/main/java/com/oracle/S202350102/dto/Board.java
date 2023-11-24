@@ -62,14 +62,13 @@ public class Board {
 	//Challenge_Review_Insert_Proc 리턴 값 저장
 	private int resultCount;
 	
-	// 좋아요 유무 판단용
-	private int likeyn;
-	private int b_user_num;
-	private int like_cnt;
 	
-	// 각 brd_num 마다의 총 신고 cnt 값
-	private int burning_cnt;	
+	private int likeyn;		// 좋아요 유무 판단용
+	private int b_user_num;	// 로그인한 나의 user_num
+	private int like_cnt;	// 좋아요 갯수
 	
-	// 게시판 작성자 팔로우 유무 판단용
-	private int followyn;
+	private int burning_cnt; // 각 brd_num 마다의 총 신고 cnt 값	
+	
+	private int followyn;	// 팔로우 유무 판단용
+	private int chgryn;		// 챌린지 참여 여부 판단용
 }

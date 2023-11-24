@@ -41,12 +41,10 @@
 			var brd_num = '';
 			if(type == '인증') {
 				brd_num = $('#brd_num' + p_index).val();
-			} else if(type == 'modal') {
-				brd_num = p_index;
 			} else {
-
+				brd_num = p_index;
 			}
-			alert(brd_num);
+			// alert(brd_num);
 			
 			// like_cnt 변경하는 거 추가해야함
 			// let like_cnt = $('#like_cnt' + p_index).val();
@@ -59,6 +57,7 @@
 	            data: { brd_num: brd_num },
 	            dataType: 'json',
 	            success: function (likeResult) {
+					// likeProResult에 좋아요 수 담아서 넘어오는거 구현할까 생각 중
 	            	if(likeResult.likeProResult > 0) {
 	            		// 좋아요 insert
 	            		$('#likeBtn' + p_index).attr('src', './images/yr/heart-fill.png');
@@ -85,6 +84,7 @@
 			var title 		= $('#title' 		+ p_index).val();
 			var conts 		= $('#conts' 		+ p_index).val();
 			var like_cnt 	= $('#like_cnt' 	+ p_index).val();
+			var chg_id 		= $('#chg_id' 		+ p_index).val();
 
 			var brd_num 	= $('#brd_num' 		+ p_index).val();
 			var user_num 	= $('#user_num' 	+ p_index).val();
@@ -116,7 +116,20 @@
 			$('#inputTitle' + p_index).text(title);
 			$('#inputConts' + p_index).text(conts);
 			$('#inputLikeCnt' + p_index).text(like_cnt);
-
+		}
+		
+		// 댓글 공백 체크
+		function commentInsertchk(form) {
+			form.conts.value = form.conts.value.trim();
+			
+			// 댓글 미입력시 체크
+			if(form.conts.value.length == 0) {
+				alert("댓글을 입력해주세요");
+				form.conts.focus();
+				return false;
+			}
+			// 댓글 입력시 실행
+			return true;
 		}
 
 	</script>
@@ -153,6 +166,7 @@
 						<input type="hidden" 	id="percentage${status.index }" 	value="${certList.percentage }">
 						<input type="hidden" 	id="icon${status.index }" 			value="${certList.icon }">
 						<input type="hidden" 	id="likeyn${status.index }" 		value="${certList.likeyn }">
+						<input type="hidden"	id="chg_id${status.index}"			value="${certList.chg_id}">
 					
 						<c:if test="${certList.brd_step == 0 }">
 
@@ -217,20 +231,36 @@
 															<!-- follow -->
 															<span>
 																<c:choose>
-																	<c:when test="${certList.followyn == 1}">
-																	<!-- 팔로잉 -->
-																		<button type="button" class="btn btn-light btn-xxs follow${certList.user_num}" onclick="following(${certList.user_num})">
-                                        									팔로잉
-                                        								</button>
+																	<c:when test="${sessionScope.user_num != null }">
+																	<!-- 로그인 한 상태 -->
+																		<c:choose>
+																			<c:when test="${certList.followyn == 1}">
+																			<!-- 팔로잉 -->
+																				<button type="button" class="btn btn-light btn-xxs follow${certList.user_num}" onclick="following(${certList.user_num})">
+		                                        									팔로잉
+		                                        								</button>
+																			</c:when>
+																			
+																			<c:otherwise>
+																			<!-- 팔로우 -->
+																				<button type="button" class="btn btn-danger btn-xxs follow${certList.user_num}" onclick="following(${certList.user_num})">
+																					팔로우
+																				</button>
+																			</c:otherwise>
+																			
+																		</c:choose>
+																		
 																	</c:when>
 																	
 																	<c:otherwise>
-																	<!-- 팔로우 -->
-																		<button type="button" class="btn btn-danger btn-xxs follow${certList.user_num}" onclick="following(${certList.user_num})">
+																	<!-- 로그인 안 한 상태 -->
+																		<button type="button" class="btn btn-danger btn-xxs" onclick="location.href='/loginForm'">
 																			팔로우
 																		</button>
 																	</c:otherwise>
+																	
 																</c:choose>
+															
 															</span>
 														</span>
 													</div>
@@ -295,8 +325,6 @@
 													</a>
 
 												</footer>
-
-												
 											</div>
 										</div>
 									</div>
@@ -305,9 +333,6 @@
 							</div>
 						</c:if>
 
-						
-						
-						
 						<!-- 댓글 클릭 시 modal -->
 						<div class="modal fade" id="showModal${status.index}" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -403,166 +428,185 @@
 												</div>
 											</div>
 										</div>
-
-
+										<hr>
 										<!-- 인증글 댓글 -->
-										<div class="review py-5">
-											<c:forEach var="comment" items="${chgCertList }">
-												<c:if test="${comment.brd_step > 0 }">
-													<!-- comment.brd_group == certList.brd_num 추가 해야함 -->
-													<div class="row">
-														<div class="col-12 col-md-auto">
-															<!-- 유저 프로필 사진 -->
-															<div class="avatar avatar-lg">
-																<img src="${pageContext.request.contextPath}/upload/${comment.user_img}" alt="profile" class="avatar-img rounded-circle">
-															</div>
-								
-															<!-- Nick -->
-															<div class="row mb-6">
-																<div class="col-12">
-																	<span class="fs-xs text-muted d-flex justify-content-between">
-								
-																		<span>
-																			<!-- Nick -->
-																			<img title="Lv.${comment.user_level } | exp.${comment.user_exp}(${comment.percentage }%)" src="/images/level/${comment.icon}.gif">
-								
-																			<span style="color: black;">
-																				${comment.nick}
+										<c:forEach var="comment" items="${chgCertList }">
+											<c:if test="${comment.brd_step > 0 && comment.brd_group == certList.brd_num}">
+												<div class="review">
+													<div class="review-body">
+													
+													
+														<div class="row">
+															<div class="col-12 col-md-auto">
+																<!-- 유저 프로필 사진 -->
+																<div class="avatar avatar-lg">
+																	<img src="${pageContext.request.contextPath}/upload/${comment.user_img}" alt="profile" class="avatar-img rounded-circle">
+																</div>
+									
+																<!-- Nick -->
+																<div class="row mb-6">
+																	<div class="col-12">
+																		<span class="fs-xs text-muted d-flex justify-content-between">
+									
+																			<span>
+																				<!-- Nick -->
+																				<img title="Lv.${comment.user_level } | exp.${comment.user_exp}(${comment.percentage }%)" src="/images/level/${comment.icon}.gif">
+									
+																				<span style="color: black;">
+																					${comment.nick}
+																				</span>
 																			</span>
 																		</span>
-																	</span>
-																</div>
-															</div>
-														</div>
-								
-								
-								
-														<div class="col-12 col-md">
-															<div>
-																<!-- Title -->
-																<p class="mb-2 fs-lg fw-bold" style="color: black;">
-																	${comment.title}
-																</p>
-															
-																<!-- conts -->
-																<p class="text-gray-500">
-																	${comment.conts }
-																</p>
-															</div>
-								
-								
-															<!-- Footer -->
-															<div class="row align-items-center">
-								
-																<div class="col-auto me-auto">
-																	<!-- Rate -->
-																	<div class="rate">
-																		<c:choose>
-																			<c:when test="${sessionScope.user_num != null }">
-																				<!-- 로그인 한 상태 -->
-								
-																				<a class="rate-item" data-toggle="vote" href="#" role="button"
-																					onclick="likePro('modal', ${comment.brd_num})">
-																					<c:choose>
-																						<c:when test="${comment.likeyn > 0}">
-																							<!-- 좋아요 눌렀을 때 -->
-																							<img alt="heart-fill" src="./images/yr/heart-fill.png"
-																								id="likeBtn${comment.brd_num }">
-																						</c:when>
-								
-																						<c:otherwise>
-																							<!-- 좋아요 안 눌렀을 때 -->
-																							<img alt="heart" src="./images/yr/heart.png"
-																								id="likeBtn${comment.brd_num }">
-																						</c:otherwise>
-								
-																					</c:choose>
-																					<span
-																						id="inputLikeCnt${comment.brd_num}">${comment.like_cnt}</span>
-																				</a>
-																			</c:when>
-								
-																			<c:otherwise>
-																				<!-- 로그인 안 한 상태 -->
-																				<a class="rate-item" data-toggle="vote"
-																					data-count="${comment.like_cnt}" href="/loginForm" role="button">
-																					<img alt="heart" src="./images/yr/heart.png">
-																				</a>
-																			</c:otherwise>
-								
-																		</c:choose>
-								
 																	</div>
 																</div>
-								
+															</div>
+									
+									
+									
+															<div class="col-12 col-md">
+																<div>
+																	<!-- Title -->
+																	<p class="mb-2 fs-lg fw-bold" style="color: black;">
+																		${comment.title}
+																	</p>
+																
+																	<!-- conts -->
+																	<p class="text-gray-500">
+																		${comment.conts }
+																	</p>
+																</div>
+									
+									
+																<!-- Footer -->
+																<div class="row align-items-center">
+									
+																	<div class="col-auto me-auto">
+																		<!-- Rate -->
+																		<div class="rate">
+																			<c:choose>
+																				<c:when test="${sessionScope.user_num != null }">
+																					<!-- 로그인 한 상태 -->
+									
+																					<a class="rate-item" data-toggle="vote" href="#" role="button"
+																						onclick="likePro('modal', ${comment.brd_num})">
+																						<c:choose>
+																							<c:when test="${comment.likeyn > 0}">
+																								<!-- 좋아요 눌렀을 때 -->
+																								<img alt="heart-fill" src="./images/yr/heart-fill.png"
+																									id="likeBtn${comment.brd_num }">
+																							</c:when>
+									
+																							<c:otherwise>
+																								<!-- 좋아요 안 눌렀을 때 -->
+																								<img alt="heart" src="./images/yr/heart.png"
+																									id="likeBtn${comment.brd_num }">
+																							</c:otherwise>
+									
+																						</c:choose>
+																						<span
+																							id="inputLikeCnt${comment.brd_num}">${comment.like_cnt}</span>
+																					</a>
+																				</c:when>
+									
+																				<c:otherwise>
+																					<!-- 로그인 안 한 상태 -->
+																					<a class="rate-item" data-toggle="vote"
+																						data-count="${comment.like_cnt}" href="/loginForm" role="button">
+																						<img alt="heart" src="./images/yr/heart.png">
+																					</a>
+																				</c:otherwise>
+									
+																			</c:choose>
+									
+																		</div>
+																	</div>
+									
+																</div>
 															</div>
 														</div>
+														
 													</div>
-													
-												</c:if>
-											</c:forEach>
-										</div>
+												</div>
+											</c:if>
+										</c:forEach>
 
 										
 						
 										<!-- 인증 댓글 쓰기 Form -->
 										<form id="certCommentForm" action="/commentInsert" method="post" onsubmit="return commentInsertchk(this)">
-											<input type="hidden" id="chg_id" name="chg_id" value="${chg.chg_id }">
 											<div class="row">
 						
 												<c:choose>
-													<c:when test="${chgrYN == 1 }">
-														<!-- 1. 참가자일 경우 -->
-														<div class="col-12 col-md-6">
-															<input type="hidden" name="chg_id" value="${chg.chg_id }">
-															<input type="hidden" name="user_num" value="${user.user_num }">
-															<input type="hidden" name="brd_num" value="${certList.brd_num }">
-															<!-- 유저 닉네임 표시하는 란 Name -->
-															<div class="form-group">
-																<p class="mb-2 fs-lg fw-bold">
-																	${user.nick }
-																</p>
-															</div>
-														</div>
-						
-														<div class="col-12">
-															<!-- 제목 입력란  Name -->
-															<div class="form-group">
-																<label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
-																<input class="form-control form-control-sm" id="commentTitle" name="title"
-																	type="text" placeholder="제목을 작성해주세요 *">
-															</div>
-														</div>
-						
-														<div class="col-12">
-															<!-- 댓글 입력란 Name -->
-															<div class="form-group">
-																<label class="visually-hidden" for="reviewText">CertBrd:</label>
-																<textarea class="form-control form-control-sm" id="commentConts" name="conts"
-																	rows="5" placeholder="댓글을 작성해주세요 *"></textarea>
-															</div>
-														</div>
-						
-						
-														<div class="col-12 text-center">
-															<!-- 등록 Button -->
-															<button class="btn btn-outline-dark" type="submit" onclick="commentCertBrd()">
-																등록
-															</button>
-														</div>
+													<c:when test="${sessionScope.user_num != null }">
+													<!-- 로그인을 한 경우 -->
+														<c:choose>
+															<c:when test="">
+																<!-- 1. 참가자일 경우 -->
+																<div class="col-12 col-md-6">
+																	<input type="hidden" name="chg_id" 		value="${certList.chg_id }">
+																	<input type="hidden" name="user_num" 	value="${user.user_num }">
+																	<input type="hidden" name="brd_num" 	value="${certList.brd_num }">
+																	<!-- 유저 닉네임 표시하는 란 Name -->
+																	<div class="form-group">
+																		<p class="mb-2 fs-lg fw-bold">
+																			${user.nick }
+																		</p>
+																	</div>
+																</div>
+								
+																<div class="col-12">
+																	<!-- 제목 입력란  Name -->
+																	<div class="form-group">
+																		<label class="visually-hidden" for="reviewTitle">CertBrd Title:</label>
+																		<input class="form-control form-control-sm" id="commentTitle" name="title"
+																			type="text" placeholder="제목을 작성해주세요 *">
+																	</div>
+																</div>
+								
+																<div class="col-12">
+																	<!-- 댓글 입력란 Name -->
+																	<div class="form-group">
+																		<label class="visually-hidden" for="reviewText">CertBrd:</label>
+																		<textarea class="form-control form-control-sm" id="commentConts" name="conts"
+																			rows="5" placeholder="댓글을 작성해주세요 *"></textarea>
+																	</div>
+																</div>
+															</c:when>
+															
+															<c:otherwise>
+																<!-- 3. 참여자가 아닌 회원 -->
+																<div class="col-12 col-md-6">
+																	<!-- 유저 닉네임 표시하는 란 Name -->
+																	<div class="form-group">
+																		<p class="mb-2 fs-lg fw-bold">
+																			${user.nick }
+																		</p>
+																	</div>
+																</div>
+								
+																<div class="col-12">
+																	<!-- 제목 입력란  Name -->
+																	<div class="form-group">
+																		<label class="visually-hidden" for="reviewTitle">Review Title:</label>
+																		<input class="form-control form-control-sm" type="text" name="title"
+																			placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
+																	</div>
+																</div>
+								
+																<div class="col-12">
+																	<!-- 댓글 입력란 Name -->
+																	<div class="form-group">
+																		<label class="visually-hidden" for="reviewText">Review:</label>
+																		<textarea class="form-control form-control-sm" rows="5" name="conts"
+																			placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
+																	</div>
+																</div>
+															</c:otherwise>
+														</c:choose>
 													</c:when>
 						
-													<c:when test="${user == null }">
-														<!-- 2. 비로그인 -->
-														<div class="col-12 col-md-6">
-															<!-- 유저 닉네임 표시하는 란 Name -->
-															<div class="form-group">
-																<p class="mb-2 fs-lg fw-bold">
-																	${user.nick }
-																</p>
-															</div>
-														</div>
-						
+													<c:otherwise>
+														<!-- 로그인을 안 한 경우 -->
 														<div class="col-12">
 															<!-- 제목 입력란  Name -->
 															<div class="form-group">
@@ -579,68 +623,25 @@
 																<textarea class="form-control form-control-sm" rows="5" name="conts"
 																	placeholder="로그인 해주세요" disabled="disabled"></textarea>
 															</div>
-														</div>
-						
-						
-														<div class="col-12 text-center">
-															<!-- 등록 Button -->
-															<button class="btn btn-outline-dark" type="submit" onclick="commentCertBrd()">
-																등록
-															</button>
-														</div>
-													</c:when>
-						
-													<c:otherwise>
-														<!-- 3. 참여자가 아닌 회원 -->
-														<div class="col-12 col-md-6">
-															<!-- 유저 닉네임 표시하는 란 Name -->
-															<div class="form-group">
-																<p class="mb-2 fs-lg fw-bold">
-																	${user.nick }
-																</p>
-															</div>
-														</div>
-						
-														<div class="col-12">
-															<!-- 제목 입력란  Name -->
-															<div class="form-group">
-																<label class="visually-hidden" for="reviewTitle">Review Title:</label>
-																<input class="form-control form-control-sm" type="text" name="title"
-																	placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled">
-															</div>
-														</div>
-						
-														<div class="col-12">
-															<!-- 댓글 입력란 Name -->
-															<div class="form-group">
-																<label class="visually-hidden" for="reviewText">Review:</label>
-																<textarea class="form-control form-control-sm" rows="5" name="conts"
-																	placeholder="챌린지 참여자만 글을 쓸 수 있습니다" disabled="disabled"></textarea>
-															</div>
-														</div>
-						
-						
-														<div class="col-12 text-center">
-															<!-- 등록 Button -->
-															<button class="btn btn-outline-dark" type="submit" disabled="disabled">
-																등록
-															</button>
-														</div>
+														</div>	
 													</c:otherwise>
-						
 												</c:choose>
 											</div>
+
+											<div class="col-12 text-center">
+												<!-- 등록 Button -->
+												<button class="btn btn-dark btn-sm" type="submit">
+													등록
+												</button>
+	
+												<!-- 닫기 -->
+												<button class="btn btn-light btn-sm" data-bs-dismiss="modal" type="button">
+													닫기
+												</button>
+											</div>
 										</form>
+
 						
-						
-						
-						
-						
-						
-										<!-- 닫기 -->
-										<button class="btn btn-light btn-sm" data-bs-dismiss="modal">
-											닫기
-										</button>
 						
 									</div>
 						
