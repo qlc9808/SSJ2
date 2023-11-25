@@ -383,6 +383,23 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return resultCount;
 	}
 
+	@Override
+	public int chgAdminUpdate(Challenge chg) {
+		System.out.println("JhChallengeDaoImpl chgAdminUpdate Start...");
+		int result = 0;
+		
+		try {
+			result = session.update("jhChgAdminUpdate", chg);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl approvReturn e.getMessage() -> " + e.getMessage());
+			
+		}
+		
+		System.out.println("JhChallengeDaoImpl approvReturn result -> " + result);
+		
+		return result;
+	}
+
 
 
 }

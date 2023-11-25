@@ -26,8 +26,11 @@ public class Challenge {
 	private String 	thumb;			// 썸네일
 	private int 	return_lg;		// 반려사유(대분류)
 	private int 	return_md;		// 반려사유(중분류)
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	reg_date;		// 챌린지신청일
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	create_date;	// 챌린지 개설일
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	start_date;		// 챌린지시작일
 	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	end_date;		// 챌린지마감일
@@ -38,7 +41,7 @@ public class Challenge {
 	private String userName; 		//챌린지 개설자 이름
 	private String nick; 			//챌린지 개설자 닉네임
 	private String stateCtn; 		//챌린지 진행상태
-	private String userId; 			//챌린지 진행상태
+	private String userId; 			//챌린지 개설자 id
 	private String returnReason; 	//챌린지 반려사유
 	private int delStatus;			//파일 업로드 -> 파일 삭제 여부 확인용
 	
@@ -55,4 +58,6 @@ public class Challenge {
 	private int	   my_user_num;  	// user별 챌린지 리스트 찜하기 확인용
 	private int    pickyn;			// 찜하기 여부 판단용
 	private int    pick_cnt;		// 챌린지 찜수
+	
+	
 }

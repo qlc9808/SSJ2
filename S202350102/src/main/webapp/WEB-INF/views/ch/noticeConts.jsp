@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>    
+    pageEncoding="UTF-8"%>   
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>   
 <%@ include file="/WEB-INF/views/header4.jsp" %>
@@ -18,8 +17,7 @@
   
   #test{  
     min-height: 200px; /* 최소 높이를 200px로 설정 */
-    max-height: 500px; /* 최대 높이를 500px로 설정 */
-    overflow: auto; /* 내용이 최대 높이를 초과할 경우 스크롤을 추가합니다. */
+    
   }
 </style>
 

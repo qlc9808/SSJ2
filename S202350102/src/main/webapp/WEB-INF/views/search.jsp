@@ -117,6 +117,7 @@
 </head>
 <body>
 <h1>검색</h1>
+<section>
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				

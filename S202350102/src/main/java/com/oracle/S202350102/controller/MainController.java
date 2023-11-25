@@ -23,6 +23,7 @@ public class MainController {
 	private final BoardService bs;
 	private final UserService us;
 	private final UserService userService;
+	private final ChController chController;
 	
 	@RequestMapping(value ="/")
 	public String index(HttpSession session, Model model) {
@@ -45,6 +46,7 @@ public class MainController {
 		
 		model.addAttribute("chgCertList", chgCert);
 		model.addAttribute("user", user);
+		chController.search(model, session);
 		
 		return "home2";
 	}

@@ -49,13 +49,13 @@
 
 </head>
 <body>
-<section class="py-11">
+<section class="pt-7 pb-12">
  <div class="container">
         <div class="row">
           <div class="col-12 text-center">
 			
             <!-- Heading -->
-            <div class="pt-10 pb-5">
+            <div class="col-12 text-center">
             
             	<h3 class="mb-10">
             	<c:choose>
@@ -112,13 +112,13 @@
 		<div class="col-12">
 		<c:set var="num" value="${page.total-page.start+1 }"></c:set>
 		
-			<table class="table table-bordered table-sm mb-0">
-			  <thead>
+			<table class="table table-bordered table-sm mb-0   table-hover">
+                    <thead class="table-dark">
 				<tr class="p-2 text-center">
 					<th>번호</th>
 					<th>카테고리명</th>
 					<th>챌린지명</th>
-					<th>개설자</th>
+					<th>개설자 ID</th>
 					<th>공개여부</th>
 					<c:choose>
 						<c:when test="${state_md == 100 || state_md == 104}">
@@ -142,7 +142,7 @@
 						<td>${num }</td>
 						<td>${chgList.ctn }</td>
 						<td><a href="/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }">${chgList.title }</td>
-						<td>${chgList.nick }</td>
+						<td>${chgList.userId }</td>
 						<td>
 							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
 							<c:if test="${chgList.chg_public == 1 }">비공개</c:if>
@@ -162,7 +162,7 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&pageNum=${page.currentPage}'">상세보기</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&pageNum=${page.currentPage}&chgUpdateMode=0'">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>

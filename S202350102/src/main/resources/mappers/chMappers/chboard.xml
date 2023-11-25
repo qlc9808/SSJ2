@@ -36,7 +36,9 @@
 	
 	<update id="noticeUpdate" parameterType="Board">
 		Update board 
-		set title = #{title}, conts=#{conts} <if test="img != null">,img = #{img}</if>
+		set title = #{title}, conts=#{conts} 
+		<if test="delStatus == 1 and img == null">, img = NULL</if>
+		<if test="img != null">, img = #{img}</if>
 		Where brd_num = #{brd_num}
 	</update>
 	
@@ -61,6 +63,7 @@
 		join user1 u on brd.user_num = u.user_num
 		Where brd.brd_step = 0
 		and brd.brd_md = 103
+		and brd.brd_lg = 700
 		and rownum BETWEEN 1 and 5
 	</select>
 	
@@ -74,6 +77,7 @@
 		join user1 u on brd.user_num = u.user_num
 		Where brd.brd_step = 0
 		and brd.brd_md = 102
+		and brd.brd_lg = 700
 		and rownum BETWEEN 1 and 5
 	</select>
 	
@@ -84,6 +88,7 @@
 		        FROM board b
 		        JOIN user1 ON b.user_num = user1.user_num
 		        WHERE b.brd_md = 103
+		        and b.brd_lg = 700
 		        AND	  b.brd_Group = b.brd_num
 		        AND   (b.title like '%' || #{keyword} || '%' 
 		        	Or user1.nick like '%' || #{keyword} || '%')
@@ -100,6 +105,7 @@
 		        FROM board b
 		        JOIN user1 ON b.user_num = user1.user_num
 		        WHERE b.brd_md = 102
+		        and b.brd_lg = 700
 		        AND	  b.brd_Group = b.brd_num
 		        AND   (b.title like '%' || #{keyword} || '%' 
 		        	Or user1.nick like '%' || #{keyword} || '%'
@@ -115,7 +121,8 @@
 	SELECT Count(*)
 	FROM board b
 	JOIN user1 ON b.user_num = user1.user_num
-	WHERE b.brd_md = #{brd_md}	
+	WHERE b.brd_md = #{brd_md}
+	and b.brd_lg = 700	
 	AND	  b.brd_Group = b.brd_num
 	<if test="keyword != null">
 	AND   (b.title like '%' || #{keyword} || '%' 
@@ -138,42 +145,45 @@
 	
 	
 	<select id="myCertiList" parameterType="int" resultType="Board">
-		SELECT rownum, b.*, u.nick, c.title chg_title
+		SELECT rownum, b.*, u.nick, c.title chg_title, replyCount(b.brd_num) replyCount
 		FROM board  b
 		JOIN user1 u On b.user_num = u.user_num
 		JOIN challenge  c ON b.chg_id = c.chg_id
 		WHERE b.user_num = #{user_num}
 		AND b.brd_md = 100
+		and b.brd_lg = 700
 		and b.brd_step = 0
 		ORDER BY b.reg_date DESC
 		between rn 1 and 5
 	</select>
 	
 	<select id="myReviewList" parameterType="int" resultType="Board">
-		SELECT b.*, u.nick, c.title chg_title
+		SELECT b.*, u.nick, c.title chg_title, replyCount(b.brd_num) replyCount
 		FROM board  b
 		JOIN user1 u On b.user_num = u.user_num
 		JOIN challenge  c ON b.chg_id = c.chg_id
 		WHERE b.user_num = #{user_num}
 		AND b.brd_md = 101
+		and b.brd_lg = 700
 		and b.brd_step = 0
 		ORDER BY b.reg_date DESC
 	</select>
 	
 	<select id="myShareList" parameterType="int" resultType="Board">
-		SELECT b.*, u.nick
+		SELECT b.*, u.nick, replyCount(b.brd_num) replyCount
 		FROM board  b
 		JOIN user1 u On b.user_num = u.user_num
 		WHERE b.user_num = #{user_num}
 		AND b.brd_md = 102
 		and b.brd_step = 0
+		and b.brd_lg = 700
 		ORDER BY b.reg_date DESC
 	</select>
 	
 	<select id="myCommuList" parameterType="Board" resultType="Board">
 		Select c.*
 		From (Select rownum rn, a.*
-		       from    (SELECT  b.*, u.nick
+		       from    (SELECT  b.*, u.nick, replyCount(b.brd_num) replyCount
 		                FROM board  b
 		                JOIN user1 u On b.user_num = u.user_num
 		                WHERE b.user_num = #{user_num}
@@ -201,20 +211,22 @@
 		Select count(*) total, brd_md
 		From board
 		Where user_num = #{user_num}
-		and brd_step = 0
+		and brd_lg = 700
+		and brd_num = brd_Group 
 		Group BY brd_md
 	</select>
 	
 	<select id="mychgBoardList" parameterType="Board" resultType="Board">
 		Select d.*       
 		From       (Select rownum rn, a.*
-		             From    (Select b.*, u.nick, c.title chg_title
+		             From    (Select b.*, u.nick, c.title chg_title, replyCount(b.brd_num) replyCount
 		                        FROM board b
 							    JOIN User1 u ON b.user_num = u.user_num
 							    JOIN challenge c ON b.chg_id = c.chg_id
 		                        Where b.brd_md = #{brd_md}
 		                        and b.user_num = #{user_num}
 		                        and b.brd_step = 0
+		                        and b.brd_lg = 700
 		                        ORDER by b.reg_date DESC) a ) d
 		Where rn BETWEEN #{start} and #{end}
 	</select>
@@ -224,6 +236,7 @@
 		From board
 		Where user_num = #{user_num}
 		and brd_md = #{brd_md}
+		and brd_lg = 700
 		and brd_step =0
 	</select>
 	

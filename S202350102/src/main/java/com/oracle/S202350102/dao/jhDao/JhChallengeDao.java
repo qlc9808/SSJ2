@@ -56,7 +56,9 @@ public interface JhChallengeDao {
 
 	int 				chgListTotal(Challenge challenge);
 
-	int 				approvReturn(Map<String, Object> apvRtnParaMap);     
-    
+	int 				approvReturn(Map<String, Object> apvRtnParaMap);
+
+	int 				chgAdminUpdate(Challenge chg);     
+     
 }        
    
