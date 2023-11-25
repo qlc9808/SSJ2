@@ -1030,7 +1030,20 @@ public class JhController {
 	}
 	
 	
-	
+	@RequestMapping(value = "/chgAdminUpdate")
+	public String chgAdminUpdate(Challenge chg, HttpSession session) {
+		System.out.println("JhController chgAdminUpdate Start...");
+		System.out.println("JhController chgAdminUpdate chg -> "+ chg);
+		
+		int chg_id = chg.getChg_id();
+		int state_md = chg.getState_md();
+		
+		
+		
+		
+		
+		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'";
+	}
 	
 	
 	

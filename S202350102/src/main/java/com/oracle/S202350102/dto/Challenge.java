@@ -26,8 +26,11 @@ public class Challenge {
 	private String 	thumb;			// 썸네일
 	private int 	return_lg;		// 반려사유(대분류)
 	private int 	return_md;		// 반려사유(중분류)
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	reg_date;		// 챌린지신청일
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	create_date;	// 챌린지 개설일
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	start_date;		// 챌린지시작일
 	@DateTimeFormat(pattern = "yy-MM-dd")
 	private Date 	end_date;		// 챌린지마감일

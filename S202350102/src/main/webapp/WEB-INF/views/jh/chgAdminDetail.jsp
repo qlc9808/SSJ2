@@ -241,8 +241,17 @@
 			      <td colspan="3"><fmt:formatDate value="${chg.reg_date }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
 			    </tr>
 			    <tr>
-			      <th scope="row">챌린지 개설일</th>
-			      <td colspan="3"><fmt:formatDate value="${chg.create_date }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
+			    <c:choose>
+			    	<c:when test="${chg.state_md == 104 }">
+				      <th scope="row">챌린지 반려일</th>
+				      <!-- return_date로 바꾸기 -->
+				      <td colspan="3"><fmt:formatDate value="${chg.create_date }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
+			    	</c:when>
+			    	<c:otherwise>
+				      <th scope="row">챌린지 개설일</th>
+				      <td colspan="3"><fmt:formatDate value="${chg.create_date }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
+			    	</c:otherwise>
+			    </c:choose>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 종료일</th>
@@ -261,13 +270,13 @@
 			</c:choose>
 			
 			
-			<!-- 챌린지 진행중, 반려 땐 수정/삭제, 종료엔 삭제 버튼만 활성화  -->
+			<!-- 챌린지 진행중 땐 수정/삭제, 반려/종료엔 삭제 버튼만 활성화  -->
 			<c:choose>
-				<c:when test="${chg.state_md == 102 || chg.state_md == 104 }">
+				<c:when test="${chg.state_md == 102 }">
 					<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
 					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
 				</c:when>
-				<c:when test="${chg.state_md == 103 }">
+				<c:when test="${chg.state_md == 103 || chg.state_md == 104}">
 					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
 				</c:when>
 			</c:choose>

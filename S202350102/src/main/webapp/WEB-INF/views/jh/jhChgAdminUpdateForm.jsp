@@ -95,6 +95,11 @@
 		}
 	}
 	
+	//챌린지 수정 전 확인 알림	
+	function chk(){
+		return confirm("챌린지를 수정하시겠습니까?");
+		 
+	}	
 </script>
 </head>
 <body>
@@ -132,15 +137,21 @@
         <%@ include file="adminSidebar.jsp" %>
         
         <div class="col-10">
-        <form action="">
+        <form action="/chgAdminUpdate" method="post" onsubmit="return chk()" enctype="multipart/form-data">
+        	<!-- 챌린지 id -->
+        	<input type="hidden" name="chg_id" value="${chg.chg_id}">
+        	<!-- 챌린지 진행상태 -->
+        	<input type="hidden" name="state_md" value="${chg.state_md}">
+        	<!-- 챌린지 개설자 user_num-->
+        	<input type="hidden" name="user_num" value="${chg.user_num}">
 		<table class="table table-bordered table-sm mb-0">
 			    <tr>
-			      <th scope="row" style="width: 200px;" >챌린지명</th>
+			      <th scope="row" style="width: 350px;" >챌린지명</th>
 			      <td style="width: 350px;">
 			      	<input type="text" maxlength="20" class="form-control form-control-sm" id="title" name="title" value="${chg.title }" required>
 			      </td>
 			      <th rowspan="3" style="width: 200px;">썸네일</th>
-				  <td rowspan="3" style="text-align: center; width: 350px;">
+				  <td rowspan="3" style="text-align: center; width: 300px;">
 					  <c:choose>
 					  	<c:when test="${chg.thumb !=null }">
 	                      	<img alt="챌린지 썸네일" src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
@@ -166,19 +177,19 @@
 			    <tr>
 			      <th scope="row">개설자 아이디 </th>
 			      <td>
-			      	<input type="hidden" name="user_id" value="${chg.userId }">${chg.userId } 
+			      	${chg.userId } 
 		      	  </td>
 			    </tr>
+			    <tr>
 			      <th scope="row">개설자  닉네임</th>
 			      <td>
-			      	  <input type="hidden" name="nick" value="${chg.nick }">${chg.nick }
+			      	${chg.nick }
 		      	  </td>
-			    <tr>
 			    </tr>
 			    <tr>
 			      <th scope="row">개설자 이름</th>
 			      <td>
-			      	<input type="hidden" name="userName" value="${chg.userName }"> ${chg.userName }
+			      	${chg.userName }
 			      </td>
 			      <th scope="row">카테고리</th>
 			      <td>                    
@@ -190,34 +201,22 @@
 			      </td>
 			    </tr>
 			    <tr>
-			    	<c:if test='${chg.state_md == 104 }'>
-				      <th scope="row">반려사유</th>
-				      <td colspan="3">
-					      <select class="form-select" style="width: 150px;" id="return_md" name="return_md" required>
-	                      	<c:forEach var="rtnReason" items="${returnReason }" varStatus="status">
-	                      		<option value="${rtnReason.md }"  ${rtnReason.md == chg.return_md ? 'selected' : ''}>${rtnReason.ctn }</option>
-	                      	</c:forEach>
-		                   </select>
-				      </td>
-			    	</c:if>
-			    </tr>
-			    <tr>
-			      <th scope="row">참가자수 </th>
-			      <td> <input type="hidden" value="${chgrParti }">${chgrParti }
-			      <th>참여정원</th>
+			      <th scope="row">참가자 수 </th>
+			      <td>${chgrParti }</td>
+			      <th>참여 정원</th>
 				  <td>
-				      <input type="number" class="form-control form-control-xs" style="width: 200px;" name="chg_capacity" value="${chg.chg_capacity }" required>
+				      <input type="number" max="50" class="form-control form-control-xs" style="width: 200px;" name="chg_capacity" value="${chg.chg_capacity }" required>
 				  </td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 소개</th>
 			      <td colspan="3">
-			       <textarea class="form-control form-control-zs" rows="5" id="chg_conts" type="text" name="chg_conts" maxlength="100" required >${chg.chg_conts }</textarea>
+			       <textarea class="form-control form-control-zs" rows="5" id="chg_conts" type="text" name="chg_conts" maxlength="200" required >${chg.chg_conts }</textarea>
 				  </td>
 			    </tr>
 			    <tr>
 			      <th scope="row">인증방법</th>
-			      <td colspan="3"><input type="text" class="form-control form-control-xs" name="upload" value="${chg.upload }" required></td>
+			      <td colspan="3"><input type="text" class="form-control form-control-xs" name="upload" value="${chg.upload }" maxlength="100" required></td>
 			    </tr>
 			    
 			    <tr>
@@ -238,7 +237,7 @@
                       	<img alt="인증 방법" src="${pageContext.request.contextPath}/upload/${chg.sample_img}" style="width: 100%; height: 150px; border-radius: 10px;">
                       	<input type="hidden" value="${chg.sample_img}" name="sample_img">
                       	<div class="pt-2">
-	                    <button type="button" class="btn btn-xxs btn-info mx-1" onclick="sampleImgUpdate()" id="sampImgUpBtn">수정</button>                    
+	                    	<button type="button" class="btn btn-xxs btn-info mx-1" onclick="sampleImgUpdate()" id="sampImgUpBtn">수정</button>                    
 	                    </div>
                     	<input type="file" class="form-control" id="sample_img" name="sampleImgFile" style="display: none;">
 					  </td>
@@ -257,17 +256,16 @@
 			      </td>
 			    </tr>
 			    <tr>
-			    
 			      <th scope="row">비밀번호</th>
 			      <td><input type="text" class="form-control form-control-xs" name="priv_pswd" value="${chg.priv_pswd != 0 ? chg.priv_pswd : ''}" ${chg.priv_pswd == 0 ? 'disabled' : ''} maxlength="4" id="priv_pswd" oninput="validatePswd(this)"></td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 신청일</th>
-			      <td colspan="3"><input class="form-control form-control-xs" name="end_date" id="end_date" type="date" required value="${reg_date }"></td>
+			      <td colspan="3">${reg_date }</td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 개설일</th>
-			      <td colspan="3"><input class="form-control form-control-sm" name="end_date" id="end_date" type="date" required value="${create_date }"></td>
+			      <td colspan="3">${create_date }</td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 종료일</th>
@@ -276,23 +274,11 @@
 		</table>
 		<div class="d-flex justify-content-end mt-5">
 			<button class="btn btn-sm btn-dark mx-1" onclick="currentPageMove()">목록</button>
-			
-		
-			<!-- 챌린지 진행중, 반려 땐 수정/삭제, 종료엔 삭제 버튼만 활성화  -->
-			<c:choose>
-				<c:when test="${chg.state_md == 102 || chg.state_md == 104 }">
-					<button class="btn btn-sm btn-info mx-1" type="submit" id="chgUpdate"  >수정</button>
-					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
-				</c:when>
-				<c:when test="${chg.state_md == 103 }">
-					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
-				</c:when>
-			</c:choose>
-
+			<button class="btn btn-sm btn-info mx-1" type="submit" id="chgUpdate"  >수정</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
 		</div>	
         </form>
 		</div>
-		<div class="py-10"></div>	
       </div>
       </div>
       </section>
