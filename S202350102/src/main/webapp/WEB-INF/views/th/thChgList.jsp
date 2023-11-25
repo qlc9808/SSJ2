@@ -46,9 +46,12 @@
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
 					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+					alert("찜 성공");
 				} else {
 					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+					alert("찜 취소");
 				}
+				$("#inputPickCnt" + p_index).text("찜수: "+ chgPickResult.chgPickCnt);
 
 			},
 			error : function() {
@@ -261,7 +264,7 @@
 			                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                 </div>
 			                <div>참여인원: ${chg.chlgerCnt}명</div>
-			                <div>찜수: ${chg.pick_cnt }</div>
+			                <div id="inputPickCnt${chg.chg_id }">찜수: ${chg.pick_cnt }</div>
 			              </div>
 							
 			            </div>

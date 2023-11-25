@@ -38,7 +38,7 @@ function renderTable(data) {
              tableHTML += "<div class='col-6 col-md-4' style='padding-left: 8px; padding-right: 8px;'>"+
                 "<div class='card mb-7'>"+
                     "<div class='card-img'>"+
-                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='likePost("+`${board.brd_num}`+")'>"+
+                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='sharingPick("+`${board.brd_num}`+")'>"+
                             "<i class='fe fe-heart'></i>"+
                        " </button>"+
                        "<button class='btn btn-xs w-100 btn-dark card-btn' onclick='location.href=\"detailSharing?user_num=" + board.user_num + "&brd_num=" + board.brd_num + "\"'>" +
@@ -104,8 +104,10 @@ $("#sortOption").change(function() {
             success: function (likeResult) {
                 if (likeResult.likeProResult > 0) {
                     $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+                    alert("찜 성공");
                 } else {
                     $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+                    alert("찜 취소");
                 }
 
             },

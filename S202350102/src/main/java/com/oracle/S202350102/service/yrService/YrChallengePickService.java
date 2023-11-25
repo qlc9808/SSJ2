@@ -6,5 +6,6 @@ public interface YrChallengePickService {
 
 	int 	chgPick(ChallengPick chgPick);
 	int 	selectChgPickYN(ChallengPick chgPick);
+	int 	selectChgPickCnt(int chg_id);
 
 }

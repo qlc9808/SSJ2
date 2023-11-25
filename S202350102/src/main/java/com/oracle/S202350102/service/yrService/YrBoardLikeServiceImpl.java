@@ -36,4 +36,12 @@ public class YrBoardLikeServiceImpl implements YrBoardLikeService {
 		return result;
 	}
 
+	@Override
+	public int selectBrdLikcCnt(int brd_num) {
+		int result = ybld.selectBrdLikcCnt(brd_num);
+		System.out.println("YrBoardLikeServiceImpl selectBrdLikcCnt result -> " + result);
+		
+		return result;
+	}
+
 }
