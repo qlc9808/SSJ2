@@ -363,13 +363,14 @@ public class ThController {
     
     @RequestMapping(value ="thChgList")
 	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt, HttpSession session) {
-		
-		System.out.println("thController thChgList Start...");
+		System.out.println("chg.getKeyword()--> "+ chg.getKeyword() );
+    	System.out.println("thController thChgList Start...");
 		System.out.println("State_md --> " + chg.getState_md());
 
 		// 카테고리 적용한 전체 게시글 수
 		int totalChg = 0;
 		// 		진행중				  or 		 nav 챌린지 클릭했을 때
+		//		검색에 값이 있으면 그 검색내용에 해당하는 게시글 수도 가져옴
 		if ( chg.getState_md() == 102 || chg.getState_md() == 0 ) {
 				totalChg = tcs.totalChgIng(chg);
 				System.out.println("tcs.totalChgIng(chg) --> " + totalChg);
@@ -413,8 +414,8 @@ public class ThController {
 		System.out.println("thController list listChg.size() --> " + listChg.size());
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
-		for(int i =0; i <listChg.size(); i++) {
-//		System.out.println("챌린지리스트 체크  --> ["+ i+"] --> " + listChg.get(i).getUserId() );
+		for(int i =0; i <3; i++) {
+//		System.out.println("챌린지리스트 체크  --> ["+ i+"] --> " + listChg.get(i) );
 		}
 
 			
@@ -518,4 +519,18 @@ public class ThController {
 		model.addAttribute("order1", order1);
 		return "th/subscriptManagement";
 	}
+	
+//	//검색 
+//	@GetMapping("/listSearchChg")
+//	public String listSearchChg(Challenge chg, String currentPage, Model model) {
+//		System.out.println("thController thSubscriptManagement start...");
+//		// 검색 조건(cond)에 따른 TotalCount
+//		int totalEmp = es.condTotalEmp(emp);
+//		// Paging 후 chg 파라미터에 start, end 담음
+//		
+//		// ListSearchg 뽑아옴
+//		
+//		// model 담음
+//		
+//	}
 }

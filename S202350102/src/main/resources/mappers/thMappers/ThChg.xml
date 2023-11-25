@@ -17,6 +17,12 @@
 		<choose>
 			<when test="chg_lg == 200">		AND chg_md = #{chg_md}</when>
 		</choose>
+		<!-- keyword 값이 null이 아니고 공백도 아닐때,  -->
+		<if test='keyword != null and keyword != ""'> 
+			AND title   	LIKE '%' || #{keyword} || '%'	
+			OR  chg_conts 	LIKE '%' || #{keyword} || '%'
+		</if>
+
 	</select>
 
 	<select id="thChgTotalFin" parameterType="Challenge" resultType="int">
@@ -27,6 +33,11 @@
 		<choose>
 			<when test="chg_lg == 200">		AND chg_md = #{chg_md}</when>
 		</choose>
+		<!-- keyword 값이 null이 아니고 공백도 아닐때,  -->
+		<if test='keyword != null and keyword != ""'> 
+			AND title   	LIKE '%' || #{keyword} || '%'	
+			OR  chg_conts 	LIKE '%' || #{keyword} || '%'
+		</if>
 	</select>
 	
 	<!--진행중 챌린지 조회 (choose: null(기본값), 개설일 순, 찜 순, 참가자 순 -->
@@ -54,6 +65,10 @@
 				 <choose>
 				 	<when test="chg_lg == 200">		AND c.chg_md = #{chg_md}</when>
 				 </choose>
+				 <if test= "keyword != null and keyword != ''"> 
+					AND title   	LIKE '%' || #{keyword} || '%'	
+					OR  chg_conts 	LIKE '%' || #{keyword} || '%'
+				 </if>
 				 
 				 <choose>
 				 	<when test="sortOpt ==  null">			ORDER BY 	c.create_date DESC) a</when>

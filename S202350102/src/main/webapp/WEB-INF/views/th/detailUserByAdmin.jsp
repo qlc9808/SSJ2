@@ -14,14 +14,12 @@
 </script>
 </head>
 <body>
-<section class="py-11">
+<section class="pt-7 pb-12">
  	<div class="container">
 	 	
 	 	<!-- TITLE  -->
 	 	<div class="col-12 text-center">
-	    	<div class="pt-10 pb-5">
 				<h3 class="mb-10">회원 관리</h3>
-	        </div>
 	    </div>
 	    
 		<div class="row">
@@ -29,9 +27,9 @@
 			<div class="col-10">
 				<table class="table table-bordered table-sm mb-0">
 				    <tr>
-				      <th scope="row">레벨 / 경험치</th>
+				      <th scope="row" class="table-secondary">레벨 / 경험치</th>
 				      <td>LV.${user1.user_level } / ${user1.user_exp } point</td>
-				      <th rowspan="3">사진</th>
+				      <th rowspan="3" class="table-secondary">사진</th>
 					  <td rowspan="3">
 			  			  <c:if test="${user1.img != null}">
 		                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${user1.img}" alt="userImg" style="width: 100%; height: 150px; border-radius: 10px;" >
@@ -42,51 +40,51 @@
 					  </td>
 				    </tr>
 				    <tr>
-				      <th scope="row">아이디</th>
+				      <th scope="row" class="table-secondary">아이디</th>
 				      <td>${user1.user_id }</td>
 				    </tr>
 				    <tr>
-				      <th scope="row">이름</th>
+				      <th scope="row" class="table-secondary">이름</th>
 				      <td>${user1.user_name }</td>
 				    </tr>
 				    <tr>
-				      <th scope="row">닉네임</th>
+				      <th scope="row" class="table-secondary">닉네임</th>
 				      <td>${user1.nick }</td>
-				      <th>회원상태</th>
+				      <th class="table-secondary">회원상태</th>
 				      <c:if test='${user1.status_md == 100 }'><td>일반 회원</td></c:if>
 				      <c:if test='${user1.status_md == 101 }'><td>멤버쉽 회원</td></c:if>
 				      <c:if test='${user1.status_md == 102 }'><td>관리자</td></c:if>
 				      <c:if test='${user1.status_md == 103 }'><td>블랙리스트</td></c:if>
 				    </tr>
 				    <tr>
-				      <th scope="row">이메일</th>
+				      <th scope="row" class="table-secondary">이메일</th>
 				      <td colspan="3">${user1.email }</td>
 				    </tr>
 				    <tr>
-				      <th scope="row">생년월일</th>
+				      <th scope="row" class="table-secondary">생년월일</th>
 				      <td><fmt:formatDate value="${user1.birth }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
-				      <th>성별</th>
+				      <th class="table-secondary">성별</th>
 				      <c:if test="${user1.gender == 'F' }"><td>여자</td></c:if>
 				      <c:if test='${user1.gender == "M" }'><td>남자</td></c:if>
 				    </tr>
 				    <tr>
-				      <th scope="row">주소</th>
+				      <th scope="row" class="table-secondary">주소</th>
 				      <td colspan="3">${user1.addr }</td>
 				    </tr>
 				    <tr>
-				      <th scope="row">전화번호</th>
+				      <th scope="row" class="table-secondary">전화번호</th>
 				      <td colspan="3">${user1.tel }</td>
 				    </tr>
 				    <tr>
-				      <th scope="row">가입일자</th>
+				      <th scope="row" class="table-secondary">가입일자</th>
 				      <td><fmt:formatDate value="${user1.reg_date }" pattern="yyyy년 MM월 dd일, HH시 mm분 ss초"></fmt:formatDate></td>
-				      <th>마지막 로그인</th>
+				      <th class="table-secondary">마지막 로그인</th>
 				      <td><fmt:formatDate value="${user1.last_lgn_date }" pattern="yyyy년 MM월 dd일, HH시 mm분 ss초"></fmt:formatDate></td>
 				    </tr>
 				    <tr>
-				      <th scope="row">탈퇴여부</th>
+				      <th scope="row" class="table-secondary">탈퇴여부</th>
 				      <td>${user1.delete_yn }</td>
-				      <th>탈퇴일자</th>
+				      <th class="table-secondary">탈퇴일자</th>
 				      <td><c:if test="${user1.delete_yn == 'Y' }"><fmt:formatDate value="${user1.end_date }" pattern="yyyy년 MM월 dd일, HH시 mm분 ss초"></fmt:formatDate></c:if></td>
 				    </tr>			    
 				</table>
