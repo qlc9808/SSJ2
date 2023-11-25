@@ -31,6 +31,7 @@ import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgBoardService;
+import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.Level1Service;
@@ -61,6 +62,7 @@ public class JhController {
 	
 	private final Level1Service ls;
 	
+	private final ChChallengeService	chChallengeService;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -917,7 +919,13 @@ public class JhController {
 	
 	//챌린지 관리자 상세보기
 	@RequestMapping(value = "chgAdminDetail")
-	public String chgAdminDetail(Challenge challenge,  HttpSession session, Model model, @RequestParam(value = "chgUpdateMode", required = false) String chgUpdateMode) {
+	public String chgAdminDetail(
+								   Challenge challenge
+								,  HttpSession session
+								, Model model
+								, @RequestParam(value = "chgUpdateMode", required = false) String chgUpdateMode
+								, @RequestParam(value = "result", required = false) String result
+								) {
 		System.out.println("JhController chgAdminDetail Start...");
 		
 		
@@ -958,7 +966,7 @@ public class JhController {
 		System.out.println("JhController chgDetail chgUpdateMode -> " + chgUpdateMode);
 		
 		if(chgUpdateMode.equals("1")) {
-			System.out.println("JhController chgDetail 수정 -> " + "수정");
+			System.out.println("JhController chgDetail 수정 페이지로 이동 ");
 			
 			//챌린지 카테고리 수정용 카테고리
 			int chgCategoryLd = 200;
@@ -984,6 +992,10 @@ public class JhController {
 			
 			return "jh/jhChgAdminUpdateForm";
 		}
+		
+		//수정 완료 후 돌아왔을 떄 결과 값 저장해서 수정 성공 여부  chgAdminDetail에서 alert 창 보여주기 위한 용도
+		model.addAttribute("result",result);
+		
 		return "jh/chgAdminDetail";
 		
 	}
@@ -1031,18 +1043,105 @@ public class JhController {
 	
 	
 	@RequestMapping(value = "/chgAdminUpdate")
-	public String chgAdminUpdate(Challenge chg, HttpSession session) {
+	public String chgAdminUpdate(Challenge chg,  HttpServletRequest request,
+			  @RequestParam(value = "sampleImgFile") MultipartFile sampleImgFile,
+			  @RequestParam(value = "thumbFile", required = false) MultipartFile thumbFile) throws Exception {
 		System.out.println("JhController chgAdminUpdate Start...");
 		System.out.println("JhController chgAdminUpdate chg -> "+ chg);
 		
 		int chg_id = chg.getChg_id();
 		int state_md = chg.getState_md();
 		
+		HttpSession session = request.getSession();
+		int user_num = 0;
+		int result = 0;
 		
+		if(session.getAttribute("user_num") != null) {
+			 			
+			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
+			
+			/*************유저 권한 확인*************/
+			if( user.getStatus_md() == 102) { //관리자면
+				System.out.println("JhController 관리자 수정 Start...");
+				
+				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+				/*************샘플이 바뀌었다면 기존 이미지 삭제 후 샘플 저장*************/
+				if(sampleImgFile != null && !sampleImgFile.isEmpty()) {
+					System.out.println("JhController sampleImgFile 널 아님 Start...");
+					//기존 샘플이미지 파일 삭제 작업
+					String deleteFile = uploadPath + chg.getSample_img();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					//새 샘플이미지 파일 업로드
+					String saveName = uploadFile(sampleImgFile.getOriginalFilename(), sampleImgFile.getBytes(), uploadPath);
+					chg.setSample_img(saveName);
+				}else {
+					chg.setSample_img(null);		
+				}	
+				
+				System.out.println("JhController sampleImgFile 널이라 수정 안함 Start...");
+				
+				//썸네일 삭제 여부
+				int delStatus = chg.getDelStatus();
+				System.out.println("JhController chgAdminUpdate delStatus -> " + delStatus);
+				/*************썸네일 기존 이미지 삭제 여부 확인*************/
+				// 새 썸네일 업로드 한 경우
+				if( thumbFile != null && !thumbFile.isEmpty()) {
+					
+					//새 썸네일 업로드 하면 기존 이미지 먼저 삭제 처리
+					String deleteFile = uploadPath + chg.getThumb();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					
+					//새로 올린 썸네일 저장
+					String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
+					chg.setThumb(saveName);
+					
+				}else if (thumbFile == null || thumbFile.isEmpty() && delStatus == 1) {
+					
+					String deleteFile = uploadPath + chg.getThumb();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					
+					chg.setThumb(null);
+					
+				}
+				
+				
+				
+				/*if(delStatus == 1 || thumbFile != null) {
+					System.out.println("JhController sampleImgFile 썸네일 기존 이미지 삭제 Start...");
+					//기존 썸네일 삭제 
+					String deleteFile = uploadPath + chg.getThumb();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					
+					*************삭제가 아닌 업데이트라면 새 이미지 저장************
+					if(thumbFile != null) {
+						System.out.println("JhController sampleImgFile 썸네일 아예 없앰 Start...");
+						//새 썸네일 저장
+						String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
+						chg.setThumb(saveName);
+						
+					// 썸네일만 삭제, 새 썸네일 업로드 안함	-> 기본 썸네일 저장
+					} else {
+						String saveName = "assets/img/chgDfaultImg.png";
+						chg.setThumb(saveName);
+					}
+					
+				}*/
+				
+				System.out.println("JhController 챌린지 진짜 수정 Start...");
+				result = jhCService.chgAdminUpdate(chg);		
+				
+				
+			}
+		}
 		
+		System.out.println("JhController chgAdminUpdate result -> "+ result);
 		
-		
-		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'";
+			return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'"+"&result="+result;
 	}
 	
 	

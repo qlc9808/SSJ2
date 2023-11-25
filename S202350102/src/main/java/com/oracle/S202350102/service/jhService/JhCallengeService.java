@@ -80,8 +80,11 @@ public interface JhCallengeService {
 
 
 	int 				approvReturn(Map<String, Object> apvRtnParaMap);
+
+
+	int 				chgAdminUpdate(Challenge chg);
   
-  
+   
 	
         
        

@@ -211,6 +211,14 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		int result = jhChgDao.approvReturn(apvRtnParaMap);
 		return result;
 	}
+
+	@Override
+	public int chgAdminUpdate(Challenge chg) {
+		System.out.println("JhCallengeServiceImpl chgAdminUpdate Start...");
+		int result = jhChgDao.chgAdminUpdate(chg);
+		
+		return result;
+	}
  
 
 	

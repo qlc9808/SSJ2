@@ -25,6 +25,16 @@
 			
 	} */
 	
+	$(document).ready(function() {
+		var result = ${result}
+		
+		if(result > 0){
+			alert("result ->" + result);
+		}
+			alert("result ->" + result);
+		
+	});
+	
 	function approvReturnFn(pApprovReturn){
 		var approvReturn	= pApprovReturn
 		var chg_id			= ${chg.chg_id}

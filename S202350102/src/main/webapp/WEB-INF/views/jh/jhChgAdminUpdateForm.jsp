@@ -205,7 +205,7 @@
 			      <td>${chgrParti }</td>
 			      <th>참여 정원</th>
 				  <td>
-				      <input type="number" max="50" class="form-control form-control-xs" style="width: 200px;" name="chg_capacity" value="${chg.chg_capacity }" required>
+				      <input type="number" max="50" min="1" class="form-control form-control-xs" style="width: 200px;" name="chg_capacity" value="${chg.chg_capacity }" required>
 				  </td>
 			    </tr>
 			    <tr>
@@ -257,7 +257,7 @@
 			    </tr>
 			    <tr>
 			      <th scope="row">비밀번호</th>
-			      <td><input type="text" class="form-control form-control-xs" name="priv_pswd" value="${chg.priv_pswd != 0 ? chg.priv_pswd : ''}" ${chg.priv_pswd == 0 ? 'disabled' : ''} maxlength="4" id="priv_pswd" oninput="validatePswd(this)"></td>
+			      <td><input type="text" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." class="form-control form-control-xs" name="priv_pswd" value="${chg.priv_pswd != 0 ? chg.priv_pswd : ''}" ${chg.priv_pswd == 0 ? 'disabled' : ''} maxlength="4" id="priv_pswd" oninput="validatePswd(this)"></td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 신청일</th>

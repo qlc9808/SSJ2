@@ -211,7 +211,7 @@
                     <label class="form-label" for="title">
                       	챌린지명
                     </label>
-                    <input class="form-control form-control-sm" id="title" type="text" name="title" required>
+                    <input class="form-control form-control-sm" maxlength="20" id="title" type="text" name="title" required>
                   </div>
 
                 </div>
@@ -224,7 +224,7 @@
                     <label class="form-label" for="chg_conts">
                       	챌린지 소개
                     </label>
-                    <textarea class="form-control form-control-sm" rows="5" id="chg_conts" type="text" name="chg_conts" required placeholder="예) 건강을 위해서 우리 다함께 매일 만보를 걷는 챌린지를 해봐요~"></textarea>
+                    <textarea class="form-control form-control-sm"  maxlength="200" rows="5" id="chg_conts" type="text" name="chg_conts" required placeholder="예) 건강을 위해서 우리 다함께 매일 만보를 걷는 챌린지를 해봐요~"></textarea>
                   </div>
 
                 </div>
@@ -253,7 +253,7 @@
                   <!--  -->
                   <div class="form-group">
                     <label class="form-label" for="chg_capacity">
-                      	참여 인원
+                      	참여 정원
                     </label>
                     <input type="number" class="form-control" name="chg_capacity" id="chg_capacity" max="50" min="1"  required="required">
                   </div>
@@ -287,7 +287,7 @@
                     <label class="form-label" for="verificationMethod">
                       	인증 방법
                     </label>
-					<input type="text" class="form-control" placeholder="예)하루 만보 걷기 챌린지 : 매일 만보를 걷고 만보가 적힌 만보기 사진을 올려주세요 " id="verificationMethod" name="upload"  required="required">
+					<input type="text" maxlength="100" class="form-control" placeholder="예)하루 만보 걷기 챌린지 : 매일 만보를 걷고 만보가 적힌 만보기 사진을 올려주세요 " id="verificationMethod" name="upload"  required>
                   </div>
 
                 </div>
