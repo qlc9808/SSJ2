@@ -29,6 +29,9 @@ function likePost(brd_num) {
 <body>
 <section class="pt-7 pb-12">
 	<div class="row" id="boardtable">
+		<c:if test="${empty srch_ShareResult }">
+			<h6>검색결과가 없습니다.</h6>
+		</c:if>
 	    <c:forEach var="board" items="${srch_ShareResult}">
 	    
 	        <div class="col-6 col-md-4" style="padding-left: 8px; padding-right: 8px;">
