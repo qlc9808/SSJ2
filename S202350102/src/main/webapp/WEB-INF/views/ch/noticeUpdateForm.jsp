@@ -19,7 +19,6 @@
     
   }
 </style>
-</style>
 <script type="text/javascript">
 	function fileUpdate(){
 		var fileInput = document.getElementById('fileInput');
