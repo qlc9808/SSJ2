@@ -153,6 +153,56 @@
 			return true;
 		}
 		
+		// 챌린지 찜하기
+		function chgPick(p_index) {
+			// var chg_id = p_chg_id;
+			// alert("chg_id -> " + chg_id);
+
+			$.ajax({
+				url : "/chgPickPro",
+				type : "POST",
+				data : {chg_id : p_index},
+				dataType : 'json',
+				success : function(chgPickResult) {
+					if(chgPickResult.chgPick > 0) {
+						$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+						alert("찜 성공");
+					} else {
+						$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+						alert("찜 취소");
+					}
+
+				},
+				error : function() {
+					alert("찜하기 오류");
+				}
+			});
+		}
+		
+		function sharingPick(p_index) {
+	        // alert("sharingPick" + p_index);
+
+	        $.ajax({
+	            url: "/likePro",
+	            type: "POST",
+	            data: { brd_num: p_index },
+	            dataType: 'json',
+	            success: function (likeResult) {
+	                if (likeResult.likeProResult > 0) {
+	                    $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+	                    alert("찜 성공");
+	                } else {
+	                    $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+	                    alert("찜 취소");
+	                }
+	                $('#likeCnt' + p_index).text(likeResult.brdLikeCnt);
+	            },
+	            error: function () {
+	                alert("찜하기 오류");
+	            }
+	        });
+	    }
+		
 		function sh(){
 			if($("#shList").css("display") == "none" || $("#shList").css("display") == ""){
 			    $("#shList").show();
@@ -203,57 +253,6 @@
 		    
 			 return flkty;
 		}
-		
-		// 챌린지 찜하기
-		function chgPick(p_index) {
-			// var chg_id = p_chg_id;
-			// alert("chg_id -> " + chg_id);
-
-			$.ajax({
-				url : "/chgPickPro",
-				type : "POST",
-				data : {chg_id : p_index},
-				dataType : 'json',
-				success : function(chgPickResult) {
-					if(chgPickResult.chgPick > 0) {
-						$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
-						alert("찜 성공");
-					} else {
-						$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
-						alert("찜 취소");
-					}
-
-				},
-				error : function() {
-					alert("찜하기 오류");
-				}
-			});
-		}
-		
-		function sharingPick(p_index) {
-	        // alert("sharingPick" + p_index);
-
-	        $.ajax({
-	            url: "/likePro",
-	            type: "POST",
-	            data: { brd_num: p_index },
-	            dataType: 'json',
-	            success: function (likeResult) {
-	                if (likeResult.likeProResult > 0) {
-	                    $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
-	                    alert("찜 성공");
-	                } else {
-	                    $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
-	                    alert("찜 취소");
-	                }
-
-	            },
-	            error: function () {
-	                alert("찜하기 오류");
-	            }
-	        });
-	    }
-
 	</script>
 </head>
 <body>
@@ -460,7 +459,8 @@
 			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
 			                                    ${board.price}원
 			                                </a><p>
-			                                <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
+			                                <i class="fas fa-heart me-1 text-primary"></i>
+			                                <a class="text-primary" id="likeCnt${board.brd_num}"> ${board.like_cnt}</a>
 			                                <i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
 			                                <i class="fas fa-comment text-secondary me-1"
 			                                   style="margin-left: 20px;"></i>${board.replyCount}
