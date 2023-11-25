@@ -1,16 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 <style type="text/css">
-	.flickity-viewport {  
-	  height: 400px !important;	  
-	}
-
 	.flickity-cell {
 	  width: 50%; /* half-width */
 	  height: 400px;
@@ -20,9 +16,20 @@
 	 #recomSlider .flickity-slider{
 		width: 100% !important; /* half-width */
 	}
+	
+	#srch_btn{
+		background-color: transparent;
+	}
+	
+	#searchVar{
+		width: 30%
+	}
+	.flickity-viewport {  
+	  height: 400px !important;
+	  padding: 10px
+	}
 </style>
 <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
-<%@ include file="/WEB-INF/views/header4.jsp" %>
 	<script type="text/javascript">
 		// 팔로우 하기 버튼
 		function following(p_index) {
@@ -206,20 +213,6 @@
 		}
 
 	</script>
-<style type="text/css">
-	#srch_btn{
-		background-color: transparent;
-	}
-	
-	#searchVar{
-		width: 30%
-	}
-	.flickity-viewport {  
-	  height: 400px !important;
-	  padding: 10px
-	}
-
-</style>	
 </head>
 <body>
 <section>
@@ -436,7 +429,7 @@
 	
 	<!-- yr 작성 -->
 	<!-- 최신 인증글 -->
-	<section class="py-12">
+	<section>
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
