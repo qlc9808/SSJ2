@@ -295,9 +295,8 @@
 			                  	~ 
 			                	<fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                </div>
-			                <div class="text-muted"><i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중</div>
-			                <span style="color: #e56d90;"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;</span>
-			                <span style="color: #e56d90;" id="inputPickCnt${chg.chg_id }">${chg.pick_cnt }</span>
+							<div class="text-muted"><i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중</div>
+			                <div style="color: #e56d90;" id="inputPickCnt${chg.chg_id }"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;${chg.pick_cnt }</div>
 			              </div>
 							
 			            </div>
