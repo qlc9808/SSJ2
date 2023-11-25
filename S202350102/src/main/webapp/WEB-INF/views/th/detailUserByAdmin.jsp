@@ -32,10 +32,10 @@
 				      <th rowspan="3" class="table-secondary">사진</th>
 					  <td rowspan="3">
 			  			  <c:if test="${user1.img != null}">
-		                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${user1.img}" alt="userImg" style="width: 100%; height: 150px; border-radius: 10px;" >
+		                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${user1.img}" alt="userImg" style="width: 80%; height: 150px; border-radius: 10px;" >
 		                  </c:if>
 		                  <c:if test="${user1.img == null}">
-		                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/뤂다방.png" alt="userDfault" style="width: 100%; height: 150px; border-radius: 10px;">
+		                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/뤂다방.png" alt="userDfault" style="width: 80%; height: 150px; border-radius: 10px;">
 		                  </c:if>
 					  </td>
 				    </tr>

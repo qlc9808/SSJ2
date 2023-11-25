@@ -212,7 +212,7 @@
 							<!-- Badge -->
 							<!-- 찜수  10이상 시 인기 챌린지 태그 달아줌 -->
 							<c:if test="${chg.pick_cnt >= 10 }">
-			                  	<h6><div class="badge bg-primary card-badge text-uppercase">인기</div></h6>
+			                  	<div class="badge bg-primary card-badge text-uppercase">인기</div>
 			                </c:if>
 			                <!-- Image -->
 			                <div class="card-img">
@@ -267,14 +267,14 @@
 			                  					   >
 			                  <c:if test="${chg.thumb != null}">
 			             		<c:if test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
-			                  		<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+			                  		<img class="card-img-top" src="assets/img/chgDfaultImg2.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 25px;">
 			                  	</c:if>
 			                  	<c:if test="${chg.thumb != 'assets/img/chgDfaultImg.png'}">
-			                  		<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
+			                  		<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 25px;" >
 			                  	</c:if>
 			                  </c:if>
 			                  <c:if test="${chg.thumb == null}">
-			                  	<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
+			                  	<img class="card-img-top" src="assets/img/chgDfaultImg2.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 25px;">
 			                  </c:if>
 
 							  </a>
