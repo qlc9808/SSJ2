@@ -7,5 +7,6 @@ public interface YrChallengePickDao {
 	int 	selectChgPickYN(ChallengPick chgPick);
 	int		deleteChgPick(ChallengPick chgPick);
 	int		insertChgPick(ChallengPick chgPick);
+	int 	selectChgPickCnt(int chg_id);
 
 }

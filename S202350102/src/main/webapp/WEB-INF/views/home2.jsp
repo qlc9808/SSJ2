@@ -62,7 +62,7 @@
 
 		// 좋아요 버튼
 		function likePro(type, p_index) {
-			let brd_num = '';
+			var brd_num = '';
 
 			if (type == '인증') {
 				brd_num = $('#brd_num' + p_index).val();
@@ -71,12 +71,7 @@
 			} else {	// modal안에 있는 댓글
 				brd_num = $('#brd_num_cmt' + p_index).val();
 			}
-
-			// like_cnt 변경하는 거 추가해야함
-			// let like_cnt = $('#like_cnt' + p_index).val();
-			// let inputLikeCnt = parseInt(like_cnt);
-
-			// const result = document.getElementById('inputLikeCnt' + p_index);
+			
 			$.ajax({
 				url: "/likePro",
 				type: "POST",
@@ -88,15 +83,12 @@
 					if (likeResult.likeProResult > 0) {
 						// 좋아요 insert
 						$('#likeBtn' + p_index).attr('src', '/images/yr/heart-fill.png');
-						// inputLikeCnt = inputLikeCnt + 1;
-
 					} else {
 						// 좋아요 delete
 						$('#likeBtn' + p_index).attr('src', '/images/yr/heart.png');
-						// inputLikeCnt = inputLikeCnt - 1;
 					}
-
-					// result.innerText = inputLikeCnt;
+					// 좋아요 수 실시간 반영
+					$('#inputLikeCnt' + p_index).text(likeResult.brdLikeCnt);
 				},
 				error: function () {
 					alert("좋아요 에러");
@@ -161,6 +153,56 @@
 			return true;
 		}
 		
+		// 챌린지 찜하기
+		function chgPick(p_index) {
+			// var chg_id = p_chg_id;
+			// alert("chg_id -> " + chg_id);
+
+			$.ajax({
+				url : "/chgPickPro",
+				type : "POST",
+				data : {chg_id : p_index},
+				dataType : 'json',
+				success : function(chgPickResult) {
+					if(chgPickResult.chgPick > 0) {
+						$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+						alert("찜 성공");
+					} else {
+						$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+						alert("찜 취소");
+					}
+
+				},
+				error : function() {
+					alert("찜하기 오류");
+				}
+			});
+		}
+		
+		function sharingPick(p_index) {
+	        // alert("sharingPick" + p_index);
+
+	        $.ajax({
+	            url: "/likePro",
+	            type: "POST",
+	            data: { brd_num: p_index },
+	            dataType: 'json',
+	            success: function (likeResult) {
+	                if (likeResult.likeProResult > 0) {
+	                    $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+	                    alert("찜 성공");
+	                } else {
+	                    $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+	                    alert("찜 취소");
+	                }
+	                $('#likeCnt' + p_index).text(likeResult.brdLikeCnt);
+	            },
+	            error: function () {
+	                alert("찜하기 오류");
+	            }
+	        });
+	    }
+		
 		function sh(){
 			if($("#shList").css("display") == "none" || $("#shList").css("display") == ""){
 			    $("#shList").show();
@@ -211,7 +253,6 @@
 		    
 			 return flkty;
 		}
-
 	</script>
 </head>
 <body>
@@ -360,29 +401,66 @@
 			                        <div class="card">
 			                            <!-- Image -->
 			                            <div class="card-img-top">
-			                                <button class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
-			                                        onclick="likePost(${board.brd_num})">
-			                                    <i class="fe fe-heart"></i>
-			                                </button>
+			                            
+			                            	<c:choose>
+						                        <c:when test="${sessionScope.user_num != null}">
+						                            <!-- 로그인 한 상태 -->
+						                            <c:choose>
+						                                <c:when test="${board.likeyn > 0}">
+						                                    <!-- 찜하기 있음 -->
+						                                    <button type="button"
+						                                        class="btn btn-xs btn-circle btn-primary card-action card-action-end"
+						                                        data-toggle="button" onclick="sharingPick(${board.brd_num})"
+						                                        id="sharingPick${board.brd_num}">
+						                                        <i class="fe fe-heart"></i>
+						                                    </button>
+						                                </c:when>
+						    
+						                                <c:otherwise>
+						                                    <!-- 찜하기 없음 -->
+						                                    <button type="button"
+						                                        class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
+						                                        data-toggle="button" onclick="sharingPick(${board.brd_num})"
+						                                        id="sharingPick${board.brd_num}">
+						                                        <i class="fe fe-heart"></i>
+						                                    </button>
+						                                </c:otherwise>
+						                            </c:choose>
+						                        </c:when>
+						    
+						                        <c:otherwise>
+						                            <!-- 로그인 안 한 상태 -->
+						                            <button type="button"
+						                                class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
+						                                data-toggle="button" onclick="location.href='/loginForm'">
+						                                <i class="fe fe-heart"></i>
+						                            </button>
+						                        </c:otherwise>
+						                    </c:choose>
+						                    
 			                                <button class="btn btn-xs w-100 btn-dark card-btn"
 			                                        onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
 			                                    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 			                                </button>
-			                                <img class="card-img-top"
-			                                     src="${pageContext.request.contextPath}/upload/${board.img}" alt="..."
-			                                     style="width: 100%; height: 200;">
+			                                <a class="text-body"
+			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+				                                <img class="card-img-top"
+				                                     src="${pageContext.request.contextPath}/upload/${board.img}" alt="..."
+				                                     style="width: 100%; height: 200;">
+			                                </a>
 			                            </div>
 			                            <!-- Body -->
 			                            <div class="card-body py-4 px-0 text-center">
-			                                <a class="stretched-link text-body"
+			                                <a class="text-body"
 			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
 			                                    ${board.title}
 			                                </a><p>
-			                                <a class="stretched-link text-primary"
+			                                <a class="text-primary"
 			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
 			                                    ${board.price}원
 			                                </a><p>
-			                                <a class="stretched-link text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
+			                                <i class="fas fa-heart me-1 text-primary"></i>
+			                                <a class="text-primary" id="likeCnt${board.brd_num}"> ${board.like_cnt}</a>
 			                                <i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
 			                                <i class="fas fa-comment text-secondary me-1"
 			                                   style="margin-left: 20px;"></i>${board.replyCount}

@@ -50,9 +50,12 @@
 			success : function(chgPickResult) {
 				if(chgPickResult.chgPick > 0) {
 					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+					alert("찜 성공");
 				} else {
 					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+					alert("찜 취소");
 				}
+				$("#inputPickCnt" + p_index).text(chgPickResult.chgPickCnt);
 
 			},
 			error : function() {
@@ -293,7 +296,8 @@
 			                	<fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                </div>
 			                <div class="text-muted"><i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중</div>
-			                <div style="color: #e56d90;"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;${chg.pick_cnt }</div>
+			                <span style="color: #e56d90;"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;</span>
+			                <span style="color: #e56d90;" id="inputPickCnt${chg.chg_id }">${chg.pick_cnt }</span>
 			              </div>
 							
 			            </div>

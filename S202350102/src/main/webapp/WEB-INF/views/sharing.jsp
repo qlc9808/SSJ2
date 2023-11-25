@@ -38,7 +38,7 @@ function renderTable(data) {
              tableHTML += "<div class='col-6 col-md-4' style='padding-left: 8px; padding-right: 8px;'>"+
                 "<div class='card mb-7'>"+
                     "<div class='card-img'>"+
-                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='likePost("+`${board.brd_num}`+")'>"+
+                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='sharingPick("+`${board.brd_num}`+")'>"+
                             "<i class='fe fe-heart'></i>"+
                        " </button>"+
                        "<button class='btn btn-xs w-100 btn-dark card-btn' onclick='location.href=\"detailSharing?user_num=" + board.user_num + "&brd_num=" + board.brd_num + "\"'>" +
@@ -92,10 +92,8 @@ $("#sortOption").change(function() {
 
     // yr 작성
 	// 찜하기 기능
-    // ajax 작동 후 찜 갯수 count 되는거 구현해볼까
 	function sharingPick(p_index) {
-        // alert("sharingPick" + p_index);
-
+    	
         $.ajax({
             url: "/likePro",
             type: "POST",
@@ -104,10 +102,12 @@ $("#sortOption").change(function() {
             success: function (likeResult) {
                 if (likeResult.likeProResult > 0) {
                     $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+                    alert("찜 성공");
                 } else {
                     $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+                    alert("찜 취소");
                 }
-
+				$('#likeCnt' + p_index).text(likeResult.brdLikeCnt);
             },
             error: function () {
                 alert("찜하기 오류");
@@ -229,9 +229,8 @@ $("#sortOption").change(function() {
                         <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                             ${board.price}원</a>
                     <p>
-                        <a class="text-primary" id="likeCnt${board.brd_num}">
-                            <i class="fas fa-heart me-1"></i> ${board.like_cnt}
-                        </a>
+                        <i class="fas fa-heart me-1 text-primary"></i>
+                        <a class="text-primary" id="likeCnt${board.brd_num}"> ${board.like_cnt}</a>
                         <i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
                         <i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}
                 </div>

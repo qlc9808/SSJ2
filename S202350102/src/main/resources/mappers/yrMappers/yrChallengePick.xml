@@ -21,5 +21,10 @@
 		INSERT INTO chg_pick (chg_id, user_num)
 		VALUES (#{chg_id}, #{user_num})
 	</insert>
+	
+	<select id="chgPickCnt" parameterType="int" resultType="int">
+		select count_pick(#{chg_id})
+		from dual
+	</select>
 	  
 </mapper>

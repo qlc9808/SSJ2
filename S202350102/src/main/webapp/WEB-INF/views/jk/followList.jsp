@@ -1,13 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../header4.jsp" %>
-
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>팔로우 리스트</title>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
   // yr 작성
   // following 버튼
@@ -284,5 +282,5 @@
     </div>
   </div>
 </body>
-<%@ include file="../footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

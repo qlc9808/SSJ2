@@ -55,8 +55,12 @@ public class YrController {
 		
 //		return "forward:chgDetail?chg_id=" + chgr.getChg_id() + "&insertResultStr=" + insertResult;	// forward 안써도 가능. 왜냐면 parameter를 직접 보내기 때문이다
 //		return "redirect:chgDetail?chg_id=" + chgr.getChg_id() + "&insertResultStr=" + insertResult;
+		int chgrParti = ycs.selectChgrParti(chgr.getChg_id());
+		System.out.println("챌린지 참여 인원 -> " + chgrParti);
+		
 		Map<String, Object> joinResult = new HashMap<>();
 		joinResult.put("chgJoin", insertResult);
+		joinResult.put("nowChgParti", chgrParti);
 		
 		return joinResult;
 	}
@@ -178,12 +182,17 @@ public class YrController {
 		}
 
 		ChallengPick chgPick = new ChallengPick();
-		Map<String, Object> chgPickResult = new HashMap<>();
 		chgPick.setChg_id(chg_id);
 		chgPick.setUser_num(userNum);
 		int chgPickPro = ycps.chgPick(chgPick); 
 		System.out.println("YrController chgPickPro chgPickPro -> " + chgPickPro);
+		
+		int chgPickCnt = ycps.selectChgPickCnt(chg_id);
+		
+		Map<String, Object> chgPickResult = new HashMap<>();
 		chgPickResult.put("chgPick", chgPickPro);
+		chgPickResult.put("chgPickCnt", chgPickCnt);
+		
 		return chgPickResult;
 	}
 	
@@ -209,8 +218,14 @@ public class YrController {
 		int likeProResult = ybls.likePro(brdLike);
 		System.out.println("YrController likePro likeProResult -> " + likeProResult);
 		
+		int brdLikeCnt = ybls.selectBrdLikcCnt(brd_num);
+		System.out.println("YrController likePro likeProResult -> " + brdLikeCnt);
+		
 		Map<String, Object> likeResult = new HashMap<>();
 		likeResult.put("likeProResult", likeProResult);
+		likeResult.put("brdLikeCnt", brdLikeCnt);
+		
+		System.out.println("map -> " + likeResult);
 		
 		return likeResult;
 	}

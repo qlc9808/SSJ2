@@ -22,4 +22,9 @@
 		VALUES (#{brd_num}, #{user_num})
 	</insert>
 	
+	<select id="yrBrdLikeCnt" parameterType="int" resultType="int">
+		select count_like(#{brd_num})
+		from dual
+	</select>
+	
 </mapper>
