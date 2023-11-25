@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>챌린지 리스트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 
 <script type="text/javascript">
@@ -26,12 +28,14 @@
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
 		var currentPage	=	${page.currentPage}
+		var keyword 	=	"${chg.keyword}"
 		
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt
-								+'&currentPage='+currentPage;
+								+'&currentPage='+currentPage
+								+'&keyword='+keyword;
 	}
 
 	// yr 작성
@@ -80,12 +84,14 @@
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
 		var currentPage	=	${page.currentPage}
+		var keyword 	=	"${chg.keyword}"
 		
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt
-								+'&currentPage='+currentPage;
+								+'&currentPage='+currentPage
+								+'&keyword='+keyword;
 	}
 	// 다른 페이지로 이동
 	function movePage(p_index) {
@@ -95,12 +101,14 @@
  		var chg_md 		= 	${chg.chg_md}
 		//	movaPage에 index를 넣어서 페이지이동 시킴
  		var pageNum		=	document.getElementById('movePage'+p_index).innerText
+ 		var keyword 	=	"${chg.keyword}"
 		
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt
-								+'&currentPage='+pageNum;
+								+'&currentPage='+pageNum
+								+'&keyword='+keyword;
 	}
 	
 	// 이전 블럭 이동
@@ -110,12 +118,14 @@
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
 		var pageNum		=	${page.startPage - page.pageBlock }
+		var keyword 	=	"${chg.keyword}"
 
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt
-								+'&currentPage='+pageNum;
+								+'&currentPage='+pageNum
+								+'&keyword='+keyword;
 	}
 	
 	// 다음 블럭 이동
@@ -125,14 +135,26 @@
  		var chg_lg 		= 	${chg.chg_lg}
  		var chg_md 		= 	${chg.chg_md}
 		var pageNum		=	${page.startPage + page.pageBlock }
+		var keyword 	=	"${chg.keyword}"
 
 		location.href= 'thChgList?state_md='+state_md
 								+'&chg_lg='+chg_lg
 								+'&chg_md='+chg_md
 								+'&sortOpt='+sortOpt
-								+'&currentPage='+pageNum;
+								+'&currentPage='+pageNum
+								+'&keyword='+keyword;
 	}
 	
+	// 검색 구현
+	$(function() {
+		$("#searchButton").click(function () {
+			var keyword 	=	$("#keyword").val();
+			var state_md 	=	${chg.state_md}
+			// 진행중,종료된 챌린지를 체크하기위해서 status_md를 넣어줌
+			location.href = '/thChgList?keyword='+keyword+'&state_md='+state_md					
+
+		})
+	})
 
 </script>
 </head>
@@ -146,15 +168,19 @@
         <div class="row">
        		<div class="col-12 text-center">
 				    <!-- Heading -->
-                	<h3 class="mb-10">챌린지
-		                <c:choose>
+				    <h3 class="mb-10">
+				    	<c:if test="${chg.state_md == 103 }">종료된 </c:if>
+                		챌린지
+                	<span class="fs-5">
+                	 	<c:choose>
 		                	<c:when test="${chg.chg_md == ''}"></c:when>	
 		                	<c:when test="${chg.chg_md == 100}"> - 운동</c:when>
 		                	<c:when test="${chg.chg_md == 101}"> - 공부</c:when>
 		                	<c:when test="${chg.chg_md == 102}"> - 취미</c:when>
 		                	<c:when test="${chg.chg_md == 103}"> - 습관</c:when>
 		                </c:choose>
-                	</h3>
+		            </span>
+		            </h3>
        		</div>
        		<%@ include file="/WEB-INF/views/chgSidebar.jsp" %>
 		  	
@@ -183,7 +209,11 @@
 						
 			               <!-- Card -->
 			              <div class="card mb-7">
-			
+							<!-- Badge -->
+							<!-- 찜수  10이상 시 인기 챌린지 태그 달아줌 -->
+							<c:if test="${chg.pick_cnt >= 10 }">
+			                  	<h6><div class="badge bg-primary card-badge text-uppercase">인기</div></h6>
+			                </c:if>
 			                <!-- Image -->
 			                <div class="card-img">
 			
@@ -252,16 +282,18 @@
 			              
 			              <!-- Body -->
 			              <div class="card-body fw-bold text-start px-0 py-2">
-			                <a class="text-body fw-bolder fs-6" <c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd${status.index }" data-bs-toggle="modal"</c:if>
-			                									<c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
-			                									id="title">${num}.${chg.title }</a>
-			                <div> 
-			                 <fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
-			                  ~ 
-			                 <fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
-			                 </div>
-			                <div>참여인원: ${chg.chlgerCnt}명</div>
-			                <div>찜수: ${chg.pick_cnt }</div>
+			                <div class="mb-1">
+				                <a class="text-body fw-bolder fs-6" 	
+				                	<c:if test="${chg.chg_public == 1 }"> href="#modalMatchPswd${status.index }" data-bs-toggle="modal"</c:if>
+									<c:if test="${chg.chg_public == 0 }"> href="/chgDetail?chg_id=${chg.chg_id }"</c:if>
+				                id="title">${chg.title }</a>
+			                </div>
+			                <div class="text-muted"><i class="bi bi-alarm-fill" style="width:16px"></i>&ensp;<fmt:formatDate value="${chg.create_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+			                  	~ 
+			                	<fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
+			                </div>
+			                <div class="text-muted"><i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중</div>
+			                <div style="color: #e56d90;"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;${chg.pick_cnt }</div>
 			              </div>
 							
 			            </div>
@@ -352,6 +384,23 @@
 					</c:if>
 				 </ul>
 		  		</nav>
+		  		
+		  		<!-- 게시판 검색 (옵션 제목, 작성자)-->
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목 검색" value="${chg.keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton">
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				
+				        </div>
+				    </div>
+				</div>
+				
 			</div>
 		
       </div>

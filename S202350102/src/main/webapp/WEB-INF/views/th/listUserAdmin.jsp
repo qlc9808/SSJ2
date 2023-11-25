@@ -23,8 +23,8 @@
 			<div class="col-10">
 			<c:set var="num" value="${page.total-page.start+1 }"></c:set>
 			
-				<table class="table table-bordered table-sm mb-0">
-				  <thead>
+				<table class="table table-bordered table-hover table-sm mb-0">
+				  <thead class="table-dark">
 					<tr class="p-2 text-center">
 						<th>번호</th>
 						<th>아이디</th>
