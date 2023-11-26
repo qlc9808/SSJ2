@@ -25,6 +25,7 @@ public interface ThUser1Service {
 	int 			deleteUserByAdmin(int user_num);
 	int 			activeUserByAdmin(int user_num);
 	int 			updateUserAdmin(User1 user1);
+	int 			updateUserNormal(int user_num);
 
 	
 	

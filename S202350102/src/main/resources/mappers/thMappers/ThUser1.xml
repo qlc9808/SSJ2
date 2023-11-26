@@ -114,5 +114,10 @@
 		WHERE	user_num 	=	#{user_num}
 	</update>
 	
+	<update id="thUpdateUserNormal" parameterType="int">
+		UPDATE 	user1
+		SET	   	status_md = 100
+		WHERE  	user_num  = #{user_num}
+	</update>
 </mapper>
 

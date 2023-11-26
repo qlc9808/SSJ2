@@ -9,5 +9,6 @@ public interface ThOrder1Service {
 	Order1 			selectOrderJoinMem(Order1 order1);
 	int 			updateOrderSucess(int order_num);
 	Order1 			selectOrderSucess(int user_num);
+	int 			updateOrderRefund(String tid);
 
 }

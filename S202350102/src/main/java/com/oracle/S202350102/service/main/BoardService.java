@@ -6,6 +6,7 @@ import com.oracle.S202350102.dto.Board;
 
 public interface BoardService {
 
-	List<Board> selectChgCert(int userNum);
+	List<Board> selectChgCert(Board board);
+	int 		selectTotBrd();
 
 }

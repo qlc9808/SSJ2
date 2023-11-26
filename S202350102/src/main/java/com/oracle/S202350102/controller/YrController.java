@@ -131,12 +131,10 @@ public class YrController {
 		
 		// 팔로잉 리스트 출력
 		List<User1> followingList = yfis.followingList(userNum);
-		System.out.println("YrController followingList -> " + followingList);
 		model.addAttribute("followingList", followingList);
 		
 		// 팔로우 리스트 출력
 		List<User1> followerList = yfis.followerList(userNum);
-		System.out.println("YrController followerList -> " + followerList);
 		model.addAttribute("followerList", followerList);
 		
 		return "jk/followList";

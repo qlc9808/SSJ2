@@ -50,4 +50,12 @@ public class ThOrder1ServiceImpl implements ThOrder1Service {
 		return order1;
 	}
 
+	@Override
+	public int updateOrderRefund(String tid) {
+		System.out.println("ThOrder1ServiceImpl updateOrderRefund Start...");
+		int updateOrderResult = od1.updateOrderRefund(tid);
+		
+		return updateOrderResult;
+	}
+
 }
