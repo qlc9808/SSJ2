@@ -516,7 +516,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12">
+				<div class="col-12" id="certListContainer">
 		
 					<!-- 인증글 시작 -->
 					<c:forEach var="certList" items="${chgCertList }" varStatus="status">
@@ -537,7 +537,6 @@
 						<input type="hidden" id="chg_id${status.index}" value="${certList.chg_id}">
 					
 						<c:if test="${certList.brd_step == 0 }">
-					
 							<div class="mt-3 d-flex justify-content-center">
 					
 								<!-- Card -->
@@ -1017,6 +1016,23 @@
 							</div>
 						</div>
 					</c:forEach>
+					<input type="hidden" id="page" value="2">
+					
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$(window).scroll(function () {
+								if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+									loadMoreData();
+								}
+							});
+						});
+						
+						function loadMoreData() {
+							var page = $('#page').val();
+							
+							alert("page -> " + page);
+						}
+					</script>
 				</div>
 			</div>
 		</div>

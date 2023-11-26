@@ -15,9 +15,15 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardDao bd;
 
 	@Override
-	public List<Board> selectChgCert(int userNum) {
-		List<Board> chgCert = bd.selectChgCert(userNum);
+	public List<Board> selectChgCert(Board board) {
+		List<Board> chgCert = bd.selectChgCert(board);
 		return chgCert;
+	}
+
+	@Override
+	public int selectTotBrd() {
+		int result = bd.selectTotBrd();
+		return result;
 	}
 
 }

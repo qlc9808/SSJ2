@@ -55,8 +55,8 @@
 					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
 					alert("찜 취소");
 				}
-				$("#inputPickCnt" + p_index).text(chgPickResult.chgPickCnt);
-
+				$("#inputPickCnt" + p_index).html('<div style="color: #e56d90;" id="inputPickCnt${chg.chg_id }"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;' + chgPickResult.chgPickCnt + '</div>');
+				
 			},
 			error : function() {
 				alert("찜하기 오류");
