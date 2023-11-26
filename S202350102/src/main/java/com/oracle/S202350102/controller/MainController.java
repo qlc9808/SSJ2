@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.BoardService;
 import com.oracle.S202350102.service.main.UserService;
 
@@ -26,7 +27,7 @@ public class MainController {
 	private final ChController chController;
 	
 	@RequestMapping(value ="/")
-	public String index(HttpSession session, Model model) {
+	public String index(HttpSession session, Model model, String currentPage, Board board) {
 		System.out.println("MainController index Start...");
 		
 		// yr 작성
@@ -37,15 +38,23 @@ public class MainController {
 			System.out.println("MainController index userNum -> " + userNum);
 		}
 		
-		// 인증게시판 출력
-		List<Board> chgCert = bs.selectChgCert(userNum);
-		chgCert = us.boardWriterLevelInfo(chgCert);
-		
 		//유저 정보(회원번호) 조회
 		User1 user = userService.userSelect(userNum);
 		
+		// paging 작업
+		int totBrd = bs.selectTotBrd();
+		Paging page = new Paging(totBrd, currentPage);
+		
+		// 인증게시판 출력
+		board.setUser_num(userNum);
+		board.setStart(page.getStart());
+		board.setEnd(page.getEnd());
+		List<Board> chgCert = bs.selectChgCert(board);
+		chgCert = us.boardWriterLevelInfo(chgCert);
+		
 		model.addAttribute("chgCertList", chgCert);
 		model.addAttribute("user", user);
+		model.addAttribute("page", page);
 		chController.search(model, session);
 		
 		return "home2";

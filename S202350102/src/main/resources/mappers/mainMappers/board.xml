@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oracle.S202350102.BoardMapper">
-	<select id="chgCert" parameterType="int" resultType="Board">
+	<select id="chgCert" parameterType="Board" resultType="Board">
 		Select b.*, u.nick, u.img as user_img
 		    , replyCount(b.brd_num) replyCount
 		    , count_like(b.brd_num) as like_cnt
@@ -25,5 +25,12 @@
 		order by b.reg_date desc, b.brd_step desc
 	</select>
 	
+	<select id="chgCertTot" resultType="int">
+		select count(*)
+		from board
+		where brd_lg = 700
+		and brd_md = 100
+		and brd_step = 0
+	</select>
 	
 </mapper>
