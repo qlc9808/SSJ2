@@ -50,6 +50,7 @@
 	    var chg_lg 	  = ${chg_lg}
 	    var chg_md    = ${chg_md}
 	    var sortOpt   = $('#sortOpt').val()
+	    var chg_md 		= 	$('.nav-link.active').data('md');
 	    //페이지 번호
 	    var pageNum   = document.getElementById('pageMove'+p_index).innerText
 	    
@@ -82,6 +83,7 @@
 	    var chg_lg 	  = ${chg_lg}
 	    var chg_md    = ${chg_md}
 	    var sortOpt   = $('#sortOpt').val()
+	    var chg_md 		= 	$('.nav-link.active').data('md');
 	 
 	    //필터 선택한 경우(진행중/종료 챌린지인 경우)
 	    if(sortOpt != null){
@@ -114,11 +116,11 @@
 		var currentPage = ${page.currentPage}
 	    var chg_lg 	  	= ${chg_lg}
 	    var sortOpt   	= $('#sortOpt').val()
-	    
+	    var chg_md 		= 	$('.nav-link.active').data('md');
 	    //필터 있는 경우 (진행/종료 챌린지)
    	    if(sortOpt != null){
 		    if(chg_lg == 0){
-				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg;
+				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0";
 		    	
 		    } else {
 				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg+"&chg_md="+chg_md;

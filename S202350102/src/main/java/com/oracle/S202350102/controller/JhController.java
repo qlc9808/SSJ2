@@ -933,12 +933,12 @@ public class JhController {
 								, HttpSession session
 								, Model model
 								, @RequestParam(value = "chgUpdateMode", required = false) String chgUpdateMode
-								, @RequestParam(value = "result", required = false) String result
+								//, @RequestParam(value = "result", required = false) String result
 								, @RequestParam(value = "currentPage", required = false) String currentPage
 								, @RequestParam(value = "chg_lg", required = false) Integer chgLg
 								) {
 		//chgUpdateMode는 업데이트 페이지로 이동하기 위한 파라미터 0이면 일반 상세 페이지 1이면 업데이트용 페이지
-		//result는 업데이트 후 다시 상세 페이지로 돌아와서 성공 유무 알리기 위한 파라미터
+		//result는 업데이트 후 다시 상세 페이지로 돌아와서 성공 유무 알리기 위한 파라미터 -> 지금은 처음 상세펭지 들어왔을 때 result 값이 없어서 발생하는 자바스크립트 오류 ㄷ때문에 삭제 시간 남으면 result 유무 따라 성공 유무 알리는 alert 창 만들 예정
 		System.out.println("JhController chgAdminDetail Start...");
 		
 		System.out.println("JhController chgDetail chgLg -> " + chgLg);
@@ -951,24 +951,26 @@ public class JhController {
 		//반려사유 종류
 		int returnCategoryLd = 500;
 		List<Comm> returnReason = jhCService.category(returnCategoryLd);
-		
 		model.addAttribute("returnReason", returnReason);
 		System.out.println("JhController chgAdminDetail  returnReason --> " + returnReason);
 		
 		
 		
-		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것 ->수정하기
+		//필터 유무 판별용 -> 꼭 챌린지 상세 정보 가져 오기 전에 셋팅해야 함?
+		String sortOpt = chg.getSortOpt();
+		if(sortOpt == null) {
+			sortOpt = "null";
+		}
+		model.addAttribute("sortOpt", sortOpt);
 		
 		
-		
-		
+		//챌린지 id
 		int chg_id = chg.getChg_id();
 		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
 		
 		//챌린지 상세 정보
 		chg = jhCService.chgDetail(chg_id);
 		
-		System.out.println("JhController chgDetail sortOpt -> " + chg.getSortOpt());
 		
 		int chgrParti = ycs.selectChgrParti(chg_id);
 		System.out.println("JhController chgDetail chgrParti -> " + chgrParti);
@@ -977,12 +979,18 @@ public class JhController {
 		model.addAttribute("chg", chg);
 		model.addAttribute("state_md", state_md);
 		model.addAttribute("currentPage", currentPage);
+		//카테고리 선택 유무 판별용
+		if(chgLg == null) {
+			chgLg = 0;
+		}
 		model.addAttribute("chgLg", chgLg);
+
 		
-		//업데이트용 페이지 이동
 		
+		
+		
+		/////////업데이트용 페이지 이동/////////
 		System.out.println("JhController chgDetail chgUpdateMode -> " + chgUpdateMode);
-		
 		if(chgUpdateMode.equals("1")) {
 			System.out.println("JhController chgDetail 수정 페이지로 이동 ");
 			
@@ -992,11 +1000,13 @@ public class JhController {
 			
 			model.addAttribute("category", category);
 
-			//진행상태 리스트 가져오기
-			int stateMd = 300;
-			List<Comm> stateMdCategory = jhCService.category(stateMd);
-			model.addAttribute("stateMdCategory", stateMdCategory);
+			//진행상태 리스트 가져오기 -> 진행상태 수정 못하게 해서 삭제 예정
+			/*
+			 * int stateMd = 300; List<Comm> stateMdCategory = jhCService.category(stateMd);
+			 * model.addAttribute("stateMdCategory", stateMdCategory);
+			 */
 			
+			//fmt 안쓰고 원하는 형식으로 표현하기 위함
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String end_date = dateFormat.format(chg.getEnd_date());			
 			String reg_date = dateFormat.format(chg.getReg_date());
@@ -1007,12 +1017,12 @@ public class JhController {
 			model.addAttribute("create_date", create_date);
 			
 			
-			
+			//수정 화면으로 이동
 			return "jh/jhChgAdminUpdateForm";
 		}
 		
 		//수정 완료 후 돌아왔을 떄 결과 값 저장해서 수정 성공 여부  chgAdminDetail에서 alert 창 보여주기 위한 용도
-		model.addAttribute("result",result);
+		//model.addAttribute("result",result);
 		
 		return "jh/chgAdminDetail";
 		
