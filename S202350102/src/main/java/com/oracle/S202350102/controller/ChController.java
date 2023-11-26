@@ -277,6 +277,44 @@ public class ChController {
 		return "search";
 	}
 	
+	@ResponseBody
+	@GetMapping("popChgList")
+	public ModelAndView popChgList( ModelAndView mav) {
+		System.out.println("ChController popChgList STart...");
+		List<Challenge> popchgList = chChallengeService.popchgList(); // 챌린지
+		
+		mav.addObject("popchgList", popchgList);
+		mav.setViewName("ch/ajaxPage/popChgListPage");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@GetMapping("popShareList")
+	public ModelAndView popShareList( ModelAndView mav) {
+		System.out.println("ChController popChgList STart...");
+		List<Board> popShareList = chBoardService.popShareList();
+		
+		mav.addObject("popShareList", popShareList);
+		mav.setViewName("ch/ajaxPage/popShareListPage");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@GetMapping("popCommuList")
+	public ModelAndView popCommuList( ModelAndView mav) {
+		System.out.println("ChController popChgList STart...");
+		List<Board> popBoardList = chBoardService.popBoardList();
+		
+		mav.addObject("popBoardList", popBoardList);
+		mav.setViewName("ch/ajaxPage/popCommuList");
+		
+		return mav;
+	}
+	
+	
+	
 	// 검색기능 
 	@GetMapping("searching")
 	public String searching(String srch_word, HttpSession session, Model model) {

@@ -212,7 +212,8 @@
 			}
 		}
 		
-		$(function(){
+
+		$(function(){	 			
 			$.ajax(
 				{
 					type:"GET",
@@ -221,38 +222,96 @@
 					success:function(data){
 						var str = hisList(data);
 						$("#listCont").html(str);
+						
 					}
 				}		
-			);
+			);	
 			
-			initFlickity(1);
-			
-			
-			
-		});
+		});		
 		
-		function initFlickity(data){
-			for(i=1; i<3; i++){
-				var flkty = $('#myslider'+i).data('flickity');
-			    if (flkty) {
-			        flkty.destroy();
-				}
-			 
-		    }
-			
-			var option = {
-				    "prevNextButtons": true,
-				    "draggable": true,
-				    "contain": true,
-				    "cellAlign": "left",
-				    "pageDots": false
-				}
-			
-		   
-		    var flkty = new Flickity('#myslider'+data, option);
-		    
-			 return flkty;
+		
+		function clickLoad(index) {				
+			// Flickity 인스턴스 제거
+		    /* var flkty = $('#mySlider').data('flickity');
+		    if (flkty) {
+		        flkty.destroy();				       
+		    }	 */
+				    
+					
+					if(index == 1) {
+						
+						// 참여 챌린지
+						$.ajax(
+								{
+									
+									url: "popChgList",
+									dataType:"html",
+									success:function(data){
+										
+										$("#Commu").html(data);
+										/* $("#mySlider").html(data); */						
+											
+									    initFlickity();
+										
+										
+									}
+								}		
+							);
+						
+					} else if(index == 2) {						
+						// 신청한 챌린지
+						$.ajax(
+								{
+									
+									url: "popShareList",
+									dataType:"html",
+									success:function(data){
+										
+										$("#Commu").html(data);
+										/* $("#mySlider").html(data);																	    
+										 */
+								        //Flickity 초기화
+									    initFlickity();
+									}
+								}		
+							);			
+					
+					} else {
+						$.ajax(
+								{
+									
+									url: "popCommuList",
+									dataType:"html",
+									success:function(data){
+										
+										$("#Commu").html(data);			    
+										
+								       
+									}
+								}		
+							);
+					}
+				
+				
 		}
+		
+		function initFlickity() {
+
+		    // Flickity 초기화 초기화 위해 객체 생성
+		    var flkty = new Flickity('#mySlider', {
+		        prevNextButtons: true, // 이전 및 다음 버튼 활성화
+		        draggable: true, // 드래깅 활성화
+		        // 필요한 경우 더 많은 옵션을 추가할 수 있습니다.
+		         contain: true ,// 부모 요소에 캐러셀을 포함시킵니다.
+		         cellAlign: 'left',
+		         pageDots: false
+		    });
+		    
+		    //리턴값을 줘서 사용(없어도 됨)
+		    return flkty;
+		}		
+		
+		
 	</script>
 </head>
 <body>
@@ -301,18 +360,18 @@
 
             <!-- Nav -->
             <div class="nav justify-content-center mb-10">
-              <a class="nav-link" href="#popChg" data-bs-toggle="tab" onclick="initFlickity('1')">인기 챌린지</a>
-              <a class="nav-link active" href="#popShare" data-bs-toggle="tab" onclick="initFlickity('2')">인기 쉐어링</a>              
-              <a class="nav-link" href="#popCommu" data-bs-toggle="tab">인기 자유글</a>              
+              <a class="nav-link active" href="#popChg" data-bs-toggle="tab" onclick="clickLoad(1)">인기 챌린지</a>
+              <a class="nav-link" href="#popChg" data-bs-toggle="tab" onclick="clickLoad(2)">인기 쉐어링</a>              
+              <a class="nav-link" href="#popChg" data-bs-toggle="tab" onclick="clickLoad(0)">인기 자유글</a>              
             </div>
 
             <!-- Content -->
             <div class="tab-content">
 
               <!-- Pane -->
-              <div class="tab-pane fade" id="popChg">
-				
-                <div id="" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
+              <div class="tab-pane fade show active" id="popChg">
+				<div id="Commu">
+                <div id="mySlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
 
                   <!-- Item2 -->
                   <c:forEach var="chg" items="${popchgList }">
@@ -384,114 +443,11 @@
 
                 </div>
                  <!-- Slider -->
-                 
+                 </div>
 				
               </div>
-              <!-- Pane -->
-              <!-- Pane popShare -->
-             <div class="tab-pane fade show active" id="popShare">
-             
-			    <!-- Slider -->
-			    <div id="myslider2" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true,"cellAlign": left}'>
-			        <div class="row">
-			            <c:forEach var="board" items="${popShareList}">
-			                <!-- Item -->
-			                <div class="col px-4 " style="max-width: 400px;">
-			                    
-			                        <div class="card">
-			                            <!-- Image -->
-			                            <div class="card-img-top">
-			                            
-			                            	<c:choose>
-						                        <c:when test="${sessionScope.user_num != null}">
-						                            <!-- 로그인 한 상태 -->
-						                            <c:choose>
-						                                <c:when test="${board.likeyn > 0}">
-						                                    <!-- 찜하기 있음 -->
-						                                    <button type="button"
-						                                        class="btn btn-xs btn-circle btn-primary card-action card-action-end"
-						                                        data-toggle="button" onclick="sharingPick(${board.brd_num})"
-						                                        id="sharingPick${board.brd_num}">
-						                                        <i class="fe fe-heart"></i>
-						                                    </button>
-						                                </c:when>
-						    
-						                                <c:otherwise>
-						                                    <!-- 찜하기 없음 -->
-						                                    <button type="button"
-						                                        class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
-						                                        data-toggle="button" onclick="sharingPick(${board.brd_num})"
-						                                        id="sharingPick${board.brd_num}">
-						                                        <i class="fe fe-heart"></i>
-						                                    </button>
-						                                </c:otherwise>
-						                            </c:choose>
-						                        </c:when>
-						    
-						                        <c:otherwise>
-						                            <!-- 로그인 안 한 상태 -->
-						                            <button type="button"
-						                                class="btn btn-xs btn-circle btn-white-primary card-action card-action-end"
-						                                data-toggle="button" onclick="location.href='/loginForm'">
-						                                <i class="fe fe-heart"></i>
-						                            </button>
-						                        </c:otherwise>
-						                    </c:choose>
-						                    
-			                                <button class="btn btn-xs w-100 btn-dark card-btn"
-			                                        onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
-			                                    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
-			                                </button>
-			                                <a class="text-body"
-			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-				                                <img class="card-img-top"
-				                                     src="${pageContext.request.contextPath}/upload/${board.img}" alt="..."
-				                                     style="width: 100%; height: 200;">
-			                                </a>
-			                            </div>
-			                            <!-- Body -->
-			                            <div class="card-body py-4 px-0 text-center">
-			                                <a class="text-body"
-			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-			                                    ${board.title}
-			                                </a><p>
-			                                <a class="text-primary"
-			                                   href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-			                                    ${board.price}원
-			                                </a><p>
-			                                <i class="fas fa-heart me-1 text-primary"></i>
-			                                <a class="text-primary" id="likeCnt${board.brd_num}"> ${board.like_cnt}</a>
-			                                <i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
-			                                <i class="fas fa-comment text-secondary me-1"
-			                                   style="margin-left: 20px;"></i>${board.replyCount}
-			                            </div>
-			                        </div>
-			                    
-			                </div>
-			                <!-- Item -->
-			            </c:forEach>
-			        </div>
-			    </div>
-			    <!-- Slider -->
-			    
-			</div>
-			<!-- Pane popShare -->
-			<div class="tab-pane fade" id="popCommu">
-				<table class="table">
-					<tr>
-						<td>제목</td><td>작성자</td><td>등록일</td><td>조회수</td><td>댓글수</td>
-					</tr>
-					<c:forEach var="popBoard" items="${popBoardList }">
-						<tr>
-							<td><a href="detailCommunity?user_num=${popBoard.user_num}&brd_num=${popBoard.brd_num}">${popBoard.title }</a></td>
-							<td>${popBoard.nick }</td>							
-							<td><fmt:formatDate value="${popBoard.reg_date }" pattern="yyyy-MM-dd" /></td>
-							<td>${popBoard.view_cnt }</td>
-							<td>${popBoard.replyCount }</td>
-						</tr>
-					</c:forEach>
-				</table>
-			</div>
+              <!-- Pane -->              
+              
           </div>
           <!-- Content -->
             

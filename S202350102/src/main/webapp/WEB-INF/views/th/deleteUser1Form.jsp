@@ -18,7 +18,6 @@
 	}
 </script>
 <body>
-<c:import url="/WEB-INF/views/header4.jsp"/>
 <!-- CONTENT -->
     <section class="py-12">
       <div class="container">
