@@ -1048,6 +1048,7 @@ public class JhController {
 	public String chgAdminUpdate(Challenge chg,  HttpServletRequest request,
 			  @RequestParam(value = "sampleImgFile") MultipartFile sampleImgFile,
 			  @RequestParam(value = "thumbFile", required = false) MultipartFile thumbFile) throws Exception {
+		
 		System.out.println("JhController chgAdminUpdate Start...");
 		System.out.println("JhController chgAdminUpdate chg -> "+ chg);
 		
@@ -1057,11 +1058,15 @@ public class JhController {
 		HttpSession session = request.getSession();
 		int user_num = 0;
 		int result = 0;
+		int delResult = 0; //파일 삭제 정공 여부
 		
 		if(session.getAttribute("user_num") != null) {
 			 			
 			user_num = (int) session.getAttribute("user_num");
 			User1 user = userService.userSelect(user_num);
+			
+			//썸네일 저장 안해서 기본 이미지 저장할 경우/기본이미지 저장되었는데 다른 썸네일 올린경우 기존 이미지 삭제해야 할 때 기본이미지 삭제되지 않도록 비교하기 위함
+			String defaultImg = "assets/img/chgDfaultImg.png";
 			
 			/*************유저 권한 확인*************/
 			if( user.getStatus_md() == 102) { //관리자면
@@ -1072,9 +1077,11 @@ public class JhController {
 				if(sampleImgFile != null && !sampleImgFile.isEmpty()) {
 					System.out.println("JhController sampleImgFile 널 아님 Start...");
 					//기존 샘플이미지 파일 삭제 작업
-					String deleteFile = uploadPath + chg.getSample_img();
-					int delResult= upFileDelete(deleteFile);
-					System.out.println("delResult1 -> " + delResult);
+					
+						String deleteFile = uploadPath + chg.getSample_img();
+						delResult= upFileDelete(deleteFile);
+						System.out.println("delResult1 -> " + delResult);
+					
 					//새 샘플이미지 파일 업로드
 					String saveName = uploadFile(sampleImgFile.getOriginalFilename(), sampleImgFile.getBytes(), uploadPath);
 					chg.setSample_img(saveName);
@@ -1093,22 +1100,23 @@ public class JhController {
 					
 					//새 썸네일 업로드 하면 기존 이미지 먼저 삭제 처리
 					String deleteFile = uploadPath + chg.getThumb();
-					int delResult= upFileDelete(deleteFile);
-					System.out.println("delResult1 -> " + delResult);
+					delResult= upFileDelete(deleteFile);
+					System.out.println("delResult2 -> " + delResult);
 					
 					//새로 올린 썸네일 저장
 					String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
 					chg.setThumb(saveName);
 					
+				//썸네일 아예 없앤 경우	
 				}else if (thumbFile == null || thumbFile.isEmpty() && delStatus == 1) {
 					
 					String deleteFile = uploadPath + chg.getThumb();
-					int delResult= upFileDelete(deleteFile);
-					System.out.println("delResult1 -> " + delResult);
+					delResult= upFileDelete(deleteFile);
+					System.out.println("delResult3 -> " + delResult);
 					
-					chg.setThumb(null);
+					chg.setThumb(defaultImg);
 					
-				}
+				} //기존 썸네일 유지
 				
 				
 				
@@ -1133,6 +1141,9 @@ public class JhController {
 					}
 					
 				}*/
+				
+				
+				System.out.println("JhController chgAdminUpdate priv_pswd -> "+ chg.getPriv_pswd());
 				
 				System.out.println("JhController 챌린지 진짜 수정 Start...");
 				result = jhCService.chgAdminUpdate(chg);		

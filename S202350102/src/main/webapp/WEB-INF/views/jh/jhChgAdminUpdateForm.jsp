@@ -152,9 +152,14 @@
 			      </td>
 			      <th rowspan="3" style="width: 200px;">썸네일</th>
 				  <td rowspan="3" style="text-align: center; width: 300px;">
-					  <c:choose>
-					  	<c:when test="${chg.thumb !=null }">
-	                      	<img alt="챌린지 썸네일" src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
+				  <c:choose>
+				  	<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}"> 
+                      	<img alt="챌린지 썸네일" src="${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
+				  	</c:when>
+				  	<c:otherwise>
+                      	<img alt="챌린지 썸네일" src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
+				  	</c:otherwise> 
+				  </c:choose>
 	                      	<input type="hidden" name="thumb" value="${chg.thumb}"><p>
 	                      	
 	                      	<!-- 썸네일 이미지 수정 / 삭제 버튼  -->
@@ -166,12 +171,6 @@
 		                    <input type="hidden" name="delStatus" value="0" id="delStatus">
 		                    <!-- 파일업로드 버튼 -->
 							<input type="file" class="form-control" id="thumb" name="thumbFile" style="display: none;">
-					  	</c:when>
-					  	<c:otherwise>
-					  		<!-- 썸네일 없을 경우 기본 이미지 -->
-		                  	<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="userDfault" style="width: 100%; height: 150px; border-radius: 10px;">
-					  	</c:otherwise>
-					  </c:choose>
 				  </td>
 			    </tr>
 			    <tr>

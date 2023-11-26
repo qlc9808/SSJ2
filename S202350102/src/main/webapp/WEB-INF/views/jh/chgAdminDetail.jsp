@@ -180,13 +180,13 @@
 			      <td>${chg.title }</td>
 			      <th rowspan="3">썸네일</th>
 				  <td rowspan="3">
-				  <c:choose>
-				  	<c:when test="${chg.thumb !=null }">
-	                  	<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb }" alt="이미지를 불러오는 데 실패했습니다." style="width: 100%; height: 150px; border-radius: 10px;" >
+ 				  <c:choose>
+				  	<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}"> 
+                      	<img alt="챌린지 썸네일" src="${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
 				  	</c:when>
 				  	<c:otherwise>
-	                  	<img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="userDfault" style="width: 100%; height: 150px; border-radius: 10px;">
-				  	</c:otherwise>
+                      	<img alt="챌린지 썸네일" src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
+				  	</c:otherwise> 
 				  </c:choose>
 				  </td>
 			    </tr>
