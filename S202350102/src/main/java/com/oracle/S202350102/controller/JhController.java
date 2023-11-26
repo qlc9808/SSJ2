@@ -958,7 +958,6 @@ public class JhController {
 		
 		
 		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것 ->수정하기
-		String pageNum = chg.getPageNum();
 		
 		
 		

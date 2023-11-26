@@ -7,6 +7,8 @@
 <meta charset="UTF-8">
 <title>챌린지 관리자 페이지</title>
 <script type="text/javascript">
+
+	//필터 선택시 페이지 이동
 	function fn_sortOpt(){
 		//카테고리 전체일 경우 chg_lg=0, chg_md=0이어야 함
 		var sortOpt = $('#sortOpt').val()
@@ -14,10 +16,18 @@
 		var chg_lg 		= 	${chg_lg }
 		var chg_md 		= 	$('.nav-link.active').data('md'); //이것 때문에 "전체"에  data-md="0"필요 없으면 string -> int 에러남
 		
-		location.href= '/chgAdminList?state_md='+state_md
-								+'&chg_lg='+chg_lg
-								+'&chg_md='+chg_md
+		//카테고리 선택 안한 경우 필터만 걸림
+		if(chg_lg == 0){
+			
+			location.href= '/chgAdminList?state_md='+state_md
 								+'&sortOpt='+sortOpt;
+		//카테고리 선택한 경우 카테고리+필터
+		} else {
+			location.href= '/chgAdminList?state_md='+state_md
+										+'&chg_lg='+chg_lg
+										+'&chg_md='+chg_md
+										+'&sortOpt='+sortOpt;
+		}
 	}
 	
 	/* 페이지네이션 수정중 */
@@ -43,7 +53,26 @@
 	    //페이지 번호
 	    var pageNum   = document.getElementById('pageMove'+p_index).innerText
 	    
-		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+	    //필터 선택한 경우(진행중/종료 챌린지인 경우)
+	    if(sortOpt != null){
+	    	
+		    //카테고리 선택 안한 경우 + 필터는 자동
+		    if(chg_lg == 0){
+				location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+			//카테고리+필터 선택	
+		    } else {
+				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+		    }
+		    
+		//필터 없는 신청/반려 챌린지인 경우
+	    } else{
+		    if(chg_lg == 0){
+				location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
+			//카테고리+필터 선택	
+		    } else {
+				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
+		    }
+	    }
 			
 	}
 	 
@@ -54,13 +83,61 @@
 	    var chg_md    = ${chg_md}
 	    var sortOpt   = $('#sortOpt').val()
 	 
-		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+	    //필터 선택한 경우(진행중/종료 챌린지인 경우)
+	    if(sortOpt != null){
+	    	
+		    //카테고리 선택 안한 경우 + 필터는 자동
+		    if(chg_lg == 0){
+				location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+			//카테고리+필터 선택	
+		    } else {
+				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+		    }
+		    
+		//필터 없는 신청/반려 챌린지인 경우
+	    } else{
+		    if(chg_lg == 0){
+				location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
+			//카테고리+필터 선택	
+		    } else {
+				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
+		    }
+	    }
+	    //원래 아래 주소인데 필터 유무와 카테고리 유무 때문에 위처럼 바꿈 근데 테스트 필요
+		//location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 	}
 
 	//상세 페이지 이동
-	function chgAdminDetail(){
-		
-	}
+	function chgAdminDetail(pChg_id){
+	    var chg_id 	  	= pChg_id
+	 	var state_md  	= ${state_md}
+		var currentPage = ${page.currentPage}
+	    var chg_lg 	  	= ${chg_lg}
+	    var sortOpt   	= $('#sortOpt').val()
+	    
+	    //필터 있는 경우 (진행/종료 챌린지)
+   	    if(sortOpt != null){
+		    if(chg_lg == 0){
+				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg;
+		    	
+		    } else {
+				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg+"&chg_md="+chg_md;
+		    	
+		    }
+		//필터 없는 경우(신청/반려 챌린지 경우)
+   	    } else{
+   	    	//카테고리 선택 안 한 경우
+		    if(chg_lg == 0){
+				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&chgUpdateMode=0";
+		    //카테고리 선택 한 경우	
+		    } else {
+				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+currentPage+"&chgUpdateMode=0";
+		    	
+		    }
+   	    	
+   	    }
+   	    	
+	} 
 </script>
 
 </head>
@@ -113,6 +190,7 @@
 
           </div>
           
+          <!-- 진행중 종료일때만 필터 보임 -->
           <c:if test="${state_md == 102 || state_md == 103}">
           <div class="col-12 col-md-3 text-center">
              <select class="form-select form-select-xs" id="sortOpt" onchange="fn_sortOpt()"> 
@@ -157,7 +235,7 @@
 					<tr class="text-center" id="chgList${status.index }">
 						<td>${num }</td>
 						<td>${chgList.ctn }</td>
-						<td><a href="/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }">${chgList.title }</td>
+						<td>${chgList.title }</td>
 						<td>${chgList.userId }</td>
 						<td>
 							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
@@ -178,7 +256,8 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="chgAdminDetail()">상세보기</button>
+						<button type="button" class="btn btn-secondary btn-xxs" onclick="chgAdminDetail(${chgList.chg_id})">상세보기1</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&currentPage=${page.currentPage}&chgUpdateMode=0&chg_lg=${chg_lg}'">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
