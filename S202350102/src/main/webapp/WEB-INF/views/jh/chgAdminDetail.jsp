@@ -25,7 +25,7 @@
 			
 	} */
 	
-	$(document).ready(function() {
+/* 	$(document).ready(function() {
 		var result = ${result}
 		
 		if(result > 0){
@@ -33,7 +33,7 @@
 		}
 			alert("result ->" + result);
 		
-	});
+	}); */
 	
 	function approvReturnFn(pApprovReturn){
 		var approvReturn	= pApprovReturn
@@ -53,6 +53,7 @@
 		}
 	}
 	
+	//모달에서 챌린지 반려 버튼 클릭시 확인 함수
 	function chk(){
 /* 		alert("pApprovReturn 반려 -> " + pApprovReturn);
 		var approvReturn	= pApprovReturn
@@ -65,7 +66,7 @@
 		
 		if(confirmResult){
 			//location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&return_md="+return_md+"&approvReturn="+approvReturn;
-			
+			//확인 버튼 클릭시 반려 진행
 			return true;
 		} else {
 	        // 취소 버튼을 눌렀을 때 아무 동작도 하지 않고 모달을 열어둠
@@ -73,6 +74,19 @@
 	    }
 		
 	} 
+	
+	//목록 버튼 클릭시
+	function chgList(){
+	    var pageNum  = ${currentPage}
+		var state_md = ${state_md}
+	    var chg_lg 	 = ${chg.chg_lg}
+	    var chg_md 	 = ${chg.chg_md}
+	    var sortOpt  = ${chg.sortOpt}
+	    
+		
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+		
+	}
 	
 </script>
 </head>
@@ -269,7 +283,7 @@
 			    </tr>
 		</table>
 		<div class="d-flex justify-content-start mt-5">
-			<button class="btn btn-sm btn-dark mx-1" onclick="currentPageMove()">목록</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="chgList()">목록</button>
 			
 			<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
 			<c:choose>
@@ -280,14 +294,13 @@
 			</c:choose>
 			
 			
-			<!-- 챌린지 진행중 땐 수정/삭제, 반려/종료엔 삭제 버튼만 활성화  -->
+			<!-- 챌린지 진행중 땐 수정 반려엔 삭제 버튼만 활성화  -->
 			<c:choose>
 				<c:when test="${chg.state_md == 102 }">
 					<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
-					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
 				</c:when>
-				<c:when test="${chg.state_md == 103 || chg.state_md == 104}">
-					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
+				<c:when test="${chg.state_md == 104}">
+					<button class="btn btn-sm btn-dark mx-1" onclick="location.href='/chgDelete?chg_id=${chg.chg_id}&state_md=${chg.state_md }&thumb=${chg.thumb}&sample_img=${chg.sample_img }'" id="chgDelete" >삭제</button>
 				</c:when>
 			</c:choose>
 

@@ -791,9 +791,16 @@ public class JhController {
 	}
 	
 	
+	//챌린지 관리자 리스트
 	@RequestMapping(value = "chgAdminList")
-	public String chgAdminList(Challenge challenge, String currentPage, @RequestParam(value = "sortOpt", required=false) String sortOpt,Model model, HttpSession session) {
+	public String chgAdminList(Challenge challenge
+							 , String currentPage
+							 , @RequestParam(value = "sortOpt", required=false) String sortOpt
+							 , Model model
+							 , HttpSession session
+							 ) {
 		System.out.println("JhController chgAdminList Start...");
+		System.out.println("JhController chgAdminList sortOpt -> " +sortOpt);
 		//카테고리 명 보내기
 		//chg_md랑 state_md 파라미터 조건으로 넣어서 카테고리별, 진행상태별 챌린지 한번에 가져오기(쿼리 재활용)
 		//신청한 챌린지 리스트 가져오기-페이지네이션 포함/필터 적용 포함
@@ -922,14 +929,19 @@ public class JhController {
 	//챌린지 관리자 상세보기
 	@RequestMapping(value = "chgAdminDetail")
 	public String chgAdminDetail(
-								   Challenge challenge
-								,  HttpSession session
+								  Challenge challenge
+								, HttpSession session
 								, Model model
 								, @RequestParam(value = "chgUpdateMode", required = false) String chgUpdateMode
 								, @RequestParam(value = "result", required = false) String result
+								, @RequestParam(value = "currentPage", required = false) String currentPage
+								, @RequestParam(value = "chg_lg", required = false) Integer chgLg
 								) {
+		//chgUpdateMode는 업데이트 페이지로 이동하기 위한 파라미터 0이면 일반 상세 페이지 1이면 업데이트용 페이지
+		//result는 업데이트 후 다시 상세 페이지로 돌아와서 성공 유무 알리기 위한 파라미터
 		System.out.println("JhController chgAdminDetail Start...");
 		
+		System.out.println("JhController chgDetail chgLg -> " + chgLg);
 		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = challenge.getState_md();
@@ -953,17 +965,19 @@ public class JhController {
 		int chg_id = challenge.getChg_id();
 		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
 		
+		//챌린지 상세 정보
 		challenge = jhCService.chgDetail(chg_id);
 		
 		int chgrParti = ycs.selectChgrParti(chg_id);
 		System.out.println("JhController chgDetail chgrParti -> " + chgrParti);
 		model.addAttribute("chgrParti", chgrParti);
 		
-		model.addAttribute("pageNum", pageNum);
 		model.addAttribute("chg", challenge);
 		model.addAttribute("state_md", state_md);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("chgLg", chgLg);
 		
-		//업데이트용 페이지
+		//업데이트용 페이지 이동
 		
 		System.out.println("JhController chgDetail chgUpdateMode -> " + chgUpdateMode);
 		
@@ -1003,7 +1017,7 @@ public class JhController {
 	}
 	
 	
-	
+	//승인반려 처리
 	@RequestMapping(value = "approvReturn")
 	public String approvReturn(int approvReturn, int chg_id, int state_md,@RequestParam(required = false) Integer user_num, @RequestParam(required = false) Integer return_md) {
 		System.out.println("JhController approvReturn Start...");
@@ -1038,12 +1052,12 @@ public class JhController {
 		
 		System.out.println("JhController approvReturn result -> " + result);
 		
-		//승인/반려 처리 후 기존 챌린지 관리 해당 페이지로 이동
+		//승인/반려 처리 후 기존  해당 챌린지 관리 상세 페이지로 이동
 		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'";
 		
 	}
 	
-	
+	//챌린지 수정
 	@RequestMapping(value = "/chgAdminUpdate")
 	public String chgAdminUpdate(Challenge chg,  HttpServletRequest request,
 			  @RequestParam(value = "sampleImgFile") MultipartFile sampleImgFile,
@@ -1078,7 +1092,8 @@ public class JhController {
 					System.out.println("JhController sampleImgFile 널 아님 Start...");
 					//기존 샘플이미지 파일 삭제 작업
 					
-						String deleteFile = uploadPath + chg.getSample_img();
+
+					String deleteFile = uploadPath + chg.getSample_img();
 						delResult= upFileDelete(deleteFile);
 						System.out.println("delResult1 -> " + delResult);
 					
@@ -1119,30 +1134,6 @@ public class JhController {
 				} //기존 썸네일 유지
 				
 				
-				
-				/*if(delStatus == 1 || thumbFile != null) {
-					System.out.println("JhController sampleImgFile 썸네일 기존 이미지 삭제 Start...");
-					//기존 썸네일 삭제 
-					String deleteFile = uploadPath + chg.getThumb();
-					int delResult= upFileDelete(deleteFile);
-					System.out.println("delResult1 -> " + delResult);
-					
-					*************삭제가 아닌 업데이트라면 새 이미지 저장************
-					if(thumbFile != null) {
-						System.out.println("JhController sampleImgFile 썸네일 아예 없앰 Start...");
-						//새 썸네일 저장
-						String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
-						chg.setThumb(saveName);
-						
-					// 썸네일만 삭제, 새 썸네일 업로드 안함	-> 기본 썸네일 저장
-					} else {
-						String saveName = "assets/img/chgDfaultImg.png";
-						chg.setThumb(saveName);
-					}
-					
-				}*/
-				
-				
 				System.out.println("JhController chgAdminUpdate priv_pswd -> "+ chg.getPriv_pswd());
 				
 				System.out.println("JhController 챌린지 진짜 수정 Start...");
@@ -1157,6 +1148,61 @@ public class JhController {
 			return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'"+"&result="+result;
 	}
 	
+	
+	@RequestMapping(value = "chgDelete")
+	public String chgDelete(int chg_id 
+						  , int state_md
+						  , String thumb
+						  , String sample_img
+						  , HttpServletRequest request
+						  ) throws Exception {
+		System.out.println("JhController chgAdminDelete Start...");
+		
+		HttpSession session = request.getSession();
+		int user_num = 0;
+		int delResult = 0; 	//파일 삭제 성공 여부
+		int result = 0; 	// 챌린지 삭제 성공 여부
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/"); //삭제를 위한 경로
+		
+		if(session.getAttribute("user_num") != null) {
+			 			
+			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
+			
+			//썸네일 저장 안해서 기본 이미지 저장할 경우/기본이미지 저장되었는데 다른 썸네일 올린경우 기존 이미지 삭제해야 할 때 기본이미지 삭제되지 않도록 비교하기 위함
+			String defaultImg = "assets/img/chgDfaultImg.png";
+			
+			/*************유저 권한 확인*************/
+			if( user.getStatus_md() == 102) { //관리자면
+				
+				//예시사진 삭제
+				if(sample_img != null && !sample_img.isEmpty() ) {
+					String deleteFile = uploadPath + sample_img;
+					delResult = upFileDelete(deleteFile);
+				}
+				
+				//예시 사진 삭제 실패하지 않은 경우 썸네일 삭제
+				if(delResult != 0) {
+					
+					if(thumb != null && !thumb.isEmpty() ) {
+						
+						String deleteFile = uploadPath + thumb;
+						delResult = upFileDelete(deleteFile);
+						
+						//썸네일 삭제에 실패하지 않은 경우 챌린지 삭제(삭제할 파일 없는 경우는 -1)
+						if(delResult != 0) {
+							//챌린지 삭제
+							result = jhCService.chgDelete(chg_id);
+							System.out.println("JhController chgAdminUpdate result -> "+ result);
+						}
+					}
+				}
+			}
+		}
+		
+		return "redirect:chgAdminList?state_md=" + state_md;
+		
+	}
 	
 	
 	/*

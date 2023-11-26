@@ -83,6 +83,9 @@ public interface JhCallengeService {
 
 
 	int 				chgAdminUpdate(Challenge chg);
+
+
+	int 				chgDelete(int chg_id); 
   
    
 	

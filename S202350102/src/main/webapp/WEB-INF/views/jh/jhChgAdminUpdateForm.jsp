@@ -14,6 +14,7 @@
             if ($('#private').prop('checked')) {
                 // 비공개가 선택되었을 때만 비밀번호 입력란 활성화
                 $('#priv_pswd').prop('disabled', false);
+                $('#priv_pswd').prop('required', true);
             } else {
                 // 그 외의 경우에는 비밀번호 입력란 비활성화
                 $('#priv_pswd').prop('disabled', true);
@@ -25,6 +26,7 @@
 	//DOMContentLoaded : HTML 문서가 완전히 로드되고 파싱되었을 때 발생하는 이벤트
 	//					 문서의 모든 요소와 스타일, 스크립트 등이 브라우저에 의해 읽혀지고 해석된 상태
 	//아래 함수는  페이지가 완전히 로드되어 브라우저에 표시되는 시점에 , 이미지, 스타일시트, 외부 스크립트 등의 추가 리소스 로딩이 완료되지 않아 DOM 구조를 조작하거나 스크립트를 실행하는 데 사용
+	//인증빈도 기존에 입력된 값으로 셀렉트하기 위한 함수
     document.addEventListener("DOMContentLoaded", function() {
         var chgFreqValue = "${chg.freq}"; // ${chg.freq}의 값
 
@@ -39,15 +41,7 @@
     });
     
     
-	function validatePswd(input) {
-		var inputValue = input.value;
-		
-		 if (/[^0-9]/.test(inputValue)) {
-	            document.getElementById('warningMessage').innerText = '숫자만 입력 가능합니다.';
-	        } else {
-	            document.getElementById('warningMessage').innerText = '';
-	        }
-	}
+
 	
 	
 	/* 인증 예시 이미지 수정버튼 클릭시 발동*/
@@ -256,7 +250,7 @@
 			    </tr>
 			    <tr>
 			      <th scope="row">비밀번호</th>
-			      <td><input type="text" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." class="form-control form-control-xs" name="priv_pswd" value="${chg.priv_pswd != 0 ? chg.priv_pswd : ''}" ${chg.priv_pswd == 0 ? 'disabled' : ''} maxlength="4" id="priv_pswd" oninput="validatePswd(this)"></td>
+			      <td><input type="text" pattern="[0-9]{4}" title="4자리 숫자로 입력하세요." class="form-control form-control-xs" name="priv_pswd" value="${chg.priv_pswd != 0 ? chg.priv_pswd : ''}" ${chg.priv_pswd == 0 ? 'disabled' : ''} maxlength="4" id="priv_pswd" ></td>
 			    </tr>
 			    <tr>
 			      <th scope="row">챌린지 신청일</th>
@@ -274,7 +268,7 @@
 		<div class="d-flex justify-content-end mt-5">
 			<button class="btn btn-sm btn-dark mx-1" onclick="currentPageMove()">목록</button>
 			<button class="btn btn-sm btn-info mx-1" type="submit" id="chgUpdate"  >수정</button>
-			<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="chgDelete" >삭제</button>
+			<button class="btn btn-sm btn-dark mx-1" onclick="location.href='/chgDelete?chg_id=${chg.chg_id}&thumb=${chg.thumb}&sample_img=${chg.sample_img }" id="chgDelete" >삭제</button>
 		</div>	
         </form>
 		</div>

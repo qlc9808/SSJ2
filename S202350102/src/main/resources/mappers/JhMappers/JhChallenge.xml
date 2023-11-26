@@ -318,6 +318,10 @@
 	</update>
 	
 	
+	<delete id="jhChgDelete" parameterType="int">
+		DELETE 	FROM  Challenge
+		WHERE 	chg_id = #{chg_id}
+	</delete>
 	
 	
 	

@@ -22,27 +22,38 @@
 	
 	/* 페이지네이션 수정중 */
 	/* 현재 페이지 클릭시 */
-	function currentPageMove(){
+/* 	function currentPageMove(){
 	 	var state_md = ${state_md}
 	    var chg_lg = ${chg_lg}
 	    var chg_md = ${chg_md}
 	    var sortOpt = $('#sortOpt').val()
+	    //현재 페이지 번호
 	    var currentPage = ${page.currentPage}
 	    
 		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+currentPage;
 			
 	}
-	
-	/* 다른 페이지로 이동시 */
-	function pageMove(){
-	 	var state_md = ${state_md}
-	    var chg_lg = ${chg_lg}
-	    var chg_md = ${chg_md}
-	    var sortOpt = $('#sortOpt').val()
-	    var currentPage = document.getElementById('pageMove').innerText
+	 */
+	/* 페이지로 이동시 */
+	function pageMove(p_index){
+	 	var state_md  = ${state_md}
+	    var chg_lg 	  = ${chg_lg}
+	    var chg_md    = ${chg_md}
+	    var sortOpt   = $('#sortOpt').val()
+	    //페이지 번호
+	    var pageNum   = document.getElementById('pageMove'+p_index).innerText
 	    
-		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+currentPage;
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 			
+	}
+	 
+	function pageMoveNav(pageNum){
+	 	var state_md  = ${state_md}
+	    var chg_lg 	  = ${chg_lg}
+	    var chg_md    = ${chg_md}
+	    var sortOpt   = $('#sortOpt').val()
+	 
+		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 	}
 
 </script>
@@ -162,7 +173,7 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&pageNum=${page.currentPage}&chgUpdateMode=0'">상세보기</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&currentPage=${page.currentPage}&chgUpdateMode=0&chg_lg=${chg_lg}'">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>
@@ -176,23 +187,25 @@
 	      	   		 <ul class="pagination pagination-lg text-gray-400">
 					  	<c:if test="${page.startPage > page.pageBlock }">
 					  		<li class="page-item">
-								<a class="page-link page-link-arrow" href="chgAdminList?currentPage=${page.startPage-page.pageBlock }">
+								<a class="page-link page-link-arrow" onclick="pageMoveNav(${page.startPage-page.pageBlock })">
 								<i class="fa fa-caret-left">이전</i></a>
 							</li>
 						</c:if>
-					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
+					    <c:forEach var="i" begin="${page.startPage }" end="${page.endPage }" varStatus="status">
 							<li class="page-item">
+							<!-- 현재 페이지랑 같은 경우 번호 ,색칠함  -->
 								<c:if test="${i == page.currentPage }">
-									<a class="page-link px-2" onclick="currentPageMove()"><b class="text-primary">${i}</b></a>
+									<a class="page-link px-2" onclick="pageMove(${status.index })"><b class="text-primary" id="pageMove${status.index }">${i}</b></a>
 								</c:if>
+								<!-- 현재 페이지랑 다른 번호들 -->
 								<c:if test="${i != page.currentPage }">
-									<a class="page-link px-2" onclick="pageMove()" id="pageMove" >${i}</a>
+									<a class="page-link px-2" onclick="pageMove(${status.index })" id="pageMove${status.index }" >${i}</a>
 								</c:if>
 							</li>
 						</c:forEach>
 					    <c:if test="${page.endPage < page.totalPage }">
 					    	<li class="page-item">
-								<a class="page-link page-link-arrow" href="chgAdminList?currentPage=${page.startPage + page.pageBlock }">
+								<a class="page-link page-link-arrow" onclick="pageMoveNav(${page.startPage + page.pageBlock })">
 								<i class="fa fa-caret-right">다음</i></a>
 							</li>
 						</c:if>

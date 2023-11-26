@@ -400,6 +400,22 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return result;
 	}
 
+	@Override
+	public int chgDelete(int chg_id) {
+		System.out.println("JhChallengeDaoImpl chgDelete Start...");
+		int result = 0;
+		
+		try {
+			result = session.delete("jhChgDelete", chg_id);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl chgDelete e.getMessage() -> " + e.getMessage());
+
+		}
+		
+		System.out.println("JhChallengeDaoImpl chgDelete result -> " + result);
+		return result;
+	}
+
 
 
 }

@@ -219,6 +219,13 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		
 		return result;
 	}
+
+	@Override
+	public int chgDelete(int chg_id) {
+		System.out.println("JhCallengeServiceImpl chgDelete Start...");
+		int result = jhChgDao.chgDelete(chg_id);
+		return result;
+	}
  
 
 	
