@@ -54,7 +54,7 @@ public class ThOrder1DaoImpl implements ThOrder1Dao {
 		System.out.println("ThOrder1DaoImpl updateOrderSucess start...");
 		int updateResult = 0;
 		try {
-			updateResult = session.selectOne("thUpdateOrderSucess",order_num);
+			updateResult = session.update("thUpdateOrderSucess",order_num);
 		}catch (Exception e) {
 			System.out.println("ThOrder1DaoImpl updateOrderSucess Exception --> " + e.getMessage());
 		}
@@ -71,6 +71,30 @@ public class ThOrder1DaoImpl implements ThOrder1Dao {
 			System.out.println("ThOrder1DaoImpl selectOrderSucess Exception --> " + e.getMessage());
 		}
 		return order1;
+	}
+
+	@Override
+	public int updateTid(Order1 order1) {
+		System.out.println("ThOrder1DaoImpl updateTid start...");
+		int updateResult = 0;
+		try {
+			updateResult = session.update("thUpdateTid",order1);
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl updateTid Exception --> " + e.getMessage());
+		}
+		return updateResult;
+	}
+
+	@Override
+	public int updateOrderRefund(String tid) {
+		System.out.println("ThOrder1DaoImpl updateTid start...");
+		int updateOrderResult = 0;
+		try {
+			updateOrderResult = session.update("thUpdateOrderRefund",tid);
+		}catch (Exception e) {
+			System.out.println("ThOrder1DaoImpl updateOrderRefund Exception --> " + e.getMessage());
+		}
+		return updateOrderResult;
 	}
 	
 	

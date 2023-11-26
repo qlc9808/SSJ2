@@ -219,6 +219,19 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 		}
 		return updateResult;
 	}
+
+	@Override
+	public int updateUserNormal(int user_num) {
+		System.out.println("ThUser1DaoImpl updateUserNormal Start... ");
+		int updateUser1Result = 0;
+		try {				
+			updateUser1Result = session.update("thUpdateUserNormal", user_num);
+			System.out.println("ThUser1DaoImpl updateUserNormal updateUser1Result --> " + updateUser1Result);
+		} catch (Exception e) {
+			System.out.println("ThUser1DaoImpl updateUserNormal Exception -->" + e.getMessage());
+		}
+		return updateUser1Result;
+	}
 	
 	
 }

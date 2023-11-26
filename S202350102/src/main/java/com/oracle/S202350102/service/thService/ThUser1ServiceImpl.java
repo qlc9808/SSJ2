@@ -181,6 +181,14 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 	}
 
 
+	@Override
+	public int updateUserNormal(int user_num) {
+		System.out.println("ThUser1ServiceImpl updateUserNormal Start...");
+		int updateUser1Result = ud1.updateUserNormal(user_num);
+		return updateUser1Result;
+	}
+
+
 	
 
 }

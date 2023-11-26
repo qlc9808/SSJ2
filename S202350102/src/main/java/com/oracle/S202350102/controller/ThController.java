@@ -30,7 +30,9 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.KakaoPayApprovalVO;
+import com.oracle.S202350102.dto.KakaoPayCancelVO;
 import com.oracle.S202350102.dto.Order1;
+import com.oracle.S202350102.dto.Refund;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
@@ -39,6 +41,7 @@ import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
+import com.oracle.S202350102.service.thService.ThRefundService;
 import com.oracle.S202350102.service.thService.ThUser1Service;
 import com.oracle.S202350102.service.yaService.Paging2;
 
@@ -60,6 +63,8 @@ public class ThController {
 	private final ThChgService tcs;
 	private final JkBoardService jbs;
 	private final UserService mus;
+	private final ThRefundService rfs;
+	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
 													   @RequestParam("birth_year")  String birth_year,
@@ -249,8 +254,6 @@ public class ThController {
         System.out.println("kakaoPaySuccess updateResult --> " + updateResult);
 
         
- 
-        
  		// order_num을 order1에 담고,
  		// 객체째로 못들고 다니므로(approval url에 객체 넣었다가 에러발생함) 주문번호만 가져옴
  		order1.setOrder_num(order_num);
@@ -259,6 +262,7 @@ public class ThController {
         // kakaoPayInfo에 pg_token과 orderResult를 파라미터로 넣어줌 ( pg_token은  결제승인 api호출시 사용, 결제승인 요청을 인증하는 token 
         //													  사용자 결제 수단 선택 완료 시, approval_url로 redirection해줄 때 pg_token을 query string으로 전달)
         Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token, orderResult);
+        
            
         
         model.addAttribute("info", kakaoSucInfo);
@@ -266,13 +270,51 @@ public class ThController {
         
         return "th/kakaoPaySuccess";
     }
-	
+	// 결제도중 취소눌렀을때 구독안내 창으로 이동
     @GetMapping("/kakaoPayCancel")
     public String kakaoPayCancel() {
     	
     	return "redirect:/thkakaoPayForm";
     	
     }
+    
+    // 카카오페이 환불
+    @PostMapping("/kakaoPayRefund")
+    public String kakaoPayRefund(HttpSession session, User1 user1, Order1 order1,Refund refund, Model model) {
+    	System.out.println("ThController kakaoPayRefund Start...");
+
+    	KakaoPayCancelVO kakaoPayCancelVO = thKakaoPay.kakaoPayCancel(order1);
+    	System.out.println(" ThController kakaoPayRefund kakaoPayCancelVO --> " + kakaoPayCancelVO);
+    	
+    	// 환불처리가 성공한경우(null이 아닌경우) 트랙잭션 처리 해야할거같음 
+    	if (kakaoPayCancelVO != null) {
+    		
+    		// 해당 Tid의 주문상태를 환불(2)으로, 결제완료날짜(=환불완료날짜)를 SYSDATE로  UPDATE
+            int updateOrderResult 	= os1.updateOrderRefund(kakaoPayCancelVO.getTid());
+            System.out.println("ThController kakaoPayRefund updateOrderResult -->" + updateOrderResult);
+            
+            // 해당 주문번호에 대한 환불처리를 환불 테이블에 INSERT
+            // CancelVO에 저장된 order_id(=order_num)이 문자열이라 정수형으로 변환
+//            refund.setOrder_num(Integer.parseInt(kakaoPayCancelVO.getPartner_order_id()));
+//            refund.setPrice(Integer.parseInt(kakaoPayCancelVO.getApproved_cancel_amount()));
+//            
+//            int insertRefundResult 	= rfs.insertRefundSucess(kakaoPayCancelVO);
+//            System.out.println("ThController kakaoPayRefund insertRefundResult -->" + insertRefundResult);
+            
+            // 해당 유저의 상태를 멤버쉽 회원 --> 일반 회원으로 변경
+            int user_num = Integer.parseInt(kakaoPayCancelVO.getPartner_user_id());
+            int updateUser1Result	= us1.updateUserNormal(user_num);	
+            System.out.println("ThController kakaoPayRefund updateUser1Result -->" + updateUser1Result);
+    		
+            model.addAttribute("kakaoPayCancelVO", kakaoPayCancelVO);
+    		return "th/refundSuccess";
+		}
+    	
+    	
+    	// 환불처리 실패한경우 일단 마이페이지로 이동
+    	return "redirect:/thSubscriptManagement";
+    }
+    
 
     // 아작스 아이디 중복체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
     // 중복확인 버튼클릭으로 넘어갈때는 Postmapping만 가능
@@ -520,17 +562,5 @@ public class ThController {
 		return "th/subscriptManagement";
 	}
 	
-//	//검색 
-//	@GetMapping("/listSearchChg")
-//	public String listSearchChg(Challenge chg, String currentPage, Model model) {
-//		System.out.println("thController thSubscriptManagement start...");
-//		// 검색 조건(cond)에 따른 TotalCount
-//		int totalEmp = es.condTotalEmp(emp);
-//		// Paging 후 chg 파라미터에 start, end 담음
-//		
-//		// ListSearchg 뽑아옴
-//		
-//		// model 담음
-//		
-//	}
+	
 }
