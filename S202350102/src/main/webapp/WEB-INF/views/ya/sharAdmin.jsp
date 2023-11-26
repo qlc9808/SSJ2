@@ -10,7 +10,7 @@
 </head>
 <body>
 <section class="py-11">
- <div class="container" style=" margin-left: 300px;">            
+ <div class="container">            <!-- style=" margin-left: 300px;"  -->
         <div class="row">
           <div class="col-12 text-center">			
             <!-- Heading -->
@@ -29,7 +29,7 @@
         <!-- 게시판리스트    user_id에 회원정보 상세보기 링크 걸어두기 -->
             <div class="col-12">	
              <c:set var="num" value="${sharBoardPage.total - sharBoardPage.start+1 }"></c:set> 
-                <table class="table table-bordered table-sm mb-0" style="width:1200px">
+                <table class="table table-bordered table-sm mb-0" ><!--  style="width:1200px" -->
                     <thead>
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
@@ -38,7 +38,6 @@
                             <th scope="col" class="th-nick">닉네임</th>
                             <th scope="col" class="th-date">등록일</th>
                             <th scope="col" class="th-view_cnt">조회수</th>
-                            <th scope="col" class="th-replyCount">댓글수</th>
                             <th scope="col" class="th-applicants">모집인원</th>
                             <th scope="col" class="th-participants">참가인원</th>
                             <th scope="col"  class="text-center">삭제처리</th>
@@ -53,7 +52,6 @@
                                 <td>${board.nick}</td>
                                 <td><fmt:formatDate value="${board.reg_date}" pattern="yy-MM-dd"/></td>
                                 <td>${board.view_cnt}</td>
-				         		<td>${board.replyCount}</td>
 				         		<td>${board.applicants}명</td>
 				         		<td>${board.participants}명</td>
 				         		<td class="justify-content-center">

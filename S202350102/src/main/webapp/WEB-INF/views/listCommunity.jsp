@@ -5,10 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <style type="text/css">
-
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
     			
 /* 페이지 전체 스타일 */
 section.community {
@@ -143,33 +140,105 @@ body {
 
 </style>
 <meta charset="UTF-8">
-<title>커뮤니티 게시판</title>
+<title>자유게시판</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {
+	var currentPage = 1;
+	
+	// 검색 및 정렬 버튼 클릭
     $("#searchButton").click(function () {
         var keyword = $("#keyword").val();
-         if (keyword !== "") { 
-         
+        if (keyword !== "") {
+            searchAndSort(keyword);
+        } else {
+            location.reload();
+        }
+    });
+    
+    // 정렬 옵션 변경
+    $("#sortOption").change(function () {
+        var sortOption = $("#sortOption").val();
+        sortBoard(sortOption);
+    });
+   
+    
+    
+     // 검색 페이징 함수
+    function updatePagination(data) {
+    	var startNum = data.boardPage.startNum;
+    	var endNum = data.boardPage.endNum;
+    	 var keyword = $("#keyword").val();
+        // 페이지 번호 업데이트
+        $('#boardPagination > ul').empty();
+        console.log('응답 데이터: ', data);
+        console.log('StarNum:', startNum);
+        console.log('EndNum:', endNum);
+        console.log('BoardPage:', data);
+        console.log('Initial Page:', { startPage: 1, endPage: 5, totalPage: 10, pageBlock: 5 });
+
+        for (var i = startNum; i <= endNum; i++) {
+            var liClass = (data.boardPage.currentPage === i) ? 'page-item active' : 'page-item';  
+            var aClass = 'page-link';
+            if (data.boardPage.currentPage !== i) {
+                aClass += ' page-link-arrow';
+            }
+
+            var pageLink = '<li class="' + liClass + '"><a class="' + aClass + '" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + i + '">' + i + '</a></li>';
+            $('#boardPagination > ul').append(pageLink);
+        }
+
+        // 이전 페이지
+        if (data.boardPage.startPage > data.boardPage.pageBlock) {  // 여기 변경
+            var prevLink = '<li class="page-item"><a class="page-link page-link-arrow" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + (data.boardPage.startPage - data.boardPage.pageBlock) + '"><i class="fa fa-caret-left"></i></a></li>';
+            $('#boardPagination > ul').prepend(prevLink);
+        }
+
+        // 추가로 페이지 번호를 생성하여 표시할 부분
+        for (var i =endNum + 1; i <= data.boardPage.totalPage && i <= (startNum + data.boardPage.pageBlock); i++) {  // 여기 변경
+            var extraPageLink = '<li class="page-item"><a class="page-link" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + i + '">' + i + '</a></li>';
+            $('#boardPagination > ul').append(extraPageLink);
+        }
+
+        // 다음 페이지
+        if (data.boardPage.endPage < data.boardPage.totalPage) {  // 여기 변경
+            var nextLink = '<li class="page-item"><a class="page-link page-link-arrow" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + (data.boardPage.startPage + data.boardPage.pageBlock) + '"><i class="fa fa-caret-right"></i></a></li>';
+            $('#boardPagination > ul').append(nextLink);
+        }
+    }
+
+    window.changePage = function(page) {
+        currentPage = page;
+        searchAndSort($("#keyword").val());
+    };
+    
+    // 초기 페이지 로딩 시 호출
+    updatePagination({ startPage: 1, endPage: 5, totalPage: 10, pageBlock: 5 }); 
+    
+    function searchAndSort(keyword) {
         	 //  검색 아작스 요청
         	$.ajax({
             	type: "GET",
-            	url: "listBoardSearch?keyword=" + keyword,
+            	url: "listBoardSearch?keyword=" + keyword + "&currentPage=" +currentPage,
                 dataType: "json",
                 async: false,
                 success: function (data) { 
                 	  console.log("응답 데이터: ",data);
+                	  var listSearchBoard = data.listSearchBoard;
+                	  var boardPage = data.boardPage;
+                	  var startNum = data.startNum;
+                	  var endNum = data.endNum
                 	// 테이블 초기화
                     $('#boardtable > tbody').empty();
 
-                    if (data && data.length > 0) { // 결과가 비어있지 않은 경우에만 처리
-                    	 for (var i = 0; i < data.length; i++) {
-                             var result = data[i];
+                    if (listSearchBoard && listSearchBoard.length > 0) { // 결과가 비어있지 않은 경우에만 처리
+                    	 for (var i = 0; i <listSearchBoard.length; i++) {
+                             var result = listSearchBoard[i];
                              console.log(result);
                              var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >";
                              var str = '<tr>';
-                             str += "<td>" + result.brd_num + "</td>";
+                             str += "<td>" + (startNum - i) + "</td>";
                              str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                              str += "<td>" + img + result.nick + "</td>";
                              // 날짜 형식 변환
@@ -191,38 +260,39 @@ $(document).ready(function () {
                          $('#boardtable > tbody').append('<tr><td colspan="6">검색 결과가 없습니다.</td></tr>');
                        
                      }
+                    /// 페이징 처리 함수 호출
+                    updatePagination(boardPage);
                  },
                  error: function (xhr, status, error) {
                      console.log('Ajax 호출 실패: ', error);
                  }
              });
-         } else {
-             // 검색어가 비어 있을 때는 페이지 리로드
-             location.reload();
-         }        
-     });
-    
-    
-    // 정렬 아작스 요청
-    $("#sortOption").change(function() {
-        var sortOption = $("#sortOption").val();
+              
+	}
 
+
+	function sortBoard(sortOption) {
         $.ajax({
             type: "GET",
-            url: "listBoardSort?sort=" + sortOption,
+            url: "listBoardSort?sort=" + sortOption +"&currentPage=" + currentPage,
             dataType: "json",
             async: false,
             success: function (data) { 
           	console.log("응답 데이터: ",data);
+	      	  var listSortedBoard = data.listSortedBoard;
+	    	  var boardPage = data.boardPage;
+        	  var startNum = data.startNum;
+        	  var endNum = data.endNum
           	// 테이블 초기화
             $('#boardtable > tbody').empty();
 
-            if (data && data.length > 0) { // 결과가 비어있지 않은 경우에만 처리
-               for (var i = 0; i < data.length; i++) {
-                      var result = data[i];
+            if (listSortedBoard && listSortedBoard.length > 0) { // 결과가 비어있지 않은 경우에만 처리
+            	var startingNum = listSortedBoard[0].num; // 시작번호 계산
+               for (var i = 0; i < listSortedBoard.length; i++) {
+                      var result = listSortedBoard[i];
                       var str = '<tr>';
-                      var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >"; // 한빛
-                      str += "<td>" + result.brd_num + "</td>"; 
+                      var img = "<img title='Lv."+result.user_level+" | exp."+result.user_exp+"("+result.percentage+"%)', src='/images/level/"+result.icon+".gif' >"; // 한빛             
+                      str += "<td>" + (startNum - i) + "</td>";
                       str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                       str += "<td>" + img + result.nick + "</td>"; // 한빛 
                       // 날짜 형식 변환
@@ -239,20 +309,26 @@ $(document).ready(function () {
                       str += "</tr>";
                       $('#boardtable').append(str);
                   }
+            
+                    updatePagination(boardPage); 
               } else {
                    // 검색 결과가 없을 경우 처리
                   $('#boardtable > tbody').append('<tr><td colspan="6">검색 결과가 없습니다.</td></tr>');
                  
                }
-           },         error: function (xhr, status, error) {
+           },       
+           error: function (xhr, status, error) {
                 console.log("정렬 아작스 호출 실패: " + error);
             }
-        });
     });
-});  
-    
+  }
+  
 
+}); 
 </script>
+
+
+
 
 </head>
 <body>
@@ -322,7 +398,7 @@ $(document).ready(function () {
                     </tbody>
                 </table>
 
-			<div class="container text-center">
+			<div class="container text-center" id="boardPagination">
 			     <ul class="pagination pagination-sm justify-content-center">
 			        <c:if test="${boardPage.startPage > boardPage.pageBlock}">
 			            <li class="page-item">

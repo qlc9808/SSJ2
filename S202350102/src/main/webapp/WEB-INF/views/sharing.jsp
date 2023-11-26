@@ -138,13 +138,13 @@ $("#sortOption").change(function() {
                 <a class="list-group-item list-group-item-action dropend-toggle active" href="../sharing">
                   	전체 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
+                <a  id="options" class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
+                <a  id="option2" class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
                  	내가 쓴 글
                 </a>
-               <a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
+               <a class="btn w-100 btn-dark mb-2"  id="options" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
                </a>
                 
               </div>
@@ -154,10 +154,40 @@ $("#sortOption").change(function() {
               
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
             <div class="row">
-        <div class="col-12">
+<!--         <div class="col-12">
             <div class="d-flex justify-content-between mb-3">
-                <!-- 공간을 벌리기 위해 클래스 추가 -->
-            </div>
+                공간을 벌리기 위해 클래스 추가
+            </div> -->
+                <!-- 게시판 검색 (옵션 제목, 작성자)-->
+			<div class="container d-flex justify-content-left" style="padding-bottom: 0px;">
+			    <div class="d-flex justify-content-center">
+			        <div class="input-group input-group-merge">
+			            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}" style="width:400px; height:49px;">
+						<div class="input-group-append">
+						    <button class="btn btn-outline-border btn-search" id="searchButton"
+						     onclick="location.href='sharingSearchResult?keyword=${keyword}'"> 						    
+						        <i class="fe fe-search"></i>
+						    </button>
+						</div>
+			
+			        </div>
+			    </div>
+			</div>
+
+<script>
+    // 검색 버튼 클릭 시
+    document.getElementById('searchButton').addEventListener('click', function() {
+        // 현재 검색어 값 가져오기
+        var keywordValue = document.getElementById('keyword').value;
+
+        // URL에 검색어 추가하고 페이지 다시로드
+        window.location.href = 'sharingSearchResult?keyword=' + keywordValue;
+    });
+</script>
+
+
+<div id="searchResults" style=" margin-top: 20px;"></div>
+            
             <div class="d-flex justify-content-end mb-3">
 			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
 			    <option value="reg_date">최근 게시물</option>
@@ -221,13 +251,15 @@ $("#sortOption").change(function() {
                         style="width: 100%; height: 200;">
                 </div>
                 
-                <div class="card-body fw-bold text-center">
-                    <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                <div class="card-body fw-bold text-left"> <!-------연아 수정: 링크 에러로 input으로 value값 넣어줌 좌측정렬 추가-------><!--text-center  -->
+                	<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">
+                    <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                         ${board.title}
                     </a>
                     <p>
-                        <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                            ${board.price}원</a>
+   					<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">                	
+                        <a class="text-primary " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                           <fmt:formatNumber value= "${board.price}"  pattern="#,###"/>원</a>     
                     <p>
                         <i class="fas fa-heart me-1 text-primary"></i>
                         <a class="text-primary" id="likeCnt${board.brd_num}"> ${board.like_cnt}</a>
@@ -239,8 +271,6 @@ $("#sortOption").change(function() {
         </div>
     </c:forEach>
 </div>
-
-
 
 
  <div class="container text-center">
@@ -269,15 +299,47 @@ $("#sortOption").change(function() {
     </ul>
 </div> 
 
+
+
           </div>
         </div>
-      </div>
       </div>
     </section>
   
   
-  
-  
+  <!--ya 비로그인 자가 글작성, 내가쓴글 확인  시도시 알람창 띄우면서 로그인 페이지로 넘겨버리기  ---------->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    	  const form = document.getElementById('options');
+          form.addEventListener('click', function (event) {
+            // 세션의 user_num 값 확인
+            const userNum = <%= session.getAttribute("user_num") %>;
+
+            // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
+            if (userNum === null) {
+                alert('로그인 후 이용해주세요!');
+                event.preventDefault(); // 폼 전송을 막음
+                window.location.href = '/loginForm'; // 로그인 페이지로 이동
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    	  const form = document.getElementById('option2');
+          form.addEventListener('click', function (event) {
+            // 세션의 user_num 값 확인
+            const userNum = <%= session.getAttribute("user_num") %>;
+
+            // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
+            if (userNum === null) {
+                alert('로그인 후 이용해주세요!');
+                event.preventDefault(); // 폼 전송을 막음
+                window.location.href = '/loginForm'; // 로그인 페이지로 이동
+            }
+        });
+    });
+</script>  
   
   
   
