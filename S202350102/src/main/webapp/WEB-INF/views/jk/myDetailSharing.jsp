@@ -30,18 +30,19 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        <!-- Images -->
+                        <!-- Images detailSharing과 똑같이 일치시킴! (이페이지에선 에러남) -->
                         <div class="row gx-5 mb-10 mb-md-0">
                             <div class="col-2">
                                 <!-- Slider -->
                                 <div class="flickity-nav flickity-vertical" data-flickity='{"asNavFor": "#productSlider", "draggable": false}'>
                                     <!-- Item -->
-                                    <div class="ratio ratio-1x1 bg-cover mb-4" style="background-image: url(${board.img});"></div>
+                                    <div class="ratio ratio-1x1 bg-cover mb-4" style="background-image: url(${pageContext.request.contextPath}/upload/${board.img});"></div>
                                 </div>
                             </div>
                             <div class="col-10">
                                 <!-- Card -->
                                 <div class="card">
+                                    <!-- Badge -->
                                   
                                     <!-- Slider -->
                                     <div data-flickity='{"draggable": false, "fade": true}' id="productSlider">
@@ -72,12 +73,15 @@
                         <!-- Heading, Price, Form -->
                         <h3 class="mb-1">${board.title}</h3>
                         <div class="mb-3 text-gray-400">
-                            <span class="ms-1 fs-5 fw-bold">${board.price}원</span>
+                             <span class="ms-1 fs-5 fw-bold"><fmt:formatNumber value="${board.price}" pattern="#,###"/>원</span>
                         </div>
                         <hr class="my-3">
                         
                         <!--  신청내용 -->
                         <p class="mb-4 fs-sm fw-bold">
+                        <a class="text-body" href="product.html">작성자</a> <br>
+	                      <span class="text-muted">${board.nick}</span>
+	                    </p>
 	                      <a class="text-body" href="product.html">작성일</a> <br>
 	                      <span class="text-muted">${board.reg_date}</span>
 	                    </p>

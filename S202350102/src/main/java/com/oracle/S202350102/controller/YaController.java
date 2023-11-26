@@ -299,32 +299,74 @@ public class YaController {
 		//자유게시판 게시글조건(이름,제목)검색 -> 객체로 변경해야 json 형식으로 데이터 반환 가능
 		@GetMapping(value="/listBoardSearch", produces = "application/json")
 		@ResponseBody
-		public List<Board> listBoardSearch(HttpServletRequest request) {
+		public  Map<String, Object> listBoardSearch(HttpServletRequest request,
+				@RequestParam String currentPage) {
 			System.out.println("YaController ycs.listSearchBoardart....");
-			String keyword = request.getParameter("keyword");
-		
+			String keyword = request.getParameter("keyword");			
 			System.out.println("사용자 검색한 키워드: " + keyword);
-		    List<Board> listSearchBoard = ycs.listSearchBoard(keyword);
+			
+		
+		    int countSearch =  ycs.countSearch(keyword);
+		    System.out.println("YaController countSearch(keyword):"+ countSearch);
 		    
+			// 페이징 처리
+		    Paging boardPage = new Paging(countSearch, currentPage);	    
+		    List<Board> listSearchBoard = ycs.listSearchBoard(keyword, currentPage);	    
 		    
+		
+		    int startNum =  countSearch - boardPage.getStart() +1 ;
+		    int endNum = countSearch - boardPage.getEnd()  ;
 		    
 		    // 한빛 : 유저의 레벨정보를 불러오는 메소드		    
 		    listSearchBoard = us.boardWriterLevelInfo(listSearchBoard);
 		    System.out.println("YaController listSearchBoard.size?" + listSearchBoard.size());
-
-		    return listSearchBoard;
+	
+		    
+		    
+		    //검색 결과와 페이징 정보를 클라이언트에게 전달
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("listSearchBoard", listSearchBoard);
+		    response.put("boardPage", boardPage);
+		    response.put("startNum", startNum);
+		    response.put("endNum", endNum);
+		    
+		    
+		    return response;
 		}
 		
 		@GetMapping("/listBoardSort")
 		@ResponseBody
-		public  List<Board> listBoardSort(HttpServletRequest request ) {
+		public Map<String, Object> listBoardSort(HttpServletRequest request, Board board,
+				@RequestParam String currentPage ) {
 			System.out.println("YaController ycs.listBoardSort start....");
 			String sortOption = request.getParameter("sort");
+			int totalCommunity = ycs.totalCommunity(board);
+			// 페이징 처리
+		    Paging boardPage = new Paging(totalCommunity, currentPage);	    
+		
 			
-			List<Board> listSortedBoard = ycs.listBoardSort(sortOption);
+			 int startNum = totalCommunity - boardPage.getStart() +1 ; 
+			 int endNum =totalCommunity - boardPage.getEnd() +1;
+			   
+		    int start = boardPage.getStart();
+		    int end = boardPage.getEnd();
+		    
+		    List<Board> listSortedBoard = ycs.listBoardSort(sortOption, start, end );
+			System.out.println("YaController listBoardSort size?"+listSortedBoard.size());
+			
 			// 한빛 : 리스트에 유저정보 추가하는 메소드
 			listSortedBoard = us.boardWriterLevelInfo(listSortedBoard);
-		    return listSortedBoard;
+		   
+			// 페이징 정보를 클라이언트에게 전달
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("listSortedBoard", listSortedBoard);
+		    response.put("boardPage", boardPage);		
+			response.put("startNum", startNum); 
+			response.put("endNum", endNum);
+			
+		    
+		    
+		    return response;
 		}
 		
 		//상세 게시글 댓글  조회
@@ -566,71 +608,76 @@ public class YaController {
 					user_num = (int) session.getAttribute("user_num");					
 					User1 user1 = ycs.userSelect(user_num);
 					model.addAttribute("user1", user1);		
-				
-				//myUploadSharingList 게시글 총 수 ----------------------------------------------------------------------------
-				int totalMyUploadsharing =0;
-				totalMyUploadsharing =ycs.totalMyUploadsharing(user_num);
-				model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
-				System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
-				
-				//페이징처리 
-				Paging myUploadSharingPaging = new Paging(totalMyUploadsharing, currentPage);
-				board.setUser_num((int) session.getAttribute("user_num"));
-				board.setStart(myUploadSharingPaging.getStart());
-				board.setEnd(myUploadSharingPaging.getEnd());
-				model.addAttribute("myUploadSharingPaging" , myUploadSharingPaging);
-				System.out.println("YaController myUploadSharingPage start?"+myUploadSharingPaging.getStart());
-				System.out.println(" YaControlloermyUploadSharingPaging total?"+myUploadSharingPaging.getTotal());
-				System.out.println("myUploadSharingPaging End?"+myUploadSharingPaging.getEnd());
-	
-				
-				//myUploadShairngList 조회
-				List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(user_num);
-				System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
-				model.addAttribute("myUploadSharingList", myUploadSharingList);				
-				
-				//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------				
-				int totalJoinSharing = 0;
-				totalJoinSharing = ycs.totalJoinSharing(user_num);		
-				System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
-				
-				//페이징처리 
-				Paging myJoinSharingPaging = new Paging(totalJoinSharing, currentPage);
-				sharingList.setUser_num((int) session.getAttribute("user_num"));
-				sharingList.setStart(myJoinSharingPaging.getStart());
-				sharingList.setEnd(myJoinSharingPaging.getEnd());
-				model.addAttribute("myJoinSharingPaging" ,  myJoinSharingPaging);
-				
-				System.out.println("YaController myJoinSharingPaging start?"+myJoinSharingPaging.getStart());
-				System.out.println(" YaControlloermyJoinSharingPaging total?"+myJoinSharingPaging.getTotal());
-				System.out.println("myJoinSharingPaging End?"+myUploadSharingPaging.getEnd());
-				
-				//myJoinSharingList 조회 
-				List<SharingList> myJoinSharingList = ycs.myJoinSharingList(user_num);
-				System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
-				model.addAttribute("myJoinSharingList", myJoinSharingList);
-				
-				//myConfirmSharingList 게시글 총 수 -----------------------------------------------------------------------------
-				int totalConfirmSharing = 0;
-				 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
-				System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
-				
-				//페이징처리 
-				Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage);
-				board.setUser_num((int) session.getAttribute("user_num"));
-				board.setStart(myConfirmSharingPaging.getStart());
-				board.setEnd(myConfirmSharingPaging.getEnd());
-				model.addAttribute("myConfirmSharingPaging" , myConfirmSharingPaging);
-				System.out.println("YaController myConfirmSharingPaging start?"+myConfirmSharingPaging.getStart());
-				System.out.println(" YaControlloer myConfirmSharingPaging total?"+myConfirmSharingPaging.getTotal());
-				System.out.println("myConfirmSharingPaging End?"+myConfirmSharingPaging.getEnd());
-									
-				//myConfirmSharingList 조회 
-				List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(user_num);
-				System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
-				model.addAttribute("myConfirmSharingList", myConfirmSharingList);
+					
+
 			
+				   int totalMyUploadsharing =0;
+					totalMyUploadsharing =ycs.totalMyUploadsharing(user_num);
+					model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
+					System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
+				
+					//페이징처리 
+					Paging myUploadSharingPaging = new Paging(totalMyUploadsharing, currentPage,3);
+					board.setUser_num((int) session.getAttribute("user_num"));
+					board.setStart(myUploadSharingPaging.getStart());
+					board.setEnd(myUploadSharingPaging.getEnd());
+					model.addAttribute("myUploadSharingPaging" , myUploadSharingPaging);
+					System.out.println("YaController myUploadSharingPage start?"+myUploadSharingPaging.getStart());
+					System.out.println(" YaControlloermyUploadSharingPaging total?"+myUploadSharingPaging.getTotal());
+					System.out.println("myUploadSharingPaging End?"+myUploadSharingPaging.getEnd());
+					
+					//myUploadShairngList 
+					List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(board);
+					System.out.println("YaController sharingManagement.size()?"+myUploadSharingList.size());
+					model.addAttribute("myUploadSharingList", myUploadSharingList);				
+					
+				
+				   
+					//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------				
+					int totalJoinSharing = 0;
+					totalJoinSharing = ycs.totalJoinSharing(user_num);		
+					System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
+					
+					//페이징처리 
+					Paging myJoinSharingPaging = new Paging(totalJoinSharing, currentPage, 3);
+					sharingList.setUser_num((int) session.getAttribute("user_num"));
+					sharingList.setStart(myJoinSharingPaging.getStart());
+					sharingList.setEnd(myJoinSharingPaging.getEnd());
+					model.addAttribute("myJoinSharingPaging" ,  myJoinSharingPaging);
+					
+					System.out.println("YaController myJoinSharingPaging start?"+myJoinSharingPaging.getStart());
+					System.out.println(" YaControlloermyJoinSharingPaging total?"+myJoinSharingPaging.getTotal());
+					System.out.println("myJoinSharingPaging End?"+myJoinSharingPaging.getEnd());
+					
+					//myJoinSharingList 조회 
+					List<SharingList> myJoinSharingList = ycs.myJoinSharingList(sharingList);
+					System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
+					model.addAttribute("myJoinSharingList", myJoinSharingList);
+					
+				
+					//myConfirmSharingList 게시글 총 수 -----------------------------------------------------------------------------
+					int totalConfirmSharing = 0;
+					 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
+					System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
+					
+					//페이징처리 
+					Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage, 3);
+					board.setUser_num((int) session.getAttribute("user_num"));
+					board.setStart(myConfirmSharingPaging.getStart());
+					board.setEnd(myConfirmSharingPaging.getEnd());
+					model.addAttribute("myConfirmSharingPaging" , myConfirmSharingPaging);
+					System.out.println("YaController myConfirmSharingPaging start?"+myConfirmSharingPaging.getStart());
+					System.out.println(" YaControlloer myConfirmSharingPaging total?"+myConfirmSharingPaging.getTotal());
+					System.out.println("myConfirmSharingPaging End?"+myConfirmSharingPaging.getEnd());
+										
+					//myConfirmSharingList 조회 
+					List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(board);
+					System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
+					model.addAttribute("myConfirmSharingList", myConfirmSharingList);
+					
+			 	
 			}
+										
 				return "ya/mySharingManagement";
 				
 		}	  
@@ -837,5 +884,43 @@ public class YaController {
 				return "redirect:/sharAdminList";
 				
 			}
-	
+			
+		//쉐어링 검색기능
+		@GetMapping(value="/sharingSearchResult")
+		public String sharingSearchResult( @RequestParam String keyword, String currentPage, Model model, Board board, String sortOption) {	
+			List<Board> sharingSearchResult = null;
+			
+			System.out.println("YaController sharingSearchResult start....");		
+			System.out.println("사용자 검색한 키워드: " + keyword);
+			
+		      //ya 쉐어링 검색 게시글 총 수, 페이징 처리 작업 
+		      int searchSharingCnt = 0;
+		      searchSharingCnt = ycs.searchSharingCnt(keyword);
+		      System.out.println("YaController searchSharingCnt:"+ searchSharingCnt);	      
+		      model.addAttribute("searchSharingCnt", searchSharingCnt);
+		      
+		      System.out.println("YaController searchSharingCnt->"+ searchSharingCnt);
+		      
+		      Paging sharBoardPage = new Paging(searchSharingCnt, currentPage, 9);
+		      
+		      board.setStart(sharBoardPage.getStart());
+		      board.setEnd(sharBoardPage.getEnd());
+		      model.addAttribute("sharBoardPage", sharBoardPage);
+		     
+		      System.out.println("YaController boardPage rowPage?"+sharBoardPage.getRowPage());
+		      System.out.println(" YaController boardPage start?"+sharBoardPage.getStart());
+		      System.out.println("YaControlller boardPage end?"+sharBoardPage.getEnd());
+		      System.out.println(" YaControlloer boardpage total?"+sharBoardPage.getTotal());
+		
+			
+			sharingSearchResult = ycs.sharingSearchResult(keyword, currentPage, sortOption);
+			
+			model.addAttribute("sharingSearchResult", sharingSearchResult);
+			model.addAttribute("searchSharingCnt", searchSharingCnt);
+			model.addAttribute("sortOption", sortOption);
+			
+			return"ya/sharingSearch";
+		} 
+		
+		
 }		

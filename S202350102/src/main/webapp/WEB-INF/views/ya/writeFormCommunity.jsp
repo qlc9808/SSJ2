@@ -22,7 +22,7 @@
         </div>
         
 	   <!--form  -->
-      <div class="col-12 col-md-9 col-lg-8 offset-lg-1">        
+     <div class="col-12 col-md-9 col-lg-10 offset-lg-1">             
      	<!--제목, 회원 닉네임 띄우기, 내용, 작성일자, 첨부파일 -->
  	 <c:if test="${msg!=null}">${msg}</c:if>
  	  <input class="form-control form-control-sm" id="user_num" name="user_num" type="hidden" value="${user1.user_num}" required>
@@ -59,9 +59,7 @@
 					<div class="col-lg-6 mb-2">
 					    <button type="submit" class="btn btn-outline-dark w-100">
 					        작성완료
-					    </button>
-					    
-				
+					    </button>			
 					</div>	        
  			</form>
          </div>

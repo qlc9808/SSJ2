@@ -20,13 +20,14 @@
             <h3 class="mb-10"> 게시글 상세내용 </h3>
           </div>
         </div>
-        
 	   <!--form  -->
-      <div class="col-12 col-md-9 col-lg-8 offset-lg-1">        	
+      <div class="col-12 col-md-9 col-lg-10 offset-lg-1">        	
 		<input type="hidden" name="brd_step" value="${board.brd_step}"> 
 		<input type="hidden" name="brd_group" value="${board.brd_group}"> 
 		            <input type=hidden  value="${board.user_num }">
-		
+		<div class="button-container" style="text-align: right;" > 
+       <!--  <a href="listCommunity?" class="btn btn-dark btn-xs">목록</a>  -->
+        </div>
 		<c:choose>
     		<c:when test="${board.brd_step == 0}">
   			Reviews : ${board.replyCount}
@@ -64,7 +65,7 @@
 					<div class="form-group mb-7">
 						<label class="form-label" for="file">이미지 </label>
 						<a href="${pageContext.request.contextPath}/upload/${board.img}">
-                            <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top">
+                            <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top" style="width: 100%; height: 200;">
                         </a>
 					</div>   	
 		 	</c:when>

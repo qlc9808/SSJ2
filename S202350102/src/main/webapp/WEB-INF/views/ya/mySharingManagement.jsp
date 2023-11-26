@@ -182,6 +182,7 @@
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
+                            <th scope="col" class=th-tilte">이름</th>
                             <th scope="col" class="th-bank_info">계좌정보</th>
                             <th scope="col" class="th-price">입금액</th>
                             <th scope="col" class="th-bank_duedate">입금기한</th>
@@ -194,6 +195,7 @@
                             <tr>
                                 <td>${num}</td>    
                                 <td><a href="detailSharing?brd_num=${board.brd_num}">${board.title}</a></td>
+                                <td>${board.user_name}</td>
                                 <td>${board.bank_info}</td>    
                                 <td><fmt:formatNumber value="${board.price div board.applicants}" pattern="#,###"/></td>        
                                 <td>${board.bank_duedate}</td>

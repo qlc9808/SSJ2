@@ -36,7 +36,7 @@ function fileUpdate(){
         </div>
 
 	   <!--form  -->
-      <div class="col-12 col-md-9 col-lg-8 offset-lg-1">        
+      <div class="col-12 col-md-9 col-lg-10 offset-lg-1">             
      	<!--제목, 닉네임, 내용, 작성일자, 첨부파일 -->
  		<form action="/updateCommunity" method="post" enctype="multipart/form-data"> 	 	
 			<input type="hidden" name="brd_num" value="${board.brd_num}">
@@ -81,8 +81,11 @@ function fileUpdate(){
 					</div>
 					    
 					    
-		<!--작성완료버튼 모달창  -->
+		<!--수정완료버튼 모달창  -->
+		<div class="button-container" >
 		<button type="button" class="btn btn-dark btn-sm" id="openModalButton">수정완료</button>
+      <!--   <a href="listcommunity?" class="btn btn-dark btn-sm">취소</a> 	 -->	
+		</div>
 		<!-- Modal -->
 		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
 		    <div class="modal-dialog modal-sm" role="document"> <!-- 모달 사이즈를 조절 -->
