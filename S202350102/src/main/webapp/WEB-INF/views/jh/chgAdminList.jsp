@@ -258,8 +258,7 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-						<button type="button" class="btn btn-secondary btn-xxs" onclick="chgAdminDetail(${chgList.chg_id})">상세보기1</button>
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&currentPage=${page.currentPage}&chgUpdateMode=0&chg_lg=${chg_lg}'">상세보기</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="chgAdminDetail(${chgList.chg_id})">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>

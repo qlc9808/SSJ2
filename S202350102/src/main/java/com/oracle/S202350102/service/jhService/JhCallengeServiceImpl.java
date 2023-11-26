@@ -31,14 +31,14 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return chgDetail;
 	}
 
-	@Override
-	public List<Board> chgReviewList(Board board) {
-		System.out.println("JhCallengeServiceImpl chgReviewList Start...");
-		
-		List<Board> chgReviewList = jhChgDao.chgReviewList(board);
-		
-		return chgReviewList;
-	}
+	/* 보드로 
+	 * @Override public List<Board> chgReviewList(Board board) {
+	 * System.out.println("JhCallengeServiceImpl chgReviewList Start...");
+	 * 
+	 * List<Board> chgReviewList = jhChgDao.chgReviewList(board);
+	 * 
+	 * return chgReviewList; }
+	 */
 
 	@Override
 	public String userStatus(int userNum) {
@@ -49,31 +49,31 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return userStatus;
 	}
 
-	@Override
-	public Board reviewContent(int brd_num) {
-		System.out.println("JhCallengeServiceImpl reviewContent Start...");
-		Board reviewContent = jhChgDao.reviewContent(brd_num);
-		
-		return reviewContent;
-	}
+	/*//보드서비스로 옮김
+	 * @Override public Board reviewContent(int brd_num) {
+	 * System.out.println("JhCallengeServiceImpl reviewContent Start..."); Board
+	 * reviewContent = jhChgDao.reviewContent(brd_num);
+	 * 
+	 * return reviewContent; }
+	 */
 
-	@Override
-	public List<Board> reviewReplyList(Board board) {
-		System.out.println("JhCallengeServiceImpl reviewReplyList Start...");
-		
-		List<Board> reviewReplyList = jhChgDao.reviewReplyList(board);
-		
-		return reviewReplyList;
-	}
+	//보드로
+//	@Override
+//	public List<Board> reviewReplyList(Board board) {
+//		System.out.println("JhCallengeServiceImpl reviewReplyList Start...");
+//		
+//		List<Board> reviewReplyList = jhChgDao.reviewReplyList(board);
+//		
+//		return reviewReplyList;
+//	}
 
-	@Override
-	public int reviewTotal(int chg_id) {
-		System.out.println("JhCallengeServiceImpl reviewTotal Start...");
-		int reviewTotal = jhChgDao.reviewTotal(chg_id);
-		
-		return reviewTotal;
-	}
-
+	/*보드 서비스
+	 * @Override public int reviewTotal(int chg_id) {
+	 * System.out.println("JhCallengeServiceImpl reviewTotal Start..."); int
+	 * reviewTotal = jhChgDao.reviewTotal(chg_id);
+	 * 
+	 * return reviewTotal; }
+	 */
 
 	@Override
 	public int ingChgListTotal() {
@@ -109,11 +109,12 @@ public class JhCallengeServiceImpl implements JhCallengeService {
 		return result;
 	}
 
-	@Override
-	public void viewCntUp(int brd_num) {
-		System.out.println("JhCallengeServiceImpl viewCntUp Start...");
-		jhChgDao.viewCntUp(brd_num);
-	}
+	//보드로
+//	@Override
+//	public void viewCntUp(int brd_num) {
+//		System.out.println("JhCallengeServiceImpl viewCntUp Start...");
+//		jhChgDao.viewCntUp(brd_num);
+//	}
 
 
 	@Override

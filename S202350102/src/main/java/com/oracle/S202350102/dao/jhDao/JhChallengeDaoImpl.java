@@ -37,22 +37,23 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return chgDetail;
 	}
 
-	@Override
-	public List<Board> chgReviewList(Board board) {
-		System.out.println("JhChallengeDaoImpl chgReviewList Start...");
-		List<Board> chgReviewList = null;
-		
-		try {
-			
-			chgReviewList = session.selectList("jhChgReviewList", board);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl chgReviewList e.getMessage() -> "+ e.getMessage());
-		}
-		
-		System.out.println("JhChallengeDaoImpl chgReviewList  chgReviewList.size() -> " + chgReviewList.size());
-
-		return chgReviewList;
-	}
+	//보드로
+//	@Override
+//	public List<Board> chgReviewList(Board board) {
+//		System.out.println("JhChallengeDaoImpl chgReviewList Start...");
+//		List<Board> chgReviewList = null;
+//		
+//		try {
+//			
+//			chgReviewList = session.selectList("jhChgReviewList", board);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl chgReviewList e.getMessage() -> "+ e.getMessage());
+//		}
+//		
+//		System.out.println("JhChallengeDaoImpl chgReviewList  chgReviewList.size() -> " + chgReviewList.size());
+//
+//		return chgReviewList;
+//	}
 
 	@Override
 	public String userStatus(int userNum) {
@@ -71,53 +72,54 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return userStatus;
 	}
 
-	@Override
-	public Board reviewContent(int brd_num) {
-		System.out.println("JhChallengeDaoImpl reviewContent Start...");
-		Board reviewContent = null;
-		
-		try {
-			reviewContent = session.selectOne("jhReviewContent" ,brd_num);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewContent e.getMessage() -> " + e.getMessage());
-		}
-		System.out.println("JhChallengeDaoImpl chgReviewList  reviewContent -> " + reviewContent);
-		
-		return reviewContent;
-	}
+	/* 보드 다오로 옮김
+	 * @Override public Board reviewContent(int brd_num) {
+	 * System.out.println("JhChallengeDaoImpl reviewContent Start..."); Board
+	 * reviewContent = null;
+	 * 
+	 * try { reviewContent = session.selectOne("jhReviewContent" ,brd_num); } catch
+	 * (Exception e) {
+	 * System.out.println("JhChallengeDaoImpl reviewContent e.getMessage() -> " +
+	 * e.getMessage()); }
+	 * System.out.println("JhChallengeDaoImpl chgReviewList  reviewContent -> " +
+	 * reviewContent);
+	 * 
+	 * return reviewContent; }
+	 */
 
-	@Override
-	public List<Board> reviewReplyList(Board board) {
-		System.out.println("JhChallengeDaoImpl reviewReplyList Start...");
-		
-		List<Board> reviewReplyList = null;
-		
-		try {
-			reviewReplyList = session.selectList("jhReviewReplyList", board);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewReplyList e.getMessage() -> " + e.getMessage());
-		}
-		
-		System.out.println("JhChallengeDaoImpl reviewReplyList  reviewReplyList.size() -> " + reviewReplyList.size());
-		
-		return reviewReplyList;
-	}
+	//보드
+//	@Override
+//	public List<Board> reviewReplyList(Board board) {
+//		System.out.println("JhChallengeDaoImpl reviewReplyList Start...");
+//		
+//		List<Board> reviewReplyList = null;
+//		
+//		try {
+//			reviewReplyList = session.selectList("jhReviewReplyList", board);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl reviewReplyList e.getMessage() -> " + e.getMessage());
+//		}
+//		
+//		System.out.println("JhChallengeDaoImpl reviewReplyList  reviewReplyList.size() -> " + reviewReplyList.size());
+//		
+//		return reviewReplyList;
+//	}
 
-	@Override
-	public int reviewTotal(int chg_id) {
-		System.out.println("JhChallengeDaoImpl reviewTotal Start...");
-		int reviewTotal = 0;
-		
-		try {
-			reviewTotal = session.selectOne("jhReviewTotal", chg_id);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewTotal e.getMessage() -> " + e.getMessage());
-		}
-		System.out.println("JhChallengeDaoImpl chgReviewList  reviewTotal -> " + reviewTotal);
-		
-		
-		return reviewTotal;
-	}
+	/*보드 다오
+	 * @Override public int reviewTotal(int chg_id) {
+	 * System.out.println("JhChallengeDaoImpl reviewTotal Start..."); int
+	 * reviewTotal = 0;
+	 * 
+	 * try { reviewTotal = session.selectOne("jhReviewTotal", chg_id); } catch
+	 * (Exception e) {
+	 * System.out.println("JhChallengeDaoImpl reviewTotal e.getMessage() -> " +
+	 * e.getMessage()); }
+	 * System.out.println("JhChallengeDaoImpl chgReviewList  reviewTotal -> " +
+	 * reviewTotal);
+	 * 
+	 * 
+	 * return reviewTotal; }
+	 */
 
 
 	
@@ -197,21 +199,22 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return result;
 	}
 
-	@Override
-	public void viewCntUp(int brd_num) {
-		System.out.println("JhChallengeDaoImpl viewCntUp Start...");
-		
-		int result = 0;
-		
-		try {
-			result = session.update("jhViewCntUp", brd_num);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl viewCntUp e.getMessage() -> " + e.getMessage());
-		}
-		
-		System.out.println("JhChallengeDaoImpl viewCntUp result -> "+ result);
-		
-	}
+	//보드로
+//	@Override
+//	public void viewCntUp(int brd_num) {
+//		System.out.println("JhChallengeDaoImpl viewCntUp Start...");
+//		
+//		int result = 0;
+//		
+//		try {
+//			result = session.update("jhViewCntUp", brd_num);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl viewCntUp e.getMessage() -> " + e.getMessage());
+//		}
+//		
+//		System.out.println("JhChallengeDaoImpl viewCntUp result -> "+ result);
+//		
+//	}
 
 
 

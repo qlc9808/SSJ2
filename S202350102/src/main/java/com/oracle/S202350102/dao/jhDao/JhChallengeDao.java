@@ -12,15 +12,15 @@ public interface JhChallengeDao {
 	Challenge 			chgDetail(int chg_id);
 
 	//아래 리스트 두개 합칠 수 없나?
-	List<Board> 		chgReviewList(Board board);
+//	List<Board> 		chgReviewList(Board board); //보드로
 	
-	List<Board>			reviewReplyList(Board board);
+//	List<Board>			reviewReplyList(Board board); //보드로
 
 	String 				userStatus(int userNum);
 
-	Board 				reviewContent(int brd_num);
+//	Board 				reviewContent(int brd_num); //보드 다오로 옮김
 
-	int 				reviewTotal(int chg_id);
+//	int 				reviewTotal(int chg_id); //보드 다오
 
 	int 				ingChgListTotal();
 
@@ -32,7 +32,7 @@ public interface JhChallengeDao {
 
 	int 				replyDelete(int brd_num);
 		
-	void 				viewCntUp(int brd_num);
+//	void 				viewCntUp(int brd_num); //보드로
  
 	int 				replyUpdate(Board board);
 

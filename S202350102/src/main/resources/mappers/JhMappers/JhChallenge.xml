@@ -19,8 +19,8 @@
 		WHERE ch.chg_id = #{chg_id}
 	</select>
 	
-	<!--챌린지 후기 총 갯수  -->
-	<select id="jhReviewTotal" parameterType="int" resultType="int">
+	<!--챌린지 후기 총 갯수  보드로 옮김 -->
+<!-- 	<select id="jhReviewTotal" parameterType="int" resultType="int">
 		SELECT 	COUNT(*)
 		FROM 	board b
 		INNER JOIN challenge c ON b.chg_id = c.chg_id
@@ -28,10 +28,10 @@
 		AND 	brd_md = 101
 		AND 	c.chg_id = #{chg_id}
 		AND 	brd_step = 0
-	</select>
+	</select> -->
 	
-	<!-- 챌린지 후기 리스트 -->
-	<select id="jhChgReviewList" parameterType="Board" resultType="Board">
+	<!-- 챌린지 후기 리스트  보드로 옮김-->
+<!-- 	<select id="jhChgReviewList" parameterType="Board" resultType="Board">
 		SELECT * 
 		FROM (
 		        SELECT  ROWNUM AS rn, a.* 
@@ -47,7 +47,7 @@
 		                    ORDER BY 	b.brd_num DESC) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}  
-	</select>
+	</select> -->
 	
 	<!-- 필요한가? -->
 	<select id="jhUserStatus" parameterType="int" resultType="java.lang.String">
@@ -57,23 +57,23 @@
 		WHERE 	u.user_num = #{user_num}
 	</select>
 
-	<!-- 조회수 올리기 -->
-	<update id="jhViewCntUp" parameterType="int">
+	<!-- 조회수 올리기 보드로-->
+<!-- 	<update id="jhViewCntUp" parameterType="int">
 		UPDATE board
 		SET    view_cnt = view_cnt+1
 		WHERE  brd_num  = #{brd_num}
-	</update>
+	</update> -->
 
-	<!-- 후기 내용 -->
-	<select id="jhReviewContent" parameterType="int" resultType="Board">
+	<!-- 후기 내용  보드 매퍼로 옮김-->
+	<!-- <select id="jhReviewContent" parameterType="int" resultType="Board">
 		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.user_num, u.nick, b.view_cnt, replyCount(b.brd_num) replyCount
 		FROM 	board b
 		INNER JOIN user1 u ON b.user_num = u.user_num
 		WHERE 	b.brd_num = #{brd_num}
-	</select>
+	</select> -->
 	
-	<!-- 후기 댓글 리스트 -->
-	<select id="jhReviewReplyList" parameterType="Board" resultType="Board">
+	<!-- 후기 댓글 리스트 보드로 -->
+	<!-- <select id="jhReviewReplyList" parameterType="Board" resultType="Board">
 		SELECT * 
 		FROM (
 				SELECT 	 ROWNUM AS rn, a.*
@@ -85,7 +85,7 @@
 						AND 	 b.brd_step > 0
 						ORDER BY b.brd_num DESC ) a
 		) WHERE rn BETWEEN #{start} AND #{end} 
-	</select>
+	</select> -->
 	
 	<!-- 후기 댓글 입력 -->
 	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >

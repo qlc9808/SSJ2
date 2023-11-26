@@ -33,6 +33,7 @@ import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jhService.JhBoardService;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
@@ -50,6 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JhController {
 	
 	private final JhCallengeService jhCService;
+	private final JhBoardService	jhBrdService;
 	private final UserService userService;
 	
 	private final ThChgService tcs;
@@ -136,7 +138,7 @@ public class JhController {
 //	}
 	
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
-	//챌린지 상세정보 조회
+	////////챌린지 상세정보 조회/////////////////////////////////////////////////////////////////////////////////////////////////////
 	@RequestMapping(value = "chgDetail")
 	public String chgDetail(@RequestParam int chg_id
 						  , @RequestParam(value = "sortBy", required = false) String sortBy
@@ -172,7 +174,7 @@ public class JhController {
 		
 		//jh 작성
 		//후기 총 개수
-		int reviewTotal = jhCService.reviewTotal(chg_id);
+		int reviewTotal = jhBrdService.reviewTotal(chg_id);
 		model.addAttribute("reviewTotal", reviewTotal);
 		System.out.println("JhController chgDetail  reviewTotal -> "+ reviewTotal);
 		
@@ -186,7 +188,7 @@ public class JhController {
 		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
 		
 		//후기 목록 조회
-		List<Board> chgReviewList = jhCService.chgReviewList(board);
+		List<Board> chgReviewList = jhBrdService.chgReviewList(board);
 		chgReviewList = userService.boardWriterLevelInfo(chgReviewList);
 		model.addAttribute("chgReviewList", chgReviewList);
 		model.addAttribute("tap", tap);
@@ -363,10 +365,10 @@ public class JhController {
 		int brd_num = board.getBrd_num();
 		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		//후기 글 조회수 +1
-		jhCService.viewCntUp(brd_num);
+		jhBrdService.viewCntUp(brd_num);
 		
 		//챌린지 후기글 내용 조회
-		Board reviewContent = jhCService.reviewContent(brd_num);
+		Board reviewContent = jhBrdService.reviewContent(brd_num);
 		
 		//후기글 총 댓글 수
 		int replyCount = reviewContent.getReplyCount();
@@ -381,7 +383,7 @@ public class JhController {
 		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
 		
 		//챌린지 해당 글에 대한 댓글 조회
-		List<Board> reviewReplyList = jhCService.reviewReplyList(board);
+		List<Board> reviewReplyList = jhBrdService.reviewReplyList(board);
 		
 		
 		// challenger 참여 유무 판단용
@@ -416,6 +418,7 @@ public class JhController {
 		return "jh/jhReviewContent";
 	}
 	
+	
 	@RequestMapping(value = "showReplyUpdate")
 	public String showReplyUpdate(@RequestParam("rep_brd_num") int rep_brd_num, 
 								  @RequestParam("ori_brd_num") int ori_brd_num,
@@ -434,7 +437,7 @@ public class JhController {
 		
 	}
 	
-	
+	//////////////////////////////////////////////////////////////////////여기서 부터 보드 다시 옮기기
 	//챌린지 후기 댓글 입력
 	@RequestMapping(value = "replyInsert")
 	public String replyInsert(Board board, HttpSession session, Model model) {
