@@ -475,6 +475,7 @@
 				<div class="col-12" id="certListContainer">
 		
 					<!-- 인증글 시작 -->
+					<c:set var="num" value="${page.total - page.start + 1 }"/>
 					<c:forEach var="certList" items="${chgCertList }" varStatus="status">
 						<!-- 인증글 원글 -->
 						<input type="hidden" id="brd_num${status.index}" value="${certList.brd_num}">
@@ -971,22 +972,37 @@
 								</div>
 							</div>
 						</div>
+						<c:set var="num" value="${num - 1 }"/>
 					</c:forEach>
+					
+					<!-- 무한 스크롤 어케 구현함 ㄷㄷ -->
+					<c:if test="${page.startPage > page.pageBlock }">
+						${page.startPage - page.pageBlock }
+					</c:if>
+					
+					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
+						<c:if test="${i == page.currentPage }">
+						
+						</c:if>
+						
+						<c:if test="${i != page.currentPage }">
+						
+						</c:if>
+					</c:forEach>
+					
+					<c:if test="${page.endPage < page.totalPage }">
+						${page.startPage + page.pageBlock }
+					</c:if>
+					
 					<input type="hidden" id="page" value="2">
 					
 					<script type="text/javascript">
-						$(document).ready(function () {
-							$(window).scroll(function () {
-								if($(window).scrollTop() + $(window).height() >= $(document).height()) {
-									loadMoreData();
-								}
-							});
-						});
-						
-						function loadMoreData() {
-							var page = $('#page').val();
-							
-							alert("page -> " + page);
+						window.onscroll = function() {
+							if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+								var page = $('#page').val();
+								
+								// alert("page -> " + page);
+							}
 						}
 					</script>
 				</div>
