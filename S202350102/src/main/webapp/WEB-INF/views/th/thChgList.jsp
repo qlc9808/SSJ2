@@ -392,7 +392,7 @@
 				<div class="container d-flex justify-content-center my-5">
 				    <div class="d-flex justify-content-center">
 				        <div class="input-group input-group-merge">
-				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목 검색" value="${chg.keyword}">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목/내용 검색" value="${chg.keyword}">
 							<div class="input-group-append">
 								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
 							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton">
