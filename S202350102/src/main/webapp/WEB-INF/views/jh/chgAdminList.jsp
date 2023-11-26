@@ -47,6 +47,7 @@
 			
 	}
 	 
+	//이전/다음 버튼으로 페이지 이동 (테스트 필요)
 	function pageMoveNav(pageNum){
 	 	var state_md  = ${state_md}
 	    var chg_lg 	  = ${chg_lg}
@@ -56,6 +57,10 @@
 		location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 	}
 
+	//상세 페이지 이동
+	function chgAdminDetail(){
+		
+	}
 </script>
 
 </head>
@@ -173,7 +178,7 @@
 						</c:if>
 												
 						<td class="justify-content-center">
-							<button type="button" class="btn btn-secondary btn-xxs" onclick="location.href='/chgAdminDetail?chg_id=${chgList.chg_id}&state_md=${state_md }&currentPage=${page.currentPage}&chgUpdateMode=0&chg_lg=${chg_lg}'">상세보기</button>
+							<button type="button" class="btn btn-secondary btn-xxs" onclick="chgAdminDetail()">상세보기</button>
 						</td> 
 					</tr>
 					<c:set var="num" value="${num -1 }"></c:set>

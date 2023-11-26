@@ -929,7 +929,7 @@ public class JhController {
 	//챌린지 관리자 상세보기
 	@RequestMapping(value = "chgAdminDetail")
 	public String chgAdminDetail(
-								  Challenge challenge
+								  Challenge chg
 								, HttpSession session
 								, Model model
 								, @RequestParam(value = "chgUpdateMode", required = false) String chgUpdateMode
@@ -942,9 +942,10 @@ public class JhController {
 		System.out.println("JhController chgAdminDetail Start...");
 		
 		System.out.println("JhController chgDetail chgLg -> " + chgLg);
+		System.out.println("JhController chgDetail sortOpt -> " + chg.getSortOpt());
 		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
-		int state_md = challenge.getState_md();
+		int state_md = chg.getState_md();
 		
 		
 		//반려사유 종류
@@ -957,22 +958,24 @@ public class JhController {
 		
 		
 		//목록 눌렀을 때 해당 페이지 번호 리스트로 돌아가기 위한 것 ->수정하기
-		String pageNum = challenge.getPageNum();
+		String pageNum = chg.getPageNum();
 		
 		
 		
 		
-		int chg_id = challenge.getChg_id();
+		int chg_id = chg.getChg_id();
 		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
 		
 		//챌린지 상세 정보
-		challenge = jhCService.chgDetail(chg_id);
+		chg = jhCService.chgDetail(chg_id);
+		
+		System.out.println("JhController chgDetail sortOpt -> " + chg.getSortOpt());
 		
 		int chgrParti = ycs.selectChgrParti(chg_id);
 		System.out.println("JhController chgDetail chgrParti -> " + chgrParti);
 		model.addAttribute("chgrParti", chgrParti);
 		
-		model.addAttribute("chg", challenge);
+		model.addAttribute("chg", chg);
 		model.addAttribute("state_md", state_md);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("chgLg", chgLg);
@@ -996,9 +999,9 @@ public class JhController {
 			model.addAttribute("stateMdCategory", stateMdCategory);
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			String end_date = dateFormat.format(challenge.getEnd_date());			
-			String reg_date = dateFormat.format(challenge.getReg_date());
-			String create_date = dateFormat.format(challenge.getCreate_date());			
+			String end_date = dateFormat.format(chg.getEnd_date());			
+			String reg_date = dateFormat.format(chg.getReg_date());
+			String create_date = dateFormat.format(chg.getCreate_date());			
 			
 			model.addAttribute("end_date", end_date);
 			model.addAttribute("reg_date", reg_date);
