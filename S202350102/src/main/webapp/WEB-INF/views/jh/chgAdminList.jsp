@@ -377,7 +377,7 @@
 					<tr class="text-center" id="chgList${status.index }">
 						<td>${num }</td>
 						<td>${chgList.ctn }</td>
-						<td>${chgList.title }</td>
+						<td><a href="/chgDetail?chg_id=${chgList.chg_id }">${chgList.title }</a></td>
 						<td>${chgList.userId }</td>
 						<td>
 							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
