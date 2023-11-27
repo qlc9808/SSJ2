@@ -10,7 +10,7 @@
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 
 <script type="text/javascript">
-	
+
 	// 모달 값 지우기
 	// 모달창을 끌 때, hidden.bs.modal이라는 이벤트가 발생하고 이때 함수를 실행시킨다
 	// 해당모달의 input창의 모든 값을 비운다
@@ -18,6 +18,14 @@
 	$(document).ready(function() {
 		$('.modal').on('hidden.bs.modal', function(e) {
 			$(this).find('input').val('');
+		});
+		
+		// 검색어 입력 후 엔터키 입력하면 검색버튼 클릭
+		$("#keyword").keypress(function(e){	
+			if(e.keyCode && e.keyCode == 13){
+				$("#searchButton").trigger("click");
+				return false;
+			}
 		});
 	});
 	
@@ -167,9 +175,7 @@
 </head>
 
 <body>
-
-    
-    
+  
     <section class="pt-7 pb-12">
       <div class="container">
         <div class="row">
@@ -216,11 +222,15 @@
 						
 			               <!-- Card -->
 			              <div class="card mb-7">
+							
 							<!-- Badge -->
 							<!-- 찜수  10이상 시 인기 챌린지 태그 달아줌 -->
 							<c:if test="${chg.pick_cnt >= 10 }">
 			                  	<div class="badge bg-primary card-badge text-uppercase">인기</div>
-			                </c:if>
+			                </c:if>					
+				            
+
+			                
 			                <!-- Image -->
 			                <div class="card-img">
 			
@@ -282,8 +292,9 @@
 			                  </c:if>
 			                  <c:if test="${chg.thumb == null}">
 			                  	<img class="card-img-top" src="assets/img/chgDfaultImg2.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 25px;">
+			                  	
 			                  </c:if>
-
+								
 							  </a>
 			              </div>
 			              
@@ -299,7 +310,15 @@
 			                  	~ 
 			                	<fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                </div>
-							<div class="text-muted"><i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중</div>
+			                <div class="row">
+								<div class="text-muted col-6">
+									<i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중
+								</div>
+								<div class="text-muted col-6 text-start">
+									<c:if test="${chg.chg_public == 0 }"><i class="fa-solid fa-lock-open"></i>&ensp;공개</c:if>
+									<c:if test="${chg.chg_public == 1 }"><i class="fa-solid fa-lock"></i>&ensp;비공개</c:if>
+								</div>
+							</div>
 			                <div style="color: #e56d90;" id="inputPickCnt${chg.chg_id }"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;${chg.pick_cnt }</div>
 			              </div>
 							
@@ -340,14 +359,14 @@
 				                <label class="visually-hidden" for="input_priv_pswd${status.index }">
 				                  	비밀번호 *
 				                </label>
-				                <input class="form-control form-control-sm" id="input_priv_pswd${status.index }" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
+				                <input class="form-control form-control-sm input_priv_pswd" id="input_priv_pswd${status.index }" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
 				                <c:if test="${chg.chg_public == 1 }">
 				                	<input class="form-control form-control-sm" id="chg_priv_pswd${status.index }" name="chg_priv_pswd" type="hidden" value="${chg.priv_pswd }">
 				                	<input class="form-control form-control-sm" id="chg_id${status.index }" name="chg_id" type="hidden" value="${chg.chg_id }">
 				                </c:if>
 				              </div>
 				     
-				              <button class="btn btn-sm btn-dark" onclick="return confirmPswd(${status.index })">
+				              <button class="btn btn-sm btn-dark" id='confirmPswd' onclick="return confirmPswd(${status.index })">
 				                	확인
 				              </button>
 				    
