@@ -18,6 +18,7 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
 import com.oracle.S202350102.service.yrService.YrChallengeService;
@@ -36,6 +37,7 @@ public class YrController {
 	private final YrChallengePickService 	ycps;
 	private final YrBoardLikeService		ybls;
 	private final YrChallengeService		ychs;
+	private final UserService us;
 	
 //	@RequestMapping(value = "checkBoard")
 //	public String checkBoard() {
@@ -131,10 +133,12 @@ public class YrController {
 		
 		// 팔로잉 리스트 출력
 		List<User1> followingList = yfis.followingList(userNum);
+		followingList = us.userLevelList(followingList);
 		model.addAttribute("followingList", followingList);
 		
 		// 팔로우 리스트 출력
 		List<User1> followerList = yfis.followerList(userNum);
+		followerList = us.userLevelList(followerList);
 		model.addAttribute("followerList", followerList);
 		
 		return "jk/followList";

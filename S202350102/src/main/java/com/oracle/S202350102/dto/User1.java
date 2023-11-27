@@ -39,6 +39,7 @@ public class User1 {
 	// 유저 경험치 정보 조회
 	private int remain_exp;
 	private int percentage;
+	private String icon;
 	
 	// following 조회용
 	private int following_id;

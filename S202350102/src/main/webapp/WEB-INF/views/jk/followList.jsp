@@ -101,7 +101,7 @@
                             </div>
   
                             <!-- nick -->
-                            <span class="col-5">${following.nick}</span>
+                            <span class="col-5"><img title="Lv.${following.user_level } | exp.${following.user_exp}(${following.percentage }%)" src="/images/level/${following.icon}.gif">${following.nick}</span>
                                   
   
                               <!-- following & sendMessage -->
@@ -153,7 +153,7 @@
                             </div>
   
                             <!-- nick -->
-                                  <span class="col-5">${follower.nick}</span>
+                                  <span class="col-5"><img title="Lv.${follower.user_level } | exp.${follower.user_exp}(${follower.percentage }%)" src="/images/level/${follower.icon}.gif">${follower.nick}</span>
                                   
                             <div class="col-4 text-end">
   
