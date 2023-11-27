@@ -29,7 +29,7 @@
     text-decoration: none; margin-right: 10px; height: 30px;
     border: 0px solid blue; width: 80px; display: flex; justify-content: center;
     align-items: center; border-radius: 5px; margin-bottom: 5px;
-    background: #ffc1c2; color: white;
+    background: #ff9d9f; color: white;
 }
 .mainBody > .qe_body > .qe_box > .qe_extra_box a:hover {
     opacity: 0.7; transition: 0.2s all;
