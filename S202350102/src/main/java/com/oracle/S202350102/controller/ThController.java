@@ -244,18 +244,14 @@ public class ThController {
         
 
 		int	user_num = (int) session.getAttribute("user_num");
-		 
-		// 결제성공시 회원상태 구독회원으로 변경
-        int updateCount = us1.updateUserPrem(user_num);
-        log.info("kakaoPaySuccess updateCount : " + updateCount);
-        
-        // 해당 주문번호의 주문상태를 성공(1)으로, 결제완료날짜를 SYSDATE로  UPDATE
-        int updateResult = os1.updateOrderSucess(order_num);
-        System.out.println("kakaoPaySuccess updateResult --> " + updateResult);
+		// 트랜잭션 묶음(결제성공시 주문상태 성공(1), 회원상태 구독회원(101)로 변경
+		int updateOrderUserResult = os1.tranxOrdUsrUptSuc(order_num,user_num);
+		System.out.println("ThController kakaoPaySuccess updateOrderUserResult --> " + updateOrderUserResult);
+		
 
-        
- 		// order_num을 order1에 담고,
+
  		// 객체째로 못들고 다니므로(approval url에 객체 넣었다가 에러발생함) 주문번호만 가져옴
+ 		// order_num을 order1에 담고,
  		order1.setOrder_num(order_num);
  		// orderResult 객체에 order1을 담고,
         Order1 orderResult = os1.selectOrderJoinMem(order1);
@@ -267,8 +263,7 @@ public class ThController {
         
         model.addAttribute("info", kakaoSucInfo);
         model.addAttribute("order1", orderResult);
-        
-        return "th/kakaoPaySuccess";
+                return "th/kakaoPaySuccess";
     }
 	// 결제도중 취소눌렀을때 구독안내 창으로 이동
     @GetMapping("/kakaoPayCancel")
@@ -282,35 +277,31 @@ public class ThController {
     @PostMapping("/kakaoPayRefund")
     public String kakaoPayRefund(HttpSession session, User1 user1, Order1 order1,Refund refund, Model model) {
     	System.out.println("ThController kakaoPayRefund Start...");
-
     	KakaoPayCancelVO kakaoPayCancelVO = thKakaoPay.kakaoPayCancel(order1);
-    	System.out.println(" ThController kakaoPayRefund kakaoPayCancelVO --> " + kakaoPayCancelVO);
     	
-    	// 환불처리가 성공한경우(null이 아닌경우) 트랙잭션 처리 해야할거같음 
+    	// 환불처리가 성공한경우(null이 아닌경우) 
     	if (kakaoPayCancelVO != null) {
-    		
-    		// 해당 Tid의 주문상태를 환불(2)으로, 결제완료날짜(=환불완료날짜)를 SYSDATE로  UPDATE
-            int updateOrderResult 	= os1.updateOrderRefund(kakaoPayCancelVO.getTid());
-            System.out.println("ThController kakaoPayRefund updateOrderResult -->" + updateOrderResult);
+    		int user_num = Integer.parseInt(kakaoPayCancelVO.getPartner_user_id());
+        	System.out.println(" ThController kakaoPayRefund kakaoPayCancelVO --> " + kakaoPayCancelVO);
+
+        	// 트랜잭션 묶음처리 
+        	// Tid의 주문상태를 환불(2)으로, 결제완료날짜(=환불완료날짜)를 SYSDATE로  UPDATE + 해당 유저의 상태를 멤버쉽 회원 --> 일반 회원으로 변경
+            int updateOrderUserResult 	= os1.transactionOrderInsertUpdate(kakaoPayCancelVO.getTid(),user_num);
+            System.out.println("ThController kakaoPayRefund transactionOrderInsertUpdateResult -->" + updateOrderUserResult);
             
-            // 해당 주문번호에 대한 환불처리를 환불 테이블에 INSERT
-            // CancelVO에 저장된 order_id(=order_num)이 문자열이라 정수형으로 변환
+//            해당 주문번호에 대한 환불처리를 환불 테이블에 INSERT
+//            CancelVO에 저장된 order_id(=order_num)이 문자열이라 정수형으로 변환
 //            refund.setOrder_num(Integer.parseInt(kakaoPayCancelVO.getPartner_order_id()));
 //            refund.setPrice(Integer.parseInt(kakaoPayCancelVO.getApproved_cancel_amount()));
-//            
 //            int insertRefundResult 	= rfs.insertRefundSucess(kakaoPayCancelVO);
 //            System.out.println("ThController kakaoPayRefund insertRefundResult -->" + insertRefundResult);
             
-            // 해당 유저의 상태를 멤버쉽 회원 --> 일반 회원으로 변경
-            int user_num = Integer.parseInt(kakaoPayCancelVO.getPartner_user_id());
-            int updateUser1Result	= us1.updateUserNormal(user_num);	
-            System.out.println("ThController kakaoPayRefund updateUser1Result -->" + updateUser1Result);
+           
+
     		
             model.addAttribute("kakaoPayCancelVO", kakaoPayCancelVO);
     		return "th/refundSuccess";
 		}
-    	
-    	
     	// 환불처리 실패한경우 일단 마이페이지로 이동
     	return "redirect:/thSubscriptManagement";
     }

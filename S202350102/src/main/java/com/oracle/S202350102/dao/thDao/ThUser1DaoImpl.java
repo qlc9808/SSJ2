@@ -56,20 +56,6 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 	}
 
 	@Override
-	public int updateUserPrem(int user_num) {
-		System.out.println("ThUser1DaoImpl updateUserPrem Start...");
-		System.out.println("ThUser1DaoImpl updateUserPrem user_num --> " + user_num);
-		int updateCount = 0;
-		try {
-			updateCount = session.update("thUser1PremUpdate", user_num);
-		} catch (Exception e) {
-			System.out.println("ThUser1DaoImpl updateUserPrem Exception --> " + e.getMessage());
-		}
-		
-		return updateCount;
-	}
-
-	@Override
 	public int user1IdCheck(String user_id) {
 		System.out.println("ThUser1DaoImpl user1IdCheck Start...");
 		System.out.println("ThUser1DaoImpl user1IdCheck user_id --> " + user_id);

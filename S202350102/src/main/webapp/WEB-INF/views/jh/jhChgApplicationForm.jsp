@@ -95,6 +95,7 @@
 		 
 	}	
 	
+	//참여자수 체크
 	
 </script>
 <title>당신만의 챌린지를 신청하세요</title>
@@ -182,7 +183,8 @@
 	                    <div class="card">
 	
 	                      <!-- Image -->
-	                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="이미지  불러오기에 실패했습니다">
+	                      
+	                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" <c:if test="">src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="이미지  불러오기에 실패했습니다"</c:if>>
 	
 	                      <!-- Body -->
 	                      <div class="card-body py-4 px-0 text-center">
@@ -246,19 +248,27 @@
 
                 </div>
                 
-                
+                <div class="col-12">
+                	<label class="form-label" for="chg_capacity">참여 정원(최대 20인)</label> 
+                 	<div class="alert alert-warning">
+						멤버쉽 이용시 최대 300인까지 가능합니다!
+					</div>
+				</div>
                 
                 <div class="col-12 col-md-6">
-
                   <!--  -->
                   <div class="form-group">
-                    <label class="form-label" for="chg_capacity">
-                      	참여 정원
-                    </label>
-                    <input type="number" class="form-control" name="chg_capacity" id="chg_capacity" max="50" min="1"  required="required">
+			                    <c:choose>
+            	   				  	<c:when test="${user.status_md == 100}">
+               							<input type="number" class="form-control" name="chg_capacity" id="chg_capacity" max="20" min="1"  required="required">			  	
+               					  	</c:when>
+                   	 			  	<c:when test="${user.status_md == 101 || user.status_md == 102}">
+                   						<input type="number" class="form-control" name="chg_capacity" id="chg_capacity" max="300" min="1"  required="required"> 	 		  	
+                   	 		  		</c:when>
+                      			</c:choose>                   
                   </div>
-
                 </div>
+                
                 <div class="col-12">
                   <!--  -->
                   <div class="form-group">
@@ -313,7 +323,7 @@
                     <label class="form-label">공개 여부</label>
                     <!-- Inputs -->
                     <c:choose>
-                    	<c:when test="${user.status_md == 101}">
+                    	<c:when test="${user.status_md == 101 || user.status_md == 102}">
 	                    	<div>
 		                      <!-- Male -->
 		                      <input class="btn-check" type="radio" name="chg_public" id="public" value="0" checked>
@@ -356,11 +366,11 @@
                   </div>
 
                 </div>
+				
+                <div class="col-12">
 				<div class="alert alert-warning">
 					멤버십 가입자만 공개/비공개 설정을 할 수 있습니다~!
 				</div>
-                <div class="col-12">
-
                   <!-- 썸네일 -->
                   <div class="form-group">
                     <label class="form-label" for="thumb">

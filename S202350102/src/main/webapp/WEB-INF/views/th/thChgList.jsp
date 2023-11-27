@@ -153,9 +153,13 @@
 		$("#searchButton").click(function () {
 			var keyword 	=	$("#keyword").val();
 			var state_md 	=	${chg.state_md}
+			var chg_lg 		= 	${chg.chg_lg}
+	 		var chg_md 		= 	${chg.chg_md}
 			// 진행중,종료된 챌린지를 체크하기위해서 status_md를 넣어줌
-			location.href = '/thChgList?keyword='+keyword+'&state_md='+state_md					
-
+			location.href = '/thChgList?keyword='+keyword
+							+'&state_md='+state_md
+							+'&chg_lg='+chg_lg
+							+'&chg_md='+chg_md
 		})
 	})
 
@@ -399,7 +403,6 @@
 							        <i class="fe fe-search"></i>
 							    </button>
 							</div>
-				
 				        </div>
 				    </div>
 				</div>

@@ -37,7 +37,9 @@
 	<update id="noticeUpdate" parameterType="Board">
 		Update board 
 		set title = #{title}, conts=#{conts} 
-		<if test="delStatus == 1 and img == null">, img = NULL</if>
+		<if test="delStatus == 1">			
+				, img = #{img , jdbcType=VARCHAR}			
+		</if>
 		<if test="img != null">, img = #{img}</if>
 		Where brd_num = #{brd_num}
 	</update>

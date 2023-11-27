@@ -23,13 +23,11 @@
 	function fileUpdate(){
 		var fileInput = document.getElementById('fileInput');
 		if(fileInput.style.display == "none"){
-			fileInput.style.display = "block";
-			fileInput.removeAttribute('disabled');
+			fileInput.style.display = "block";			
 			$("#imgOroot").hide();
 			$("#chgBtn").html("취소");
 		} else{
-			fileInput.style.display = "none";
-			fileInput.setAttribute('disabled', 'true');
+			fileInput.style.display = "none";			
 			$("#imgOroot").show();
 			$("#chgBtn").html("사진 첨부");
 		}
@@ -91,7 +89,7 @@
 										</span>
 									</div>						
 								</div>						
-								<input type="file" name="file1" style="display: none;" id="fileInput" disabled="disabled">
+								<input type="file" name="file1" style="display: none;" id="fileInput">
 								<c:if test="${not empty noticeConts.img }"><span id="imgOroot">${pageContext.request.contextPath}/upload/${noticeConts.img}</span></c:if><p>
 								<button type="button" onclick="fileUpdate()" id="chgBtn">사진 첨부</button>											
 								<c:if test="${not empty noticeConts.img }">
