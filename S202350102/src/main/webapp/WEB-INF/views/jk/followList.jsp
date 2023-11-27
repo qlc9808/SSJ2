@@ -153,7 +153,7 @@
                             </div>
   
                             <!-- nick -->
-                                  <span class="col-5">${follower.nick}</span>
+                                  <span class="col-5"><img title="Lv.${follower.user_level } | exp.${follower.user_exp}(${follower.percentage }%)" src="/images/level/${follower.icon}.gif">${follower.nick}</span>
                                   
                             <div class="col-4 text-end">
   
