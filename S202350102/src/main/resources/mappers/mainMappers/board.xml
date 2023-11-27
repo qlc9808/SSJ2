@@ -23,7 +23,7 @@
 		        and     brd_lg	=	700
 		    ) 	b
 		where 	b.row_num
-		BETWEEN #{start}
+		BETWEEN 1
 		and 	#{end}
 	</select>
 	
