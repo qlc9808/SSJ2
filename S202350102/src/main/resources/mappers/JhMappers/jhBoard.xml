@@ -126,12 +126,12 @@
 		<!-- OR		brd_group = #{brd_num} -->
 	</delete>
 	
-		<!-- 후기 이미지 삭제  필요한가? -->
-	<update id="jhBoardImgDelete" parameterType="int">
+		<!-- 후기 이미지 삭제  필요한가? 없어도 될듯 -->
+<!-- 	<update id="jhBoardImgDelete" parameterType="int">
 		UPDATE  board
 		SET 	img = null
 		WHERE	brd_num = #{brd_num}
-	</update>
+	</update> -->
 	
 	
 </mapper>
