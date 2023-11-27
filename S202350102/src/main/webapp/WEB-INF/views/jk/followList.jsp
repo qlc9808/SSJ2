@@ -101,7 +101,7 @@
                             </div>
   
                             <!-- nick -->
-                            <span class="col-5">${following.nick}</span>
+                            <span class="col-5"><img title="Lv.${following.user_level } | exp.${following.user_exp}(${following.percentage }%)" src="/images/level/${following.icon}.gif">${following.nick}</span>
                                   
   
                               <!-- following & sendMessage -->

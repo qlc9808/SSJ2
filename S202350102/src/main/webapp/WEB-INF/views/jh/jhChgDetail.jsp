@@ -1968,6 +1968,7 @@
 															
 															<!-- nick -->
 															<a href="#" data-bs-toggle="modal" onclick="userInfoModal('소세지들', ${status.index})" class="col-5">
+																<img title="Lv.${ssj.user_level } | exp.${ssj.user_exp}(${ssj.percentage }%)" src="/images/level/${ssj.icon}.gif">
 																<span style="color: black;">${ssj.nick}</span>
 															</a>
 				
