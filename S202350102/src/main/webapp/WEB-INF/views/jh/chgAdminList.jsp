@@ -17,24 +17,17 @@
 		var chg_md 		= 	$('.nav-link.active').data('md'); //이것 때문에 "전체"에  data-md="0"필요 없으면 string -> int 에러남
 		var keyword 	=	"${chg.keyword}"
 		
-		alert("sortOpt " + sortOpt)
-		alert("state_md " + state_md)
-		alert("chg_lg " + chg_lg)
-		alert("chg_md " + chg_md)
-		alert("keyword " + keyword)
+		
 		
 		//검색 한 경우 필터 적용
 		if(keyword != null && keyword !== ""){
-			alert("검색 적용")
 			//카테고리 선택 안한 경우 필터/검색만 걸림
 			if(chg_lg == 0){
-			alert("카테고리 미적용")
 				
 				location.href= '/chgAdminList?state_md='+state_md
 									+'&sortOpt='+sortOpt+'&keyword='+keyword;
 			//카테고리 선택한 경우 카테고리+필터
 			} else {
-			alert("카테고리 적용")
 				location.href= '/chgAdminList?state_md='+state_md
 											+'&chg_lg='+chg_lg
 											+'&chg_md='+chg_md
@@ -42,7 +35,6 @@
 			}
 			
 		}else{
-			alert("검색 미적용")
 			
 			//카테고리 선택 안한 경우 필터만 걸림
 			if(chg_lg == 0){
@@ -85,7 +77,6 @@
 	    
 	    //검색어 있는 경우
     	if(keyword != null && keyword !== ""){
-    		alert("검색 함")
 		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
 		    if(sortOpt != null){
 		    	
@@ -107,7 +98,6 @@
 			    }
 		    }
     	} else{
-    		alert("검색 안 함")
     		
 		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
 		    if(sortOpt != null){
@@ -144,7 +134,6 @@
 		    
 	    //검색어 있는 경우
     	if(keyword != null && keyword !== ""){
-    		alert("검색 함")
 		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
 		    if(sortOpt != null){
 		    	
@@ -167,7 +156,6 @@
 		    }
     		
     	} else{
-    		alert("검색 안 함")
 		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
 		    if(sortOpt != null){
 		    	
@@ -206,7 +194,6 @@
 		    
 	    //검색어 있는 경우
     	if(keyword != null && keyword !== ""){
-    		alert("검색 함")
 		    //필터 있는 경우 (진행/종료 챌린지)
 	   	    if(sortOpt != null){
 			    if(chg_lg == 0){
@@ -268,34 +255,23 @@
 		    var chg_md 		= 	$('.nav-link.active').data('md');
 			// 진행중,종료된 챌린지를 체크하기위해서 status_md를 넣어줌
 			
-			alert("keyword -> "+keyword)
-			alert("state_md -> "+state_md)
-			alert("chg_lg -> "+chg_lg)
-			alert("chg_md -> "+chg_md)
-			alert("sortOpt -> "+sortOpt)
 			
 			if(sortOpt != null){
-			alert("sortOpt 필터 있음 -> "+ sortOpt)
 		    	
 			    //카테고리 선택 안한 경우 + 필터는 자동
 			    if(chg_lg == 0){
-			alert("chg_lg 카테고리 없음-> "+ chg_lg)
 					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&keyword="+keyword;
 				//카테고리+필터 선택	
 			    } else {
-			alert("chg_lg 카테고리 유-> "+ chg_lg)
 					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&keyword="+keyword;
 			    }
 			    
 			//필터 없는 신청/반려 챌린지인 경우
 		    } else{
-			alert("sortOpt 필터 없음 -> "+ sortOpt)
 			    if(chg_lg == 0){
-			alert("chg_lg 카테고리 없음 -> "+ chg_lg)
 					location.href= "chgAdminList?state_md="+state_md+"&keyword="+keyword;
 				//카테고리+필터 선택	
 			    } else {
-			alert("chg_lg 카테고리 유 -> "+ chg_lg)
 					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&keyword="+keyword;
 			    }
 		    }
