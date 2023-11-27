@@ -63,7 +63,7 @@
                         <!-- Heading, Price, Form -->
                         <h3 class="mb-1">${board.title}</h3>
                         <div class="mb-3 text-gray-400">
-                            <span class="ms-1 fs-5 fw-bold"><fmt:formatNumber value="${board.price}" pattern="#,###"/>원</span>
+                            <span class="ms-1 fs-5 fw-bold"><fmt:formatNumber value="${board.price}" pattern="#,###"/>원</span> <a href="sharing" class="btn btn-dark btn-xs">목록</a>
                         </div>
                         <hr class="my-3">
                         
@@ -74,7 +74,9 @@
 	                    </p>
                         <p class="mb-4 fs-sm fw-bold">
 	                      <a class="text-body" href="product.html">작성일</a> <br>
-	                      <span class="text-muted">${board.reg_date}</span>
+	                      <span class="text-muted">
+						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
+						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">

@@ -158,21 +158,36 @@ $("#sortOption").change(function() {
             <div class="d-flex justify-content-between mb-3">
                 공간을 벌리기 위해 클래스 추가
             </div> -->
-                <!-- 게시판 검색 (옵션 제목, 작성자)-->
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton"
+							   onclick="location.href='sharingSearchResult?keyword=${keyword}'"  >
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				        </div>
+				    </div>
+				</div>            
+              
+<%--                 <!-- 게시판 검색 (옵션 제목, 작성자) Ya추가 수정----------- -->
 			<div class="container d-flex justify-content-left" style="padding-bottom: 0px;">
 			    <div class="d-flex justify-content-center">
 			        <div class="input-group input-group-merge">
-			            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}" style="width:400px; height:49px;">
+			            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}" >
 						<div class="input-group-append">
-						    <button class="btn btn-outline-border btn-search" id="searchButton"
-						     onclick="location.href='sharingSearchResult?keyword=${keyword}'"> 						    
+						    <button class="btn btn-outline-border btn-search" id="searchButton" style= "height: 40px;"
+						     onclick="location.href='sharingSearchResult?keyword=${keyword}'" > 						    
 						        <i class="fe fe-search"></i>
 						    </button>
 						</div>
 			
 			        </div>
 			    </div>
-			</div>
+			</div> --%>
 
 <script>
     // 검색 버튼 클릭 시
@@ -254,7 +269,7 @@ $("#sortOption").change(function() {
                 <div class="card-body fw-bold text-left"> <!-------연아 수정: 링크 에러로 input으로 value값 넣어줌 좌측정렬 추가-------><!--text-center  -->
                 	<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">
                     <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title}
+                        ${board.title}  <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
                     </a>
                     <p>
    					<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">                	

@@ -61,8 +61,9 @@ function fileUpdate(){
           	 	   </div>
 		 			   <!-- 작성일자 -->
                     <div class="form-group mb-7">                       
-                           <label class="form-label" for="nick">날짜</label>
+                           <label class="form-label" for="reg_Date">날짜</label>
                            <input class="form-control form-control-sm" id="view_cnt" name="view_cnt" type="text" value="${board.reg_date}" readonly>
+                           
           	   		 </div>
 		
 					<!-- 상세내용 -->       
@@ -84,7 +85,7 @@ function fileUpdate(){
 		<!--수정완료버튼 모달창  -->
 		<div class="button-container" >
 		<button type="button" class="btn btn-dark btn-sm" id="openModalButton">수정완료</button>
-      <!--   <a href="listcommunity?" class="btn btn-dark btn-sm">취소</a> 	 -->	
+        <a href="listCommunity?" class="btn btn-dark btn-sm">취소</a> 	
 		</div>
 		<!-- Modal -->
 		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">

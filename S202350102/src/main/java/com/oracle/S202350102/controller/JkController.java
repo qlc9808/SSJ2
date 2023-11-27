@@ -216,89 +216,103 @@ public class JkController {
 	}
 	
 	// 쉐어링 내가 쓴 글 (연아)-------------------------
-		@RequestMapping("/mySharing")
-		public String mySharing(Board board, Model model, HttpSession session,String currentPage) {
-			System.out.println("JkController mySharing start...");
-			
-			int user_num = 0;
-			if(session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
-				User1 user1 = jbs.userSelect(user_num);
-				System.out.println("usernum"+user_num);
-				model.addAttribute("user1", user1);
-			}
-						
-			/*
-			 * else { model.addAttribute("msg", "로그인한 사용자만 이용할 수 있는 페이지입니다."); return
-			 * "redirect:/loginForm"; }
-			 */
-			 			
-			 //y쉐어링 전체 게시글 총 수, 페이징 처리 작업 
-			int totalMyUploadsharing =0;
-			totalMyUploadsharing =ycs.totalMyUploadsharing(user_num);
-			model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
-			System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
-					      
-			//페이징처리 
-			Paging myUploadSharingPaging = new Paging(totalMyUploadsharing, currentPage,9);
-			board.setUser_num((int) session.getAttribute("user_num"));
-			board.setStart(myUploadSharingPaging.getStart());
-			board.setEnd(myUploadSharingPaging.getEnd());
-			model.addAttribute("myUploadSharingPaging" , myUploadSharingPaging);
-			System.out.println("JkController myUploadSharingPage start?"+myUploadSharingPaging.getStart());
-			System.out.println(" JkControllemyUploadSharingPaging total?"+myUploadSharingPaging.getTotal());
-			System.out.println("myUploadSharingPaging End?"+myUploadSharingPaging.getEnd());
-			
-			//myUploadShairngList 
-			List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(board);
-			System.out.println("JkControlle sharingManagement.size()?"+myUploadSharingList.size());
-			model.addAttribute("myUploadSharingList", myUploadSharingList);								
-			System.out.println("JkController myUploadSharingList.size()?" + myUploadSharingList.size());
-			
-			return "jk/mySharing";
-			}
+	@RequestMapping("/mySharing")
+	public String mySharing(Board board, Model model, HttpSession session,String currentPage) {
+		System.out.println("JkController mySharing start...");
 		
-	//  쉐어링 찜한 목록 조회 (연아)----------------------
-		@RequestMapping("/myLikeSharing")
-		public String myLikeSharing(Board board, Model model, HttpSession session, String currentPage) {
-			System.out.println("JkController myLikeSharing start...");
-			
-			int user_num = 0;
-			if(session.getAttribute("user_num") != null) {
-				user_num = (int) session.getAttribute("user_num");
-				User1 user1 = jbs.userSelect(user_num);
-				System.out.println("usernum"+user_num);
-				model.addAttribute("user1", user1);
-			}
-						
-			 // else { model.addAttribute("msg", "로그인한 사용자만 이용할 수 있는 페이지입니다."); return
-			 // "redirect:/loginForm"; }
-			
-			 //찜한 쉐어링 전체 게시글 총 수, 페이징 처리 작업 
-			int likeSharingCnt =0;
-			likeSharingCnt =ycs.likeSharingCnt(user_num);
-			model.addAttribute("likeSharingCnt", likeSharingCnt);
-			System.out.println("likeSharingCnt->"+likeSharingCnt);
-					      
-			//페이징처리 
-			Paging mylikeSharingPaging = new Paging(likeSharingCnt,currentPage,9);
-			board.setUser_num((int) session.getAttribute("user_num"));
-			board.setStart(mylikeSharingPaging.getStart());
-			board.setEnd(mylikeSharingPaging.getEnd());
-			model.addAttribute("mylikeSharingPaging" ,mylikeSharingPaging);
-			System.out.println("mylikeSharingPaging start?"+mylikeSharingPaging.getStart());
-			System.out.println("mylikeSharingPaging total?"+mylikeSharingPaging.getTotal());
-			System.out.println("mylikeSharingPaging  End?"+mylikeSharingPaging.getEnd());
-			
-			//mylikeSharingList
-			List<Board> 	 likeSharingList  = ycs.likeSharingList(board);
-			model.addAttribute("likeSharingList", likeSharingList);								
-			System.out.println("JkController likeSharingList.size()?" + likeSharingList.size());
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			User1 user1 = jbs.userSelect(user_num);
+			System.out.println("usernum"+user_num);
+			model.addAttribute("user1", user1);
+		}
+					
+		/*
+		 * else { model.addAttribute("msg", "로그인한 사용자만 이용할 수 있는 페이지입니다."); return
+		 * "redirect:/loginForm"; }
+		 */
+		 			
+		 //y쉐어링 내가 쓴글 전체 게시글 총 수, 페이징 처리 작업 
+		int totalMyUploadsharing =0;
+		totalMyUploadsharing =ycs.totalMyUploadsharing(user_num);
+		model.addAttribute("totalMyUploadSharing", totalMyUploadsharing);
+		System.out.println("YaController totalMyUploadShairng->"+totalMyUploadsharing);
+		
+	      // yr 작성
+	      // 쉐어링 찜 여부 판단용
+	      board.setB_user_num(user_num);
+				      
+		//페이징처리 
+		Paging mySharingPaging = new Paging(totalMyUploadsharing, currentPage, 9);
+		board.setUser_num((int) session.getAttribute("user_num"));
+		board.setStart(mySharingPaging.getStart());
+		board.setEnd(mySharingPaging.getEnd());
+		model.addAttribute("mySharingPaging", mySharingPaging);
+		System.out.println("JkController mySharingPaging start?"+mySharingPaging.getStart());
+		System.out.println(" JkControlle mySharingPaging total?"+mySharingPaging.getTotal());
+		System.out.println("mySharingPaging End?"+mySharingPaging.getEnd());
+		
+		//myUploadShairngList 
+		List<Board> 	 myUploadSharingList  = ycs.myUploadSharingList(board);
+		System.out.println("JkControlle sharingManagement.size()?"+myUploadSharingList.size());
+		model.addAttribute("myUploadSharingList", myUploadSharingList);								
+		System.out.println("JkController myUploadSharingList.size()?" + myUploadSharingList.size());
+		
+		return "jk/mySharing";
+		}
+	
+//  쉐어링 찜한 목록 조회 (연아)----------------------
+	@RequestMapping("/myLikeSharing")
+	public String myLikeSharing(Board board, Model model, HttpSession session, String currentPage, String sortOption) {
+		System.out.println("JkController myLikeSharing start...");
+		
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+			User1 user1 = jbs.userSelect(user_num);
+			System.out.println("usernum"+user_num);
+			model.addAttribute("user1", user1);
+		}
+					
+		 // else { model.addAttribute("msg", "로그인한 사용자만 이용할 수 있는 페이지입니다."); return
+		 // "redirect:/loginForm"; }
+		
+		 //찜한 쉐어링 전체 게시글 총 수, 페이징 처리 작업 
+		int likeSharingCnt =0;
+		likeSharingCnt =ycs.likeSharingCnt(user_num);
+		model.addAttribute("likeSharingCnt", likeSharingCnt);
+		System.out.println("likeSharingCnt->"+likeSharingCnt);
+		
+	      // yr 작성
+	      // 쉐어링 찜 여부 판단용
+	      board.setB_user_num(user_num);
+	      
+	      
+		  board.setUser_num(board.getB_user_num());		
+		  board.setBrd_num(board.getBrd_num());
+		
+		  //페이징처리 
+		Paging mylikeSharingPaging = new Paging(likeSharingCnt,currentPage,9);
+		/* board.setUser_num((int) session.getAttribute("user_num")); */
+		board.setStart(mylikeSharingPaging.getStart());
+		board.setEnd(mylikeSharingPaging.getEnd());
+		model.addAttribute("mylikeSharingPaging" ,mylikeSharingPaging);
+		System.out.println("board user_num?"+user_num);
+		System.out.println("mylikeSharingPaging start?"+mylikeSharingPaging.getStart());
+		System.out.println("mylikeSharingPaging total?"+mylikeSharingPaging.getTotal());
+		System.out.println("mylikeSharingPaging  End?"+mylikeSharingPaging.getEnd());
+		
+		
+		//mylikeSharingList
+		List<Board> likeSharingList  = ycs.likeSharingList(board);
+		model.addAttribute("likeSharingList", likeSharingList);								
+		System.out.println("JkController likeSharingList.size()?" + likeSharingList.size());
 
-			
-				return "jk/myLikeSharing";
-			}	
 		
+			return "jk/myLikeSharing";
+		}	
+	
 	//쉐어링 내가 쓴 글 상세 
 	@GetMapping(value="/myDetailSharing")
 	public String myDetailSharing(int brd_num, Model model, HttpSession session) {

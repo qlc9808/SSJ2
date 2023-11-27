@@ -22,13 +22,17 @@
         </div>
         
 	   <!--form  -->
-     <div class="col-12 col-md-9 col-lg-10 offset-lg-1">             
+     <div class="col-12 col-md-9 col-lg-10 offset-lg-1">       
+		<div class="button-container" style="text-align: right;" > 
+       		<a href="listCommunity?" class="btn btn-dark btn-xs">목록</a> 
+        </div>     
      	<!--제목, 회원 닉네임 띄우기, 내용, 작성일자, 첨부파일 -->
  	 <c:if test="${msg!=null}">${msg}</c:if>
  	  <input class="form-control form-control-sm" id="user_num" name="user_num" type="hidden" value="${user1.user_num}" required>
  		<form action="/writeCommunity"  method="post" enctype="multipart/form-data" name="writeCommunity"> 	 	
 	       <input type="hidden" name="brd_lg" id="brd_lg" value="700" readonly>
 	       <input type="hidden" name="brd_md" id="brd_md" value="103" readonly>
+	       
               <div class="col-12">
                     <!-- 제목 -->
                     <div class="form-group">
@@ -65,7 +69,7 @@
          </div>
      </div>    
     </section>	
-
+    
 </body>
 <%@ include file="../footer.jsp" %>
 </html>

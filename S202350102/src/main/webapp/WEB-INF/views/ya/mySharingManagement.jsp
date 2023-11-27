@@ -5,7 +5,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<style type="text/css">
+/* 테이블 스타일 */
+</style>
 <!--모달창-->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -35,8 +37,8 @@
       <div class="container" >
         <div class="col-12">
          <c:set var="num" value="${myUploadSharingPaging.total - myUploadSharingPaging.start+1 }"></c:set> 
-                <table class="table table-bordered  table-sm">
-                     <thead class="table-light">
+                <table class="table table-bordered table-sm mb-0" >
+                     <thead class="table-dark">
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
@@ -52,8 +54,8 @@
                              <tr>
                                 <td>${num}</td>
                                 <td><a href="detailSharing?brd_num=${board.brd_num}">${board.title}</a></td>
-                                <td>${board.applicants}</td>            
-                                <td>${board.participants}</td>      
+                                <td>${board.applicants}명</td>            
+                                <td>${board.participants}명</td>      
                                 <td>${board.bank_duedate}</td>
 				         		<td><button type="button" class="btn  btn-xs openModalButton" data-toggle="modal" data-target="#joinInfoModal" 
 				         					data-brd_num="${board.brd_num}" style=" background-color: #E56D90; color:#FFFFFF; padding-left: 10px;   padding-right: 10px; padding-top: 5px; padding-bottom: 5px">
@@ -107,8 +109,8 @@
       	 <div class="container" >
          <div class="col-12">
          <c:set var="num" value="${myJoinSharingPaging.total - myJoinSharingPaging.start+1 }"></c:set> 
-                <table class="table table-bordered  table-sm">         
-                      <thead class="table-light">
+                <table class="table table-bordered table-sm mb-0" >
+                     <thead class="table-dark">
                          <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
@@ -177,8 +179,8 @@
         <div  class="col-12">
                   <c:set var="num" value="${myConfirmSharingPaging.total - myConfirmSharingPaging.start+1 }"></c:set> 
                   <input type="hidden" value="${board.brd_num }"> 
-                <table class="table  table-bordered table-sm" >
-                      <thead class="table-light">
+                <table class="table table-bordered table-sm mb-0" >
+                     <thead class="table-dark">
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
@@ -197,7 +199,7 @@
                                 <td><a href="detailSharing?brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td>${board.user_name}</td>
                                 <td>${board.bank_info}</td>    
-                                <td><fmt:formatNumber value="${board.price div board.applicants}" pattern="#,###"/></td>        
+                                <td><fmt:formatNumber value="${board.price div board.applicants}" pattern="#,###"/>원</td>        
                                 <td>${board.bank_duedate}</td>
                                 <td>${board.addr}</td>      
                                 <c:set var="num" value="${num-1}"></c:set> 	                         
@@ -400,7 +402,7 @@ $(document).on('click', '.openModalButton', function () {
          	// 참가자 수 업데이트 함수
             function updateVisibleParticipants() {
                 // 참가자 수 업데이트
-                $('#totalParticipants').text('총 지원자 수: ' + participantCount);
+                $('#totalParticipants').text('총 지원자 수: ' + participantCount+'명');
             }
            
         })

@@ -7,16 +7,11 @@
 <head>
 <!-- CSS -->
 <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-    @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -82,8 +77,11 @@
                         <a class="text-body" href="product.html">작성자</a> <br>
 	                      <span class="text-muted">${board.nick}</span>
 	                    </p>
+	                    <p class="mb-4 fs-sm fw-bold">
 	                      <a class="text-body" href="product.html">작성일</a> <br>
-	                      <span class="text-muted">${board.reg_date}</span>
+	                      <span class="text-muted">
+						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
+						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">
@@ -111,19 +109,37 @@
                                 <!-- ... -->
                                 <!-- Submit Buttons -->
                                 <div class="row">
-                                    <div class="col-lg-6 mb-2">
-										    <a class="btn btn-dark w-100" href="/updateSharing1?brd_num=${board.brd_num}">
+                                    <div class="col-lg-3">
+										    <a class="btn btn-sm btn-dark " href="/updateSharing1?brd_num=${board.brd_num}">
 										        수정하기
 										    </a>
 										</div>
 
-                                    <div class="col-lg-6 mb-2">
-                                        <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}">
+                                    <div class="col-lg-3">
+                                        <%-- <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}"> --%>
+                                        <a class="btn btn-sm btn-outline-dark" href="#" onclick="confirmDelete(${board.brd_num}, ${board.participants})">
 											    삭제하기
-											</a>
-
-                                           
-                                    </div>
+										</a>
+										<!--ya참가자 존재시 게시글 삭제 불가능 알람창 ------------------------------------>
+										<script>
+										function confirmDelete(brd_num, participants) {
+										    if (participants > 0) {
+										        alert("참가자가 존재하여 삭제가 불가능합니다.");
+										    } else {
+										        var confirmDelete = confirm("정말로 삭제하시겠습니까?");
+										        if (confirmDelete) {
+										            window.location.href = "/deleteSharing?brd_num=" + brd_num;
+										        }
+										    }
+										}
+										</script>     										
+									</div>	
+                                    <div class="col-lg-3">
+                                        <%-- <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}"> --%>
+                                        <a class="btn btn-sm btn-outline-dark" href="/mySharing">
+											   목록이동
+										</a>										
+    
                                 </div>
                                 </div>
                                
