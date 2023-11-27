@@ -192,23 +192,22 @@ public class ChController {
 		System.out.println("ChController noticeUpdate Start...");
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		int result = 0;
-		if(board.getDelStatus() == 1 || file1 != null) {			
+		if(board.getDelStatus() == 1 || file1.getOriginalFilename().length() > 0) {			
 			String deleteFile = uploadPath + board.getImg();			
 			//실제 upload에 담김 파일 이미지 삭제
 			int delResult= upFileDelete(deleteFile);
 			System.out.println("기존 파일 삭제 결과" + delResult);
+			board.setImg(null);
 			
 		}		
 		
 		ServletContext servletContext = request.getSession().getServletContext();
 		String realPath = servletContext.getRealPath("/upload/");
 		System.out.println("realPath->" + realPath);
-		if(file1 != null) {
+		if(file1.getOriginalFilename().length() > 0) {
 			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
 			
 			board.setImg(saveName);	
-		}else if(board.getDelStatus() ==1) {
-			board.setImg(null);
 		}
 		
 		result = chBoardService.noticeUpdate(board);
@@ -851,11 +850,13 @@ public class ChController {
 	@RequestMapping(value = "chChgUpDate", method = RequestMethod.POST)
 	public String chChgUpDate(Challenge chg,
 							  HttpServletRequest request,
-							  @RequestParam(value = "sampleImgFile", required = false) MultipartFile sampleImgFile,
-							  @RequestParam("thumbFile") MultipartFile thumbFile) throws Exception {
+							  @RequestParam(value = "sampleImgFile",required = false) MultipartFile sampleImgFile,
+							  @RequestParam(value = "thumbFile",required = false) MultipartFile thumbFile) throws Exception {
 		
 		
 		System.out.println("chChgUpDate start...");
+		System.out.println("chChgUpDate sampleImgFile.getOriginalFilename()->"+sampleImgFile.getOriginalFilename());
+		
 		/*************유저 확인*************/
 		HttpSession session = request.getSession();
 		int user_num = 0;
@@ -866,11 +867,19 @@ public class ChController {
 			user_num = (int) session.getAttribute("user_num");
 			User1 user = userService.userSelect(user_num);
 			
+			
+			System.out.println("sampleImgFile ----->" + sampleImgFile);
+			System.out.println("thumbFile ----->" + thumbFile);
+			System.out.println("chg ----->" + chg);
+			
 			/*************유저 권한 확인*************/
 			if(user_num == chg.getUser_num() || user.getStatus_md() == 102) { //관리자나 작성자이면
+				System.out.println("-------------------유저 권한 확인--------------------");
 				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+				System.out.println("-------------------uploadPath 확인--------------------" + uploadPath);
 				/*************샘플이 바뀌었다면 기존 이미지 삭제 후 샘플 저장*************/
-				if(sampleImgFile != null) {
+				if(sampleImgFile.getOriginalFilename().length() > 0) {
+					System.out.println("sample이 null이 아닐 경우 실행");
 					String deleteFile = uploadPath + chg.getSample_img();
 					int delResult= upFileDelete(deleteFile);
 					System.out.println("delResult1 -> " + delResult);
@@ -880,21 +889,23 @@ public class ChController {
 				
 				int delStatus = chg.getDelStatus();
 				/*************썸네일 기존 이미지 삭제 여부 확인*************/
-				if(delStatus == 1 || thumbFile != null) {
+				if(delStatus == 1 || thumbFile.getOriginalFilename().length() > 0) {
+					System.out.println("thumbFile삭제 or null이 아닐경우 실행");
 					String deleteFile = uploadPath + chg.getThumb();
 					int delResult= upFileDelete(deleteFile);
 					System.out.println("delResult1 -> " + delResult);
 					/*************삭제가 아닌 업데이트라면 새 이미지 저장*************/
-					if(thumbFile != null) {
+					if(thumbFile.getOriginalFilename().length() > 0) {
+						System.out.println("thumbFile이 null이 아닐경우 실행");
 						String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
 						chg.setThumb(saveName);
 					} else {
-						String saveName = "assets/img/chgDfaultImg.png";
-						chg.setThumb(saveName);
+						System.out.println("thumbFile이 null일경우 실행");						
+						chg.setThumb(null);
 					}
 					
 				}
-				
+				chg.setChg_conts(chg.getChg_conts().trim());
 				int result = chChallengeService.chgUpdate(chg);		
 				
 				if(result > 0 ) {
