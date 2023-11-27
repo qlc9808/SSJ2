@@ -41,8 +41,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.BoardLike;
-import com.oracle.S202350102.dto.ChallengPick;
+
 import com.oracle.S202350102.dto.Challenge;
+import com.oracle.S202350102.dto.Level1;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.chService.ChSearchService;
@@ -52,8 +53,6 @@ import com.oracle.S202350102.service.jkService.JkMypageService;
 import com.oracle.S202350102.service.jkService.JkUserService;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
-import com.oracle.S202350102.service.thService.ThChgService;
-import com.oracle.S202350102.service.yaService.Paging2;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 
@@ -624,31 +623,6 @@ public class JkController {
 		 }
 	
 
-	@GetMapping("/mypage")
-	public String mypage(HttpSession session, User1 user1, Challenge chg, Board board, Model model) {
-	    System.out.println("JkController mypage start...");
-	    System.out.println("session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
-
-	    int user_num = 0;
-	    if (session.getAttribute("user_num") != null) {
-	        user_num = (int) session.getAttribute("user_num");
-	        chcont.myConts(session, model, null);  // 메서드 실행, return void
-	    }
-	    user1.setUser_num(user_num);
-	    List<Challenge> myChgList = jms.myChgList(chg);
-	    User1 user1FromDB = us.userSelect(user_num);
-	    
-	    
-	    user1.setUser_num(user_num);
-	    model.addAttribute("level1List",ls.level1List());
-	    model.addAttribute("user1", user1FromDB);
-	    
-	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
-
-
-	    
-	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
-	}
 	
 	@PostMapping("/updateProfile")
 	@ResponseBody
@@ -766,6 +740,70 @@ public class JkController {
 
 		    return resultMap;
 	}
-	}
-   
 	
+	@GetMapping("/mypage")
+	public String mypage(HttpSession session, User1 user1, Challenge chg, Board board, Model model) {
+	    System.out.println("JkController mypage start...");
+	    System.out.println("session.getAttribute(\"user_num\") --> " + session.getAttribute("user_num"));
+
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	        chcont.myConts(session, model, null);  // 메서드 실행, return void
+	    }
+	    user1.setUser_num(user_num);
+	    List<Challenge> myChgList = jms.myChgList(chg);
+	    User1 user1FromDB = us.userSelect(user_num);
+	    
+	    
+	    user1.setUser_num(user_num);
+	    model.addAttribute("level1List",ls.level1List());
+	    model.addAttribute("user1", user1FromDB);
+	    
+	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
+
+
+	    
+	    return user_num != 0 ? "mypage" : "redirect:/loginForm";
+	}
+	
+	@GetMapping("/mypageMenu")
+	@ResponseBody
+	public String mypageMenu(HttpSession session, User1 user1, Board board, Model model) {
+	    System.out.println("JkController mypageMenu start...");
+
+	    int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	     	    }
+	    user1.setUser_num(user_num);
+	    User1 user1FromDB = us.userSelect(user_num);
+	    List<Level1> level1List = ls.level1List();
+	    int myBoard = jbs.myBoard(user_num);
+	    
+	    Map<String, Integer> followCnt = jus.followingCnt(user_num);
+	    System.out.println("followCnt: " + followCnt);
+	    
+	    model.addAttribute("level1List",ls.level1List());
+	    model.addAttribute("user1", user1FromDB);
+	    model.addAttribute("followCnt", followCnt);
+	    model.addAttribute("myBoard", myBoard);
+	    
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	 
+	        Map<String, Object> responseData = new HashMap<>();
+	        responseData.put("user1", user1FromDB);
+	        responseData.put("level1List", level1List);
+	        responseData.put("followCnt", followCnt);
+	        responseData.put("myBoard", myBoard);
+
+	        String jsonData = objectMapper.writeValueAsString(responseData);
+	        return jsonData;
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	        return "Error occurred while processing JSON";
+	    }
+	}
+}
+	  

@@ -22,7 +22,7 @@
  	
 	<div class="col-10">
 	
-		<table class="table table-bordered table-sm mb-0" style="border-top: solid 2px #e5e5e5">
+		<table class="table table-bordered table-sm mb-0" style="border-top: solid 3px #e5e5e5">
 			<form action="/updateUserAdmin" method="get" name="frm">
 			    <tr>
 			      <th scope="row" width="15%" class="table-secondary">레벨 / 경험치 </th> 

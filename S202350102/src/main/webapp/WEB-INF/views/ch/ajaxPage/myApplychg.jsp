@@ -18,11 +18,11 @@
 	<!-- Item2 참여한 챌린지 -->
 	<c:forEach items="${mychgList }" var="chg">
 		<div class="col px-4" style="max-width: 400px;">
-			<c:if test="${chg.state_md==100 || chg.state_md==104}">
-				<a href="myChgUpdate?chg_id=${chg.chg_id}">수정</a>
-			</c:if>
-			<div class="card">
 			
+			<div class="card">
+				<c:if test="${chg.state_md==100 || chg.state_md==104}">
+					<a href="myChgUpdate?chg_id=${chg.chg_id}" class="btn btn-outline-danger btn-sm">수정</a>
+				</c:if>
 				<!-- Image -->
 				
 				

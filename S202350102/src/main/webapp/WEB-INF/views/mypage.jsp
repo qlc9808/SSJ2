@@ -95,20 +95,25 @@ function clickLoad(index) {
 	
 	
 	function myContsDelete(brd_md, brd_num){
-		var brdMd = brd_md;
-		var brdNum = brd_num;
-		
-		$.ajax({
-			url: "myContsDelete",
-			type: "POST",
-			data: { brd_num: brd_num },
-			dataType: "text",
-			success: function(data){
-				if(parseInt(data)>0){
-					$("#body" + brdMd + " #row" + brd_num).remove();
+		if(!confirm('삭제하시겠습니까?')){
+			
+		}else{
+			var brdMd = brd_md;
+			var brdNum = brd_num;
+			
+			$.ajax({
+				url: "myContsDelete",
+				type: "POST",
+				data: { brd_num: brd_num },
+				dataType: "text",
+				success: function(data){
+					if(parseInt(data)>0){
+						$("#body" + brdMd + " #row" + brd_num).remove();
+					}
 				}
-			}
-		})
+			})	
+		}
+		
 		
 	}
 
@@ -127,10 +132,28 @@ function clickLoad(index) {
 				var text = "";
 				text = brdText(result);
 				$("#body"+result.page.brd_md).html(text);
-				$("#body"+result.page.brd_md).css()
+				$("#body"+result.page.brd_md).css();
 			}
 		})
 	}
+	
+	function certiAjax(brd_num){
+		$("#ceriModal").modal('show');
+			alert(brd_num);
+			var brdNum = brd_num;
+			$.ajax({
+				url : "ajaxModal",
+				data: {brd_num : brd_num},
+				dataType: "html",
+				success: function(result){				
+						$("#ceModal").html(result);
+						}
+			});	
+		}
+			
+		
+	
+		
 	
 	function brdText(result){
 		var text ="";
@@ -482,7 +505,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                        <c:forEach items="${myCertiList }" var="myCertiList">
 					                            <tr id="row${myCertiList.brd_num}">
 					                                <td>${num}</td>
-					                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
+					                                <td><a href="javascript:void(0);" onclick="certiAjax(${myCertiList.brd_num})">${myCertiList.title}</a></td>
 					                                <td>${myCertiList.nick}</td>
 					                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
 									         		<td>${myCertiList.replyCount}</td>
@@ -511,8 +534,16 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				            		<h3>작성한 글이 없습니다.</h3>
 				            	</c:otherwise>
 				            	
-							</c:choose>			
-					</div>	<!-- myCert -->				
+							</c:choose>									
+					</div>	<!-- myCert -->
+					<div>
+						<div class="modal fade" id="ceriModal" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
+								<div class="modal-content" id="ceModal"><!--  -->
+								</div>
+							</div>
+						</div>
+					</div>				
 				</div>   <!-- myCert-list -->
 				<!--------------------------------후기 리스트 --------------------------------------->
 				<div class="tab-pane fade" id="myReview-list">
