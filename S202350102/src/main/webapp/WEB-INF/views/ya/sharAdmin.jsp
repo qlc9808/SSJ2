@@ -9,14 +9,12 @@
 <title>전체 자유게시판 게시글 조회</title>
 </head>
 <body>
-<section class="py-11">
+<section class="pt-7 pb-12">
  <div class="container">            <!-- style=" margin-left: 300px;"  -->
         <div class="row">
           <div class="col-12 text-center">			
-            <!-- Heading -->
-            <div class="pt-10 pb-5">          
+            <!-- Heading -->  
             	<h3 class="mb-10">쉐어링게시판 관리</h3>
-            </div>
           </div>
         </div>        
                
@@ -30,7 +28,7 @@
             <div class="col-12">	
              <c:set var="num" value="${sharBoardPage.total - sharBoardPage.start+1 }"></c:set> 
                 <table class="table table-bordered table-sm mb-0" ><!--  style="width:1200px" -->
-                    <thead>
+                    <thead class="table-dark">
                         <tr class="p-2 text-center">
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>         

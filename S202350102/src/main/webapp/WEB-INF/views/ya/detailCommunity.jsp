@@ -8,6 +8,9 @@
 <head>
 <!-- CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style type="text/css">
+
+</style>
 <meta charset="UTF-8">
 <title>게시글 상세내용</title>
 </head>
@@ -26,7 +29,7 @@
 		<input type="hidden" name="brd_group" value="${board.brd_group}"> 
 		            <input type=hidden  value="${board.user_num }">
 		<div class="button-container" style="text-align: right;" > 
-       <!--  <a href="listCommunity?" class="btn btn-dark btn-xs">목록</a>  -->
+       <a href="listCommunity?" class="btn btn-dark btn-xs">목록</a> 
         </div>
 		<c:choose>
     		<c:when test="${board.brd_step == 0}">
@@ -51,23 +54,34 @@
 		    		<!-- 작성일자 -->
                     <div class="form-group mb-7">                       
                            <label class="form-label" for="reg_date">등록일자</label>
-                           <input class="form-control form-control-sm" id="reg_date" name="reg_date" type="text" value="${board.reg_date}" readonly>
+                           <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd" var="formattedDate" />
+						  <input class="form-control form-control-sm" id="reg_date" name="reg_date" type="text" value="${formattedDate}"  readonly>
+                         
           	   	    </div>
 		
 					<!-- 상세내용 -->       
 					<div class="form-group mb-7">
     					<label class="form-label" for="conts">내용</label>
     					<div class="d-flex align-items-start" style="margin-top: 10px;">
-      					 	 <textarea class="form-control form-control-sm"  rows="12"  readonly >${board.conts}</textarea>
+      					 	 <textarea class="form-control form-control-sm" rows="12"  style="height: 200px; overflow-y: auto; font-size: 16px;" readonly >${board.conts}</textarea>
   						</div>
 					</div>       
                     <!-- 이미지 업로드 -->	
-					<div class="form-group mb-7">
-						<label class="form-label" for="file">이미지 </label>
-						<a href="${pageContext.request.contextPath}/upload/${board.img}">
-                            <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top" style="width: 100%; height: 200;">
-                        </a>
-					</div>   	
+<div class="form-group mb-7">
+    <label class="form-label" for="file">이미지 </label>
+    <c:if test="${not empty board.img}">
+        <div class="image-container">
+            <img src="${pageContext.request.contextPath}/upload/${board.img}" alt="..." class="card-img-top" style="width: 300;height: 400;">
+        </div>
+    </c:if>
+    <c:if test="${empty board.img}">
+        <!-- 이미지가 비어있을 경우 아무것도 보이지 않도록 설정 -->
+        <div class="image-container" style="display: none;">
+            <img src="#" alt="..." class="card-img-top" style="width: 250;height: 300;">
+        </div>
+    </c:if>
+</div>
+
 		 	</c:when>
 		</c:choose>					
 

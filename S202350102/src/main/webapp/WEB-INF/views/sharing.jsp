@@ -254,7 +254,7 @@ $("#sortOption").change(function() {
                 <div class="card-body fw-bold text-left"> <!-------연아 수정: 링크 에러로 input으로 value값 넣어줌 좌측정렬 추가-------><!--text-center  -->
                 	<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">
                     <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title}
+                        ${board.title}  <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
                     </a>
                     <p>
    					<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">                	

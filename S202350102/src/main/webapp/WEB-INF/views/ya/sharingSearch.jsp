@@ -263,7 +263,7 @@ $("#sortOption").change(function() {
                 <div class="card-body fw-bold text-left"> <!-------연아 수정: 링크 에러로 input으로 value값 넣어줌 좌측정렬로 변경, price 원단위 ------->
                 	<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">
                     <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title}
+                        ${board.title}  ${board.applicants}명 모집
                     </a>
                     <p>          	
                         <a class="text-primary " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">

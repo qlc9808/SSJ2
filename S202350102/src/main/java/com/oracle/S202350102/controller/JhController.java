@@ -261,9 +261,9 @@ public class JhController {
 			
 			
 			// bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
-			Challenge chg = bBoardD.bgChgDetail(chg_id);
-			System.out.println("BgController bgChgDetail chg -> "+chg);
-			model.addAttribute("chg", chg);
+//			Challenge chg = bBoardD.bgChgDetail(chg_id);
+//			System.out.println("BgController bgChgDetail chg -> "+chg);
+//			model.addAttribute("chg", chg);
 			
 		} 
 		

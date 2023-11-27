@@ -47,6 +47,7 @@
 	<delete id="deleteNotice" parameterType="int">
 		Delete board
 		Where brd_num = #{brd_num}
+		or brd_gruop = #{brd_num}
 	</delete>
 	
 	<update id="noticeViewUp">

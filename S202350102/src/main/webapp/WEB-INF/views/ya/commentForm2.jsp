@@ -302,8 +302,15 @@ function listComment() {
  <!--댓글작성-->
 <c:choose>
     <c:when test="${empty sessionScope.user_num}">
-        <p><p>
-        <h5>댓글을 작성하실 분은 로그인을 해주세요!</h5>
+    <section class="pt-9 pb-8" id="reviews">
+    <div class="container">
+       <div class="row">
+          <div class="col-12" align="center">
+  			게시판 댓글을 확인하시려면 로그인을 해주세요!
+  		  </div>
+  	   </div>	  	
+  	</div>	
+  	</section>	
     </c:when>
     
     <c:otherwise> 

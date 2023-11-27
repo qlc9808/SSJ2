@@ -39,6 +39,7 @@ import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.chService.ChBoardService;
 import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.chService.ChSearchService;
@@ -64,6 +65,7 @@ public class ChController {
 	private final UserService			userService;
 	private final JhCallengeService 	jhCService;
 	private final ThChgService 			tcs;
+	private final BgBoardService 		bBoardD;
 	
 	
 	// notice List 조회 
@@ -918,6 +920,42 @@ public class ChController {
 		
 		
 		return "ch/notAnAdmin";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "ajaxModal")
+	public ModelAndView ajaxModal(HttpSession session, ModelAndView mav, int brd_num) {
+		System.out.println("ChController ajaxModal Start...");
+		Board board = chBoardService.noticeConts(brd_num);
+		System.out.println("board" + board);
+		mav.addObject("board", board);
+		mav.setViewName("ch/ajaxPage/ajaxModal");
+		
+		return mav;
+	}
+	
+	@PostMapping(value = "chCertBoardUpdate")
+	public String updateCertBrd(Board board, Model model, HttpServletRequest request,								
+								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
+										throws IOException {
+		log.info("updateCertBrd Start...");
+		
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		
+		
+		if (editFile != null) {
+			// 진짜 저장
+			String saveName = uploadFile(editFile.getOriginalFilename(), editFile.getBytes(), realPath);
+			board.setImg(saveName);
+		}
+		
+		int updateCount = bBoardD.updateCertBrd(board);
+		
+		
+		return "redirect:mypage";
 	}
 	
 	
