@@ -210,8 +210,7 @@ public class JhController {
 		
 		// 소세지들 출력용
 		List<User1> listSsj = ycs.getListSsj(chg_id);
-		// user1에서 레벨 못뽑나? ㅜㅜ
-		// listSsj = userService.boardWriterLevelInfo(listSsj);
+		listSsj = userService.userLevelList(listSsj);
 		model.addAttribute("listSsj", listSsj);
 		
 		// 찜 여부 판단용
