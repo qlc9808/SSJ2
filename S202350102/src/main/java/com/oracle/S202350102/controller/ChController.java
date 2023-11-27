@@ -175,8 +175,9 @@ public class ChController {
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
 			// 글의 user_num과 내 session의 user_num이 같은가?
-			if(board.getUser_num() == user_num) {
+			if(board.getUser_num() == user_num || user.getStatus_md() == 102) {
 				Board noticeConts = chBoardService.noticeConts(board.getBrd_num());
 				model.addAttribute("noticeConts", noticeConts);
 				
@@ -192,30 +193,39 @@ public class ChController {
 	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws Exception {
 		
 		System.out.println("ChController noticeUpdate Start...");
-		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
-		int result = 0;
-		if(board.getDelStatus() == 1 || file1.getOriginalFilename().length() > 0) {			
-			String deleteFile = uploadPath + board.getImg();			
-			//실제 upload에 담김 파일 이미지 삭제
-			int delResult= upFileDelete(deleteFile);
-			System.out.println("기존 파일 삭제 결과" + delResult);
-			board.setImg(null);
-			
-		}		
+		 if(request.getSession().getAttribute("user_num") != null) {
+			 int user_num = (int) request.getSession().getAttribute("user_num");
+			 User1 user = userService.userSelect(user_num);
+			 String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+				if(user.getStatus_md() == 102) {
+					int result = 0;
+					if(board.getDelStatus() == 1 || file1.getOriginalFilename().length() > 0) {			
+						String deleteFile = uploadPath + board.getImg();			
+						//실제 upload에 담김 파일 이미지 삭제
+						int delResult= upFileDelete(deleteFile);
+						System.out.println("기존 파일 삭제 결과" + delResult);
+						board.setImg(null);
+						
+					}		
+					
+					ServletContext servletContext = request.getSession().getServletContext();
+					String realPath = servletContext.getRealPath("/upload/");
+					System.out.println("realPath->" + realPath);
+					if(file1.getOriginalFilename().length() > 0) {
+						String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
+						
+						board.setImg(saveName);	
+					}
+					
+					result = chBoardService.noticeUpdate(board);
+				
+					request.setAttribute("brd_md", board.getBrd_md());
+					return "forward:notice";
+				}
+		 }
 		
-		ServletContext servletContext = request.getSession().getServletContext();
-		String realPath = servletContext.getRealPath("/upload/");
-		System.out.println("realPath->" + realPath);
-		if(file1.getOriginalFilename().length() > 0) {
-			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
-			
-			board.setImg(saveName);	
-		}
 		
-		result = chBoardService.noticeUpdate(board);
-	
-		request.setAttribute("brd_md", board.getBrd_md());
-		return "forward:notice";
+		return "/ch/notAnAdmin";
 	}
 	
 	
