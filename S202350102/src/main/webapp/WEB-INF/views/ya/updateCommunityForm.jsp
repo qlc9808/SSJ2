@@ -84,7 +84,7 @@ function fileUpdate(){
 		<!--수정완료버튼 모달창  -->
 		<div class="button-container" >
 		<button type="button" class="btn btn-dark btn-sm" id="openModalButton">수정완료</button>
-      <!--   <a href="listcommunity?" class="btn btn-dark btn-sm">취소</a> 	 -->	
+        <a href="listCommunity?" class="btn btn-dark btn-sm">취소</a> 	
 		</div>
 		<!-- Modal -->
 		<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">

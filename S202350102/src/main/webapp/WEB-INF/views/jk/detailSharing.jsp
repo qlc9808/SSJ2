@@ -74,7 +74,9 @@
 	                    </p>
                         <p class="mb-4 fs-sm fw-bold">
 	                      <a class="text-body" href="product.html">작성일</a> <br>
-	                      <span class="text-muted">${board.reg_date}</span>
+	                      <span class="text-muted">
+						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
+						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">
