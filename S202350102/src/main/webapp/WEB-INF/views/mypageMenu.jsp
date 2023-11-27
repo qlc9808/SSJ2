@@ -22,12 +22,16 @@ $(document).ready(function () {
           var followCnt = jsonData.followCnt;
           var followerCount = followCnt.FOLLOWER_CNT;
           var followingCount = followCnt.FOLLOWING_CNT;
+          var myBoard_cnt = jsonData.myBoard;
+          
           console.log("Follower Count: " + followerCount);
           console.log("Following Count: " + followingCount);
+          console.log("myBoard_cnt: " + myBoard_cnt);
           
           $('.profile-usertitle-name').text(user1.nick + ' 님');
           $('.follow').text(followCnt.FOLLOWER_CNT);
           $('.following').text(followCnt.FOLLOWING_CNT);
+          $('.myBoardCnt').text(followCnt.FOLLOWING_CNT);
           
        },
        error: function (error) {
@@ -441,7 +445,8 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
                        <div class="uppercase profile-stat-text"> 팔로잉 </div>
                    </div>
                    <div class="col-md-4 col-sm-4 col-xs-6">
-                       <div class="uppercase profile-stat-title"> 61 </div>
+                       <div class="uppercase profile-stat-title">
+                       <div class="myBoardCnt"></div></div>
                        <div class="uppercase profile-stat-text"> 내가 쓴 글</div>
                    </div>
                    
