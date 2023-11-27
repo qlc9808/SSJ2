@@ -82,8 +82,11 @@
                         <a class="text-body" href="product.html">작성자</a> <br>
 	                      <span class="text-muted">${board.nick}</span>
 	                    </p>
+	                    <p class="mb-4 fs-sm fw-bold">
 	                      <a class="text-body" href="product.html">작성일</a> <br>
-	                      <span class="text-muted">${board.reg_date}</span>
+	                      <span class="text-muted">
+						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
+						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">
@@ -118,11 +121,23 @@
 										</div>
 
                                     <div class="col-lg-6 mb-2">
-                                        <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}">
+                                        <%-- <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}"> --%>
+                                        <a class="btn btn-outline-dark w-100" href="#" onclick="confirmDelete(${board.brd_num}, ${board.participants})">
 											    삭제하기
-											</a>
-
-                                           
+										</a>
+										<!--ya참가자 존재시 게시글 삭제 불가능 알람창 ------------------------------------>
+										<script>
+										function confirmDelete(brd_num, participants) {
+										    if (participants > 0) {
+										        alert("참가자가 존재하여 삭제가 불가능합니다.");
+										    } else {
+										        var confirmDelete = confirm("정말로 삭제하시겠습니까?");
+										        if (confirmDelete) {
+										            window.location.href = "/deleteSharing?brd_num=" + brd_num;
+										        }
+										    }
+										}
+										</script>                                           
                                     </div>
                                 </div>
                                 </div>

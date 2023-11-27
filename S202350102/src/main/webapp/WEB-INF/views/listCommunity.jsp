@@ -368,7 +368,7 @@ $(document).ready(function () {
 			</div>
 			  <div class="d-flex mb-3" style="justify-content: flex-start;">
 			<form id="options" action="writeFormCommunity" method="post" class="text-end">
-			    <button class="btn btn-secondary btn-xs" type="submit" style="background-color: #E56D90;">글 작성 <i class="fe fe-arrow-right ms-2"></i></button>
+			    <button class="btn btn-dark btn-xs" type="submit" >글 작성 <i class="fe fe-arrow-right ms-2"></i></button>
 			</form>
 			</div>	
              <c:set var="num" value="${boardPage.total - boardPage.start+1 }"></c:set> 

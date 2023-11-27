@@ -138,10 +138,8 @@ function fileUpdate(){
 							<button type="button" onclick="fileUpdate()">파일 변경</button>
 									
 							</div>
-
-
-
- 							<!-- 상세내용 -->
+							
+							<!-- 상세내용 -->
 							<div class="form-group mb-7">
 							    <label class="form-label" for="conts">상세내용 *</label>
 							    <div class="d-flex align-items-start" style="margin-top: 10px;">
@@ -149,16 +147,38 @@ function fileUpdate(){
 							     <textarea class="form-control form-control-sm" id="conts" name="conts" rows="5" required>${board.conts}</textarea>
 							    </div>
 							</div>
-
-
-
-
-
-                            
+							<div class="button-container" >
+							<button type="button" class="btn btn-dark btn-sm" id="openModalButton">수정완료</button>
+					                           
                             <!-- Button -->
-                            <button class="btn btn-dark" type="submit">작성완료</button>
+                           <!--  <button class="btn btn-dark" type="submit" >작성완료</button> -->
                         </div>
-                    </form>
+					    <!--ya 수정완료버튼 모달창 ---------------------------------->
+							<!-- Modal -->
+							<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+							    <div class="modal-dialog modal-sm" role="document"> <!-- 모달 사이즈를 조절 -->
+							        <div class="modal-content">
+							            <div class="modal-header">
+							                <h5 class="modal-title" id="updateModalLabel">게시물 수정</h5>
+							            </div>
+							            <div class="modal-body">
+							              	  게시물 수정이 완료되었습니다.
+							            </div>
+							            <div class="modal-footer">
+							                <button type="submit" class="btn btn-dark btn-sm"  data-dismiss="modal">확인</button>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							
+							<script>
+							    // 버튼 클릭 시 모달 열기
+							    document.getElementById('openModalButton').addEventListener('click', function() {
+							        $('#updateModal').modal('show');
+							    });		    
+							</script>
+					                       
+    	               </form>
                 </div>
             </div>
         </div>
