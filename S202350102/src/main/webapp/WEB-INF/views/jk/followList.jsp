@@ -110,9 +110,10 @@
                                       <!-- following -->
                                       <button type="button" class="btn btn-light btn-xxs mb-1" onclick="follow('following', ${status.index})" id="following${status.index}">팔로잉</button>
   
-                                      <!-- sendMessage -->
+                                      <!-- sendMessage --> 
+                                      <!-- 
 	                                  <button type="button" class="btn btn-info btn-xxs" onclick="sendMessage('following', ${status.index})">쪽지보내기</button>
-  
+	                                  -->
                                     </div>
                           </div>
                         </div>
@@ -173,7 +174,9 @@
                                 </c:choose>
 
                                 <!-- sendMessage -->
+                                <!-- 
                                 <button type="button" class="btn btn-info btn-xxs" onclick="sendMessage('follower', ${status.index})">쪽지보내기</button>
+                                 -->
                                     
                             </div>
                           </div>

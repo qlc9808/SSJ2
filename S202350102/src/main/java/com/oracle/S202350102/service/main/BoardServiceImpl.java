@@ -20,10 +20,4 @@ public class BoardServiceImpl implements BoardService {
 		return chgCert;
 	}
 
-	@Override
-	public int selectTotBrd() {
-		int result = bd.selectTotBrd();
-		return result;
-	}
-
 }

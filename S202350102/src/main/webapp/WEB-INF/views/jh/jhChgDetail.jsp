@@ -175,6 +175,7 @@
 					$("#chgPick").removeClass("btn-dark").addClass("btn-outline-dark");
 					alert("찜 취소");
 				}
+				$("#inputPickCnt").text(chgPickResult.chgPickCnt);
 
 			},
 			error : function() {
@@ -594,7 +595,7 @@
 </script> 
 </head>
 <body>
-	<input type="button" value="목록" onclick="location.href='/thChgList'" > 
+	<input type="button" value="목록" onclick="location.href='/thChgList?state_md=${chg.state_md }&chg_lg=200&chg_md=${chg.chg_md }'" > 
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -604,10 +605,10 @@
             <!-- Breadcrumb -->
             <ol class="breadcrumb mb-0 fs-xs text-gray-400">
               <li class="breadcrumb-item">
-                <a class="text-gray-400" href="index.html">챌린지</a>
+                <a class="text-gray-400" href="/thChgList?state_md=${chg.state_md }">챌린지</a>
               </li>
               <li class="breadcrumb-item">
-                <a class="text-gray-400" href="shop.html">${chg.ctn }</a>
+                <a class="text-gray-400" href="/thChgList?state_md=${chg.state_md }&chg_lg=200&chg_md=${chg.chg_md }">${chg.ctn }</a>
               </li>
               <li class="breadcrumb-item active">${chg.title }
                 	
@@ -630,11 +631,12 @@
                 <!-- Card -->
                 <div class="card">
 
-                  <!-- Badge -->
-                  <div class="badge bg-primary card-badge text-uppercase">
-                                    인기
+					
+                  <!-- 인기 뱃지-->
+                 <c:if test="${chg.pick_cnt >= 10 }">
+			     	<div class="badge bg-primary card-badge text-uppercase">인기</div>
+				 </c:if>
                                     <!-- 찜수  -->
-                  </div>
 
                   <!-- Slider -->
                   <div class="mb-4" data-flickity='{"draggable": false, "fade": true}' id="productSlider">
@@ -686,7 +688,7 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">챌린지 찜</li>
-                    <li class="list-group-item">${chg.pick_cnt }</li>
+                    <li class="list-group-item" id="inputPickCnt">${chg.pick_cnt }</li>
                   </ul> 
                
 				<div class="row gx-5 mb-7">

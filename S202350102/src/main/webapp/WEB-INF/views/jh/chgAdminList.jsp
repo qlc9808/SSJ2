@@ -15,18 +15,39 @@
 		var state_md 	= 	${state_md }
 		var chg_lg 		= 	${chg_lg }
 		var chg_md 		= 	$('.nav-link.active').data('md'); //이것 때문에 "전체"에  data-md="0"필요 없으면 string -> int 에러남
+		var keyword 	=	"${chg.keyword}"
 		
-		//카테고리 선택 안한 경우 필터만 걸림
-		if(chg_lg == 0){
+		
+		
+		//검색 한 경우 필터 적용
+		if(keyword != null && keyword !== ""){
+			//카테고리 선택 안한 경우 필터/검색만 걸림
+			if(chg_lg == 0){
+				
+				location.href= '/chgAdminList?state_md='+state_md
+									+'&sortOpt='+sortOpt+'&keyword='+keyword;
+			//카테고리 선택한 경우 카테고리+필터
+			} else {
+				location.href= '/chgAdminList?state_md='+state_md
+											+'&chg_lg='+chg_lg
+											+'&chg_md='+chg_md
+											+'&sortOpt='+sortOpt+'&keyword='+keyword;
+			}
 			
-			location.href= '/chgAdminList?state_md='+state_md
-								+'&sortOpt='+sortOpt;
-		//카테고리 선택한 경우 카테고리+필터
-		} else {
-			location.href= '/chgAdminList?state_md='+state_md
-										+'&chg_lg='+chg_lg
-										+'&chg_md='+chg_md
-										+'&sortOpt='+sortOpt;
+		}else{
+			
+			//카테고리 선택 안한 경우 필터만 걸림
+			if(chg_lg == 0){
+				
+				location.href= '/chgAdminList?state_md='+state_md
+									+'&sortOpt='+sortOpt;
+			//카테고리 선택한 경우 카테고리+필터
+			} else {
+				location.href= '/chgAdminList?state_md='+state_md
+											+'&chg_lg='+chg_lg
+											+'&chg_md='+chg_md
+											+'&sortOpt='+sortOpt;
+			}
 		}
 	}
 	
@@ -51,30 +72,55 @@
 	    var chg_md    = ${chg_md}
 	    var sortOpt   = $('#sortOpt').val()
 	    var chg_md 		= 	$('.nav-link.active').data('md');
-	    //페이지 번호
-	    var pageNum   = document.getElementById('pageMove'+p_index).innerText
+	    var pageNum   = document.getElementById('pageMove'+p_index).innerText   //페이지 번호
+	    var keyword 	=	"${chg.keyword}" // 검색 키워드
 	    
-	    //필터 선택한 경우(진행중/종료 챌린지인 경우)
-	    if(sortOpt != null){
-	    	
-		    //카테고리 선택 안한 경우 + 필터는 자동
-		    if(chg_lg == 0){
-				location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
-			//카테고리+필터 선택	
-		    } else {
-				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+	    //검색어 있는 경우
+    	if(keyword != null && keyword !== ""){
+		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
+		    if(sortOpt != null){
+		    	
+			    //카테고리 선택 안한 경우 + 필터는 자동
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
+			    }
+			    
+			//필터 없는 신청/반려 챌린지인 경우
+		    } else{
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum+"&keyword="+keyword;
+			    }
 		    }
-		    
-		//필터 없는 신청/반려 챌린지인 경우
-	    } else{
-		    if(chg_lg == 0){
-				location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
-			//카테고리+필터 선택	
-		    } else {
-				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
+    	} else{
+    		
+		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
+		    if(sortOpt != null){
+		    	
+			    //카테고리 선택 안한 경우 + 필터는 자동
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+			    }
+			    
+			//필터 없는 신청/반려 챌린지인 경우
+		    } else{
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
+			    }
 		    }
-	    }
 			
+    	}
 	}
 	 
 	//이전/다음 버튼으로 페이지 이동 (테스트 필요)
@@ -84,27 +130,54 @@
 	    var chg_md    = ${chg_md}
 	    var sortOpt   = $('#sortOpt').val()
 	    var chg_md 		= 	$('.nav-link.active').data('md');
-	 
-	    //필터 선택한 경우(진행중/종료 챌린지인 경우)
-	    if(sortOpt != null){
-	    	
-		    //카테고리 선택 안한 경우 + 필터는 자동
-		    if(chg_lg == 0){
-				location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
-			//카테고리+필터 선택	
-		    } else {
-				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
-		    }
+	    var keyword 	=	"${chg.keyword}" // 검색 키워드
 		    
-		//필터 없는 신청/반려 챌린지인 경우
-	    } else{
-		    if(chg_lg == 0){
-				location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
-			//카테고리+필터 선택	
-		    } else {
-				location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
+	    //검색어 있는 경우
+    	if(keyword != null && keyword !== ""){
+		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
+		    if(sortOpt != null){
+		    	
+			    //카테고리 선택 안한 경우 + 필터는 자동
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
+			    }
+			    
+			//필터 없는 신청/반려 챌린지인 경우
+		    } else{
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum+"&keyword="+keyword;
+			    }
 		    }
-	    }
+    		
+    	} else{
+		    //필터 선택한 경우(진행중/종료 챌린지인 경우)
+		    if(sortOpt != null){
+		    	
+			    //카테고리 선택 안한 경우 + 필터는 자동
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
+			    }
+			    
+			//필터 없는 신청/반려 챌린지인 경우
+		    } else{
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
+			    }
+		    }
+    		
+    	}
 	    //원래 아래 주소인데 필터 유무와 카테고리 유무 때문에 위처럼 바꿈 근데 테스트 필요
 		//location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 	}
@@ -117,29 +190,96 @@
 	    var chg_lg 	  	= ${chg_lg}
 	    var sortOpt   	= $('#sortOpt').val()
 	    var chg_md 		= 	$('.nav-link.active').data('md');
-	    //필터 있는 경우 (진행/종료 챌린지)
-   	    if(sortOpt != null){
-		    if(chg_lg == 0){
-				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0";
-		    	
-		    } else {
-				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg+"&chg_md="+chg_md;
-		    	
-		    }
-		//필터 없는 경우(신청/반려 챌린지 경우)
-   	    } else{
-   	    	//카테고리 선택 안 한 경우
-		    if(chg_lg == 0){
-				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&chgUpdateMode=0";
-		    //카테고리 선택 한 경우	
-		    } else {
-				location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+currentPage+"&chgUpdateMode=0";
-		    	
-		    }
+	    var keyword 	=	"${chg.keyword}" // 검색 키워드
+		    
+	    //검색어 있는 경우
+    	if(keyword != null && keyword !== ""){
+		    //필터 있는 경우 (진행/종료 챌린지)
+	   	    if(sortOpt != null){
+			    if(chg_lg == 0){
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0"+"&keyword="+keyword;
+			    	
+			    } else {
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg+"&chg_md="+chg_md+"&keyword="+keyword;
+			    	
+			    }
+			//필터 없는 경우(신청/반려 챌린지 경우)
+	   	    } else{
+	   	    	//카테고리 선택 안 한 경우
+			    if(chg_lg == 0){
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&chgUpdateMode=0"+"&keyword="+keyword;
+			    //카테고리 선택 한 경우	
+			    } else {
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+currentPage+"&chgUpdateMode=0"+"&keyword="+keyword;
+			    	
+			    }
+	   	    	
+	   	    }
    	    	
-   	    }
-   	    	
+    	//검색 안한 경우	
+    	} else{
+		    //필터 있는 경우 (진행/종료 챌린지)
+	   	    if(sortOpt != null){
+			    if(chg_lg == 0){
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0";
+			    	
+			    } else {
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&sortOpt="+sortOpt+"&chgUpdateMode=0&chg_lg="+chg_lg+"&chg_md="+chg_md;
+			    	
+			    }
+			//필터 없는 경우(신청/반려 챌린지 경우)
+	   	    } else{
+	   	    	//카테고리 선택 안 한 경우
+			    if(chg_lg == 0){
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&currentPage="+currentPage+"&chgUpdateMode=0";
+			    //카테고리 선택 한 경우	
+			    } else {
+					location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+currentPage+"&chgUpdateMode=0";
+			    	
+			    }
+	   	    	
+	   	    }
+    		
+    	}
 	} 
+	
+	
+	// 검색 구현
+	$(function() {
+		$("#searchButton").click(function () {
+			
+			var keyword 	=	$("#keyword").val();
+			var state_md  	= 	${state_md}
+		    var chg_lg 	  	= 	${chg_lg}
+		    var sortOpt   	= 	$('#sortOpt').val()
+		    var chg_md 		= 	$('.nav-link.active').data('md');
+			// 진행중,종료된 챌린지를 체크하기위해서 status_md를 넣어줌
+			
+			
+			if(sortOpt != null){
+		    	
+			    //카테고리 선택 안한 경우 + 필터는 자동
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&keyword="+keyword;
+			    }
+			    
+			//필터 없는 신청/반려 챌린지인 경우
+		    } else{
+			    if(chg_lg == 0){
+					location.href= "chgAdminList?state_md="+state_md+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&keyword="+keyword;
+			    }
+		    }
+			
+			//location.href = '/chgAdminList?keyword='+keyword+'&state_md='+state_md					
+
+		})
+	})
 </script>
 
 </head>
@@ -237,7 +377,7 @@
 					<tr class="text-center" id="chgList${status.index }">
 						<td>${num }</td>
 						<td>${chgList.ctn }</td>
-						<td>${chgList.title }</td>
+						<td><a href="/chgDetail?chg_id=${chgList.chg_id }">${chgList.title }</a></td>
 						<td>${chgList.userId }</td>
 						<td>
 							<c:if test="${chgList.chg_public == 0 }">공개</c:if> 
@@ -296,6 +436,23 @@
 						</c:if>
 					 </ul>
 			  		</nav>
+			  		
+			  		
+			  				  		<!-- 게시판 검색 (옵션 제목, 작성자)-->
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목/내용 검색"  value="${chg.keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton">
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				
+				        </div>
+				    </div>
+				</div>
 			  </div>
 		  	</div>
 		  	</div>

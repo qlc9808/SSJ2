@@ -309,8 +309,13 @@
 		    
 		    //리턴값을 줘서 사용(없어도 됨)
 		    return flkty;
-		}		
+		}
 		
+		//하단 더보기 클릭시 발동(인증글 더 불러오기)
+		function moreList() {
+			var sendData = $('#more').serialize();
+			location.href = "/?" + sendData;
+		}
 		
 	</script>
 </head>
@@ -472,10 +477,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12" id="certListContainer">
+				<div class="col-12">
 		
 					<!-- 인증글 시작 -->
-					<c:set var="num" value="${page.total - page.start + 1 }"/>
 					<c:forEach var="certList" items="${chgCertList }" varStatus="status">
 						<!-- 인증글 원글 -->
 						<input type="hidden" id="brd_num${status.index}" value="${certList.brd_num}">
@@ -972,39 +976,16 @@
 								</div>
 							</div>
 						</div>
-						<c:set var="num" value="${num - 1 }"/>
 					</c:forEach>
 					
-					<!-- 무한 스크롤 어케 구현함 ㄷㄷ -->
-					<c:if test="${page.startPage > page.pageBlock }">
-						${page.startPage - page.pageBlock }
-					</c:if>
-					
-					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
-						<c:if test="${i == page.currentPage }">
-						
-						</c:if>
-						
-						<c:if test="${i != page.currentPage }">
-						
-						</c:if>
-					</c:forEach>
-					
-					<c:if test="${page.endPage < page.totalPage }">
-						${page.startPage + page.pageBlock }
-					</c:if>
-					
-					<input type="hidden" id="page" value="2">
-					
-					<script type="text/javascript">
-						window.onscroll = function() {
-							if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-								var page = $('#page').val();
-								
-								// alert("page -> " + page);
-							}
-						}
-					</script>
+				</div>
+				
+				<div class="col-12 text-center">
+					<form id="more">
+						<input type="hidden" name="start" value="1">
+						<input type="hidden" name="end" value="${board.end + 10}">
+						<button type="button" onclick="moreList()" class="btn btn-outline-gray-400 text-muted">더보기▼</button>
+					</form>
 				</div>
 			</div>
 		</div>

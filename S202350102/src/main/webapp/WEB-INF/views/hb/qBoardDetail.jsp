@@ -51,7 +51,7 @@
 					    <input type="hidden"  id="img"  name="img" value="${board.img }">
 					    <input type="hidden"  id="brd_md" 	 name="brd_md" value="${board.brd_md }">
 					    <input type="hidden"  id="brd_group"  name="brd_group" value="${board.brd_num }">
-					    <textarea rows="3" cols="50" name="conts" id="conts" placeholder="댓글을 입력하세요." required="required"></textarea><p>
+					    <textarea rows="3" cols="50" maxlength="200" name="conts" id="conts" placeholder="댓글을 입력하세요." required="required"></textarea><p>
 						<input type="button" value="입력" onclick="commentWriteBtn()">
 					</form>
 				</div>
@@ -187,7 +187,7 @@
 	        var brd_num = $(this).data('brd-num');
 
 	        var originalContent = commentList.find('span').text(); // input hidden하고 textarea 밸류 받자
-	        var inputField = $('<input class="updateArea" type="text" value="'+originalContent+'">' /* { type: 'text', value: originalContent } */);
+	        var inputField = $('<textarea rows="5" cols="50" maxlength="200" class="updateArea">' +originalContent+ '</textarea>' /* { type: 'text', value: originalContent } */);
 	        commentList.find('span').replaceWith(inputField);
 
 	        var saveButton = $('<button type="button" class="saveBtn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');
@@ -198,7 +198,7 @@
 
 	        $(document).off('click', '.saveBtn');
 	        $(document).on('click', '.saveBtn', function () {
-	            var updateContent = commentList.find('input').val();
+	            var updateContent = commentList.find('textarea').val();
 	            $.ajax({
 	                url: 'qBoardCommentUpdate',
 	                type: 'POST',
@@ -233,6 +233,16 @@
 	    } else {
 	    }
 	}
+	
+	// textarea 줄바꿈 제한
+	$(document).on('keydown', 'textarea', function() {
+	    var rows = $(this).val().split('\n').length;
+	    var maxRows = 6;
+	    if (rows > maxRows) {
+	        var modifiedText = $(this).val().split("\n").slice(0, maxRows);
+	        $(this).val(modifiedText.join("\n"));
+	    }
+	});
 
 </script>
 </body>

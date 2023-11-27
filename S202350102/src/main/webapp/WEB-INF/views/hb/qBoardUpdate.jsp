@@ -21,7 +21,7 @@
 			<table class="brd-tb">
 				<tr class="brd-title">
 					<td>제목</td>
-					<td><input type="text" name="title" value="${board.title }" name="title" required="required"></td>
+					<td><input type="text" maxlength="25" name="title" value="${board.title }" name="title" required="required"></td>
 				</tr>
 				<tr class="brd-line"></tr>
 				<tr class="brd-option">
