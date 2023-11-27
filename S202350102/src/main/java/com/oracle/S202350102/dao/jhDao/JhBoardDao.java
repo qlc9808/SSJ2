@@ -20,5 +20,21 @@ public interface JhBoardDao {
 	//댓글 리스트
 	List<Board>			reviewReplyList(Board board);
 	
+	//댓글 입력
+	void 				replyInsert(Board board);
+	
+	//댓글 수정
+	int 				replyUpdate(Board board);
+	
+	//댓글 삭제
+	int 				replyDelete(int brd_num);
+	
+	//후기 작성
+	int 				reviewPost(Board board);
+	
+	//후기 수정
+	int 				reviewUpdate(Board board);
+	
+	
 	
 }

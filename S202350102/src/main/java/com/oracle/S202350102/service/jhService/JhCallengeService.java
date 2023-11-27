@@ -37,22 +37,22 @@ public interface JhCallengeService {
 //	List<Challenge> 	ingChgPickList(Challenge challenge);
 
 
-	void 				replyInsert(Board board);
+//	void 				replyInsert(Board board); 보드로
 
 
-	int 				replyDelete(int brd_num);
+//	int 				replyDelete(int brd_num); //보드로
 
 
 //	void 				viewCntUp(int brd_num);//보드로
 
 
-	int 				replyUpdate(Board board);
+//	int 				replyUpdate(Board board); //보드로
 
 
-	int 				reviewPost(Board board);
+//	int 				reviewPost(Board board); //보드로
 
 
-	int 				reviewUpdate(Board board);
+//	int 				reviewUpdate(Board board); //보드
 
 
 	int 				reviewDelete(int brd_num);

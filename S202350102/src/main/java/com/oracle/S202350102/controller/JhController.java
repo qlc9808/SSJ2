@@ -64,7 +64,7 @@ public class JhController {
 	
 	private final Level1Service ls;
 	
-	private final ChChallengeService	chChallengeService;
+	//private final ChChallengeService	chChallengeService;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -436,13 +436,13 @@ public class JhController {
 		
 	}
 	
-	//////////////////////////////////////////////////////////////////////여기서 부터 보드 다시 옮기기
+
 	//챌린지 후기 댓글 입력
 	@RequestMapping(value = "replyInsert")
 	public String replyInsert(Board board, HttpSession session, Model model) {
 		System.out.println("JhController replyInsert Start...");
 		
-		jhCService.replyInsert(board);
+		jhBrdService.replyInsert(board);
 		
 		//디비에 인서트는 이 메소드에서 해결 했으니 새롭게 reviewContent 요청해야하니 redirect 사용
 		//forward 사용하면 새로고침시 같은 댓글이 계속 입력되는 문제 발생
@@ -455,7 +455,7 @@ public class JhController {
 							   Model model,
 							   Board board) {
 		
-		int result = jhCService.replyUpdate(board);
+		int result = jhBrdService.replyUpdate(board);
 		System.out.println("JhController replyInsert replyUpdate -> " + result );
 		
 		//댓글 수정 결과를 삭제와 어떻게 구분하지? -> 구분 안하고 댓글 변경 완료되었습니다 메세지로 통일
@@ -475,7 +475,7 @@ public class JhController {
 		
 		int rep_brd_num = Integer.parseInt(brd_num2);
 		
-		int result = jhCService.replyDelete(rep_brd_num);
+		int result = jhBrdService.replyDelete(rep_brd_num);
 		
 		System.out.println("JhController replyDelete result -> " + result);
 		
@@ -678,7 +678,7 @@ public class JhController {
 			model.addAttribute("savedName", saveName);
 			
 			//글 등록
-			int result = jhCService.reviewPost(board);
+			int result = jhBrdService.reviewPost(board);
 			
 			if ( result > 0 ) {
 				ls.userExp(user_num, lg, md);
@@ -736,13 +736,14 @@ public class JhController {
 		
 		
 		//진짜 이미지 및 글 업데이트
-		int result = jhCService.reviewUpdate(board);
+		int result = jhBrdService.reviewUpdate(board);
 		
 		System.out.println("result -> " + result);
 		
 		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
 	}
 
+	////////////////////////////여기서 부터 다시
 	//후기 삭제
 	@RequestMapping(value = "reviewDelete")
 	public String reviewDelete(int brd_num, int chg_id, String img, HttpServletRequest request) throws Exception {

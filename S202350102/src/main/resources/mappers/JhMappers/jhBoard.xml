@@ -65,4 +65,60 @@
 	</select>
 	
 	
+	<!-- 후기 댓글 입력 -->
+	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
+		{
+			call Challenge_Review_Insert_Proc(
+						 #{brd_num , 	mode=IN , jdbcType=INTEGER}
+						,#{chg_id , 	mode=IN , jdbcType=INTEGER}
+						,#{user_num, 	mode=IN , jdbcType=INTEGER}
+						,#{conts , 		mode=IN , jdbcType=VARCHAR}
+						,#{resultCount, mode=OUT, jdbcType=INTEGER}
+						)
+		}
+		
+	</select>
+	
+	
+	<!-- 후기 댓글 수정-->
+	<update id="jhReplyUpdate" parameterType="Board">
+		UPDATE board
+		SET    conts = #{conts}, reg_date = SYSDATE
+		WHERE  brd_num = #{brd_num}
+	</update>
+	
+	
+	<!-- 후기랑 댓글 수정 삭제 하나의 쿼리에 조건문 주고 가능한지 생각해보기 -->
+	<!-- 후기 댓글 삭제 -->
+	<delete id="jhReplyDelete" parameterType="int">
+		DELETE 	FROM board
+		WHERE 	brd_num = #{brd_num}
+	</delete>
+	
+	<!-- 후기 입력 -->
+	<insert id="jhReviewPost" parameterType="Board" >
+		INSERT INTO board (brd_num, chg_id, user_num, brd_lg, brd_md, title, conts, img, reg_date , brd_group, brd_step)
+		VALUES (brd_num_seq.NEXTVAL, #{chg_id}, #{user_num}, 700, 101, #{title}, #{conts}, #{img}, SYSDATE, brd_num_seq.NEXTVAL, 0)
+	</insert>
+	
+	<!-- 후기 수정 -->
+	<update id="jhReviewUpdate" parameterType="Board">
+      UPDATE  board
+      SET     title = #{title} 
+            , conts = #{conts} 
+            , img = 
+        	  <choose>
+            	<when test="img != null and !img.equals('')">
+                	#{img}
+            	</when>
+              	<otherwise>
+                	null
+            	</otherwise>
+        	  </choose>
+            , reg_date = SYSDATE   
+      WHERE   brd_num = #{brd_num}
+   </update>
+	
+	
+	
 </mapper>
