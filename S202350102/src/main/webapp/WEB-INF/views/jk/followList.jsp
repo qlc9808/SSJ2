@@ -61,7 +61,7 @@
     <div class="row profile">
       
       <div class="col-md-3">
-        <%@ include file="/WEB-INF/views/mypageMenu.jsp" %>
+        <%@ include file="../mypageMenu.jsp" %>
       </div>
 
       <div class="col-md-9 profile-form">

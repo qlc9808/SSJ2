@@ -22,7 +22,7 @@ $(document).ready(function () {
           var followCnt = jsonData.followCnt;
           var followerCount = followCnt.FOLLOWER_CNT;
           var followingCount = followCnt.FOLLOWING_CNT;
-          var myBoard_cnt = jsonData.myBoard;
+          var myBoard_cnt = jsonData.myBoard; 
           
           console.log("Follower Count: " + followerCount);
           console.log("Following Count: " + followingCount);
@@ -31,7 +31,7 @@ $(document).ready(function () {
           $('.profile-usertitle-name').text(user1.nick + ' 님');
           $('.follow').text(followCnt.FOLLOWER_CNT);
           $('.following').text(followCnt.FOLLOWING_CNT);
-          $('.myBoardCnt').text(followCnt.FOLLOWING_CNT);
+          $('.myBoardCnt').text(myBoard_cnt);
           
        },
        error: function (error) {

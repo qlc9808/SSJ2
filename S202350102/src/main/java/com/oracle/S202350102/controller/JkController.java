@@ -754,9 +754,7 @@ public class JkController {
 	    user1.setUser_num(user_num);
 	    List<Challenge> myChgList = jms.myChgList(chg);
 	    User1 user1FromDB = us.userSelect(user_num);
-	    
-	    
-	    user1.setUser_num(user_num);
+	
 	    model.addAttribute("level1List",ls.level1List());
 	    model.addAttribute("user1", user1FromDB);
 	    
