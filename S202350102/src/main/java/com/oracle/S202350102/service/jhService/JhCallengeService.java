@@ -85,9 +85,12 @@ public interface JhCallengeService {
 	int 				chgAdminUpdate(Challenge chg);
 
 
-	int 				chgDelete(int chg_id); 
+	int 				chgDelete(int chg_id);
+
+	//승인 반려 후 챌린지 진행 상태 가져 오기 위함
+	int 				chgStateMd(int chg_id); 
   
-   
+    
 	
         
        

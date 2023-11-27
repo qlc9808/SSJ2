@@ -289,8 +289,9 @@
 		
 	</select>
 	
+	<!-- 챌린지 승인 반려 성공 여부 가져오기 위함 -->
 	<resultMap id="resultMap" type="java.util.Map">
-    <result property="resultCount" column="resultCount" jdbcType="INTEGER"/>
+    	<result property="resultCount" column="resultCount" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	
@@ -332,7 +333,11 @@
 		WHERE 	chg_id = #{chg_id}
 	</delete>
 	
-	
+	<select id="jhChgStateMd" parameterType="int" resultType="int">
+		SELECT  state_md
+		FROM    challenge
+		WHERE   chg_id = #{chg_id}
+	</select>
 	
 	
 	

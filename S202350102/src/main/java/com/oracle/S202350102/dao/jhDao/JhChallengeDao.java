@@ -60,7 +60,9 @@ public interface JhChallengeDao {
 
 	int 				chgAdminUpdate(Challenge chg);
 
-	int 				chgDelete(int chg_id);     
+	int 				chgDelete(int chg_id);
+
+	int 				chgStateMd(int chg_id);     
       
-}        
+}         
    

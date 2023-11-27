@@ -419,6 +419,21 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		return result;
 	}
 
+	@Override
+	public int chgStateMd(int chg_id) {
+		System.out.println("JhChallengeDaoImpl chgStateMd Start...");
+		
+		int stateMd = 0;
+		
+		try {
+			stateMd = session.selectOne("jhChgStateMd", chg_id);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl chgStateMd e.getMessage() -> " + e.getMessage());
+
+		}
+		return stateMd;
+	}
+
 
 
 }

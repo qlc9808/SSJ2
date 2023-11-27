@@ -938,6 +938,20 @@ public class JhController {
 		System.out.println("JhController chgDetail sortOpt -> " + chg.getSortOpt());
 		System.out.println("JhController chgDetail keyword -> " + chg.getKeyword());
 		
+		
+
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		} 
+		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = chg.getState_md();
 		
@@ -977,7 +991,14 @@ public class JhController {
 		
 		model.addAttribute("chg", chg);
 		model.addAttribute("state_md", state_md);
+		System.out.println("JhController chgDetail state_md -> " + state_md);
+		
+		//승인/반려 후 currentPage가 null인경우 chgAdminDetail에서 목록, 삭제 버튼이 클릭되지 않는 문제 때문에 null일 경우 1로 셋팅함
+		if(currentPage == null) {
+			currentPage = "1";
+		}
 		model.addAttribute("currentPage", currentPage);
+		
 		//카테고리 선택 유무 판별용
 		if(chgLg == null) {
 			chgLg = 0;
@@ -988,7 +1009,7 @@ public class JhController {
 		
 		
 		
-		/////////업데이트용 페이지 이동/////////
+		/////////관리자 업데이트용 페이지 이동/////////
 		System.out.println("JhController chgDetail chgUpdateMode -> " + chgUpdateMode);
 		if(chgUpdateMode.equals("1")) {
 			System.out.println("JhController chgDetail 수정 페이지로 이동 ");
@@ -1030,11 +1051,10 @@ public class JhController {
 	
 	//승인반려 처리
 	@RequestMapping(value = "approvReturn")
-	public String approvReturn(int approvReturn, int chg_id, int state_md,@RequestParam(required = false) Integer user_num, @RequestParam(required = false) Integer return_md) {
+	public String approvReturn(int approvReturn, int chg_id, @RequestParam(required = false) Integer user_num, @RequestParam(required = false) Integer return_md) {
 		System.out.println("JhController approvReturn Start...");
 		System.out.println("JhController approvReturn approvReturn -> " + approvReturn);
 		System.out.println("JhController approvReturn chg_id -> " 		+ chg_id);
-		System.out.println("JhController approvReturn state_md -> "		+ state_md);
 		System.out.println("JhController approvReturn user_num -> " 	+ user_num);
 		System.out.println("JhController approvReturn return_md-> " 	+ return_md);
 		
@@ -1063,8 +1083,17 @@ public class JhController {
 		
 		System.out.println("JhController approvReturn result -> " + result);
 		
+		int stateMd = 0;
+		//승인 반려 성공시
+		if(result > 0) {
+			//승인 반려 후 챌린지 진행 상태 가져 오기 위함
+			//state_md를 파라미터로 받는 경우 승인/반려 처리 이전 진행상태이므로 chgAdminDetail로 리다이렉트 됐을 경우 승인/반려 이전 진행상태를 계속 가지고 가므로 승인/반려 처리 이후 새롭게 상태 정보 가져옴
+			stateMd = jhCService.chgStateMd(chg_id);
+		}
+		
+		System.out.println("JhController approvReturn state_md -> " + stateMd);
 		//승인/반려 처리 후 기존  해당 챌린지 관리 상세 페이지로 이동
-		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md+"&chgUpdateMode='0'";
+		return "redirect:chgAdminDetail?chg_id="+chg_id+"&state_md="+stateMd+"&chgUpdateMode='0'";
 		
 	}
 	
@@ -1176,15 +1205,16 @@ public class JhController {
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/"); //삭제를 위한 경로
 		
 		if(session.getAttribute("user_num") != null) {
-			 			
-			user_num = (int) session.getAttribute("user_num");
-			User1 user = userService.userSelect(user_num);
+			 	
+			//원래 관리자만 삭제 가능하게 했다가 유저가 삭제하는 것도 같이 하려고 주석처리함
+//			user_num = (int) session.getAttribute("user_num");
+//			User1 user = userService.userSelect(user_num);
 			
-			//썸네일 저장 안해서 기본 이미지 저장할 경우/기본이미지 저장되었는데 다른 썸네일 올린경우 기존 이미지 삭제해야 할 때 기본이미지 삭제되지 않도록 비교하기 위함
-			String defaultImg = "assets/img/chgDfaultImg.png";
+			//썸네일 저장 안해서 기본 이미지 저장할 경우/기본이미지 저장되었는데 다른 썸네일 올린경우 기존 이미지 삭제해야 할 때 기본이미지 삭제되지 않도록 비교하기 위함--없어도 되는 듯
+			//String defaultImg = "assets/img/chgDfaultImg.png";
 			
 			/*************유저 권한 확인*************/
-			if( user.getStatus_md() == 102) { //관리자면
+			//if( user.getStatus_md() == 102 ) { //관리자면
 				
 				//예시사진 삭제
 				if(sample_img != null && !sample_img.isEmpty() ) {
@@ -1208,7 +1238,7 @@ public class JhController {
 						}
 					}
 				}
-			}
+			//}
 		}
 		
 		return "redirect:chgAdminList?state_md=" + state_md;
