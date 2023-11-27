@@ -140,6 +140,59 @@
    	    }
    	    	
 	} 
+	
+	
+	// 검색 구현
+	$(function() {
+		$("#searchButton").click(function () {
+			
+			var keyword 	=	$("#keyword").val();
+			var state_md  	= 	${state_md}
+		    var chg_lg 	  	= 	${chg_lg}
+		    var chg_md   	= 	${chg_md}
+		    var sortOpt   	= 	$('#sortOpt').val()
+		    var chg_md 		= 	$('.nav-link.active').data('md');
+		    var pageNum   	=   document.getElementById('pageMove'+p_index).innerText
+			// 진행중,종료된 챌린지를 체크하기위해서 status_md를 넣어줌
+			
+			alert("keyword -> "+keyword)
+			alert("state_md -> "+state_md)
+			alert("chg_lg -> "+chg_lg)
+			alert("chg_md -> "+chg_md)
+			alert("sortOpt -> "+sortOpt)
+			alert("chg_md -> "+chg_md)
+			alert("pageNum -> "+pageNum)
+			
+			if(sortOpt != null){
+			alert("sortOpt 필터 있음 -> "+ sortOpt)
+		    	
+			    //카테고리 선택 안한 경우 + 필터는 자동
+			    if(chg_lg == 0){
+			alert("chg_lg 카테고리 없음-> "+ chg_lg)
+					location.href= "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+			alert("chg_lg 카테고리 유-> "+ chg_lg)
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
+			    }
+			    
+			//필터 없는 신청/반려 챌린지인 경우
+		    } else{
+			alert("sortOpt 필터 없음 -> "+ sortOpt)
+			    if(chg_lg == 0){
+			alert("chg_lg 카테고리 없음 -> "+ chg_lg)
+					location.href= "chgAdminList?state_md="+state_md+"&currentPage="+pageNum+"&keyword="+keyword;
+				//카테고리+필터 선택	
+			    } else {
+			alert("chg_lg 카테고리 유 -> "+ chg_lg)
+					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum+"&keyword="+keyword;
+			    }
+		    }
+			
+			//location.href = '/chgAdminList?keyword='+keyword+'&state_md='+state_md					
+
+		})
+	})
 </script>
 
 </head>
@@ -296,6 +349,23 @@
 						</c:if>
 					 </ul>
 			  		</nav>
+			  		
+			  		
+			  				  		<!-- 게시판 검색 (옵션 제목, 작성자)-->
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목/내용 검색" value="${chg.keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton">
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				
+				        </div>
+				    </div>
+				</div>
 			  </div>
 		  	</div>
 		  	</div>

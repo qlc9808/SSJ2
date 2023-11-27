@@ -796,7 +796,7 @@ public class JhController {
 	
 	//챌린지 관리자 리스트
 	@RequestMapping(value = "chgAdminList")
-	public String chgAdminList(Challenge challenge
+	public String chgAdminList(Challenge chg
 							 , String currentPage
 							 , @RequestParam(value = "sortOpt", required=false) String sortOpt
 							 , Model model
@@ -804,17 +804,7 @@ public class JhController {
 							 ) {
 		System.out.println("JhController chgAdminList Start...");
 		System.out.println("JhController chgAdminList sortOpt -> " +sortOpt);
-		//카테고리 명 보내기
-		//chg_md랑 state_md 파라미터 조건으로 넣어서 카테고리별, 진행상태별 챌린지 한번에 가져오기(쿼리 재활용)
-		//신청한 챌린지 리스트 가져오기-페이지네이션 포함/필터 적용 포함
-		
-//		int chgLg = 200;
-//		challenge.setChg_lg(chgLg);
-//		
-//		int stateLg = 300;
-//		challenge.setState_lg(stateLg);
-		
-		
+		System.out.println("키워드 --> "+ chg.getKeyword() );
 		
 		
 		//전체 챌린지수와 리스트, 카테고리명(신청/진행/종료 공통)
@@ -822,9 +812,9 @@ public class JhController {
 		List<Challenge> chgList = null;
 		
 		//카테고리 전체일 경우 chg_lg/chg_md = 0
-		int chg_md 				= challenge.getChg_md();
-		int chg_lg 				= challenge.getChg_lg();
-		System.out.println("JhController chgAdminList state_md -> " + challenge.getState_md());
+		int chg_md 				= chg.getChg_md();
+		int chg_lg 				= chg.getChg_lg();
+		System.out.println("JhController chgAdminList state_md -> " + chg.getState_md());
 		System.out.println("JhController chgAdminList sortOpt -> " + sortOpt);
 		System.out.println("JhController chgAdminList chg_md --> " + chg_md);
 		System.out.println("JhController chgAdminList chg_lg --> " + chg_lg);
@@ -837,7 +827,7 @@ public class JhController {
 		System.out.println("JhController chgAdminList category --> " + category);
 		
 		//진행상태(대분류는 따로 값을 넣는 부분이 없어서 뺌)
-		int state_md 			= challenge.getState_md();
+		int state_md 			= chg.getState_md();
 		System.out.println("JhController chgAdminList state_md --> " + state_md);
 		
 		//페이지
@@ -845,18 +835,18 @@ public class JhController {
 		
 		
 		//진행중,종료 챌린지일 경우
-		if(challenge.getState_md() == 102 || challenge.getState_md() == 103) {
+		if(chg.getState_md() == 102 || chg.getState_md() == 103) {
 			
 			//진행중 챌린지 총수
-			if (challenge.getState_md() ==102  ) {
+			if (chg.getState_md() ==102  ) {
 				System.out.println("JhController chgAdminList 진행 챌린지 ");
-				totalChg = tcs.totalChgIng(challenge);
+				totalChg = tcs.totalChgIng(chg);
 				System.out.println("JhController chgAdminList tcs.totalChgIng(challenge) --> " + totalChg);
 				
 				//종료 챌린지 총수
-			} else if (challenge.getState_md() == 103) {
+			} else if (chg.getState_md() == 103) {
 				System.out.println("JhController chgAdminList 종료 챌린지 ");
-				totalChg = tcs.totalChgFin(challenge);
+				totalChg = tcs.totalChgFin(chg);
 				System.out.println("JhController chgAdminList tcs.totalChgFin(challenge) --> " + totalChg);
 			}
 			
@@ -865,36 +855,36 @@ public class JhController {
 			//페이지네이션
 			page = new Paging(totalChg, currentPage);
 			//페이지 셋팅
-			challenge.setStart(page.getStart());
-			challenge.setEnd(page.getEnd());
+			chg.setStart(page.getStart());
+			chg.setEnd(page.getEnd());
 			
 			//조회 필터 셋팅(
 			if(sortOpt != null) {
-				challenge.setSortOpt(sortOpt);
+				chg.setSortOpt(sortOpt);
 				System.out.println("JhController chgAdminList sortOption --> " + sortOpt);
 			}
 				
 			//리스트
-			chgList = tcs.listChg(challenge);
+			chgList = tcs.listChg(chg);
 			System.out.println("JhController chgAdminList listChg.size() --> " + chgList.size());
-			System.out.println("JhController chgAdminList chg_lg --> " + challenge.getChg_lg());
-			System.out.println("JhController chgAdminList chg_md --> " + challenge.getChg_md());
+			System.out.println("JhController chgAdminList chg_lg --> " + chg.getChg_lg());
+			System.out.println("JhController chgAdminList chg_md --> " + chg.getChg_md());
 
 			
 		//신청 /반려 챌린지인 경우	
 		} else {
 			System.out.println("JhController chgAdminList 신청 챌린지 ");
 //			파라미터 chg_lg=200&state_lg=300&state_md=100
-			totalChg = jhCService.chgListTotal(challenge);
+			totalChg = jhCService.chgListTotal(chg);
 			
 			//페이지 네이션
 			page = new Paging(totalChg, currentPage);
 			//페이지 셋팅
-			challenge.setStart(page.getStart());
-			challenge.setEnd(page.getEnd());
+			chg.setStart(page.getStart());
+			chg.setEnd(page.getEnd());
 			System.out.println("JhController chgAdminList page --> " + page);
 			
-			chgList = jhCService.chgAplList(challenge);
+			chgList = jhCService.chgAplList(chg);
 			
 			System.out.println("JhController chgAdminList 신청 listChg.size() --> " + chgList.size());
 			System.out.println("JhController chgAdminList 신청 totalChg --> " + totalChg);
