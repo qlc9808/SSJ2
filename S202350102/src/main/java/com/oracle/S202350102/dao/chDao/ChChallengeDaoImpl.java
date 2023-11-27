@@ -115,7 +115,7 @@ public class ChChallengeDaoImpl implements ChChallengeDao {
 	public int chgUpdate(Challenge chg) {
 		System.out.println("ChChallengeDaoImpl chgUpdate Start...");
 		int result = 0;
-		System.out.println(chg);
+		System.out.println(chg);		
 		
 		try {
 			result = session.update("chgUpdate",chg);

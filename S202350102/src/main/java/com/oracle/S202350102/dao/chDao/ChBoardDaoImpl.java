@@ -84,6 +84,7 @@ public class ChBoardDaoImpl implements ChBoardDao {
 	@Override
 	public int noticeUpdate(Board board) {
 		System.out.println("chBoardDaoImpl noticeUpdate Start...");
+		System.out.println("board->"+board );
 		int result = 0;
 		
 		try {

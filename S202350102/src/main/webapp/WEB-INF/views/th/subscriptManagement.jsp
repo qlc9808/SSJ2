@@ -75,11 +75,11 @@
 						      <th  class="py-4" scope="row" colspan="3">${user1.user_name }님 안녕하세요. <br>
 						      							  ${order1.mem_name } 상품을 구매 해주셔서 감사합니다.</th>
 						    </tr>
-						    <tr class="py-3" style="border-bottom: none; border-top: none;">
-						      <th class="py-3" scope="row" colspan="3">결제 완료일: <fmt:formatDate value="${order1.suc_date }" pattern="yyyy년 MM월 dd일, HH시 mm분 ss초"></fmt:formatDate></th>
+						    <tr class="py-2" style="border-bottom: none; border-top: none;">
+						      <th class="py-2" scope="row" colspan="3">결제 완료일: <fmt:formatDate value="${order1.suc_date }" pattern="yyyy년 MM월 dd일, HH시 mm분 ss초"></fmt:formatDate></th>
 						    </tr>
-						    <tr class="py-3" style="border-bottom: none; border-top: none;">
-						      <th class="py-3" scope="row" colspan="3">결제 수단: ${order1.pay_type }</th>
+						    <tr class="py-2" style="border-bottom: none; border-top: none;">
+						      <th class="py-2" scope="row" colspan="3">결제 수단: ${order1.pay_type }</th>
 						    </tr>
 						    <tr style="border-top: none;">
 						      <th class="d-flex justify-content-end" ><button type="submit" class="btn btn-dark btn-sm">구독취소</button></th>

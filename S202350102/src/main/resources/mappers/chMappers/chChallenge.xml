@@ -116,6 +116,11 @@
            	chg_public = #{chg_public}, 
            	<if test="priv_pswd != null">priv_pswd = #{priv_pswd},</if> 
            	<if test="thumb != null">thumb = #{thumb}, </if>           	
+           	<if test="delStatus == 1">
+           		<if test="thumb == null">
+           			thumb = #{thumb,jdbcType=VARCHAR},
+           		</if>
+           	</if>
            	end_date = #{end_date}
         Where chg_id = #{chg_id}
 	</update>

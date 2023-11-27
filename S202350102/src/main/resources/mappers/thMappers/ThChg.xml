@@ -19,8 +19,8 @@
 		</choose>
 		<!-- keyword 값이 null이 아니고 공백도 아닐때,  -->
 		<if test='keyword != null and keyword != ""'> 
-			AND title   	LIKE '%' || #{keyword} || '%'	
-			OR  chg_conts 	LIKE '%' || #{keyword} || '%'
+			AND (title   	LIKE '%' || #{keyword} || '%'	
+			OR  chg_conts 	LIKE '%' || #{keyword} || '%')
 		</if>
 
 	</select>
@@ -35,8 +35,8 @@
 		</choose>
 		<!-- keyword 값이 null이 아니고 공백도 아닐때,  -->
 		<if test='keyword != null and keyword != ""'> 
-			AND title   	LIKE '%' || #{keyword} || '%'	
-			OR  chg_conts 	LIKE '%' || #{keyword} || '%'
+			AND (title   	LIKE '%' || #{keyword} || '%'	
+			OR  chg_conts 	LIKE '%' || #{keyword} || '%')
 		</if>
 	</select>
 	
