@@ -15,6 +15,10 @@
               SELECT b.brd_num, u.user_num, b.title, u.nick, b.reg_date, b.view_cnt, b.brd_md 
               FROM   board b, user1 u 
               WHERE  b.user_num = u.user_num 
+              <choose>
+              	<when test="status_md != 102">and u.user_num = #{user_num}</when>
+              	<otherwise></otherwise>
+              </choose>
               AND    brd_lg = 400
               AND    brd_step = 0
               order  by b.reg_date desc

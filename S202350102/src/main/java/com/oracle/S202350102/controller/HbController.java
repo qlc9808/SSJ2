@@ -70,19 +70,25 @@ public class HbController {
 				ls.userLevelCheck(user_num);
 				// 전체 게시글 수
 				int total = qbs.totalQBoard(user1);
-				
+				System.out.println(total);
 				// Paging 작업
 				Paging page = new Paging(total, currentPage);
 				
 				board.setStart(page.getStart());
 				board.setEnd(page.getEnd());
+				board.setStatus_md(user1.getStatus_md());
 				
 				// 보드 리스트 불러오기
+				if ( user1.getStatus_md() != 102 ) {
+					board.setUser_num(user_num);
+				}
+				
 				List<Board> qBoardList = qbs.qBoardList(board);
+				System.out.println(qBoardList);
 				
 
 				
-				// 유저 정보 불러오기
+				
 
 				// 게시판 유저 정보 BoardList에 저장하기
 				qBoardList = us.boardWriterLevelInfo(qBoardList);

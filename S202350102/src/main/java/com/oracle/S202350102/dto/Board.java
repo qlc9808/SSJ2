@@ -47,6 +47,7 @@ public class Board {
 	private int user_level;
 	private int user_exp;
 	private int percentage;
+	private int status_md;
 	
 	//join
 	private String nick;			// 유저 닉네임
