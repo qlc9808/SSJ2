@@ -138,6 +138,7 @@ public class YrController {
 		
 		// 팔로우 리스트 출력
 		List<User1> followerList = yfis.followerList(userNum);
+		followerList = us.userLevelList(followerList);
 		model.addAttribute("followerList", followerList);
 		
 		return "jk/followList";
