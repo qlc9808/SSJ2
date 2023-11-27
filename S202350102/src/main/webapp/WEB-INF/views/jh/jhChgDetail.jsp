@@ -595,7 +595,7 @@
 </script> 
 </head>
 <body>
-	<input type="button" value="목록" onclick="location.href='/thChgList?state_md=${chg.state_md }&chg_lg=200&chg_md=${chg.chg_md }'" > 
+
     <!-- BREADCRUMB -->
     <nav class="py-5">
       <div class="container">
@@ -639,16 +639,19 @@
                                     <!-- 찜수  -->
 
                   <!-- Slider -->
-                  <div class="mb-4" data-flickity='{"draggable": false, "fade": true}' id="productSlider">
+                  <div class="mb-4">
 
 
                     <!-- Item -->
            		    <c:choose>
-					    <c:when test="${empty reviewContent.img}">
-							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" class="card-img-top" >
+					    <c:when test="${empty chg.thumb || chg.thumb == null}">
+							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
+					    </c:when>
+					    <c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
+							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
 					    </c:when>
 					    <c:otherwise>
-							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." >
+							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="챌린지 썸네일" >
 					    </c:otherwise>
 					</c:choose>
              <!--썸네일 처리 해야 함 파일 위치랑 null일 때 뜨게 할 것  -->
@@ -2172,7 +2175,7 @@
             <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${tap}">  
             <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
             <c:choose>
-            	<c:when test="${chg.stateCtn == '종료'}">
+            	<c:when test="${chg.state_md == 103}">
    	              <div class="tab-pane fade" id="reviewTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
@@ -2434,12 +2437,28 @@
             
             	<c:otherwise>
             	<div class="tab-pane fade" id="reviewTab">
-	                <div class="row justify-content-center py-9" >
-	                  <div class="col-12 col-lg-10 col-xl-8">
-            			<h5>챌린지가 종료된 후 후기를 써주세요</h5>
-            		  </div>
-            		</div>
-            	</div>
+	                <section class="py-12">
+				      <div class="container">
+				        <div class="row justify-content-center">
+				          <div class="col-12 col-md-10 col-lg-10 col-xl-10 text-center">
+				
+				            <!-- Icon -->
+				            <div class="mb-7 fs-1">🙁</div>
+				
+				            <!-- Heading -->
+				            <h2 class="mb-5">챌린지가 종료 된 후에 후기를 남겨주세요!</h2>
+				
+				            <!-- Text -->
+				            <p class="mb-7 text-gray-500">
+						              아직 챌린지가 종료되지 않았습니다.<br>
+						              후기 게시판은 챌린지가 종료된 이후에 글을 남길 수 있습니다!<br>
+						              챌린지가 종료되기 전까지 최선을 다 해주세요~!
+				            </p>
+				          </div>
+				        </div>
+				      </div>
+				    </section>
+            	  </div>
             	</c:otherwise>
             </c:choose>
             
