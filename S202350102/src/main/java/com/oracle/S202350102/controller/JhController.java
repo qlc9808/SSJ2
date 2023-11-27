@@ -383,7 +383,7 @@ public class JhController {
 		
 		//챌린지 해당 글에 대한 댓글 조회
 		List<Board> reviewReplyList = jhBrdService.reviewReplyList(board);
-		
+		reviewReplyList = userService.boardWriterLevelInfo(reviewReplyList);
 		
 		// challenger 참여 유무 판단용
 		Challenger chgr = new Challenger();

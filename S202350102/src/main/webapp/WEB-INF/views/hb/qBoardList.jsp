@@ -169,7 +169,6 @@
                             str += "<td>" +img+result.nick + "</td>";
                             str += "<td>"+result.category+"</td>";
                             var formatDate = new Date(result.reg_date);
-                            formatDate.setHours(formatDate.getHours()+9);
                             var day = formatDate.getDate();
                             var month = formatDate.getMonth() + 1;
                             var year = formatDate.getFullYear() % 100;
@@ -270,7 +269,6 @@
                         str += "<td>" +img+result.nick + "</td>";
                         str += "<td>"+result.category+"</td>";
                         var formatDate = new Date(result.reg_date);
-                        formatDate.setHours(formatDate.getHours()+9);
                         var day = formatDate.getDate();
                         var month = formatDate.getMonth() + 1;
                         var year = formatDate.getFullYear() % 100;
