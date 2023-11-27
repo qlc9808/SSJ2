@@ -310,16 +310,18 @@
 			                  	~ 
 			                	<fmt:formatDate value="${chg.end_date }" pattern="yyyy-MM-dd"></fmt:formatDate>
 			                </div>
-			                <div class="row">
-								<div class="text-muted col-6">
+			               
+								<div class="text-muted">
 									<i class="fa-solid fa-user" style="width:16px"></i>&ensp;${chg.chlgerCnt}명 참여중
 								</div>
-								<div class="text-muted col-6 text-start">
-									<c:if test="${chg.chg_public == 0 }"><i class="fa-solid fa-lock-open"></i>&ensp;공개</c:if>
+
+							<div class="row">
+			                	<div class="col-4" style="color: #e56d90;" id="inputPickCnt${chg.chg_id }"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;${chg.pick_cnt }</div>
+								<div class="text-muted col-5 text-start">
+									<c:if test="${chg.chg_public == 0 }"><span style="color: #5478e3;"><i class="fa-solid fa-lock-open"></i>&ensp;공개</span></c:if>
 									<c:if test="${chg.chg_public == 1 }"><i class="fa-solid fa-lock"></i>&ensp;비공개</c:if>
-								</div>
-							</div>
-			                <div style="color: #e56d90;" id="inputPickCnt${chg.chg_id }"><i class="fa-solid fa-heart" style="width:16px"></i>&ensp;${chg.pick_cnt }</div>
+								</div>			                	
+			                </div>
 			              </div>
 							
 			            </div>
