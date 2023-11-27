@@ -91,10 +91,25 @@
 
           <!-- Nav -->
           <ul class="navbar-nav flex-row">
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="offcanvas" href="./search">
+            <li class="nav-item dropdown hovered">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                 <i class="fe fe-search"></i>
               </a>
+				<div class="dropdown-menu">
+				    <div class="card card-lg">
+				        <div class="card-body">
+				            <form action="searching" class="row" id="srchForm">
+				                <div class="col-9 ml-2">
+				                    <input type="text" name="srch_word" id="srch_word" style="width: 120px;"> 
+				                </div>
+				                <div class="col-3" style="padding-top: 5px;">
+				                	<a href="javascript:void(0);" onclick="headSearching()" id="srchBtn"><i class='fe fe-search'></i></a>
+				                </div>				                
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
             </li>
             
             <li class="nav-item dropdown hovered">
@@ -193,6 +208,9 @@
 </style>
 
 <script type="text/javascript">
+	function headSearching(){
+		$("#srchForm").submit();
+	}
 	function alarmText(data){
 		var str = "";
 		
