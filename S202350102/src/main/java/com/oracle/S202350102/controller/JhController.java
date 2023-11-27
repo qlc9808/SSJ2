@@ -874,6 +874,7 @@ public class JhController {
 			System.out.println("JhController chgAdminList 신청 챌린지 ");
 //			파라미터 chg_lg=200&state_lg=300&state_md=100
 			totalChg = jhCService.chgListTotal(chg);
+			System.out.println("JhController chgAdminList 신청/반려 개수--> " + totalChg);
 			
 			//페이지 네이션
 			page = new Paging(totalChg, currentPage);
@@ -901,6 +902,7 @@ public class JhController {
 		model.addAttribute("state_md",state_md); 	//챌린지 진행 상태 중분류
 		model.addAttribute("chg_lg", chg_lg); 		//챌린지 카테고리 대분류
 		model.addAttribute("chg_md", chg_md); 		//챌린지 카테고리 중분류
+		model.addAttribute("chg", chg); 		//챌린지 카테고리 중분류
 		
 		
 		/*
@@ -934,6 +936,7 @@ public class JhController {
 		
 		System.out.println("JhController chgDetail chgLg -> " + chgLg);
 		System.out.println("JhController chgDetail sortOpt -> " + chg.getSortOpt());
+		System.out.println("JhController chgDetail keyword -> " + chg.getKeyword());
 		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = chg.getState_md();
@@ -959,8 +962,13 @@ public class JhController {
 		int chg_id = chg.getChg_id();
 		System.out.println("JhController chgAdminDetail  chg_id --> " + chg_id);
 		
+		//검색정보 챌린지 상세정보 가져온 후 저장하기 위함
+		String keyword = chg.getKeyword();
 		//챌린지 상세 정보
 		chg = jhCService.chgDetail(chg_id);
+		chg.setKeyword(keyword); //챌린지 상세정보에 검색정보 저장
+		System.out.println("JhController chgDetail chg -> " + chg);
+		System.out.println("JhController chgDetail keyword -> " + chg.getKeyword());
 		
 		
 		int chgrParti = ycs.selectChgrParti(chg_id);
