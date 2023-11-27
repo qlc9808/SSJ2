@@ -73,22 +73,60 @@
           <!-- Links -->
           <ul class="list-unstyled mb-7 mb-sm-0">
 			<li>
-              <span class="text-gray-300">챌린지</span>
+              <span>
+	              <a class="text-gray-300" href="/thChgList">
+	                	챌린지
+	              </a>
+              </span>
             </li>
             <li>
-              <span class="text-gray-300">내주변 쉐어</span>
+              <span>
+              	<a class="text-gray-300" href="/nearbySharing">
+                	내주변 쉐어
+              	</a>
+              </span>
             </li>
             <li>
-              <span class="text-gray-300">커뮤니티</span>
+              <span>
+              	<a class="text-gray-300" href="/sharing">
+              		쉐어링
+              	</a>
+              </span>
             </li>
             <li>
-              <span class="text-gray-300">소식</span>
+              <span>
+              	<a class="text-gray-300" href="/listCommunity">
+              		자유게시판
+              	</a>
+              </span>
             </li>
             <li>
-              <span class="text-gray-300">문의</span>
+              <span>
+              	<a class="text-gray-300" href="/notice?brd_md=105">
+              		공지
+              	</a>
+              </span>
             </li>
             <li>
-              <span class="text-gray-300">서비스 소개</span>
+              <span>
+              	<a class="text-gray-300" href="/notice?brd_md=106">
+              		이벤트
+              	</a>
+              </span>
+            </li>
+            <li>
+              <span>
+              	<a class="text-gray-300" href="/qBoardList">
+              		문의
+              	</a>
+              </span>
+            </li>
+            <li>
+              <span>
+              	<a class="text-gray-300" href="/introduce">
+              		서비스 소개
+              	</a>
+              </span>
             </li>
             
           </ul>
