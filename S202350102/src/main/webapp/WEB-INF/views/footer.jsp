@@ -26,35 +26,6 @@
           <!-- Heading -->
           <h4 class="mb-6 text-white"><img src="assets/img/logo01.png" alt="logo"></h4>
 
-          <!-- Social -->
-          <ul class="list-unstyled list-inline mb-7 mb-md-0">
-            <li class="list-inline-item">
-              <a href="#!" class="text-gray-350">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="#!" class="text-gray-350">
-                <i class="fab fa-youtube"></i>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="#!" class="text-gray-350">
-                <i class="fab fa-twitter"></i>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="#!" class="text-gray-350">
-                <i class="fab fa-instagram"></i>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="#!" class="text-gray-350">
-                <i class="fab fa-medium"></i>
-              </a>
-            </li>
-          </ul>
-
         </div>
         <div class="col-6 col-sm">
 

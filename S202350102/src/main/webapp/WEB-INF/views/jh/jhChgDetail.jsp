@@ -175,6 +175,7 @@
 					$("#chgPick").removeClass("btn-dark").addClass("btn-outline-dark");
 					alert("찜 취소");
 				}
+				$("#inputPickCnt").text(chgPickResult.chgPickCnt);
 
 			},
 			error : function() {
@@ -687,7 +688,7 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">챌린지 찜</li>
-                    <li class="list-group-item">${chg.pick_cnt }</li>
+                    <li class="list-group-item" id="inputPickCnt">${chg.pick_cnt }</li>
                   </ul> 
                
 				<div class="row gx-5 mb-7">

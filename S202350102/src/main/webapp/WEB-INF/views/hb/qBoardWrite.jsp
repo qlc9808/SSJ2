@@ -20,7 +20,7 @@
 			<table class="brd-tb">
 				<tr class="brd-title">
 					<td>제목</td>
-					<td><input type="text" name="title" required="required"></td>
+					<td><input type="text" maxlength="25" name="title" required="required"></td>
 				</tr>
 				<tr class="brd-line"></tr>
 				<tr class="brd-option">
@@ -48,7 +48,7 @@
 				<tr class="brd-line"></tr>
 				<tr class="brd-btn">
 					<td colspan="2">
-						<input type="submit" value="확인">
+						<input type="submit" value="입력">
 						<input type="button" onclick="location.href='qBoardList'" value="취소">
 					</td>
 				</tr>

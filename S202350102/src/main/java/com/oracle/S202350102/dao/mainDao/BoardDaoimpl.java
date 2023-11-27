@@ -25,16 +25,5 @@ public class BoardDaoimpl implements BoardDao {
 		}
 		return chgCert;
 	}
-
-	@Override
-	public int selectTotBrd() {
-		int result = 0;
-		try {
-			result = session.selectOne("chgCertTot");
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return result;
-	}
-
+	
 }
