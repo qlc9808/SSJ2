@@ -84,9 +84,10 @@
             </li>
           
             <li class="nav-item">
-              <a class="nav-link" href="/admin">관리자</a>
+<%--               <c:if test="${sessionScope.status_md == 102 }"><a class="nav-link" href="/admin">관리자</a></c:if> --%>
+			<!--관리자 작업 끝나면 아래 한줄 지우고 위 한줄 주석 풀어주세요 ( 관리자일때만 헤더에 관리자 보이게 설정해놨습니다) -->
+              <a class="nav-link" href="/listUserAdmin">관리자</a>
             </li>
-         
           </ul>
 
           <!-- Nav -->
