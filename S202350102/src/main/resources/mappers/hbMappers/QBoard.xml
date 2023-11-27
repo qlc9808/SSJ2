@@ -49,7 +49,7 @@
 		INSERT INTO board 
 			(brd_num, brd_lg, brd_md, title, conts, reg_date, user_num, brd_group, brd_step, view_cnt, img) 
 		VALUES
-			(brd_num_seq.nextval, 400, #{brd_md}, #{title}, #{conts}, sysdate, #{user_num}, brd_num_seq.currval, 0, 0, #{img})
+			(brd_num_seq.nextval, 400, #{brd_md}, #{title}, #{conts}, sysdate + interval '9' hour, #{user_num}, brd_num_seq.currval, 0, 0, #{img})
 	</insert>
 	
 	<delete id="qBoardDelete" parameterType="int">
