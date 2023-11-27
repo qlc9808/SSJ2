@@ -802,7 +802,6 @@ public class JhController {
 							 , HttpSession session
 							 ) {
 		System.out.println("JhController chgAdminList Start...");
-		System.out.println("JhController chgAdminList sortOpt -> " +sortOpt);
 		System.out.println("키워드 --> "+ chg.getKeyword() );
 		
 		
