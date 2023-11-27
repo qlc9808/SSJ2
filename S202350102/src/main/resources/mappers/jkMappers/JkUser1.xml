@@ -4,7 +4,6 @@
 
 <mapper namespace="com.oracle.S202350102.JkUser1Mapper">
 
-	
 	<update id="updateUser1" parameterType="User1">
 	    UPDATE user1
 	    SET user_pswd = #{user_pswd},
@@ -35,7 +34,13 @@
 	    WHERE user_num = #{user_num}
 	</update>     
       
-      
-    
+	<select id="followingCnt" resultType="java.util.Map" parameterType="map">
+	    <![CDATA[
+        SELECT cnt_following(#{user_num}) as following_cnt, cnt_follower(#{user_num}) as follower_cnt FROM dual
+        
+    ]]>
+	</select>
+
+
 </mapper>
 
