@@ -49,4 +49,7 @@ public class User1 {
 	private String search;   	private String keyword;
 	private String pageNum;
 	private int start; 		 	private int end;
+	
+	// following 리스트 조회용(로그인한 내 user_num)
+	private int my_user_num;
 }
