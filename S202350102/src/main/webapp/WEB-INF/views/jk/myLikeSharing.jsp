@@ -94,10 +94,11 @@ $(document).ready(function() {
 					 </div>
                 <div class="card-body fw-bold text-left">
                     <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title} <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
-                    </a><p>
-                    <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}"></a>
-                         <span class="ms-1 fs-5 fw-bold"><fmt:formatNumber value="${board.price}" pattern="#,###"/>원</span>
+                        ${board.title} 
+                        <p>${board.applicants}명 모집 | ${board.participants }명  참가중
+                    </a>
+                    <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                        <fmt:formatNumber value= "${board.price}"  pattern="#,###"/>원</a>    <p>
                     <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
                     						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
                     						<i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}

@@ -271,7 +271,7 @@ $("#sortOption").change(function() {
                     <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                         ${board.title}  <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
                     </a>
-                    <p>
+                    
    					<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">                	
                         <a class="text-primary " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                            <fmt:formatNumber value= "${board.price}"  pattern="#,###"/>원</a>     
