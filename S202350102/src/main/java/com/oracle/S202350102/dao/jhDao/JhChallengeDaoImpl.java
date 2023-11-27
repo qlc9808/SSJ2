@@ -266,18 +266,19 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 //		return result;
 //	}
 
-	@Override
-	public int reviewDelete(int brd_num) {
-		System.out.println("JhChallengeDaoImpl reviewDelete Start...");
-		
-		int reviewDel = 0; 
-		try {
-			reviewDel = session.delete("jhReviewDelete", brd_num);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewDelete e.getMessage() -> " + e.getMessage());
-		}
-		return reviewDel;
-	}
+	//보드
+//	@Override
+//	public int reviewDelete(int brd_num) {
+//		System.out.println("JhChallengeDaoImpl reviewDelete Start...");
+//		
+//		int reviewDel = 0; 
+//		try {
+//			reviewDel = session.delete("jhReviewDelete", brd_num);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl reviewDelete e.getMessage() -> " + e.getMessage());
+//		}
+//		return reviewDel;
+//	}
 
 	@Override
 	public int boardImgDelete(int brd_num) {

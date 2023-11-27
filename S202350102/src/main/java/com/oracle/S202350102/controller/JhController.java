@@ -743,7 +743,7 @@ public class JhController {
 		return "redirect:reviewContent?brd_num="+board.getBrd_num()+"&chg_id="+board.getChg_id();
 	}
 
-	////////////////////////////여기서 부터 다시
+
 	//후기 삭제
 	@RequestMapping(value = "reviewDelete")
 	public String reviewDelete(int brd_num, int chg_id, String img, HttpServletRequest request) throws Exception {
@@ -752,8 +752,8 @@ public class JhController {
 		
 		System.out.println("JhController reviewDelete Start...");
 		
-		//글 삭제(이미지는 upload폴더에 그대로 남아 있음)
-		int reviewDel = jhCService.reviewDelete(brd_num);
+		//글 삭제
+		int reviewDel = jhBrdService.reviewDelete(brd_num);
 		
 		//글이 삭제 되면 이미지도 같이 삭제 
 		if(reviewDel > 0) {

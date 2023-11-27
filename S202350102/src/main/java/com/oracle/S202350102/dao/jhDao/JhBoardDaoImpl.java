@@ -146,7 +146,7 @@ public class JhBoardDaoImpl implements JhBoardDao {
 	//후기 작성
 	@Override
 	public int reviewPost(Board board) {
-		System.out.println("JhChallengeDaoImpl reviewPost Start...");
+		System.out.println("JhBoardDaoImpl reviewPost Start...");
 		
 		int result = 0;
 		
@@ -154,7 +154,7 @@ public class JhBoardDaoImpl implements JhBoardDao {
 			result = session.insert("jhReviewPost", board);
 			
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewPost e.getMessage() -> " + e.getMessage());
+			System.out.println("JhBoardDaoImpl reviewPost e.getMessage() -> " + e.getMessage());
 			
 		}
 		
@@ -165,18 +165,31 @@ public class JhBoardDaoImpl implements JhBoardDao {
 	//후기 수정
 	@Override
 	public int reviewUpdate(Board board) {
-		System.out.println("JhChallengeDaoImpl reviewUpdate Start...");
+		System.out.println("JhBoardDaoImpl reviewUpdate Start...");
 		int result = 0;
 		try {
 			result = session.update("jhReviewUpdate", board);
 			
 		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewUpdate e.getMessage() -> " + e.getMessage());
+			System.out.println("JhBoardDaoImpl reviewUpdate e.getMessage() -> " + e.getMessage());
 			
 		}
 		return result;
 	}
 	
+	//후기 삭제
+	@Override
+	public int reviewDelete(int brd_num) {
+		System.out.println("JhBoardDaoImpl reviewDelete Start...");
+		
+		int reviewDel = 0; 
+		try {
+			reviewDel = session.delete("jhReviewDelete", brd_num);
+		} catch (Exception e) {
+			System.out.println("JhBoardDaoImpl reviewDelete e.getMessage() -> " + e.getMessage());
+		}
+		return reviewDel;
+	}
 	
 	
 	

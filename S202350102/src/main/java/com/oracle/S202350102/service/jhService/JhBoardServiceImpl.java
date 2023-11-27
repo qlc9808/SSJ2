@@ -105,4 +105,14 @@ public class JhBoardServiceImpl implements JhBoardService {
 		return result;
 	}
 	
+	//후기 삭제
+	@Override
+	public int reviewDelete(int brd_num) {
+		System.out.println("JhBoardServiceImpl reviewDelete Start...");
+		
+		int reviewDel = jhBrdDao.reviewDelete(brd_num);
+		return reviewDel;
+	}
+
+	
 }

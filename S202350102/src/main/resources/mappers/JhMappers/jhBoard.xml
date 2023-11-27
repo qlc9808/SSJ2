@@ -118,7 +118,20 @@
             , reg_date = SYSDATE   
       WHERE   brd_num = #{brd_num}
    </update>
+   
+   <!-- 후기 삭제 -> 댓글도 같이 삭제 되게 할 것인가? -->
+	<delete id="jhReviewDelete" parameterType="int">
+		DELETE	FROM board
+		WHERE 	brd_num = #{brd_num}
+		<!-- OR		brd_group = #{brd_num} -->
+	</delete>
 	
+		<!-- 후기 이미지 삭제  필요한가? -->
+	<update id="jhBoardImgDelete" parameterType="int">
+		UPDATE  board
+		SET 	img = null
+		WHERE	brd_num = #{brd_num}
+	</update>
 	
 	
 </mapper>

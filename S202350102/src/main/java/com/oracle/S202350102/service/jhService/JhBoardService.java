@@ -35,6 +35,9 @@ public interface JhBoardService {
 	//후기 수정
 	int 				reviewUpdate(Board board);
 	
+	//후기 삭제
+	int 				reviewDelete(int brd_num);
+	
 	
 	
 }
