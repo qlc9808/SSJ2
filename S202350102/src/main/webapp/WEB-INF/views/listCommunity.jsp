@@ -163,7 +163,13 @@ $(document).ready(function () {
         sortBoard(sortOption);
     });
    
-    
+    // 검색창 엔터버튼
+    $("#keyword").keypress(function(e){	
+			if(e.keyCode && e.keyCode == 13){
+				$("#searchButton").trigger("click");
+				return false;
+			}
+		});
     
      // 검색 페이징 함수
     function updatePagination(boardPage) {
