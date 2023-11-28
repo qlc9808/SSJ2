@@ -333,10 +333,10 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	
 	//쉐어링 검색	
 	@Override
-	public List<Board>  sharingSearchResult(String keyword,String sortOption,  String currentPage) {
+	public List<Board>  sharingSearchResult(String keyword,String sortOption,  String currentPage, Board board) {
 		List<Board> sharingSearchResult = null;
 		System.out.println("Ycs  sharingSearchResult START...");
-		sharingSearchResult = ybd. sharingSearchResult(keyword, currentPage , sortOption);
+		sharingSearchResult = ybd. sharingSearchResult(keyword, currentPage , sortOption, board);
 		System.out.println("ycs sharingSearchResult.size()?"+ sharingSearchResult.size());
 				
 		return  sharingSearchResult;

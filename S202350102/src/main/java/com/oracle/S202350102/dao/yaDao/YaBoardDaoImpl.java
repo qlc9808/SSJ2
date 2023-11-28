@@ -500,6 +500,8 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	public List<Board> likeSharingList(Board board) {
 		System.out.println("YaBoardDaoImpl likeSharingList start...");
 		List<Board> likeSharingList = null;
+		//이거하니까 담김***
+		board.setUser_num(board.getB_user_num());
 		try {
 			likeSharingList = session.selectList("YaLikeSharingList", board);
 			
@@ -530,23 +532,27 @@ public class YaBoardDaoImpl implements YaBoardDao {
 
 
 	@Override
-	public List<Board> sharingSearchResult(String keyword,String sortOption,  String currentPage) {
+	public List<Board> sharingSearchResult(String keyword,String sortOption,  String currentPage, Board board) {
 		List<Board> sharingSearchResult = null;
 		System.out.println("YaBoardDaoImpl sharingSearchResult start...");
+		board.setUser_num(board.getB_user_num());
+		System.out.println("YaBoardDaoImpl sharingSearchResult b_user_num" + board.getB_user_num());
+
 		
 		try {
 			// sharingSearchResult = session.selectList("YaSharingSearchResult", keyword);
-	
+			
 			int searchSharingCnt =searchSharingCnt(keyword);			 
-		  	 Paging boardPage = new Paging(searchSharingCnt, currentPage,9);
-		  	 
+		  	Paging boardPage = new Paging(searchSharingCnt, currentPage,9);
+		  	 	
+		  		
 		        Map<String, Object> paramMap = new HashMap<>();
 		        paramMap.put("keyword", keyword);
+		        paramMap.put("b_user_num", board.getB_user_num());
 		        paramMap.put("currentPage", currentPage);
 		        paramMap.put("start", boardPage.getStart());
 		        paramMap.put("sortOption", sortOption);
 		        paramMap.put("end", boardPage.getEnd());
-		        paramMap.put("currentPage", currentPage);
 		        paramMap.put("searchSharingCnt", searchSharingCnt);
 		        sharingSearchResult = session.selectList("YaSharingSearchResult", paramMap);
 		} catch (Exception e) {
