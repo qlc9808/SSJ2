@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <script type="text/javascript" src="js/jquery.js"></script>
-<link rel="stylesheet" href="/css/qBoardDetail.css">
+<link rel="stylesheet" href="/css/qBoardDetail.css?after">
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
 	<i class="fa-sharp fa-light fa-image"></i>
@@ -134,6 +134,15 @@
 	
 // 댓글작성
 	function commentWriteBtn() {
+		  // 댓글 내용 가져오기
+		  var commentContent = $('#conts').val();
+
+		  // 댓글 내용이 비어 있는지 확인
+		  if (commentContent.trim() === '') {
+		    alert('댓글 내용을 입력하세요.');
+		    return; // 댓글 내용이 비어있다면 함수 종료
+		  }
+	
 		var brd_group = ${board.brd_group};
 		var sendData =  $('#boardTrans').serialize();
 		$.ajax({
@@ -151,8 +160,16 @@
 			
 		})		
 	}
+	
+	// 엔터 키 입력 시 댓글 작성 함수 호출
+	$('#conts').keyup(function (e) {
+	  if (e.which === 13 && !e.shiftKey) { // 엔터 키 코드이면서 쉬프트 키가 눌리지 않았을 때
+	    e.preventDefault(); // 기본 엔터 동작 제거
+	    commentWriteBtn(); // 댓글 작성 함수 호출
+	  }
+	});
 
-
+	// 댓글삭제
 	$(document).ready(function () {
 	    $(document).off('click', '#commentDelete');
 	    $(document).on('click', '#commentDelete', function () {
@@ -179,7 +196,7 @@
 	        }
 	    });
 
-
+		// 댓글수정
 	    $(document).off('click', '#commentUpdate');
 	    $(document).on('click', '#commentUpdate', function () {
 	        var commentList = $(this).closest('li');

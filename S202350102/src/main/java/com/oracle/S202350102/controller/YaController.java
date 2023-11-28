@@ -606,7 +606,7 @@ public class YaController {
 				int user_num=0;
 				if(session.getAttribute("user_num") != null) {
 					user_num = (int) session.getAttribute("user_num");					
-					User1 user1 = ycs.userSelect(user_num);
+					User1 user1 = us.userSelect(user_num);
 					model.addAttribute("user1", user1);		
 					
 
@@ -674,6 +674,7 @@ public class YaController {
 					List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(board);
 					System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
 					model.addAttribute("myConfirmSharingList", myConfirmSharingList);
+					model.addAttribute("level1List",ls.level1List());
 					
 			 	
 			}

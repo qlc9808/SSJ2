@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<script type="text/javascript" src="js/jquery.js"></script>
-	<link rel="stylesheet" href="/css/qBoardList.css">
+	<link rel="stylesheet" href="/css/qBoardList.css?after">
 </head>
 <body>
 	<c:import url="/WEB-INF/views/header4.jsp"/>
@@ -48,7 +48,7 @@
 	                <td>제목</td>
 	                <td>작성자</td>
 	                <td>카테고리</td>
-	                <td>작성일</td>
+	                <td>작성일자</td>
 	                <td>조회수</td>
 	              </tr>
 	          </thead>
