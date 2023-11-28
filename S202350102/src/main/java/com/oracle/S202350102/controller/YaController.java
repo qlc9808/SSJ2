@@ -59,9 +59,15 @@ public class YaController {
 	@RequestMapping(value="/listCommunity")
 	public String listCommunity(Board board, Model model,String currentPage ) {
 		System.out.println("YaController listCommunity start....");
-		
+		String keyword = board.getKeyword(); // 키워드 받아옴
+		int totalCommunity = 0;
 		//전체 게시글 총 수 
-		int totalCommunity = ycs.totalCommunity(board);
+		if ( keyword != null ) {
+			totalCommunity = ycs.countSearch(keyword);
+		} else {
+			totalCommunity = ycs.totalCommunity(board);
+		}
+		System.out.println(totalCommunity);
 		model.addAttribute("totalCommunity", totalCommunity);		
 		System.out.println("YaContorller totalCommunity->"+totalCommunity);
 		
@@ -73,13 +79,17 @@ public class YaController {
 		System.out.println(" YaController boardPage start?"+boardPage.getStart());
 		System.out.println(" YaControlloer boardpage total?"+boardPage.getTotal());
 		System.out.println("boardPage End?"+boardPage.getEnd());
-		
-		List<Board> listCommunity = ycs.listCommunity(board);
+		List<Board> listCommunity = null;
+		if ( keyword != null ) {
+			listCommunity = ycs.listSearchBoard(keyword, currentPage);
+		} else {
+			listCommunity = ycs.listCommunity(board);
+		}
 		// 한빛 : 리스트에 유저정보 추가하는 메소드
 		listCommunity = us.boardWriterLevelInfo(listCommunity);
 		System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
 		model.addAttribute("listCommunity", listCommunity);
-		
+		model.addAttribute("keyword", keyword);
 		
 
 

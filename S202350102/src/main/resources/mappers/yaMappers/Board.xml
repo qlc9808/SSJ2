@@ -37,7 +37,7 @@
 	
     <insert id="YaBoardInsert" parameterType="Board">
     	INSERT INTO board ( brd_num, user_num, brd_lg, brd_md, title, conts, img, reg_Date, brd_group, brd_step)
-    	VALUES          ( BRD_NUM_SEQ.nextval, #{user_num}, 700, 103, #{title}, #{conts}, #{img}, sysdate, BRD_NUM_SEQ.nextval,0)
+    	VALUES          ( BRD_NUM_SEQ.nextval, #{user_num}, 700, 103, #{title}, #{conts}, #{img}, sysdate + interval '9' hour, BRD_NUM_SEQ.nextval,0)
     </insert>
     
 	<update id="YaBoardUpdate" parameterType="Board">
