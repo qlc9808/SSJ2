@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/css/qBoardWrite.css">
+<link rel="stylesheet" href="/css/qBoardWrite.css?after">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -27,7 +27,10 @@
 				<tr class="brd-option">
 					<td>파일</td>
 					<td>
-						<c:if test="${not empty board.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>
+						<c:if test="${not empty board.img }">
+				  			<img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}" 
+				      	   			 style="max-width: 100%; height: auto;">
+						</c:if>
 						<%@ include file="/WEB-INF/views/hb/test.jsp" %>
 					</td>
 					<td>카테고리</td>
