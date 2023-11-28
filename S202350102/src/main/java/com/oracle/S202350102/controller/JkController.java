@@ -793,6 +793,7 @@ public class JkController {
 	    user1.setUser_num(user_num);
 	    User1 user1FromDB = us.userSelect(user_num);
 	    List<Level1> level1List = ls.level1List();
+	    int myBoard = jbs.myBoard(user_num);
 	    
 	    Map<String, Integer> followCnt = jus.followingCnt(user_num);
 	    System.out.println("followCnt: " + followCnt);
@@ -800,6 +801,7 @@ public class JkController {
 	    model.addAttribute("level1List",ls.level1List());
 	    model.addAttribute("user1", user1FromDB);
 	    model.addAttribute("followCnt", followCnt);
+	    model.addAttribute("myBoard", myBoard);
 
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    try {
@@ -808,6 +810,7 @@ public class JkController {
 	        responseData.put("user1", user1FromDB);
 	        responseData.put("level1List", level1List);
 	        responseData.put("followCnt", followCnt);
+	        responseData.put("myBoard", myBoard);
 
 	        String jsonData = objectMapper.writeValueAsString(responseData);
 	        return jsonData;
