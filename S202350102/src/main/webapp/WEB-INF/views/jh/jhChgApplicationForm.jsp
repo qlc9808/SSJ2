@@ -184,7 +184,7 @@
 	
 	                      <!-- Image -->
 	                      
-	                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" <c:if test="">src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="이미지  불러오기에 실패했습니다"</c:if>>
+	                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="이미지  불러오기에 실패했습니다">
 	
 	                      <!-- Body -->
 	                      <div class="card-body py-4 px-0 text-center">
