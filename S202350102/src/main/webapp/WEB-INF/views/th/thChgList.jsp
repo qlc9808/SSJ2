@@ -358,20 +358,33 @@
 				    			
 				    		  <!-- 모달 -->
 				              <div class="form-group">
+				                
 				                <label class="visually-hidden" for="input_priv_pswd${status.index }">
 				                  	비밀번호 *
 				                </label>
+				                
 				                <input class="form-control form-control-sm input_priv_pswd" id="input_priv_pswd${status.index }" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
+				                
 				                <c:if test="${chg.chg_public == 1 }">
 				                	<input class="form-control form-control-sm" id="chg_priv_pswd${status.index }" name="chg_priv_pswd" type="hidden" value="${chg.priv_pswd }">
-				                	<input class="form-control form-control-sm" id="chg_id${status.index }" name="chg_id" type="hidden" value="${chg.chg_id }">
+				                	<input class="form-control form-control-sm" id="chg_id${status.index }" 	   name="chg_id" 		type="hidden" value="${chg.chg_id }">
 				                </c:if>
 				              </div>
-				     
-				              <button class="btn btn-sm btn-dark" id='confirmPswd' onclick="return confirmPswd(${status.index })">
+				                					    			    				     
+				              <button class="btn btn-sm btn-dark" id='confirmPswd${status.index }' onclick="return confirmPswd(${status.index })">
 				                	확인
 				              </button>
-				    
+				              
+ 				                <!-- 비공개방 모달창 비밀번호 입력칸에서 엔터키 클릭시 확인 버튼 클릭 -->
+			                	<script type="text/javascript">
+				            		// 검색어 입력 후 엔터키 입력하면 검색버튼 클릭
+				            		$("#input_priv_pswd"+${status.index}).keypress(function(e){	
+				            			if(e.keyCode && e.keyCode == 13){
+				            				$("#confirmPswd"+${status.index }).trigger("click");
+				            				return false;
+				            			}
+				            		});
+			    			    </script>
 				    
 				          </div>
 				    

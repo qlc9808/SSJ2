@@ -119,6 +119,11 @@
     background-color: #fff;
     overflow: auto;
 }
+.comment_item span {
+    display: inline-block;
+    max-height: 140px;
+    overflow: hidden;
+}
 
 .comment_info {
 	padding: 20px 20px 10px 10px;
