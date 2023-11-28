@@ -17,7 +17,7 @@ public interface ThUser1Dao {
 	List<User1> 		findId(User1 user1);
 	User1 				findUser1ByIdAndEmail(User1 user1);
 	int 				user1PswdUpdate(Map<String, Object> map);
-	int 				totalUser();
+	int 				totalUser(User1 user1);
 	List<User1> 		listUser(User1 user1);
 	int 				updateUserLoginDate(int user_num);
 	int 				deleteUserByAdmin(int user_num);

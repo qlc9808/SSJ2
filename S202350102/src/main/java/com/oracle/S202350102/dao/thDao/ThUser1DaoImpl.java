@@ -125,12 +125,12 @@ public class ThUser1DaoImpl implements ThUser1Dao {
 	}
 
 	@Override
-	public int totalUser() {
+	public int totalUser(User1 user1) {
 		System.out.println("ThUser1DaoImpl totalUser Start... ");
 		int totUserCnt = 0;
 
 		try {											 
-			totUserCnt = session.selectOne("ThTotUserCnt");
+			totUserCnt = session.selectOne("ThTotUserCnt",user1);
 			System.out.println("ThUser1DaoImpl totalUser totUserCnt -->" + totUserCnt);
 		} catch (Exception e) {
 			System.out.println("ThUser1DaoImpl totalUser Exception -->" + e.getMessage());
