@@ -15,20 +15,20 @@
 <body>
 <div class="container">
 	<div class="row profile">
+	
+		<!-- mypageMenu start -->
 		<div class="col-md-3">
         	<%@ include file="/WEB-INF/views/mypageMenu.jsp" %>
-        	
 		</div>
       	<div class="col-md-9 profile-form">
-			<!-- 필수!! -->
+		<!-- mypageMenu end -->
 		
-		 <!-- CATEGORIES -->
-
+		<!-- tab -->
 		<div class="container">
 	        <div class="row">
 	        	<div class="col-12">	
 	            	<!-- Heading -->
-	            	<h5 class="mb-4">챌린지 목록</h5>
+	            	<h5 class="mb-4">챌린지 관리</h5>
 	            
 		            <!-- Nav -->
 		            <div class="nav justify-content-center mb-10">
@@ -41,7 +41,7 @@
 		            
 	            	<!-- Content -->
 		            <div class="tab-content">	
-		            	<!-- Pane -->
+		            	<!-- 참여 챌린지 start -->
 		            	<div class="tab-pane fade show active" id="joinChg">
 		            	  <div class="row justify-content-center py-9">
 			                  <div class="col-12 col-lg-10 col-xl-8">
@@ -59,16 +59,55 @@
 			            	  	</div>
 			            	  </div>
 			           	  </div>
-		            	</div>  
+		            	</div> 
+		            	<!-- 참여 챌린지 end -->
+		            	
+		            	 
+		            	<!-- 신청한 챌린지 start -->
+		            	<div class="tab-pane fade show active" id="applyChg">
+		            	  <div class="row justify-content-center py-9">
+			                  <div class="col-12 col-lg-10 col-xl-8">
+			                    <div class="row">
+			                      <div class="col-12">
+			                      
+			                      
+			                      
+			                      
+			                      <!-- 여기서부터 작업하면 됨 -->
+			                      
+			                      
+			                      
+			            	  		</div>
+			            	  	</div>
+			            	  </div>
+			           	  </div>
+		            	</div>
+		            	<!-- 신청한 챌린지 end -->
+		            	
+		            	
+		            	<!-- 찜한 챌린지 start -->
+		            	<div class="tab-pane fade show active" id="pickChg">
+		            	  <div class="row justify-content-center py-9">
+			                  <div class="col-12 col-lg-10 col-xl-8">
+			                    <div class="row">
+			                      <div class="col-12">
+				                      <%@ include file="/WEB-INF/views/yr/myPickChgManagement.jsp" %>
+			            	  		</div>
+			            	  	</div>
+			            	  </div>
+			           	  </div>
+		            	</div>
+		            	<!-- 찜한 챌린지 end -->
+		            	
 		            	
 		        	</div> 
 		        	<!-- tab-content end -->
 				</div> 
-				<!-- col-12 -->
+				<!-- col-12 end -->
 			</div> 
-			<!-- row -->
+			<!-- row end -->
 		</div> 
-		<!-- container -->
+		<!-- container end -->
 
 	
 	

@@ -146,7 +146,7 @@ public class YrController {
 		
 		// user 정보 가져오기
 		// 없애도 될지도? -> sessionscope로 대체 가능??
-		User1 user1 = us.userSelect(userNum);
+		user1 = us.userSelect(userNum);
 		model.addAttribute("user1", user1);
 		
 		return "jk/followList";
@@ -273,7 +273,7 @@ public class YrController {
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
-			System.out.println("YrController followList userNum -> " + userNum);
+			System.out.println("YrController chgPickList userNum -> " + userNum);
 		}
 		
 		List<Challenge> chgPickList = ychs.selectChgPick(userNum);
@@ -281,6 +281,19 @@ public class YrController {
 		model.addAttribute("chgPickList", chgPickList);
 		
 		return "yr/chgPickList";
+	}
+	
+	@RequestMapping(value = "myPickChgManagement")
+	public String myChgPickList(HttpSession session, Model model) {
+		
+		// session에 저장된 로그인 정보값 가져오기
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("YrController myChgPickList userNum -> " + userNum);
+		}
+		
+		return "yr/myPickChgManagement";
 	}
 	
 }
