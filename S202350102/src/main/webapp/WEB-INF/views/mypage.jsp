@@ -95,23 +95,28 @@ function clickLoad(index) {
 	
 	
 	function myContsDelete(brd_md, brd_num){
-		var brdMd = brd_md;
-		var brdNum = brd_num;
-		
-		$.ajax({
-			url: "myContsDelete",
-			type: "POST",
-			data: { brd_num: brd_num },
-			dataType: "text",
-			success: function(data){
-				if(parseInt(data)>0){
-					$("#body" + brdMd + " #row" + brd_num).remove();
+		if(!confirm('삭제하시겠습니까?')){
+			
+		}else{
+			var brdMd = brd_md;
+			var brdNum = brd_num;
+			
+			$.ajax({
+				url: "myContsDelete",
+				type: "POST",
+				data: { brd_num: brd_num },
+				dataType: "text",
+				success: function(data){
+					if(parseInt(data)>0){
+						$("#body" + brdMd + " #row" + brd_num).remove();
+					}
+				
 				}
-			}
-		})
-		
-	}
-
+			});
+		}
+			
+			
+		}
 
 	function pageMove(brd_md, currentPage){
 		/* alert(brd_md);
@@ -142,10 +147,10 @@ function clickLoad(index) {
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='chgDetail?chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
-         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
+         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a>"
+         			+"	<a href='javascript:void(0);' onclick='certiAjax("+result.listBdRe[i].brd_num+")'>수정</a></td></tr>";
          		num = num - 1;            
 			}
 			return text;
@@ -157,7 +162,6 @@ function clickLoad(index) {
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
@@ -189,7 +193,6 @@ function clickLoad(index) {
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='detailCommunity?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
@@ -206,6 +209,20 @@ function clickLoad(index) {
 	function moveChgUpdate(chg_id){
 		location.href= "myChgUpdate?chg_id=" + chg_id;
 	}
+	
+	function certiAjax(brd_num){
+		$("#ceriModal").modal('show');
+			
+			var brdNum = brd_num;
+			$.ajax({
+				url : "ajaxModal",
+				data: {brd_num : brd_num},
+				dataType: "html",
+				success: function(result){				
+						$("#ceModal").html(result);
+						}
+			});	
+		}
 </script>    
 
 </head>
@@ -355,12 +372,14 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 }
 
 .th-title {
-	width: 250px;
+	width: 250px;	
 }
 
 .thumb-img{
-	width: 100%; height: 250px; border-radius: 10px;
+	width: 100%; height: 250px; border-radius: 10px; 
 }
+
+.
 </style>
 
 <body>
@@ -482,7 +501,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                        <tr>
 					                            <th scope="col" class="th-num">번호</th>
 					                            <th scope="col" class="th-title">제목</th>
-					                            <th scope="col" class="th-nick">작성자</th>
 					                            <th scope="col" class="th-date">등록일</th>					                            
 					                            <th  scope="col" class="th-replyCount">댓글수</th>
 					                            <th  scope="col" >비고</th>
@@ -493,17 +511,17 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                            <tr id="row${myCertiList.brd_num}">
 					                                <td>${num}</td>
 					                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
-					                                <td>${myCertiList.nick}</td>
 					                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
 									         		<td>${myCertiList.replyCount}</td>
-									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a></td>
+									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a>
+									         			<a href="javascript:void(0);" onclick="certiAjax(${myCertiList.brd_num })">수정</a></td>
 									         		<c:set var="num" value="${num-1}"></c:set> 			       
 					                            </tr>
 					                        </c:forEach>
 					                    </tbody>
 					                </table>
 					                
-									   <div class="page">
+									   <div class="d-flex justify-content-center justify-content-md-center">
 										    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
 										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
 										    </c:if>
@@ -522,7 +540,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				            	</c:otherwise>
 				            	
 							</c:choose>			
-					</div>	<!-- myCert -->				
+					</div>	<!-- myCert -->		
+						<div>
+						<div class="modal fade" id="ceriModal" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
+								<div class="modal-content" id="ceModal"><!--  -->
+								</div>
+							</div>
+						</div>
+					</div>			
 				</div>   <!-- myCert-list -->
 				<!--------------------------------후기 리스트 --------------------------------------->
 				<div class="tab-pane fade" id="myReview-list">
@@ -535,7 +561,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>
 				                            <th scope="col" class="th-title">제목</th>
-				                            <th scope="col" class="th-nick">작성자</th>
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
@@ -547,7 +572,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <tr id="row${myReviewList.brd_num }">
 				                                <td>${num}</td>
 				                                <td><a href="reviewContent?brd_num=${myReviewList.brd_num }&chg_id=${myReviewList.chg_id }">${myReviewList.title}</a></td>
-				                                <td>${myReviewList.nick}</td>
 				                                <td><fmt:formatDate value="${myReviewList.reg_date}" pattern="yyyy-MM-dd"/></td>
 				                                <td>${myReviewList.view_cnt}</td>
 								         		<td>${myReviewList.replyCount}</td>
@@ -558,7 +582,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                    </tbody>
 				                </table>
 				                
-								<div class="page">
+				                <div class="d-flex justify-content-center justify-content-md-center">
 								    <c:if test="${myReviewPage.startPage >myReviewPage.pageBlock}">					        
 								        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage-myReviewPage.pageBlock}); return false;" >[이전]</a>
 								    </c:if>
@@ -611,7 +635,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                    </tbody>
 				                </table>
 				                
-								   <div class="page">
+								   <div class="d-flex justify-content-center justify-content-md-center">
 								    <c:if test="${mySharePage.startPage >mySharePage.pageBlock}">
 								        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage-mySharePage.pageBlock}); return false;" >[이전]</a>
 								    </c:if>
@@ -645,7 +669,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                        <tr>
 					                            <th scope="col" class="th-num">번호</th>
 					                            <th scope="col" class="th-title">제목</th>
-					                            <th scope="col" class="th-nick">작성자</th>
 					                            <th scope="col" class="th-date">등록일</th>
 					                            <th scope="col" class="th-view_cnt">조회수</th>
 					                            <th  scope="col" class="th-replyCount">댓글수</th>					                            
@@ -657,7 +680,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                            <tr>
 					                                <td>${num}</td>
 					                                <td><a href="detailCommunity?user_num=${myCommuList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
-					                                <td>${myCommuList.nick}</td>
 					                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
 					                                <td>${myCommuList.view_cnt}</td>
 									         		<td>${myCommuList.replyCount}</td>
@@ -668,7 +690,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                    </tbody>
 					                </table>
 					                
-									   <div class="page">
+									   <div class="d-flex justify-content-center justify-content-md-center">
 									    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
 									        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
 									    </c:if>

@@ -336,7 +336,7 @@
 				<div class="card-body">
 					<table>
 						<c:forEach items="${shList }" var="shList">
-							<tr>
+							<tr id="row"+${shList.srch_word }>
 								<td>
 									<a href="searching?srch_word=${shList.srch_word }">${shList.srch_word }</a>
 								</td>

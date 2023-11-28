@@ -26,12 +26,15 @@
 			
 				<!-- Image -->			
 				<a class="text-body" href="/chgAdminDetail?chg_id=${chg.chg_id }&chgUpdateMode=0">
-					<c:if test="${chg.thumb != null}">
-						<img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
-					</c:if>
-					<c:if test="${chg.thumb == null}">
-						<img class="card-img-top" src="./assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
-					</c:if>
+					<c:choose>
+						<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
+							<img class="card-img-top thumb-img" src="/assets/img/chgDfaultImg.png" alt="chgDfault">
+						</c:when>
+						
+						<c:otherwise>
+							<img class="card-img-top thumb-img" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb">
+						</c:otherwise>
+					</c:choose> 
 				</a>
 				
 				               <!-- Body -->

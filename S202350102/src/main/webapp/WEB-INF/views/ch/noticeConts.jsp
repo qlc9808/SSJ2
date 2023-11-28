@@ -42,24 +42,21 @@
 							<div class="qbd-title-content">
 								<span class="title-text">${noticeConts.title }</span>
 							</div>
-							<div class="qbd-object" >
-								<form action="noticeUpdateForm" onsubmit="return chk()">
+							
+						</div>
+						<div class="row justify-content-center">
+								<div class="col-3 text-center py-2"><span class="qbd-line-box-text align-middle">작성자: ${noticeConts.nick }</span></div>
+								<div class="col-3 text-center py-2"><span class="qbd-line-box-text">작성일: <fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></span></div>								
+								<form action="noticeUpdateForm" onsubmit="return chk()" class="col-6 text-end">
 									<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
 									<input type="hidden" value="${noticeConts.user_num  }" name="user_num">					
 									<c:if test="${status_md==102 }">
 										<input type="submit" value="수정" class="btn-danger btn-xxs">
 										<input type="button" value="삭제" onclick="location.href='deleteNoticeForm?brd_num=${noticeConts.brd_num}'" class="btn-danger btn-xxs">
+										<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'" class="btn-danger btn-xxs">
 									</c:if>								
 								</form>
-								<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'" class="btn-danger btn-xxs">							
-							</div>	
-						</div>
-						<div class="qbd-line">
-							<div class="qbd-line-box">
-								<span class="qbd-line-box-text">작성자: ${noticeConts.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;
-								<span class="qbd-line-box-text">작성일: <fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
-							</div>
-							
+								
 							<!-- <div class="qbd-line-li"></div> -->
 						</div>
 						<hr class="custom-hr">
