@@ -93,11 +93,26 @@
 
           <!-- Nav -->
           <ul class="navbar-nav flex-row">
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="offcanvas" href="./search">
-                <i class="fe fe-search"></i>
-              </a>
-            </li>
+            <li class="nav-item dropdown hovered">
+				 <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+				   <i class="fe fe-search"></i>
+				 </a>
+				<div class="dropdown-menu">
+					<div class="card card-lg">
+						<div class="card-body">
+							<form action="searching" class="row" id="srchForm">
+								<div class="col-9 ml-2">
+									<input type="text" name="srch_word" id="srch_word" style="width: 120px;"> 
+								</div>
+								<div class="col-3" style="padding-top: 5px;">
+									<a href="javascript:void(0);" onclick="headSearching()" id="srchBtn"><i class='fe fe-search'></i></a>
+								</div>				                
+							</form>
+						</div>
+					</div>
+				</div>
+			</li>
+
             
             <li class="nav-item dropdown hovered">
 
@@ -195,13 +210,18 @@
 </style>
 
 <script type="text/javascript">
+	function headSearching(){
+		$("#srchForm").submit();
+	}
+
+
 	function alarmText(data){
 		var str = "";
 		
 		for(var i =0; i<data.reCount; i++){
 			str += "<tr>";
-			str += "<td><a href='javascript:void(0);' onclick='read("+data.listBdRe[i].user_num+","+data.listBdRe[i].brd_num+"); return false;' ><b>";			
-			str += data.listBdRe[i].title + "</b>글에 "+data.listBdRe[i].re_step +"번째 댓글이 달렸습니다.</a></td>";
+			str += "<td><a href='javascript:void(0);' onclick='read("+data.listBdRe[i].user_num+","+data.listBdRe[i].brd_num+","+data.listBdRe[i].brd_md+","+data.listBdRe[i].chg_id+"); return false;' ><b>";			
+			str += data.listBdRe[i].title + "</b>글에 "+data.listBdRe[i].new_Cmt +"개의 새댓글이 달렸습니다.</a></td>";
 			str += "<td><a href='javascript:void(0);' id='alarmRead' data-user-num='" + data.listBdRe[i].user_num + "' data-re-step='"+data.listBdRe[i].re_step + "' onclick='readAlarm(event);'>";
 			str +="<button class='btn btn-danger btn-circle btn-xxs mb-1'><i class='fe fe-check'></i></button></a></td>";
 	    	str += "</tr>";			
@@ -235,7 +255,7 @@
 	}
 	
 	function readAlarmAll(){
-		alert("test");
+		
 		$.ajax({
 			type: "POST",
 			url: "readAllcmt",
@@ -250,16 +270,34 @@
 		});
 	}
 	
-	function read(user_num, brd_num){
+	function read(user_num, brd_num, brd_md){
 		/* alert("user_num"+user_num);
-		alert("brd_num"+brd_num); */
+		alert("brd_num"+brd_num); */		
 		$.ajax({
 			type:"POST",
 			url:"moveToNewCmt",
 			data: {user_num : user_num, brd_num : brd_num},
 			success:function(data){
 				if(data > 0){
-					window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+					switch(brd_md){
+							/* 인증 */
+						case(100): 
+							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+							/* 후기 */
+						case(101):
+							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+							/* 쉐어링 */
+						case(102):
+							window.location.href = 'detailSharing?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+							/* 커뮤니티 */
+						case(103):
+							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+					}
+					
 				}
 			}
 		})

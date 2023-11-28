@@ -59,9 +59,15 @@ public class YaController {
 	@RequestMapping(value="/listCommunity")
 	public String listCommunity(Board board, Model model,String currentPage ) {
 		System.out.println("YaController listCommunity start....");
-		
+		String keyword = board.getKeyword(); // 키워드 받아옴
+		int totalCommunity = 0;
 		//전체 게시글 총 수 
-		int totalCommunity = ycs.totalCommunity(board);
+		if ( keyword != null ) {
+			totalCommunity = ycs.countSearch(keyword);
+		} else {
+			totalCommunity = ycs.totalCommunity(board);
+		}
+		System.out.println(totalCommunity);
 		model.addAttribute("totalCommunity", totalCommunity);		
 		System.out.println("YaContorller totalCommunity->"+totalCommunity);
 		
@@ -73,13 +79,17 @@ public class YaController {
 		System.out.println(" YaController boardPage start?"+boardPage.getStart());
 		System.out.println(" YaControlloer boardpage total?"+boardPage.getTotal());
 		System.out.println("boardPage End?"+boardPage.getEnd());
-		
-		List<Board> listCommunity = ycs.listCommunity(board);
+		List<Board> listCommunity = null;
+		if ( keyword != null ) {
+			listCommunity = ycs.listSearchBoard(keyword, currentPage);
+		} else {
+			listCommunity = ycs.listCommunity(board);
+		}
 		// 한빛 : 리스트에 유저정보 추가하는 메소드
 		listCommunity = us.boardWriterLevelInfo(listCommunity);
 		System.out.println("YaController list listCommunity.size()?"+listCommunity.size());
 		model.addAttribute("listCommunity", listCommunity);
-		
+		model.addAttribute("keyword", keyword);
 		
 
 
@@ -196,7 +206,7 @@ public class YaController {
 					ls.userLevelCheck(user_num); // 경험치가 올랐기 때문에 현재 레벨이 맞는지 체크하는 메소드
 				}
 				
-				return "forward:listCommunity";		
+				return "redirect:listCommunity";	
 				
 			}
 			
@@ -886,42 +896,56 @@ public class YaController {
 				
 			}
 			
-		//쉐어링 검색기능
-		@GetMapping(value="/sharingSearchResult")
-		public String sharingSearchResult( @RequestParam String keyword, String currentPage, Model model, Board board, String sortOption) {	
-			List<Board> sharingSearchResult = null;
+			//쉐어링 검색기능
+			@GetMapping(value="/sharingSearchResult")
+			public String sharingSearchResult( @RequestParam String keyword, HttpSession session, String currentPage, Model model, Board board, String sortOption) {	
+				List<Board> sharingSearchResult = null;
+			      
+				int user_num = 0;
+			      if(session.getAttribute("user_num") != null) {
+			         user_num = (int) session.getAttribute("user_num");
+			      }
+			      
+			      User1 user1 = jbs.userSelect(user_num);
+				
+				
+				System.out.println("YaController sharingSearchResult start....");		
+				System.out.println("사용자 검색한 키워드: " + keyword);
+				
+			      //ya 쉐어링 검색 게시글 총 수, 페이징 처리 작업 
+			      int searchSharingCnt = 0;
+			      searchSharingCnt = ycs.searchSharingCnt(keyword);
+			      
+			      
+			      System.out.println("YaController searchSharingCnt:"+ searchSharingCnt);	      
+			      model.addAttribute("searchSharingCnt", searchSharingCnt);
+			      
+			      System.out.println("YaController searchSharingCnt->"+ searchSharingCnt);
+			      
+			      Paging sharBoardPage = new Paging(searchSharingCnt, currentPage, 9);
+			      
+			      // yr 작성
+			      // 쉐어링 찜 여부 판단용		      
+			      board.setB_user_num(user_num);
+			      
+			      board.setStart(sharBoardPage.getStart());
+			      board.setEnd(sharBoardPage.getEnd());
+			      model.addAttribute("sharBoardPage", sharBoardPage);
+			     
+			      System.out.println("YaController boardPage rowPage?"+sharBoardPage.getRowPage());
+			      System.out.println(" YaController boardPage start?"+sharBoardPage.getStart());
+			      System.out.println("YaControlller boardPage end?"+sharBoardPage.getEnd());
+			      System.out.println(" YaControlloer boardpage total?"+sharBoardPage.getTotal());
 			
-			System.out.println("YaController sharingSearchResult start....");		
-			System.out.println("사용자 검색한 키워드: " + keyword);
+				
+				sharingSearchResult = ycs.sharingSearchResult(keyword, currentPage, sortOption, board);
+				
+				model.addAttribute("sharingSearchResult", sharingSearchResult);
+				model.addAttribute("searchSharingCnt", searchSharingCnt);
+				model.addAttribute("sortOption", sortOption);
+				
+				return"ya/sharingSearch";
+			} 
 			
-		      //ya 쉐어링 검색 게시글 총 수, 페이징 처리 작업 
-		      int searchSharingCnt = 0;
-		      searchSharingCnt = ycs.searchSharingCnt(keyword);
-		      System.out.println("YaController searchSharingCnt:"+ searchSharingCnt);	      
-		      model.addAttribute("searchSharingCnt", searchSharingCnt);
-		      
-		      System.out.println("YaController searchSharingCnt->"+ searchSharingCnt);
-		      
-		      Paging sharBoardPage = new Paging(searchSharingCnt, currentPage, 9);
-		      
-		      board.setStart(sharBoardPage.getStart());
-		      board.setEnd(sharBoardPage.getEnd());
-		      model.addAttribute("sharBoardPage", sharBoardPage);
-		     
-		      System.out.println("YaController boardPage rowPage?"+sharBoardPage.getRowPage());
-		      System.out.println(" YaController boardPage start?"+sharBoardPage.getStart());
-		      System.out.println("YaControlller boardPage end?"+sharBoardPage.getEnd());
-		      System.out.println(" YaControlloer boardpage total?"+sharBoardPage.getTotal());
-		
 			
-			sharingSearchResult = ycs.sharingSearchResult(keyword, currentPage, sortOption);
-			
-			model.addAttribute("sharingSearchResult", sharingSearchResult);
-			model.addAttribute("searchSharingCnt", searchSharingCnt);
-			model.addAttribute("sortOption", sortOption);
-			
-			return"ya/sharingSearch";
-		} 
-		
-		
-}		
+	}		

@@ -13,23 +13,6 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
- $(document).ready(function() {
-function likePost(brd_num) {
-  
-	$.ajax({
-	    type: 'POST',
-	    url: '/board/' + brd_num + '/like', // 좋아요 업데이트를 처리할 서버 엔드포인트
-	    data: { brd_num : brd_num }, // 업데이트할 게시물의 ID를 전송
-	    success: function (response) {
-	        // 성공 시 수행할 작업
-	    },
-	    error: function (error) {
-	        // 오류 발생 시 수행할 작업
-	    }
-	});
-}
-
-
     // yr 작성
 	// 찜하기 기능
 	function sharingPick(p_index) {
@@ -54,7 +37,6 @@ function likePost(brd_num) {
             }
         });
     }
-	
 </script>
 
 </head>

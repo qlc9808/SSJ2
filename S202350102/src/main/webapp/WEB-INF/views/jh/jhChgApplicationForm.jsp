@@ -59,7 +59,13 @@
 	        var contextPath = $('#contextPath').val();
 	        text += '<div class="col px-4" style="max-width: 200px;">';
 	        text += '<div class="card">';
-	        text += '<img class="card-img-top" id="recomChgThumb' + i + '" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="' + contextPath + item.thumb + '" alt="이미지 불러오기에 실패했습니다">';
+	        // 이미지 조건부 렌더링
+	        text += '<img class="card-img-top" id="recomChgThumb' + i + '" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" ';
+	        if (item.thumb === 'assets/img/chgDfaultImg.png') {
+	            text += 'src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일">';
+	        } else {
+	            text += 'src="' + contextPath + item.thumb + '" alt="챌린지 썸네일">';
+	        }
 	        text += '<div class="card-body py-4 px-0 text-center">';															
 	        text += '<a class="stretched-link text-body" id="rcomChgUrl' + i + '" href="/chgDetail?chg_id=' + item.chg_id + '" onclick="return confirm(\'페이지를 이동하시면 작성중인 내용이 사라질 수 있습니다. 이동하시겠습니까?\');">';
 	        text += '<label class="form-check-label" id="recomChgTitle' + i + '" for="rcomChgUrl">' + item.title + '</label>';
@@ -70,6 +76,25 @@
 	    }
 	    return text;
 	}
+/* 	//ajax 성공시 추천 챌린지 목록 보여주기 원본
+	function recomList(recomChgList) {
+	    var text = "";
+	    for (var i = 0; i < recomChgList.length; i++) {
+	        var item = recomChgList[i];
+	        var contextPath = $('#contextPath').val();
+	        text += '<div class="col px-4" style="max-width: 200px;">';
+	        text += '<div class="card">';
+	        text += '<img class="card-img-top" id="recomChgThumb' + i + '" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="' + contextPath + item.thumb + '" alt="이미지 불러오기에 실패했습니다">';
+	        text += '<div class="card-body py-4 px-0 text-center">';															
+	        text += '<a class="stretched-link text-body" id="rcomChgUrl' + i + '" href="/chgDetail?chg_id=' + item.chg_id + '" onclick="return confirm(\'페이지를 이동하시면 작성중인 내용이 사라질 수 있습니다. 이동하시겠습니까?\');">';
+	        text += '<label class="form-check-label" id="recomChgTitle' + i + '" for="rcomChgUrl">' + item.title + '</label>';
+	        text += '</a>';
+	        text += '</div>';
+	        text += '</div>';
+	        text += '</div>';
+	    }
+	    return text;
+	} */
 	
 		// Flickity 초기화 함수 - slider활용하기 위한 것
 	function initFlickity() {
@@ -183,8 +208,14 @@
 	                    <div class="card">
 	
 	                      <!-- Image -->
-	                      
-	                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="이미지  불러오기에 실패했습니다">
+	                      <c:choose>
+	                      	<c:when test="${recomgList.thumb == 'assets/img/chgDfaultImg.png'}">
+		                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일">
+	                      	</c:when>
+	                      	<c:otherwise>
+		                      	<img class="card-img-top" id="recomChgThumb${status.index}" style="width: 100%; width:150px; height: 150px; border-radius: 10px;" src="${pageContext.request.contextPath}/upload/${recomgList.thumb }" alt="챌린지 썸네일">
+	                      	</c:otherwise>
+	                      </c:choose>
 	
 	                      <!-- Body -->
 	                      <div class="card-body py-4 px-0 text-center">

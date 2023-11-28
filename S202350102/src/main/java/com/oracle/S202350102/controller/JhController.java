@@ -148,8 +148,10 @@ public class JhController {
 						  , Model model
 						  , String currentPage
 						  , Board board
-						  , String tap) {
+						  , String tap //탭 구분을 위한 파라미터 1 인증, 2 소세지, 3 후기
+						  ) {
 
+		
 		System.out.println("JhController chgDetail Start...");
 		System.out.println("JhController chgDetail  chg_id -> "+ chg_id);
 		System.out.println("JhController chgDetail  tap -> "+ tap);
@@ -340,10 +342,10 @@ public class JhController {
 								@RequestParam int chg_id 
 								,HttpSession   session 
 								,Model 		   model 
-								,String 	   rep_brd_num
-								,String 	   result
-								,String 	   currentPage
-								,Board		   board
+								,String 	   rep_brd_num	//댓글 번호(수정 후 그 글번호로 화면 이동하기 위함)
+								,String 	   result		//댓글 수정/삭제 성공여부 전달
+								,String 	   currentPage	//페이지네이션 위함
+								,Board		   board 		//페이지네이션 위함
 								) {
 		System.out.println("JhController reviewContent Start...");
 		System.out.println("JhController reviewContent chg_id -> " + chg_id);
@@ -361,6 +363,7 @@ public class JhController {
 		System.out.println("JhController reviewContent userNum -> " + user);
 		model.addAttribute("user", user);
 		
+		//원글 번호
 		int brd_num = board.getBrd_num();
 		System.out.println("JhController reviewContent brd_num -> " + brd_num);
 		//후기 글 조회수 +1
@@ -465,12 +468,14 @@ public class JhController {
 	
 	//후기 댓글 삭제 근데 화면처리는 어떻게?
 	@RequestMapping(value = "replyDelete")
-	public String replyDelete(@RequestParam("ori_brd_num") String brd_num, 
-							  @RequestParam("rep_brd_num") String brd_num2, 
+	public String replyDelete(@RequestParam(value = "ori_brd_num" , required = false) String brd_num, 
+							  @RequestParam("rep_brd_num") String brd_num2,
+							  @RequestParam(required = false) Integer admin,
 							  int chg_id, 
 							  HttpSession session, 
 							  Model model) {
-		
+		//ori_brd_num : 원글번호(다시 후기 글로 돌아가기 위한 파라미터)
+		//rep_brd_num : 삭제할 댓글 파라미터
 		System.out.println("JhController replyDelete Start...");
 		
 		int rep_brd_num = Integer.parseInt(brd_num2);
@@ -479,8 +484,10 @@ public class JhController {
 		
 		System.out.println("JhController replyDelete result -> " + result);
 		
-		
-		return "redirect:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id+"&result="+result;
+		if(admin == null) {
+			return "redirect:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id+"&result="+result;
+		}
+		return "redirect:replyAdminList?brd_num="+brd_num+"&chg_id="+chg_id;
 	}
 	
 	
@@ -746,9 +753,10 @@ public class JhController {
 
 	//후기 삭제
 	@RequestMapping(value = "reviewDelete")
-	public String reviewDelete(int brd_num, int chg_id, String img, HttpServletRequest request) throws Exception {
+	public String reviewDelete(int brd_num, int chg_id, String img, @RequestParam(required = false) Integer admin, HttpServletRequest request) throws Exception {
 		
 		//파라미터 : brd_num -> 이미지 삭제 위함, chg_id -> redirect로 이동하기 위함, img -> 이미지 삭제 위함
+		//admin : 관리자에서 후기 삭제후 관리자 후기관리 페이지로 넘어가기 위한 파라미터
 		
 		System.out.println("JhController reviewDelete Start...");
 		
@@ -768,9 +776,19 @@ public class JhController {
 			System.out.println("JhController reviewDelete delResult -> " + delResult);
 			
 		}
-		return "redirect:chgDetail?&chg_id=" + chg_id +"&tap=3";
+		
+		//admin이 없는 경우 사용자가 후기 삭제한 경우라 return이 챌린지 상세페이지 후기 목록으로 이동하는 것
+		if(admin == null) {
+			return "redirect:chgDetail?&chg_id=" + chg_id +"&tap=3";
+		} else 
+			//admin이 null이 아닌 경우는 관리자가 후기 삭제 하고 관리자가 후기 관리 목록으로 이동하는 것
+			return "redirect:chgReviewAdmin?chg_id=" + chg_id;
 	}
 
+	
+	
+	
+	
 	//파일 삭제
 	private int upFileDelete(String deleteFileName) throws Exception {
 		int result = 0;
@@ -1245,6 +1263,161 @@ public class JhController {
 		return "redirect:chgAdminList?state_md=" + state_md;
 		
 	}
+	
+	
+	@RequestMapping(value = "chgReviewAdmin")
+	public String chgReviewAdmin(Model model, Challenge chg, Board board, HttpSession session, String currentPage) {
+		System.out.println("JhController boardImgDelete Start...");
+		//파라미터 chg_id로 후기(board)리스트 가져옴
+		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		} 
+		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+		int chg_id = chg.getChg_id();
+		String title = chg.getTitle();
+		
+		System.out.println("JhController chgDetail title -> " + title);
+		
+		//후기 총 개수
+		int reviewTotal = jhBrdService.reviewTotal(chg_id);
+		model.addAttribute("reviewTotal", reviewTotal);
+		System.out.println("JhController chgDetail  reviewTotal -> "+ reviewTotal);
+		
+		//페이지네이션
+		Paging reviewPage = new Paging(reviewTotal, currentPage);
+		board.setStart(reviewPage.getStart());
+		board.setEnd(reviewPage.getEnd());
+		model.addAttribute("reviewPage",reviewPage);
+		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ reviewPage.getStart());
+		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
+		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		
+		//후기 목록 조회
+		List<Board> chgReviewList = jhBrdService.chgReviewList(board);
+		chgReviewList = userService.boardWriterLevelInfo(chgReviewList);
+		model.addAttribute("chgReviewList", chgReviewList);
+		
+		model.addAttribute("chg", chg);
+		
+		return "jh/jhChgReviewAdminList";
+	}
+	
+	
+	@RequestMapping(value = "replyAdminList")
+	public String replyAdminList(Board board, String currentPage, Model model, HttpSession session) {
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController chgDetail userNum -> " + userNum);
+		} 
+		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
+		User1 user = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user);
+		model.addAttribute("user", user);
+		
+		//brd_num은 원글 글번호
+		int brd_num = board.getBrd_num();
+		System.out.println("JhController reviewContent  brd_num -> "+ brd_num);
+		System.out.println("JhController reviewContent  currentPage -> "+ currentPage);
+		
+		//챌린지 후기글 내용 조회
+		Board reviewContent = jhBrdService.reviewContent(brd_num);
+		
+		model.addAttribute("brd_num", brd_num);
+		
+		
+		//후기글 총 댓글 수
+		int replyCount = reviewContent.getReplyCount();
+		model.addAttribute("replyCount", replyCount);
+		
+		//페이지네이션
+		Paging replyPage = new Paging(replyCount, currentPage);
+		board.setStart(replyPage.getStart());
+		board.setEnd(replyPage.getEnd());
+		model.addAttribute("replyPage",replyPage);
+		System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
+		System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
+		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
+		System.out.println("JhController reviewContent  currentPage -> "+ replyPage.getCurrentPage());
+		
+		//챌린지 해당 글에 대한 댓글 조회
+		List<Board> reviewReplyList = jhBrdService.reviewReplyList(board);
+		reviewReplyList = userService.boardWriterLevelInfo(reviewReplyList);
+		model.addAttribute("reviewContent", reviewContent);
+		model.addAttribute("reviewReplyList", reviewReplyList);
+		
+		return "jh/jhChgReplyAdminList";
+		
+	}
+	
+	//댓글 관리에 필요한거
+//	int brd_num = board.getBrd_num();
+//	System.out.println("JhController reviewContent brd_num -> " + brd_num);
+//	//후기 글 조회수 +1
+//	jhBrdService.viewCntUp(brd_num);
+//	
+//	//챌린지 후기글 내용 조회
+//	Board reviewContent = jhBrdService.reviewContent(brd_num);
+//	
+//	//후기글 총 댓글 수
+//	int replyCount = reviewContent.getReplyCount();
+//	
+//	//페이지네이션
+//	Paging replyPage = new Paging(replyCount, currentPage);
+//	board.setStart(replyPage.getStart());
+//	board.setEnd(replyPage.getEnd());
+//	model.addAttribute("replyPage",replyPage);
+//	System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
+//	System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
+//	System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
+//	
+//	//챌린지 해당 글에 대한 댓글 조회
+//	List<Board> reviewReplyList = jhBrdService.reviewReplyList(board);
+//	reviewReplyList = userService.boardWriterLevelInfo(reviewReplyList);
+//	
+//	// challenger 참여 유무 판단용
+//	Challenger chgr = new Challenger();
+//	chgr.setUser_num(userNum);
+//	chgr.setChg_id(chg_id);
+//	int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
+//	System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
+//	model.addAttribute("chgrYN", chgrJoinYN);
+//	
+//	
+//	System.out.println("JhController reviewContent reviewContent -> " + reviewContent);
+//	System.out.println("JhController reviewContent reviewReply -> " + reviewReplyList);
+//	model.addAttribute("reviewContent", reviewContent);
+//	model.addAttribute("reviewReply", reviewReplyList);
+//	model.addAttribute("chg_id", chg_id);
+//	
+//	//댓글 수정
+//	if ( rep_brd_num != null ) {
+//		String flag = "flag";
+//		model.addAttribute("flag", flag);
+//		model.addAttribute("rep_brd_num", rep_brd_num);
+//		System.out.println("JhController reviewContent flag -> " + flag);
+//		System.out.println("JhController reviewContent rep_brd_num -> " + rep_brd_num);
+//	}
+//	
+//	
+//	//댓글 삭제/업데이트 결과정보 전달
+//	model.addAttribute("result", result);
+//	System.out.println("JhController reviewContent result -> " + result);
+//	
+	
+	
+	
+	
+	
 	
 	
 	/*

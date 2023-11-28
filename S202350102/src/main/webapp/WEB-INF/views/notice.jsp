@@ -143,7 +143,7 @@ body {
 		
 		
 			<div class="row" >
-				<div class="col-12 col-md-3">
+				<div class="col-3">
 					
 					<nav class="mb-10 mb-md-0">
 						<div class="list-group list-group-sm list-group-strong list-group-flush-x">
@@ -160,7 +160,7 @@ body {
 					
 				</div>
 				
-		        <div class="col-12 col-md-9 col-lg-8 mx-0">
+		        <div class="col-9">
 					<c:set var="num" value="${page.total-page.start+1 }"></c:set>
 					
 					<table id="boardtable">

@@ -28,7 +28,7 @@
 		FROM (
 		        SELECT  ROWNUM AS rn, a.* 
 		        FROM    (
-		                    SELECT      b.brd_num , b.title, b.user_num, u.nick, b.view_cnt, b.reg_date, replyCount(b.brd_num) replyCount
+		                    SELECT      b.brd_num , b.chg_id, b.img, b.title, b.user_num, u.nick, b.view_cnt, b.reg_date, replyCount(b.brd_num) replyCount
 		                    FROM 		board b
 		                    INNER JOIN 	user1 u      ON b.user_num = u.user_num
 		                    INNER JOIN 	challenge ch ON b.chg_id   = ch.chg_id
@@ -116,14 +116,13 @@
             	</otherwise>
         	  </choose>
             , reg_date = SYSDATE   
-      WHERE   brd_num = #{brd_num}
+      WHERE   brd_num  = #{brd_num}
    </update>
    
-   <!-- 후기 삭제 -> 댓글도 같이 삭제 되게 할 것인가? -->
+   <!-- 후기 삭제 -> 댓글까지 삭제 하기 - 나중에 댓글삭제버전과 후기삭제 버전 합치기 -->
 	<delete id="jhReviewDelete" parameterType="int">
 		DELETE	FROM board
-		WHERE 	brd_num = #{brd_num}
-		<!-- OR		brd_group = #{brd_num} -->
+		WHERE 	brd_group 	= #{brd_num}
 	</delete>
 	
 		<!-- 후기 이미지 삭제  필요한가? 없어도 될듯 -->

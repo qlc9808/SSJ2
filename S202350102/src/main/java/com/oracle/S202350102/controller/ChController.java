@@ -39,12 +39,11 @@ import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.chService.ChBoardService;
 import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.chService.ChSearchService;
-import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
-import com.oracle.S202350102.service.jhService.JhBoardService;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
@@ -64,8 +63,8 @@ public class ChController {
 	private final ChChallengeService	chChallengeService;
 	private final UserService			userService;
 	private final JhCallengeService 	jhCService;
-	private final ThChgService 			tcs;
-	private final JhBoardService		jhBrdService;
+	private final ThChgService 			tcs;	
+	private final BgBoardService 		bBoardD;
 	
 	// notice List 조회 
 	@RequestMapping("/notice")
@@ -172,10 +171,12 @@ public class ChController {
 		System.out.println("ChController noticeUpdateForm Start...");
 		System.out.println("brd_num->" + board.getBrd_num());
 		int user_num = 0;
+		
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 			// 글의 user_num과 내 session의 user_num이 같은가?
-			if(board.getUser_num() == user_num) {
+			User1 user = userService.userSelect(user_num);
+			if(user.getStatus_md() == 102) {
 				Board noticeConts = chBoardService.noticeConts(board.getBrd_num());
 				model.addAttribute("noticeConts", noticeConts);
 				
@@ -237,8 +238,9 @@ public class ChController {
 		
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
 			// 글의 user_num과 내 session의 user_num이 같은가?
-			if(board.getUser_num() == user_num) {
+			if(user.getStatus_md() == 102) {
 				int result = chBoardService.deleteNotice(board.getBrd_num());
 				request.setAttribute("brd_md",board.getBrd_md());
 				
@@ -424,14 +426,14 @@ public class ChController {
 	
 	@ResponseBody
 	@RequestMapping(value = "rechk")
-	public commReChk alarmchk(HttpSession session, ModelAndView mav) {
+	public commReChk alarmchk(HttpSession session) {
 		int result = 0;
 		List<BoardReChk> nochkList = null;
 		commReChk rechk = new commReChk();
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
 			
-			nochkList = chBoardService.alarmchk(user_num);
+			nochkList = chBoardService.alarmchk(user_num);			
 			result = nochkList.size();
 			System.out.println("nochkList.size()->" + nochkList.size());
 			rechk.setListBdRe(nochkList);
@@ -485,7 +487,7 @@ public class ChController {
 	
 	
 	public void myConts(HttpSession session, Model model, String currentPage) {
-		System.out.println("ChController myConts Start...");
+//		System.out.println("ChController myConts Start...");
 		int user_num = 0;
 		
 		
@@ -503,9 +505,11 @@ public class ChController {
 			user_num = (int)session.getAttribute("user_num");
 			Board board = new Board();
 			List<Paging> myPaging = chBoardService.myCount(user_num);
-			System.out.println("myPaging size->" + myPaging.size());
+//			System.out.println("myPaging size->" + myPaging.size());
+			
 			for(Paging p : myPaging) {
 				if(p.getBrd_md() == 100) {
+					/*********************인증*********************/
 					myCertiPage= new Paging(p.getTotal(), currentPage);
 					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
@@ -517,20 +521,22 @@ public class ChController {
 					model.addAttribute("Certi_md",p.getBrd_md());
 					model.addAttribute("myCertiPage",myCertiPage);
 				} else if(p.getBrd_md() == 101) {
+					/*********************후기*********************/
 					myReviewPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
+//					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myReviewPage.getStart());
-					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
+//					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
 					board.setEnd(myReviewPage.getEnd());
 					myReviewList = chBoardService.mychgBoardList(board);
 					
 					model.addAttribute("Review_md",p.getBrd_md());
 					model.addAttribute("myReviewPage",myReviewPage);
 				} else if(p.getBrd_md() == 102) {
+					/*********************쉐어링*********************/
 					mySharePage= new Paging(p.getTotal(), currentPage);
-					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
+//					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(mySharePage.getStart());
@@ -540,8 +546,10 @@ public class ChController {
 					model.addAttribute("Share_md",p.getBrd_md());
 					model.addAttribute("mySharePage",mySharePage);
 				} else if(p.getBrd_md() == 103) {
+					/*********************자유*********************/
 					myCommuPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+//					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+//					System.out.println("-------------------------myCommuPage.myCommuPage.getTotal()->" + myCommuPage.getStart());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myCommuPage.getStart());
@@ -583,7 +591,8 @@ public class ChController {
 	@PostMapping(value = "moveToNewCmt")
 	public String moveToNewCmt(BoardReChk brc) {
 		System.out.println("ChController readAlarm Start...");
-		
+		System.out.println("----------------brc.getBrd_num()----------"+brc.getBrd_num());
+		System.out.println("----------------brc.getUser_num()----------"+brc.getUser_num());
 		int result = chBoardService.moveToNewCmt(brc);
 		
 		String result1 = Integer.toString(result);
@@ -664,7 +673,7 @@ public class ChController {
 		int result = 0;
 		Board board = chBoardService.noticeConts(brd_num);
 		
-		result = jhBrdService.reviewDelete(brd_num);
+		result = chBoardService.deleteNotice(brd_num);
 		
 		if(result >0 ) {
 			//이미지 삭제를 위한 작업
@@ -791,7 +800,7 @@ public class ChController {
 			String endDate = dateFormat.format(chg.getEnd_date());						
 			
 			User1 user = userService.userSelect(user_num);
-			model.addAttribute("user", user);
+			model.addAttribute("user1", user);
 			model.addAttribute("chg", chg);
 			model.addAttribute("endDate", endDate);
 			
@@ -900,9 +909,8 @@ public class ChController {
 						System.out.println("thumbFile이 null이 아닐경우 실행");
 						String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
 						chg.setThumb(saveName);
-					} else {
-						System.out.println("thumbFile이 null일경우 실행");						
-						chg.setThumb(null);
+					} else if(thumbFile.getOriginalFilename().length() == 0){
+						chg.setThumb("assets/img/chgDfaultImg.png");
 					}
 					
 				}
@@ -919,7 +927,46 @@ public class ChController {
 		
 		
 		return "ch/notAnAdmin";
+	}		
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "ajaxModal")
+	public ModelAndView ajaxModal(HttpSession session, ModelAndView mav, int brd_num) {
+		System.out.println("ChController ajaxModal Start...");
+		Board board = chBoardService.noticeConts(brd_num);
+		System.out.println("board" + board);
+		mav.addObject("board", board);
+		mav.setViewName("ch/ajaxPage/ajaxModal");
+		
+		return mav;
 	}
+	
+	@PostMapping(value = "chCertBoardUpdate")
+	public String updateCertBrd(Board board, Model model, HttpServletRequest request,								
+								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
+										throws IOException {
+		log.info("updateCertBrd Start...");
+		
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		
+		
+		if (editFile != null) {
+			// 진짜 저장
+			String saveName = uploadFile(editFile.getOriginalFilename(), editFile.getBytes(), realPath);
+			board.setImg(saveName);
+		}
+		
+		int updateCount = bBoardD.updateCertBrd(board);
+		
+		
+		return "redirect:mypage";
+	}
+	
 	
 	
 	

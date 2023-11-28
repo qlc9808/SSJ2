@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>    
+    pageEncoding="UTF-8"%>   
 <%@ include file="/WEB-INF/views/header4.jsp" %>    
 <!DOCTYPE html>
 <html>
@@ -79,14 +78,16 @@
 		    			<div class="row border" style="height: auto;">
 		    				<div class="col-8 p-4 mt-4" >
 								<div class="qbd-content">
-									<div class="qbd-content text"  id="test">
-										<c:if test="${not empty noticeConts.img }">
-											<img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" id="Img"><p>
-											<input type="hidden" name="img" value="${noticeConts.img}">
-										</c:if>				
+									<div class="qbd-content text"  id="test">													
 										<span>
 											<textarea rows="20" cols="50" name="conts">${noticeConts.conts }</textarea>
 										</span>
+										<div id="imgContanier">
+											<c:if test="${not empty noticeConts.img }">
+												<img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" id="Img" style="max-width: 800px"><p>
+												<input type="hidden" name="img" value="${noticeConts.img}">											
+											</c:if>	
+										</div>
 									</div>						
 								</div>						
 								<input type="file" name="file1" style="display: none;" id="fileInput">

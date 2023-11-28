@@ -1,14 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header4.jsp" %>    
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
+
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<head>
-<!-- CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 <style type="text/css">
+.form-group input.form-control.form-control-sm {
+  background-color: transparent; 
+}
+.form-group textarea.form-control.form-control-sm {
+  background-color: transparent;
+}
+
 
 </style>
 <meta charset="UTF-8">

@@ -147,6 +147,12 @@
 		
 	}
 	
+	function chgReviewAdminFn(){
+		var chg_id = ${chg.chg_id}
+		var title  = '${chg.title }'	
+		location.href = "chgReviewAdmin?chg_id="+chg_id+"&title="+title;
+		
+	}
 
 	
 </script>
@@ -357,26 +363,24 @@
 			    </tr>
 		</table>
 		<div class="d-flex justify-content-start mt-5">
+				<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
+				<!-- 챌린지 진행중 땐 수정 반려엔 삭제 버튼만 활성화  -->
 		<c:choose>
 			<c:when test="${user.status_md == 102 }">
 				<button class="btn btn-sm btn-dark mx-1" onclick="chgAdminList()">목록</button>
-				
-				<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
 				<c:choose>
 					<c:when test="${chg.state_md == 100 }">
 						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
 						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
 					</c:when>
-				</c:choose>
-				
-				
-				<!-- 챌린지 진행중 땐 수정 반려엔 삭제 버튼만 활성화  -->
-				<c:choose>
 					<c:when test="${chg.state_md == 102 }">
 						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
 					</c:when>
 					<c:when test="${chg.state_md == 104}">
 						<button class="btn btn-sm btn-dark mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>
+					</c:when>
+					<c:when test="${chg.state_md == 103}">
+						<button class="btn btn-sm btn-dark mx-1" onclick="chgReviewAdminFn()" id="chgReviewAdmin">후기 관리하기</button>
 					</c:when>
 				</c:choose>
 			</c:when>

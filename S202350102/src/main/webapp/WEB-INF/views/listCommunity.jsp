@@ -153,7 +153,7 @@ $(document).ready(function () {
         if (keyword !== "") {
             searchAndSort(keyword);
         } else {
-            location.reload();
+        	window.location.href = "/listCommunity";
         }
     });
     
@@ -163,25 +163,30 @@ $(document).ready(function () {
         sortBoard(sortOption);
     });
    
-    
+    // 검색창 엔터버튼
+    $("#keyword").keypress(function(e){	
+			if(e.keyCode && e.keyCode == 13){
+				$("#searchButton").trigger("click");
+				return false;
+			}
+		});
     
      // 검색 페이징 함수
-    function updatePagination(data) {
-    	var startNum = data.boardPage.startNum;
-    	var endNum = data.boardPage.endNum;
-    	 var keyword = $("#keyword").val();
+    function updatePagination(boardPage) {
+    	var total = boardPage.total;
+    	var keyword = $("#keyword").val();
+    	var startNum =  boardPage.total - boardPage.start +1;
+    	var endNum =  boardPage.total - boardPage.end;
         // 페이지 번호 업데이트
         $('#boardPagination > ul').empty();
-        console.log('응답 데이터: ', data);
-        console.log('StarNum:', startNum);
-        console.log('EndNum:', endNum);
-        console.log('BoardPage:', data);
-        console.log('Initial Page:', { startPage: 1, endPage: 5, totalPage: 10, pageBlock: 5 });
+        // console.log('StarNum:', startNum);
+        // console.log('EndNum:', endNum);
+        // console.log('Initial Page:', { startPage: 1, endPage: 5, totalPage: 10, pageBlock: 5 });
 
         for (var i = startNum; i <= endNum; i++) {
-            var liClass = (data.boardPage.currentPage === i) ? 'page-item active' : 'page-item';  
+            var liClass = (boardPage.currentPage === i) ? 'page-item active' : 'page-item';  
             var aClass = 'page-link';
-            if (data.boardPage.currentPage !== i) {
+            if (boardPage.currentPage !== i) {
                 aClass += ' page-link-arrow';
             }
 
@@ -190,20 +195,20 @@ $(document).ready(function () {
         }
 
         // 이전 페이지
-        if (data.boardPage.startPage > data.boardPage.pageBlock) {  // 여기 변경
-            var prevLink = '<li class="page-item"><a class="page-link page-link-arrow" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + (data.boardPage.startPage - data.boardPage.pageBlock) + '"><i class="fa fa-caret-left"></i></a></li>';
+        if (boardPage.startPage > boardPage.pageBlock) {  // 여기 변경
+            var prevLink = '<li class="page-item"><a class="page-link page-link-arrow" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + (boardPage.startPage - boardPage.pageBlock) + '"><i class="fa fa-caret-left"></i></a></li>';
             $('#boardPagination > ul').prepend(prevLink);
         }
 
         // 추가로 페이지 번호를 생성하여 표시할 부분
-        for (var i =endNum + 1; i <= data.boardPage.totalPage && i <= (startNum + data.boardPage.pageBlock); i++) {  // 여기 변경
+        for (var i =endNum + 1; i <= boardPage.totalPage && i <= (startNum + boardPage.pageBlock); i++) {  // 여기 변경
             var extraPageLink = '<li class="page-item"><a class="page-link" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + i + '">' + i + '</a></li>';
             $('#boardPagination > ul').append(extraPageLink);
         }
 
         // 다음 페이지
-        if (data.boardPage.endPage < data.boardPage.totalPage) {  // 여기 변경
-            var nextLink = '<li class="page-item"><a class="page-link page-link-arrow" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + (data.boardPage.startPage + data.boardPage.pageBlock) + '"><i class="fa fa-caret-right"></i></a></li>';
+        if (boardPage.endPage < boardPage.totalPage) {  // 여기 변경
+            var nextLink = '<li class="page-item"><a class="page-link page-link-arrow" href="listBoardSearch?keyword=' + keyword + '&currentPage=' + (boardPage.startPage + boardPage.pageBlock) + '"><i class="fa fa-caret-right"></i></a></li>';
             $('#boardPagination > ul').append(nextLink);
         }
     }
@@ -214,7 +219,7 @@ $(document).ready(function () {
     };
     
     // 초기 페이지 로딩 시 호출
-    updatePagination({ startPage: 1, endPage: 5, totalPage: 10, pageBlock: 5 }); 
+    // updatePagination({ startPage: 1, endPage: 5, totalPage: 10, pageBlock: 5 }); 
     
     function searchAndSort(keyword) {
         	 //  검색 아작스 요청
@@ -241,14 +246,26 @@ $(document).ready(function () {
                              str += "<td>" + (startNum - i) + "</td>";
                              str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                              str += "<td>" + img + result.nick + "</td>";
-                             // 날짜 형식 변환
-                             var formattedDate = new Date(result.reg_date);
-                             var day = formattedDate.getDate();
-                             var month = formattedDate.getMonth() + 1;
-                             var year = formattedDate.getFullYear() % 100;
+                             var formatDate = new Date(result.reg_date);
+                             var day = formatDate.getDate();
+                             var month = formatDate.getMonth() + 1;
+                             var year = formatDate.getFullYear() % 100;
+         					 var hours = formatDate.getHours();
+         					 var minutes = formatDate.getMinutes();
+         					
                              day = (day < 10) ? '0' + day : day;
                              month = (month < 10) ? '0' + month : month;
-                             str += "<td>" + year + "-" + month + "-" + day + "</td>";
+                             year = (year < 10) ? '0' + year : year;
+         					 hours = (hours < 10) ? '0' + hours : hours;
+         					 minutes = (minutes < 10) ? '0' + minutes : minutes;
+         					 var sysdate = new Date();
+         					 if (sysdate.getDate() === formatDate.getDate()) {
+         					     // 날짜가 sysdate와 다르면 시간을 표시
+         					     str += "<td>" + hours + ":" + minutes + "</td>";
+         					 } else {
+         					     // 날짜가 sysdate와 같으면 날짜를 표시
+         					     str += "<td>" + year + '.' + month + '.' + day + "</td>";
+         					 }
                              
                              str += "<td>" + result.view_cnt + "</td>";
                              str += "<td>" + result.replyCount +"</td>"; 
@@ -260,8 +277,25 @@ $(document).ready(function () {
                          $('#boardtable > tbody').append('<tr><td colspan="6">검색 결과가 없습니다.</td></tr>');
                        
                      }
+                    $('#boardPagination > ul ').empty();
+                    // 페이지 링크 추가
+                    if (boardPage.startPage > boardPage.pageBlock) {
+                        var prevPage = boardPage.startPage - boardPage.pageBlock;
+                        $('#boardPagination > ul').append('<li class="page-item"><a href="#" class="page-link page-link-arrow" id="page-link" data-page="' + prevPage + '">[이전]</a></li>');
+                    }
+
+                    for (var i = boardPage.startPage; i <= boardPage.endPage; i++) {
+                        $('#boardPagination > ul').append('<li class="page-item"><a href="#" id="page-link" class="page-link <c:if test='+boardPage.currentPage == i+'>active</c:if>" data-page="' + i + '">[' + i + ']</a></li>');
+                    }
+
+                    if (boardPage.endPage < boardPage.totalPage) {
+                        var nextPage = boardPage.startPage + boardPage.pageBlock;
+                        $('#boardPagination > ul').append('<li class="page-item"><a href="#" id="page-link" class="page-link page-link-arrow" data-page="' + nextPage + '" >[다음]</a></li>');
+                    }
+                    
+                    
                     /// 페이징 처리 함수 호출
-                    updatePagination(boardPage);
+      //              updatePagination(boardPage);
                  },
                  error: function (xhr, status, error) {
                      console.log('Ajax 호출 실패: ', error);
@@ -269,7 +303,15 @@ $(document).ready(function () {
              });
               
 	}
-
+    
+    // 페이지 링크를 클릭했을 때의 이벤트 처리
+    $(document).off('click', '#page-link');
+    $(document).on('click', '#page-link', function searchPage() {
+        var keyword = $("#keyword").val();
+        // 클릭한 페이지의 번호를 가져와서 해당 페이지로 이동
+        var targetPage = $(this).data('page');
+        window.location.href = 'listCommunity?currentPage=' + targetPage + '&keyword=' + keyword;
+    });
 
 	function sortBoard(sortOption) {
         $.ajax({
@@ -295,14 +337,26 @@ $(document).ready(function () {
                       str += "<td>" + (startNum - i) + "</td>";
                       str += "<td><a href='/detailCommunity?user_num=" + result.user_num + "&brd_num=" + result.brd_num + "'>" + result.title + "</a></td>";
                       str += "<td>" + img + result.nick + "</td>"; // 한빛 
-                      // 날짜 형식 변환
-                      var formattedDate = new Date(result.reg_date);
-                      var day = formattedDate.getDate();
-                      var month = formattedDate.getMonth() + 1;
-                      var year = formattedDate.getFullYear() % 100;
+                      var formatDate = new Date(result.reg_date);
+                      var day = formatDate.getDate();
+                      var month = formatDate.getMonth() + 1;
+                      var year = formatDate.getFullYear() % 100;
+	  				  var hours = formatDate.getHours();
+	  				  var minutes = formatDate.getMinutes();
+  					
                       day = (day < 10) ? '0' + day : day;
                       month = (month < 10) ? '0' + month : month;
-                      str += "<td>" + year + "-" + month + "-" + day + "</td>";
+                      year = (year < 10) ? '0' + year : year;
+  				      hours = (hours < 10) ? '0' + hours : hours;
+  					  minutes = (minutes < 10) ? '0' + minutes : minutes;
+  					  var sysdate = new Date();
+  					  if (sysdate.getDate() === formatDate.getDate()) {
+  					      // 날짜가 sysdate와 다르면 시간을 표시
+  					      str += "<td>" + hours + ":" + minutes + "</td>";
+  					  } else {
+  					      // 날짜가 sysdate와 같으면 날짜를 표시
+  					      str += "<td>" + year + '.' + month + '.' + day + "</td>";
+  					  }
                       
                       str += "<td>" + result.view_cnt + "</td>";
                       str += "<td>" + result.replyCount +"</td>";
@@ -310,7 +364,6 @@ $(document).ready(function () {
                       $('#boardtable').append(str);
                   }
             
-                    updatePagination(boardPage); 
               } else {
                    // 검색 결과가 없을 경우 처리
                   $('#boardtable > tbody').append('<tr><td colspan="6">검색 결과가 없습니다.</td></tr>');
@@ -401,7 +454,20 @@ $(document).ready(function () {
                                 <td>${num}</td>
                                 <td><a href="detailCommunity?user_num=${board.user_num}&brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td><img title="Lv.${board.user_level } | exp.${board.user_exp}(${board.percentage }%)" src="/images/level/${board.icon}.gif">${board.nick}</td>
-                                <td><fmt:formatDate value="${board.reg_date}" pattern="yy-MM-dd"/></td>
+ 								<td>
+								<jsp:useBean id="today" class="java.util.Date"></jsp:useBean>
+								  <fmt:parseNumber value="${today.time / (1000 * 60 * 60 * 24)}" var="nowDays" integerOnly="true" />
+								  <fmt:parseNumber value="${(board.reg_date.time + (9 * 60 * 60 * 1000)) / (1000 * 60 * 60 * 24)}" var="regDays" integerOnly="true" />
+								  <c:set value="${nowDays - regDays }" var="dayDiff" />
+								  <c:choose>
+								    <c:when test="${dayDiff == 0 }">
+								    	<fmt:formatDate value="${board.reg_date }" pattern="HH:mm"/>
+								    </c:when>
+								    <c:otherwise>
+								        <fmt:formatDate value="${board.reg_date }" pattern="yy.MM.dd"/>
+								    </c:otherwise>
+								  </c:choose>
+								</td>
                                 <td>${board.view_cnt}</td>
 				         		<td>${board.replyCount}</td>
 				         		<c:set var="num" value="${num-1}"></c:set> 			       
@@ -409,32 +475,63 @@ $(document).ready(function () {
                         </c:forEach>
                     </tbody>
                 </table>
+			<c:if test="${keyword == null }">
+				<div class="container text-center" id="boardPagination">
+				     <ul class="pagination pagination-sm justify-content-center">
+				        <c:if test="${boardPage.startPage > boardPage.pageBlock}">
+				            <li class="page-item">
+				                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">
+				                    <i class="fa fa-caret-left"></i>
+				                </a>
+				            </li>
+				        </c:if>
+				
+				        <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
+				            <li class="page-item <c:if test='${boardPage.currentPage == i}'>active</c:if>">
+				                <a class="page-link" href="listCommunity?currentPage=${i}">${i}</a>
+				            </li>
+				        </c:forEach>
+				
+				        <c:if test="${boardPage.endPage < boardPage.totalPage}">
+				            <li class="page-item">
+				                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">
+				                    <i class="fa fa-caret-right"></i>
+				                </a>
+				            </li>
+				        </c:if>
+				    </ul>
+				</div>			
+			</c:if>
+			<c:if test="${keyword != null }">
+				<div class="container text-center" id="boardPagination">
+				     <ul class="pagination pagination-sm justify-content-center">
+				        <c:if test="${boardPage.startPage > boardPage.pageBlock}">
+				            <li class="page-item">
+				                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}&keyword=${keyword}">
+				                    <i class="fa fa-caret-left"></i>
+				                </a>
+				            </li>
+				        </c:if>
+				
+				        <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
+				            <li class="page-item <c:if test='${boardPage.currentPage == i}'>active</c:if>">
+				                <a class="page-link" href="listCommunity?currentPage=${i}&keyword=${keyword}">${i}</a>
+				            </li>
+				        </c:forEach>
+				
+				        <c:if test="${boardPage.endPage < boardPage.totalPage}">
+				            <li class="page-item">
+				                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}&keyword=${keyword}">
+				                    <i class="fa fa-caret-right"></i>
+				                </a>
+				            </li>
+				        </c:if>
+				    </ul>
+				</div>			
+			</c:if>
+			
 
-			<div class="container text-center" id="boardPagination">
-			     <ul class="pagination pagination-sm justify-content-center">
-			        <c:if test="${boardPage.startPage > boardPage.pageBlock}">
-			            <li class="page-item">
-			                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage-boardPage.pageBlock}">
-			                    <i class="fa fa-caret-left"></i>
-			                </a>
-			            </li>
-			        </c:if>
 			
-			        <c:forEach var="i" begin="${boardPage.startPage}" end="${boardPage.endPage}">
-			            <li class="page-item <c:if test='${boardPage.currentPage == i}'>active</c:if>">
-			                <a class="page-link" href="listCommunity?currentPage=${i}">${i}</a>
-			            </li>
-			        </c:forEach>
-			
-			        <c:if test="${boardPage.endPage < boardPage.totalPage}">
-			            <li class="page-item">
-			                <a class="page-link page-link-arrow" href="listCommunity?currentPage=${boardPage.startPage+boardPage.pageBlock}">
-			                    <i class="fa fa-caret-right"></i>
-			                </a>
-			            </li>
-			        </c:if>
-			    </ul>
-			</div>
             </div>
         </div>
  </section>
