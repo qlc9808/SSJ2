@@ -465,9 +465,13 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/mypage">
                                활동정보
                            </a>
+							
+							<!-- 나중에 추가 예정 -->
+                           <!--
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-                               챌린지 관리
-                           </a>
+                               	챌린지 관리
+                           </a> 
+                           -->
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
                                팔로우 관리
                            </a>
