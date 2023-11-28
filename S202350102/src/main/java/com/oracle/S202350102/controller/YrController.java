@@ -122,7 +122,7 @@ public class YrController {
 	
 	// following 리스트
 	@RequestMapping(value = "followList")
-	public String followList(HttpSession session, Model model) {
+	public String followList(HttpSession session, User1 user1, Model model) {
 		
 		// session에 저장된 로그인 정보값 가져오기
 		int userNum = 0;
@@ -131,10 +131,13 @@ public class YrController {
 			System.out.println("YrController followList userNum -> " + userNum);
 		}
 		
+		user1.setUser_num(userNum);
+		User1 user1FromDB = us.userSelect(userNum);
 		// 팔로잉 리스트 출력
 		List<User1> followingList = yfis.followingList(userNum);
 		followingList = us.userLevelList(followingList);
 		model.addAttribute("followingList", followingList);
+		model.addAttribute("user1", user1FromDB);
 		
 		// 팔로우 리스트 출력
 		List<User1> followerList = yfis.followerList(userNum);
