@@ -18,6 +18,7 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Following;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.yrService.YrBoardLikeService;
 import com.oracle.S202350102.service.yrService.YrChallengePickService;
@@ -38,6 +39,7 @@ public class YrController {
 	private final YrBoardLikeService		ybls;
 	private final YrChallengeService		ychs;
 	private final UserService us;
+	private final Level1Service ls;
 	
 //	@RequestMapping(value = "checkBoard")
 //	public String checkBoard() {
@@ -143,11 +145,7 @@ public class YrController {
 		List<User1> followerList = yfis.followerList(userNum);
 		followerList = us.userLevelList(followerList);
 		model.addAttribute("followerList", followerList);
-		
-		// user 정보 가져오기
-		// 없애도 될지도? -> sessionscope로 대체 가능??
-		User1 user1 = us.userSelect(userNum);
-		model.addAttribute("user1", user1);
+		model.addAttribute("level1List",ls.level1List());
 		
 		return "jk/followList";
 	}
