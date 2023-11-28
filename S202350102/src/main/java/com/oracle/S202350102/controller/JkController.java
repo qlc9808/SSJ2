@@ -575,8 +575,24 @@ public class JkController {
 	}
 
 	@RequestMapping(value="/challengeManagement")
-	public String challengeManagement(Integer user_num, Model model ) {
+	public String challengeManagement(HttpSession session, Model model, User1 user1, Challenge chg) {
 		System.out.println("JkController challengeManagement Start... ");
+		
+		int user_num = 0;
+	    if (session.getAttribute("user_num") != null) {
+	        user_num = (int) session.getAttribute("user_num");
+	        chcont.myConts(session, model, null);  // 메서드 실행, return void
+	    }
+	    user1.setUser_num(user_num);
+	    List<Challenge> myChgList = jms.myChgList(chg);
+	    User1 user1FromDB = us.userSelect(user_num);
+	    
+	    
+	    user1.setUser_num(user_num);
+	    model.addAttribute("level1List",ls.level1List());
+	    model.addAttribute("user1", user1FromDB);
+	    
+	    System.out.println("JkController myChgList.size() --> " + myChgList.size());
 		
 		return "jk/challengeManagement";	
 	}
@@ -793,6 +809,7 @@ public class JkController {
 	    user1.setUser_num(user_num);
 	    User1 user1FromDB = us.userSelect(user_num);
 	    List<Level1> level1List = ls.level1List();
+	    int myBoard = jbs.myBoard(user_num);
 	    
 	    Map<String, Integer> followCnt = jus.followingCnt(user_num);
 	    System.out.println("followCnt: " + followCnt);
@@ -800,6 +817,7 @@ public class JkController {
 	    model.addAttribute("level1List",ls.level1List());
 	    model.addAttribute("user1", user1FromDB);
 	    model.addAttribute("followCnt", followCnt);
+	    model.addAttribute("myBoard", myBoard);
 
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    try {
@@ -808,6 +826,7 @@ public class JkController {
 	        responseData.put("user1", user1FromDB);
 	        responseData.put("level1List", level1List);
 	        responseData.put("followCnt", followCnt);
+	        responseData.put("myBoard", myBoard);
 
 	        String jsonData = objectMapper.writeValueAsString(responseData);
 	        return jsonData;

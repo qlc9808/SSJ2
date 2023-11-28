@@ -424,7 +424,7 @@ public class ChController {
 	
 	@ResponseBody
 	@RequestMapping(value = "rechk")
-	public commReChk alarmchk(HttpSession session, ModelAndView mav) {
+	public commReChk alarmchk(HttpSession session) {
 		int result = 0;
 		List<BoardReChk> nochkList = null;
 		commReChk rechk = new commReChk();
@@ -485,7 +485,7 @@ public class ChController {
 	
 	
 	public void myConts(HttpSession session, Model model, String currentPage) {
-		System.out.println("ChController myConts Start...");
+//		System.out.println("ChController myConts Start...");
 		int user_num = 0;
 		
 		
@@ -503,9 +503,11 @@ public class ChController {
 			user_num = (int)session.getAttribute("user_num");
 			Board board = new Board();
 			List<Paging> myPaging = chBoardService.myCount(user_num);
-			System.out.println("myPaging size->" + myPaging.size());
+//			System.out.println("myPaging size->" + myPaging.size());
+			
 			for(Paging p : myPaging) {
 				if(p.getBrd_md() == 100) {
+					/*********************인증*********************/
 					myCertiPage= new Paging(p.getTotal(), currentPage);
 					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
@@ -517,20 +519,22 @@ public class ChController {
 					model.addAttribute("Certi_md",p.getBrd_md());
 					model.addAttribute("myCertiPage",myCertiPage);
 				} else if(p.getBrd_md() == 101) {
+					/*********************후기*********************/
 					myReviewPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
+//					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myReviewPage.getStart());
-					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
+//					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
 					board.setEnd(myReviewPage.getEnd());
 					myReviewList = chBoardService.mychgBoardList(board);
 					
 					model.addAttribute("Review_md",p.getBrd_md());
 					model.addAttribute("myReviewPage",myReviewPage);
 				} else if(p.getBrd_md() == 102) {
+					/*********************쉐어링*********************/
 					mySharePage= new Paging(p.getTotal(), currentPage);
-					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
+//					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(mySharePage.getStart());
@@ -540,8 +544,10 @@ public class ChController {
 					model.addAttribute("Share_md",p.getBrd_md());
 					model.addAttribute("mySharePage",mySharePage);
 				} else if(p.getBrd_md() == 103) {
+					/*********************자유*********************/
 					myCommuPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+//					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+//					System.out.println("-------------------------myCommuPage.myCommuPage.getTotal()->" + myCommuPage.getStart());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myCommuPage.getStart());
@@ -791,7 +797,7 @@ public class ChController {
 			String endDate = dateFormat.format(chg.getEnd_date());						
 			
 			User1 user = userService.userSelect(user_num);
-			model.addAttribute("user", user);
+			model.addAttribute("user1", user);
 			model.addAttribute("chg", chg);
 			model.addAttribute("endDate", endDate);
 			
@@ -919,9 +925,7 @@ public class ChController {
 		
 		
 		return "ch/notAnAdmin";
-	}
-	
-	
+	}		
 	
 	public void myChgList(HttpSession session, Model model) {
 		System.out.println("ChController myChgList Start...");

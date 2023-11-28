@@ -117,7 +117,10 @@ public class ThController {
 			if(loginResult.getDelete_yn().equals("N")) {
 				session = request.getSession();
 				session.setAttribute("user_num", loginResult.getUser_num());
+				session.setAttribute("status_md", loginResult.getStatus_md());
 		         int user_num = (int) session.getAttribute("user_num");
+		         
+		         
 		         ls.userLevelCheck(user_num);
 		         
 		         //로그인 성공시 마지막 로그인 날짜 SYSDATE로 업데이트
@@ -259,7 +262,7 @@ public class ThController {
         //													  사용자 결제 수단 선택 완료 시, approval_url로 redirection해줄 때 pg_token을 query string으로 전달)
         Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token, orderResult);
         
-           
+        
         
         model.addAttribute("info", kakaoSucInfo);
         model.addAttribute("order1", orderResult);
@@ -467,8 +470,8 @@ public class ThController {
     public String listUserByAdmin(User1 user1, String currentPage, Model model) {
     	System.out.println("thController listUserAdmin Start...");
     	// 전체 유저수 Count
-    	int totalUser = us1.totalUser();
-    	
+    	int totalUser = us1.totalUser(user1);
+
     	
     	// 페이징 작업
     	Paging page = new Paging(totalUser, currentPage);
@@ -483,7 +486,7 @@ public class ThController {
     	model.addAttribute("totalUser", totalUser);
     	model.addAttribute("user1List", user1List);
     	model.addAttribute("page"	  ,	page );
-    	
+    	model.addAttribute("keyword", user1.getKeyword());
     	return	"th/listUserAdmin";
     }
     
@@ -508,20 +511,23 @@ public class ThController {
     }
     
     @GetMapping(value = "/detailUserByAdmin")
-    public String detailUserByAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    public String detailUserByAdmin(User1 user1, int user_num, String pageNum, Model model, String keyword) {
     	System.out.println("thController detailUserByAdmin Start...");
+    	System.out.println("detailUserByAdmin 키워드 --> "+ user1.getKeyword());
     	user1 = jbs.userSelect(user_num);
     	model.addAttribute("user1", user1);
     	model.addAttribute("pageNum",pageNum);
+    	model.addAttribute("keyword", keyword);
     	return "th/detailUserByAdmin";
     }
     
     @GetMapping(value = "updateUserFormAdmin")
-    public String updateUserFormAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    public String updateUserFormAdmin(User1 user1, int user_num, String pageNum, Model model, String keyword) {
     	System.out.println("thController updateUserFormAdmin Start...");
     	user1 = jbs.userSelect(user_num);
     	model.addAttribute("user1", user1);
     	model.addAttribute("pageNum", pageNum);
+    	model.addAttribute("keyword", keyword);
     	return "th/updateUserFormAdmin";
     }
     

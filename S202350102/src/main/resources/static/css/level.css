@@ -31,7 +31,7 @@
 }	
 
 #modalContainer {
-  z-index: 2;
+  z-index: 5;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -44,7 +44,7 @@
 }
 
 #modalContainer > #modalContent {
-  z-index: 2;
+  z-index: 5;
   position: absolute;
   background-color: #ffffff;
   width: 530px;

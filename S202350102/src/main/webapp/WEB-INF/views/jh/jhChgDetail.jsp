@@ -697,7 +697,7 @@
 				<div class="row gx-5 mb-7">
 					<!-- 참여하기 -->
 					<!-- YR 작성 -->
-					<div class="col-auto">
+					<div class="col-6">
 						<c:choose>
 							<c:when test="${chg.stateCtn == '진행중'}">
 					

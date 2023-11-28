@@ -128,7 +128,7 @@
 <title>당신만의 챌린지를 신청하세요</title>
 </head>
 <body>
-<button onclick="location.href='/modify'"></button>
+
  <section class="pt-7 pb-12">
       <div class="container">
         <div class="row">
@@ -141,18 +141,20 @@
         </div>
         
         <div class="row">
-        <!-- 나중에 진짜 사이드바 만들면 추가하기 -->
-         <%@ include file="/WEB-INF/views/chgSidebar.jsp" %>
+        <div class="col-md-3">
+        	<%@ include file="../mypageMenu.jsp" %>
+        	
+		</div>      
          
-          <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
-			<h5>${user.nick }님이 원하시는 챌린지는?</h5>
+          <div class="col-9 col-md-9 col-lg-8 offset-lg-1">
+			<h5>${user1.nick }님이 원하시는 챌린지는?</h5>
 			
 			
 			
 			
             <!-- Form -->
             <form action="chChgUpDate" onsubmit="return chk()" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="user_num" value="${user.user_num}">
+              <input type="hidden" name="user_num" value="${user1.user_num}">
               <input type="hidden" name="chg_id" value="${chg.chg_id}">
               <input type="hidden" name="contextPath" id="contextPath" value="${pageContext.request.contextPath}/upload/">
 <%-- 필요한가
@@ -355,7 +357,7 @@
                     <label class="form-label">공개 여부</label>
                     <!-- Inputs -->
                     <c:choose>
-                    	<c:when test="${user.status_md == 101}">
+                    	<c:when test="${user1.status_md == 101}">
 	                    	<div>
 		                      <c:choose>
 		                      	<c:when test="${chg.chg_public == 0}">

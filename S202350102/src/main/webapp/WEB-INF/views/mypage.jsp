@@ -173,8 +173,7 @@ function clickLoad(index) {
 			for(var i = 0; i< result.reCount; i++){
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
-                	+"<td><a href='detailSharing?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"                	
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td><a href='detailSharing?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
@@ -200,10 +199,12 @@ function clickLoad(index) {
 			}
 			return text;
 			break;
-		}
+		}	
 		
-		
-		
+	}
+	
+	function moveChgUpdate(chg_id){
+		location.href= "myChgUpdate?chg_id=" + chg_id;
 	}
 </script>    
 
@@ -353,6 +354,13 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 	width: 100% !important; /* half-width */
 }
 
+.th-title {
+	width: 250px;
+}
+
+.thumb-img{
+	width: 100%; height: 250px; border-radius: 10px;
+}
 </style>
 
 <body>
@@ -392,7 +400,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
                   			<!-- Item2 참여한 챌린지 -->
 			                  <c:forEach items="${mychgrList }" var="chg">
-				                  <div class="col px-4" style="max-width: 400px;">
+				                  <div class="col px-4" style="max-width: 250px;">
 				                    <div class="card">
 				
 				                      <!-- Image -->
@@ -405,12 +413,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					
 					                  
 					                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
-					                  <c:if test="${chg.thumb != null}">
-					                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
-					                  </c:if>
-					                  <c:if test="${chg.thumb == null}">
-					                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
-					                  </c:if>
+						                <c:choose>
+											<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
+												<img class="card-img-top thumb-img" src="/assets/img/chgDfaultImg.png" alt="chgDfault">
+											</c:when>
+											
+											<c:otherwise>
+												<img class="card-img-top thumb-img" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb">
+											</c:otherwise>
+										</c:choose>  
 									  </a>
 				
 				                      <!-- Body -->
@@ -445,8 +456,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
 	
 	
-      <div class="container"style="margin-top: 60px;">
-        <div class="row">
+        <div class="row" style="margin-top: 60px;">
           <div class="col-12">
 
             <!-- Heading -->
@@ -579,8 +589,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
                     				<thead class="table-dark">
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>
-				                            <th scope="col" class="th-title">제목</th>
-				                            <th scope="col" class="th-nick">작성자</th>
+				                            <th scope="col" class="th-title">제목</th>				                            
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
@@ -591,8 +600,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                        <c:forEach items="${myShareList }" var="myShareList">
 				                            <tr id="row${myShareList.brd_num }">
 				                                <td>${num}</td>
-				                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>
-				                                <td>${myShareList.nick}</td>
+				                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>				                                
 				                                <td><fmt:formatDate value="${myShareList.reg_date}" pattern="yyyy-MM-dd"/></td>
 				                                <td>${myShareList.view_cnt}</td>
 								         		<td>${myShareList.replyCount}</td>
@@ -631,7 +639,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						
 							<c:choose>
 				            	<c:when test="${not empty myCommuList }">
-				            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
+				            		<c:set var="num" value="${myCommuPage.total - myCommuPage.start+1 }"></c:set> 
 					                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
                     					<thead class="table-dark">
 					                        <tr>
@@ -685,7 +693,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
             </div>     <!-- tab-content -->               
 	     </div><!-- col-12 -->	    
 	    </div> <!-- row -->
-     		</div>
     	</div>	
     </div>
 </div>

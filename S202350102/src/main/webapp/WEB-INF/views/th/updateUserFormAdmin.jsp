@@ -187,11 +187,12 @@
 				<tr style="border-bottom: none;">
 					<td colspan="2" align="right" style="border-left: none; border-right: none;" class="px-0"><button class="btn btn-sm btn-dark mx-1" onclick="return chk()">확인</button></td>
 <!-- 				<div class="form-group"> -->
-					<input type="hidden" name="pageNum" value="${pageNum}">
-					<input type="hidden" name="user_num" value="${user1.user_num }">
+					<input type="hidden" name="pageNum" 	value="${pageNum}">
+					<input type="hidden" name="user_num" 	value="${user1.user_num }">
+					<input type="hidden" name="keyword"		value="${keyword }">
 <!-- 				</div>	 -->
 		</form>
-					<td colspan="2" align="left"  style="border-left: none; border-right: none;" class="px-0"><button class="btn btn-sm btn-dark mx-1" onclick="location.href='/detailUserByAdmin?user_num=${user1.user_num}&pageNum=${pageNum}'">취소</button></td>		
+					<td colspan="2" align="left"  style="border-left: none; border-right: none;" class="px-0"><button class="btn btn-sm btn-dark mx-1" onclick="location.href='/detailUserByAdmin?user_num=${user1.user_num}&pageNum=${pageNum}&keyword=${keyword }'">취소</button></td>		
 				</tr>
 				   			    
 		</table>	

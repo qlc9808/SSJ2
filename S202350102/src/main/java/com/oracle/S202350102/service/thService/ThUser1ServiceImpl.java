@@ -121,9 +121,9 @@ public class ThUser1ServiceImpl implements ThUser1Service {
 
 
 	@Override
-	public int totalUser() {
+	public int totalUser(User1 user1) {
 		System.out.println("ThUser1ServiceImpl totalUser Start...");
-		int totUserCnt = ud1.totalUser();
+		int totUserCnt = ud1.totalUser(user1);
 		System.out.println("ThUser1ServiceImpl totalUser totalUserCnt --> " + totUserCnt);
 		return totUserCnt;
 	}

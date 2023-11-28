@@ -380,7 +380,7 @@
 
                   <!-- Item2 -->
                   <c:forEach var="chg" items="${popchgList }">
-                  <div class="col px-4" style="max-width: 400px;">
+                  <div class="col px-4" style="max-width: 250px;">
                     <div class="card">
 
                       <!-- Image -->

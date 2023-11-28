@@ -12,7 +12,7 @@
 <div id="mySlider" class="flickity-buttons-lg flickity-buttons-offset px-lg-12" data-flickity='{"prevNextButtons": true}'>
 	<c:forEach var="board" items="${popShareList}">
 	    <!-- Item -->
-	    <div class="col px-4 " style="max-width: 400px;">
+	    <div class="col px-4 " style="max-width: 250px;">
 	        
 	            <div class="card">
 	                <!-- Image -->

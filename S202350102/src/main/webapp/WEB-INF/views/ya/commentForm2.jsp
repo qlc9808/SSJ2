@@ -64,8 +64,9 @@ function listComment() {
                 var headerCol = $("<div class='col-12'></div>");
                 
                 var regDate = new Date(board.reg_date);
-                var formattedRegDate = regDate.toLocaleString();
-                headerCol.append("<span class='fs-xs text-muted'>" + board.nick + " " + formattedRegDate + "</span>");
+                var formattedDateTime = regDate.toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+                headerCol.append("<span class='fs-xs text-muted'>" + board.nick + " " + formattedDateTime + "</span>");
                 headerRow.append(headerCol);
                 
                 var text = $("<p class='text-gray-500'>" + board.conts + "</p>");

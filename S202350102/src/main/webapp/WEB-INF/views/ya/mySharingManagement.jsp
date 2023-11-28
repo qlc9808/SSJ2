@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header4.jsp" %>    
+<%@ include file="../header4.jsp" %>    
 <%@ include file="/WEB-INF/views/topBar.jsp" %>     
 <!DOCTYPE html>
 <html>
@@ -27,10 +27,11 @@
 <!-- 필수!! -->
 
 <!--내가 개설한 쉐어링 제목 누르면  brd_num으로 해당하는 상세페이지로 이동시키게 설정하기-------------------------------------------------------->
-    <section class="myUploadSharing" style="width: 1000px; height: 400px">
+    <section class="myUploadSharing" style="width: 900px; height: 500px">
         <div class="page-title">
             <div class="container">
-                <h6>내가 올린 쉐어링 </h6>
+                <h6>내가 개설한 쉐어링 </h6>
+                <hr class="my6">
             </div>
         </div>
    <!-- 게시판리스트  -->
@@ -99,10 +100,11 @@
 			 </nav>        
     </section>
     <!--내가 신청한 쉐어링 joinsharingList ------------------------------------------------------------------------------ -->
-	    <section class="myJoinSharing" style="width: 1000px; height: 400px">
+	    <section class="myJoinSharing" style="width: 900px; height: 500px">
         <div class="page-title">
             <div class="container" >
-                <h6>내가 참가한 쉐어링 </h6>
+                <h6>내가 신청한 쉐어링 </h6>
+                <hr class="my6">
             </div>
         </div>
       <!-- 게시판리스트  -->
@@ -115,7 +117,9 @@
                             <th scope="col" class="th-num">번호</th>
                             <th scope="col" class="th-title">제목</th>
                             <th scope="col" class="th-applicants">승인상태</th>
-                            <th scope="col" class="th-bank_duedate">반려사유</th>
+                            <th scope="col" class="th-bank_duedate">입금정보</th>
+                            <th scope="col" class="th-reject_msg">반려사유</th>
+                            
                         </tr>
                     </thead>                 
                     <tbody>             
@@ -130,14 +134,70 @@
                                  		<c:when test="${sharingList.state_md == 101}">승인완료</c:when>
                                  		<c:otherwise>반려</c:otherwise>
                                  	</c:choose>                               
-                                 </td>                  
-                                <td>${sharingList.reject_msg} </td>
-                            <c:set var="num" value="${num-1}"></c:set> 	
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>  
-             </div>          
+                                 </td>
+                                <td>
+							    <c:choose>
+							        <c:when test="${sharingList.state_md == 101}">
+					                  <button class="btn btn-xs btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#cofirmForm${status.index}" 
+					                  aria-expanded="false" aria-controls="cofirmForm${status.index}"> 확인</button>
+							        </c:when>
+							       <c:otherwise>  </c:otherwise>
+							    </c:choose>
+                                </td>
+                                <td>${sharingList.reject_msg} </td>   
+						        </tr>
+					            <!-- 폼 내용 추가 -->
+					            <tr>
+					                <td colspan="5">
+					                    <div class="collapse" id="cofirmForm${status.index}" data-bs-parent="#boardTable">
+					                        <form>
+					                            <input type="hidden" name="brd_num" value="${sharingList.brd_num}" id="formBrdNum${status.index}">
+								                <table class="table table-bordered table-sm mb-0" id="boardTable">
+							                    <thead>
+							                        <tr class="p-2 text-center">
+							                            <th scope="col" class="th-tilte">이름</th>
+							                            <th scope="col" class="th-bank_info">계좌정보</th>
+							                            <th scope="col" class="th-price">입금액</th>
+							                            <th scope="col" class="th-bank_duedate">입금기한</th>
+							                            <th scope="col" class="th-addr">거래주소</th>
+							                        </tr>
+							                    </thead>
+							                    <tbody>
+							                    <c:forEach var="board"  items="${myConfirmSharingList}" varStatus="status">
+                       						    <input type="hidden" value="${board.applicants}">
+							                    	 <tr>
+						                                <td>${board.user_name}</td>
+						                                <td>${board.bank_info}</td>    
+						                                <td><fmt:formatNumber value="${board.price div board.applicants}" pattern="#,###"/>원</td>        
+						                                <td>${board.bank_duedate}</td>
+						                                <td>${board.addr}</td> 
+						                             </tr>  
+						                         </c:forEach>          
+							                    </tbody>			
+							                	</table>					                       
+					                        </form>
+					                    </div>
+					                </td>
+					            </tr>
+					          
+					            <script>
+					            document.getElementById(`cofirmForm${status.index}`).addEventListener('shown.bs.collapse', function () {
+					                document.getElementById(`formBrdNum${status.index}`).value = '${sharingList.brd_num}';
+					                fetchData('${sharingList.brd_num}');
+					                document.getElementById(`boardTable${status.index}`).style.display = 'block';
+					            });
+
+					            document.getElementById(`cofirmForm${status.index}`).addEventListener('hidden.bs.collapse', function () {
+					                document.getElementById(`boardTable${status.index}`).style.display = 'none';
+					            });
+					            </script>
+						           
+						            <c:set var="num" value="${num - 1}"></c:set>
+						        </c:forEach>
+						    </tbody>
+						</table>             
+						</div>                       					
+
 	
         		<nav class="d-flex justify-content-center justify-content-md-center mt-3">
 			     <ul class="pagination pagination-sm justify-content-center">
@@ -167,81 +227,40 @@
        </div>
     </section>
     
- <!--승인완료된 쉐어링 정보 -------------------입금액(총금액/모집인원   ?? ------------------------------------------------------------- -->   
+<%--  <!--승인완료된 쉐어링 정보 -------------------입금액(총금액/모집인원   ?? ------------------------------------------------------------- -->   
     <section class="myUploadSharing"  style="width: 1000px; height: 400px">
-        <div class="page-title">
-       		 <div class="container">
-                <h6> 입금정보 </h6>
-            </div>
-        </div>
+
       <!-- 게시판리스트  -->
       <div class="container" >
         <div  class="col-12">
                   <c:set var="num" value="${myConfirmSharingPaging.total - myConfirmSharingPaging.start+1 }"></c:set> 
                   <input type="hidden" value="${board.brd_num }"> 
                 <table class="table table-bordered table-sm mb-0" >
-                     <thead class="table-dark">
                         <tr class="p-2 text-center">
-                            <th scope="col" class="th-num">번호</th>
-                            <th scope="col" class="th-title">제목</th>
-                            <th scope="col" class=th-tilte">이름</th>
+                            <th scope="col" class="th-tilte">이름</th>
                             <th scope="col" class="th-bank_info">계좌정보</th>
                             <th scope="col" class="th-price">입금액</th>
                             <th scope="col" class="th-bank_duedate">입금기한</th>
                             <th scope="col" class="th-addr">거래주소</th>
                         </tr>
-                    </thead>                 
-                    <tbody>
+                  
                         <c:forEach var="board"  items="${myConfirmSharingList}" varStatus="status">
                          <input type="hidden" value="${board.applicants}">
                             <tr>
-                                <td>${num}</td>    
-                                <td><a href="detailSharing?brd_num=${board.brd_num}">${board.title}</a></td>
                                 <td>${board.user_name}</td>
                                 <td>${board.bank_info}</td>    
                                 <td><fmt:formatNumber value="${board.price div board.applicants}" pattern="#,###"/>원</td>        
                                 <td>${board.bank_duedate}</td>
-                                <td>${board.addr}</td>      
-                                <c:set var="num" value="${num-1}"></c:set> 	                         
+                                <td>${board.addr}</td>                               
                             </tr>
                         </c:forEach>
-                    </tbody>
                 </table>  
-             </div>          
-        		<nav class="d-flex justify-content-center justify-content-md-center mt-3">
-			     <ul class="pagination pagination-sm justify-content-center">
-			        <c:if test="${myConfirmSharingPaging.startPage > myConfirmSharingPaging.pageBlock}">
-			            <li class="page-item">
-			                <a class="page-link page-link-arrow" href="sharingManagement?currentPage=${myConfirmSharingPaging.startPage-myConfirmSharingPaging.pageBlock}">
-			                    <i class="fa fa-caret-left"></i>
-			                </a>
-			            </li>
-			        </c:if>
-			
-			        <c:forEach var="i" begin="${myConfirmSharingPaging.startPage}" end="${myConfirmSharingPaging.endPage}">
-			            <li class="page-item <c:if test='${myConfirmSharingPaging.currentPage == i}'>active</c:if>">
-			                <a class="page-link" href="sharingManagement?currentPage=${i}">${i}</a>
-			            </li>
-			        </c:forEach>
-			
-			        <c:if test="${myConfirmSharingPaging.endPage < myConfirmSharingPaging.totalPage}">
-			            <li class="page-item">
-			                <a class="page-link page-link-arrow" href="sharingManagement?currentPage=${myConfirmSharingPaging.startPage+myConfirmSharingPaging.pageBlock}">
-			                    <i class="fa fa-caret-right"></i>
-			                </a>
-			            </li>
-			        </c:if>
-			    </ul>
-			</nav> 
+             </div>                 	
 		</div>	      
-    </section>	
+    </section>	 --%>
 </div>
 </div>
 </div>
-
-
-
-
 
 <!-----------내가올린 쉐어링모달창 띄우기------------------------------------------------------------------------------------------------------->
 <div class="modal  fade" id="joinInfoModal">

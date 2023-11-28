@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="header4.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,20 +14,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-function likePost(brd_num) {
-  
-	$.ajax({
-	    type: 'POST',
-	    url: '/board/' + brd_num + '/like', // 좋아요 업데이트를 처리할 서버 엔드포인트
-	    data: { brd_num : brd_num }, // 업데이트할 게시물의 ID를 전송
-	    success: function (response) {
-	        // 성공 시 수행할 작업
-	    },
-	    error: function (error) {
-	        // 오류 발생 시 수행할 작업
-	    }
-	});
-}
+$("#keyword").keypress(function(e){	
+	if(e.keyCode && e.keyCode == 13){
+		$("#searchButton").trigger("click");
+		return false;
+	}
+});
 
 //Select 변경 시
 function renderTable(data) {

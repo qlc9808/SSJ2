@@ -78,15 +78,20 @@
 	</delete>
 	
 	<select id="chMyChgList" parameterType="Board" resultType="Challenge">
-		Select b.*, c.*
-		From (  Select Count(*) chlgerCnt, a.chg_id
-		        From (Select *
-		              From challenge
-		              Where user_num = #{user_num}) a
-		        left JOIN challenger g on a.chg_id = g.chg_id
-		        GROUP BY a.chg_id) b
-		join challenge c on b.chg_id = c.chg_id
-		Order By c.reg_date DESC
+		Select *
+		From (Select rownum rn, myall.*
+		        From (Select b.*, c.*
+		                From (  Select Count(*) chlgerCnt, a.chg_id check_id
+		                        From (Select *
+		                              From challenge
+		                              Where user_num = #{user_num}
+		                              and state_lg = 300
+		                              and state_md != 103 ) a
+		                        left JOIN challenger g on a.chg_id = g.chg_id
+		                        GROUP BY a.chg_id) b
+		                join challenge c on b.check_id = c.chg_id
+		                Order By c.reg_date DESC) myall ) allrn
+		<if test="start > 0">WHere allrn.rn BETWEEN #{start} and #{end}</if>  
 	</select>
 	
 	<select id="chmyChgrList" parameterType="int" resultType="Challenge">
@@ -102,6 +107,7 @@
 		    Where c.user_num = #{user_num}
 		) b
 		join challenge d on b.chg_id = d.chg_id
+		where d.state_lg = 300 and d.state_md != 103
 	</select>
 	
 	<update id="chgUpdate" parameterType="Challenge">

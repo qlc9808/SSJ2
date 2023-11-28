@@ -55,7 +55,7 @@ public interface YaCommunityService {
 	
 	//sharing 검색
 	int searchSharingCnt(String keyword);
-	List<Board> sharingSearchResult(String keyword, String currentPage, String sortOption);
+	List<Board> sharingSearchResult(String keyword, String currentPage, String sortOption, Board board);
 
 	
 	
