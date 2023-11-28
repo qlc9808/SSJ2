@@ -44,6 +44,7 @@ import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.chService.ChSearchService;
 import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jhService.JhBoardService;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
@@ -64,7 +65,7 @@ public class ChController {
 	private final UserService			userService;
 	private final JhCallengeService 	jhCService;
 	private final ThChgService 			tcs;
-	
+	private final JhBoardService		jhBrdService;
 	
 	// notice List 조회 
 	@RequestMapping("/notice")
@@ -663,7 +664,7 @@ public class ChController {
 		int result = 0;
 		Board board = chBoardService.noticeConts(brd_num);
 		
-		result = jhCService.reviewDelete(brd_num);
+		result = jhBrdService.reviewDelete(brd_num);
 		
 		if(result >0 ) {
 			//이미지 삭제를 위한 작업
