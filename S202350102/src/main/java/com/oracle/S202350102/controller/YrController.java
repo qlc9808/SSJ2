@@ -141,6 +141,11 @@ public class YrController {
 		followerList = us.userLevelList(followerList);
 		model.addAttribute("followerList", followerList);
 		
+		// user 정보 가져오기
+		// 없애도 될지도? -> sessionscope로 대체 가능??
+		User1 user1 = us.userSelect(userNum);
+		model.addAttribute("user1", user1);
+		
 		return "jk/followList";
 	}
 
