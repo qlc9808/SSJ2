@@ -40,7 +40,7 @@
         
     ]]>
 	</select>
-	
+
 	<select id="myBoard" parameterType="Board" resultType="int">
 	  	Select Count(*)
 		From board
@@ -48,7 +48,6 @@
    		and brd_step = 0
         and brd_md > 0
 	</select>
-
 
 </mapper>
 

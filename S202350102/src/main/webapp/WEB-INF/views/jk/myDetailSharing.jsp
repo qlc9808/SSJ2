@@ -7,16 +7,11 @@
 <head>
 <!-- CSS -->
 <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-    @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -114,15 +109,15 @@
                                 <!-- ... -->
                                 <!-- Submit Buttons -->
                                 <div class="row">
-                                    <div class="col-lg-6 mb-2">
-										    <a class="btn btn-dark w-100" href="/updateSharing1?brd_num=${board.brd_num}">
+                                    <div class="col-lg-3">
+										    <a class="btn btn-sm btn-dark " href="/updateSharing1?brd_num=${board.brd_num}">
 										        수정하기
 										    </a>
 										</div>
 
-                                    <div class="col-lg-6 mb-2">
+                                    <div class="col-lg-3">
                                         <%-- <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}"> --%>
-                                        <a class="btn btn-outline-dark w-100" href="#" onclick="confirmDelete(${board.brd_num}, ${board.participants})">
+                                        <a class="btn btn-sm btn-outline-dark" href="#" onclick="confirmDelete(${board.brd_num}, ${board.participants})">
 											    삭제하기
 										</a>
 										<!--ya참가자 존재시 게시글 삭제 불가능 알람창 ------------------------------------>
@@ -137,8 +132,14 @@
 										        }
 										    }
 										}
-										</script>                                           
-                                    </div>
+										</script>     										
+									</div>	
+                                    <div class="col-lg-3">
+                                        <%-- <a class="btn btn-outline-dark w-100" href="/deleteSharing?brd_num=${board.brd_num}"> --%>
+                                        <a class="btn btn-sm btn-outline-dark" href="/mySharing">
+											   목록이동
+										</a>										
+    
                                 </div>
                                 </div>
                                

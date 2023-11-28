@@ -7,18 +7,11 @@
 <head>
 <!--  CSS  -->
 <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
  <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-    	body{
-    	font-family: 'Noto Sans KR', sans-serif;} 
-			
-</style>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function fileUpdate(){
@@ -44,7 +37,7 @@ function fileUpdate(){
           <div class="col-12 text-center">
 
             <!-- Heading -->
-            <h3 class="mb-10">게시글 올리기</h3>
+            <h3 class="mb-10">게시글 수정하기</h3>
 
           </div>
         </div>
@@ -149,7 +142,7 @@ function fileUpdate(){
 							</div>
 							<div class="button-container" >
 							<button type="button" class="btn btn-dark btn-sm" id="openModalButton">수정완료</button>
-					                           
+					        <a href="myDetailSharing?brd_num=${board.brd_num}" class="btn btn-dark btn-sm">취소</a>          <!--ya취소버튼 추가  -->          
                             <!-- Button -->
                            <!--  <button class="btn btn-dark" type="submit" >작성완료</button> -->
                         </div>

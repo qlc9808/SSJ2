@@ -52,11 +52,6 @@
                             	종료된 챌린지
                           </a>
                         </li>
-                        <li class="list-styled-item">
-                          <a class="list-styled-link" href="/chgCommManagement">
-                            	챌린지 카테고리
-                          </a>
-                        </li>
                       </ul>
                     </div>
     			  </div>

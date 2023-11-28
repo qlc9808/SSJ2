@@ -336,9 +336,21 @@ $(document).ready(function () {
 <div class="container text-center" style="padding-bottom: 0px; padding-top: 0px;">
     <h3 style="margin-bottom: 5px;">자유게시판</h3>
 </div>
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목/작성자 검색" value="${keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton">						
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				        </div>
+				    </div>
+				</div>      
 
-
-    <!-- 게시판 검색 (옵션 제목, 작성자)-->
+<%--     <!-- 게시판 검색 (옵션 제목, 작성자)-->
 <div class="container d-flex justify-content-center" style="padding-bottom: 0px;">
     <div class="d-flex justify-content-center">
         <div class="input-group input-group-merge">
@@ -351,7 +363,7 @@ $(document).ready(function () {
 
         </div>
     </div>
-</div>
+</div> --%>
 
 <div id="searchResults" style=" margin-top: 20px;"></div>
 

@@ -199,9 +199,10 @@
 		FROM (
 		    SELECT ROWNUM AS r, b.*
 		    FROM (
-		        SELECT s.brd_num, b.title, b.bank_info, b.bank_duedate, b.addr, b.applicants, b.price
-		        FROM board b, sharingList s
+		        SELECT s.brd_num, b.title, b.bank_info, b.bank_duedate, b.addr, b.applicants, b.price, u.user_name
+		        FROM board b, sharingList s, user1 u
 		        WHERE s.user_num = #{user_num} 
+		        AND u.user_num = s.user_num
 		        AND b.brd_num = s.brd_num
 		        AND s.state_md = 101
 		    ) b

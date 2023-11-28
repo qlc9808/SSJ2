@@ -61,8 +61,9 @@ function fileUpdate(){
           	 	   </div>
 		 			   <!-- 작성일자 -->
                     <div class="form-group mb-7">                       
-                           <label class="form-label" for="nick">날짜</label>
+                           <label class="form-label" for="reg_Date">날짜</label>
                            <input class="form-control form-control-sm" id="view_cnt" name="view_cnt" type="text" value="${board.reg_date}" readonly>
+                           
           	   		 </div>
 		
 					<!-- 상세내용 -->       

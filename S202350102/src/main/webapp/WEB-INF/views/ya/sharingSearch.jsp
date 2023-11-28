@@ -29,66 +29,6 @@ function likePost(brd_num) {
 	});
 }
 
-/*//Select 변경 시
-function renderTable(data) {
-    if (data && data.length > 0) {
-        var tableHTML = ''; // 초기화된 테이블 시작
-        for (var i = 0; i < data.length; i++) {
-            var board = data[i];
-             tableHTML += "<div class='col-6 col-md-4' style='padding-left: 8px; padding-right: 8px;'>"+
-                "<div class='card mb-7'>"+
-                    "<div class='card-img'>"+
-                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='sharingPick("+`${board.brd_num}`+")'>"+
-                            "<i class='fe fe-heart'></i>"+
-                       " </button>"+
-                       "<button class='btn btn-xs w-100 btn-dark card-btn' onclick='location.href=\"detailSharing?user_num=" + board.user_num + "&brd_num=" + board.brd_num + "\"'>" +
-                       "<i class='fe fe-eye me-2 mb-1'></i> 자세히 보기" +
-                       "</button>" +
-
-                      "<img class='card-img-top' src='/upload/"+board.img+"' alt='...' style='width: 100%; height: 200;'>"+
-    					" </div>"+
-                   " <div class='card-body fw-bold text-center'>"+
-                       " <a class='text-body' href='detailSharing?user_num=`${board.user_num}`&brd_num=`${board.brd_num}`'>"+
-                            board.title+
-                       " </a><p>"+
-                       " <a class='text-primary' href='detailSharing?user_num=`${board.user_num}`&brd_num=`${board.brd_num}`'>"+
-                            board.price+"원</a><p>"+
-                       " <a class='text-primary'><i class='fas fa-heart me-1'></i>"+
-                       		board.like_cnt+"</a>"+
-                        						"<i class='fe fe-eye me-1 mb-1' style='margin-left: 30px;'></i>"+
-                        	board.view_cnt+
-                        						"<i class='fas fa-comment text-secondary me-1' style='margin-left: 20px;'></i>"+
-                        	board.replyCount+	"</div>"+"</div>"+"</div>"                    				
-    				       
-            ;
-        }
-
-       
-        tableHTML += ''; // 테이블 닫기
-        $('#boardtable').html(tableHTML); // boardtable에 새로운 데이터로 업데이트된 테이블 렌더링
-    } else {
-        $('#boardtable').html('<p>검색 결과가 없습니다.</p>');
-    }
-}
-
-$("#sortOption").change(function() {
-    var sortOption = $("#sortOption").val();
-
-    $.ajax({
-        type: "GET",
-        url: "loadSortedPosts",
-        data: { sort: sortOption },
-        dataType: "json",
-        success: function(data) {
-            console.log("응답 데이터: ", data);
-            renderTable(data); // 테이블 렌더링 함수 호출
-        },
-        error: function(xhr, status, error) {
-            console.log("정렬 아작스 호출 실패: " + error);
-        }
-    });
-});
-}); */
 
     // yr 작성
 	// 찜하기 기능
@@ -158,21 +98,20 @@ $("#sortOption").change(function() {
             <div class="d-flex justify-content-between mb-3">
                 공간을 벌리기 위해 클래스 추가
             </div> -->
-                <!-- 게시판 검색 (옵션 제목, 작성자)-->
-			<div class="container d-flex justify-content-left" style="padding-bottom: 0px;">
-			    <div class="d-flex justify-content-center">
-			        <div class="input-group input-group-merge">
-			            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}" style="width:400px; height:49px;">
-						<div class="input-group-append">
-						    <button class="btn btn-outline-border btn-search" id="searchButton"
-						     onclick="location.href='sharingSearchResult?keyword=${keyword}'"> 						    
-						        <i class="fe fe-search"></i>
-						    </button>
-						</div>
-			
-			        </div>
-			    </div>
-			</div>
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton"
+							   onclick="location.href='sharingSearchResult?keyword=${keyword}'"  >
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				        </div>
+				    </div>
+				</div>      
 <script>
     // 검색 버튼 클릭 시
     document.getElementById('searchButton').addEventListener('click', function() {
@@ -263,9 +202,8 @@ $("#sortOption").change(function() {
                 <div class="card-body fw-bold text-left"> <!-------연아 수정: 링크 에러로 input으로 value값 넣어줌 좌측정렬로 변경, price 원단위 ------->
                 	<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">
                     <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title}  ${board.applicants}명 모집
-                    </a>
-                    <p>          	
+                        ${board.title} <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
+                    </a>          	
                         <a class="text-primary " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
                             <fmt:formatNumber value= "${board.price}"  pattern="#,###"/>원</a>                        
                     <p>

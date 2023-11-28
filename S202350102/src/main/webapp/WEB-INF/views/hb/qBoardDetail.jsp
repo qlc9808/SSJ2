@@ -136,27 +136,20 @@
 	function commentWriteBtn() {
 		var brd_group = ${board.brd_group};
 		var sendData =  $('#boardTrans').serialize();
-		var formData = new URLSearchParams(sendData);
-		var contsValue = formData.get('conts');
-		if ( contsValue != null) {
-			$.ajax({
-				url: 'qBoardCommentWrite',
-				type: 'POST',
-				data: sendData,
-				dataType: 'json',
-				success: function(response) {
-					if( response.result > 0) {
-						console.log("response: ", response);
-						qBoardCommentList();
-						$('#conts').val('');
-					}
+		$.ajax({
+			url: 'qBoardCommentWrite',
+			type: 'POST',
+			data: sendData,
+			dataType: 'json',
+			success: function(response) {
+				if( response.result > 0) {
+					console.log("response: ", response);
+					qBoardCommentList();
+					$('#conts').val('');
 				}
-				
-			})
-		} else {
-			alert("댓글을 입력하세요.");
-		}
-		
+			}
+			
+		})		
 	}
 
 

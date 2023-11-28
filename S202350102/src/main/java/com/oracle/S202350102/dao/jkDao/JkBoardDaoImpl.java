@@ -226,8 +226,7 @@ public class JkBoardDaoImpl implements JkBoardDao {
 
 	@Override
 	public int myBoard(int user_num) {
-	int myBoard = 0;
-		
+		int myBoard = 0;
 		try {
 			myBoard = session.selectOne("myBoard", user_num);
 			System.out.println("myboardCnt-->" + myBoard);
@@ -237,5 +236,4 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		}
 		return myBoard;
 	}
-	
 }

@@ -500,15 +500,12 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	public List<Board> likeSharingList(Board board) {
 		System.out.println("YaBoardDaoImpl likeSharingList start...");
 		List<Board> likeSharingList = null;
-		//이거하니까 담김
-		board.setUser_num(board.getB_user_num());
-		
 		try {
 			likeSharingList = session.selectList("YaLikeSharingList", board);
-			System.out.println("likeSharingList:"+likeSharingList);
-			System.out.println("YaBoardDaoImpl likeSharingList.size()?"+likeSharingList.size());
+			
+			System.out.println("YaBoardDaoImpl myConfirmSharingList.size()?"+likeSharingList.size());
 		} catch (Exception e) {
-			System.out.println("YaBoardDaoImpl likeSharingList e.getMessage()?"+e.getMessage());
+			System.out.println("YaBoardDaoImpl myConfirmSharingList e.getMessage()?"+e.getMessage());
 		}	
 		return likeSharingList;
 

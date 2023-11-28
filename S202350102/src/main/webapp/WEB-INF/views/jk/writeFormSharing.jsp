@@ -60,7 +60,7 @@
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
 
              <!-- Form -->
-                    <form method="post" action="/writeShare" enctype="multipart/form-data">
+                    <form id="options" method="post" action="/writeShare" enctype="multipart/form-data">
                        
                             <div class="col-12">
                                 <!-- 제목 -->
@@ -162,32 +162,34 @@
 							</div>
 
  							<!-- 상세내용 -->
-<div class="form-group mb-7">
-    <label class="form-label" for="conts">상세내용 *</label>
-    <div class="d-flex align-items-start" style="margin-top: 10px;">
-        <textarea class="form-control form-control-sm" id="conts" name="conts" rows="8" required></textarea>
-    </div>
-</div>
-
-<!-- Button (input 요소로 submit) -->
-<div class="col-lg-6 mb-2">
-    <button type="submit" class="btn btn-outline-dark w-100">
-        작성완료
-    </button>
-                          
-                        </div>
-                  </form>
+					<div class="form-group mb-7">
+					    <label class="form-label" for="conts">상세내용 *</label>
+					    <div class="d-flex align-items-start" style="margin-top: 10px;">
+					        <textarea class="form-control form-control-sm" id="conts" name="conts" rows="8" required></textarea>
+					    </div>
+					</div>
+					<div class="row">
+						<!-- Button (input 요소로 submit) ya 추가 -->
+						<div class="col-lg-6 mb-2">
+						    <button type="submit" class="btn btn-outline-dark w-100">
+						        작성완료
+						    </button>
+						 </div>
+					
+					 <div class="col-lg-6 mb-2">
+						  <a href="sharing" class="btn btn-outline-dark w-100">작성취소</a> 
+					 </div>
+				 </div>               
+				 </form>
                 </div>
             </div>
         </div>
     </section>
   
+
   
   
-  
-  
-  
-  
+   
   
   
   

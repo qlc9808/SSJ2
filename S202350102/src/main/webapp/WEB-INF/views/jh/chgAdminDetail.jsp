@@ -45,7 +45,7 @@
 			var confirmResult = confirm("챌린지를 승인하시겠습니까?");
 			
 			if(confirmResult){
-				location.href = "approvReturn?chg_id="+chg_id+"&state_md="+state_md+"&user_num="+user_num+"&approvReturn="+approvReturn;
+				location.href = "approvReturn?chg_id="+chg_id+"&user_num="+user_num+"&approvReturn="+approvReturn;
 			} 
 		} else{
 			
@@ -75,8 +75,20 @@
 		
 	} 
 	
+	//챌린지 삭제시
+	function chgDeleteFn(){
+		var chg_id 		= ${chg.chg_id}
+		var state_md	= ${chg.state_md }
+		var thumb		= '${chg.thumb}'
+		var sample_img	= '${chg.sample_img }'
+		var confirmResult = confirm("챌린지를 삭제 하시겠습니까?");
+		if(confirmResult){
+			location.href='/chgDelete?chg_id='+chg_id+'&state_md='+state_md+'&thumb='+thumb+'&sample_img='+sample_img;    
+		}
+	}
+	
 	//목록 버튼 클릭시
-	function chgList(){
+	function chgAdminList(){
 	    var pageNum  =  ${currentPage}
 		var state_md =  ${state_md}
 	    var chg_md 	 =  ${chg.chg_md}
@@ -135,6 +147,8 @@
 		
 	}
 	
+
+	
 </script>
 </head>
 <body>
@@ -165,13 +179,12 @@
                 </p>
     
                 <!-- Form -->
-                <form action="/approvReturn" onsubmit="return chk()">
+                <form action="/approvReturn" method="post" onsubmit="return chk()">
                   <div class="row gx-5">
                     <div class="col">
                     
     				<input type="hidden" name="approvReturn" value="0">
     				<input type="hidden" name="chg_id" value="${chg.chg_id}">
-    				<input type="hidden" name="state_md" value="${chg.state_md}">
                       <!-- Input -->
                       <select class="form-select" id="return_md" name="return_md" required="required">
                       	<c:forEach var="rtnReason" items="${returnReason }" varStatus="status">
@@ -229,11 +242,22 @@
           </div>
         </div>
         
-        <div class="row">
         <!--사이드바   -->
-        <%@ include file="adminSidebar.jsp" %>
+		<div class="row">
+	        <c:choose>
+				<c:when test="${user.status_md == 102 }">
+	        		<%@ include file="adminSidebar.jsp" %>
+			        <div class="col-10">
+	        	</c:when>
+	        	<c:otherwise>
+					<div class="col-md-3">
+	        			<%@ include file="/WEB-INF/views/mypageMenu.jsp" %>
+	    		  	</div>
+			        <div class="col-9">
+	        	</c:otherwise>
+	        </c:choose>
+        		
         
-        <div class="col-10">
         
 		<table class="table table-bordered table-sm mb-0">
 			    <tr>
@@ -242,8 +266,11 @@
 			      <th rowspan="3">썸네일</th>
 				  <td rowspan="3">
  				  <c:choose>
-				  	<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}"> 
+				  	<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png' }"> 
                       	<img alt="챌린지 썸네일" src="${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
+				  	</c:when>
+				  	<c:when test="${chg.thumb == null }"> 
+                      	<img alt="챌린지 썸네일" src="assets/img/chgDfaultImg.png" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
 				  	</c:when>
 				  	<c:otherwise>
                       	<img alt="챌린지 썸네일" src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg" style="width: 100%; height: 150px; border-radius: 10px;">
@@ -252,7 +279,7 @@
 				  </td>
 			    </tr>
 			    <tr>
-			      <th scope="row">개설자 아이디 / 개설자 닉네임</th>
+			      <th scope="row">개설자 아이디  /<br> 개설자 닉네임</th>
 			      <td>${chg.userId} / ${chg.nick }</td>
 			    </tr>
 			    <tr>
@@ -316,7 +343,7 @@
 			    	<c:when test="${chg.state_md == 104 }">
 				      <th scope="row">챌린지 반려일</th>
 				      <!-- return_date로 바꾸기 -->
-				      <td colspan="3"><fmt:formatDate value="${chg.create_date }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
+				      <td colspan="3"><fmt:formatDate value="${chg.return_date }" pattern="yyyy년 MM월 dd일"></fmt:formatDate></td>
 			    	</c:when>
 			    	<c:otherwise>
 				      <th scope="row">챌린지 개설일</th>
@@ -330,26 +357,50 @@
 			    </tr>
 		</table>
 		<div class="d-flex justify-content-start mt-5">
-			<button class="btn btn-sm btn-dark mx-1" onclick="chgList()">목록</button>
+		<c:choose>
+			<c:when test="${user.status_md == 102 }">
+				<button class="btn btn-sm btn-dark mx-1" onclick="chgAdminList()">목록</button>
+				
+				<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
+				<c:choose>
+					<c:when test="${chg.state_md == 100 }">
+						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
+						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
+					</c:when>
+				</c:choose>
+				
+				
+				<!-- 챌린지 진행중 땐 수정 반려엔 삭제 버튼만 활성화  -->
+				<c:choose>
+					<c:when test="${chg.state_md == 102 }">
+						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
+					</c:when>
+					<c:when test="${chg.state_md == 104}">
+						<button class="btn btn-sm btn-dark mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>
+					</c:when>
+				</c:choose>
+			</c:when>
 			
-			<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
-			<c:choose>
-				<c:when test="${chg.state_md == 100 }">
-					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
-					<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
-				</c:when>
-			</c:choose>
+			<c:otherwise>
+			    <button class="btn btn-sm btn-dark mx-1" onclick="location.href='/mypage'">목록</button>
 			
+			    <c:if test="${user.user_num == chg.user_num && (chg.state_md == 100 || chg.state_md == 104)}">
+			        <!-- 수정 버튼 -->
+			        <c:if test="${chg.state_md == 100}">
+			            <button class="btn btn-sm btn-dark mx-1" onclick="location.href='/myChgUpdate?chg_id=${chg.chg_id}'">수정</button>
+			        </c:if>
 			
-			<!-- 챌린지 진행중 땐 수정 반려엔 삭제 버튼만 활성화  -->
-			<c:choose>
-				<c:when test="${chg.state_md == 102 }">
-					<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
-				</c:when>
-				<c:when test="${chg.state_md == 104}">
-					<button class="btn btn-sm btn-dark mx-1" onclick="location.href='/chgDelete?chg_id=${chg.chg_id}&state_md=${chg.state_md }&thumb=${chg.thumb}&sample_img=${chg.sample_img }'" id="chgDelete" >삭제</button>
-				</c:when>
-			</c:choose>
+			        <!-- 삭제 버튼 -->
+			        <button class="btn btn-sm btn-dark mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>
+			    </c:if>
+			
+			    <c:if test="${chg.state_md == 102 || chg.state_md == 103}">
+			        <!-- 챌린지 상세보기 버튼 -->
+			        <button class="btn btn-sm btn-dark mx-1" onclick="location.href='/chgDetail?chg_id=${chg.chg_id}'">챌린지 상세보기</button>
+			    </c:if>
+			</c:otherwise>
+
+		</c:choose>
 
 		</div>	
 		</div>

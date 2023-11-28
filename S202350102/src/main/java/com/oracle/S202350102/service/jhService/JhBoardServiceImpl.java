@@ -61,4 +61,58 @@ public class JhBoardServiceImpl implements JhBoardService {
 		
 		return reviewReplyList;
 	}
+	
+	//댓글 입력
+	@Override
+	public void replyInsert(Board board) {
+		System.out.println("JhBoardServiceImpl replyInsert Start...");
+		jhBrdDao.replyInsert(board);
+		
+	}
+
+	//댓글 수정
+	@Override
+	public int replyUpdate(Board board) {
+		System.out.println("JhBoardServiceImpl replyUpdate Start...");
+		int result = jhBrdDao.replyUpdate(board);
+		return result;
+	}
+
+	//댓글 삭제
+	@Override
+	public int replyDelete(int brd_num) {
+		System.out.println("JhBoardServiceImpl replyDelete Start...");
+		int result = jhBrdDao.replyDelete(brd_num);
+		
+		return result;
+	}
+	
+	//후기 작성
+	@Override
+	public int reviewPost(Board board) {
+		System.out.println("JhBoardServiceImpl reviewPost Start...");
+		
+		int result = jhBrdDao.reviewPost(board);
+		
+		return result;
+	}
+
+	//후기 수정
+	@Override
+	public int reviewUpdate(Board board) {
+		System.out.println("JhBoardServiceImpl reviewUpdate Start...");
+		int result = jhBrdDao.reviewUpdate(board);
+		return result;
+	}
+	
+	//후기 삭제
+	@Override
+	public int reviewDelete(int brd_num) {
+		System.out.println("JhBoardServiceImpl reviewDelete Start...");
+		
+		int reviewDel = jhBrdDao.reviewDelete(brd_num);
+		return reviewDel;
+	}
+
+	
 }

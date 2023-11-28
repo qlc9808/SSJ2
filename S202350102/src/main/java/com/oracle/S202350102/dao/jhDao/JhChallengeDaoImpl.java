@@ -173,31 +173,33 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 
 	//미완성 //////////////////////////////////////////////
 	
-	@Override
-	public void replyInsert(Board board) {
-		System.out.println("JhChallengeDaoImpl replyInsert Start...");
-		session.selectOne("jhReplyInsertPro", board);
-		System.out.println("JhChallengeDaoImpl replyInsert board.getResultCount() -> "+board.getResultCount());
+	//보드로 위에 뭐가 미완성이지?
+//	@Override
+//	public void replyInsert(Board board) {
+//		System.out.println("JhChallengeDaoImpl replyInsert Start...");
+//		session.selectOne("jhReplyInsertPro", board);
+//		System.out.println("JhChallengeDaoImpl replyInsert board.getResultCount() -> "+board.getResultCount());
+//
+//		
+//	}
 
-		
-	}
-
-	@Override
-	public int replyDelete(int brd_num) {
-		System.out.println("JhChallengeDaoImpl replyDelete Start...");
-		System.out.println("JhChallengeDaoImpl replyDelete brd_num -> "+ brd_num);
-		
-		int result = 0;
-		
-		try {
-			result = session.delete("jhReplyDelete", brd_num);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl replyDelete e.getMessage() -> " + e.getMessage());
-		}
-		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
-		
-		return result;
-	}
+	//보드
+//	@Override
+//	public int replyDelete(int brd_num) {
+//		System.out.println("JhChallengeDaoImpl replyDelete Start...");
+//		System.out.println("JhChallengeDaoImpl replyDelete brd_num -> "+ brd_num);
+//		
+//		int result = 0;
+//		
+//		try {
+//			result = session.delete("jhReplyDelete", brd_num);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl replyDelete e.getMessage() -> " + e.getMessage());
+//		}
+//		System.out.println("JhChallengeDaoImpl replyDelete result -> "+ result);
+//		
+//		return result;
+//	}
 
 	//보드로
 //	@Override
@@ -217,62 +219,66 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 //	}
 
 
+	//보드로
+//	@Override
+//	public int replyUpdate(Board board) {
+//		System.out.println("JhChallengeDaoImpl replyUpdate Start...");
+//		int result = 0;
+//		try {
+//			result = session.update("jhReplyUpdate", board);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl replyUpdate e.getMessage() -> " + e.getMessage());
+//		}
+//		return result;
+//	}
 
-	@Override
-	public int replyUpdate(Board board) {
-		System.out.println("JhChallengeDaoImpl replyUpdate Start...");
-		int result = 0;
-		try {
-			result = session.update("jhReplyUpdate", board);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl replyUpdate e.getMessage() -> " + e.getMessage());
-		}
-		return result;
-	}
+	
+	//보드
+//	@Override
+//	public int reviewPost(Board board) {
+//		System.out.println("JhChallengeDaoImpl reviewPost Start...");
+//		
+//		int result = 0;
+//		
+//		try {
+//			result = session.insert("jhReviewPost", board);
+//			
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl reviewPost e.getMessage() -> " + e.getMessage());
+//			
+//		}
+//		
+//		return result;
+//	}
 
-	@Override
-	public int reviewPost(Board board) {
-		System.out.println("JhChallengeDaoImpl reviewPost Start...");
-		
-		int result = 0;
-		
-		try {
-			result = session.insert("jhReviewPost", board);
-			
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewPost e.getMessage() -> " + e.getMessage());
-			
-		}
-		
-		return result;
-	}
+	//보드
+//	@Override
+//	public int reviewUpdate(Board board) {
+//		System.out.println("JhChallengeDaoImpl reviewUpdate Start...");
+//		int result = 0;
+//		try {
+//			result = session.update("jhReviewUpdate", board);
+//			
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl reviewUpdate e.getMessage() -> " + e.getMessage());
+//			
+//		}
+//		return result;
+//	}
 
-	@Override
-	public int reviewUpdate(Board board) {
-		System.out.println("JhChallengeDaoImpl reviewUpdate Start...");
-		int result = 0;
-		try {
-			result = session.update("jhReviewUpdate", board);
-			
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewUpdate e.getMessage() -> " + e.getMessage());
-			
-		}
-		return result;
-	}
-
-	@Override
-	public int reviewDelete(int brd_num) {
-		System.out.println("JhChallengeDaoImpl reviewDelete Start...");
-		
-		int reviewDel = 0; 
-		try {
-			reviewDel = session.delete("jhReviewDelete", brd_num);
-		} catch (Exception e) {
-			System.out.println("JhChallengeDaoImpl reviewDelete e.getMessage() -> " + e.getMessage());
-		}
-		return reviewDel;
-	}
+	//보드
+//	@Override
+//	public int reviewDelete(int brd_num) {
+//		System.out.println("JhChallengeDaoImpl reviewDelete Start...");
+//		
+//		int reviewDel = 0; 
+//		try {
+//			reviewDel = session.delete("jhReviewDelete", brd_num);
+//		} catch (Exception e) {
+//			System.out.println("JhChallengeDaoImpl reviewDelete e.getMessage() -> " + e.getMessage());
+//		}
+//		return reviewDel;
+//	}
 
 	@Override
 	public int boardImgDelete(int brd_num) {
@@ -417,6 +423,21 @@ public class JhChallengeDaoImpl implements JhChallengeDao {
 		
 		System.out.println("JhChallengeDaoImpl chgDelete result -> " + result);
 		return result;
+	}
+
+	@Override
+	public int chgStateMd(int chg_id) {
+		System.out.println("JhChallengeDaoImpl chgStateMd Start...");
+		
+		int stateMd = 0;
+		
+		try {
+			stateMd = session.selectOne("jhChgStateMd", chg_id);
+		} catch (Exception e) {
+			System.out.println("JhChallengeDaoImpl chgStateMd e.getMessage() -> " + e.getMessage());
+
+		}
+		return stateMd;
 	}
 
 

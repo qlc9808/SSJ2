@@ -39,12 +39,12 @@ import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
-import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.chService.ChBoardService;
 import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.chService.ChSearchService;
 import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
+import com.oracle.S202350102.service.jhService.JhBoardService;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
@@ -65,8 +65,7 @@ public class ChController {
 	private final UserService			userService;
 	private final JhCallengeService 	jhCService;
 	private final ThChgService 			tcs;
-	private final BgBoardService 		bBoardD;
-	
+	private final JhBoardService		jhBrdService;
 	
 	// notice List 조회 
 	@RequestMapping("/notice")
@@ -175,9 +174,8 @@ public class ChController {
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
-			User1 user = userService.userSelect(user_num);
 			// 글의 user_num과 내 session의 user_num이 같은가?
-			if(board.getUser_num() == user_num || user.getStatus_md() == 102) {
+			if(board.getUser_num() == user_num) {
 				Board noticeConts = chBoardService.noticeConts(board.getBrd_num());
 				model.addAttribute("noticeConts", noticeConts);
 				
@@ -193,39 +191,30 @@ public class ChController {
 	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws Exception {
 		
 		System.out.println("ChController noticeUpdate Start...");
-		 if(request.getSession().getAttribute("user_num") != null) {
-			 int user_num = (int) request.getSession().getAttribute("user_num");
-			 User1 user = userService.userSelect(user_num);
-			 String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
-				if(user.getStatus_md() == 102) {
-					int result = 0;
-					if(board.getDelStatus() == 1 || file1.getOriginalFilename().length() > 0) {			
-						String deleteFile = uploadPath + board.getImg();			
-						//실제 upload에 담김 파일 이미지 삭제
-						int delResult= upFileDelete(deleteFile);
-						System.out.println("기존 파일 삭제 결과" + delResult);
-						board.setImg(null);
-						
-					}		
-					
-					ServletContext servletContext = request.getSession().getServletContext();
-					String realPath = servletContext.getRealPath("/upload/");
-					System.out.println("realPath->" + realPath);
-					if(file1.getOriginalFilename().length() > 0) {
-						String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
-						
-						board.setImg(saveName);	
-					}
-					
-					result = chBoardService.noticeUpdate(board);
-				
-					request.setAttribute("brd_md", board.getBrd_md());
-					return "forward:notice";
-				}
-		 }
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		int result = 0;
+		if(board.getDelStatus() == 1 || file1.getOriginalFilename().length() > 0) {			
+			String deleteFile = uploadPath + board.getImg();			
+			//실제 upload에 담김 파일 이미지 삭제
+			int delResult= upFileDelete(deleteFile);
+			System.out.println("기존 파일 삭제 결과" + delResult);
+			board.setImg(null);
+			
+		}		
 		
+		ServletContext servletContext = request.getSession().getServletContext();
+		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath->" + realPath);
+		if(file1.getOriginalFilename().length() > 0) {
+			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
+			
+			board.setImg(saveName);	
+		}
 		
-		return "/ch/notAnAdmin";
+		result = chBoardService.noticeUpdate(board);
+	
+		request.setAttribute("brd_md", board.getBrd_md());
+		return "forward:notice";
 	}
 	
 	
@@ -675,7 +664,7 @@ public class ChController {
 		int result = 0;
 		Board board = chBoardService.noticeConts(brd_num);
 		
-		result = jhCService.reviewDelete(brd_num);
+		result = jhBrdService.reviewDelete(brd_num);
 		
 		if(result >0 ) {
 			//이미지 삭제를 위한 작업
@@ -930,42 +919,6 @@ public class ChController {
 		
 		
 		return "ch/notAnAdmin";
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value = "ajaxModal")
-	public ModelAndView ajaxModal(HttpSession session, ModelAndView mav, int brd_num) {
-		System.out.println("ChController ajaxModal Start...");
-		Board board = chBoardService.noticeConts(brd_num);
-		System.out.println("board" + board);
-		mav.addObject("board", board);
-		mav.setViewName("ch/ajaxPage/ajaxModal");
-		
-		return mav;
-	}
-	
-	@PostMapping(value = "chCertBoardUpdate")
-	public String updateCertBrd(Board board, Model model, HttpServletRequest request,								
-								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
-										throws IOException {
-		log.info("updateCertBrd Start...");
-		
-		
-		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
-		
-		
-		
-		if (editFile != null) {
-			// 진짜 저장
-			String saveName = uploadFile(editFile.getOriginalFilename(), editFile.getBytes(), realPath);
-			board.setImg(saveName);
-		}
-		
-		int updateCount = bBoardD.updateCertBrd(board);
-		
-		
-		return "redirect:mypage";
 	}
 	
 	

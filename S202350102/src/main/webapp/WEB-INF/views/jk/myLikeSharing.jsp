@@ -86,7 +86,7 @@ $(document).ready(function() {
         <div class="col-6 col-md-4" style="padding-left: 8px; padding-right: 8px;">
             <div class="card mb-7">
                 <div class="card-img">            
-                   <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='myDetailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
+                   <button class="btn btn-xs w-100 btn-dark card-btn" onclick="location.href='detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}'">
 				    <i class="fe fe-eye me-2 mb-1"></i> 자세히 보기
 					</button>
 
@@ -94,10 +94,11 @@ $(document).ready(function() {
 					 </div>
                 <div class="card-body fw-bold text-left">
                     <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title} <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
-                    </a><p>
+                        ${board.title} 
+                        <p>${board.applicants}명 모집 | ${board.participants }명  참가중
+                    </a>
                     <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.price}원</a><p>
+                        <fmt:formatNumber value= "${board.price}"  pattern="#,###"/>원</a>    <p>
                     <a class="text-primary"><i class="fas fa-heart me-1"></i> ${board.like_cnt}</a>
                     						<i class="fe fe-eye me-1 mb-1" style="margin-left: 30px;"></i> ${board.view_cnt}
                     						<i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}

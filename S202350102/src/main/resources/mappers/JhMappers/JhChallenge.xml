@@ -87,8 +87,8 @@
 		) WHERE rn BETWEEN #{start} AND #{end} 
 	</select> -->
 	
-	<!-- 후기 댓글 입력 -->
-	<select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
+	<!-- 후기 댓글 입력  보드로-->
+	<!-- <select id="jhReplyInsertPro" parameterType="Board" statementType="CALLABLE" >
 		{
 			call Challenge_Review_Insert_Proc(
 						 #{brd_num , 	mode=IN , jdbcType=INTEGER}
@@ -99,31 +99,31 @@
 						)
 		}
 		
-	</select>
+	</select> -->
 	
 	<!-- 후기랑 댓글 수정 삭제 하나의 쿼리에 조건문 주고 가능한지 생각해보기 -->
-	<!-- 후기 댓글 삭제 -->
-	<delete id="jhReplyDelete" parameterType="int">
+	<!-- 후기 댓글 삭제  보드로-->
+	<!-- <delete id="jhReplyDelete" parameterType="int">
 		DELETE 	FROM board
 		WHERE 	brd_num = #{brd_num}
-	</delete>
+	</delete> -->
 	
 	<!-- 후기 댓글 수정-->
-	<update id="jhReplyUpdate" parameterType="Board">
+	<!-- <update id="jhReplyUpdate" parameterType="Board">
 		UPDATE board
 		SET    conts = #{conts}, reg_date = SYSDATE
 		WHERE  brd_num = #{brd_num}
 	</update>
-	
+	 -->
 
 	<!-- 후기 입력 -->
-	<insert id="jhReviewPost" parameterType="Board" >
+<!-- 	<insert id="jhReviewPost" parameterType="Board" >
 		INSERT INTO board (brd_num, chg_id, user_num, brd_lg, brd_md, title, conts, img, reg_date , brd_group, brd_step)
 		VALUES (brd_num_seq.NEXTVAL, #{chg_id}, #{user_num}, 700, 101, #{title}, #{conts}, #{img}, SYSDATE, brd_num_seq.NEXTVAL, 0)
-	</insert>
+	</insert> -->
 	
 	<!-- 후기 수정 -->
-	<update id="jhReviewUpdate" parameterType="Board">
+<!-- 	<update id="jhReviewUpdate" parameterType="Board">
       UPDATE  board
       SET     title = #{title} 
             , conts = #{conts} 
@@ -138,21 +138,21 @@
         	  </choose>
             , reg_date = SYSDATE   
       WHERE   brd_num = #{brd_num}
-   </update>
+   </update> -->
 	
 	<!-- 후기 삭제 -> 댓글도 같이 삭제 되게 할 것인가? -->
-	<delete id="jhReviewDelete" parameterType="int">
+	<!-- <delete id="jhReviewDelete" parameterType="int">
 		DELETE	FROM board
 		WHERE 	brd_num = #{brd_num}
-		<!-- OR		brd_group = #{brd_num} -->
-	</delete>
+		OR		brd_group = #{brd_num}
+	</delete> -->
 	
-	<!-- 후기 이미지 삭제 -->
-	<update id="jhBoardImgDelete" parameterType="int">
+	<!-- 후기 이미지 삭제  필요한가? -->
+<!-- 	<update id="jhBoardImgDelete" parameterType="int">
 		UPDATE  board
 		SET 	img = null
 		WHERE	brd_num = #{brd_num}
-	</update>
+	</update> -->
 	
 	<!-- 추천 챌린지 -->
 	<select id="jhRecommendChgList" parameterType="int" resultMap="RecommendChg">
@@ -289,8 +289,9 @@
 		
 	</select>
 	
+	<!-- 챌린지 승인 반려 성공 여부 가져오기 위함 -->
 	<resultMap id="resultMap" type="java.util.Map">
-    <result property="resultCount" column="resultCount" jdbcType="INTEGER"/>
+    	<result property="resultCount" column="resultCount" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	
@@ -332,7 +333,11 @@
 		WHERE 	chg_id = #{chg_id}
 	</delete>
 	
-	
+	<select id="jhChgStateMd" parameterType="int" resultType="int">
+		SELECT  state_md
+		FROM    challenge
+		WHERE   chg_id = #{chg_id}
+	</select>
 	
 	
 	

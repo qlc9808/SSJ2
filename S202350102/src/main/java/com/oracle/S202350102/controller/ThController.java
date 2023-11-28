@@ -117,10 +117,7 @@ public class ThController {
 			if(loginResult.getDelete_yn().equals("N")) {
 				session = request.getSession();
 				session.setAttribute("user_num", loginResult.getUser_num());
-				session.setAttribute("status_md", loginResult.getStatus_md());
 		         int user_num = (int) session.getAttribute("user_num");
-		         
-		         
 		         ls.userLevelCheck(user_num);
 		         
 		         //로그인 성공시 마지막 로그인 날짜 SYSDATE로 업데이트

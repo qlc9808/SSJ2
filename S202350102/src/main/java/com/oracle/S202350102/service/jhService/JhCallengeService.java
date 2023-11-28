@@ -37,25 +37,25 @@ public interface JhCallengeService {
 //	List<Challenge> 	ingChgPickList(Challenge challenge);
 
 
-	void 				replyInsert(Board board);
+//	void 				replyInsert(Board board); 보드로
 
 
-	int 				replyDelete(int brd_num);
+//	int 				replyDelete(int brd_num); //보드로
 
 
 //	void 				viewCntUp(int brd_num);//보드로
 
 
-	int 				replyUpdate(Board board);
+//	int 				replyUpdate(Board board); //보드로
 
 
-	int 				reviewPost(Board board);
+//	int 				reviewPost(Board board); //보드로
 
 
-	int 				reviewUpdate(Board board);
+//	int 				reviewUpdate(Board board); //보드
 
 
-	int 				reviewDelete(int brd_num);
+//	int 				reviewDelete(int brd_num); //보드
 
 
 	int 				boardImgDelete(int brd_num);
@@ -85,9 +85,12 @@ public interface JhCallengeService {
 	int 				chgAdminUpdate(Challenge chg);
 
 
-	int 				chgDelete(int chg_id); 
+	int 				chgDelete(int chg_id);
+
+	//승인 반려 후 챌린지 진행 상태 가져 오기 위함
+	int 				chgStateMd(int chg_id); 
   
-   
+    
 	
         
        
