@@ -508,11 +508,11 @@
 										<div class="row align-items-center">
 					
 											<!-- 인증 사진 -->
-											<div class="col-4">
+											<div class="col-4 text-center">
 					
 												<a href="/chgDetail?chg_id=${certList.chg_id }">
 													<img src="${pageContext.request.contextPath}/upload/${certList.img}" alt="certImg"
-														class="img-fluid">
+														class="img-fluid" style="width: 200px; height: 100%;">
 												</a>
 					
 											</div>

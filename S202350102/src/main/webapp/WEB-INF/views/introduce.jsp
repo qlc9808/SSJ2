@@ -87,13 +87,13 @@
 			            <div class="col-6"> 
 			 
 			              <!-- Image --> 
-			              <img class="img-fluid" src="/images/yr/intro_1.jpg" alt="intro_2"> 
+			              <img class="img-fluid" src="/images/yr/intro_2.jpg" alt="intro_2"> 
 			 
 			            </div> 
 			            <div class="col-6"> 
 			 
 			              <!-- Image --> 
-			              <img class="img-fluid" src="/images/yr/intro_1.jpg" alt="intro_3"> 
+			              <img class="img-fluid" src="/images/yr/intro_3.jpg" alt="intro_3"> 
 			 
 			            </div> 
 			          </div> 
@@ -131,13 +131,13 @@
 			            <div class="col-6"> 
 			 
 			              <!-- Image --> 
-			              <img class="img-fluid" src="/images/yr/intro_1.jpg" alt="intro_4"> 
+			              <img class="img-fluid" src="/images/yr/intro_4.jpg" alt="intro_4"> 
 			 
 			            </div> 
 			            <div class="col-6"> 
 			 
 			              <!-- Image --> 
-			              <img class="img-fluid" src="/images/yr/intro_1.jpg" alt="intro_4"> 
+			              <img class="img-fluid" src="/images/yr/intro_5.jpg" alt="intro_4"> 
 			 
 			            </div> 
 			          </div> 
