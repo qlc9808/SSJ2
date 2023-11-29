@@ -55,7 +55,7 @@ public class JhController {
 	private final YrChallengerService ycs;
 	private final YrChallengePickService ycps;
 	
-	private final BgBoardService bBoardD;
+	private final BgBoardService bBoardS;
 	
 	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
 //	@RequestMapping(value = "challengeList")
@@ -132,7 +132,7 @@ public class JhController {
 	//챌린지 상세정보 조회
 	@RequestMapping(value = "chgDetail")
 	public String chgDetail(@RequestParam int chg_id
-						  , @RequestParam(value = "sortBy", required = false) String sortBy
+						  , @RequestParam(value = "sortBy", required = false) String sortBy				// 인증게시판 검색 및 정렬
 						  , @RequestParam(value = "searchType", required = false) String searchType
 						  , @RequestParam(value = "keyword", required = false) String keyword
 						  , HttpSession session
@@ -215,6 +215,7 @@ public class JhController {
 		// 해당 chg_id의 게시글 만을 가져오기 위해 board 객체에 설정
 		board.setChg_id(chg_id);
 		board.setSearchType(searchType);
+		board.setKeyword(keyword);
 		board.setSortBy(sortBy);
 		
 		// yr 작성
@@ -223,13 +224,14 @@ public class JhController {
 		  
 		// 페이징 작업 
 		// 인증 글 개수			mapper 키: certTotal
+		System.out.println("JhController board.getSearchType() -> "+board.getSearchType());
 		System.out.println("JhController board.getKeyword() -> "+board.getKeyword());
 		System.out.println("JhController board.getSortBy() -> "+board.getSortBy());
 		// 
 		if (searchType == null && sortBy == null ) {
 			
 			// 카운팅
-			int certTotal = bBoardD.certTotal(chg_id);
+			int certTotal = bBoardS.certTotal(chg_id);
 			model.addAttribute("certTotal", certTotal);
 			System.out.println("certTotal -> " + certTotal);
 			
@@ -243,13 +245,13 @@ public class JhController {
 			System.out.println("certBrdPage.getTotal() -> "+certBrdPage.getTotal());
 			
 			// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
-			List<Board> certBoard = bBoardD.certBoard(board);
+			List<Board> certBoard = bBoardS.certBoard(board);
 			System.out.println("BgController certBoard.size() -> "+certBoard.size());
 			model.addAttribute("certBoard", certBoard);
 			
 			
 			// bgChgDetail: 해당 chg_id 회원의 챌린지 상세 정보 조회		mapper 키: bgChgDetail
-			Challenge chg = bBoardD.bgChgDetail(chg_id);
+			Challenge chg = bBoardS.bgChgDetail(chg_id);
 			System.out.println("BgController bgChgDetail chg -> "+chg);
 			model.addAttribute("chg", chg);
 			
@@ -264,7 +266,7 @@ public class JhController {
 			
 			// 카운팅
 			// mapper key: srchCrtBdCnt		 검색 결과 counting 후, 페이징 작업
-			int searchCnt = bBoardD.srchCrtBdCnt(board);
+			int searchCnt = bBoardS.srchCrtBdCnt(board);
 			System.out.println("searchCnt3 -> "+searchCnt);
 			
 			// 페이징
@@ -277,7 +279,7 @@ public class JhController {
 			
 			// R
 			// mapper key: searchCrtBd		 검색 결과 리스트 R
-			List<Board> srchResult = bBoardD.searchCrtBd(board);
+			List<Board> srchResult = bBoardS.searchCrtBd(board);
 			System.out.println("srchResult.size() -> "+srchResult.size());
 			
 			
