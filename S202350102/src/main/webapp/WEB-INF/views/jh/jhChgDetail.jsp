@@ -598,7 +598,7 @@
 
     <!-- BREADCRUMB -->
     <nav class="py-5">
-      <div class="container">
+      <div class="container section-mt">
         <div class="row">
           <div class="col-12">
 
@@ -693,6 +693,7 @@
                     <li class="list-group-item">챌린지 찜</li>
                     <li class="list-group-item" id="inputPickCnt">${chg.pick_cnt }</li>
                   </ul> 
+               </div>
                
 				<div class="row gx-5 mb-7">
 					<!-- 참여하기 -->
@@ -832,7 +833,7 @@
 
 					</div>
 				</div>
-              </div>
+              
             </div>
           </div>
         </div>

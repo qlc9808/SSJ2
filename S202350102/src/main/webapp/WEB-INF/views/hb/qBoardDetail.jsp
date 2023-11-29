@@ -2,42 +2,46 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="today" class="java.util.Date" />
+<fmt:formatDate value="${today}" pattern="yyyyMMdd" var="nowDate"/>
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/qBoardDetail.css"><c:param name="dt" value="${nowDate}"/></c:url>"/>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <script type="text/javascript" src="js/jquery.js"></script>
-<link rel="stylesheet" href="/css/qBoardDetail.css?after">
 <body>
+
 <c:import url="/WEB-INF/views/header4.jsp"/>
 	<i class="fa-sharp fa-light fa-image"></i>
-	<div id="qbd-main" class="qbd-main">
+	<div id="qbd-main" class="container section-mt">
 		<div class="qbd-mainbody">
 			<div id="qbd-title" class="qbd-title">
 				<div class="qbd-title-content">
 					<span class="title-text">${board.title }</span>
 				</div>
-				<div class="qbd-object">
+				<div class="qbd-object text-end">
 						<a href="qBoardUpdateForm?brd_num=${board.brd_num }">수정</a>
 						<a href="javascript:void(0);" onclick="confirmDelete(${board.brd_num}, '${board.img}');">삭제</a>
 						<a href="qBoardList?board=${board }">목록</a></p>
 				</div>	
 			</div>
-			<div class="qbd-line">
 				<div class="qbd-line-box">
 					<span class="qbd-line-box-text">작성자: ${board.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="qbd-line-box-text">작성일: <fmt:formatDate value="${board.reg_date }" pattern="yyyy-MM-dd"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="qbd-line-box-text">카테고리: ${board.category }</span>
 				</div>
+			<div class="qbd-line">
+				<div class="qbd-line-li"></div>
+			</div>
 				<!-- <div class="qbd-line-li"></div> -->
 			</div>
 			
 			<div class="qbd-content">
 				<div class="qbd-content text">
-					<c:if test="${board.img != null }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>				
-					<span>${board.conts }</span>
+					<span><c:if test="${board.img != null }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/qBoard/${board.img}"><p></c:if>${board.conts }</span>
 				</div>
 
 			</div>
@@ -51,7 +55,7 @@
 					    <input type="hidden"  id="img"  name="img" value="${board.img }">
 					    <input type="hidden"  id="brd_md" 	 name="brd_md" value="${board.brd_md }">
 					    <input type="hidden"  id="brd_group"  name="brd_group" value="${board.brd_num }">
-					    <textarea rows="3" cols="50" maxlength="200" name="conts" id="conts" placeholder="댓글을 입력하세요." required="required"></textarea><p>
+					    <textarea rows="3" cols="50" maxlength="200" name="conts" id="conts" placeholder="댓글을 입력하세요." wrap="on" required="required"></textarea><p>
 						<input type="button" value="입력" onclick="commentWriteBtn()">
 					</form>
 				</div>
@@ -204,7 +208,7 @@
 	        var brd_num = $(this).data('brd-num');
 
 	        var originalContent = commentList.find('span').text(); // input hidden하고 textarea 밸류 받자
-	        var inputField = $('<textarea rows="5" cols="50" maxlength="200" class="updateArea">' +originalContent+ '</textarea>' /* { type: 'text', value: originalContent } */);
+	        var inputField = $('<textarea wrap="on" rows="5" cols="50" maxlength="200" class="updateArea">' +originalContent+ '</textarea>' /* { type: 'text', value: originalContent } */);
 	        commentList.find('span').replaceWith(inputField);
 
 	        var saveButton = $('<button type="button" class="saveBtn" data-user-num="' + user_num + '" data-brd-num="' + brd_num + '">저장</button>');

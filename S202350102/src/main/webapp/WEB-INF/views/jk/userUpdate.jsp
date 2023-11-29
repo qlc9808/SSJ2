@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %> 
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 </head>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
@@ -64,7 +61,7 @@
         
 <body>
 <!-- 필수!! -->
- <div class="container">
+ <div class="container section-mt">
          <div class="row profile">
             <div class="col-md-3">
                 <%@ include file="../mypageMenu.jsp" %>

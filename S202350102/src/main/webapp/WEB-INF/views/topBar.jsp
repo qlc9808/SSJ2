@@ -25,8 +25,12 @@
 <!--  jquery.js-->
 <script src="./js/jquery.js"></script>
 
+<!-- flickity -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
 <!--  font -->
 <link href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
 <style type="text/css">
     body{ font-family: 'Noto Sans KR', sans-serif; } 
+    .section-mt {margin-top: 100px;}
 </style>

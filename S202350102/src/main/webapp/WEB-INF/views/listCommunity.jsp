@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header4.jsp" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -136,6 +135,10 @@ body {
 
 #boardtable tbody th p{
   display: none;
+}
+
+.section-mt {
+	margin-top: 150px;
 }
 
 </style>
@@ -385,7 +388,7 @@ $(document).ready(function () {
 
 </head>
 <body>
-<section class="community">
+<section class="community section-mt">
 <div class="container text-center" style="padding-bottom: 0px; padding-top: 0px;">
     <h3 style="margin-bottom: 5px;">자유게시판</h3>
 </div>

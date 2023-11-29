@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
-<html>
-<head>
-    <meta charset="UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="css/level.css">
-<title>Insert title here</title>
-</head>
 <script>
 $(document).ready(function () {
     // mypageMenu 엔드포인트로 AJAX 요청
@@ -290,7 +285,6 @@ Down
 }
 
 </style>
-<body>
  <div class="pCard_card">
   <div class="pCard_up">
     <div class="pCard_text">
@@ -337,9 +331,11 @@ Down
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/mypage">
                                활동정보
                            </a>
+                           <!-- 
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-                               챌린지 관리
+   			                            챌린지 관리
                            </a>
+                            -->
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
                                팔로우 관리
                            </a>
@@ -403,24 +399,26 @@ Down
 						</div>
 
 					</div>
-					<button id="levelInfoBtn">레벨표 보기</button>
+                    <div class="extra_box">
+                        <button id="levelInfoBtn">레벨표 보기</button>
+                    </div>
 					<div class="hidden" id="level_info_container">
-						<table border="1" style="width:500px;">
+						<table style="border: 1px solid black; width:500px;">
 							<thead>
-								<tr>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">레벨</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">아이콘</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">경험치</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">설명</span></span></td>
+								<tr style="border: 1px solid black;">
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">레벨</span></span></td>
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">아이콘</span></span></td>
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">경험치</span></span></td>
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">설명</span></span></td>
 								</tr>
 							</thead>	
 							<c:forEach var="level" items="${level1List }">
 								<tbody>
-									<tr>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.user_level }</span></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><img alt="${level.user_level }" src="/images/level/${level.lv_name }.gif"></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.tot_exp }.Exp</span></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.lv_name }레벨</span></span></td>
+									<tr border: 1px solid black;>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.user_level }</span></span></td>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><img alt="${level.user_level }" src="/images/level/${level.lv_name }.gif"></span></td>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.tot_exp }.Exp</span></span></td>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.lv_name }레벨</span></span></td>
 									</tr>
 								</tbody>
 							</c:forEach>
@@ -488,5 +486,3 @@ levelInfoBtn.addEventListener('click', () => {
 });
 
 </script>
-</body>
-</html>

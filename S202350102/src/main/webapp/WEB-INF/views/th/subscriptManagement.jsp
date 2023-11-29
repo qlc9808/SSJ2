@@ -43,7 +43,7 @@
 </head>
 <body>
 
-	 <div class="container">
+	 <div class="container section-mt">
          <div class="row profile">
 			<!-- 마이페이지 사이드바  -->         
             <div class="col-md-3">

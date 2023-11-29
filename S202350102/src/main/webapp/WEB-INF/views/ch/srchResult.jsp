@@ -70,7 +70,55 @@
 	   
 	    clickChgResult(srch_word,brd_md);
 	}
+	// 챌린지 찜하기
+	function chgPick(p_index) {
+		// var chg_id = p_chg_id;
+		// alert("chg_id -> " + chg_id);
 
+		$.ajax({
+			url : "/chgPickPro",
+			type : "POST",
+			data : {chg_id : p_index},
+			dataType : 'json',
+			success : function(chgPickResult) {
+				if(chgPickResult.chgPick > 0) {
+					$("#chgPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+					alert("찜 성공");
+				} else {
+					$("#chgPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+					alert("찜 취소");
+				}
+
+			},
+			error : function() {
+				alert("찜하기 오류");
+			}
+		});
+	}
+	
+	function sharingPick(p_index) {
+        // alert("sharingPick" + p_index);
+
+        $.ajax({
+            url: "/likePro",
+            type: "POST",
+            data: { brd_num: p_index },
+            dataType: 'json',
+            success: function (likeResult) {
+                if (likeResult.likeProResult > 0) {
+                    $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+                    alert("찜 성공");
+                } else {
+                    $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+                    alert("찜 취소");
+                }
+                $('#likeCnt' + p_index).text(likeResult.brdLikeCnt);
+            },
+            error: function () {
+                alert("찜하기 오류");
+            }
+        });
+    }
 	
 	
 </script>

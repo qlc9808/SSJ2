@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 <style type="text/css">
 	.flickity-cell {
 	  width: 50%; /* half-width */
@@ -27,6 +26,9 @@
 	.flickity-viewport {  
 	  height: 400px !important;
 	  padding: 10px
+	}
+	.section-mt {
+		margin-top: 150px;
 	}
 </style>
 <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
@@ -320,7 +322,7 @@
 	</script>
 </head>
 <body>
-<section>
+<section class="section-mt">
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				
@@ -980,11 +982,11 @@
 					
 				</div>
 				
-				<div class="col-12 text-center">
+				<div class="col-12 text-center mt-10">
 					<form id="more">
 						<input type="hidden" name="start" value="1">
 						<input type="hidden" name="end" value="${board.end + 10}">
-						<button type="button" onclick="moreList()" class="btn btn-outline-gray-400 text-muted">더보기▼</button>
+						<button type="button" onclick="moreList()" class="btn btn-sm btn-outline-dark">더보기</button>
 					</form>
 				</div>
 			</div>

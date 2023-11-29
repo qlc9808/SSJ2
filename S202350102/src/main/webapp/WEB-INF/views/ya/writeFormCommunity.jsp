@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../header4.jsp" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>       
+<%@ include file="../header4.jsp" %>     
 <!DOCTYPE html>
 <html>
  <head>
@@ -13,7 +12,7 @@
 </head>
 <body>
    <section class="pt-7 pb-12">
-      <div class="container">
+      <div class="container section-mt">
        <!-- Heading -->
         <div class="row">
           <div class="col-12 text-center"> 

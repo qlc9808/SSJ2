@@ -1,13 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>    
-<%@ include file="/WEB-INF/views/topBar.jsp" %>     
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">
-/* 테이블 스타일 */
-</style>
 <!--모달창-->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -16,9 +12,9 @@
 <title>쉐어링관리</title>
 </head>
 <body>
-<section class="py-11">
+<section>
 <!-- 필수!! -->
- <div class="container">
+ <div class="container section-mt">
     <div class="row profile">
        <div class="col-md-3">
             <%@ include file="../mypageMenu.jsp" %>
@@ -138,8 +134,16 @@
                                 <td>
 							    <c:choose>
 							        <c:when test="${sharingList.state_md == 101}">
-					                  <button class="btn btn-xs btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#cofirmForm${status.index}" 
-					                  aria-expanded="false" aria-controls="cofirmForm${status.index}"> 확인</button>
+							            <button class="btn btn-xs" type="button" data-toggle="collapse" 
+							                    data-target="#collapse-${status.index}" aria-expanded="false" 
+							                    aria-controls="collapse-${status.index}" data-bs-index="${status.index}" 
+							                    style=" background-color: #E56D90; color:#FFFFFF; padding-left: 10px;   padding-right: 10px; padding-top: 5px; padding-bottom: 5px">
+							                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart" viewBox="0 0 16 16">
+  											<path d="M6.5 4.482c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
+  											<path d="M13 6.5a6.471 6.471 0 0 1-1.258 3.844c.04.03.078.062.115.098l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1.007 1.007 0 0 1-.1-.115h.002A6.5 6.5 0 1 1 13 6.5ZM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Z"/>
+											</svg>		
+							         	       확인
+							            </button>
 							        </c:when>
 							       <c:otherwise>  </c:otherwise>
 							    </c:choose>
@@ -148,12 +152,13 @@
 						        </tr>
 					            <!-- 폼 내용 추가 -->
 					            <tr>
-					                <td colspan="5">
-					                    <div class="collapse" id="cofirmForm${status.index}" data-bs-parent="#boardTable">
-					                        <form>
-					                            <input type="hidden" name="brd_num" value="${sharingList.brd_num}" id="formBrdNum${status.index}">
+					                <td colspan="6" class="p-0">
+					                	
+					                    <div class="collapse" id="collapse-${status.index}" data-bs-parent="#boardTable">
+					                        <form class="p-0">
+					                            <input type="hidden" name="brd_num" value="${sharingList.brd_num}" id=" ">
 								                <table class="table table-bordered table-sm mb-0" id="boardTable">
-							                    <thead>
+							                    <thead class ="table-light">
 							                        <tr class="p-2 text-center">
 							                            <th scope="col" class="th-tilte">이름</th>
 							                            <th scope="col" class="th-bank_info">계좌정보</th>
@@ -164,6 +169,7 @@
 							                    </thead>
 							                    <tbody>
 							                    <c:forEach var="board"  items="${myConfirmSharingList}" varStatus="status">
+							                     <c:if test="${board.brd_num eq sharingList.brd_num}">
                        						    <input type="hidden" value="${board.applicants}">
 							                    	 <tr>
 						                                <td>${board.user_name}</td>
@@ -172,27 +178,33 @@
 						                                <td>${board.bank_duedate}</td>
 						                                <td>${board.addr}</td> 
 						                             </tr>  
+						                           </c:if>
 						                         </c:forEach>          
 							                    </tbody>			
 							                	</table>					                       
 					                        </form>
 					                    </div>
+					                    
+										<script>
+										    document.addEventListener('DOMContentLoaded', function () {
+										        var buttons = document.querySelectorAll('[data-toggle="collapse"]');
+										        buttons.forEach(function (button) {
+										            button.addEventListener('click', function () {
+										                var targetIndex = button.getAttribute('data-bs-index');
+										                var targetId = 'collapse-' + targetIndex;
+										                var target = document.getElementById(targetId);
+										                var isExpanded = target.classList.contains('show');
+										
+										                target.classList.toggle('show', !isExpanded);
+										                }
+										            });
+										        });
+										    });
+										</script>					                    
+					                				                    
 					                </td>
 					            </tr>
-					          
-					            <script>
-					            document.getElementById(`cofirmForm${status.index}`).addEventListener('shown.bs.collapse', function () {
-					                document.getElementById(`formBrdNum${status.index}`).value = '${sharingList.brd_num}';
-					                fetchData('${sharingList.brd_num}');
-					                document.getElementById(`boardTable${status.index}`).style.display = 'block';
-					            });
-
-					            document.getElementById(`cofirmForm${status.index}`).addEventListener('hidden.bs.collapse', function () {
-					                document.getElementById(`boardTable${status.index}`).style.display = 'none';
-					            });
-					            </script>
-						           
-						            <c:set var="num" value="${num - 1}"></c:set>
+							            <c:set var="num" value="${num - 1}"></c:set>
 						        </c:forEach>
 						    </tbody>
 						</table>             
@@ -226,38 +238,6 @@
 			</nav>        
        </div>
     </section>
-    
-<%--  <!--승인완료된 쉐어링 정보 -------------------입금액(총금액/모집인원   ?? ------------------------------------------------------------- -->   
-    <section class="myUploadSharing"  style="width: 1000px; height: 400px">
-
-      <!-- 게시판리스트  -->
-      <div class="container" >
-        <div  class="col-12">
-                  <c:set var="num" value="${myConfirmSharingPaging.total - myConfirmSharingPaging.start+1 }"></c:set> 
-                  <input type="hidden" value="${board.brd_num }"> 
-                <table class="table table-bordered table-sm mb-0" >
-                        <tr class="p-2 text-center">
-                            <th scope="col" class="th-tilte">이름</th>
-                            <th scope="col" class="th-bank_info">계좌정보</th>
-                            <th scope="col" class="th-price">입금액</th>
-                            <th scope="col" class="th-bank_duedate">입금기한</th>
-                            <th scope="col" class="th-addr">거래주소</th>
-                        </tr>
-                  
-                        <c:forEach var="board"  items="${myConfirmSharingList}" varStatus="status">
-                         <input type="hidden" value="${board.applicants}">
-                            <tr>
-                                <td>${board.user_name}</td>
-                                <td>${board.bank_info}</td>    
-                                <td><fmt:formatNumber value="${board.price div board.applicants}" pattern="#,###"/>원</td>        
-                                <td>${board.bank_duedate}</td>
-                                <td>${board.addr}</td>                               
-                            </tr>
-                        </c:forEach>
-                </table>  
-             </div>                 	
-		</div>	      
-    </section>	 --%>
 </div>
 </div>
 </div>
