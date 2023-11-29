@@ -97,24 +97,29 @@
     	var keyword 	=	"${chg.keyword}" // 검색 키워드
 			    
    	    //검색어 있는 경우
-       	if(keyword != null && keyword !== ""){
-       		alert("검색 함")
+       	if(keyword !== null && keyword !== ""){
+       		//alert("검색 함")
 		    //진행/종료 챌린지인 경우(필터 있을 때)
-	   	    if(sortOpt != null){
+	   	    if(sortOpt !== null){
+		   			//alert("필터 없음")
 			    //카테고리 선택한 경우
 		   		if(chg_lg != 0){
+		   			//alert("필터 없음")
 					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
 		   		//카테고리 선택 안한 경우	
 		   		}else{
+		   			alert("필터 없음")
 					location.href = "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum+"&keyword="+keyword;
 		   			
 		   		}
 			//신청/반려 챌린지인 경우
 		   	}else{
 		   		if(chg_lg != 0 ){
+		   			//alert("필터 없음")
 					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum+"&keyword="+keyword;
 		   		//카테고리 선택 안한 경우	
 		   		}else{
+		   			//alert("필터 없음")
 					location.href = "chgAdminList?state_md="+state_md+"&currentPage="+pageNum+"&keyword="+keyword;
 		   			
 		   		}
@@ -122,21 +127,26 @@
 		   	}
        	} else{
 		    //진행/종료 챌린지인 경우(필터 있을 때)
-	   	    if(sortOpt != null){
+	   	    if(sortOpt !== null && sortOpt !== 'null'){
+		   			//alert("검색없음")
 			    //카테고리 선택한 경우
 		   		if(chg_lg != 0){
+		   			//alert("필터있고 카테고리 있음")
 					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 		   		//카테고리 선택 안한 경우	
 		   		}else{
+		   			//alert("필터있고 카테고리 없음 " + sortOpt)
 					location.href = "chgAdminList?state_md="+state_md+"&sortOpt="+sortOpt+"&currentPage="+pageNum;
 		   			
 		   		}
 			//신청/반려 챌린지인 경우
 		   	}else{
 		   		if(chg_lg != 0 ){
+		   			//alert("필터 없음 카테고리 유")
 					location.href = "chgAdminList?state_md="+state_md+"&chg_lg="+chg_lg+"&chg_md="+chg_md+"&currentPage="+pageNum;
 		   		//카테고리 선택 안한 경우	
 		   		}else{
+		   			//alert("필터 없음 카테고리 무")
 					location.href = "chgAdminList?state_md="+state_md+"&currentPage="+pageNum;
 		   			
 		   		}
@@ -147,6 +157,7 @@
 		
 	}
 	
+	//댓글 관리
 	function chgReviewAdminFn(){
 		var chg_id = ${chg.chg_id}
 		var title  = '${chg.title }'	
