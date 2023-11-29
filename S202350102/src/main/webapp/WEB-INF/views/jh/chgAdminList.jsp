@@ -248,7 +248,7 @@
 	$(function() {
 		$("#searchButton").click(function () {
 			
-			var keyword 	=	$("#keyword").val();
+			var keyword 	=	$("#chgKeyword").val();
 			var state_md  	= 	${state_md}
 		    var chg_lg 	  	= 	${chg_lg}
 		    var sortOpt   	= 	$('#sortOpt').val()
@@ -279,7 +279,22 @@
 			//location.href = '/chgAdminList?keyword='+keyword+'&state_md='+state_md					
 
 		})
+		
+		
+		// 검색어 입력 후 엔터키 입력하면 검색버튼 클릭
+		//$(function()이 $(document).ready(function() {의 줄임
+		/* input창 아이디 */
+		$("#chgKeyword").keydown(function(e) {
+			console.log("Key pressed:", e.keyCode);
+		    if (e.keyCode && e.keyCode === 13) {
+		    	/* 버튼 아이디 */
+		        $("#searchButton").trigger("click");
+		        return false;
+		    }
+		});
 	})
+	
+
 </script>
 
 </head>
@@ -442,7 +457,7 @@
 				<div class="container d-flex justify-content-center my-5">
 				    <div class="d-flex justify-content-center">
 				        <div class="input-group input-group-merge">
-				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="제목/내용 검색"  value="${chg.keyword}">
+				            <input class="form-control form-control-sm" id="chgKeyword" type="search" placeholder="제목/내용 검색"  value="${chg.keyword}">
 							<div class="input-group-append">
 								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
 							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton">

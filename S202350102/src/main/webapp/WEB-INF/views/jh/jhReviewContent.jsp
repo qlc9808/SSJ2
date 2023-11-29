@@ -122,7 +122,7 @@
 </head>
 <body>
  <section>
-      <div class="container">
+      <div class="container section-mt">
         <div class="row">
         
         
@@ -274,7 +274,7 @@
 				<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
 		    </c:when>
 		    <c:otherwise>
-				 <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
+				 <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 불러오기에 실패했습니다." style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
 		    </c:otherwise>
 		</c:choose>
 		</div>
@@ -284,10 +284,10 @@
 	 </div>
 	
      <!-- 댓글 쓰기 -->
-     <div class="modal-body py-9">
+     <div class="py-9">
        <!-- Form -->
        <form action="/replyInsert" method="post" onsubmit="return replyInsertChk(this)">
-         <div class="row gx-5">
+         <div class="row gx-5 align-items-center">
          	<c:choose>
          	  <c:when test="${chgrYN == 1 }">
 	            <!-- 참여자일 경우 -->
@@ -295,8 +295,8 @@
 	   				<input type="hidden" name="chg_id" value="${chg_id}">
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
-	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!">
-	   				
+	   				<%-- <input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!"> --%>
+	   				<textarea class="form-control form-control-sm" id="reviewReply" rows="3" name="conts" maxlength="100" required placeholder="${user.nick }님 댓글을 남겨주세요!"></textarea>
 	   				
 	 			</div>
 	 			

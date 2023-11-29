@@ -541,9 +541,9 @@ public class JhController {
 			
 		}
 		
-		//태현 카테고리 리스트 -없어도 되려나?
-//		List<Comm> chgCategoryList = tcs.listChgCategory();
-//		model.addAttribute("chgCategoryList", chgCategoryList);
+		//태현 카테고리 리스트 
+		List<Comm> chgCategoryList = tcs.listChgCategory();
+		model.addAttribute("chgCategoryList", chgCategoryList);
 
 		
 		
@@ -673,16 +673,15 @@ public class JhController {
 	public String reviewPost(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1, Model model) throws IOException {
 		System.out.println("JhController reviewPost Start...");
 		
-		//저장 경로 생성
-		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		System.out.println("JhController chgApplication file -> " + file1);		
 		
 		int user_num = board.getUser_num();
-		board.setBrd_lg(700);
-		board.setBrd_md(101);
+
 		
-		int lg = board.getBrd_lg();
-		int md = board.getBrd_md();
-		
+		if (!file1.isEmpty()) {
+			//저장 경로 생성
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			
 			log.info("originalName: " + file1.getOriginalFilename());
 			log.info("size: " +file1.getSize());
 			log.info("contentType : " + file1.getContentType());
@@ -695,6 +694,19 @@ public class JhController {
 			
 			log.info("Return savedName: " + saveName);
 			model.addAttribute("savedName", saveName);
+			
+		} 
+
+		System.out.println("JhController chgApplication 이미지 -> " + board.getImg());		
+		
+			//후기 글 공통 코드 번호 셋팅
+			board.setBrd_lg(700);
+			board.setBrd_md(101);
+		
+			int lg = board.getBrd_lg();
+			int md = board.getBrd_md();
+		
+			
 			
 			//글 등록
 			int result = jhBrdService.reviewPost(board);

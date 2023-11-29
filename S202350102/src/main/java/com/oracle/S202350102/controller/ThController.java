@@ -43,7 +43,6 @@ import com.oracle.S202350102.service.thService.ThKakaoPay;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
 import com.oracle.S202350102.service.thService.ThRefundService;
 import com.oracle.S202350102.service.thService.ThUser1Service;
-import com.oracle.S202350102.service.yaService.Paging2;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
