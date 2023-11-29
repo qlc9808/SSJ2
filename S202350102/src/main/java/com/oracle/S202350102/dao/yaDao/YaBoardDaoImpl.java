@@ -560,6 +560,24 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		}
 		return  sharingSearchResult;
 	}
+
+
+	//쉐어링 참가 확인
+	@Override
+	public List<SharingList> sharingChk(int brd_num) {
+		System.out.println("ybdSharingChk start...");
+		System.out.println("brd_num?"+brd_num);
+		
+		List<SharingList> sharingChk = null;
+		try {
+			sharingChk = session.selectList("YaSharingChk", brd_num);
+			
+		} catch (Exception e) {
+		
+			System.out.println("YaBoardDaoImpl sharingChk e.getmssage?"+e.getMessage());
+		}
+		return sharingChk;
+	}
 	
 
 

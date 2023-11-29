@@ -106,7 +106,7 @@ table tbody tr td{
 }
 .search > .select > .search-box {
 	height: 40px; width: 300px;
-	border: 2px solid black;
+	border: 1px solid black;
 }
 .search > .select > #search-select {
 	width: 80px; text-align: center; height: 40px;

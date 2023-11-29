@@ -39,7 +39,6 @@ import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
-import com.oracle.S202350102.service.yaService.Paging2;
 import com.oracle.S202350102.service.yaService.YaCommunityService;
 
 import lombok.RequiredArgsConstructor;
@@ -849,7 +848,7 @@ public class YaController {
 			     model.addAttribute("totalSharing", totalSharing);
 			     System.out.println("JkController Ya totalSharing->"+totalSharing);
 			      
-			     Paging2 sharBoardPage = new Paging2(totalSharing, currentPage);		
+			     Paging sharBoardPage = new Paging(totalSharing, currentPage);		
 			    
 			     board.setStart(sharBoardPage.getStart());
 			     board.setEnd(sharBoardPage.getEnd());
@@ -946,6 +945,8 @@ public class YaController {
 				
 				return"ya/sharingSearch";
 			} 
+			
+			// 쉐어링 참가 신청 취소기능 (추가예정)
 			
 			
 	}		

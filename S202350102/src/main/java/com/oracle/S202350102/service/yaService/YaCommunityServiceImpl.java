@@ -341,6 +341,17 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 				
 		return  sharingSearchResult;
 	}
+	
+	//쉐어링 참가 확인용 
+	@Override
+	public List<SharingList> sharingChk(int brd_num) {
+		List<SharingList> sharingChk = null;
+		System.out.println("ycs shatirngChk start...");
+		sharingChk = ybd.sharingChk(brd_num);
+		System.out.println("ycs sharingChk(brd_num):"+sharingChk);
+		
+		return sharingChk;
+	}
 
 
 	

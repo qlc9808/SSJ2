@@ -107,12 +107,36 @@
                                     <input type="hidden" name="b_user_num" value="${board.user_num}">
                                     <input type="hidden" name="user_num" value="${sessionScope.user_num}">		
                                     <div class="col-lg-6 mb-2">
+                                       <!--로그인 유저  user_num과 sharingList table user_num이 존재할경우 버튼비활성화   -->
                                        
                                         <!--ya 쉐어링 참가신청 test -------------------------------------------------------------------------->
                                         <button type="button" class="btn btn-dark w-100" id="participateBtn" data-toggle="modal" data-target="#infoModal"
                                             data-user_num="${sessionScope.user_num}" data-brd_num="${board.brd_num}" data-participants="${board.participants}" data-applicants="${board.applicants }">
                                             <i class="fe fe-mail me-2"> 참가신청 </i></button>
                                     </div>
+                                    <!--ya 참가자 중복신청 막기 버튼  ------>
+									<script>
+									    document.addEventListener('DOMContentLoaded', function () {
+									        // 페이지 로드 시 실행되는 함수
+									        checkAndDisableButton();
+									    });
+									
+									    function checkAndDisableButton() {									        
+									        var userNum = ${sessionScope.user_num};
+									        var sharingChk = ${sharingChk};
+											console.log("userNum : "+userNum );
+											console.log("sharingChk:" +sharingChk);
+											
+									        // 유저의 user_num과 sharingChk 중 하나와 일치하면 버튼 비활성화
+									        if (sharingChk.includes(userNum)) {
+									            document.getElementById('participateBtn').disabled = true;
+									            
+									            
+									        }
+									    }
+									</script>
+									                                    
+                                    
                                          <!-- yr 작성 -->
                         <!-- 쉐어링 찜하기 -->
                         <div class="col-lg-6 mb-2">
@@ -293,6 +317,7 @@
 
 		                if (result.status === 'success') {
 		                    alert('신청이 완료되었습니다 마이페이지에서 승인상태를 확인해주세요.');
+		                    location.reload();
 		                } else {
 		                    alert('신청 저장에 실패했습니다.');
 		                }

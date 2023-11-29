@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
+<html>
+<head>
+    <meta charset="UTF-8">
 <link rel="stylesheet" href="css/level.css">
+<title>Insert title here</title>
+</head>
 <script>
 $(document).ready(function () {
     // mypageMenu 엔드포인트로 AJAX 요청
@@ -83,7 +88,22 @@ $(document).ready(function () {
      }
  </script>
 <style>
-
+.portlet {
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding: 0;
+    border-radius: 4px;
+}
+.portlet.bordered {
+    border-left: 2px solid #e6e9ec!important;
+}
+.portlet.light {
+    padding: 12px 20px 15px;
+    background-color: #fff;
+}
+.portlet.light.bordered {
+    border: 1px solid #e7ecf1!important;
+}
 
 .pCard_card {
 
@@ -99,6 +119,9 @@ $(document).ready(function () {
 /****************
 UP
 ****************/
+
+
+
 
 .pCard_card .pCard_up {
   position: absolute;
@@ -284,7 +307,50 @@ Down
   transform: translateX(-50%);
 }
 
+ /* 프로그레스바 */
+  :root {
+      --dark: #1B252B;
+      --blue: #00BBE3;
+    }
+
+.progress {
+  position: relative;
+  width: 491px;
+  height: 50px;
+  background-color: #d3dadd;
+  border-radius: 10px !important;
+  overflow: hidden;
+  margin: 3px;
+}
+
+.progress-bar {
+    position: absolute;
+    height: 50%;
+    background-color: #E57373;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px !important;
+    transition: width 0.5s;
+    margin: 12px;
+}
+
+
+.progress-bar2 {
+  width: var(--user-progress, 95%);
+  height: 50%;
+  background-color: #F9F5F6; /* 회색 바 색상 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.5s;
+  border-radius: 11px !important;
+  margin: 12px;
+}
+
 </style>
+<body>
  <div class="pCard_card">
   <div class="pCard_up">
     <div class="pCard_text">
@@ -305,7 +371,7 @@ Down
       <p class="following"></p>
     </div>
     <div>
-      <p class="fs-sm">Likes</p>
+      <p class="fs-sm">My Posts</p>
       <p class="myBoardCnt"></p>
     </div>
   </div>
@@ -331,11 +397,9 @@ Down
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/mypage">
                                활동정보
                            </a>
-                           <!-- 
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-   			                            챌린지 관리
+                               챌린지 관리
                            </a>
-                            -->
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
                                팔로우 관리
                            </a>
@@ -386,11 +450,15 @@ Down
 							</span>
 						</div>
 
-						<div class="progress" style="height: 50px">
-							<div class="progress-bar" role="progressbar" style="width: ${user1.percentage}%;">${user1.percentage}%</div>
-						</div>
+					 <div class="progress">
+					   <div class="progress-bar" role="progressbar" style="width: 95%;">${user1.percentage}%</div>
+					    <div class="progress-bar2"></div>
+					  </div>
+
+						
+												
 						<div class="userInfoBox2">
-							<span class="user_exp">
+							<span class="user_exp" style=" margin-right: 260px; margin-left: 10px;">
 								<label>현재 경험치 ${user1.user_exp }</label>
 							</span>
 							<span class="remain_exp">
@@ -399,31 +467,30 @@ Down
 						</div>
 
 					</div>
-                    <div class="extra_box">
-                        <button id="levelInfoBtn">레벨표 보기</button>
-                    </div>
+					<button id="levelInfoBtn" style="margin-top: 0px; margin-left:207px;">레벨표 보기</button>
 					<div class="hidden" id="level_info_container">
-						<table style="border: 1px solid black; width:500px;">
-							<thead>
-								<tr>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">레벨</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">아이콘</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">경험치</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">설명</span></span></td>
-								</tr>
-							</thead>	
-							<c:forEach var="level" items="${level1List }">
-								<tbody>
-									<tr>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.user_level }</span></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><img alt="${level.user_level }" src="/images/level/${level.lv_name }.gif"></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.tot_exp }.Exp</span></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.lv_name }레벨</span></span></td>
-									</tr>
-								</tbody>
-							</c:forEach>
-						</table>			
+					    <table border="1" style="width: 500px; border-collapse: collapse;">
+					        <thead style="background-color: #F2BED1;">
+					            <tr>
+					                <th style="text-align: center; padding: 5px;"><span style="font-size: 16px;">레벨</span></th>
+					                <th style="text-align: center; padding: 5px;"><span style="font-size: 16px;">아이콘</span></th>
+					                <th style="text-align: center; padding: 5px;"><span style="font-size: 16px;">경험치</span></th>
+					                <th style="text-align: center; padding: 5px;"><span style="font-size: 16px;">설명</span></th>
+					            </tr>
+					        </thead>
+					        <c:forEach var="level" items="${level1List}">
+					            <tbody>
+					                <tr>
+					                    <td style="text-align: center; padding: 5px;"><span style="font-size: 16px;">${level.user_level}</span></td>
+					                    <td style="text-align: center; padding: 5px;"><img alt="${level.user_level}" src="/images/level/${level.lv_name}.gif" style="max-width: 50px;"></td>
+					                    <td style="text-align: center; padding: 5px;"><span style="font-size: 16px;">${level.tot_exp}.Exp</span></td>
+					                    <td style="text-align: center; padding: 5px;"><span style="font-size: 16px;">${level.lv_name}레벨</span></td>
+					                </tr>
+					            </tbody>
+					        </c:forEach>
+					    </table>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -486,3 +553,21 @@ levelInfoBtn.addEventListener('click', () => {
 });
 
 </script>
+
+<!-- 프로그레스바 -->
+<script>
+  $(document).ready(function () {
+    // Assuming user1.percentage is the actual percentage value you want to display
+    const user1 = {
+      percentage: ${user1.percentage}
+    };
+
+    const progressBar = document.querySelector('.progress-bar');
+    progressBar.style.width = `${user1.percentage}%`;
+    progressBar.textContent = `${user1.percentage}%`;
+  });
+</script>
+
+
+</body>
+</html>
