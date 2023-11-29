@@ -24,7 +24,7 @@
 }
 
 #modalCloseBtn {
-	display: flex; justify-content: end; align-items: center;
+    border: 0 solid black; position: absolute; top: 10px; right: 20px;
 }	
 
 #modalContainer {
@@ -58,9 +58,6 @@
     opacity: 0;
     pointer-events: none;
 }
-.hidden table tr, td {
-    border: 1px solid black;
-}
 
 #levelInfoBtn {
 	margin-top: 50px;
@@ -69,6 +66,7 @@
 .userInfoBox1{
 	border: 0px solid red; height: 50px;
 	display: flex; justify-content: center; align-items: center;
+    margin-top: 40px;
 }
 
 .userInfoBox2 {

@@ -28,11 +28,11 @@
 					<td><input style="background: #ccc;" type="text" maxlength="25" name="title" required="required"></td>
 				</tr>
 				<tr class="brd-line"></tr>
-				<tr class="brd-option" style="background: #ccc;">
-					<td>파일</td>
+				<tr class="brd-option">
+					<td style="background: #ccc;">파일</td>
 					<td><%@ include file="/WEB-INF/views/hb/test.jsp" %></td>
-					<td>카테고리</td>
-					<td>
+					<td style="background: #ccc;">카테고리</td>
+					<td style="background: #ccc;">
 						<select name="brd_md">
 							<option value="100" selected="selected">회원관련</option>
 							<option value="101">버그</option>

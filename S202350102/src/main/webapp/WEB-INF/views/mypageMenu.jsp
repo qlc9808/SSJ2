@@ -405,20 +405,20 @@ Down
 					<div class="hidden" id="level_info_container">
 						<table style="border: 1px solid black; width:500px;">
 							<thead>
-								<tr>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">레벨</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">아이콘</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">경험치</span></span></td>
-									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">설명</span></span></td>
+								<tr style="border: 1px solid black;">
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">레벨</span></span></td>
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">아이콘</span></span></td>
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">경험치</span></span></td>
+									<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">설명</span></span></td>
 								</tr>
 							</thead>	
 							<c:forEach var="level" items="${level1List }">
 								<tbody>
-									<tr>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.user_level }</span></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><img alt="${level.user_level }" src="/images/level/${level.lv_name }.gif"></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.tot_exp }.Exp</span></span></td>
-										<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.lv_name }레벨</span></span></td>
+									<tr border: 1px solid black;>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.user_level }</span></span></td>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><img alt="${level.user_level }" src="/images/level/${level.lv_name }.gif"></span></td>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.tot_exp }.Exp</span></span></td>
+										<td style="border: 1px solid black; text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">${level.lv_name }레벨</span></span></td>
 									</tr>
 								</tbody>
 							</c:forEach>
