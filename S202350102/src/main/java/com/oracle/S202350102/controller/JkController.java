@@ -45,6 +45,7 @@ import com.oracle.S202350102.dto.BoardLike;
 import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Level1;
 import com.oracle.S202350102.dto.SearchHistory;
+import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.chService.ChSearchService;
 import com.oracle.S202350102.service.hbService.Paging;
@@ -185,11 +186,16 @@ public class JkController {
 		
 		board.setReplyCount(replyCount);
 		board.setBrd_group(board.getBrd_group());
-		
+			
 		int user_num = 0;
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 		}
+		
+		//연아 추가사항 쉐어링 참가중복 방지용 sharingList user_num 조회 
+		List<SharingList> sharingChk = ycs.sharingChk(brd_num); 
+		model.addAttribute("sharingChk",sharingChk);
+		System.out.println("sharingChk:" + sharingChk);
 		
 		int upViewCnt = 0;
 		ycs.upViewCnt(brd_num);
