@@ -403,9 +403,11 @@ Down
 						</div>
 
 					</div>
-					<button id="levelInfoBtn">레벨표 보기</button>
+                    <div class="extra_box">
+                        <button id="levelInfoBtn">레벨표 보기</button>
+                    </div>
 					<div class="hidden" id="level_info_container">
-						<table border="1" style="width:500px;">
+						<table style="border: 1px solid black; width:500px;">
 							<thead>
 								<tr>
 									<td style="text-align: center;"><span style="font-family:굴림,Gulim,sans-serif;"><span style="font-size:16px;">레벨</span></span></td>
