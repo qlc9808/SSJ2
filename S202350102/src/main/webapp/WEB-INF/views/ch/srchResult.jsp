@@ -139,6 +139,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<div class="section-mt">
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				
@@ -417,6 +418,7 @@
 				</div> <!-- col-12 -->
 			</div> <!-- row -->
 		</div> <!-- container -->
+</div>
 	
 	
 	

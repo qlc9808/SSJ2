@@ -339,8 +339,8 @@
                   <!-- 인증예시 사진 -->
                   <div class="form-group" id="sampleUpdate">
                     <label class="form-label" for="sample_img">
-                      	인증 예시
-                      	<img alt="이미지 불러오기에 실패했습니다." src="${pageContext.request.contextPath}/upload/${chg.sample_img}">                      	
+                      	인증 예시<p>
+                      	<img alt="이미지 불러오기에 실패했습니다." src="${pageContext.request.contextPath}/upload/${chg.sample_img}" style="max-width: 400px"><p>                      	
                     </label>
                     <button type="button" onclick="appendInput()" id="apply">인증 예시 수정</button>                    
                     <input type="file" class="form-control" id="sample_img" name="sampleImgFile" style="display: none;">
@@ -425,13 +425,19 @@
                   <!-- 썸네일 -->
                   <div class="form-group">
                     <label class="form-label" for="thumb">
-                      	썸네일
-                      	<c:if test="${not empty chg.thumb }">
-                      		<img alt="이미지 불러오기에 실패했습니다." src="${pageContext.request.contextPath}/upload/${chg.thumb}" id="thumbImg">
-                      	</c:if>                      	
+                      	썸네일<p>
+                      	<c:choose>
+							<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">		
+							<p>						
+							</c:when>
+						
+							<c:otherwise>
+								<img class="card-img-top thumb-img" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="max-width: 400px"><p>
+							</c:otherwise>
+					</c:choose>                     	
                     </label>
                     <button  type="button" onclick="thumbUpdate()">썸네일 수정</button>
-                    <button  type="button" onclick="Deletethumb()" id="delBtn">썸네일 삭제</button>
+                    <button  type="button" onclick="Deletethumb()" id="delBtn">썸네일 삭제</button><p>
                     <input type="hidden" name="delStatus" value="0" id="delStatus">
 					<input type="file" class="form-control" id="thumb" name="thumbFile" style="display: none;">
                   </div>

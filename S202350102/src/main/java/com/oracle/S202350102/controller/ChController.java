@@ -426,17 +426,22 @@ public class ChController {
 		return srch_his;
 	}
 	
-	
-	@RequestMapping(value = "deleteHis")
-	public String deleteHis(String srch_word, HttpSession session) {
+	@ResponseBody
+	@PostMapping(value = "deleteHis")
+	public int deleteHis(String srch_word, HttpSession session) {
 		System.out.println("ChController deleteHis Start...");
 		SearchHistory sh = new SearchHistory();
-		sh.setUser_num((int) session.getAttribute("user_num"));
-		sh.setSrch_word(srch_word);
-		chSearchService.deleteHis(sh);
+		int result = 0;
+		if (session.getAttribute("user_num")!= null) {
+			sh.setUser_num((int) session.getAttribute("user_num"));
+			sh.setSrch_word(srch_word);
+			result = chSearchService.deleteHis(sh);
+		} else {
+			result = -1;
+		}
 		
 		
-		return "redirect:search";
+		return result;
 	}
 	
 	@ResponseBody
