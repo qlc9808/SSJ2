@@ -145,6 +145,7 @@
               <!-- Body -->
               <div class="modal-body my-auto py-10">
     
+    			
     			<h4>${user.nick}</h4>
                 <!-- Form -->
                 <form action="reviewUpdate"  method="post"  enctype="multipart/form-data">
@@ -212,13 +213,16 @@
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 
 <!-- 버튼 위치 조정하기 -->
-<div class="col-auto">
-	<c:if test="${user.user_num == reviewContent.user_num }">
-		<button  class="btn btn-xs btn-outline-border btn-danger" type="button" id="showUpdateModalBtn" onclick="updateModal()" >수정</button>
-<%-- 		<button  class="btn btn-xs btn-outline-border btn-danger" type="button"  onclick="location.href='reviewUpdateForm?brd_num=${reviewContent.brd_num}'" >수정</button> --%>
-		<button  class="btn btn-xs btn-outline-border btn-dark" type="button"  onclick="reviewDelete('${reviewContent.brd_num}', '${chg_id}', '${reviewContent.img}')" >삭제</button>
-	</c:if>
-	<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
+<div class="d-flex justify-content-end align-items-between mt-8 mb-4">
+	<div class="col-auto">
+		<button  class="btn btn-xs btn-dark" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
+		<c:if test="${user.user_num == reviewContent.user_num }">
+			<button  class="btn btn-xs btn-dark" type="button" id="showUpdateModalBtn" onclick="updateModal()" >수정</button>
+		</c:if>
+		<c:if test="${user.user_num == reviewContent.user_num || user.status_md == 102 }">
+			<button  class="btn btn-xs  btn-danger" type="button"  onclick="reviewDelete('${reviewContent.brd_num}', '${chg_id}', '${reviewContent.img}')" >삭제</button>
+		</c:if>
+	</div>
 </div>
 
 <div class="card mb-3">
@@ -228,7 +232,43 @@
 	<div class="card-body">
 
 	  <h3 class="card-title">${reviewContent.title }</h3>
-	  <h6 class="card-subtitle mb-2 text-muted">${reviewContent.nick }${result }</h6>
+	  
+	  <!-- 프로필 사진 -->
+<!-- img -->
+		<div class="d-flex justify-content-start align-items-center mt-6 mb-4">
+		  <div class="avatar avatar-lg mb-6 mb-md-0">
+		    <span class="avatar-title rounded-circle">
+		      <img src="${pageContext.request.contextPath}/upload/${reviewContent.user_img}" alt="profile" class="avatar-title rounded-circle">
+		    </span>
+		  </div>
+		  <h6 class="card-subtitle mb-2 text-muted align-self-center">${reviewContent.nick }</h6>
+		</div>
+
+		<div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+			<div>
+			  <small class="text-muted " style="margin-right: 10px;">조회수  ${reviewContent.view_cnt } </small>
+			  <small class="text-muted">
+			  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots" viewBox="0 0 16 16">
+				<path
+						d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+					<path
+						d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2" />
+				</svg>
+															
+				 ${reviewContent.replyCount } </small>
+			</div>
+		  <div>
+		  <small class="text-muted"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></small>
+		  </div>
+		  </div>
+		
+		
+		
+		
+		
+		
+		
+		<div class="d-flex justify-content-center mt-7 mb-10">
 		 <c:choose>
 		    <c:when test="${empty reviewContent.img}">
 				<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
@@ -237,12 +277,10 @@
 				 <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
 		    </c:otherwise>
 		</c:choose>
+		</div>
 
 
 	  <p class="card-text">${reviewContent.conts }</p>
-	  <p class="card-text"><small class="text-muted"><fmt:formatDate value="${reviewContent.reg_date }" pattern="yyyy-MM-dd"/></small></p>
-	  <p class="card-text"><small class="text-muted">조회수 : ${reviewContent.view_cnt }</small>
-	  <p class="card-text"><small class="text-muted">댓글수 : ${reviewContent.replyCount } </small>
 	 </div>
 	
      <!-- 댓글 쓰기 -->
@@ -320,11 +358,15 @@
  						<div class="col-12 col-md-auto">
 						    	
 					        <!-- 프로필 사진 -->
-					        <div class="avatar avatar-xxl mb-6 mb-md-0">
-					          <span class="avatar-title rounded-circle">
-					            <i class="fa fa-user"></i>
-					          </span>
-					        </div>
+					        <!-- img -->
+                            <div class="col-3">
+                              <div class="avatar avatar-xxl mb-6 mb-md-0">
+                                <span class="avatar-title rounded-circle">
+                                  <img src="${pageContext.request.contextPath}/upload/${reply.img}" alt="profile"
+                                    class="avatar-title rounded-circle">
+                                </span>
+                              </div>
+                            </div>
 					
 					    </div>
 					    <div class="col-12 col-md">
@@ -353,16 +395,20 @@
 			    	<!-- 댓글 내용 -->
 					      <div class="col-12 col-md-auto">
 						    	
-					        <!-- 프로필 사진 -->
-					        <div class="avatar avatar-xxl mb-6 mb-md-0">
-					          <span class="avatar-title rounded-circle">
-					            <i class="fa fa-user"></i>
-					          </span>
-					        </div>
+					       <!-- 프로필 사진 -->
+					        <!-- img -->
+                            <div class="col-3">
+                              <div class="avatar avatar-xxl mb-6 mb-md-0">
+                                <span class="avatar-title rounded-circle">
+                                  <img src="${pageContext.request.contextPath}/upload/${reply.img}" alt="profile"
+                                    class="avatar-title rounded-circle">
+                                </span>
+                              </div>
+                            </div>
 					
 					      </div>
-					        <div class="col-12 col-md">
-					      
+					        <div class="col-12 col-md d-flex justify-content-between align-items-center">
+					      	<div>
 					        <!-- 닉네임 -->
 					        <p class="mb-2 fs-lg fw-bold">
 					        <span class="col-5"><img title="Lv.${reply.user_level } | exp.${reply.user_exp}(${reply.percentage }%)" src="/images/level/${reply.icon}.gif">${reply.nick }
@@ -382,6 +428,7 @@
 					        <p class="text-gray-500">
 								${reply.conts }
 					        </p>
+					      	</div>
 					
 					        <div class="col-auto">
 					
@@ -389,8 +436,10 @@
 				             <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 				             <!-- 삭제 눌렀을 때 자스로 삭제하시겠습니까? 확인하는 alert만들기 -->
 							  <c:if test="${user.user_num == reply.user_num }">					 
-									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}&currentPage=${replyPage.currentPage }'">수정</button>
-									<button  class="btn btn-xs btn-outline-border" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
+									<button  class="btn btn-xs btn-outline-dark" type="button"  onclick="location.href='/showReplyUpdate?rep_brd_num=${reply.brd_num}&ori_brd_num=${reviewContent.brd_num }&chg_id=${chg_id}&currentPage=${replyPage.currentPage }'">수정</button>
+							  </c:if>
+							  <c:if test="${user.user_num == reply.user_num || user.status_md == 102 }">					 
+									<button  class="btn btn-xs btn-outline-danger" type="button"  onclick="replyDelete('${reviewContent.brd_num}', '${reply.brd_num}', '${chg_id}')" >삭제</button>
 							  </c:if>
 							  
 					        </div>

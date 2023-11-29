@@ -29,13 +29,22 @@
    		}
 	}
 	
-	function replyAdminList(brd_num){
+	//댓글 관리 버튼
+	function replyAdminList(brd_num, chg_id, title){
 		//나중에 모달로 바꾸기
-		location.href='/replyAdminList?brd_num='+ brd_num ;
+		location.href='/replyAdminList?brd_num='+ brd_num + '&chg_id=' + chg_id +'&title=' + title ;
 		
 	}
 	
 
+	//챌린지 관리로 돌아가는 목록 버튼
+	function chgAdminDetailFn(){
+		var chg_id = ${chg.chg_id}
+		var title  = '${chg.title }'
+		var state_md = ${state_md} 
+			location.href= "chgAdminDetail?chg_id="+chg_id+"&state_md="+state_md;
+		
+	}
 </script>
 </head>
 <body>
@@ -62,6 +71,11 @@
 		
 		<div class="col-md-10 ">
 		<div class="col-12">
+		<div class="col-12 col-md d-flex justify-content-end align-items-center">
+		<div class="col-auto mb-5"> 
+				<button  class="btn btn-xs btn-outline-dark" type="button"  onclick="chgAdminDetailFn()" >챌린지 상세보기</button>
+			</div>
+			</div>
 		<c:set var="num" value="${reviewPage.total-reviewPage.start+1 }"></c:set>
 		
 			<table class="table table-bordered table-sm mb-0   table-hover">
@@ -87,7 +101,7 @@
 						<td>${review.view_cnt }</td>
 						<td>${review.replyCount }</td>
 						<td class="justify-content-center">
-								<button type="button" class="btn btn-secondary btn-xxs" onclick="replyAdminList(${review.brd_num})">댓글 관리</button>
+								<button type="button" class="btn btn-secondary btn-xxs" onclick="replyAdminList(${review.brd_num},'${review.chg_id}','${chg.title }')">댓글 관리</button>
 						</td> 
 						<td class="justify-content-center">
 								<button type="button" class="btn btn-secondary btn-xxs" onclick="chgReviewAdminDelete('${review.brd_num}', '${review.chg_id}', '${review.img}')">삭제</button>
