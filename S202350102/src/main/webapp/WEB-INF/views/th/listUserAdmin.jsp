@@ -141,7 +141,7 @@
 							 </ul>
 				  		</nav>
 				  		
-			  		<!-- 유저 검색 현재 구현 안함 나중에 프로젝트 보완할때 구현하기-->
+			  		<!-- 나중에 이름 검색 추가하기 검색 옆에 sort 값줘서 -->
 					<div class="container d-flex justify-content-center my-5">
 					    <div class="d-flex justify-content-center">
 					        <div class="input-group input-group-merge">

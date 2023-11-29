@@ -19,8 +19,8 @@
 			let date 		= today.getDate();  		// 날짜
 			var todayString = year + "-" + month +"-" + date			
 			
-			alert('결제한 날짜 --> '+ $('#suc_date').text());
-			alert('현재 날짜 -->' + todayString);
+// 			alert('결제한 날짜 --> '+ $('#suc_date').text());
+// 			alert('현재 날짜 -->' + todayString);
 			
 			// 문자형 날짜를 다시 Date형으로 변환
 			var 	Todayfloor = new Date(todayString)
@@ -28,7 +28,7 @@
 			
 			// 두 날짜사이 시간차를 구함 --> / 밀리초    60초  60분 = /h 단위로 계산됨
 			const diffHour = diffDate/(1000 * 60 * 60);
-			alert('두 날짜사이 시간 --> ' + diffHour + '시간')
+// 			alert('두 날짜사이 시간 --> ' + diffHour + '시간')
 			if(diffHour > 24){
 				alert('구독취소는 구독후 24시간 이내에만 가능 합니다');
 				return false;
