@@ -27,6 +27,9 @@
 	  height: 400px !important;
 	  padding: 10px
 	}
+	.section-mt {
+		margin-top: 150px;
+	}
 </style>
 <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
 	<script type="text/javascript">
@@ -319,7 +322,7 @@
 	</script>
 </head>
 <body>
-<section>
+<section class="section-mt">
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				
