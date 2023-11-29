@@ -12,7 +12,6 @@
 	<!-- MODALS  -->
 
 	<!-- 비밀번호 리셋 MODAL -->
-
 	<div class="modal fade" id="modalPasswordReset" tabindex="-1"
 		role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
@@ -123,7 +122,7 @@
 
 	<!-- CONTENT -->
 	<section class="py-12">
-		<div class="container">
+		<div class="container section-mt">
 			<div class="row">
 				<div class="col-12 col-md-6" style="float: none; margin: 0 auto;">
 

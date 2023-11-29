@@ -752,10 +752,10 @@
                   </ul> 
                </div>
                
-				<div class="row gx-5 mb-7">
+				<div class="mb-7 d-flex justify-content-start">
 					<!-- 참여하기 -->
 					<!-- YR 작성 -->
-					<div class="col-6">
+					<div class="mx-1">
 						<c:choose>
 							<c:when test="${chg.stateCtn == '진행중'}">
 					
@@ -833,6 +833,10 @@
 						</c:choose>
 						
 						<!-- 참여완료 YN -->
+						<!-- 실제로 나타나는 버튼은 아님
+							 modal 띄우기 위해 존재하는 버튼
+							 hidden처리 되어있음 
+						-->
 						<button type="button" class="btn btn-danger mb-2" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
 							참여완료
 						</button>
@@ -855,7 +859,7 @@
 
 					<!-- 찜하기 -->
 					<!-- YR 작성 -->
-					<div class="col-6">
+					<div>
 
 						<c:choose>
 							<c:when test="${sessionScope.user_num != null}">

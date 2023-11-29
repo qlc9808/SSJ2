@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>  
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -16,12 +14,19 @@
 </script>
 </head>
 <body>
-	<div class="container">
+	<div class="container section-mt">
+			<div class="row">
+	            <!-- Heading -->
+	            <div class="col-12 text-center">
+            		<h3>챌린지 카테고리 관리</h3>
+          		</div>
+        	</div>
+        	
 		<div class="row">
 			<%@ include file="../jh/adminSidebar.jsp" %>
 			
-		<div class="col-md-10 profile-form">
-			<div class="tab-pane fade show active" id="followingList">
+			<div class="col-md-10 profile-form">
+        	
 	            <div class="row justify-content-center py-9">
 	              <div class="col-12 col-lg-10 col-xl-8">
 	                <div class="row">
@@ -58,7 +63,6 @@
 	                  </div>
 	                </div>
 	              </div>
-	          	</div>
            </div>
 		                
 			

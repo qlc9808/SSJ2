@@ -54,5 +54,11 @@ WHERE r BETWEEN #{start} AND #{end}
 		WHERE user_num = #{user_num}	
 	</select>
 	
+	<select id="YaSharingChk" parameterType="int" resultType="int">
+                select user_num
+                from sharingList
+                where brd_num = #{brd_num}	    
+	</select>	
+	
 	
 </mapper>	

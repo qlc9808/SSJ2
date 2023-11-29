@@ -5,7 +5,7 @@
 
 	<!-- 후기 내용 -->
 	<select id="jhReviewContent" parameterType="int" resultType="Board">
-		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.user_num, u.nick, b.view_cnt, replyCount(b.brd_num) replyCount
+		SELECT  b.brd_num, b.title, b.conts, b.img, b.reg_date, u.user_num, u.nick, u.img as user_img, b.view_cnt, replyCount(b.brd_num) as replyCount
 		FROM 	board b
 		INNER JOIN user1 u ON b.user_num = u.user_num
 		WHERE 	b.brd_num = #{brd_num}
@@ -55,7 +55,7 @@
 		FROM (
 				SELECT 	 ROWNUM AS rn, a.*
 				FROM	(
-						SELECT	 b.brd_num, b.conts, b.reg_date, u.user_num, u.nick
+						SELECT	 b.brd_num, b.conts, b.reg_date, u.user_num, u.nick, u.img
 						FROM 	 board b
 						INNER JOIN user1 u ON b.user_num = u.user_num
 						WHERE 	 b.brd_group = #{brd_num}

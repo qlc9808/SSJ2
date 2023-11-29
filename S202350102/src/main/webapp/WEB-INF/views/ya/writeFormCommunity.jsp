@@ -12,7 +12,7 @@
 </head>
 <body>
    <section class="pt-7 pb-12">
-      <div class="container">
+      <div class="container section-mt">
        <!-- Heading -->
         <div class="row">
           <div class="col-12 text-center"> 

@@ -472,8 +472,8 @@ public class JhController {
 	@RequestMapping(value = "replyDelete")
 	public String replyDelete(@RequestParam(value = "ori_brd_num" , required = false) String brd_num, 
 							  @RequestParam("rep_brd_num") String brd_num2,
-							  @RequestParam(required = false) Integer admin,
-							  int chg_id, 
+							  //@RequestParam(required = false) Integer admin,
+							  Integer chg_id, 
 							  HttpSession session, 
 							  Model model) {
 		//ori_brd_num : 원글번호(다시 후기 글로 돌아가기 위한 파라미터)
@@ -486,10 +486,22 @@ public class JhController {
 		
 		System.out.println("JhController replyDelete result -> " + result);
 		
-		if(admin == null) {
-			return "redirect:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id+"&result="+result;
+		
+		//세션에서 회원번호 가져옴
+		int userNum = 0;
+		if(session.getAttribute("user_num") != null) {
+			userNum = (int) session.getAttribute("user_num");
+			System.out.println("JhController replyDelete userNum -> " + userNum);
+		} 
+		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
+		User1 user = userService.userSelect(userNum);
+		int status_md = user.getStatus_md();
+		
+		
+		if(status_md == 102) {
+			return "redirect:replyAdminList?brd_num="+brd_num+"&chg_id="+chg_id;
 		}
-		return "redirect:replyAdminList?brd_num="+brd_num+"&chg_id="+chg_id;
+		return "redirect:reviewContent?brd_num="+brd_num+"&chg_id="+chg_id+"&result="+result;
 	}
 	
 	
@@ -1027,7 +1039,9 @@ public class JhController {
 		model.addAttribute("chgLg", chgLg);
 
 		
-		
+		if(chgUpdateMode==null) {
+			chgUpdateMode = "0";
+		}
 		
 		
 		/////////관리자 업데이트용 페이지 이동/////////
@@ -1266,7 +1280,7 @@ public class JhController {
 		
 	}
 	
-	
+	//후기 관리
 	@RequestMapping(value = "chgReviewAdmin")
 	public String chgReviewAdmin(Model model, Challenge chg, Board board, HttpSession session, String currentPage) {
 		System.out.println("JhController boardImgDelete Start...");
@@ -1276,31 +1290,43 @@ public class JhController {
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
-			System.out.println("JhController chgDetail userNum -> " + userNum);
+			System.out.println("JhController chgReviewAdmin userNum -> " + userNum);
 		} 
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController chgDetail userNum -> " + user);
+		System.out.println("JhController chgReviewAdmin userNum -> " + user);
 		model.addAttribute("user", user);
 		
+		//챌린지 번호
 		int chg_id = chg.getChg_id();
-		String title = chg.getTitle();
 		
-		System.out.println("JhController chgDetail title -> " + title);
+		//후기 원글 제목
+		String title = chg.getTitle();
+		model.addAttribute("title",title);
+		
+		System.out.println("JhController chgReviewAdmin title -> " + title);
+		System.out.println("JhController chgReviewAdmin chg_id -> " + chg_id);
+		
+		chg = jhCService.chgDetail(chg_id);
+		
+		//진행상태(챌린지 관리자 리스트로 돌아가기 위함)
+		int state_md = chg.getState_md();
+		model.addAttribute("state_md",state_md);
+		
 		
 		//후기 총 개수
 		int reviewTotal = jhBrdService.reviewTotal(chg_id);
 		model.addAttribute("reviewTotal", reviewTotal);
-		System.out.println("JhController chgDetail  reviewTotal -> "+ reviewTotal);
+		System.out.println("JhController chgReviewAdmin  reviewTotal -> "+ reviewTotal);
 		
 		//페이지네이션
 		Paging reviewPage = new Paging(reviewTotal, currentPage);
 		board.setStart(reviewPage.getStart());
 		board.setEnd(reviewPage.getEnd());
 		model.addAttribute("reviewPage",reviewPage);
-		System.out.println("JhController chgDetail  reviewPage.getStart() -> "+ reviewPage.getStart());
-		System.out.println("JhController chgDetail  reviewPage.getTotal() -> "+ reviewPage.getTotal());
-		System.out.println("JhController chgDetail  board.getChg_id() -> "+ board.getChg_id());
+		System.out.println("JhController chgReviewAdmin  reviewPage.getStart() -> "+ reviewPage.getStart());
+		System.out.println("JhController chgReviewAdmin  reviewPage.getTotal() -> "+ reviewPage.getTotal());
+		System.out.println("JhController chgReviewAdmin  board.getChg_id() -> "+ board.getChg_id());
 		
 		//후기 목록 조회
 		List<Board> chgReviewList = jhBrdService.chgReviewList(board);
@@ -1312,30 +1338,37 @@ public class JhController {
 		return "jh/jhChgReviewAdminList";
 	}
 	
-	
+	//댓글 관리
 	@RequestMapping(value = "replyAdminList")
 	public String replyAdminList(Board board, String currentPage, Model model, HttpSession session) {
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
 			userNum = (int) session.getAttribute("user_num");
-			System.out.println("JhController chgDetail userNum -> " + userNum);
+			System.out.println("JhController replyAdminList userNum -> " + userNum);
 		} 
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
 		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController chgDetail userNum -> " + user);
+		System.out.println("JhController replyAdminList userNum -> " + user);
 		model.addAttribute("user", user);
 		
 		//brd_num은 원글 글번호
 		int brd_num = board.getBrd_num();
-		System.out.println("JhController reviewContent  brd_num -> "+ brd_num);
-		System.out.println("JhController reviewContent  currentPage -> "+ currentPage);
+		System.out.println("JhController replyAdminList  brd_num -> "+ brd_num);
+		System.out.println("JhController replyAdminList  currentPage -> "+ currentPage);
 		
-		//챌린지 후기글 내용 조회
+		//챌린지 후기 원글 내용 조회
 		Board reviewContent = jhBrdService.reviewContent(brd_num);
-		
+		//후기 원글 번호
 		model.addAttribute("brd_num", brd_num);
+		//챌린지 번호
+		int chg_id = board.getChg_id();
+		model.addAttribute("chg_id", chg_id);
 		
+		//후기 원글 제목(목록버튼 클릭시 후기글로 돌아가기 위함)
+		String title = board.getTitle();
+		System.out.println("JhController replyAdminList  title -> "+ title);
+		model.addAttribute("title", title);
 		
 		//후기글 총 댓글 수
 		int replyCount = reviewContent.getReplyCount();
@@ -1346,10 +1379,10 @@ public class JhController {
 		board.setStart(replyPage.getStart());
 		board.setEnd(replyPage.getEnd());
 		model.addAttribute("replyPage",replyPage);
-		System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
-		System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
-		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
-		System.out.println("JhController reviewContent  currentPage -> "+ replyPage.getCurrentPage());
+		System.out.println("JhController replyAdminList  replyPage.getStart() -> "+ replyPage.getStart());
+		System.out.println("JhController replyAdminList  replyPage.getTotal() -> "+ replyPage.getTotal());
+		System.out.println("JhController replyAdminList  board.getChg_id() -> "+ board.getChg_id());
+		System.out.println("JhController replyAdminList  currentPage -> "+ replyPage.getCurrentPage());
 		
 		//챌린지 해당 글에 대한 댓글 조회
 		List<Board> reviewReplyList = jhBrdService.reviewReplyList(board);

@@ -137,6 +137,10 @@ body {
   display: none;
 }
 
+.section-mt {
+	margin-top: 150px;
+}
+
 </style>
 <meta charset="UTF-8">
 <title>자유게시판</title>
@@ -384,7 +388,7 @@ $(document).ready(function () {
 
 </head>
 <body>
-<section class="community">
+<section class="community section-mt">
 <div class="container text-center" style="padding-bottom: 0px; padding-top: 0px;">
     <h3 style="margin-bottom: 5px;">자유게시판</h3>
 </div>

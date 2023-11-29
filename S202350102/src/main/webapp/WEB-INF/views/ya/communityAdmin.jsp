@@ -10,7 +10,7 @@
 </head>
 <body>
 <section class="pt-7 pb-12">
- <div class="container"><!--  style=" margin-left: 300px;" -->            
+ <div class="container section-mt"><!--  style=" margin-left: 300px;" -->            
         <div class="row">
           <div class="col-12 text-center">			
             <!-- Heading -->        

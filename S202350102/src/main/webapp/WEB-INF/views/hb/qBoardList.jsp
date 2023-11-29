@@ -12,11 +12,11 @@
 </head>
 <body>
 	<c:import url="/WEB-INF/views/header4.jsp"/>
-	<div class="mainBody">
+	<div class="mainBody section-mt">
 	  <div class="qe_body">
 	    <div class="qe_box">
 	      <div class="qe_text_box">
-	        <span>문의게시판</span>
+	        <h2>문의게시판</h2>
 	      </div>
 	      <div class="qe_extra_box">
 	      	<div class="qe_select_box">
