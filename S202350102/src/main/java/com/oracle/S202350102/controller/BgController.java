@@ -277,6 +277,7 @@ public class BgController {
 	@PostMapping(value = "updateCertBrd")
 	public String updateCertBrd(Board board, Model model, HttpServletRequest request,
 								@RequestParam("chg_id") int chg_id,
+								@RequestParam("currentPage") int currentPage,
 								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
 										throws IOException {
 		log.info("updateCertBrd Start...");
@@ -302,7 +303,7 @@ public class BgController {
 		model.addAttribute("uptCnt", updateCount);
 		model.addAttribute("kk3", "Message Test");
 		
-		return "redirect:chgDetail?chg_id="+chg_id;
+		return "redirect:chgDetail?chg_id="+chg_id+"&currentPage="+currentPage;
 	}
 	
 	

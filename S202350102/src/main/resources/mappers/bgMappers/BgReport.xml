@@ -113,7 +113,7 @@
 							        And     TO_DATE(#{endDate}, 'YYYY-MM-DD') + INTERVAL '1' DAY
 						</when>
 				</choose>
-				Order By    r.report_id) a
+				Order By    r.report_id desc) a
 				)
 		Where   rn  Between #{start}   
 					And		#{end}

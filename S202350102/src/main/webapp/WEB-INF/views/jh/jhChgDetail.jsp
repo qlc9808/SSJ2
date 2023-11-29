@@ -265,7 +265,7 @@
 			processData: false,		// 이미지 파일 처리를 위해 false로 설정
 			contentType: false,		// 이미지 파일 처리를 위해 false로 설정
 			success:function(data){
-				alert(".ajax writeCertBrd->"+data); 
+				// alert(".ajax writeCertBrd->"+data); 
 				if (data == '1') {
 					// 성공하면 아래라인 수행 
 					alert("입력성공");
@@ -367,7 +367,7 @@
 			return;
 		}
 		
-		alert("type -> " + type);
+		// alert("type -> " + type);
 		// Group 번호 가져오기
 
  	
@@ -393,10 +393,10 @@
 		var brd_num 	= $("#brd_num"+index).val();
 		var img			= $("#img"+index).val();
 		var brd_group	= $("#brd_group"+index).val();
-		alert("brd_num -> " + brd_num);
-		alert("img -> " + img);
+		// alert("brd_num -> " + brd_num);
+		// alert("img -> " + img);
 
-		alert("JSON.stringify(arr)->"+JSON.stringify(arr));
+		// alert("JSON.stringify(arr)->"+JSON.stringify(arr));
 
 		$.ajax({
 			url:"/brdNumDelete",
@@ -408,7 +408,7 @@
 			dataType:'text',
 			
 			success:function(data){
-				alert(".ajax deleteCertBrd data -> "+data);
+				// alert(".ajax deleteCertBrd data -> "+data);
 				
 				if (data > '0') {
 					// id 가 review +index 성공하면 아래 라인 수행
@@ -418,7 +418,7 @@
 						
 						// 원글의 brd_group 가져오기
 						var brd_group = arr[index].brd_group;
-						alert("삭제 대상 brd_num -> "+brd_num);
+						// alert("삭제 대상 brd_num -> "+brd_num);
 						
 						// 댓글 그룹이 동일한 모든 댓글 삭제
 						// 'comment'로 시작하는 모든 div 엘리먼트에 대해 아래의 코드를 실행
@@ -427,7 +427,7 @@
 							if (brd_num == arr[i].brd_group ) {
 								//alert("arr.title2.brd_num->"+ i + " :  "+ arr[i].brd_num);
 								/// alert("arr.title2.brd_group->"+ i + " :  "+ arr[i].brd_group);
-								alert("arr.title2.idx->"+ i + " :  "+ arr[i].idx);
+								// alert("arr.title2.idx->"+ i + " :  "+ arr[i].idx);
 								// 원글인지 댓글인지 판단하여 삭제
 								if (arr[i].brd_num ==  arr[i].brd_group) {
 									$('#review'+arr[i].idx).remove();
@@ -471,7 +471,7 @@
 		// EL값을 JavaScript 변수에 저장 
 		// 실패:  
 		var sendMailUser_num	= ${user.user_num}; 
-		alert("sendMailUser_num -> "+sendMailUser_num); 
+		// alert("sendMailUser_num -> "+sendMailUser_num); 
 		 
 		// 넘겨줄 값을 저장 
 		var ssjUserNum	= $("#ssjUserNum").val(); 
@@ -489,7 +489,7 @@
 			dataType:'text',
 			success:	function (result) { 
 				// 성공했을 때의 동작 
-				alert("찌르기 성공"+result);
+				alert("메일이 발송되었습니다");
 				if(result == "1") {
 				window.location.href = 'chgDetail?chg_id='+${chg.chg_id}; 
 					
@@ -497,7 +497,7 @@
 			}, 
 			error:		function () { 
 				// 실패했을 때의 동작 
-				alert("찌르기 실패")
+				alert("메일이 발송되지 않았습니다")
 			} 
 		}); 
 		 
@@ -552,9 +552,44 @@
 		var keyword		= '${keyword != null ? keyword : ''}';
 		
 		location.href	= 'chgDetail?chg_id=' + chg_id
-				+	(searchType ? '&searchType=' + searchType : '')
-				+	(keyword ? '&keyword=' + keyword : '')
-				+	'&sortBy=' + sortBy;
+						+	(searchType ? '&searchType=' + searchType : '')
+						+	(keyword ? '&keyword=' + keyword : '')
+						+	'&sortBy=' + sortBy;
+	}
+	
+	
+	// 이전 블럭 이동
+	function movePrevBlock() {
+		var sortBy 	= 	$('#sortBy').val()
+		var chg_id		= ${chg.chg_id}
+		
+		// searchType 과 keyword 값이 존재하는 경우에만 추가
+		var searchType	= '${searchType != null ? searchType : ''}';
+		var keyword		= '${keyword != null ? keyword : ''}';
+		var pageNum		=	${certBrdPage.startPage - certBrdPage.pageBlock }
+
+		location.href	= 'chgDetail?chg_id=' + chg_id
+						+	(searchType ? '&searchType=' + searchType : '')
+						+	(keyword ? '&keyword=' + keyword : '')
+						+	'&sortBy=' + sortBy
+						+	'&currentPage=' + pageNum;
+	}
+	
+	// 다음 블럭 이동
+	function moveNextBlock() {
+		var sortBy 	= 	$('#sortBy').val()
+		var chg_id		= ${chg.chg_id}
+		
+ 		// searchType 과 keyword 값이 존재하는 경우에만 추가
+		var searchType	= '${searchType != null ? searchType : ''}';
+		var keyword		= '${keyword != null ? keyword : ''}';
+		var pageNum		=	${certBrdPage.startPage + certBrdPage.pageBlock }
+
+		location.href	= 'chgDetail?chg_id=' + chg_id
+						+	(searchType ? '&searchType=' + searchType : '')
+						+	(keyword ? '&keyword=' + keyword : '')
+						+	'&sortBy=' + sortBy
+						+	'&currentPage=' + pageNum;
 	}
 	
 	
@@ -566,8 +601,8 @@
 		var brd_num		= $('#brd_num' + p_index).val();
 		var myBurning	= $('#myBurning' + p_index).val();
 		
-		alert("report_cnt -> " + report_cnt);
-		alert("myBurning -> " + myBurning);
+		// alert("report_cnt -> " + report_cnt);
+		// alert("myBurning -> " + myBurning);
 		
 		var confirmationMsg = "이 글을 신고하시겠습니까? (+10°C)\n\n현재 신고 온도: " + report_cnt + "°C";
 		var cancelBurningMsg = "신고를 취소하시겠습니까? (-10°C)\n\n현재 신고 온도: " + report_cnt + "°C";
@@ -592,7 +627,7 @@
 	            // dataType 이란, 서버로부터 받아올 응답 데이터의 타입
 	            // -> 서버로 데이터를 전송할 때는 영향을 받지 X
 	            ,success:   function (burningResult) {
-	               alert("태우기 성공");
+	               // alert("태우기 성공"); -> 추후 취소 여부에 따라 다르게 alert 가 뜨도록 수정
 	               location.reload();
 	               
 	            },
@@ -606,6 +641,10 @@
 		}
 		
 	}
+	
+	
+	
+	
 	
 
 	
@@ -1101,7 +1140,7 @@
 				                <select class="form-select form-select-xs" id="sortBy" onchange="fn_sortBy()"> 
 				                  <option value="newest"	<c:if test="${sortBy eq 'newest' }">	selected="selected"</c:if>>최신 순</option>
 				                  <option value="oldest"	<c:if test="${sortBy eq 'oldest' }">	selected="selected"</c:if>>오래된 순</option>
-				                  <option value="like"		<c:if test="${sortBy eq 'like' }">		selected="selected"</c:if>>좋아요 순</option>
+				                  <%-- 보류 중 <option value="like"		<c:if test="${sortBy eq 'like' }">		selected="selected"</c:if>>좋아요 순</option> --%>
 				                </select>
 				              </div>
 				              </c:if>
@@ -1297,9 +1336,9 @@
 			              	<c:choose>
 			              		<c:when test="${certBoard.brd_step == 0 }">
 			              		<!-- 1. 원글 -->
-					              <div class="review" id="review${status.index}">
-					              	<div class="review-body">
-					              		<div class="row" id="certBoard${status.index}">
+					              <div class="review" id="review${status.index}"><!--  -->
+					              	<div class="review-body"><!--  -->
+					              		<div class="row" id="certBoard${status.index}"><!--  -->
 							              	<c:choose>
 							              		<c:when test="${certBoard.report_cnt >= 100 }">
 				                                   <div class="text-center">
@@ -1323,6 +1362,10 @@
 			                                        <input type="hidden" id="like_cnt${status.index}"		value="${certBoard.like_cnt}">
 			                                        <input type="hidden" id="report_cnt${status.index}"		value="${certBoard.report_cnt}">
 			                                        <input type="hidden" id="myBurning${status.index}"		value="${certBoard.myBurning}">
+			                                        <input type="hidden" id="user_level${status.index}"		value="${certBoard.user_level}">
+			                                        <input type="hidden" id="user_exp${status.index}"		value="${certBoard.user_exp}">
+			                                        <input type="hidden" id="percentage${status.index}"		value="${certBoard.percentage}">
+			                                        <input type="hidden" id="icon${status.index}"			value="${certBoard.icon}">
 							   						                  	
 								                  	
 								                  	<div class="col-5 col-md-3 col-xl-2">
@@ -1334,9 +1377,11 @@
 								                    <div class="col-12 col-md">
 								                    
 														<!-- Avatar -->
-								                    	<div class="avatar avatar-lg">
-														  <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
-														</div>
+														<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+									                    	<div class="avatar avatar-lg">
+															  <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
+															</div>
+														</a>
 								                    
 								                      <!-- Header -->
 								                      <div class="row mb-6">
@@ -1344,6 +1389,7 @@
 								                         	<!-- Time -->
 								                         	<span class="fs-xs text-muted">
 																<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+																	<img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">
 																	<span style="color: black;">${certBoard.nick}</span>
 																</a>
 																<time datetime="2019-07-25">${certBoard.reg_date }</time>
@@ -1374,48 +1420,35 @@
 																<c:choose>
 																	<c:when test="${sessionScope.user_num != null }">
 																		<!-- 로그인 한 상태 -->
-																
-																		<c:choose>
-																			<c:when test="${certBoard.likeyn > 0}">
-																				<!-- 좋아요 눌렀을 때 -->
-																				<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
-																					좋아요 
-																					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-																						<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-																					</svg>
-																				</a>
-																			</c:when>
-																
-																			<c:otherwise>
-																				<!-- 좋아요 안 눌렀을 때 -->
-																				<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button" onclick="likePro(${status.index})">
-																					좋아요 
-																					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																						<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																					</svg>
-																				</a>
-																
-																
-																			</c:otherwise>
-																
-																		</c:choose>
-																
+																		<a class="rate-item" data-toggle="vote" role="button" onclick="likePro(${status.index})">
+																			좋아요 
+																			<c:choose>
+																				<c:when test="${certBoard.likeyn > 0}">
+																					<!-- 좋아요 눌렀을 때 -->
+																					<img alt="heart-fill" src="./images/yr/heart-fill.png"
+																						id="likeBtn${status.index }">
+																				</c:when>
+																		
+																				<c:otherwise>
+																					<!-- 좋아요 안 눌렀을 때 -->
+																					<img alt="heart" src="./images/yr/heart.png"
+																						id="likeBtn${status.index }">
+																				</c:otherwise>
+																			</c:choose>
+																			<span id="inputLikeCnt${status.index}">${certBoard.like_cnt}</span>
+																		</a>
 																	</c:when>
-																
 																	<c:otherwise>
 																		<!-- 로그인 안 한 상태 -->
-																		<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
+																		<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" role="button">
 																			좋아요 
-																			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																				<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																			</svg>
+																			<img alt="heart" src="./images/yr/heart.png">
 																		</a>
 																	</c:otherwise>
-																
 																</c:choose>
 			
 																<a class="rate-item" data-toggle="vote" data-count="(${certBoard.report_cnt }°C)" href="#" role="button" onclick="Burning(${status.index})">
-																	태워요 <i class="fa-solid fa-fire"></i>
+																	태워요<i class="fa-solid fa-fire ms-2"></i>
 																</a>
 															</div>
 									                        
@@ -1423,7 +1456,7 @@
 								                        
 								                        <div class="col-auto d-none d-lg-block">
 								                          <!-- Text -->
-								                          <p class="mb-0 fs-sm">Comments (${certBoard.replyCount })</p>
+								                          <p class="mb-0 fs-sm">댓글<i class="fa-regular fa-comments ms-2"></i> (${certBoard.replyCount })</p>
 								                        </div>
 								                        
 								                        <c:choose>
@@ -1468,60 +1501,26 @@
 							              	</c:choose>
 					              	
 					                  	</div> <!-- <div class="row" id="certBoard${status.index}"> -->
-                                        <input type="hidden" id="user_level${status.index}"		value="${certBoard.user_level}">
-                                        <input type="hidden" id="user_exp${status.index}"		value="${certBoard.user_exp}">
-                                        <input type="hidden" id="percentage${status.index}"		value="${certBoard.percentage}">
-                                        <input type="hidden" id="icon${status.index}"			value="${certBoard.icon}">
-											<!-- Avatar -->
-											<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
-						                    	<div class="avatar avatar-lg">
-												  <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
-												</div>
-											</a>
-					                         	<!-- Time -->
-					                         	<span class="fs-xs text-muted">
-													<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
-														<img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">
-														<span style="color: black;">${certBoard.nick}</span>
-													</a>
-													<time datetime="2019-07-25">${certBoard.reg_date }</time>
-												</span>
-														<c:when test="${sessionScope.user_num != null }">
-															<!-- 로그인 한 상태 -->
-															<a class="rate-item" data-toggle="vote" role="button" onclick="likePro(${status.index})">
-																좋아요 
-																<c:choose>
-																	<c:when test="${certBoard.likeyn > 0}">
-																		<!-- 좋아요 눌렀을 때 -->
-																		<img alt="heart-fill" src="./images/yr/heart-fill.png"
-																			id="likeBtn${status.index }">
-																	</c:when>
-														</c:when>
-															</a>
-																<span id="inputLikeCnt${status.index}">${certBoard.like_cnt}</span>
-																</c:choose>
-																	</c:otherwise>
-																			id="likeBtn${status.index }">
-																		<img alt="heart" src="./images/yr/heart.png"
-																		<!-- 좋아요 안 눌렀을 때 -->
-																	<c:otherwise>
-														
-														</c:otherwise>
-															</a>
-																<img alt="heart" src="./images/yr/heart.png">
-																좋아요 
-															<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" role="button">
-															<!-- 로그인 안 한 상태 -->
-														<c:otherwise>
 													
-					                </div>
+					                </div><!-- <div class="review-body"> -->
 					                
-					              </div>
+					              </div><!-- <div class="review" id="review${status.index}"> -->
+					             
 				              	</c:when>
 			            		<c:otherwise>
 			            		<!-- 2. 댓글 Child review -->
 									<div class="review" id="comment${status.index }">
-		            					<div class="review review-child">
+										<c:choose>
+											<c:when test="${certBoard.report_cnt >= 100 }">
+			                                   <div class="text-center">
+			                                       <div class="mb-6 fs-1">🔥</div>
+			                                       <p>
+			                                           	다수의 사용자에 의해 다 탄 소시지의 댓글입니다
+			                                       </p>
+			                                   </div>
+			                                </c:when>
+			                                <c:otherwise>
+			                                <div class="review review-child">
 						                  <div class="review-body">
 							                  <div class="row" id="certBoard${status.index}">
 							                  	<input type="hidden" id="brd_num${status.index}"	value="${certBoard.brd_num }">
@@ -1547,7 +1546,6 @@
 								                        </div>
 							                        </a>
 												</div>
-							                    
 							                    
 							                    
 							                    <div class="col-12 col-md">
@@ -1623,7 +1621,7 @@
 															</c:choose>
 
 															<a class="rate-item" data-toggle="vote" data-count="(${certBoard.report_cnt }°C)" href="#" role="button" onclick="Burning(${status.index})">
-																태워요 <i class="fa-solid fa-fire"></i>
+																태워요<i class="fa-solid fa-fire ms-2"></i>
 															</a>
 								                        </div>
 							                      	</div>
@@ -1646,6 +1644,17 @@
 							                  </div>
 							                </div>
 										</div>	
+			                                
+			                                
+			                                
+			                                
+			                                </c:otherwise>
+										</c:choose>
+									
+									
+									
+									
+		            					
 									</div>
 				                </c:otherwise>
 			            	</c:choose>		
@@ -1811,6 +1820,7 @@
 					              <input type="hidden" name="brd_num"	id="editBrd_num">
 					              <input type="hidden" name="nick" 		id="editNick">
 					              <input type="hidden" name="chg_id" 	value="${chg.chg_id }">
+					              <input type="hidden" name="currentPage" 	value="${certBrdPage.currentPage }">
 					                
 									<div class="avatar avatar-xl">
 									  <img src="" alt="profile" class="avatar-img rounded-circle" id="editUserImg">
@@ -1975,7 +1985,7 @@
 		      	   		 <ul class="pagination pagination-sm text-gray-400">
 						  	<c:if test="${certBrdPage.startPage > certBrdPage.pageBlock }">
 						  		<li class="page-item">
-									<a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&searchType=${searchType }&keyword=${keyword }&sortBy=${sortBy }&currentPage=${certBrdPage.startPage-page.pageBlock }">
+									<a class="page-link page-link-arrow" href="#" onclick="movePrevBlock()">
 									<i class="fa fa-caret-left">이전</i></a>
 								</li>
 							</c:if>
@@ -1992,7 +2002,7 @@
 							</c:forEach>
 						    <c:if test="${certBrdPage.endPage < certBrdPage.totalPage }">
 						    	<li class="page-item">
-									<a class="page-link page-link-arrow" href="chgDetail?chg_id=${chg.chg_id}&searchType=${searchType }&keyword=${keyword }&sortBy=${sortBy }&currentPage=${certBrdPage.startPage + certBrdPage.pageBlock }">
+									<a class="page-link page-link-arrow" href="#" onclick="moveNextBlock()">
 									<i class="fa fa-caret-right">다음</i></a>
 								</li>
 							</c:if>

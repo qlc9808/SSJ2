@@ -38,6 +38,7 @@
 		        Where   brd_md	= 	100
                 and     brd_lg	=	700
                 and     chg_id	=	#{chg_id}
+                
 		        ) b
 		Where b.row_num Between #{start} 
 						And 	#{end}
@@ -149,7 +150,19 @@
 	<select id="searchCrtBd" parameterType="board" resultType="board">
 		Select  *
 		From    (Select rownum  rn, a.*
-		         From   (Select b.*, u.nick, replyCount(b.brd_num) replyCount
+		         From   (Select b.*, u.nick, u.img as user_img, replyCount(b.brd_num) replyCount
+		         		,count_like(b.brd_num) as like_cnt
+		                ,toggle_burning_count_function2(b.brd_num) as report_cnt
+		                ,(SELECT 	COUNT(*)
+				                   FROM   	board_like bl
+				                   WHERE 	bl.brd_num = b.brd_num
+				                   AND 		bl.user_num = 1
+				                  ) AS likeyn
+		                , (SELECT	SUM(cnt)
+		                   FROM		report r
+		                   WHERE	r.brd_num	= b.brd_num
+		                   AND		r.user_num	= 1
+		                   ) As myBurning
 		                 From   board b
 		                 Inner Join user1 u On  b.user_num = u.user_num
 		                 Where  brd_md  =   100

@@ -258,7 +258,7 @@ public class JhController {
 			System.out.println("certBrdPage.getTotal() -> "+certBrdPage.getTotal());
 			
 			// certBoard: 인증 게시판 글 불러오기		mapper 키: bgCertBoardAll
-			List<Board> certBoard = bBoardD.certBoard(board);
+			List<Board> certBoard = bBoardS.certBoard(board);
 			certBoard = userService.boardWriterLevelInfo(certBoard);
 			System.out.println("BgController certBoard.size() -> "+certBoard.size());
 			model.addAttribute("certBoard", certBoard);
@@ -293,7 +293,7 @@ public class JhController {
 			
 			// R
 			// mapper key: searchCrtBd		 검색 결과 리스트 R
-			List<Board> srchResult = bBoardD.searchCrtBd(board);
+			List<Board> srchResult = bBoardS.searchCrtBd(board);
 			srchResult = userService.boardWriterLevelInfo(srchResult);
 			System.out.println("srchResult.size() -> "+srchResult.size());
 			
