@@ -281,7 +281,7 @@
 									</c:forEach>
 									</div>
 								</div>
-							<button onclick="moveAndLoadTab(200, '${srch_word}')">더보기</button>
+							<button onclick="moveAndLoadTab(200, '${srch_word}')" class="btn btn-outline-dark btn-xxs">더보기</button>
 							</section>
 							
 							<hr>
@@ -366,7 +366,7 @@
 									    </c:forEach>
 									    </div>							
 								</div>
-							<button onclick="moveAndLoadTab(102, '${srch_word}')">더보기</button>
+							<button onclick="moveAndLoadTab(102, '${srch_word}')" class="btn btn-outline-dark btn-xxs">더보기</button>
 							</section>
 							
 							<hr>
@@ -395,7 +395,7 @@
 									</table>
 									<%-- <a href="srchcommunity?srch_word=${srch_word }">더보기</a> --%>
 								</div>
-								<button onclick="moveAndLoadTab(103, '${srch_word}')">더보기</button>
+								<button onclick="moveAndLoadTab(103, '${srch_word}')" class="btn btn-outline-dark btn-xxs">더보기</button>
 							</section>
 		            	</div> 
 		            	
