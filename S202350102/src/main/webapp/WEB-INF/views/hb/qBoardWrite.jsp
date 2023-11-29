@@ -14,16 +14,21 @@
 </head>
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
-	<div class="main">
+	<div class="container">
+		<div class="row">
+          <div class="col-12 text-center"> 
+            <h3 class="mb-10"> 문의글 작성</h3>
+          </div>
+        </div>
 		<form class="brd" action="qBoardWrite" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="brd_lg" value="400">
 			<table class="brd-tb">
-				<tr class="brd-title">
+				<tr class="brd-title" style="background: #ccc;">
 					<td>제목</td>
-					<td><input type="text" maxlength="25" name="title" required="required"></td>
+					<td><input style="background: #ccc;" type="text" maxlength="25" name="title" required="required"></td>
 				</tr>
 				<tr class="brd-line"></tr>
-				<tr class="brd-option">
+				<tr class="brd-option" style="background: #ccc;">
 					<td>파일</td>
 					<td><%@ include file="/WEB-INF/views/hb/test.jsp" %></td>
 					<td>카테고리</td>
@@ -39,10 +44,10 @@
 					</td>
 				</tr>
 				<tr class="brd-line"></tr>
-				<tr class="brd-conts">
+				<tr class="brd-conts" style="background: #ccc;">
 					<td>내용</td>
 					<td>
-						<textarea name="conts" id="conts" required="required"></textarea>
+						<textarea style="background: #ccc;" name="conts" id="conts" required="required"></textarea>
 					</td>
 				</tr>
 				<tr class="brd-line"></tr>
