@@ -208,4 +208,32 @@ public class JkBoardDaoImpl implements JkBoardDao {
 		return sharingResult;
 	
 	}
+
+	@Override
+	public List<Board> sharing2(Board board) {
+		// board 테이블 쉐어링게시판조회
+		List<Board> sharing2 = null;
+		System.out.println("JkBoardDaoImpl Sharing start...");
+		try {
+			sharing2 = session.selectList("sharing2", board);
+			System.out.println("JkBoardDaoImpl Sharing.size()-->"+sharing2.size());
+		} catch (Exception e) {
+			System.out.println("JkBoardDaoImpl Sharing e.getMessage()?"+e.getMessage());
+		}
+		
+		return sharing2;
+	}
+
+	@Override
+	public int myBoard(int user_num) {
+		int myBoard = 0;
+		try {
+			myBoard = session.selectOne("myBoard", user_num);
+			System.out.println("myboardCnt-->" + myBoard);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("JkBoardDaoImpl myBoard e.getMessage->" + e.getMessage());
+		}
+		return myBoard;
+	}
 }

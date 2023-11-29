@@ -45,17 +45,18 @@ public class Level1ServiceImpl implements Level1Service {
 	@Override
 	public void userLevelCheck(int user_num) {
 		User1 user1 = ud.userSelect(user_num);
-		int user_level = userLevelUp( user1.getUser_exp(), user1.getUser_level());
+		// userLevelUp 메소드에 현재 유저의 경험치, 레벨을 넣어 조건에 따라 결과 레벨값을 도출
+		int user_level = userLevelUp( user1.getUser_exp(), user1.getUser_level()); 
 		
+		// 위 메소드를 통해 얻은 user_level이 현재 유저가 갖고있는 레벨과 같지 않다면 레벨업
 		if ( user_level != user1.getUser_level() ) {
-			ud.userLevelUp(user_num);
+			ud.userLevelUp(user_num); // ud는 유저dao (여긴 level service )
 		}
 	}
 	
 	private int userLevelUp(int user_exp, int user_level) {
-		Level1 nextLevelInfo = ld.level1Select(user_level+1);
 		
-		Level1 level1 = new Level1();
+		Level1 nextLevelInfo = ld.level1Select(user_level+1); // 유제레벨의 다음 레벨에 대한 정보
 		List<Level1> level1List = ld.level1List();
 		if ( nextLevelInfo == null ) {
 			return user_level;
@@ -88,21 +89,21 @@ public class Level1ServiceImpl implements Level1Service {
 		int user_exp = user1.getUser_exp();
 		String combineValue = lg+"-"+md;
 		
-		if ( user1.getStatus_md() == 100 ) { // 일반회원
+		if ( user1.getStatus_md() != 101 ) { // 일반회원
 		    if (combineValue.startsWith("200-")) {
-				user1.setUser_exp(user_exp+10);
+				user1.setUser_exp(user_exp+50);
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("600-101")) {
-		    	user1.setUser_exp(user_exp+5);
+		    	user1.setUser_exp(user_exp+25);
 		    	ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-100")) {
-				user1.setUser_exp(user_exp+1);
+				user1.setUser_exp(user_exp+5);
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-101")) {
-				user1.setUser_exp(user_exp+3);
+				user1.setUser_exp(user_exp+15);
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-103")) {
-				user1.setUser_exp(user_exp+1);
+				user1.setUser_exp(user_exp+5);
 				ud.userExpUp(user1);
 		    } 
 //		    else if (combineValue.startsWith("400-")) { // 테스트용
@@ -113,19 +114,19 @@ public class Level1ServiceImpl implements Level1Service {
 //			}
 		} else if ( user1.getStatus_md() == 101 ) { // 프리미엄회원
 		    if (combineValue.startsWith("200-")) {
-				user1.setUser_exp(user_exp+(10*3));
+				user1.setUser_exp(user_exp+(50*3));
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("600-101")) {
-		    	user1.setUser_exp(user_exp+(5*3));
+		    	user1.setUser_exp(user_exp+(25*3));
 		    	ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-100")) {
-				user1.setUser_exp(user_exp+(1*3));
+				user1.setUser_exp(user_exp+(5*3));
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-101")) {
-				user1.setUser_exp(user_exp+(3*3));
+				user1.setUser_exp(user_exp+(15*3));
 				ud.userExpUp(user1);
 		    } else if (combineValue.equals("700-103")) {
-				user1.setUser_exp(user_exp+(1*3));
+				user1.setUser_exp(user_exp+(5*3));
 				ud.userExpUp(user1);
 		    }
 		}

@@ -7,9 +7,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oracle.S202350102.dto.Board;
+import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.BoardService;
+import com.oracle.S202350102.service.main.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MainController {
 	private final BoardService bs;
+	private final UserService us;
+	private final UserService userService;
+	private final ChController chController;
 	
 	@RequestMapping(value ="/")
-	public String index(HttpSession session, Model model) {
+	public String index(HttpSession session, Model model, Board board, String end) {
 		System.out.println("MainController index Start...");
 		
 		// yr 작성
@@ -32,11 +39,26 @@ public class MainController {
 			System.out.println("MainController index userNum -> " + userNum);
 		}
 		
+		//유저 정보(회원번호) 조회
+		User1 user = userService.userSelect(userNum);
+		
 		// 인증게시판 출력
-		List<Board> chgCert = bs.selectChgCert(userNum);
-		System.out.println("MainController index chgCert -> " + chgCert);
+		board.setUser_num(userNum);
+		if(end == null) {
+			board.setEnd(10);
+		} else {
+			board.setEnd(Integer.parseInt(end));
+		}
+		
+		
+		
+		List<Board> chgCert = bs.selectChgCert(board);
+		chgCert = us.boardWriterLevelInfo(chgCert);
 		
 		model.addAttribute("chgCertList", chgCert);
+		model.addAttribute("user", user);
+		model.addAttribute("board", board);
+		chController.search(model, session);
 		
 		return "home2";
 	}
@@ -130,7 +152,7 @@ public class MainController {
 	
 	@RequestMapping(value ="loginForm")
 	public String logInForm() {
-		System.out.println("MainController logIn Start...");
+		System.out.println("MainController loginForm Start...");
 		
 		return "loginForm";
 	}

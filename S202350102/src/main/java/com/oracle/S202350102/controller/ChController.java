@@ -4,7 +4,8 @@ package com.oracle.S202350102.controller;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,10 +39,10 @@ import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.SearchHistory;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.bgService.BgBoardService;
 import com.oracle.S202350102.service.chService.ChBoardService;
 import com.oracle.S202350102.service.chService.ChChallengeService;
 import com.oracle.S202350102.service.chService.ChSearchService;
-import com.oracle.S202350102.service.chService.ChUser1Service;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jhService.JhCallengeService;
 import com.oracle.S202350102.service.main.UserService;
@@ -61,8 +63,8 @@ public class ChController {
 	private final ChChallengeService	chChallengeService;
 	private final UserService			userService;
 	private final JhCallengeService 	jhCService;
-	private final ThChgService 			tcs;
-	
+	private final ThChgService 			tcs;	
+	private final BgBoardService 		bBoardD;
 	
 	// notice List 조회 
 	@RequestMapping("/notice")
@@ -169,10 +171,12 @@ public class ChController {
 		System.out.println("ChController noticeUpdateForm Start...");
 		System.out.println("brd_num->" + board.getBrd_num());
 		int user_num = 0;
+		
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
 			// 글의 user_num과 내 session의 user_num이 같은가?
-			if(board.getUser_num() == user_num) {
+			User1 user = userService.userSelect(user_num);
+			if(user.getStatus_md() == 102) {
 				Board noticeConts = chBoardService.noticeConts(board.getBrd_num());
 				model.addAttribute("noticeConts", noticeConts);
 				
@@ -185,24 +189,36 @@ public class ChController {
 	}
 	// notice Update
 	@PostMapping("noticeUpdate")
-	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws IOException {
+	public String noticeUpdate(Board board, HttpServletRequest request, @RequestParam(value = "file1", required = false) MultipartFile file1) throws Exception {
+		
 		System.out.println("ChController noticeUpdate Start...");
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 		int result = 0;
+		if(board.getDelStatus() == 1 || file1.getOriginalFilename().length() > 0) {			
+			String deleteFile = uploadPath + board.getImg();			
+			//실제 upload에 담김 파일 이미지 삭제
+			int delResult= upFileDelete(deleteFile);
+			System.out.println("기존 파일 삭제 결과" + delResult);
+			board.setImg(null);
+			
+		}		
+		
 		ServletContext servletContext = request.getSession().getServletContext();
 		String realPath = servletContext.getRealPath("/upload/");
 		System.out.println("realPath->" + realPath);
-		if(file1 != null) {
+		if(file1.getOriginalFilename().length() > 0) {
 			String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), realPath);  // 진짜 저장
 			
 			board.setImg(saveName);	
 		}
-		
 		
 		result = chBoardService.noticeUpdate(board);
 	
 		request.setAttribute("brd_md", board.getBrd_md());
 		return "forward:notice";
 	}
+	
+	
 	// notice 삭제 확인
 	@GetMapping("deleteNoticeForm")
 	public String deleteform(int brd_num, Model model) {
@@ -222,8 +238,9 @@ public class ChController {
 		
 		if(session.getAttribute("user_num") != null) {
 			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
 			// 글의 user_num과 내 session의 user_num이 같은가?
-			if(board.getUser_num() == user_num) {
+			if(user.getStatus_md() == 102) {
 				int result = chBoardService.deleteNotice(board.getBrd_num());
 				request.setAttribute("brd_md",board.getBrd_md());
 				
@@ -236,12 +253,11 @@ public class ChController {
 		
 	}
 	// 검색 기본 page
-	@GetMapping("search")
+	
 	public String search(Model model, HttpSession session) {
 		System.out.println("ChController search Start...");
-		List<Challenge> popchgList = chChallengeService.popchgList(); // 챌린지
 		List<Board> popBoardList = chBoardService.popBoardList(); // 자유개시판
-		List<Board> popShareList = chBoardService.popShareList();
+		
 		
 		// 검색기록 조회
 		int user_num = 0;
@@ -253,6 +269,8 @@ public class ChController {
 			model.addAttribute("shList", sh);
 			
 		}
+		List<Challenge> popchgList = chChallengeService.popchgList(user_num); // 챌린지
+		List<Board> popShareList = chBoardService.popShareList(user_num); // share
 		model.addAttribute("user_num", user_num);
 		model.addAttribute("popchgList", popchgList); 
 		model.addAttribute("popBoardList", popBoardList);
@@ -261,6 +279,55 @@ public class ChController {
 		
 		return "search";
 	}
+	
+	@ResponseBody
+	@GetMapping("popChgList")
+	public ModelAndView popChgList( ModelAndView mav, HttpSession session) {
+		System.out.println("ChController popChgList STart...");
+		int user_num = 0;
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		List<Challenge> popchgList = chChallengeService.popchgList(user_num); // 챌린지
+		
+		mav.addObject("popchgList", popchgList);
+		mav.setViewName("ch/ajaxPage/popChgListPage");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@GetMapping("popShareList")
+	public ModelAndView popShareList( ModelAndView mav, HttpSession session) {
+		System.out.println("ChController popChgList STart...");
+		int user_num = 0;
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		List<Board> popShareList = chBoardService.popShareList(user_num);
+		
+		mav.addObject("popShareList", popShareList);
+		mav.setViewName("ch/ajaxPage/popShareListPage");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@GetMapping("popCommuList")
+	public ModelAndView popCommuList( ModelAndView mav) {
+		System.out.println("ChController popChgList STart...");
+		List<Board> popBoardList = chBoardService.popBoardList();
+		
+		mav.addObject("popBoardList", popBoardList);
+		mav.setViewName("ch/ajaxPage/popCommuList");
+		
+		return mav;
+	}
+	
+	
 	
 	// 검색기능 
 	@GetMapping("searching")
@@ -297,9 +364,12 @@ public class ChController {
 			Board[] srchList = {srchChg, srchShare, srchCommu};
 			
 			for(Board i : srchList) {
-				i.setKeyword(replSrch_word);			
+				i.setKeyword(replSrch_word);				
 				i.setStart(1);
 				i.setEnd(5);
+				if(user_num > 0) {
+					i.setUser_num(user_num);
+					}
 			}
 			
 			// 입력된 키워드에 따라 검색 
@@ -371,14 +441,14 @@ public class ChController {
 	
 	@ResponseBody
 	@RequestMapping(value = "rechk")
-	public commReChk alarmchk(HttpSession session, ModelAndView mav) {
+	public commReChk alarmchk(HttpSession session) {
 		int result = 0;
 		List<BoardReChk> nochkList = null;
 		commReChk rechk = new commReChk();
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
 			
-			nochkList = chBoardService.alarmchk(user_num);
+			nochkList = chBoardService.alarmchk(user_num);			
 			result = nochkList.size();
 			System.out.println("nochkList.size()->" + nochkList.size());
 			rechk.setListBdRe(nochkList);
@@ -432,7 +502,7 @@ public class ChController {
 	
 	
 	public void myConts(HttpSession session, Model model, String currentPage) {
-		System.out.println("ChController myConts Start...");
+//		System.out.println("ChController myConts Start...");
 		int user_num = 0;
 		
 		
@@ -450,9 +520,11 @@ public class ChController {
 			user_num = (int)session.getAttribute("user_num");
 			Board board = new Board();
 			List<Paging> myPaging = chBoardService.myCount(user_num);
-			System.out.println("myPaging size->" + myPaging.size());
+//			System.out.println("myPaging size->" + myPaging.size());
+			
 			for(Paging p : myPaging) {
 				if(p.getBrd_md() == 100) {
+					/*********************인증*********************/
 					myCertiPage= new Paging(p.getTotal(), currentPage);
 					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
@@ -464,20 +536,22 @@ public class ChController {
 					model.addAttribute("Certi_md",p.getBrd_md());
 					model.addAttribute("myCertiPage",myCertiPage);
 				} else if(p.getBrd_md() == 101) {
+					/*********************후기*********************/
 					myReviewPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
+//					System.out.println("myCertiPage.getBrd_md()->" + p.getBrd_md());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myReviewPage.getStart());
-					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
+//					System.out.println("myReviewPage.getStart()->" + p.getBrd_md());
 					board.setEnd(myReviewPage.getEnd());
 					myReviewList = chBoardService.mychgBoardList(board);
 					
 					model.addAttribute("Review_md",p.getBrd_md());
 					model.addAttribute("myReviewPage",myReviewPage);
 				} else if(p.getBrd_md() == 102) {
+					/*********************쉐어링*********************/
 					mySharePage= new Paging(p.getTotal(), currentPage);
-					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
+//					System.out.println("mySharePage.getBrd_md()->" + mySharePage.getBrd_md());			
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(mySharePage.getStart());
@@ -487,8 +561,10 @@ public class ChController {
 					model.addAttribute("Share_md",p.getBrd_md());
 					model.addAttribute("mySharePage",mySharePage);
 				} else if(p.getBrd_md() == 103) {
+					/*********************자유*********************/
 					myCommuPage= new Paging(p.getTotal(), currentPage);
-					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+//					System.out.println("myCommuPage.getBrd_md()->" + myCommuPage.getBrd_md());
+//					System.out.println("-------------------------myCommuPage.myCommuPage.getTotal()->" + myCommuPage.getStart());
 					board.setBrd_md(p.getBrd_md());
 					board.setUser_num(user_num);
 					board.setStart(myCommuPage.getStart());
@@ -530,7 +606,8 @@ public class ChController {
 	@PostMapping(value = "moveToNewCmt")
 	public String moveToNewCmt(BoardReChk brc) {
 		System.out.println("ChController readAlarm Start...");
-		
+		System.out.println("----------------brc.getBrd_num()----------"+brc.getBrd_num());
+		System.out.println("----------------brc.getUser_num()----------"+brc.getUser_num());
 		int result = chBoardService.moveToNewCmt(brc);
 		
 		String result1 = Integer.toString(result);
@@ -605,14 +682,45 @@ public class ChController {
 	
 	@ResponseBody
 	@PostMapping(value = "myContsDelete")
-	public int myContsDelete(int brd_num) {
+	public int myContsDelete(int brd_num, HttpServletRequest request) throws Exception {
 		System.out.println("ChController myContsDelete Start");
 		System.out.println("ChController myContsDelete board.getBrd_num() -> "+brd_num);
 		int result = 0;
+		Board board = chBoardService.noticeConts(brd_num);
 		
 		result = chBoardService.deleteNotice(brd_num);
 		
-		
+		if(result >0 ) {
+			//이미지 삭제를 위한 작업
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			String deleteFile = uploadPath + board.getImg();
+			
+			//실제 upload에 담김 파일 이미지 삭제
+			int delResult= upFileDelete(deleteFile);
+			
+			System.out.println("ChController myContsDelete delResult -> " + delResult);
+		}		
+		return result;
+	}
+	
+	private int upFileDelete(String deleteFileName) throws Exception {
+		int result = 0;
+		log.info("upFileDelete result -> " + deleteFileName);
+		File file = new File(deleteFileName);
+		if (file.exists()) {
+			if (file.delete()) {
+				System.out.println("파일삭제 성공");
+				result = 1;
+				
+			} 
+			else {
+				System.out.println("파일삭제 실패");
+				result = 0;
+			}
+		} else {
+			System.out.println("삭제할 파일이 존재하지 않습니다.");
+			result = -1;
+		}
 		return result;
 	}
 	
@@ -644,6 +752,9 @@ public class ChController {
 		Paging page = null;
 		System.out.println("ChController clickChgResult Start...->" + board.getKeyword());		
 		board.setKeyword(board.getKeyword().replace(" ", ""));
+		if(session.getAttribute("user_num") != null) {
+			board.setUser_num((int) session.getAttribute("user_num"));
+		}
 		switch (board.getBrd_md()) {
 		case 200:
 			int totalChg = chSearchService.chgSrchTot(board);
@@ -699,15 +810,18 @@ public class ChController {
 	
 	@RequestMapping("myChgUpdate")
 	public String myChgUpdate(int chg_id,HttpSession session, Model model) {
+		
 		if(session.getAttribute("user_num") != null) {
 			int user_num = (int) session.getAttribute("user_num");
-			Challenge chg = jhCService.chgDetail(chg_id);
-			if(user_num != chg.getUser_num()) {
-				return "ch/notAnAdmin";
-			}
+			Challenge chg = jhCService.chgDetail(chg_id);	
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String endDate = dateFormat.format(chg.getEnd_date());						
+			
 			User1 user = userService.userSelect(user_num);
-			model.addAttribute("user", user);
+			model.addAttribute("user1", user);
 			model.addAttribute("chg", chg);
+			model.addAttribute("endDate", endDate);
+			
 			
 			
 			int categoryLd = 200;
@@ -724,13 +838,9 @@ public class ChController {
 			}
 			
 			List<Comm> chgCategoryList = tcs.listChgCategory();
-			model.addAttribute("chgCategoryList", chgCategoryList);
-
-			
-			
-			model.addAttribute("recomChgList", recomChgList);
-			
-			model.addAttribute("user", user);
+			model.addAttribute("chgCategoryList", chgCategoryList);		
+			model.addAttribute("recomChgList", recomChgList);		
+			model.addAttribute("user", user);			
 			
 			
 			
@@ -764,6 +874,118 @@ public class ChController {
 		
 		return mav;
 	}
+	
+	@RequestMapping(value = "chChgUpDate", method = RequestMethod.POST)
+	public String chChgUpDate(Challenge chg,
+							  HttpServletRequest request,
+							  @RequestParam(value = "sampleImgFile",required = false) MultipartFile sampleImgFile,
+							  @RequestParam(value = "thumbFile",required = false) MultipartFile thumbFile) throws Exception {
+		
+		
+		System.out.println("chChgUpDate start...");
+		System.out.println("chChgUpDate sampleImgFile.getOriginalFilename()->"+sampleImgFile.getOriginalFilename());
+		
+		/*************유저 확인*************/
+		HttpSession session = request.getSession();
+		int user_num = 0;
+		if(session.getAttribute("user_num") != null) {
+			
+			
+			 			
+			user_num = (int) session.getAttribute("user_num");
+			User1 user = userService.userSelect(user_num);
+			
+			
+			System.out.println("sampleImgFile ----->" + sampleImgFile);
+			System.out.println("thumbFile ----->" + thumbFile);
+			System.out.println("chg ----->" + chg);
+			
+			/*************유저 권한 확인*************/
+			if(user_num == chg.getUser_num() || user.getStatus_md() == 102) { //관리자나 작성자이면
+				System.out.println("-------------------유저 권한 확인--------------------");
+				String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+				System.out.println("-------------------uploadPath 확인--------------------" + uploadPath);
+				/*************샘플이 바뀌었다면 기존 이미지 삭제 후 샘플 저장*************/
+				if(sampleImgFile.getOriginalFilename().length() > 0) {
+					System.out.println("sample이 null이 아닐 경우 실행");
+					String deleteFile = uploadPath + chg.getSample_img();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					String saveName = uploadFile(sampleImgFile.getOriginalFilename(), sampleImgFile.getBytes(), uploadPath);
+					chg.setSample_img(saveName);
+				}			
+				
+				int delStatus = chg.getDelStatus();
+				/*************썸네일 기존 이미지 삭제 여부 확인*************/
+				if(delStatus == 1 || thumbFile.getOriginalFilename().length() > 0) {
+					System.out.println("thumbFile삭제 or null이 아닐경우 실행");
+					String deleteFile = uploadPath + chg.getThumb();
+					int delResult= upFileDelete(deleteFile);
+					System.out.println("delResult1 -> " + delResult);
+					/*************삭제가 아닌 업데이트라면 새 이미지 저장*************/
+					if(thumbFile.getOriginalFilename().length() > 0) {
+						System.out.println("thumbFile이 null이 아닐경우 실행");
+						String saveName = uploadFile(thumbFile.getOriginalFilename(), thumbFile.getBytes(), uploadPath);
+						chg.setThumb(saveName);
+					} else if(thumbFile.getOriginalFilename().length() == 0){
+						chg.setThumb("assets/img/chgDfaultImg.png");
+					}
+					
+				}
+				chg.setChg_conts(chg.getChg_conts().trim());
+				int result = chChallengeService.chgUpdate(chg);		
+				
+				if(result > 0 ) {
+					return "redirect:/mypage";
+				}
+				
+			}
+		} 
+		
+		
+		
+		return "ch/notAnAdmin";
+	}		
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "ajaxModal")
+	public ModelAndView ajaxModal(HttpSession session, ModelAndView mav, int brd_num) {
+		System.out.println("ChController ajaxModal Start...");
+		Board board = chBoardService.noticeConts(brd_num);
+		System.out.println("board" + board);
+		mav.addObject("board", board);
+		mav.setViewName("ch/ajaxPage/ajaxModal");
+		
+		return mav;
+	}
+	
+	@PostMapping(value = "chCertBoardUpdate")
+	public String updateCertBrd(Board board, Model model, HttpServletRequest request,								
+								@RequestParam(value = "editFile", required = false) MultipartFile editFile) 
+										throws IOException {
+		log.info("updateCertBrd Start...");
+		
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		
+		
+		if (editFile != null) {
+			// 진짜 저장
+			String saveName = uploadFile(editFile.getOriginalFilename(), editFile.getBytes(), realPath);
+			board.setImg(saveName);
+		}
+		
+		int updateCount = bBoardD.updateCertBrd(board);
+		
+		
+		return "redirect:mypage";
+	}
+	
+	
 	
 	
 	public void myChgList(HttpSession session, Model model) {

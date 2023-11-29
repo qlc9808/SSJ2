@@ -30,7 +30,9 @@ import com.oracle.S202350102.dto.Challenge;
 import com.oracle.S202350102.dto.Challenger;
 import com.oracle.S202350102.dto.Comm;
 import com.oracle.S202350102.dto.KakaoPayApprovalVO;
+import com.oracle.S202350102.dto.KakaoPayCancelVO;
 import com.oracle.S202350102.dto.Order1;
+import com.oracle.S202350102.dto.Refund;
 import com.oracle.S202350102.dto.User1;
 import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.jkService.JkBoardService;
@@ -39,7 +41,9 @@ import com.oracle.S202350102.service.main.UserService;
 import com.oracle.S202350102.service.thService.ThChgService;
 import com.oracle.S202350102.service.thService.ThKakaoPay;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
+import com.oracle.S202350102.service.thService.ThRefundService;
 import com.oracle.S202350102.service.thService.ThUser1Service;
+import com.oracle.S202350102.service.yaService.Paging2;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +63,8 @@ public class ThController {
 	private final ThChgService tcs;
 	private final JkBoardService jbs;
 	private final UserService mus;
+	private final ThRefundService rfs;
+	
 	@PostMapping(value = "/writeUser1")
 	public String writeUser1(User1 user1, Model model, @RequestParam("addr_detail") String addr_detail,
 													   @RequestParam("birth_year")  String birth_year,
@@ -97,9 +103,12 @@ public class ThController {
 		}
 	}
 	
+	@ResponseBody
 	@PostMapping(value = "/login")							// 로그인 유지를 위한 세션 필요
 	public String login(@ModelAttribute User1 user1, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("ThController login start... ");
+		System.out.println("ThController login user1.getUser_id() --> " + user1.getUser_id());
+		System.out.println("ThController login user1.getUser_pswd() --> " + user1.getUser_pswd());
 		User1 loginResult = us1.login(user1);
 		System.out.println("ThController loginResult -->" + loginResult);
 		// 회원정보가 존재 하는경우
@@ -108,7 +117,11 @@ public class ThController {
 			if(loginResult.getDelete_yn().equals("N")) {
 				session = request.getSession();
 				session.setAttribute("user_num", loginResult.getUser_num());
+				session.setAttribute("status_md", loginResult.getStatus_md());
+				session.setAttribute("nick", loginResult.getNick());
 		         int user_num = (int) session.getAttribute("user_num");
+		         
+		         
 		         ls.userLevelCheck(user_num);
 		         
 		         //로그인 성공시 마지막 로그인 날짜 SYSDATE로 업데이트
@@ -116,18 +129,15 @@ public class ThController {
 		         System.out.println("Thcontroller login updateResult --> " + updateResult);
 		         
 				 System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
-				return "home2";
+				return "loginSuccess";
 			// 탈퇴처리된 아이디 인경우		
 			} else {
-				model.addAttribute("result","delId");
-				return "loginForm";
+				return "delId";
 			}
 			
 		// 회원정보가 없는경우(아이디 비밀번호 틀린경우)
 		} else {
-			// chk에 1값을 주고 JS통해서 chk값에 따라 다른 alert창 만듬 
-			model.addAttribute("result","wrongValue");
-			return "loginForm";
+			return "wrongValue";
 		}
 	}
 		
@@ -144,7 +154,7 @@ public class ThController {
 		System.out.println("ThController logout session --> " + session);
 		session.invalidate();
 		System.out.println("ThController logout session --> " + session);
-		return "home2";
+		return "redirect:/";
 	}
 	
 	@GetMapping(value = "/deleteUser1Form")
@@ -238,40 +248,68 @@ public class ThController {
         
 
 		int	user_num = (int) session.getAttribute("user_num");
-		 
-		// 결제성공시 회원상태 구독회원으로 변경
-        int updateCount = us1.updateUserPrem(user_num);
-        log.info("kakaoPaySuccess updateCount : " + updateCount);
-        
-        // 해당 주문번호의 주문상태를 성공(1)으로, 결제완료날짜를 SYSDATE로  UPDATE
-        int updateResult = os1.updateOrderSucess(order_num);
-        System.out.println("kakaoPaySuccess updateResult --> " + updateResult);
+		// 트랜잭션 묶음(결제성공시 주문상태 성공(1), 회원상태 구독회원(101)로 변경
+		int updateOrderUserResult = os1.tranxOrdUsrUptSuc(order_num,user_num);
+		System.out.println("ThController kakaoPaySuccess updateOrderUserResult --> " + updateOrderUserResult);
+		
 
-        
- 
-        
- 		// order_num을 order1에 담고,
+
  		// 객체째로 못들고 다니므로(approval url에 객체 넣었다가 에러발생함) 주문번호만 가져옴
+ 		// order_num을 order1에 담고,
  		order1.setOrder_num(order_num);
  		// orderResult 객체에 order1을 담고,
         Order1 orderResult = os1.selectOrderJoinMem(order1);
         // kakaoPayInfo에 pg_token과 orderResult를 파라미터로 넣어줌 ( pg_token은  결제승인 api호출시 사용, 결제승인 요청을 인증하는 token 
         //													  사용자 결제 수단 선택 완료 시, approval_url로 redirection해줄 때 pg_token을 query string으로 전달)
         Object kakaoSucInfo = thKakaoPay.kakaoPayInfo(pg_token, orderResult);
-           
+        
+        
         
         model.addAttribute("info", kakaoSucInfo);
         model.addAttribute("order1", orderResult);
-        
-        return "th/kakaoPaySuccess";
+                return "th/kakaoPaySuccess";
     }
-	
+	// 결제도중 취소눌렀을때 구독안내 창으로 이동
     @GetMapping("/kakaoPayCancel")
     public String kakaoPayCancel() {
     	
     	return "redirect:/thkakaoPayForm";
     	
     }
+    
+    // 카카오페이 환불
+    @PostMapping("/kakaoPayRefund")
+    public String kakaoPayRefund(HttpSession session, User1 user1, Order1 order1,Refund refund, Model model) {
+    	System.out.println("ThController kakaoPayRefund Start...");
+    	KakaoPayCancelVO kakaoPayCancelVO = thKakaoPay.kakaoPayCancel(order1);
+    	
+    	// 환불처리가 성공한경우(null이 아닌경우) 
+    	if (kakaoPayCancelVO != null) {
+    		int user_num = Integer.parseInt(kakaoPayCancelVO.getPartner_user_id());
+        	System.out.println(" ThController kakaoPayRefund kakaoPayCancelVO --> " + kakaoPayCancelVO);
+
+        	// 트랜잭션 묶음처리 
+        	// Tid의 주문상태를 환불(2)으로, 결제완료날짜(=환불완료날짜)를 SYSDATE로  UPDATE + 해당 유저의 상태를 멤버쉽 회원 --> 일반 회원으로 변경
+            int updateOrderUserResult 	= os1.transactionOrderInsertUpdate(kakaoPayCancelVO.getTid(),user_num);
+            System.out.println("ThController kakaoPayRefund transactionOrderInsertUpdateResult -->" + updateOrderUserResult);
+            
+//            해당 주문번호에 대한 환불처리를 환불 테이블에 INSERT
+//            CancelVO에 저장된 order_id(=order_num)이 문자열이라 정수형으로 변환
+//            refund.setOrder_num(Integer.parseInt(kakaoPayCancelVO.getPartner_order_id()));
+//            refund.setPrice(Integer.parseInt(kakaoPayCancelVO.getApproved_cancel_amount()));
+//            int insertRefundResult 	= rfs.insertRefundSucess(kakaoPayCancelVO);
+//            System.out.println("ThController kakaoPayRefund insertRefundResult -->" + insertRefundResult);
+            
+           
+
+    		
+            model.addAttribute("kakaoPayCancelVO", kakaoPayCancelVO);
+    		return "th/refundSuccess";
+		}
+    	// 환불처리 실패한경우 일단 마이페이지로 이동
+    	return "redirect:/thSubscriptManagement";
+    }
+    
 
     // 아작스 아이디 중복체크할때쓰는데, 왜 Getmapping일까? id가져가는데 postMapping이어야 하지않나? (getmapping하면 안됨)
     // 중복확인 버튼클릭으로 넘어갈때는 Postmapping만 가능
@@ -302,7 +340,6 @@ public class ThController {
     	System.out.println("ThController findId Start...");
     	List<User1> user_id_List = us1.findId(user1);
     	System.out.println("ThController user_id_List --> " + user_id_List);
-    	
     	model.addAttribute("user_id_List" , user_id_List);
     	
     	return user_id_List;
@@ -363,13 +400,14 @@ public class ThController {
     
     @RequestMapping(value ="thChgList")
 	public String thChgList(Challenge chg, String currentPage, Model model, @RequestParam(value = "sortOpt", required=false) String sortOpt, HttpSession session) {
-		
-		System.out.println("thController thChgList Start...");
+		System.out.println("chg.getKeyword()--> "+ chg.getKeyword() );
+    	System.out.println("thController thChgList Start...");
 		System.out.println("State_md --> " + chg.getState_md());
 
 		// 카테고리 적용한 전체 게시글 수
 		int totalChg = 0;
 		// 		진행중				  or 		 nav 챌린지 클릭했을 때
+		//		검색에 값이 있으면 그 검색내용에 해당하는 게시글 수도 가져옴
 		if ( chg.getState_md() == 102 || chg.getState_md() == 0 ) {
 				totalChg = tcs.totalChgIng(chg);
 				System.out.println("tcs.totalChgIng(chg) --> " + totalChg);
@@ -383,11 +421,11 @@ public class ThController {
 		
 		// 챌린지 카테고리 가져오기
 		List<Comm> chgCategoryList = tcs.listChgCategory();
-		
-		
 		// 						전체 챌린지수가 아니라  조회된 챌린지수로 페이징 작업을 해야한다. (= listChg.size() 사용)
-		// Paging 작업			  	7			0 
-		Paging page = new Paging(totalChg, currentPage);
+		// Paging 작업			  	7			0	   rowPage값 입력(한페이지에 리스트 몇개 출력할지)	
+		Paging page = new Paging(totalChg, currentPage, 9);
+		System.out.println(" page --> " + page);
+		
 		
 
 		chg.setStart(page.getStart());
@@ -413,6 +451,9 @@ public class ThController {
 		System.out.println("thController list listChg.size() --> " + listChg.size());
 		System.out.println("chg_lg --> " + chg.getChg_lg());
 		System.out.println("chg_md --> " + chg.getChg_md());
+		for(int i =0; i <3; i++) {
+//		System.out.println("챌린지리스트 체크  --> ["+ i+"] --> " + listChg.get(i) );
+		}
 
 			
 		// Model에 메소드 수행한 결과(전체게시글수, 게시글리스트, 페이지) 넣음
@@ -430,8 +471,8 @@ public class ThController {
     public String listUserByAdmin(User1 user1, String currentPage, Model model) {
     	System.out.println("thController listUserAdmin Start...");
     	// 전체 유저수 Count
-    	int totalUser = us1.totalUser();
-    	
+    	int totalUser = us1.totalUser(user1);
+
     	
     	// 페이징 작업
     	Paging page = new Paging(totalUser, currentPage);
@@ -446,7 +487,7 @@ public class ThController {
     	model.addAttribute("totalUser", totalUser);
     	model.addAttribute("user1List", user1List);
     	model.addAttribute("page"	  ,	page );
-    	
+    	model.addAttribute("keyword", user1.getKeyword());
     	return	"th/listUserAdmin";
     }
     
@@ -471,20 +512,23 @@ public class ThController {
     }
     
     @GetMapping(value = "/detailUserByAdmin")
-    public String detailUserByAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    public String detailUserByAdmin(User1 user1, int user_num, String pageNum, Model model, String keyword) {
     	System.out.println("thController detailUserByAdmin Start...");
+    	System.out.println("detailUserByAdmin 키워드 --> "+ user1.getKeyword());
     	user1 = jbs.userSelect(user_num);
     	model.addAttribute("user1", user1);
     	model.addAttribute("pageNum",pageNum);
+    	model.addAttribute("keyword", keyword);
     	return "th/detailUserByAdmin";
     }
     
     @GetMapping(value = "updateUserFormAdmin")
-    public String updateUserFormAdmin(User1 user1, int user_num, String pageNum, Model model) {
+    public String updateUserFormAdmin(User1 user1, int user_num, String pageNum, Model model, String keyword) {
     	System.out.println("thController updateUserFormAdmin Start...");
     	user1 = jbs.userSelect(user_num);
     	model.addAttribute("user1", user1);
     	model.addAttribute("pageNum", pageNum);
+    	model.addAttribute("keyword", keyword);
     	return "th/updateUserFormAdmin";
     }
     
@@ -515,4 +559,6 @@ public class ThController {
 		model.addAttribute("order1", order1);
 		return "th/subscriptManagement";
 	}
+	
+	
 }

@@ -1,17 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header4.jsp" %>
-
 <html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-    <title>Insert title here</title>
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-<script src="./js/jquery.js"></script>
+<meta charset="UTF-8">
+<title>마이페이지</title>
 <script type="text/javascript">
 //Flickity 초기화 함수 - slider활용하기 위한 것
 function initFlickity() {
@@ -96,23 +89,28 @@ function clickLoad(index) {
 	
 	
 	function myContsDelete(brd_md, brd_num){
-		var brdMd = brd_md;
-		var brdNum = brd_num;
-		
-		$.ajax({
-			url: "myContsDelete",
-			type: "POST",
-			data: { brd_num: brd_num },
-			dataType: "text",
-			success: function(data){
-				if(parseInt(data)>0){
-					$("#body" + brdMd + " #row" + brd_num).remove();
+		if(!confirm('삭제하시겠습니까?')){
+			
+		}else{
+			var brdMd = brd_md;
+			var brdNum = brd_num;
+			
+			$.ajax({
+				url: "myContsDelete",
+				type: "POST",
+				data: { brd_num: brd_num },
+				dataType: "text",
+				success: function(data){
+					if(parseInt(data)>0){
+						$("#body" + brdMd + " #row" + brd_num).remove();
+					}
+				
 				}
-			}
-		})
-		
-	}
-
+			});
+		}
+			
+			
+		}
 
 	function pageMove(brd_md, currentPage){
 		/* alert(brd_md);
@@ -143,11 +141,10 @@ function clickLoad(index) {
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='chgDetail?chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
-                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
-         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
+         			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a>"
+         			+"	<a href='javascript:void(0);' onclick='certiAjax("+result.listBdRe[i].brd_num+")'>수정</a></td></tr>";
          		num = num - 1;            
 			}
 			return text;
@@ -159,8 +156,8 @@ function clickLoad(index) {
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
          		num = num - 1;            
@@ -174,8 +171,7 @@ function clickLoad(index) {
 			for(var i = 0; i< result.reCount; i++){
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
-                	+"<td><a href='detailSharing?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"                	
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td><a href='detailSharing?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
@@ -190,8 +186,7 @@ function clickLoad(index) {
 			for(var i = 0; i< result.reCount; i++){
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
-                	+"<td><a href='detailCommunity?brd_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+result.listBdRe[i].nick+"</td>"
+                	+"<td><a href='detailCommunity?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
                 	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
@@ -201,20 +196,29 @@ function clickLoad(index) {
 			}
 			return text;
 			break;
-		}
-		
-		
+		}	
 		
 	}
+	
+	function moveChgUpdate(chg_id){
+		location.href= "myChgUpdate?chg_id=" + chg_id;
+	}
+	
+	function certiAjax(brd_num){
+		$("#ceriModal").modal('show');
+			
+			var brdNum = brd_num;
+			$.ajax({
+				url : "ajaxModal",
+				data: {brd_num : brd_num},
+				dataType: "html",
+				success: function(result){				
+						$("#ceModal").html(result);
+						}
+			});	
+		}
 </script>    
 
-</head>
-<style type="text/css">
-@import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-    	body{
-    	font-family: 'Noto Sans KR', sans-serif;} 
-			
-    </style>
 <style>
 .profile {
   margin: 20px 0;
@@ -359,10 +363,19 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 	width: 100% !important; /* half-width */
 }
 
-</style>
+.th-title {
+	width: 250px;	
+}
 
+.thumb-img{
+	width: 100%; height: 250px; border-radius: 10px; 
+}
+
+.
+</style>
+</head>
 <body>
-<div class="container">
+<div class="container section-mt">
 	<div class="row profile">
 		<div class="col-md-3">
         	<%@ include file="mypageMenu.jsp" %>
@@ -398,7 +411,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
                   			<!-- Item2 참여한 챌린지 -->
 			                  <c:forEach items="${mychgrList }" var="chg">
-				                  <div class="col px-4" style="max-width: 400px;">
+				                  <div class="col px-4" style="max-width: 250px;">
 				                    <div class="card">
 				
 				                      <!-- Image -->
@@ -411,12 +424,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					
 					                  
 					                  <a class="text-body" href="chgDetail?chg_id=${chg.chg_id }">
-					                  <c:if test="${chg.thumb != null}">
-					                  <img class="card-img-top" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb" style="width: 100%; height: 250px; border-radius: 10px;" >
-					                  </c:if>
-					                  <c:if test="${chg.thumb == null}">
-					                  <img class="card-img-top" src="assets/img/chgDfaultImg.png" alt="chgDfault" style="width: 100%; height: 250px; border-radius: 10px;">
-					                  </c:if>
+						                <c:choose>
+											<c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
+												<img class="card-img-top thumb-img" src="/assets/img/chgDfaultImg.png" alt="chgDfault">
+											</c:when>
+											
+											<c:otherwise>
+												<img class="card-img-top thumb-img" src="${pageContext.request.contextPath}/upload/${chg.thumb}" alt="thumb">
+											</c:otherwise>
+										</c:choose>  
 									  </a>
 				
 				                      <!-- Body -->
@@ -451,8 +467,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
 	
 	
-      <div class="container"style="margin-top: 60px;">
-        <div class="row">
+        <div class="row" style="margin-top: 60px;">
           <div class="col-12">
 
             <!-- Heading -->
@@ -473,17 +488,14 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 							<c:choose>
 				            	<c:when test="${not empty myCertiList }">
 				            		<c:set var="num" value="${myCertiPage.total - myCertiPage.start+1 }"></c:set> 
-					                <table class="boardtable">
-					                    <thead>
+					                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    					<thead class="table-dark">					                    
 					                        <tr>
 					                            <th scope="col" class="th-num">번호</th>
 					                            <th scope="col" class="th-title">제목</th>
-					                            <th scope="col" class="th-nick">작성자</th>
-					                            <th scope="col" class="th-date">등록일</th>
-					                            <th scope="col" class="th-view_cnt">조회수</th>
+					                            <th scope="col" class="th-date">등록일</th>					                            
 					                            <th  scope="col" class="th-replyCount">댓글수</th>
-					                            <th  scope="col" ></th>
-					                            <th></th>
+					                            <th  scope="col" >비고</th>
 					                        </tr>
 					                    </thead>                 
 					                    <tbody id="body${Certi_md }">
@@ -491,18 +503,17 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                            <tr id="row${myCertiList.brd_num}">
 					                                <td>${num}</td>
 					                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
-					                                <td>${myCertiList.nick}</td>
 					                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
-					                                <td>${myCertiList.view_cnt}</td>
 									         		<td>${myCertiList.replyCount}</td>
-									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a></td>
+									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a>
+									         			<a href="javascript:void(0);" onclick="certiAjax(${myCertiList.brd_num })">수정</a></td>
 									         		<c:set var="num" value="${num-1}"></c:set> 			       
 					                            </tr>
 					                        </c:forEach>
 					                    </tbody>
 					                </table>
 					                
-									   <div class="page">
+									   <div class="d-flex justify-content-center justify-content-md-center">
 										    <c:if test="${myCertiPage.startPage >myCertiPage.pageBlock}">
 										        <a href="javascript:void(0);" onclick="pageMove(${Certi_md}, ${myCertiPage.startPage-myCertiPage.pageBlock}">[이전]</a>
 										    </c:if>
@@ -521,7 +532,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				            	</c:otherwise>
 				            	
 							</c:choose>			
-					</div>	<!-- myCert -->				
+					</div>	<!-- myCert -->		
+						<div>
+						<div class="modal fade" id="ceriModal" tabindex="-1" role="dialog" aria-hidden="true"><!--  -->
+							<div class="modal-dialog modal-dialog-centered modal-xl" role="document"><!--  -->
+								<div class="modal-content" id="ceModal"><!--  -->
+								</div>
+							</div>
+						</div>
+					</div>			
 				</div>   <!-- myCert-list -->
 				<!--------------------------------후기 리스트 --------------------------------------->
 				<div class="tab-pane fade" id="myReview-list">
@@ -529,15 +548,15 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						<c:choose>
 			            	<c:when test="${not empty myReviewList }">
 			            		<c:set var="num" value="${myReviewPage.total - myReviewPage.start+1 }"></c:set> 
-				                <table class="table">
-				                    <thead>
+				                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    				<thead class="table-dark">	
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>
 				                            <th scope="col" class="th-title">제목</th>
-				                            <th scope="col" class="th-nick">작성자</th>
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
+				                            <th  scope="col" class="th-replyCount">비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Review_md}">
@@ -545,7 +564,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <tr id="row${myReviewList.brd_num }">
 				                                <td>${num}</td>
 				                                <td><a href="reviewContent?brd_num=${myReviewList.brd_num }&chg_id=${myReviewList.chg_id }">${myReviewList.title}</a></td>
-				                                <td>${myReviewList.nick}</td>
 				                                <td><fmt:formatDate value="${myReviewList.reg_date}" pattern="yyyy-MM-dd"/></td>
 				                                <td>${myReviewList.view_cnt}</td>
 								         		<td>${myReviewList.replyCount}</td>
@@ -556,7 +574,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                    </tbody>
 				                </table>
 				                
-								<div class="page">
+				                <div class="d-flex justify-content-center justify-content-md-center">
 								    <c:if test="${myReviewPage.startPage >myReviewPage.pageBlock}">					        
 								        <a href="javascript:void(0);" onclick="pageMove(${Review_md},${myReviewPage.startPage-myReviewPage.pageBlock}); return false;" >[이전]</a>
 								    </c:if>
@@ -583,24 +601,22 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						<c:choose>
 			            	<c:when test="${not empty myShareList }">
 			            		<c:set var="num" value="${mySharePage.total - mySharePage.start+1 }"></c:set> 
-				                <table class="boardtable">
-				                    <thead>
+				                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    				<thead class="table-dark">
 				                        <tr>
 				                            <th scope="col" class="th-num">번호</th>
-				                            <th scope="col" class="th-title">제목</th>
-				                            <th scope="col" class="th-nick">작성자</th>
+				                            <th scope="col" class="th-title">제목</th>				                            
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
 				                            <th  scope="col" class="th-replyCount">댓글수</th>
-				                            <th  scope="col" ></th>
+				                            <th  scope="col" >비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Share_md }">
 				                        <c:forEach items="${myShareList }" var="myShareList">
 				                            <tr id="row${myShareList.brd_num }">
 				                                <td>${num}</td>
-				                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>
-				                                <td>${myShareList.nick}</td>
+				                                <td><a href="detailSharing?user_num=${myShareList.user_num}&brd_num=${myShareList.brd_num}">${myShareList.title}</a></td>				                                
 				                                <td><fmt:formatDate value="${myShareList.reg_date}" pattern="yyyy-MM-dd"/></td>
 				                                <td>${myShareList.view_cnt}</td>
 								         		<td>${myShareList.replyCount}</td>
@@ -611,7 +627,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                    </tbody>
 				                </table>
 				                
-								   <div class="page">
+								   <div class="d-flex justify-content-center justify-content-md-center">
 								    <c:if test="${mySharePage.startPage >mySharePage.pageBlock}">
 								        <a href="javascript:void(0);" onclick="pageMove(${Share_md},${mySharePage.startPage-mySharePage.pageBlock}); return false;" >[이전]</a>
 								    </c:if>
@@ -639,17 +655,16 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 						
 							<c:choose>
 				            	<c:when test="${not empty myCommuList }">
-				            		<c:set var="num" value="${myCommuPage.total - myCommuPages.start+1 }"></c:set> 
-					                <table class="boardtable">
-					                    <thead>
+				            		<c:set var="num" value="${myCommuPage.total - myCommuPage.start+1 }"></c:set> 
+					                <table class="table table-bordered table-sm mb-0  table-striped table-hover">
+                    					<thead class="table-dark">
 					                        <tr>
 					                            <th scope="col" class="th-num">번호</th>
 					                            <th scope="col" class="th-title">제목</th>
-					                            <th scope="col" class="th-nick">작성자</th>
 					                            <th scope="col" class="th-date">등록일</th>
 					                            <th scope="col" class="th-view_cnt">조회수</th>
-					                            <th  scope="col" class="th-replyCount">댓글수</th>
-					                            <th></th>
+					                            <th  scope="col" class="th-replyCount">댓글수</th>					                            
+					                            <th  scope="col" class="th-replyCount">비고</th>					                            
 					                        </tr>
 					                    </thead>                 
 					                    <tbody id="body${commu_bd }">
@@ -657,7 +672,6 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                            <tr>
 					                                <td>${num}</td>
 					                                <td><a href="detailCommunity?user_num=${myCommuList.user_num}&brd_num=${myCommuList.brd_num}">${myCommuList.title}</a></td>
-					                                <td>${myCommuList.nick}</td>
 					                                <td><fmt:formatDate value="${myCommuList.reg_date}" pattern="yyyy-MM-dd"/></td>
 					                                <td>${myCommuList.view_cnt}</td>
 									         		<td>${myCommuList.replyCount}</td>
@@ -668,7 +682,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                    </tbody>
 					                </table>
 					                
-									   <div class="page">
+									   <div class="d-flex justify-content-center justify-content-md-center">
 									    <c:if test="${myCommuPage.startPage >myCommuPage.pageBlock}">					        
 									        <a href="javascript:void(0);" onclick="pageMove(${commu_bd},${myCommuPage.startPage-myCommuPage.pageBlock}); return false;" >[이전]</a>
 									    </c:if>
@@ -693,14 +707,12 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
             </div>     <!-- tab-content -->               
 	     </div><!-- col-12 -->	    
 	    </div> <!-- row -->
-     		</div>
     	</div>	
     </div>
 </div>
 
 
-    <button type="button" class="btn btn-primary" onclick="location.href='/chgCommManagement'">챌린지 카테고리 관리</button><p>
-    <button type="button" class="btn btn-primary" onclick="location.href='/myConts'">내가 쓴 글 </button><p>
+    
 </body>
 <%@ include file="footer.jsp" %>
 </html>

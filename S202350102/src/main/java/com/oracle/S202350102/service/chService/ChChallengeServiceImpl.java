@@ -20,10 +20,10 @@ public class ChChallengeServiceImpl implements ChChallengeService {
 	
 	
 	@Override
-	public List<Challenge> popchgList() {
+	public List<Challenge> popchgList(int user_num) {
 		System.out.println("ChChallengeServiceImpl popChgList Start...");
 		
-		List<Challenge> popchgList = chChallengeService.popChgList();
+		List<Challenge> popchgList = chChallengeService.popChgList(user_num);
 		return popchgList;
 	}
 
@@ -88,6 +88,18 @@ public class ChChallengeServiceImpl implements ChChallengeService {
 		System.out.println("ChChallengeServiceImpl myChgList myChgList->" + myChgList.size());
 		
 		return myChgList;
+	}
+
+
+
+	@Override
+	public int chgUpdate(Challenge chg) {
+		System.out.println("ChChallengeServiceImpl chgUpdate Start...");
+		int result = 0;
+		System.out.println(chg.getChg_id());
+		result = chChallengeService.chgUpdate(chg);
+		
+		return result;
 	}
 
 }

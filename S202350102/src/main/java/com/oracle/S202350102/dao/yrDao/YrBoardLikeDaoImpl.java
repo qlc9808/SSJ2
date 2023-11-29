@@ -50,4 +50,16 @@ public class YrBoardLikeDaoImpl implements YrBoardLikeDao {
 		return result;
 	}
 
+	@Override
+	public int selectBrdLikcCnt(int brd_num) {
+		int result = 0;
+		
+		try {
+			result = session.selectOne("yrBrdLikeCnt", brd_num);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+
 }

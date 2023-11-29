@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +10,7 @@
     }
 </style>
 <title>챌린지 상세 페이지</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 <script type="text/javascript">
 /* 	//jh 작성 -> 보류(챌린지 후기 10개 이상 쓰고 다시 해보기)
  * 일단 리뷰에만 적용되게 하고 추후에 변경하기 1페이지 누르면 아래 적용 안됨
@@ -54,6 +54,8 @@
 			dataType : 'json',
 			success : function(joinResult) {
 				if(joinResult.chgJoin > 0) {
+					$('#inputParti').text(joinResult.nowChgParti);
+					$('#joinBtn').text("참여완료").removeClass("btn-danger").addClass("btn-secondary");
 					// 참여 완료 modal
 					document.getElementById('chgResultModalClick').click();
 				}
@@ -67,16 +69,24 @@
 	// 유저 닉네임 클릭 시 modal 창 띄우기
 	function userInfoModal(tap, index) {
 		// 모달창에 넘겨줄 값을 저장 
-		var user_num, user_nick, user_img;
+		var user_num, user_nick, user_img, user_level, user_exp, percentage, icon;
 
 		if(tap == '인증') {
-			user_num = $("#user_num" + index).val();
-			user_nick = $("#nick" + index).val();
-			user_img = $("#user_img" + index).val();
+			user_num 	= $("#user_num" 	+ index).val();
+			user_nick 	= $("#nick" 		+ index).val();
+			user_img 	= $("#user_img" 	+ index).val();
+//			user_level 	= $("#user_level" 	+ index).val();
+//			user_exp 	= $("#user_exp" 	+ index).val();
+//			percentage 	= $("#percentage" 	+ index).val();
+//			icon 		= $("#icon" 		+ index).val();
 		} else { // tap == '소세지들'
-			user_num = $("#ssjUserNum" + index).val();
-			user_nick = $("#ssjNick" + index).val();
-			user_img = $("#ssjImg" + index).val();
+			user_num 	= $("#ssjUserNum" 	+ index).val();
+			user_nick 	= $("#ssjNick" 		+ index).val();
+			user_img 	= $("#ssjImg" 		+ index).val();
+//			user_level 	= $("#ssjLevel" 	+ index).val();
+//			user_exp 	= $("#ssjExp" 		+ index).val();
+//			percentage 	= $("#ssjPercentage"+ index).val();
+//			icon 		= $("#ssjIcon" 		+ index).val();
 		}
 		
 		// DB에 있는지 존재 유무 체크
@@ -105,7 +115,8 @@
 		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
 		$('#displayUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img);
-
+//		$('#displayUserLevel').attr('title', 'Lv.' + user_level + ' | exp.' + user_exp + '(' + percentage + '%)')
+//							  .attr('src', '/images/level/' + icon + '.gif');
 			
 		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
@@ -130,10 +141,12 @@
 					$("#follow").removeClass("btn-danger");
 					$("#follow").addClass("btn-light");
 					$("#follow").text("팔로잉");
-				} else {
+				} else if(followResult.following == 0) {
 					$("#follow").removeClass("btn-light");
 					$("#follow").addClass("btn-danger");
 					$("#follow").text("팔로우");
+				} else {
+					alert("자신의 계정은 팔로우 할 수 없습니다");
 				}
 			},
 			error : function() {
@@ -162,6 +175,7 @@
 					$("#chgPick").removeClass("btn-dark").addClass("btn-outline-dark");
 					alert("찜 취소");
 				}
+				$("#inputPickCnt").text(chgPickResult.chgPickCnt);
 
 			},
 			error : function() {
@@ -173,7 +187,6 @@
 	// 좋아요 버튼
 	function likePro(p_index) {
 		var brd_num = $('#brd_num' + p_index).val();
-//		alert("brd_num -> " + brd_num);
 
 		$.ajax({
             url: "/likePro",
@@ -181,9 +194,16 @@
             data: { brd_num: brd_num },
             dataType: 'json',
             success: function (likeResult) {
-                location.reload();
-                // 좋아요 없음 <img alt="heart" src="./images/yr/heart.png">
-                // 좋아요 있음 <img alt="heart-fill" src="./images/yr/heart-fill.png">
+            	if (likeResult.likeProResult > 0) {
+					// 좋아요 insert
+					$('#likeBtn' + p_index).attr('src', '/images/yr/heart-fill.png');
+
+				} else {
+					// 좋아요 delete
+					$('#likeBtn' + p_index).attr('src', '/images/yr/heart.png');
+				}
+            	// 좋아요 수 실시간 반영
+            	$('#inputLikeCnt' + p_index).text(likeResult.brdLikeCnt);
             },
             error: function () {
                 alert("좋아요 에러");
@@ -593,20 +613,20 @@
 </script> 
 </head>
 <body>
-	<input type="button" value="목록" onclick="location.href='/thChgList'" > 
+
     <!-- BREADCRUMB -->
     <nav class="py-5">
-      <div class="container">
+      <div class="container section-mt">
         <div class="row">
           <div class="col-12">
 
             <!-- Breadcrumb -->
             <ol class="breadcrumb mb-0 fs-xs text-gray-400">
               <li class="breadcrumb-item">
-                <a class="text-gray-400" href="index.html">챌린지</a>
+                <a class="text-gray-400" href="/thChgList?state_md=${chg.state_md }">챌린지</a>
               </li>
               <li class="breadcrumb-item">
-                <a class="text-gray-400" href="shop.html">${chg.ctn }</a>
+                <a class="text-gray-400" href="/thChgList?state_md=${chg.state_md }&chg_lg=200&chg_md=${chg.chg_md }">${chg.ctn }</a>
               </li>
               <li class="breadcrumb-item active">${chg.title }
                 	
@@ -629,23 +649,27 @@
                 <!-- Card -->
                 <div class="card">
 
-                  <!-- Badge -->
-                  <div class="badge bg-primary card-badge text-uppercase">
-                                    인기
+					
+                  <!-- 인기 뱃지-->
+                 <c:if test="${chg.pick_cnt >= 10 }">
+			     	<div class="badge bg-primary card-badge text-uppercase">인기</div>
+				 </c:if>
                                     <!-- 찜수  -->
-                  </div>
 
                   <!-- Slider -->
-                  <div class="mb-4" data-flickity='{"draggable": false, "fade": true}' id="productSlider">
+                  <div class="mb-4">
 
 
                     <!-- Item -->
            		    <c:choose>
-					    <c:when test="${empty reviewContent.img}">
-							<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" class="card-img-top" >
+					    <c:when test="${empty chg.thumb || chg.thumb == null}">
+							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
+					    </c:when>
+					    <c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
+							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
 					    </c:when>
 					    <c:otherwise>
-							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="이미지 업로드에 실패했습니다." >
+							 <img src="${pageContext.request.contextPath}/upload/${chg.thumb}" class="card-img-top" alt="챌린지 썸네일" >
 					    </c:otherwise>
 					</c:choose>
              <!--썸네일 처리 해야 함 파일 위치랑 null일 때 뜨게 할 것  -->
@@ -669,7 +693,7 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                       <li class="list-group-item">참여 인원</li>
-                    <li class="list-group-item">${chgrParti } / ${chg.chg_capacity }</li>
+                    <li class="list-group-item"><span id="inputParti">${chgrParti }</span> / ${chg.chg_capacity }</li>
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">진행 기간</li>
@@ -685,192 +709,149 @@
                   </ul>
                   <ul class="list-group list-group-horizontal-sm">
                     <li class="list-group-item">챌린지 찜</li>
-                    <li class="list-group-item">${chg.pick_cnt }</li>
+                    <li class="list-group-item" id="inputPickCnt">${chg.pick_cnt }</li>
                   </ul> 
+               </div>
                
-               
-					<div class="form-group">
-						<div class="row gx-5 mb-7">
-							<!-- 참여하기 -->
-							<!-- YR 작성 -->
-							<div class="col-12 col-lg-auto">
+				<div class="row gx-5 mb-7">
+					<!-- 참여하기 -->
+					<!-- YR 작성 -->
+					<div class="col-6">
+						<c:choose>
+							<c:when test="${chg.stateCtn == '진행중'}">
+					
 								<c:choose>
-									<c:when test="${chg.stateCtn == '진행중'}">
-							
+									<c:when test="${sessionScope.user_num != null}">
+									<!-- 로그인 한 상태 -->
+										
 										<c:choose>
-							
-											<c:when test="${sessionScope.user_num != null}">
-												<!-- 로그인 한 상태 -->
-												<button type="button" class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+											<c:when test="${chgrYN == 1 }">
+												<!-- 이미 챌린지 참여함 -->
+												<button type="button" class=" btn btn-secondary mb-2 btn-sm">
+													참여완료
+												</button>
+												
+											</c:when>
+											
+											<c:when test="${chg.chg_capacity == chgrParti }">
+												<!-- 참여 정원 = 참가 인원 -->
+												<button type="button" class=" btn btn-secondary mb-2 btn-sm">
+													참여마감
+												</button>
+											
+											</c:when>
+											
+											<c:otherwise>
+												<button type="button" class=" btn btn-danger mb-2 btn-sm" data-bs-toggle="modal" data-bs-target="#chgJoin" id="joinBtn">
 													참여하기
 												</button>
-							
-												<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+											
+												<div class="modal fade" id="chgJoin" tabindex="-1" aria-labelledby="exampleModalLabel"
 													aria-hidden="true">
 													<div class="modal-dialog">
-							
-														<c:choose>
-							
-															<c:when test="${chg.chg_capacity == chgrParti }">
-																<!-- 참여 정원 = 참가 인원 -->
-																<div class="modal-content">
-																	<div class="modal-body">
-																		<p>참여인원이 마감되었습니다</p>
-																	</div>
-																	<div class="modal-footer">
-																		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-																			aria-label="Close">취소하기</button>
-																	</div>
+														<div class="modal-content">
+															<div class="modal-body">
+																<p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
+																<p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
+																<div class="text-end">
+																	<button type="button" class="btn btn-danger btn-xs"
+																		onclick="cJoin()">참여하기</button>
+																	<button type="button" class="btn btn-secondary btn-xs"
+																		data-bs-dismiss="modal" aria-label="Close">취소하기</button>
+																	<form id="cJoinForm">
+																		<input type="hidden" name="user_num" value="${user.user_num}">
+																		<input type="hidden" name="chg_id" value="${chg.chg_id}">
+																	</form>
 																</div>
-							
-															</c:when>
-							
-							
-															<c:otherwise>
-							
-																<c:choose>
-							
-																	<c:when test="${chgrYN == 1 }">
-																		<!-- 이미 챌린지 참여함 -->
-																		<div class="modal-content">
-																			<div class="modal-body">
-																				<p>이미 참여한 챌린지입니다</p>
-																			</div>
-																			<div class="modal-footer">
-																				<button type="button" class="btn btn-secondary"
-																					data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-																			</div>
-																		</div>
-																	</c:when>
-							
-							
-																	<c:otherwise>
-																		<!-- 챌린지 참가 -->
-																		<div class="modal-content">
-																			<div class="modal-body">
-																				<p>현재 참여 인원 : ${chgrParti } / 참여 정원 : ${chg.chg_capacity}</p>
-																				<p>${user.nick }님 챌린지에 참여하시겠습니까?</p>
-																			</div>
-																			<div class="modal-footer">
-																				<button type="button" class="btn btn-secondary"
-																					data-bs-dismiss="modal" aria-label="Close">취소하기</button>
-																				<button type="button" class="btn btn-danger"
-																					onclick="cJoin()">참여하기</button>
-																				<form id="cJoinForm">
-																					<input type="hidden" name="user_num" value="${user.user_num}">
-																					<input type="hidden" name="chg_id" value="${chg.chg_id}">
-																				</form>
-																			</div>
-																		</div>
-							
-																	</c:otherwise>
-							
-																</c:choose>
-							
-															</c:otherwise>
-							
-														</c:choose>
-							
+															</div>
+														</div>
 													</div>
 												</div>
-							
-											</c:when>
-							
-											<c:when test="${sessionScope.user_num == null}">
-												<!-- 로그인 안 한 상태 -->
-												<button type="button" class="btn btn-danger mb-2" onclick="location.href='/loginForm'">
-													참여하기
-												</button>
-											</c:when>
-							
+												
+											</c:otherwise>
+										
 										</c:choose>
-							
+					
+					
 									</c:when>
-							
-									<c:otherwise>
-										<button type="button" class="btn btn-secondary mb-2">
-											챌린지 종료
+					
+									<c:when test="${sessionScope.user_num == null}">
+										<!-- 로그인 안 한 상태 -->
+										<button type="button" class=" btn btn-danger mb-2 btn-sm" onclick="location.href='/loginForm'">
+											참여하기
 										</button>
-									</c:otherwise>
+									</c:when>
+					
 								</c:choose>
-								
-								<!-- 참여완료 YN -->
-								<button type="button" class="btn btn-danger mb-2" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
-									참여완료
+					
+							</c:when>
+					
+							<c:otherwise>
+								<button type="button" class="btn btn-secondary mb-2 btn-sm">
+									챌린지 종료
 								</button>
-								
-								<!-- 챌린지 참여 성공 -->
-								<div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-body">
-												<p>챌린지 참여가 완료되었습니다</p>
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-											</div>
+							</c:otherwise>
+						</c:choose>
+						
+						<!-- 참여완료 YN -->
+						<button type="button" class="btn btn-danger mb-2" id="chgResultModalClick" data-bs-toggle="modal" data-bs-target="#chgResultModal" hidden>
+							참여완료
+						</button>
+						
+						<!-- 챌린지 참여 성공 -->
+						<div class="modal fade" tabindex="-1" id="chgResultModal" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-body">
+										<p>챌린지 참여가 완료되었습니다</p>
+										<div class="text-end">
+											<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
 										</div>
 									</div>
 								</div>
 							</div>
-							
+						</div>
+					</div>
+					
 
-							<!-- 찜하기 -->
-							<!-- YR 작성 -->
-							<div class="col-12 col-lg">
+					<!-- 찜하기 -->
+					<!-- YR 작성 -->
+					<div class="col-6">
 
+						<c:choose>
+							<c:when test="${sessionScope.user_num != null}">
+								<!-- 로그인 한 상태 -->
 								<c:choose>
-									<c:when test="${sessionScope.user_num != null}">
-										<!-- 로그인 한 상태 -->
-										<c:choose>
-										
-											<c:when test="${chgPickYN == 1}">
-												<!-- 찜 기록 있을 때 -->
-												<button class="btn btn-dark w-100 mb-2" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
-													챌린지 찜 <i class="fe fe-heart ms-2"></i>
-												</button>	
-											</c:when>
-
-											<c:otherwise>
-												<!-- 찜 기록 없을 때 -->
-												<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
-													챌린지 찜 <i class="fe fe-heart ms-2"></i>
-												</button>
-											</c:otherwise>
-										</c:choose>
-
+								
+									<c:when test="${chgPickYN == 1}">
+										<!-- 찜 기록 있을 때 -->
+										<button class=" btn btn-dark mb-2 btn-sm" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
+											챌린지 찜 <i class="fe fe-heart ms-2"></i>
+										</button>	
 									</c:when>
-									
+
 									<c:otherwise>
-										<!-- 로그인 안 한 상태 -> 로그인 페이지로 이동 -->
-										<button class="btn btn-outline-dark w-100 mb-2" data-toggle="button" onclick="location.href='/loginForm'">
+										<!-- 찜 기록 없을 때 -->
+										<button class=" btn btn-outline-dark mb-2 btn-sm" data-toggle="button" onclick="chgPick(${chg.chg_id})" id="chgPick">
 											챌린지 찜 <i class="fe fe-heart ms-2"></i>
 										</button>
 									</c:otherwise>
-
 								</c:choose>
 
-							</div>
-						</div>
+							</c:when>
+							
+							<c:otherwise>
+								<!-- 로그인 안 한 상태 -> 로그인 페이지로 이동 -->
+								<button class=" btn btn-outline-dark mb-2 btn-sm" data-toggle="button" onclick="location.href='/loginForm'">
+									챌린지 찜 <i class="fe fe-heart ms-2"></i>
+								</button>
+							</c:otherwise>
 
-
-						<!-- Share -->
-						<p class="mb-0">
-						<span class="me-4">Share:</span>
-						<a class="btn btn-xxs btn-circle btn-light fs-xxxs text-gray-350" href="#!">
-							<i class="fab fa-twitter"></i>
-						</a>
-						<a class="btn btn-xxs btn-circle btn-light fs-xxxs text-gray-350" href="#!">
-							<i class="fab fa-facebook-f"></i>
-						</a>
-						<a class="btn btn-xxs btn-circle btn-light fs-xxxs text-gray-350" href="#!">
-							<i class="fab fa-pinterest-p"></i>
-						</a>
-						</p>
+						</c:choose>
 
 					</div>
-
-              </div>
+				</div>
+              
             </div>
           </div>
         </div>
@@ -1487,6 +1468,52 @@
 							              	</c:choose>
 					              	
 					                  	</div> <!-- <div class="row" id="certBoard${status.index}"> -->
+                                        <input type="hidden" id="user_level${status.index}"		value="${certBoard.user_level}">
+                                        <input type="hidden" id="user_exp${status.index}"		value="${certBoard.user_exp}">
+                                        <input type="hidden" id="percentage${status.index}"		value="${certBoard.percentage}">
+                                        <input type="hidden" id="icon${status.index}"			value="${certBoard.icon}">
+											<!-- Avatar -->
+											<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+						                    	<div class="avatar avatar-lg">
+												  <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
+												</div>
+											</a>
+					                         	<!-- Time -->
+					                         	<span class="fs-xs text-muted">
+													<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+														<img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">
+														<span style="color: black;">${certBoard.nick}</span>
+													</a>
+													<time datetime="2019-07-25">${certBoard.reg_date }</time>
+												</span>
+														<c:when test="${sessionScope.user_num != null }">
+															<!-- 로그인 한 상태 -->
+															<a class="rate-item" data-toggle="vote" role="button" onclick="likePro(${status.index})">
+																좋아요 
+																<c:choose>
+																	<c:when test="${certBoard.likeyn > 0}">
+																		<!-- 좋아요 눌렀을 때 -->
+																		<img alt="heart-fill" src="./images/yr/heart-fill.png"
+																			id="likeBtn${status.index }">
+																	</c:when>
+														</c:when>
+															</a>
+																<span id="inputLikeCnt${status.index}">${certBoard.like_cnt}</span>
+																</c:choose>
+																	</c:otherwise>
+																			id="likeBtn${status.index }">
+																		<img alt="heart" src="./images/yr/heart.png"
+																		<!-- 좋아요 안 눌렀을 때 -->
+																	<c:otherwise>
+														
+														</c:otherwise>
+															</a>
+																<img alt="heart" src="./images/yr/heart.png">
+																좋아요 
+															<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" role="button">
+															<!-- 로그인 안 한 상태 -->
+														<c:otherwise>
+													
 					                </div>
 					                
 					              </div>
@@ -1512,11 +1539,13 @@
 							                  	
 												<div class="col-12 col-md-auto">
 							                        <!-- Avatar -->
-							                        <div class="avatar avatar-xxl mb-6 mb-md-0">
-							                          <span class="avatar-title rounded-circle">
-							                            <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
-							                          </span>
-							                        </div>
+							                        <a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
+								                        <div class="avatar avatar-xxl mb-6 mb-md-0">
+								                          <span class="avatar-title rounded-circle">
+								                            <img src="${pageContext.request.contextPath}/upload/${certBoard.user_img}" alt="profile" class="avatar-img rounded-circle">
+								                          </span>
+								                        </div>
+							                        </a>
 												</div>
 							                    
 							                    
@@ -1530,9 +1559,11 @@
 							                          <!-- Time -->
 							                          <span class="fs-xs text-muted">
 															
-														<!-- <a href="#" data-bs-toggle="modal" onclick="userInfoModalBoard(${status.index})"> -->
 														<a href="#" data-bs-toggle="modal" onclick="userInfoModal('인증', ${status.index})">
-															<span style="color: black;">${certBoard.nick}</span>
+															<span style="color: black;">
+																<img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">
+																${certBoard.nick}
+															</span>
 														</a>
 
 														<time datetime="2019-07-25">${certBoard.reg_date }</time>
@@ -1558,52 +1589,37 @@
 							                      	<div class="col-auto me-auto">
 							                      		<!-- Rate -->
 								                        <div class="rate">
+								                        
 															<c:choose>
 																<c:when test="${sessionScope.user_num != null }">
 																	<!-- 로그인 한 상태 -->
-															
-																	<c:choose>
-																		<c:when test="${certBoard.likeyn > 0}">
-																			<!-- 좋아요 눌렀을 때 -->
-																			<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
-																				onclick="likePro(${status.index})">
-																				좋아요
-																				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-																					class="bi bi-heart-fill" viewBox="0 0 16 16">
-																					<path fill-rule="evenodd"
-																						d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-																				</svg>
-																			</a>
-																		</c:when>
-															
-																		<c:otherwise>
-																			<!-- 좋아요 안 눌렀을 때 -->
-																			<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button"
-																				onclick="likePro(${status.index})">
-																				좋아요
-																				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-																					class="bi bi-heart" viewBox="0 0 16 16">
-																					<path
-																						d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-																				</svg>
-																			</a>
-															
-															
-																		</c:otherwise>
-															
-																	</c:choose>
-															
+																	<a class="rate-item" data-toggle="vote" role="button" onclick="likePro(${status.index})">
+																		좋아요 
+																		<c:choose>
+																			<c:when test="${certBoard.likeyn > 0}">
+																				<!-- 좋아요 눌렀을 때 -->
+																				<img alt="heart-fill" src="./images/yr/heart-fill.png"
+																					id="likeBtn${status.index }">
+																			</c:when>
+																
+																			<c:otherwise>
+																				<!-- 좋아요 안 눌렀을 때 -->
+																				<img alt="heart" src="./images/yr/heart.png"
+																					id="likeBtn${status.index }">
+																			</c:otherwise>
+																		</c:choose>
+																		<span id="inputLikeCnt${status.index}">${certBoard.like_cnt}</span>
+																	</a>
 																</c:when>
 															
 																<c:otherwise>
-																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" href="#" role="button">
+																	<!-- 로그인 안 한 상태 -->
+																	<a class="rate-item" data-toggle="vote" data-count="${certBoard.like_cnt}" role="button">
 																		좋아요 
-																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-																			<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-																		</svg>
+																		<img alt="heart" src="./images/yr/heart.png">
 																	</a>
 																</c:otherwise>
-															
+													
 															</c:choose>
 
 															<a class="rate-item" data-toggle="vote" data-count="(${certBoard.report_cnt }°C)" href="#" role="button" onclick="Burning(${status.index})">
@@ -2027,100 +2043,93 @@
 									<div class="review">
 										<!-- Body -->
 										<c:forEach var="ssj" items="${listSsj}" varStatus="status">
-											<div class="review-body">
-												<div class="row" id="ssj${status.index}">
-													<input type="hidden" id="ssjImg${status.index}" value="${ssj.img}">
-													<input type="hidden" id="ssjNick${status.index}" value="${ssj.nick}">
-													<input type="hidden" id="ssjUserNum${status.index}" value="${ssj.user_num}">
-													<!-- profile -->
-													<div class="col-12 col-md-auto">
-														<div class="avatar avatar-xxl mb-6 mb-md-0">
-															<span class="avatar-title rounded-circle">
-																<img src="${pageContext.request.contextPath}/upload/${ssj.img}"
-																	alt="profile" class="avatar-title rounded-circle">
-															</span>
-														</div>
-													</div>
-				
-													<!-- nick -->
-													<div class="col-12 col-md">
-														<div class="row mb-6">
-															<div class="col-12">
-																<a href="#" data-bs-toggle="modal"
-																	onclick="userInfoModal('소세지들', ${status.index})">
-																	<span style="color: black;">${ssj.nick}</span>
-																</a>
-															</div>
-														</div>
-													</div>
+											<div class="review-body row d-flex justify-content-between align-items-center" id="ssj${status.index}">
+													<input type="hidden" id="ssjImg${status.index}" 		value="${ssj.img}">
+													<input type="hidden" id="ssjNick${status.index}" 		value="${ssj.nick}">
+													<input type="hidden" id="ssjUserNum${status.index}" 	value="${ssj.user_num}">
+													
+													<!-- profile & nick -->
+															<!-- profile -->
+															<a href="#" data-bs-toggle="modal" onclick="userInfoModal('소세지들', ${status.index})" class="col-2">
+																<div class="avatar avatar-xxl mb-6 mb-md-0">
+																		<span class="avatar-title rounded-circle">
+																			<img src="${pageContext.request.contextPath}/upload/${ssj.img}"
+																				alt="profile" class="avatar-title rounded-circle">
+																		</span>
+																</div>
+															</a>
+															
+															<!-- nick -->
+															<a href="#" data-bs-toggle="modal" onclick="userInfoModal('소세지들', ${status.index})" class="col-5">
+																<img title="Lv.${ssj.user_level } | exp.${ssj.user_exp}(${ssj.percentage }%)" src="/images/level/${ssj.icon}.gif">
+																<span style="color: black;">${ssj.nick}</span>
+															</a>
 				
 													<!-- reg_date & fork -->
-													<div class="col-12 col-md">
+													<div class="col-5 text-end">
 														<!-- reg_date -->
-														<div class="row mb-6">
-															<div class="col-12">
 				
 																<!-- 오늘 날짜 -->
 																<jsp:useBean id="javaDate" class="java.util.Date" />
 																<fmt:formatDate var="nowDateFd" value="${javaDate }"
-																	pattern="yyyy-MM-dd" /><br>
+																	pattern="yyyy-MM-dd" />
 				
 																<!-- 마지막 인증 게시판 작성일자 -->
 																<fmt:formatDate var="lastRegDateFd" value="${ssj.brd_reg_date }"
-																	pattern="yyyy-MM-dd" /><br>
+																	pattern="yyyy-MM-dd" />
 				
-																<c:if test="${ssj.brd_reg_date != null }">
+																<c:choose>
+																	<c:when test="${ssj.brd_reg_date != null }">
+																		<!-- 인증한 날짜 있음 -->
+																		<fmt:parseDate var="nowDatePd" value="${nowDateFd }"
+																			pattern="yyyy-MM-dd" />
+																		<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }"
+																			pattern="yyyy-MM-dd" />
+					
+																		<fmt:parseNumber var="nowDatePn"
+																			value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true" />
+																		<fmt:parseNumber var="lastRegDatePn"
+																			value="${lastRegDatePd.time/(1000*60*60*24) }"
+																			integerOnly="true" />
+					
+																		<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
+					
+																		<span class="mx-5">
+																			${dDay }일 전
+																		</span>
+																	
+																	</c:when>
+																	
+																	<c:otherwise>
+																		<!-- 인증한 날짜 없음 -->
+																		<span class="mx-5">
+																			인증 전
+																		</span>
+																	
+																	</c:otherwise>
+																</c:choose>
 				
-																	<fmt:parseDate var="nowDatePd" value="${nowDateFd }"
-																		pattern="yyyy-MM-dd" />
-																	<fmt:parseDate var="lastRegDatePd" value="${lastRegDateFd }"
-																		pattern="yyyy-MM-dd" />
 				
-																	<fmt:parseNumber var="nowDatePn"
-																		value="${nowDatePd.time/(1000*60*60*24) }" integerOnly="true" />
-																	<fmt:parseNumber var="lastRegDatePn"
-																		value="${lastRegDatePd.time/(1000*60*60*24) }"
-																		integerOnly="true" />
-				
-																	<c:set var="dDay" value="${nowDatePn - lastRegDatePn}" />
-				
-																	<span>
-																		${dDay }일 전
-																	</span>
-																</c:if>
-				
-															</div>
-														</div>
-				
-														<c:choose>
-															<c:when test="${sessionScope.user_num != null}">
-																<!-- 로그인 한 상태 -->
-																<!-- fork -->
-																<div class="row align-items-center">
-																	<div class="col-auto">
-																		<!-- Button -->
-																		<a class="btn btn-xs btn-outline-border" href="#!"
-																			onclick="forkModalCall(${status.index})">찌르기</a>
-																	</div>
-																</div>
-															</c:when>
-				
-															<c:when test="${sessionScope.user_num == null}">
-																<!-- 로그인 안 한 상태 -->
-																<!-- loginForm으로 이동 -->
-																<div class="row align-items-center">
-																	<div class="col-auto">
-																		<!-- Button -->
-																		<a class="btn btn-xs btn-outline-border"
-																			href="/loginForm">찌르기</a>
-																	</div>
-																</div>
-															</c:when>
-				
-														</c:choose>
+															<c:choose>
+																<c:when test="${sessionScope.user_num != null}">
+																	<!-- 로그인 한 상태 -->
+																	<!-- fork -->
+																	<!-- Button -->
+																	<a class="btn btn-xs btn-outline-border" href="#!"
+																		onclick="forkModalCall(${status.index})">찌르기</a>
+																</c:when>
+					
+																<c:when test="${sessionScope.user_num == null}">
+																	<!-- 로그인 안 한 상태 -->
+																	<!-- loginForm으로 이동 -->
+																	<!-- Button -->
+																	<a class="btn btn-xs btn-outline-border"
+																		href="/loginForm">찌르기</a>
+																</c:when>
+					
+															</c:choose>
 													</div>
 				
-												</div>
 				
 											</div>
 				
@@ -2219,28 +2228,28 @@
 										</span>
 									</div>
 								</div>
-								<div class="col-12 col-md">
-									<div class="row mb-6">
-										<div class="col-12">
-											<p id="displayUserNick"></p>
-										</div>
-									</div>
+								
+								<div class="col-12">
+									<p id="displayUserNick"></p>
 								</div>
-							</div>
-				
-							<div class="modal-footer">
-				
-								<button type="button" class="btn btn-danger" name="user_num" onclick="following(${status.index})"
-									id="follow">팔로우</button>
-								<form id="followingForm">
-									<input type="hidden" id="inputUserNum1" name="user_num">
-								</form>
-				
-								<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
-								<form id="sendMessageForm">
-									<input type="hidden" id="inputUserNum2" name="user_num">
-								</form>
-				
+								
+								<div class="text-end">
+										<button type="button" class="btn btn-danger btn-xs" name="user_num" onclick="following(${status.index})"
+											id="follow">팔로우</button>
+										
+										<!-- 
+											<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
+											<form id="sendMessageForm">
+												<input type="hidden" id="inputUserNum2" name="user_num">
+											</form>
+										 -->
+										 
+										<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+										
+										<form id="followingForm">
+											<input type="hidden" id="inputUserNum1" name="user_num">
+										</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -2254,7 +2263,7 @@
             <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${tap}">  
             <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
             <c:choose>
-            	<c:when test="${chg.stateCtn == '종료'}">
+            	<c:when test="${chg.state_md == 103}">
    	              <div class="tab-pane fade" id="reviewTab">
 	                <div class="row justify-content-center py-9">
 	                  <div class="col-12 col-lg-10 col-xl-8">
@@ -2466,7 +2475,10 @@
 									          <tr>
 									            <td>${num }</td>
 									            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
-									            <td>${review.nick }</td>
+									            <td>
+									            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
+													${review.nick }
+												</td>
 									            <td>${review.view_cnt }</td>
 									            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
 									          </tr>
@@ -2513,12 +2525,28 @@
             
             	<c:otherwise>
             	<div class="tab-pane fade" id="reviewTab">
-	                <div class="row justify-content-center py-9" >
-	                  <div class="col-12 col-lg-10 col-xl-8">
-            			<h5>챌린지가 종료된 후 후기를 써주세요</h5>
-            		  </div>
-            		</div>
-            	</div>
+	                <section class="py-12">
+				      <div class="container">
+				        <div class="row justify-content-center">
+				          <div class="col-12 col-md-10 col-lg-10 col-xl-10 text-center">
+				
+				            <!-- Icon -->
+				            <div class="mb-7 fs-1">🙁</div>
+				
+				            <!-- Heading -->
+				            <h2 class="mb-5">챌린지가 종료 된 후에 후기를 남겨주세요!</h2>
+				
+				            <!-- Text -->
+				            <p class="mb-7 text-gray-500">
+						              아직 챌린지가 종료되지 않았습니다.<br>
+						              후기 게시판은 챌린지가 종료된 이후에 글을 남길 수 있습니다!<br>
+						              챌린지가 종료되기 전까지 최선을 다 해주세요~!
+				            </p>
+				          </div>
+				        </div>
+				      </div>
+				    </section>
+            	  </div>
             	</c:otherwise>
             </c:choose>
             

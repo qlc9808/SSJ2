@@ -70,11 +70,13 @@
             </form>
             
           <div style="text-align: center;">
-	            <button class="btn btn-primary mb-1" onclick="location.href='/chgApplicationForm'">
+	            <button class="btn w-100 btn-primary mb-2" onclick="location.href='/chgApplicationForm'" style="margin-top: 26px;">
 	 				챌린지 신청하기 <i class="fe fe-arrow-right ms-2"></i>
 				</button>
 		  </div>
 			
+<!-- 			<a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기 -->
+<!--                </a> -->
          </div>
           
 </body>

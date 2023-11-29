@@ -8,6 +8,7 @@ import com.oracle.S202350102.dao.yaDao.YaBoardDao;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.SharingList;
 import com.oracle.S202350102.dto.User1;
+import com.oracle.S202350102.service.hbService.Paging;
 
 import lombok.RequiredArgsConstructor;
 @Service
@@ -66,24 +67,35 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	}
 
 	@Override
-	public List<Board> listSearchBoard(String keyword) {
+	public List<Board> listSearchBoard(String keyword, String currentPage) {
 		List<Board> boardSearchList = null;
 		System.out.println("YaCommunityServiceImpl listSearchBoard start...");
-		boardSearchList = ybd.boardSearchList(keyword);
+		boardSearchList = ybd.boardSearchList(keyword, currentPage);
 		System.out.println("YaCommunityServiceImpl listSearchBoard boardSearchList.size()?"+boardSearchList.size());
+		
 		return boardSearchList;
 	}
+	
+
 	@Override
-	public List<Board> listBoardSort(String sort) {
+	public int countSearch(String keyword) {
+		System.out.println("YaCommunityServiceImpl  countSearch start...");
+		int countSearch = ybd.countSearch(keyword);
+		return countSearch;
+	}
+
+	
+	@Override
+	public List<Board> listBoardSort(String sort, int start, int end) {
 		List<Board> listBoardSort = null;
 		System.out.println("YaCommunityServiceImpl listBoardSort start...");
 		
 		if("view_cnt".contentEquals(sort)) {
-			return ybd.sortByViewCnt();
+			return ybd.sortByViewCnt(start, end);
 		} else if ("reg_date".equals(sort)) {
-			return ybd.sortByRegDate();
+			return ybd.sortByRegDate(start, end);
 		} else {
-			return ybd.sortByRegDate();
+			return ybd.sortByRegDate(start, end);
 		}
 	}
 
@@ -163,11 +175,11 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 
 	//마이페이지- 내가 올린 쉐어링 리스트 조회 
 	@Override
-	public List<Board> myUploadSharingList(int user_num) {
+	public List<Board> myUploadSharingList(Board board) {
 		System.out.println("YaCommunityServiceImpl myUploadSharingList start....");
 		List<Board> myUploadSharingList = null;
 		try {
-			myUploadSharingList = ybd.myUploadSharingList(user_num);
+			myUploadSharingList = ybd.myUploadSharingList(board);
 			System.out.println("YaCommunityServiceImpl myUploadSharingList.size()?"+myUploadSharingList.size());			
 		} catch (Exception e) {
 			System.out.println("YaCommunityServiceImpl myUploadSharingList e.getMessage?"+e.getMessage());
@@ -178,11 +190,11 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 
 	//마이페이지 - 내가 올린 쉐어링 게시글의 참가자리스트 조회
 	@Override
-	public List<SharingList> sharingParticipantsList(int brd_num) {
+	public List<SharingList> sharingParticipantsList(int  brd_num) {
 		System.out.println("YaCommunityServiceImpl sharingParticipantsList start...");
 		List<SharingList> sharingParticipantsList = null;
 		try {
-			sharingParticipantsList = ybd.sharingParticipantsList(brd_num);
+			sharingParticipantsList = ybd.sharingParticipantsList( brd_num);
 		} catch (Exception e) {
 			System.out.println("YaCommunityServiceImpl sharingParticipantsList e.getMessage?"+e.getMessage());
 		}
@@ -191,11 +203,11 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	
 	// 마이페이지 - 내가참여한 쉐어링 조회
 	@Override
-	public List<SharingList> myJoinSharingList(int user_num) {
+	public List<SharingList> myJoinSharingList(SharingList sharingList) {
 		System.out.println("YaControllerService  myJoinSharingList start...");
 		List<SharingList> myJoinSharingList = null;
 		try {
-			myJoinSharingList = ybd.myJoinSharingList(user_num);
+			myJoinSharingList = ybd.myJoinSharingList(sharingList);
 		} catch (Exception e) {
 			System.out.println("YaCommunityServiceImpl myJoinSharingList e.getMessage?"+e.getMessage());
 		}
@@ -204,11 +216,11 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 
 	// 마이페이지 - 승인완료  쉐어링 조회
 	@Override
-	public List<Board> myConfirmSharingList(int user_num) {
+	public List<Board> myConfirmSharingList(Board board) {
 		System.out.println("YaControllerService   myConfirmSharingList start...");
 		List<Board> myConfirmSharingList = null;
 		try {
-			myConfirmSharingList = ybd.myConfirmSharingList(user_num);
+			myConfirmSharingList = ybd.myConfirmSharingList(board);
 		} catch (Exception e) {
 			System.out.println("YaCommunityServiceImpl myConfirmSharingList e.getMessage?"+e.getMessage());
 		}
@@ -260,26 +272,74 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		ybd.downParticipantsCnt(brd_num);
 	}
 
-	// 페이징 카운트 수
+	// 페이징 카운트 수(1)
 	@Override
 	public int totalMyUploadsharing(int user_num) {
 		System.out.println("YaCommunityServiceImpl totalMyUploadsharing start...");
 		int totalMyUploadsharing = ybd.totalMyUploadsharing( user_num);
 		return totalMyUploadsharing;
 	}
-	// 페이징 카운트 수
+	// 페이징 카운트 수(2)
 	@Override
 	public int totalJoinSharing(int user_num) {
 		System.out.println("YaCommunityServiceImpl totalJoinSharing start...");
 		int totalJoinSharing = ybd.totalJoinSharing(user_num);
 		return totalJoinSharing;
 	}
-	// 페이징 카운트 수
+	// 페이징 카운트 수(3)
 	@Override
 	public int totalConfirmSharing(int user_num) {
 		System.out.println("YaCommunityServiceImpl totalConfirmSharing start...");
 		int totalConfirmSharing = ybd.totalConfirmSharing(user_num);
 		return totalConfirmSharing;
+	}
+	
+	//쉐어링 전체게시글 수 구하기  
+	@Override
+	public int totalSharing(Board board) {
+		System.out.println("YaCommunityServiceImpl totalSharing start...");
+		int totalSharing = ybd.totalSharing(board);
+		
+		return totalSharing;
+	}
+
+	//sharing 내가 찜한 게시글 
+	@Override
+	public int likeSharingCnt(int user_num) {
+		System.out.println("YaCommunityServiceImpl likeSharingCnt start...");
+		int likeSharingCnt = ybd.likeSharingCnt( user_num);
+		
+		return likeSharingCnt;
+	}
+
+	@Override
+	public List<Board> likeSharingList(Board board) {
+		System.out.println("YaControllerService    likeSharingList start...");
+		List<Board>  likeSharingList = null;
+		try {
+			 likeSharingList = ybd. likeSharingList(board);
+		} catch (Exception e) {
+			System.out.println("YaCommunityServiceImpl likeSharingList e.getMessage?"+e.getMessage());
+		}
+		return  likeSharingList;
+	}
+	//쉐어링 검색개수
+	@Override
+	public int searchSharingCnt(String keyword) {
+		System.out.println("YaCommunityServiceImpl  countSearch start...");
+		int searchSharingCnt = ybd.searchSharingCnt(keyword); 
+		return searchSharingCnt;
+	}
+	
+	//쉐어링 검색	
+	@Override
+	public List<Board>  sharingSearchResult(String keyword,String sortOption,  String currentPage, Board board) {
+		List<Board> sharingSearchResult = null;
+		System.out.println("Ycs  sharingSearchResult START...");
+		sharingSearchResult = ybd. sharingSearchResult(keyword, currentPage , sortOption, board);
+		System.out.println("ycs sharingSearchResult.size()?"+ sharingSearchResult.size());
+				
+		return  sharingSearchResult;
 	}
 
 

@@ -29,6 +29,8 @@ public interface JkBoardService {
 	
 	// 주변 쉐어링
 	List<Board> 	sharingResult(Board board);
+	List<Board> 	sharing2(Board board);
+	int myBoard		(int user_num);
 	
 	
 

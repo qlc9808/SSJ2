@@ -50,6 +50,17 @@ public class YrChallengePickDaoImpl implements YrChallengePickDao {
 		
 		return insertChgPick;
 	}
+
+	@Override
+	public int selectChgPickCnt(int chg_id) {
+		int result = 0;
+		try {
+			result = session.selectOne("chgPickCnt", chg_id);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
 	
 	
 

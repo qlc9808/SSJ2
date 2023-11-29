@@ -199,4 +199,22 @@ public class JkBoardServiceImpl implements JkBoardService {
 		return sharingResult ;
 		
 	}
+
+	@Override
+	public List<Board> sharing2(Board board) {
+		List<Board> sharing2 = null;
+		System.out.println("JkCommunityServiceImpl start...");
+		sharing2 = jbd.sharing2(board);
+		System.out.println("JkCommunityServiceImpl Sharing.size()-->"+sharing2.size());
+		return sharing2 ;
+	}
+
+	@Override
+	public int myBoard(int user_num) {
+		System.out.println("JkCommunityServiceImpl myBoard Start...");
+		
+		int myBoard = jbd.myBoard(user_num);
+		
+		return myBoard;
+	}
 }

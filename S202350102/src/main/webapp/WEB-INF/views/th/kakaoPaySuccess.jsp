@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>결제 성공</title>
+<%@ include file="/WEB-INF/views/header4.jsp" %>
 </head>
 <body>
-	<c:import url="/WEB-INF/views/header4.jsp"/>
 <!-- CONTENT -->
     <section class="py-12">
       <div class="container">
@@ -33,7 +32,7 @@
 				&emsp;결제일시:     &emsp;<fmt:formatDate value="${order1.suc_date}" pattern="yyyy년 MM월 dd일, HH시 mm분 ss초"></fmt:formatDate><br/>
 				&emsp;주문번호:     &emsp;${info.partner_order_id}<br/>
 				&emsp;구독상품:     &emsp;${info.item_name}<br/>
-				&emsp;결제금액:     &emsp;${info.amount.total}<br/>
+				&emsp;결제금액:     &emsp;<fmt:formatNumber value="${info.amount.total}" pattern="#,###"/>원<br/>
 				&emsp;결제방법:     &emsp;${order1.pay_type}<br/>
             </p>
 			
@@ -58,6 +57,6 @@
 
 <%-- 	<p>${info}</p> --%>
 
-	<c:import url="/WEB-INF/views/footer.jsp"/>
 </body>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

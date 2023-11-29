@@ -365,7 +365,7 @@
 					      
 					        <!-- 닉네임 -->
 					        <p class="mb-2 fs-lg fw-bold">
-							  ${reply.nick }
+					        <span class="col-5"><img title="Lv.${reply.user_level } | exp.${reply.user_exp}(${reply.percentage }%)" src="/images/level/${reply.icon}.gif">${reply.nick }
 					        </p>
 					        
 					        <!-- 댓글 쓴 날짜 및 시간 -->

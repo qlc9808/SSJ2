@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="topBar.jsp" %>
 <%@ include file="header4.jsp" %> 
 <!DOCTYPE html>
 <html>
@@ -116,6 +117,7 @@
 </head>
 <body>
 <h1>검색</h1>
+<section>
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				

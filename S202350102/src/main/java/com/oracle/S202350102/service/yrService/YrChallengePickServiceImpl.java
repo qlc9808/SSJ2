@@ -38,4 +38,10 @@ public class YrChallengePickServiceImpl implements YrChallengePickService {
 		return result;
 	}
 
+	@Override
+	public int selectChgPickCnt(int chg_id) {
+		int result = ycpd.selectChgPickCnt(chg_id);
+		return result;
+	}
+
 }

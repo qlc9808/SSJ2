@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-white" id="nav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top" id="nav">
       <div class="container">
 
         <!-- Brand -->
@@ -85,19 +84,39 @@
             </li>
           
             <li class="nav-item">
-              <a class="nav-link" href="/admin">관리자</a>
+              <c:if test="${sessionScope.status_md == 102 }"><a class="nav-link" href="/listUserAdmin">관리자</a></c:if>
+			<!--관리자 작업 끝나면 아래 한줄 지우고 위 한줄 주석 풀어주세요 ( 관리자일때만 헤더에 관리자 보이게 설정해놨습니다) -->
+<!-- 			   <a class="nav-link" href="/listUserAdmin">관리자</a> -->
             </li>
          
           </ul>
 
           <!-- Nav -->
-          <ul class="navbar-nav flex-row">
-            <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="offcanvas" href="./search">
-                <i class="fe fe-search"></i>
-              </a>
-            </li>
-            
+          <ul class="navbar-nav flex-row align-items-center">
+            <li class="nav-item dropdown hovered">
+				 <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+				   <i class="fe fe-search"></i>
+				 </a>
+				<div class="dropdown-menu">
+					<div class="card card-lg">
+						<div class="card-body">
+							<form action="searching" class="row" id="srchForm">
+								<div class="col-9 ml-2">
+									<input type="text" name="srch_word" id="srch_word" style="width: 120px;"> 
+								</div>
+								<div class="col-3" style="padding-top: 5px;">
+									<a href="javascript:void(0);" onclick="headSearching()" id="srchBtn"><i class='fe fe-search'></i></a>
+								</div>				                
+							</form>
+						</div>
+					</div>
+				</div>
+			</li>
+			<c:if test="${sessionScope.nick != null}">
+				<li class="nav-item">
+					${sessionScope.nick } 님
+				</li>
+            </c:if>
             <li class="nav-item dropdown hovered">
 
               <!-- Toggle -->
@@ -148,6 +167,7 @@
 	            </c:when>
               </c:choose>
             </li>
+
             <li class="nav-item ms-lg-n4">
               <a class="nav-link" data-bs-toggle="offcanvas" href= "#" id="alarmpopup">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16" >
@@ -173,39 +193,6 @@
       </div>
     </nav>
 
-
-
-<!-- CSS start -->
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-<!-- Favicon -->
-<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-
-<!-- Libs CSS -->
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-
-<!-- Theme CSS -->
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />    
-    
-<!-- JAVASCRIPT -->
-<!-- Map (replace the API key to enable) -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnKt8_N4-FKOnhI_pSaDL7g_g-XI1-R9E"></script>
-
-<!-- Vendor JS -->
-<script src="./assets/js/vendor.bundle.js"></script>
-
-<!-- Theme JS -->
-<script src="./assets/js/theme.bundle.js"></script>
-
-<!--  jquery.js-->
-<script src="./js/jquery.js"></script>
-
-<!--  font -->
-<link href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
-<style type="text/css">
-    body{ font-family: 'Noto Sans KR', sans-serif; } 
-</style>
-
 <style>
 	#alarmPopText{
 		display: none;
@@ -226,13 +213,18 @@
 </style>
 
 <script type="text/javascript">
+	function headSearching(){
+		$("#srchForm").submit();
+	}
+
+
 	function alarmText(data){
 		var str = "";
 		
 		for(var i =0; i<data.reCount; i++){
 			str += "<tr>";
-			str += "<td><a href='javascript:void(0);' onclick='read("+data.listBdRe[i].user_num+","+data.listBdRe[i].brd_num+"); return false;' ><b>";			
-			str += data.listBdRe[i].title + "</b>글에 "+data.listBdRe[i].re_step +"번째 댓글이 달렸습니다.</a></td>";
+			str += "<td><a href='javascript:void(0);' onclick='read("+data.listBdRe[i].user_num+","+data.listBdRe[i].brd_num+","+data.listBdRe[i].brd_md+","+data.listBdRe[i].chg_id+"); return false;' ><b>";			
+			str += data.listBdRe[i].title + "</b>글에 "+data.listBdRe[i].new_Cmt +"개의 새댓글이 달렸습니다.</a></td>";
 			str += "<td><a href='javascript:void(0);' id='alarmRead' data-user-num='" + data.listBdRe[i].user_num + "' data-re-step='"+data.listBdRe[i].re_step + "' onclick='readAlarm(event);'>";
 			str +="<button class='btn btn-danger btn-circle btn-xxs mb-1'><i class='fe fe-check'></i></button></a></td>";
 	    	str += "</tr>";			
@@ -266,7 +258,7 @@
 	}
 	
 	function readAlarmAll(){
-		alert("test");
+		
 		$.ajax({
 			type: "POST",
 			url: "readAllcmt",
@@ -281,16 +273,34 @@
 		});
 	}
 	
-	function read(user_num, brd_num){
+	function read(user_num, brd_num, brd_md){
 		/* alert("user_num"+user_num);
-		alert("brd_num"+brd_num); */
+		alert("brd_num"+brd_num); */		
 		$.ajax({
 			type:"POST",
 			url:"moveToNewCmt",
 			data: {user_num : user_num, brd_num : brd_num},
 			success:function(data){
 				if(data > 0){
-					window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+					switch(brd_md){
+							/* 인증 */
+						case(100): 
+							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+							/* 후기 */
+						case(101):
+							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+							/* 쉐어링 */
+						case(102):
+							window.location.href = 'detailSharing?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+							/* 커뮤니티 */
+						case(103):
+							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							break;
+					}
+					
 				}
 			}
 		})
@@ -350,4 +360,3 @@
 </script>
 
 <body onload="alarmchk()"></body>
-

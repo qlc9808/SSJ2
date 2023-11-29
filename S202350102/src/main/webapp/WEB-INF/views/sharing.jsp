@@ -7,35 +7,19 @@
 <head>
 <!--  CSS  -->
 <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-<link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
  <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-    	body{
-    	font-family: 'Noto Sans KR', sans-serif;} 
-			
-    </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-function likePost(brd_num) {
-  
-	$.ajax({
-	    type: 'POST',
-	    url: '/board/' + brd_num + '/like', // 좋아요 업데이트를 처리할 서버 엔드포인트
-	    data: { brd_num : brd_num }, // 업데이트할 게시물의 ID를 전송
-	    success: function (response) {
-	        // 성공 시 수행할 작업
-	    },
-	    error: function (error) {
-	        // 오류 발생 시 수행할 작업
-	    }
-	});
-}
+$("#keyword").keypress(function(e){	
+	if(e.keyCode && e.keyCode == 13){
+		$("#searchButton").trigger("click");
+		return false;
+	}
+});
 
 //Select 변경 시
 function renderTable(data) {
@@ -46,7 +30,7 @@ function renderTable(data) {
              tableHTML += "<div class='col-6 col-md-4' style='padding-left: 8px; padding-right: 8px;'>"+
                 "<div class='card mb-7'>"+
                     "<div class='card-img'>"+
-                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='likePost("+`${board.brd_num}`+")'>"+
+                        "<button class='btn btn-xs btn-circle btn-white-primary card-action card-action-end' onclick='sharingPick("+`${board.brd_num}`+")'>"+
                             "<i class='fe fe-heart'></i>"+
                        " </button>"+
                        "<button class='btn btn-xs w-100 btn-dark card-btn' onclick='location.href=\"detailSharing?user_num=" + board.user_num + "&brd_num=" + board.brd_num + "\"'>" +
@@ -100,10 +84,8 @@ $("#sortOption").change(function() {
 
     // yr 작성
 	// 찜하기 기능
-    // ajax 작동 후 찜 갯수 count 되는거 구현해볼까
 	function sharingPick(p_index) {
-        // alert("sharingPick" + p_index);
-
+    	
         $.ajax({
             url: "/likePro",
             type: "POST",
@@ -112,10 +94,12 @@ $("#sortOption").change(function() {
             success: function (likeResult) {
                 if (likeResult.likeProResult > 0) {
                     $("#sharingPick" + p_index).removeClass("btn-white-primary").addClass("btn-primary");
+                    alert("찜 성공");
                 } else {
                     $("#sharingPick" + p_index).removeClass("btn-primary").addClass("btn-white-primary");
+                    alert("찜 취소");
                 }
-
+				$('#likeCnt' + p_index).text(likeResult.brdLikeCnt);
             },
             error: function () {
                 alert("찜하기 오류");
@@ -146,13 +130,13 @@ $("#sortOption").change(function() {
                 <a class="list-group-item list-group-item-action dropend-toggle active" href="../sharing">
                   	전체 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
+                <a  id="options" class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-                <a class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
+                <a  id="option2" class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
                  	내가 쓴 글
                 </a>
-               <a class="btn w-100 btn-dark mb-2" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
+               <a class="btn w-100 btn-dark mb-2"  id="options" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
                </a>
                 
               </div>
@@ -162,10 +146,55 @@ $("#sortOption").change(function() {
               
           <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
             <div class="row">
-        <div class="col-12">
+<!--         <div class="col-12">
             <div class="d-flex justify-content-between mb-3">
-                <!-- 공간을 벌리기 위해 클래스 추가 -->
-            </div>
+                공간을 벌리기 위해 클래스 추가
+            </div> -->
+				<div class="container d-flex justify-content-center my-5">
+				    <div class="d-flex justify-content-center">
+				        <div class="input-group input-group-merge">
+				            <input class="form-control form-control-sm" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}">
+							<div class="input-group-append">
+								<!-- 부트스트랩에서 button or div 내 이미지 수평+수직정렬 -->					
+							    <button class="btn btn-outline-border btn-search d-flex justify-content-center align-items-center"  id="searchButton"
+							   onclick="location.href='sharingSearchResult?keyword=${keyword}'"  >
+							        <i class="fe fe-search"></i>
+							    </button>
+							</div>
+				        </div>
+				    </div>
+				</div>            
+              
+<%--                 <!-- 게시판 검색 (옵션 제목, 작성자) Ya추가 수정----------- -->
+			<div class="container d-flex justify-content-left" style="padding-bottom: 0px;">
+			    <div class="d-flex justify-content-center">
+			        <div class="input-group input-group-merge">
+			            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}" >
+						<div class="input-group-append">
+						    <button class="btn btn-outline-border btn-search" id="searchButton" style= "height: 40px;"
+						     onclick="location.href='sharingSearchResult?keyword=${keyword}'" > 						    
+						        <i class="fe fe-search"></i>
+						    </button>
+						</div>
+			
+			        </div>
+			    </div>
+			</div> --%>
+
+<script>
+    // 검색 버튼 클릭 시
+    document.getElementById('searchButton').addEventListener('click', function() {
+        // 현재 검색어 값 가져오기
+        var keywordValue = document.getElementById('keyword').value;
+
+        // URL에 검색어 추가하고 페이지 다시로드
+        window.location.href = 'sharingSearchResult?keyword=' + keywordValue;
+    });
+</script>
+
+
+<div id="searchResults" style=" margin-top: 20px;"></div>
+            
             <div class="d-flex justify-content-end mb-3">
 			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
 			    <option value="reg_date">최근 게시물</option>
@@ -229,17 +258,18 @@ $("#sortOption").change(function() {
                         style="width: 100%; height: 200;">
                 </div>
                 
-                <div class="card-body fw-bold text-center">
-                    <a class="text-body" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                        ${board.title}
+                <div class="card-body fw-bold text-left"> <!-------연아 수정: 링크 에러로 input으로 value값 넣어줌 좌측정렬 추가-------><!--text-center  -->
+                	<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">
+                    <a class="text-body " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                        ${board.title}  <p> ${board.applicants}명 모집 | ${board.participants }명  참가중
                     </a>
+                    
+   					<input type="hidden" value="${board.user_num }"> <input type="hidden" value="${board.brd_num }">                	
+                        <a class="text-primary " href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
+                           <fmt:formatNumber value= "${board.price}"  pattern="#,###"/>원</a>     
                     <p>
-                        <a class="text-primary" href="detailSharing?user_num=${board.user_num}&brd_num=${board.brd_num}">
-                            ${board.price}원</a>
-                    <p>
-                        <a class="text-primary" id="likeCnt${board.brd_num}">
-                            <i class="fas fa-heart me-1"></i> ${board.like_cnt}
-                        </a>
+                        <i class="fas fa-heart me-1 text-primary"></i>
+                        <a class="text-primary" id="likeCnt${board.brd_num}"> ${board.like_cnt}</a>
                         <i class="fe fe-eye me-1 mb-1" style="margin-left: 20px;"></i> ${board.view_cnt}
                         <i class="fas fa-comment text-secondary me-1" style="margin-left: 20px;"></i>${board.replyCount}
                 </div>
@@ -250,17 +280,73 @@ $("#sortOption").change(function() {
 </div>
 
 
-           
+ <div class="container text-center">
+    <ul class="pagination pagination-sm justify-content-center">
+        <c:if test="${sharBoardPage.startPage > sharBoardPage.pageBlock}">
+            <li class="page-item">
+                <a class="page-link page-link-arrow" href="sharing?currentPage=${sharBoardPage.startPage-sharBoardPage.pageBlock}">
+                    <i class="fa fa-caret-left"></i>
+                </a>
+            </li>
+        </c:if>
+
+        <c:forEach var="i" begin="${sharBoardPage.startPage}" end="${sharBoardPage.endPage}">
+            <li class="page-item <c:if test='${sharBoardPage.currentPage == i}'>active</c:if>">
+                <a class="page-link" href="sharing?currentPage=${i}">${i}</a>
+            </li>
+        </c:forEach>
+
+        <c:if test="${sharBoardPage.endPage < sharBoardPage.totalPage}">
+            <li class="page-item">
+                <a class="page-link page-link-arrow" href="sharing?currentPage=${sharBoardPage.startPage+sharBoardPage.pageBlock}">
+                    <i class="fa fa-caret-right"></i>
+                </a>
+            </li>
+        </c:if>
+    </ul>
+</div> 
+
+
 
           </div>
         </div>
       </div>
-      </div>
     </section>
   
   
-  
-  
+  <!--ya 비로그인 자가 글작성, 내가쓴글 확인  시도시 알람창 띄우면서 로그인 페이지로 넘겨버리기  ---------->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    	  const form = document.getElementById('options');
+          form.addEventListener('click', function (event) {
+            // 세션의 user_num 값 확인
+            const userNum = <%= session.getAttribute("user_num") %>;
+
+            // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
+            if (userNum === null) {
+                alert('로그인 후 이용해주세요!');
+                event.preventDefault(); // 폼 전송을 막음
+                window.location.href = '/loginForm'; // 로그인 페이지로 이동
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    	  const form = document.getElementById('option2');
+          form.addEventListener('click', function (event) {
+            // 세션의 user_num 값 확인
+            const userNum = <%= session.getAttribute("user_num") %>;
+
+            // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
+            if (userNum === null) {
+                alert('로그인 후 이용해주세요!');
+                event.preventDefault(); // 폼 전송을 막음
+                window.location.href = '/loginForm'; // 로그인 페이지로 이동
+            }
+        });
+    });
+</script>  
   
   
   

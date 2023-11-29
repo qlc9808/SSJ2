@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,14 +63,20 @@
                         <!-- Heading, Price, Form -->
                         <h3 class="mb-1">${board.title}</h3>
                         <div class="mb-3 text-gray-400">
-                            <span class="ms-1 fs-5 fw-bold">${board.price}원</span>
+                            <span class="ms-1 fs-5 fw-bold"><fmt:formatNumber value="${board.price}" pattern="#,###"/>원</span> <a href="sharing" class="btn btn-dark btn-xs">목록</a>
                         </div>
                         <hr class="my-3">
                         
                         <!--  신청내용 -->
+                          <p class="mb-4 fs-sm fw-bold">
+	                      <a class="text-body" href="product.html">작성자</a> <br>
+	                      <span class="text-muted">${board.nick}</span>
+	                    </p>
                         <p class="mb-4 fs-sm fw-bold">
 	                      <a class="text-body" href="product.html">작성일</a> <br>
-	                      <span class="text-muted">${board.reg_date}</span>
+	                      <span class="text-muted">
+						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
+						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">
@@ -162,7 +169,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">전달할  메세지를 입력해주세요.신청하시겠습니까?</h6>
+                <h6 class="modal-title">전달할  메세지를 입력해주세요!</h6>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -201,8 +208,9 @@
         </div>
     </div>
 </div>
-<!-------------------------------- 모달창 자바스크립트 ------------------------------------------------------------------------>
+<!--------------------------------YA모달창 자바스크립트 ------------------------------------------------------------------------>
 <script type="text/javascript">
+    
     // 참가신청버튼 클릭 모달창열기
     document.addEventListener('DOMContentLoaded', function() {
         const modalBtn = document.querySelector('[data-target="#infoModal"]');
