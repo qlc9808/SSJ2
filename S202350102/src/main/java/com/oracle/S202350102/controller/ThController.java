@@ -118,6 +118,7 @@ public class ThController {
 				session = request.getSession();
 				session.setAttribute("user_num", loginResult.getUser_num());
 				session.setAttribute("status_md", loginResult.getStatus_md());
+				session.setAttribute("nick", loginResult.getNick());
 		         int user_num = (int) session.getAttribute("user_num");
 		         
 		         

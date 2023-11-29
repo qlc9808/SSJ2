@@ -92,7 +92,7 @@
           </ul>
 
           <!-- Nav -->
-          <ul class="navbar-nav flex-row">
+          <ul class="navbar-nav flex-row align-items-center">
             <li class="nav-item dropdown hovered">
 				 <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 				   <i class="fe fe-search"></i>
@@ -112,8 +112,11 @@
 					</div>
 				</div>
 			</li>
-
-            
+			<c:if test="${sessionScope.nick != null}">
+				<li class="nav-item">
+					${sessionScope.nick } 님
+				</li>
+            </c:if>
             <li class="nav-item dropdown hovered">
 
               <!-- Toggle -->
