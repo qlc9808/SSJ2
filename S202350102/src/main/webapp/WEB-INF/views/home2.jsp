@@ -980,11 +980,11 @@
 					
 				</div>
 				
-				<div class="col-12 text-center">
+				<div class="col-12 text-center mt-10">
 					<form id="more">
 						<input type="hidden" name="start" value="1">
 						<input type="hidden" name="end" value="${board.end + 10}">
-						<button type="button" onclick="moreList()" class="btn btn-outline-gray-400 text-muted">더보기▼</button>
+						<button type="button" onclick="moreList()" class="btn btn-sm btn-outline-dark">더보기</button>
 					</form>
 				</div>
 			</div>
