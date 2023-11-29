@@ -2,15 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="today" class="java.util.Date" />
+<fmt:formatDate value="${today}" pattern="yyyyMMdd" var="nowDate"/>
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/qBoardDetail.css"><c:param name="dt" value="${nowDate}"/></c:url>"/>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <script type="text/javascript" src="js/jquery.js"></script>
-<link rel="stylesheet" href="/css/qBoardDetail.css?after">
 <body>
+
 <c:import url="/WEB-INF/views/header4.jsp"/>
 	<i class="fa-sharp fa-light fa-image"></i>
 	<div id="qbd-main" class="qbd-main">

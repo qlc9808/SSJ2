@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/css/qBoardWrite.css?after">
+<link rel="stylesheet" href="/css/qBoardWrite.css?version1.1.1">
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
 

@@ -5,15 +5,12 @@
     font-style: normal;
 }
 
-/* .modal {
-	width: 100%; height: 100%;
-	background-color: gray; opacity: 0.6;
-} */
-
 #modalOpenBtn, #modalCloseBtn {
   cursor: pointer;
 }
-
+.extra_box {
+    display: flex; align-items: center; justify-content: center;
+}
 #modalOpenBtn {
   font-size: 16px;
   color: #59a5d2;
@@ -61,6 +58,9 @@
     opacity: 0;
     pointer-events: none;
 }
+.hidden table tr, td {
+    border: 1px solid black;
+}
 
 #levelInfoBtn {
 	margin-top: 50px;
@@ -73,7 +73,7 @@
 
 .userInfoBox2 {
 	height: 50px;
-	border: 0px solid red;
+	border: 0px solid red; text-align: center;
 	display: flex; align-items: center;
 }
 .userInfoBox2 > .user_exp {

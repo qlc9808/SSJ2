@@ -10,27 +10,26 @@
     background-color: #fff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: 0px solid red;
-    background: #ccc;
+    border: 0 solid red;
 }
 .qbd-main > .qbd-mainbody{
 	width: 100%; height: 100%;
-	border: 0px solid red; margin: auto;
+	border: 0 solid red; margin: auto;
 }
 
 .qbd-main > .qbd-mainbody >.qbd-title {
     width: 1100px; height: 150px;
     display: flex;
-    border: 0px solid red;
+    border: 0 solid red;
     margin: auto;
 }
 .qbd-main > .qbd-mainbody >.qbd-title > .qbd-object{
 	display: flex; justify-content: end; align-items: end;
-	border: 0px solid black; width: 30%;
+	border: 0 solid black; width: 30%;
 }
 .qbd-main > .qbd-mainbody >.qbd-title > .qbd-title-content {
 	display: flex; align-items: center; justify-content: start;
-	width: 900px; border: 0px solid red;
+	width: 900px; border: 0 solid red;
 }
 .qbd-main > .qbd-mainbody > .qbd-line {
 	width: 70%; margin-left: 50px;
@@ -38,8 +37,7 @@
 	vertical-align: middle;
 }
 .qbd-main > .qbd-mainbody > .qbd-line > .qbd-line-li {
-	width: 80%; height: 2px; background-color: gray;
-	margin: auto;
+	height: 40px;
 }
 .qbd-main > .qbd-mainbody > .qbd-line > .qbd-line-box {
 	width: 80%; margin: auto;
@@ -50,7 +48,7 @@
 }
 .qbd-main > .qbd-mainbody > .qbd-content {
 	width: 80%; height: auto; max-height: 1000px;
-    border: 0px solid black;
+    border: 0 solid black;
 	margin: auto;
 	display: flex;
 	overflow: auto;
@@ -76,7 +74,7 @@
     margin-bottom: 20px;
 }
 .qbd-main > .qbd-mainbody > .qbd-rp {
-	width: 80%; margin: 0 auto; background: #ccc; border-radius: 30px;
+	width: 80%; margin: 0 auto; border-radius: 30px;
 }
 .qbd-rp-write form[name="boardTrans"] {
 	display: flex; align-items: center; justify-content: center;
@@ -99,7 +97,7 @@
 }
 
 .qbd-rp-write input[type="button"]:hover {
-    background-color: #ffc1c2; opacity: 0.7; transition: 0.2s all;
+    opacity: 0.7; transition: 0.2s all;
 }
 
 .qbd-rp-list {
@@ -108,8 +106,10 @@
     width: 80%; margin: auto;
 }
 .qbd-rp-list ul {
-	margin-left: -60px;
+	margin-left: 30px;
+    border-left: 1px solid #1a1a1a;
 }
+
 .qbd-rp-group li {
 	white-space: pre-wrap;
 	overflow: auto;
@@ -121,7 +121,7 @@
     margin-bottom: 10px;
     padding: 10px;
     background-color: #fff;
-    overflow: auto;
+    width: 90%;
 }
 .comment_item span {
     display: inline-block;
