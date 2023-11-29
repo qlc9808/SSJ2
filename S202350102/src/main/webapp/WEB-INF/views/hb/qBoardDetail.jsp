@@ -16,7 +16,7 @@
 
 <c:import url="/WEB-INF/views/header4.jsp"/>
 	<i class="fa-sharp fa-light fa-image"></i>
-	<div id="qbd-main" class="qbd-main">
+	<div id="qbd-main" class="qbd-main section-mt">
 		<div class="qbd-mainbody">
 			<div id="qbd-title" class="qbd-title">
 				<div class="qbd-title-content">

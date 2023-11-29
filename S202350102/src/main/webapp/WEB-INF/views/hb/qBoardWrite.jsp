@@ -14,7 +14,7 @@
 </head>
 <body>
 <c:import url="/WEB-INF/views/header4.jsp"/>
-	<div class="container">
+	<div class="container section-mt">
 		<div class="row">
           <div class="col-12 text-center"> 
             <h3 class="mb-10"> 문의글 작성</h3>

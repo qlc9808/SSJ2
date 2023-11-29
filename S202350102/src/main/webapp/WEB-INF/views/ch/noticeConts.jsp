@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>   
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>   
 <%@ include file="/WEB-INF/views/header4.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -23,7 +21,7 @@
 
 </head>
 <body>	
-	<div class="container">
+	<div class="container section-mt">
 			<div id="qbd-main" class="qbd-main" style="height: auto;">
 				<div class="row">
 					<div class="col-12 col-md-3">

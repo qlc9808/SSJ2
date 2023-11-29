@@ -12,7 +12,7 @@
 </head>
 <body>
 	<c:import url="/WEB-INF/views/header4.jsp"/>
-	<div class="mainBody">
+	<div class="mainBody section-mt">
 	  <div class="qe_body">
 	    <div class="qe_box">
 	      <div class="qe_text_box">
