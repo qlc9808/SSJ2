@@ -256,9 +256,8 @@ public class ChController {
 	
 	public String search(Model model, HttpSession session) {
 		System.out.println("ChController search Start...");
-		List<Challenge> popchgList = chChallengeService.popchgList(); // 챌린지
 		List<Board> popBoardList = chBoardService.popBoardList(); // 자유개시판
-		List<Board> popShareList = chBoardService.popShareList();
+		
 		
 		// 검색기록 조회
 		int user_num = 0;
@@ -270,6 +269,8 @@ public class ChController {
 			model.addAttribute("shList", sh);
 			
 		}
+		List<Challenge> popchgList = chChallengeService.popchgList(user_num); // 챌린지
+		List<Board> popShareList = chBoardService.popShareList(user_num); // share
 		model.addAttribute("user_num", user_num);
 		model.addAttribute("popchgList", popchgList); 
 		model.addAttribute("popBoardList", popBoardList);
@@ -281,9 +282,15 @@ public class ChController {
 	
 	@ResponseBody
 	@GetMapping("popChgList")
-	public ModelAndView popChgList( ModelAndView mav) {
+	public ModelAndView popChgList( ModelAndView mav, HttpSession session) {
 		System.out.println("ChController popChgList STart...");
-		List<Challenge> popchgList = chChallengeService.popchgList(); // 챌린지
+		int user_num = 0;
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		
+		List<Challenge> popchgList = chChallengeService.popchgList(user_num); // 챌린지
 		
 		mav.addObject("popchgList", popchgList);
 		mav.setViewName("ch/ajaxPage/popChgListPage");
@@ -293,9 +300,14 @@ public class ChController {
 	
 	@ResponseBody
 	@GetMapping("popShareList")
-	public ModelAndView popShareList( ModelAndView mav) {
+	public ModelAndView popShareList( ModelAndView mav, HttpSession session) {
 		System.out.println("ChController popChgList STart...");
-		List<Board> popShareList = chBoardService.popShareList();
+		int user_num = 0;
+		
+		if(session.getAttribute("user_num") != null) {
+			user_num = (int) session.getAttribute("user_num");
+		}
+		List<Board> popShareList = chBoardService.popShareList(user_num);
 		
 		mav.addObject("popShareList", popShareList);
 		mav.setViewName("ch/ajaxPage/popShareListPage");
@@ -352,9 +364,12 @@ public class ChController {
 			Board[] srchList = {srchChg, srchShare, srchCommu};
 			
 			for(Board i : srchList) {
-				i.setKeyword(replSrch_word);			
+				i.setKeyword(replSrch_word);				
 				i.setStart(1);
 				i.setEnd(5);
+				if(user_num > 0) {
+					i.setUser_num(user_num);
+					}
 			}
 			
 			// 입력된 키워드에 따라 검색 
@@ -737,6 +752,9 @@ public class ChController {
 		Paging page = null;
 		System.out.println("ChController clickChgResult Start...->" + board.getKeyword());		
 		board.setKeyword(board.getKeyword().replace(" ", ""));
+		if(session.getAttribute("user_num") != null) {
+			board.setUser_num((int) session.getAttribute("user_num"));
+		}
 		switch (board.getBrd_md()) {
 		case 200:
 			int totalChg = chSearchService.chgSrchTot(board);

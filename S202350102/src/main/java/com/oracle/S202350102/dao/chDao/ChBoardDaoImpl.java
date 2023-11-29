@@ -145,12 +145,12 @@ public class ChBoardDaoImpl implements ChBoardDao {
 
 
 	@Override
-	public List<Board> popShareList() {
+	public List<Board> popShareList(int user_num) {
 		System.out.println("chBoardDaoImpl popShareList Start...");
 		List<Board> popShareList = null;
 		
 		try {
-			popShareList = session.selectList("popShareList");
+			popShareList = session.selectList("popShareList",user_num);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("chBoardDaoImpl popBoardList e.getMessage->" + e.getMessage());
