@@ -3,14 +3,8 @@
 <%@ include file="header4.jsp" %>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-    <title>Insert title here</title>
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-<script src="./js/jquery.js"></script>
+<meta charset="UTF-8">
+<title>마이페이지</title>
 <script type="text/javascript">
 //Flickity 초기화 함수 - slider활용하기 위한 것
 function initFlickity() {
@@ -225,8 +219,6 @@ function clickLoad(index) {
 		}
 </script>    
 
-</head>
-
 <style>
 .profile {
   margin: 20px 0;
@@ -381,9 +373,9 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 
 .
 </style>
-
+</head>
 <body>
-<div class="container">
+<div class="container section-mt">
 	<div class="row profile">
 		<div class="col-md-3">
         	<%@ include file="mypageMenu.jsp" %>

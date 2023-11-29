@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
-<html>
-<head>
-    <meta charset="UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="css/level.css">
-<title>Insert title here</title>
-</head>
 <script>
 $(document).ready(function () {
     // mypageMenu 엔드포인트로 AJAX 요청
@@ -290,7 +285,6 @@ Down
 }
 
 </style>
-<body>
  <div class="pCard_card">
   <div class="pCard_up">
     <div class="pCard_text">
@@ -337,9 +331,11 @@ Down
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/mypage">
                                활동정보
                            </a>
+                           <!-- 
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-                               챌린지 관리
+   			                            챌린지 관리
                            </a>
+                            -->
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
                                팔로우 관리
                            </a>
@@ -488,5 +484,3 @@ levelInfoBtn.addEventListener('click', () => {
 });
 
 </script>
-</body>
-</html>

@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 <style type="text/css">
 	.flickity-cell {
 	  width: 50%; /* half-width */

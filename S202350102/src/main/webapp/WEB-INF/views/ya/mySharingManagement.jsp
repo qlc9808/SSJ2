@@ -12,9 +12,9 @@
 <title>쉐어링관리</title>
 </head>
 <body>
-<section class="py-11">
+<section>
 <!-- 필수!! -->
- <div class="container">
+ <div class="container section-mt">
     <div class="row profile">
        <div class="col-md-3">
             <%@ include file="../mypageMenu.jsp" %>
