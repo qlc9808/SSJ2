@@ -12,7 +12,6 @@
 	<!-- MODALS  -->
 
 	<!-- 비밀번호 리셋 MODAL -->
-
 	<div class="modal fade" id="modalPasswordReset" tabindex="-1"
 		role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">

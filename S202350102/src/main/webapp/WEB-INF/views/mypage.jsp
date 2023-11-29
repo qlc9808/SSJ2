@@ -135,13 +135,18 @@ function clickLoad(index) {
 		var text ="";
 		switch(result.page.brd_md){
 		/**********************인증***************/
-		case 100:
+		case 100:		
 			var num = result.page.total - result.page.start+1;
 			for(var i = 0; i< result.reCount; i++){
+				var date = new Date(result.listBdRe[i].reg_date);
+				date.setDate(date.getDate() + 1); // 현재 날짜에 1을 더함
+				var formattedDate = date.toISOString().slice(0, 10);
+				
+				
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='chgDetail?chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+formattedDate+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a>"
          			+"	<a href='javascript:void(0);' onclick='certiAjax("+result.listBdRe[i].brd_num+")'>수정</a></td></tr>";
@@ -150,13 +155,18 @@ function clickLoad(index) {
 			return text;
 			break;
 		/**********************후기***************/
-		case 101:						
+		case 101:
 			var num = result.page.total - result.page.start+1;
 			for(var i = 0; i< result.reCount; i++){
+				var date = new Date(result.listBdRe[i].reg_date);
+				date.setDate(date.getDate() + 1); // 현재 날짜에 1을 더함
+				var formattedDate = date.toISOString().slice(0, 10);
+				
+				
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='reviewContent?brd_num="+result.listBdRe[i].brd_num+"&chg_id="+result.listBdRe[i].chg_id+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+formattedDate+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
@@ -169,10 +179,14 @@ function clickLoad(index) {
 		case 102:
 			var num = result.page.total - result.page.start+1;
 			for(var i = 0; i< result.reCount; i++){
+				var date = new Date(result.listBdRe[i].reg_date);
+				date.setDate(date.getDate() + 1); // 현재 날짜에 1을 더함
+				var formattedDate = date.toISOString().slice(0, 10);
+				
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='detailSharing?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+formattedDate+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
          			+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
@@ -184,10 +198,14 @@ function clickLoad(index) {
 		case 103:
 			var num = result.page.total - result.page.start+1;
 			for(var i = 0; i< result.reCount; i++){
+				var date = new Date(result.listBdRe[i].reg_date);
+				date.setDate(date.getDate() + 1); // 현재 날짜에 1을 더함
+				var formattedDate = date.toISOString().slice(0, 10);
+				
 				text += "<tr id='row"+result.listBdRe[i].brd_num+"'>"
                 	+"<td>"+num+"</td>"
                 	+"<td><a href='detailCommunity?user_num="+result.listBdRe[i].user_num+"&brd_num="+result.listBdRe[i].brd_num+"'>"+result.listBdRe[i].title+"</a></td>"
-                	+"<td>"+new Date(result.listBdRe[i].reg_date).toISOString().slice(0, 10)+"</td>"
+                	+"<td>"+formattedDate+"</td>"
                 	+"<td>"+result.listBdRe[i].view_cnt+"</td>"
                 	+"<td>"+result.listBdRe[i].replyCount+"</td>"
          			+"<td><a href='javascript:void(0);' onclick='myContsDelete("+result.page.brd_md+","+result.listBdRe[i].brd_num+")'>삭제</a></td></tr>";
@@ -502,11 +520,11 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 					                        <c:forEach items="${myCertiList }" var="myCertiList">
 					                            <tr id="row${myCertiList.brd_num}">
 					                                <td>${num}</td>
-					                                <td><a href="detailCommunity?user_num=${myCertiList.user_num}&brd_num=${myCertiList.brd_num}">${myCertiList.title}</a></td>
+					                                <td><a href="chgDetail?chg_id=${myCertiList.chg_id}">${myCertiList.title}</a></td>
 					                                <td><fmt:formatDate value="${myCertiList.reg_date}" pattern="yyyy-MM-dd"/></td>
 									         		<td>${myCertiList.replyCount}</td>
 									         		<td><a href="javascript:void(0);" onclick="myContsDelete(${Certi_md},${myCertiList.brd_num })">삭제</a>
-									         			<a href="javascript:void(0);" onclick="certiAjax(${myCertiList.brd_num })">수정</a></td>
+									         				<a href="javascript:void(0);" onclick="certiAjax(${myCertiList.brd_num })">수정</a></td>
 									         		<c:set var="num" value="${num-1}"></c:set> 			       
 					                            </tr>
 					                        </c:forEach>
@@ -555,8 +573,8 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 				                            <th scope="col" class="th-title">제목</th>
 				                            <th scope="col" class="th-date">등록일</th>
 				                            <th scope="col" class="th-view_cnt">조회수</th>
-				                            <th  scope="col" class="th-replyCount">댓글수</th>
-				                            <th  scope="col" class="th-replyCount">비고</th>
+				                            <th scope="col" class="th-replyCount">댓글수</th>
+				                            <th scope="col" class="th-replyCount">비고</th>
 				                        </tr>
 				                    </thead>                 
 				                    <tbody id="body${Review_md}">

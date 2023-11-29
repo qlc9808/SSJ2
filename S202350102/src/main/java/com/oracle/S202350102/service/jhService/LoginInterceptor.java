@@ -13,7 +13,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		System.out.println("LoginInterceptor Interceptor Prehandle Start.....");
-
+		System.out.println("[Controller Method 호출 전]");
+		System.out.println("[" + request.getMethod() + "]");
+		System.out.println("[" + request.getRequestURL() + "]");
+		System.out.println("[" + request.getRequestURI() + "]");
 		//request에서 세션정보 추출
 		HttpSession session = request.getSession();
 		
@@ -41,5 +44,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 //		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 	
+
 
 }

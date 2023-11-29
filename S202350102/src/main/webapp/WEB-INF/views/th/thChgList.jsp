@@ -11,14 +11,8 @@
 
 <script type="text/javascript">
 
-	// 모달 값 지우기
-	// 모달창을 끌 때, hidden.bs.modal이라는 이벤트가 발생하고 이때 함수를 실행시킨다
-	// 해당모달의 input창의 모든 값을 비운다
-	// $(document).ready(function() : 이부분을 사용하지않으면 문서가 모달 이벤트 수신할 때 아래코드가 준비되지 않아 작동 안할수있음, 문서가준비된 이후 코드가 작동하도록 보장하기위해 jQuery의 document.ready 이벤트 사용
 	$(document).ready(function() {
-		$('.modal').on('hidden.bs.modal', function(e) {
-			$(this).find('input').val('');
-		});
+
 		
 		// 검색어 입력 후 엔터키 입력하면 검색버튼 클릭
 		$("#keyword").keypress(function(e){	
@@ -77,6 +71,8 @@
 		var input_priv_pswd = $('#input_priv_pswd'+p_index).val()
 		var chg_priv_pswd 	= $('#chg_priv_pswd'+p_index).val();
 		var chg_id			= $('#chg_id'+p_index).val();
+		alert('input_priv_pswd --> ' + input_priv_pswd);
+		alert('chg_priv_pswd --> ' + chg_priv_pswd);
 		if(input_priv_pswd == chg_priv_pswd){
 			location.href = "chgDetail?chg_id="+chg_id
 		} else {
@@ -334,7 +330,6 @@
 				     <div class="modal fade" id="modalMatchPswd${status.index }" tabindex="-1" role="dialog" aria-hidden="true">
 				      <div class="modal-dialog modal-dialog-centered" role="document">
 				        <div class="modal-content">
-				    
 				          <!-- Close -->
 				          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 				            <i class="fe fe-x" aria-hidden="true"></i>
@@ -363,7 +358,7 @@
 				                  	비밀번호 *
 				                </label>
 				                
-				                <input class="form-control form-control-sm input_priv_pswd" id="input_priv_pswd${status.index }" name="input_priv_pswd" type="text"  placeholder="비밀번호 " required>
+				                <input class="form-control form-control-sm input_priv_pswd" id="input_priv_pswd${status.index }" name="input_priv_pswd" type="password"  placeholder="비밀번호 " required>
 				                
 				                <c:if test="${chg.chg_public == 1 }">
 				                	<input class="form-control form-control-sm" id="chg_priv_pswd${status.index }" name="chg_priv_pswd" type="hidden" value="${chg.priv_pswd }">
@@ -375,14 +370,19 @@
 				                	확인
 				              </button>
 				              
- 				                <!-- 비공개방 모달창 비밀번호 입력칸에서 엔터키 클릭시 확인 버튼 클릭 -->
+ 				                
 			                	<script type="text/javascript">
+			                	    //비공개방 모달창 비밀번호 입력칸에서 엔터키 클릭시 확인 버튼 클릭 
 				            		// 검색어 입력 후 엔터키 입력하면 검색버튼 클릭
 				            		$("#input_priv_pswd"+${status.index}).keypress(function(e){	
 				            			if(e.keyCode && e.keyCode == 13){
 				            				$("#confirmPswd"+${status.index }).trigger("click");
 				            				return false;
 				            			}
+				            		});
+				            		// 모달창 끌때 input값 비우기
+				            		$('.modal').on('hidden.bs.modal', function(e) {
+				             			$('#input_priv_pswd'+${status.index }).val('');
 				            		});
 			    			    </script>
 				    
