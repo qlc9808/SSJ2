@@ -49,7 +49,7 @@
 
 </head>
 <body>
-	
+<section class="section-mt">	
 	<div class="container">
 		<form action="noticeUpdate" method="post" enctype="multipart/form-data">
 			<div id="qbd-main" class="qbd-main" style="height: auto;">
@@ -109,6 +109,7 @@
 			</div>
 		</form>
 	</div>
+</section>	
 </body>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

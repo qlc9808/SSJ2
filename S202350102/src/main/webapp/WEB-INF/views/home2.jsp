@@ -30,6 +30,15 @@
 	.section-mt {
 		margin-top: 150px;
 	}
+	
+	#shList{
+		z-index: 999;
+		position: absolute;
+		max-height: 200px;
+		min-width: 550px;
+		overflow-y: scroll;
+		overflow-x: hidden;	
+	}
 </style>
 <title>맛있게! 즐겁게! 건강한 습관 커뮤니티 + Life is the best game.</title>
 	<script type="text/javascript">
@@ -214,22 +223,6 @@
 			}
 		}
 		
-
-		$(function(){	 			
-			$.ajax(
-				{
-					type:"GET",
-					url: "srch_history",
-					dataType:"json",
-					success:function(data){
-						var str = hisList(data);
-						$("#listCont").html(str);
-						
-					}
-				}		
-			);	
-			
-		});		
 		
 		
 		function clickLoad(index) {				
@@ -319,6 +312,25 @@
 			location.href = "/?" + sendData;
 		}
 		
+		function deleteHis(srch_word, index){
+			/* alert(srch_word+index); */
+			$.ajax(
+					{
+						url: "deleteHis",
+						type: "POST",
+						data:{srch_word : srch_word},
+						dataType:"text",
+						success:function(data){							
+							if(data > 0){
+								$("#row-"+index).remove();
+							} else{
+								alert("잘못된 접근입니다.");
+							}
+						}
+					}		
+				);
+		}
+		
 	</script>
 </head>
 <body>
@@ -333,17 +345,17 @@
 			
 			</div>			
 		</form>
-		<div class="card" id="shList" style="display: none;">
+		<div class="card review px-0" id="shList" style="display: none;">
 			<c:if test="${user_num != 0 }">
 				<div class="card-body">
 					<table>
-						<c:forEach items="${shList }" var="shList">
-							<tr id="row"+${shList.srch_word }>
-								<td>
+						<c:forEach items="${shList }" var="shList" varStatus="status">
+							<tr id="row-${status.index }">
+								<td class="col-6 text-start">
 									<a href="searching?srch_word=${shList.srch_word }">${shList.srch_word }</a>
 								</td>
-								<td>
-									<a href="deleteHis?srch_word=${shList.srch_word }">
+								<td class="col-6 text-end">
+									<a href="javascript:void(0);" onclick="deleteHis('${shList.srch_word }',${status.index })">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
 										  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
 										</svg>
