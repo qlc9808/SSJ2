@@ -2,16 +2,16 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/header4.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>문의</title>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<link rel="stylesheet" href="/css/qBoardList.css?after">
 </head>
 <body>
-	<c:import url="/WEB-INF/views/header4.jsp"/>
 	<div class="mainBody section-mt">
 	  <div class="qe_body">
 	    <div class="qe_box">
@@ -128,7 +128,6 @@
 	    </div>
 	  </div>
 	</div>
-	<c:import url="/WEB-INF/views/footer.jsp"/>
 	
 </body>
 <script type="text/javascript">
@@ -317,4 +316,5 @@
     
     
 </script>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +19,7 @@
 <!-- PRODUCT -->
 <c:set var="usernum" value="${sessionScope.user_num}" />
 <section>
-    <div class="container">
+     <div class="container section-mt">
         <div class="row">
             <div class="col-12">
                 <div class="row">
