@@ -61,14 +61,14 @@
 <div align=left><h2>💻 화면 구성</h2></div>
 
 <div align=center>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/a5da8d56-8025-42fc-9993-5997527b8a2a"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/a5da8d56-8025-42fc-9993-5997527b8a2a"/> // 메인페이지(홈)
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/d0e3f4ed-0185-425c-9b28-9de7aeb2043e"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/> // 로그인, 회원가입
 </div>
 
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/1ccc227c-6727-4c68-9834-f929f2a1b3ab"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/b5316300-d366-40d0-b765-e2d61aa5f1f7"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/b5316300-d366-40d0-b765-e2d61aa5f1f7"/> // 챌린지
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/22f3582b-8089-49b2-ab0a-ff59950e9af0"/>
 </div>
 
@@ -80,25 +80,25 @@
 
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/677e337c-15f0-41a0-b6d0-3f95fac5c20a"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/7c6258d0-3e34-4968-8a0e-b2b9c2f2cb62"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/7c6258d0-3e34-4968-8a0e-b2b9c2f2cb62"/> // 쉐어링
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/3c8b6e29-b58b-4e8b-9b34-006fadd0b089"/>
 </div>
 
 <div align=center>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98cc4f05-852d-4ba5-94fb-cbda00891260"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/14b5e7fc-65e1-48a6-a2d4-8291ead77e01"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98cc4f05-852d-4ba5-94fb-cbda00891260"/> 
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/14b5e7fc-65e1-48a6-a2d4-8291ead77e01"/> // 자유게시판
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/eccb36a3-a345-40d9-aa53-9bf1475fd470"/>
 </div>
 
 <div align=center>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/1eeac0cc-1cc2-4d73-b5c6-d83bd58be06d"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/1eeac0cc-1cc2-4d73-b5c6-d83bd58be06d"/> // 공지사항
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/cb3cd86f-b0fc-4b93-ba6a-2cd55de42a51"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/773716ec-4e9b-40ec-a98a-7b8d2efcff4e"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/773716ec-4e9b-40ec-a98a-7b8d2efcff4e"/> // 문의
 </div>
 
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/68dbe37b-90df-4f95-80ef-833f2859c3f2"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/9ccb1b96-fff1-4a95-b4a4-ed2dfc1b30c3"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/9ccb1b96-fff1-4a95-b4a4-ed2dfc1b30c3"/> // 관리자
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/1e7d0f01-4dba-4e62-b761-8b4230e57eae"/>
 </div>
 
@@ -110,7 +110,7 @@
 
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/5c461076-2fd3-45d4-90b1-1c4f83d6b2ef"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/5c461076-2fd3-45d4-90b1-1c4f83d6b2ef"/> // 레벨
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/> // 검색
 </div>
 
