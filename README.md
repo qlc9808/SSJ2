@@ -2,9 +2,13 @@
 
 스프링 부트 + Mybatis 챌린지 커뮤니티 사이트 코딩
 
+
+
 <div align=left><h2>프로젝트 소개</h2></div>
 이 서비스는 습관 인증과 지역 기반의 나눔 공유를 제공하는 커뮤니티입니다.
 습관 인증 커뮤니티를 개발한 배경은 스스로와 다른 사람들을 더 행복하게 만들어줄 서비스를 제공하고자 하는 고민에서 출발했습니다.
+
+
 
 <div align=left><h2>📚 STACK</h2></div>
 
@@ -16,6 +20,8 @@
 </div>
 
 <div align=left><h3>📗 Development</h3></div>
+
+
 
 <div>
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
@@ -29,6 +35,8 @@
   <img src="https://img.shields.io/badge/jsp-E6700C?style=for-the-badge&logo=jsp&logoColor=white">
   <img src="https://img.shields.io/badge/mybatis-251C1D?style=for-the-badge&logo=mybatis&logoColor=white">
 </div>
+
+
 
 <div align=left><h2>🔥 프로젝트 팀원 소개 및 역할 분담 🔥</h2></div>
 
@@ -48,6 +56,8 @@
 
 **🐹팀원 강한빛** : 문의 게시판 페이지, 유저 레벨시스템
 
+
+
 <div align=left><h2>💻 화면 구성</h2></div>
 
 <div align=center>
@@ -62,6 +72,8 @@
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
 </div>
 
+
+
 <div align=left><h2>💡 주요 기능</h2></div>
 ### 회원가입 및 로그인 기능
 -
@@ -72,6 +84,9 @@
 ### ㅇ
 ### ㅇ
 ### ㅇ
+
+
+
 <div align=left><h2>❗ 프로젝트 회고</h2></div>
 
 
