@@ -51,16 +51,15 @@
 <div align=left><h2>💻 화면 구성</h2></div>
 
 <div align=center>
-    <img width="30%" src="https://github.com/qlc9808/SSJ2/assets/137845430/a5da8d56-8025-42fc-9993-5997527b8a2a"/>
-    <img width="30%" src="https://github.com/qlc9808/SSJ2/assets/137845430/d0e3f4ed-0185-425c-9b28-9de7aeb2043e"/>
-    <img width="30%" src="https://github.com/qlc9808/SSJ2/assets/137845430/1ccc227c-6727-4c68-9834-f929f2a1b3ab"/>
-    
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/a5da8d56-8025-42fc-9993-5997527b8a2a"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/d0e3f4ed-0185-425c-9b28-9de7aeb2043e"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
 </div>
 
 <div align=center>
-    <img width="30%" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
-    <img width="30%" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
-    <img width="30%" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/1ccc227c-6727-4c68-9834-f929f2a1b3ab"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ecfb30bc-74cf-4bf2-89ce-9443b59856cd"/>
 </div>
 
 <div align=left><h2>💡 주요 기능</h2></div>
