@@ -230,7 +230,6 @@
 	                dataType: 'json',
 	                success: function (result) {
 	                    if (result.result == "success") {
-	                        alert("수정성공!");
 	                        qBoardCommentList();
 	                    } else {
 	                        alert("수정실패..");

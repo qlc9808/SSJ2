@@ -259,10 +259,10 @@
           </div>
         </div>
         
-        <!--사이드바   -->
+        <!--사이드바   관리자인 경우 adminSidebar, 사용자인 경우 mypageMenu  -->
 		<div class="row">
 	        <c:choose>
-				<c:when test="${user.status_md == 102 }">
+				<c:when test="${user1.status_md == 102 }">
 	        		<%@ include file="adminSidebar.jsp" %>
 			        <div class="col-10">
 	        	</c:when>
@@ -376,8 +376,9 @@
 		<div class="d-flex justify-content-start mt-5">
 				<!-- 챌린지 신청완료 땐 승인/반려 활성화 -->
 				<!-- 챌린지 진행중 땐 수정 반려엔 삭제 버튼만 활성화  -->
+				<!-- 관리자인 경우  -->
 		<c:choose>
-			<c:when test="${user.status_md == 102 }">
+			<c:when test="${user1.status_md == 102 }">
 				<button class="btn btn-sm btn-dark mx-1" onclick="chgAdminList()">목록</button>
 				<c:choose>
 					<c:when test="${chg.state_md == 100 }">
@@ -385,7 +386,7 @@
 						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
 					</c:when>
 					<c:when test="${chg.state_md == 102 }">
-						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
+						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&state_md=${state_md}&chgUpdateMode=1'">수정</button>
 					</c:when>
 					<c:when test="${chg.state_md == 104}">
 						<button class="btn btn-sm btn-dark mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>
@@ -398,8 +399,8 @@
 			
 			<c:otherwise>
 			    <button class="btn btn-sm btn-dark mx-1" onclick="location.href='/mypage'">목록</button>
-			
-			    <c:if test="${user.user_num == chg.user_num && (chg.state_md == 100 || chg.state_md == 104)}">
+			<!-- 사용자인 경우 -->
+			    <c:if test="${user1.user_num == chg.user_num && (chg.state_md == 100 || chg.state_md == 104)}">
 			        <!-- 수정 버튼 -->
 			        <c:if test="${chg.state_md == 100}">
 			            <button class="btn btn-sm btn-dark mx-1" onclick="location.href='/myChgUpdate?chg_id=${chg.chg_id}'">수정</button>
