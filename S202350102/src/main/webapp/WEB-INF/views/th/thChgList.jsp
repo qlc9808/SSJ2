@@ -71,8 +71,8 @@
 		var input_priv_pswd = $('#input_priv_pswd'+p_index).val()
 		var chg_priv_pswd 	= $('#chg_priv_pswd'+p_index).val();
 		var chg_id			= $('#chg_id'+p_index).val();
-		alert('input_priv_pswd --> ' + input_priv_pswd);
-		alert('chg_priv_pswd --> ' + chg_priv_pswd);
+// 		alert('input_priv_pswd --> ' + input_priv_pswd);
+// 		alert('chg_priv_pswd --> ' + chg_priv_pswd);
 		if(input_priv_pswd == chg_priv_pswd){
 			location.href = "chgDetail?chg_id="+chg_id
 		} else {
