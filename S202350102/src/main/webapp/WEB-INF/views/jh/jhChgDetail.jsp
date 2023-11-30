@@ -2481,7 +2481,7 @@
 							
 							                    <!-- Button -->
 							                    <button class="btn btn-outline-dark" type="submit" disabled>
-							                      Post Review
+							                      	등록
 							                    </button>
 							
 							                  </div>

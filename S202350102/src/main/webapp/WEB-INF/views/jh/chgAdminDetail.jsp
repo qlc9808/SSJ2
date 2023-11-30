@@ -386,7 +386,7 @@
 						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
 					</c:when>
 					<c:when test="${chg.state_md == 102 }">
-						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&chgUpdateMode=1'">수정</button>
+						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&state_md=${state_md}&chgUpdateMode=1'">수정</button>
 					</c:when>
 					<c:when test="${chg.state_md == 104}">
 						<button class="btn btn-sm btn-dark mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>

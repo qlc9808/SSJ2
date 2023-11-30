@@ -213,7 +213,7 @@
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 
 <!-- 버튼 위치 조정하기 -->
-<div class="d-flex justify-content-end align-items-between mt-8 mb-4">
+<div class="d-flex justify-content-end align-items-between mt-5">
 	<div class="col-auto">
 		<button  class="btn btn-xs btn-dark" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
 		<c:if test="${user.user_num == reviewContent.user_num }">
