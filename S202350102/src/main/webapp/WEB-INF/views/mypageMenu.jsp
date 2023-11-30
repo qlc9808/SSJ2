@@ -437,7 +437,7 @@ Down
 <!-------------------------------- 모달창  ------------------------------------------------------------------------>
 		<div id="modal">
 			<div class="hidden" id="modalContainer">
-				<div id="modalContent">
+				<div id="modalContent" style="max-height: calc(100vh - 200px); overflow-x: hidden; overflow-y: auto;">
 					<button id="modalCloseBtn">X</button>
 					<div class="user_info">
 						<div class="userInfoBox1">
@@ -486,6 +486,14 @@ Down
 					            </tbody>
 					        </c:forEach>
 					    </table>
+					    <div class="mt-10">
+						    <h6 class="text-center">레벨 올리는 방법</h6>
+						    <ul class="list-group list-group-flush">
+			                  <li class="list-group-item active">Cras justo odio</li>
+			                  <li class="list-group-item">Dapibus ac facilisis in</li>
+			                  <li class="list-group-item">Morbi leo risus</li>
+			                </ul>
+					    </div>
 					</div>
 
 				</div>
