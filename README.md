@@ -114,15 +114,20 @@
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/22f3582b-8089-49b2-ab0a-ff59950e9af0"/>
 </div>
 <div align=left><h2>💡 주요 기능</h2></div>
+
 ### 회원가입 및 로그인 기능
 -
 -
-### 메인페이지
+
+### ㅇ
+
 ### ㅇ
 ### ㅇ
 ### ㅇ
 ### ㅇ
 ### ㅇ
+
+
 
 
 
