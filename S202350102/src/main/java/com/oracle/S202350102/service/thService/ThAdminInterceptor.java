@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class ThAdminInterceptor implements HandlerInterceptor {
 
-	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -57,7 +56,7 @@ public class ThAdminInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("adminInterceptor Interceptor PostHandle Start.....");
+		System.out.println("ThAdminInterceptor Interceptor PostHandle Start.....");
 	//	HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 	
