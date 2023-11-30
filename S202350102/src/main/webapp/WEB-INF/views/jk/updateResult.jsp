@@ -5,14 +5,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript">
-		function updateSuccess(){
-			alert('회원정보 수정 성공');
-			location.href ="/userDetail";
-		}
-</script>
-<meta charset="UTF-8">
-<title>수정 성공</title>
+	<meta charset="UTF-8">
+	<title>수정 성공</title>
+	<script type="text/javascript">
+			function updateSuccess() {
+			    alert('회원정보 수정 성공');
+			    redirectToUserDetail();
+			}
+			
+			function redirectToUserDetail() {
+			    window.location.href = "/userDetail"; // 페이지 이동 코드
+			}
+	</script>
 </head>
 <body onload="updateSuccess()">
 </body>

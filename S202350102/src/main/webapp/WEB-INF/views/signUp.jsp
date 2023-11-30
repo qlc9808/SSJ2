@@ -4,8 +4,8 @@
 <html>
  <head>
  <meta charset="UTF-8">
-<script type="text/javascript" src="js/th/thSignUp.js"></script>
 <title>회원가입</title>
+<script type="text/javascript" src="js/th/thSignUp.js"></script>
 <%@ include file="/WEB-INF/views/header4.jsp" %>
  </head>
 <body class="bg-light">
