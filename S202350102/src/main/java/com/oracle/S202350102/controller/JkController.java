@@ -651,10 +651,10 @@ public class JkController {
 		     int updateResult = jus.updateUser1(user1);
 		     model.addAttribute("updateResult", updateResult);
 		     if (updateResult > 0) {
-		         return "forward:/jk/updateResult.jsp"; // 업데이트 성공 시의 뷰 페이지로 이동
+		         return "jk/updateResult"; // 업데이트 성공 시의 뷰 페이지로 이동
 		     } else {
 		         model.addAttribute("msg", "수정 실패 확인해 보세요");
-		         return "forward:/jk/mypage.jsp"; // 업데이트 실패 시의 뷰 페이지로 이동
+		         return "mypage"; // 업데이트 실패 시의 뷰 페이지로 이동
 		     }
 		 }
 	
