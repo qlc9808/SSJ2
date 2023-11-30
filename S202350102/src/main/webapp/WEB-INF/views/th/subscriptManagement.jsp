@@ -54,6 +54,9 @@
 <!--             <div class="row"> -->
          
              <div class="col-md-9 profile-form">
+             	<div class="container text-center" style="margin-top: 20px;">
+			    	<h3>My Page</h3>
+			    </div>
                  <form action="/kakaoPayRefund" method="post" onsubmit="return chkDate()">
                  <!-- tid price 가져와서 refund테이블에 추가하려 했었음(미완성) -->
                  	<input type="hidden" name="tid"  		id="tid" 		value="${order1.tid }">
