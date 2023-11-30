@@ -32,7 +32,7 @@
 					
 						<nav class="mb-10 mb-md-0">
 							<div class="list-group list-group-sm list-group-strong list-group-flush-x">
-								<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지</a>
+								<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지사항</a>
 								<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=106">이벤트</a>							
 							</div>
 						</nav>			
