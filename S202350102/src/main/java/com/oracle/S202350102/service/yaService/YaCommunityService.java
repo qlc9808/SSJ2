@@ -57,8 +57,9 @@ public interface YaCommunityService {
 	int searchSharingCnt(String keyword);
 	List<Board> sharingSearchResult(String keyword, String currentPage, String sortOption, Board board);
 	
-	// 쉐어링 참가 확인용
-	List<SharingList> sharingChk(int brd_num);
+	// 쉐어링 참가쪽
+	List<SharingList> 		sharingChk(int brd_num);
+	int 					deleteJoinSharing(int user_num);
 
 	
 	

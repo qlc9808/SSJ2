@@ -348,7 +348,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 	//마이페이지 내가 승인한 쉐어링 조회 
 	@Override
 	public List<Board> myConfirmSharingList(Board board) {
-		System.out.println("YaBoardDaoImpl myConfirmSharingList sharingParticipantsInfo start...");
+		System.out.println("YaBoardDaoImpl myConfirmSharingList start...");
 		List<Board> myConfirmSharingList = null;
 		try {
 			myConfirmSharingList = session.selectList("YaMyConfirmSharingList", board);
@@ -577,6 +577,23 @@ public class YaBoardDaoImpl implements YaBoardDao {
 			System.out.println("YaBoardDaoImpl sharingChk e.getmssage?"+e.getMessage());
 		}
 		return sharingChk;
+	}
+
+
+
+	@Override
+	public int deleteJoinSharing(int user_num) {
+		System.out.println("ybd deletejoinShairng start...");
+		int deleteJoinSharing = 0;
+		try {
+			
+			deleteJoinSharing = session.delete("YaDeleteSharing", user_num);
+			System.out.println("deleteJoinSharing:"+deleteJoinSharing);
+			
+		} catch (Exception e) {
+			System.out.println("YaBoardDaoImpl deleteJoinSharing  e.getmssage?"+e.getMessage());
+		}
+		return deleteJoinSharing;
 	}
 	
 

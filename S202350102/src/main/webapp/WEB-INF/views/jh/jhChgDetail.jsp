@@ -701,9 +701,6 @@
 
                     <!-- Item -->
            		    <c:choose>
-					    <c:when test="${empty chg.thumb || chg.thumb == null}">
-							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
-					    </c:when>
 					    <c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
 							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
 					    </c:when>
@@ -932,23 +929,43 @@
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
                 <div class="row justify-content-center py-9">
-                  <div class="col-12 col-lg-10 col-xl-8">
-                    <div class="row">
-                      <div class="col-12">
+                <div class="col-12 col-md-6">
+                <!-- 챌린지 소개 수정 -->
+                 <div class="card mb-7">
 
-                        <!-- Text -->
-                        <p class="text-gray-500">
-                        <!-- 유저닉은 로그인 유지 되는지 확인하기 위한 것 나중에 삭제 예정 -->
-                        	${user.nick} <p>
-							${chg.chg_conts }<p>
-							인증방법 : ${chg.upload }<p>
-							<img alt="인증예시" src="${sample_img }">
-                        </p>
-
-                      </div>
-                      
-                    </div>
-                  </div>
+	            
+	
+	                <!-- Heading -->
+	                <div class="mt-1 mb-4">
+	                	<h5>챌린지 정보</h5>
+	                </div>
+	                
+	                <div>
+		                <!-- Text -->
+		                <p class="mb-8 text-gray-500">
+		                 		${chg.chg_conts }
+		                </p>
+	                </div>
+	                
+		              <!-- Image -->
+		              <img class="card-img-top mb-7" src="${pageContext.request.contextPath}/upload/${chg.sample_img }" alt="인증예시">
+		
+		              <!-- Body -->
+		              <div class="card-body px-0">
+		
+	
+	                <!-- Text -->
+	                <p class="mb-0 text-gray-500">
+	                 		인증방법 : ${chg.upload }
+	                </p>
+	
+	                
+					</div>
+	              </div>
+	
+	            </div>
+                
+                 
                 </div>
               </div>
               
@@ -2298,7 +2315,7 @@
 							
 							              </div>
 							              
-			   				              <div class="col-12 col-md-auto">
+			   				              <div class="col-12 col-md-auto mb-1">
 							
 							                <!-- Button -->
 							                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
@@ -2351,14 +2368,14 @@
 												  <label class="input-group-text" for="inputGroupFile">이미지 업로드</label>
 											  </div>
 							                  
-							                  <div class="col-12 text-center">
+							                  <div class="col-12 text-center mb-5">
 							
 							                    <!-- Button -->
 							                    <button class="btn btn-outline-dark" type="submit">
 							                      	등록
 							                    </button>
 							                    <button class="btn btn-outline-secondary" type="reset">
-							                      	취소
+							                      	다시쓰기
 							                    </button>
 							
 							                  </div>

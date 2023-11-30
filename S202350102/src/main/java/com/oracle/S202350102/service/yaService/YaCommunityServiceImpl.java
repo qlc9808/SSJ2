@@ -353,6 +353,14 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return sharingChk;
 	}
 
+	@Override
+	public int deleteJoinSharing(int user_num) {
+		System.out.println("ycs delteJoinSharng start...");
+		int deleteResult=0;
+		deleteResult = ybd.deleteJoinSharing(user_num);
+		return  deleteResult;
+	}
+
 
 	
 	

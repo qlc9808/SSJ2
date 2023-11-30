@@ -946,7 +946,27 @@ public class YaController {
 				return"ya/sharingSearch";
 			} 
 			
-			// 쉐어링 참가 신청 취소기능 (추가예정)
+			//쉐어링 참가 취소기능 구현중..... 예정
+			@GetMapping(value="/deleteJoinSharing")
+			public String deleteJoinSharing(@RequestParam int user_num, HttpSession session, Model model) {	
+				System.out.println("YaController deleteJoinShairng start...");
+				
+				
+				
+			      if(session.getAttribute("user_num") != null) {
+			         user_num = (int) session.getAttribute("user_num");
+			      }
+			      
+			      User1 user1 = jbs.userSelect(user_num);
+				
+				System.out.println("deleteJoinSharing user_num?"+user_num);
+				int deleteResult=0;
+				deleteResult = ycs.deleteJoinSharing(user_num);
+				model.addAttribute("deleteResult", deleteResult);
+				System.out.println("YaController deleteJoinSharing deleteResult: " + deleteResult);
+				
+				return "redirect:/sharingManagement";
+			}
 			
 			
 	}		

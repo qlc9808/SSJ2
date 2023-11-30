@@ -1,11 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>  
 <%@ include file="header4.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <style type="text/css">
+body {
+   font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+   
+}
+
 /* 타이틀 스타일 */
 .page-title {
   	margin-bottom: 30px;
@@ -118,12 +133,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-<section class="pt-7 pb-12">
-	<div class="container section-mt">
+<section class="section-mt" style="padding-top: 30px;">
+	<div class="container">
 		<div class="row">
 			<div class="col-12 text-center">
-				<c:if test="${brd_md == 106 }"><h3 class="mb-10">이벤트</h3></c:if>
-				<c:if test="${brd_md == 105 }"><h3 class="mb-10">공지</h3></c:if>				
+				<c:if test="${brd_md == 105 }"><h3 class="mb-10">공지사항</h3></c:if>
+				<c:if test="${brd_md == 106 }"><h3 class="mb-10">이벤트</h3></c:if>								
 			</div>
 		
 		
@@ -132,7 +147,7 @@
 					
 					<nav class="mb-10 mb-md-0">
 						<div class="list-group list-group-sm list-group-strong list-group-flush-x">
-							<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지</a>
+							<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지사항</a>
 							<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=106">이벤트</a>							
 						</div>
 					</nav>
