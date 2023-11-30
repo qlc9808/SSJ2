@@ -486,12 +486,24 @@ Down
 					            </tbody>
 					        </c:forEach>
 					    </table>
-					    <div class="mt-10">
+					    <div class="mt-10 container">
 						    <h6 class="text-center">레벨 올리는 방법</h6>
 						    <ul class="list-group list-group-flush">
-			                  <li class="list-group-item active">Cras justo odio</li>
-			                  <li class="list-group-item">Dapibus ac facilisis in</li>
-			                  <li class="list-group-item">Morbi leo risus</li>
+			                  <li class="list-group-item active">
+								챌린지
+								<ul class="list-group list-group-flush">
+				                  <li class="list-group-item">챌린지 생성 : 50점</li>
+				                  <li class="list-group-item">챌린지 참가 : 25점</li>
+				                  <li class="list-group-item">챌린지 인증글 작성 : 5점</li>
+				                  <li class="list-group-item">챌린지 후기글 작성 : 15점</li>
+								</ul>
+			                  </li>
+			                  <li class="list-group-item">커뮤니티
+			                  	<ul class="list-group list-group-flush">
+				                  <li class="list-group-item">게시글 작성 : 5점</li>
+			                  	</ul>
+			                  </li>
+			                  <li class="list-group-item">구독자일 경우 X3배</li>
 			                </ul>
 					    </div>
 					</div>
