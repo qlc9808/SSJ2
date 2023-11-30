@@ -16,16 +16,20 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 													   .addPathPatterns("/writeCertBrd")
 													   .addPathPatterns("/commentInsert")
 													   .addPathPatterns("/chgApplicationForm")												   
-													   .addPathPatterns("/chgAdminList")
 													   .addPathPatterns("/thkakaoPayForm")			// 태현 - 구독안내 페이지
-													   .addPathPatterns("/mypage")					// 진기님 - 마이페이지
+													   .addPathPatterns("/mypage")					// 진기 - 마이페이지
 													   ;
 		
 		registry.addInterceptor(new ThAdminInterceptor()).addPathPatterns("/detailUserByAdmin")			// 태현 - 관리자 유저 상세
 														 .addPathPatterns("/updateUserFormAdmin")		// 태현 - 관리자 유저 업데이트
 														 .addPathPatterns("/updateUserAdmin")			// 태현 - 관리자 유저 업데이트 처리
 														 .addPathPatterns("/delUserByAdmin")			// 태현 - 관리자 유저 삭제
-														 .addPathPatterns("/listUserAdmin")
-														 .addPathPatterns("/sharAdminList");			// 연아님 - 커뮤니티관리
+														 .addPathPatterns("/listUserAdmin")				// 태현 - 관리자 유저 리스트
+														 .addPathPatterns("/sharAdminList")				// 진기 - 관리자 쉐어링 관리
+														 .addPathPatterns("/communityAdminList")		// 연아 - 관리자 커뮤니티 관리
+														 .addPathPatterns("/reportListAdmin")			// 보경 - 관리자 인증게시판 관리
+														 .addPathPatterns("/chgAdminList");				// 지혜 - 관리자 챌린지 리스트 관리
+		
+		
 	}
 }

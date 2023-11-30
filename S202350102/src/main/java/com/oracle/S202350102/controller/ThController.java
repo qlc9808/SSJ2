@@ -43,7 +43,6 @@ import com.oracle.S202350102.service.thService.ThKakaoPay;
 import com.oracle.S202350102.service.thService.ThOrder1Service;
 import com.oracle.S202350102.service.thService.ThRefundService;
 import com.oracle.S202350102.service.thService.ThUser1Service;
-import com.oracle.S202350102.service.yaService.Paging2;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -560,5 +559,16 @@ public class ThController {
 		return "th/subscriptManagement";
 	}
 	
+	@RequestMapping("/errorLogin")
+	public String errorLogin() {
+		System.out.println("thController errorLogin Start...");
+		return "errorLogin";
+	}
+	
+	@RequestMapping("/errorAuth")
+	public String errorAuth() {
+		System.out.println("thController errorAuth Start...");
+		return "errorAuth";
+	}
 	
 }
