@@ -391,6 +391,7 @@
 	    	arr.push({brd_num:"${item.brd_num }"
 	    		     ,brd_group:"${item.brd_group}"
 	    		     ,idx: idx
+	    		     
 	    	});
 	    	idx ++ ;
 		</c:forEach>
@@ -1426,7 +1427,9 @@
 																	<img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">
 																	<span style="color: black;">${certBoard.nick}</span>
 																</a>
-																<time datetime="2019-07-25">${certBoard.reg_date }</time>
+																<fmt:formatDate var="date" value="${certBoard.reg_date }"
+														pattern="yyyy.MM.dd" />
+																<span>${date }</span>
 															</span>
 								                        </div>
 								                      </div>
@@ -1598,7 +1601,9 @@
 															</span>
 														</a>
 
-														<time datetime="2019-07-25">${certBoard.reg_date }</time>
+														<fmt:formatDate var="date" value="${certBoard.reg_date }"
+				                                          pattern="yyyy.MM.dd" />
+				                                                <span>${date }</span>
 							                          </span>
 							                        </div>
 							                      </div>
