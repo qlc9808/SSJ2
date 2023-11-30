@@ -23,7 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		//로그인 여부 확인 -> 로그인 전이면 로그인 페이지로 이동
 		int userNum = 0;
 		if(session.getAttribute("user_num") == null) {
-			response.sendRedirect("/loginForm");
+			response.sendRedirect("/errorLogin");
 			return false;
 			
 		} else {
