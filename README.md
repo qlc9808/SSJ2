@@ -115,20 +115,17 @@
 </div>
 
 <div align=center>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/5c461076-2fd3-45d4-90b1-1c4f83d6b2ef"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/8c95e902-1dca-469e-aa25-e8b71d82dc21"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/d648a1c8-67fc-45d4-8c2f-710419417352"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/29d5b2d7-1be5-4d67-ab4d-6c18c5b898ea"/>
 </div>
 
 <div align=center>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/5c461076-2fd3-45d4-90b1-1c4f83d6b2ef"/>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/788e9da1-d1e5-4504-9279-44f45775e0dd"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/2995ff92-8a8b-4892-8d8f-ea02f4c5e680"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c5d59bfd-7f20-4983-b323-db748d2404ec"/>
 </div>
 
-<div align=left>
-    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
-</div>
 
 <div align=left><h2>💡 주요 기능</h2></div>
 
