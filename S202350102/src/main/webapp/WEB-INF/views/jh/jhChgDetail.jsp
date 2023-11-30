@@ -75,18 +75,18 @@
 			user_num 	= $("#user_num" 	+ index).val();
 			user_nick 	= $("#nick" 		+ index).val();
 			user_img 	= $("#user_img" 	+ index).val();
-//			user_level 	= $("#user_level" 	+ index).val();
-//			user_exp 	= $("#user_exp" 	+ index).val();
-//			percentage 	= $("#percentage" 	+ index).val();
-//			icon 		= $("#icon" 		+ index).val();
+			user_level 	= $("#user_level" 	+ index).val();
+			user_exp 	= $("#user_exp" 	+ index).val();
+			percentage 	= $("#percentage" 	+ index).val();
+			icon 		= $("#icon" 		+ index).val();
 		} else { // tap == '소세지들'
 			user_num 	= $("#ssjUserNum" 	+ index).val();
 			user_nick 	= $("#ssjNick" 		+ index).val();
 			user_img 	= $("#ssjImg" 		+ index).val();
-//			user_level 	= $("#ssjLevel" 	+ index).val();
-//			user_exp 	= $("#ssjExp" 		+ index).val();
-//			percentage 	= $("#ssjPercentage"+ index).val();
-//			icon 		= $("#ssjIcon" 		+ index).val();
+			user_level 	= $("#ssjUserLevel" + index).val();
+			user_exp 	= $("#ssjUserExp" 	+ index).val();
+			percentage 	= $("#ssjPercentage"+ index).val();
+			icon 		= $("#ssjIcon" 		+ index).val();
 		}
 		
 		// DB에 있는지 존재 유무 체크
@@ -115,9 +115,8 @@
 		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
 		$('#displayUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img);
-//		$('#displayUserLevel').attr('title', 'Lv.' + user_level + ' | exp.' + user_exp + '(' + percentage + '%)')
-//							  .attr('src', '/images/level/' + icon + '.gif');
-			
+		$('#displayUserLevel').attr('title', 'Lv.' + user_level + ' | exp.' + user_exp + '(' + percentage + '%)').attr('src', '/images/level/' + icon + '.gif');
+		
 		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
 		$('#inputUserNum2').val(user_num);	// sendMessage()
@@ -2078,6 +2077,10 @@
 													<input type="hidden" id="ssjImg${status.index}" 		value="${ssj.img}">
 													<input type="hidden" id="ssjNick${status.index}" 		value="${ssj.nick}">
 													<input type="hidden" id="ssjUserNum${status.index}" 	value="${ssj.user_num}">
+													<input type="hidden" id="ssjUserLevel${status.index}" 	value="${ssj.user_level}">
+													<input type="hidden" id="ssjUserExp${status.index}" 	value="${ssj.user_exp}">
+													<input type="hidden" id="ssjPercentage${status.index}" 	value="${ssj.percentage}">
+													<input type="hidden" id="ssjIcon${status.index}" 		value="${ssj.icon}">
 													
 													<!-- profile & nick -->
 															<!-- profile -->
@@ -2261,7 +2264,8 @@
 								</div>
 								
 								<div class="col-12">
-									<p id="displayUserNick"></p>
+									<img title="" src="" id="displayUserLevel">
+									<span id="displayUserNick"></span>
 								</div>
 								
 								<div class="text-end">
