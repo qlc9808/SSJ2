@@ -13,16 +13,17 @@
 <script>
 
 /* jk 아작스 필터  일단 주석처리  */
-/* $(document).ready(function() {
+ $(document).ready(function() {
 $("#keyword").keypress(function(e){	
 	if(e.keyCode && e.keyCode == 13){
 		$("#searchButton").trigger("click");
 		return false;
 	}
 });
-
+ });
+/* jk 아작스 필터  일단 주석처리  */
 //Select 변경 시
-function renderTable(data) {
+/*function renderTable(data) {
     if (data && data.length > 0) {
         var tableHTML = ''; // 초기화된 테이블 시작
         for (var i = 0; i < data.length; i++) {

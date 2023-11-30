@@ -35,6 +35,17 @@
             }
         });
     }
+    
+    
+	 $(document).ready(function() {
+		 $("#keyword").keypress(function(e){	
+		 	if(e.keyCode && e.keyCode == 13){
+		 		$("#searchButton").trigger("click");
+		 		return false;
+		 	}
+		 });
+		  });
+    
 </script>
 
 </head>
