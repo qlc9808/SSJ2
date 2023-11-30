@@ -114,7 +114,21 @@
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/>
 </div>
 
+<div align=center>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/5c461076-2fd3-45d4-90b1-1c4f83d6b2ef"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/>
+</div>
 
+<div align=center>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/5c461076-2fd3-45d4-90b1-1c4f83d6b2ef"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/>
+</div>
+
+<div align=center>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
+</div>
 
 <div align=left><h2>💡 주요 기능</h2></div>
 
