@@ -118,11 +118,91 @@
     	  $('#updateFormModal').modal('show')
       }
       
+   // 유저 닉네임 클릭 시 modal 창 띄우기
+  	function userInfoModal(index) {
+  		// 모달창에 넘겨줄 값을 저장 
+  		var user_num, user_nick, user_img, user_level, user_exp, percentage, icon;
+
+		user_num 	= $("#replyUserNum" 	+ index).val();
+		user_nick 	= $("#replyNick" 		+ index).val();
+		user_img 	= $("#replyImg" 		+ index).val();
+		user_level 	= $("#replyUserLevel"   + index).val();
+		user_exp 	= $("#replyUserExp" 	+ index).val();
+		percentage 	= $("#replyPercentage"  + index).val();
+		icon 		= $("#replyIcon" 		+ index).val();
+  		
+  		// DB에 있는지 존재 유무 체크
+  		$.ajax({
+  			url : "/followingCheck",
+  			type : "POST",
+  			data:{following_id : user_num},
+  			dataType : 'json',
+  			success : function(followingCheck) {
+  				if(followingCheck.fStatus > 0) {
+  					$("#follow").removeClass("btn-danger");
+  					$("#follow").addClass("btn-light");
+   					$("#follow").text("팔로잉");
+  				} else {
+  					$("#follow").removeClass("btn-light");
+  					$("#follow").addClass("btn-danger");
+  					$("#follow").text("팔로우");
+  				}
+  			},
+  			error : function() {
+  				alert("팔로우 오류");
+  			}
+
+  		});
+
+  		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
+  		$('#displayUserNick').text(user_nick);
+  		$('#displayUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img);
+  		$('#displayUserLevel').attr('title', 'Lv.' + user_level + ' | exp.' + user_exp + '(' + percentage + '%)').attr('src', '/images/level/' + icon + '.gif');
+  		
+  		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
+  		$('#inputUserNum1').val(user_num);	// following()
+  		$('#inputUserNum2').val(user_num);	// sendMessage()
+
+  		// 모달 창 표시
+  		$('#userShowModal').modal('show');
+  	}
+   
+ 	// 팔로우 하기 버튼
+	function following() {
+		var sendData = $('#followingForm').serialize();	// user_num=?
+
+		$.ajax({
+			url : "/followingPro",
+			type : "POST",
+			data : sendData,
+			dataType : 'json',
+			success : function(followResult) {
+
+				if(followResult.following > 0) {
+					$("#follow").removeClass("btn-danger");
+					$("#follow").addClass("btn-light");
+					$("#follow").text("팔로잉");
+				} else if(followResult.following == 0) {
+					$("#follow").removeClass("btn-light");
+					$("#follow").addClass("btn-danger");
+					$("#follow").text("팔로우");
+				} else {
+					alert("자신의 계정은 팔로우 할 수 없습니다");
+				}
+			},
+			error : function() {
+				alert("팔로우 오류");
+			}
+
+		});
+		
+	}
+      
 </script>
 </head>
 <body>
  <section>
-      <div class="container">
+      <div class="container section-mt">
         <div class="row">
         
         
@@ -213,7 +293,7 @@
 <!-- 글쓴이일 경우 수정, 삭제 버튼 활성화 -->
 
 <!-- 버튼 위치 조정하기 -->
-<div class="d-flex justify-content-end align-items-between mt-8 mb-4">
+<div class="d-flex justify-content-end align-items-between mt-5">
 	<div class="col-auto">
 		<button  class="btn btn-xs btn-dark" type="button"  onclick="location.href='chgDetail?chg_id=${chg_id}&tap=3'" >목록</button>
 		<c:if test="${user.user_num == reviewContent.user_num }">
@@ -274,7 +354,7 @@
 				<img src="assets/img/chgDfaultImg.png" alt="이미지가 없습니다" style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
 		    </c:when>
 		    <c:otherwise>
-				 <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 업로드에 실패했습니다." style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
+				 <img src="${pageContext.request.contextPath}/upload/${reviewContent.img}" class="card-img-top" alt="이미지 불러오기에 실패했습니다." style="max-width: 700px; max-height: 600px; width: auto; height: auto;">
 		    </c:otherwise>
 		</c:choose>
 		</div>
@@ -284,10 +364,10 @@
 	 </div>
 	
      <!-- 댓글 쓰기 -->
-     <div class="modal-body py-9">
+     <div class="py-9">
        <!-- Form -->
        <form action="/replyInsert" method="post" onsubmit="return replyInsertChk(this)">
-         <div class="row gx-5">
+         <div class="row gx-5 align-items-center">
          	<c:choose>
          	  <c:when test="${chgrYN == 1 }">
 	            <!-- 참여자일 경우 -->
@@ -295,8 +375,8 @@
 	   				<input type="hidden" name="chg_id" value="${chg_id}">
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
-	   				<input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!">
-	   				
+	   				<%-- <input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!"> --%>
+	   				<textarea class="form-control form-control-sm" id="reviewReply" rows="3" name="conts" maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!"></textarea>
 	   				
 	 			</div>
 	 			
@@ -342,7 +422,7 @@
      </div>
      
      <!-- 후기 댓글 리스트 -->
-     <c:forEach var="reply" items="${reviewReply }" >
+     <c:forEach var="reply" items="${reviewReply }" varStatus="status">
     	
 	     <div class="review">
 		
@@ -394,25 +474,39 @@
 			    	<c:otherwise>
 			    	<!-- 댓글 내용 -->
 					      <div class="col-12 col-md-auto">
+					      <input type="hidden" id="replyImg${status.index}" 		value="${reply.img}">
+						  <input type="hidden" id="replyNick${status.index}" 		value="${reply.nick}">
+						  <input type="hidden" id="replyUserNum${status.index}" 	value="${reply.user_num}">
+				          <input type="hidden" id="replyUserLevel${status.index}" 	value="${reply.user_level}">
+						  <input type="hidden" id="replyUserExp${status.index}" 	value="${reply.user_exp}">
+						  <input type="hidden" id="replyPercentage${status.index}" 	value="${reply.percentage}">
+						  <input type="hidden" id="replyIcon${status.index}" 		value="${reply.icon}">
 						    	
 					       <!-- 프로필 사진 -->
 					        <!-- img -->
                             <div class="col-3">
+                            <a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})" class="col-2">
                               <div class="avatar avatar-xxl mb-6 mb-md-0">
                                 <span class="avatar-title rounded-circle">
                                   <img src="${pageContext.request.contextPath}/upload/${reply.img}" alt="profile"
                                     class="avatar-title rounded-circle">
                                 </span>
                               </div>
+                            </a>
                             </div>
 					
 					      </div>
 					        <div class="col-12 col-md d-flex justify-content-between align-items-center">
 					      	<div>
 					        <!-- 닉네임 -->
-					        <p class="mb-2 fs-lg fw-bold">
-					        <span class="col-5"><img title="Lv.${reply.user_level } | exp.${reply.user_exp}(${reply.percentage }%)" src="/images/level/${reply.icon}.gif">${reply.nick }
-					        </p>
+					        <a href="#" data-bs-toggle="modal" onclick="userInfoModal(${status.index})" class="col-2">
+						        <p class="mb-2 fs-lg fw-bold">
+						        <span class="col-5">
+						        	<img title="Lv.${reply.user_level } | exp.${reply.user_exp}(${reply.percentage }%)" src="/images/level/${reply.icon}.gif">
+						        	<span style="color: black;">${reply.nick }</span>
+						        </span>
+						        </p>
+					        </a>
 					        
 					        <!-- 댓글 쓴 날짜 및 시간 -->
 					        <div class="row mb-6">
@@ -483,6 +577,48 @@
         </c:if>
   </ul>
 </nav>
+
+			<!-- yr 작성 -->
+            <!-- nick 클릭 시 나타나는 modal -->
+			<!-- 인증게시판, 소세지들, 후기게시판 사용 -->
+			<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="col-12 col-md-auto">
+								<div class="avatar avatar-xxl mb-6 mb-md-0">
+									<span class="avatar-title rounded-circle">
+										<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+									</span>
+								</div>
+							</div>
+							
+							<div class="col-12">
+								<img title="" src="" id="displayUserLevel">
+								<span id="displayUserNick"></span>
+							</div>
+							
+							<div class="text-end">
+									<button type="button" class="btn btn-danger btn-xs" name="user_num" onclick="following(${status.index})"
+										id="follow">팔로우</button>
+									
+									<!-- 
+										<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
+										<form id="sendMessageForm">
+											<input type="hidden" id="inputUserNum2" name="user_num">
+										</form>
+									 -->
+									 
+									<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+									
+									<form id="followingForm">
+										<input type="hidden" id="inputUserNum1" name="user_num">
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 </div>
 </div>
     </section>

@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,12 +35,23 @@
             }
         });
     }
+    
+    
+	 $(document).ready(function() {
+		 $("#keyword").keypress(function(e){	
+		 	if(e.keyCode && e.keyCode == 13){
+		 		$("#searchButton").trigger("click");
+		 		return false;
+		 	}
+		 });
+		  });
+    
 </script>
 
 </head>
 <body>
    <section class="pt-7 pb-12">
-      <div class="container">
+      <div class="container section-mt">
         <div class="row">
           <div class="col-12 text-center">
 
@@ -51,6 +60,8 @@
 
           </div>
         </div>
+
+        
         <div class="row">
           <div class="col-12 col-md-3">
 
@@ -63,7 +74,7 @@
                 <a  id="options" class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-                <a  id="options" class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
+                <a  id="option2" class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
                  	내가 쓴 글
                 </a>
                <a class="btn w-100 btn-dark mb-2"  id="options" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
@@ -105,13 +116,14 @@
     });
 </script>
 
-            
+ <div id="searchResults" style=" margin-top: 20px;"></div>           
             <div class="d-flex justify-content-end mb-3">
 			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption"  onchange="applySortOption()">
 			    <option value="reg_date" ${sortOption == 'reg_date' ? 'selected' : ''}>최근 게시물</option>
 			    <option value="view_cnt" ${sortOption == 'view_cnt' ? 'selected' : ''}>조회수 높은 순</option>
 			</select>
             </div>
+            
 <script>
     function applySortOption() {
         // 선택한 정렬 옵션 가져오기

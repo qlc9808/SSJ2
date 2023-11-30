@@ -179,7 +179,7 @@
           </ul>
 		 	
         </div>
-       		<div class="card" style="display: none;" id="alarmPopText" >
+       		<div class="card border" style="display: none;" id="alarmPopText" >
 			  <div class="card-body">
 			    <table id="alarmEmpty">
 			    	<tr><td><h4>새로운 댓글이 없습니다.</h4></td></tr>
@@ -273,7 +273,7 @@
 		});
 	}
 	
-	function read(user_num, brd_num, brd_md){
+	function read(user_num, brd_num, brd_md, chg_id){
 		/* alert("user_num"+user_num);
 		alert("brd_num"+brd_num); */		
 		$.ajax({
@@ -285,11 +285,11 @@
 					switch(brd_md){
 							/* 인증 */
 						case(100): 
-							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							window.location.href = 'chgDetail?chg_id=' + chg_id;
 							break;
 							/* 후기 */
 						case(101):
-							window.location.href = 'detailCommunity?user_num=' + user_num + '&brd_num=' + brd_num;
+							window.location.href = 'reviewContent?brd_num=' + brd_num + '&chg_id=' + chg_id;
 							break;
 							/* 쉐어링 */
 						case(102):

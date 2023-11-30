@@ -139,6 +139,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<div class="section-mt">
 	<div id="searchVar" class="container">
 		<form action="searching">
 			<div class="input-group">				
@@ -280,7 +281,7 @@
 									</c:forEach>
 									</div>
 								</div>
-							<button onclick="moveAndLoadTab(200, '${srch_word}')">더보기</button>
+							<button onclick="moveAndLoadTab(200, '${srch_word}')" class="btn btn-outline-dark btn-xxs">더보기</button>
 							</section>
 							
 							<hr>
@@ -365,7 +366,7 @@
 									    </c:forEach>
 									    </div>							
 								</div>
-							<button onclick="moveAndLoadTab(102, '${srch_word}')">더보기</button>
+							<button onclick="moveAndLoadTab(102, '${srch_word}')" class="btn btn-outline-dark btn-xxs">더보기</button>
 							</section>
 							
 							<hr>
@@ -394,7 +395,7 @@
 									</table>
 									<%-- <a href="srchcommunity?srch_word=${srch_word }">더보기</a> --%>
 								</div>
-								<button onclick="moveAndLoadTab(103, '${srch_word}')">더보기</button>
+								<button onclick="moveAndLoadTab(103, '${srch_word}')" class="btn btn-outline-dark btn-xxs">더보기</button>
 							</section>
 		            	</div> 
 		            	
@@ -417,6 +418,7 @@
 				</div> <!-- col-12 -->
 			</div> <!-- row -->
 		</div> <!-- container -->
+</div>
 	
 	
 	

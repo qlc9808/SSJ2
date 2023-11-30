@@ -543,9 +543,9 @@ public class JhController {
 			
 		}
 		
-		//태현 카테고리 리스트 -없어도 되려나?
-//		List<Comm> chgCategoryList = tcs.listChgCategory();
-//		model.addAttribute("chgCategoryList", chgCategoryList);
+		//태현 카테고리 리스트 
+		List<Comm> chgCategoryList = tcs.listChgCategory();
+		model.addAttribute("chgCategoryList", chgCategoryList);
 
 		
 		
@@ -675,16 +675,15 @@ public class JhController {
 	public String reviewPost(Board board, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file1, Model model) throws IOException {
 		System.out.println("JhController reviewPost Start...");
 		
-		//저장 경로 생성
-		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		System.out.println("JhController chgApplication file -> " + file1);		
 		
 		int user_num = board.getUser_num();
-		board.setBrd_lg(700);
-		board.setBrd_md(101);
+
 		
-		int lg = board.getBrd_lg();
-		int md = board.getBrd_md();
-		
+		if (!file1.isEmpty()) {
+			//저장 경로 생성
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			
 			log.info("originalName: " + file1.getOriginalFilename());
 			log.info("size: " +file1.getSize());
 			log.info("contentType : " + file1.getContentType());
@@ -697,6 +696,19 @@ public class JhController {
 			
 			log.info("Return savedName: " + saveName);
 			model.addAttribute("savedName", saveName);
+			
+		} 
+
+		System.out.println("JhController chgApplication 이미지 -> " + board.getImg());		
+		
+			//후기 글 공통 코드 번호 셋팅
+			board.setBrd_lg(700);
+			board.setBrd_md(101);
+		
+			int lg = board.getBrd_lg();
+			int md = board.getBrd_md();
+		
+			
 			
 			//글 등록
 			int result = jhBrdService.reviewPost(board);
@@ -980,10 +992,14 @@ public class JhController {
 			System.out.println("JhController chgDetail userNum -> " + userNum);
 		} 
 		//유저 정보(회원번호) 조회 -> 일단 더 필요한 유저 정보 있을까봐 user dto 자체를 가져옴 없으면 나중에 userNum만 모델에 저장할 예정
-		User1 user = userService.userSelect(userNum);
-		System.out.println("JhController chgDetail userNum -> " + user);
-		model.addAttribute("user", user);
+		User1 user1 = userService.userSelect(userNum);
+		System.out.println("JhController chgDetail userNum -> " + user1);
+		model.addAttribute("user1", user1);
 		
+		//관리자 아닌 사용자면 레벨리스트 가져오기
+		if(user1.getStatus_md() != 102) {
+			model.addAttribute("level1List",ls.level1List());
+		}
 		
 		//진행상태 중분류 - 신청/반려/진행/종료 모두 한 페이지에 표기하기 위한 것
 		int state_md = chg.getState_md();

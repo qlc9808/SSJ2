@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
-<html>
-<head>
-    <meta charset="UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="css/level.css">
-<title>Insert title here</title>
-</head>
 <script>
 $(document).ready(function () {
     // mypageMenu 엔드포인트로 AJAX 요청
@@ -394,12 +389,14 @@ Down
                    <!-- Nav -->
                    <nav class="mb-10 mb-md-0" >
                        <div class="list-group list-group-sm list-group-strong list-group-flush-x">
-                           <a class="list-group-item list-group-item-action dropend-toggle " href="/mypage">
+                           <a class="list-group-item list-group-item-action dropend-toggle" href="/mypage">
                                활동정보
                            </a>
+                           <!-- 
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/challengeManagement">
-                               챌린지 관리
+							챌린지 관리
                            </a>
+                            -->
                            <a class="list-group-item list-group-item-action dropend-toggle " href="/followList">
                                팔로우 관리
                            </a>
@@ -458,11 +455,11 @@ Down
 						
 												
 						<div class="userInfoBox2">
-							<span class="user_exp" style=" margin-right: 260px; margin-left: 10px;">
-								<label>현재 경험치 ${user1.user_exp }</label>
+							<span class="user_exp" style=" margin-right: 248px; margin-left: 10px;">
+								<label>남은 경험치 ${user1.user_exp }</label>
 							</span>
 							<span class="remain_exp">
-								<label>남은 경험치 ${user1.remain_exp }</label>
+								<label>레벨업 까지 ${user1.remain_exp }</label>
 							</span>
 						</div>
 
@@ -570,4 +567,3 @@ levelInfoBtn.addEventListener('click', () => {
 
 
 </body>
-</html>

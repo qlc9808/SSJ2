@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import javax.mail.Session;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
@@ -141,7 +142,7 @@ public class YaController {
 		return"ya/detailCommunity";
 	}
 	
-	// 커뮤니티 게시글 작성폼으로 이동 (************************************진기)
+	// 커뮤니티 게시글 작성폼으로 이동 (************************************진기 파일업로드)
 	@RequestMapping(value="/writeFormCommunity")
 	public String writeFormCommunity(Board board, HttpSession session, Model model ) {
 		System.out.println("YaController writeFormCommunity Start... ");
@@ -160,7 +161,8 @@ public class YaController {
 
 	 // 게시글 작성
 		@PostMapping(value="/writeCommunity") 
-		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session,
+				@RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 				System.out.println("YaController start insertCommunity... "); 
 				
 				int user_num = 0;
@@ -607,7 +609,7 @@ public class YaController {
 		  
 			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing), 내가 참가한 쉐어링(myJoinSharing)  		
 			@RequestMapping(value="/sharingManagement")
-			public String SharingManagement(HttpSession session, Board board, SharingList sharingList,  Model model,
+			public String SharingManagement(HttpSession session, Board board, SharingList sharingList, ServletRequest request, Model model,
 					@RequestParam(name = "currentPage", defaultValue = "1") String currentPage) {
 				
 				System.out.println("YaController myUploadSharingList start...");
@@ -669,8 +671,13 @@ public class YaController {
 					 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
 					System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
 					
+				
 					//페이징처리 
 					Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage, 3);
+					
+					 currentPage = request.getParameter(currentPage);				
+					 System.out.println("currentPage?"+currentPage);
+					
 					board.setUser_num((int) session.getAttribute("user_num"));
 					board.setStart(myConfirmSharingPaging.getStart());
 					board.setEnd(myConfirmSharingPaging.getEnd());
@@ -946,7 +953,27 @@ public class YaController {
 				return"ya/sharingSearch";
 			} 
 			
-			// 쉐어링 참가 신청 취소기능 (추가예정)
+			//쉐어링 참가 취소기능 구현중..... 예정
+			@GetMapping(value="/deleteJoinSharing")
+			public String deleteJoinSharing(@RequestParam int user_num, HttpSession session, Model model) {	
+				System.out.println("YaController deleteJoinShairng start...");
+				
+				
+				
+			      if(session.getAttribute("user_num") != null) {
+			         user_num = (int) session.getAttribute("user_num");
+			      }
+			      
+			      User1 user1 = jbs.userSelect(user_num);
+				
+				System.out.println("deleteJoinSharing user_num?"+user_num);
+				int deleteResult=0;
+				deleteResult = ycs.deleteJoinSharing(user_num);
+				model.addAttribute("deleteResult", deleteResult);
+				System.out.println("YaController deleteJoinSharing deleteResult: " + deleteResult);
+				
+				return "redirect:/sharingManagement";
+			}
 			
 			
 	}		

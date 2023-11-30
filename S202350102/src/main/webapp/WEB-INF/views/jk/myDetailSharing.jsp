@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +19,7 @@
 <!-- PRODUCT -->
 <c:set var="usernum" value="${sessionScope.user_num}" />
 <section>
-    <div class="container">
+     <div class="container section-mt">
         <div class="row">
             <div class="col-12">
                 <div class="row">
@@ -74,33 +73,33 @@
                         
                         <!--  신청내용 -->
                         <p class="mb-4 fs-sm fw-bold">
-                        <a class="text-body" href="product.html">작성자</a> <br>
+                        <a class="text-body" href="#">작성자</a> <br>
 	                      <span class="text-muted">${board.nick}</span>
 	                    </p>
 	                    <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="product.html">작성일</a> <br>
+	                      <a class="text-body" href="#">작성일</a> <br>
 	                      <span class="text-muted">
 						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
 						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="product.html">모집인원</a> <br>
+	                      <a class="text-body" href="#">모집인원</a> <br>
 	                      <span class="text-muted">${board.applicants}명</span>
 	                    </p>
                         
                         <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="product.html">참여인원</a> <br>
+	                      <a class="text-body" href="#">참여인원</a> <br>
 	                      <span class="text-muted">${board.participants}명</span>
 	                    </p>
                         
                         <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="product.html">거래지역</a> <br>
+	                      <a class="text-body" href="#">거래지역</a> <br>
 	                      <span class="text-muted">${board.addr}</span>
 	                    </p>
                         
                         <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="product.html">내용</a> <br>
+	                      <a class="text-body" href="#">내용</a> <br>
 	                      <span class="text-muted">${board.conts}</span>
 	                    </p>
                         <form>

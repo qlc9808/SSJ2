@@ -12,9 +12,9 @@
 <title>쉐어링관리</title>
 </head>
 <body>
-<section>
+<section class="py-11">
 <!-- 필수!! -->
- <div class="container section-mt">
+ <div class="container">
     <div class="row profile">
        <div class="col-md-3">
             <%@ include file="../mypageMenu.jsp" %>
@@ -22,11 +22,16 @@
     <div class="col-md-9 profile-form">
 <!-- 필수!! -->
 
+	<div class="container text-center" style="margin-top: 20px;">
+    	<h3>My Page</h3>
+    </div>
+
 <!--내가 개설한 쉐어링 제목 누르면  brd_num으로 해당하는 상세페이지로 이동시키게 설정하기-------------------------------------------------------->
-    <section class="myUploadSharing" style="width: 900px; height: 500px">
+    <section class="myUploadSharing" style="width: 900px; height: 500px; margin-top: 30px;">
         <div class="page-title">
             <div class="container">
                 <h6>내가 개설한 쉐어링 </h6>
+               
                 <hr class="my6">
             </div>
         </div>
@@ -115,12 +120,15 @@
                             <th scope="col" class="th-applicants">승인상태</th>
                             <th scope="col" class="th-bank_duedate">입금정보</th>
                             <th scope="col" class="th-reject_msg">반려사유</th>
+                       <!-- 추후 진행할 예정     <th scope="col" class="th-delete_shar">신청취소</th> -->
                             
                         </tr>
                     </thead>                 
                     <tbody>             
                         <c:forEach var="sharingList" items="${myJoinSharingList}" varStatus="status" >
                             <input type="hidden" value="${sharingList.brd_num}">
+                            <input type="hidden" value="${sharingList.user_num }">
+                            <input type="hidden" value="${sessionScope.user_num} ">
                             <tr>
                                 <td>${num}</td>    
                                 <td><a href="detailSharing?brd_num=${sharingList.brd_num}">${sharingList.title}</a></td>
@@ -148,7 +156,15 @@
 							       <c:otherwise>  </c:otherwise>
 							    </c:choose>
                                 </td>
-                                <td>${sharingList.reject_msg} </td>   
+                            
+                                <td>${sharingList.reject_msg} </td>  
+                                <c:choose> 
+                                <c:when test="${sharingList.state_md == 100}">
+                                <%--  추후 진행할 예정<td><a class="btn btn-xs btn-outline-dark w-100" href="/deleteJoinSharing?user_num=${sharingList.user_num}">취소</a></td> --%>
+                               
+                              	</c:when>
+                              	<c:otherwise>  </c:otherwise>
+                              	</c:choose>
 						        </tr>
 					            <!-- 폼 내용 추가 -->
 					            <tr>
@@ -196,6 +212,7 @@
 										                var isExpanded = target.classList.contains('show');
 										
 										                target.classList.toggle('show', !isExpanded);
+										                							                
 										                }
 										            });
 										        });

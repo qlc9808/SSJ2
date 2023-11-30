@@ -29,7 +29,7 @@ public class ThAdminInterceptor implements HandlerInterceptor {
 		// 세션에 담긴 회원 번호가 없다 --> 홈
 		if(session.getAttribute("user_num") == null) {
 			System.out.println("세션에 담긴 회원 정보 없음");
-			response.sendRedirect("/");
+			response.sendRedirect("/errorLogin");
 			return false;
 			
 		// 세션에 담긴 회원번호가 있다
@@ -45,7 +45,7 @@ public class ThAdminInterceptor implements HandlerInterceptor {
 				System.out.println("유저상태 --> 관리자 아님");
 				userNum = (int) session.getAttribute("user_num");
 				System.out.println("ThAdminInterceptor Prehandle userNum -> " + userNum);
-				response.sendRedirect("/");
+				response.sendRedirect("/errorAuth");
 				return false;
 			}
 		}
@@ -56,7 +56,7 @@ public class ThAdminInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("adminInterceptor Interceptor PostHandle Start.....");
+		System.out.println("ThAdminInterceptor Interceptor PostHandle Start.....");
 	//	HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 	

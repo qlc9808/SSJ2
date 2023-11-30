@@ -60,5 +60,11 @@ WHERE r BETWEEN #{start} AND #{end}
                 where brd_num = #{brd_num}	    
 	</select>	
 	
+	<select id="YaDeleteSharing" parameterType="int"> 
+		DELETE FROM sharingList
+		WHERE brd_num = #{brd_num}
+		AND user_num = #{user_num}	
+	</select>
+	
 	
 </mapper>	

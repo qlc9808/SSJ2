@@ -406,21 +406,6 @@ $(document).ready(function () {
 				    </div>
 				</div>      
 
-<%--     <!-- 게시판 검색 (옵션 제목, 작성자)-->
-<div class="container d-flex justify-content-center" style="padding-bottom: 0px;">
-    <div class="d-flex justify-content-center">
-        <div class="input-group input-group-merge">
-            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="제목/작성자 검색" value="${srch_word}">
-			<div class="input-group-append">
-			    <button class="btn btn-outline-border btn-search" id="searchButton" style="height: 40px;">
-			        <i class="fe fe-search"></i>
-			    </button>
-			</div>
-
-        </div>
-    </div>
-</div> --%>
-
 <div id="searchResults" style=" margin-top: 20px;"></div>
 
 	

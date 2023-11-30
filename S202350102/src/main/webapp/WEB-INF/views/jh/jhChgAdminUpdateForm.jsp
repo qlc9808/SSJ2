@@ -98,7 +98,7 @@
 </head>
 <body>
 <section class="py-11">
- <div class="container">
+ <div class="container section-mt">
         <div class="row">
           <div class="col-12 text-center">
 			
@@ -198,7 +198,7 @@
 			      <td>${chgrParti }</td>
 			      <th>참여 정원</th>
 				  <td>
-				      <input type="number" max="50" min="1" class="form-control form-control-xs" style="width: 200px;" name="chg_capacity" value="${chg.chg_capacity }" required>
+				      <input type="number" max="100" min="1" class="form-control form-control-xs" style="width: 200px;" name="chg_capacity" value="${chg.chg_capacity }" required>
 				  </td>
 			    </tr>
 			    <tr>

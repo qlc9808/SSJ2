@@ -58,6 +58,8 @@
 					$('#joinBtn').text("참여완료").removeClass("btn-danger").addClass("btn-secondary");
 					// 참여 완료 modal
 					document.getElementById('chgResultModalClick').click();
+					// var chgrYN = joinResult.chgrYN;
+					// alert("chgrYN -> " + chgrYN);
 				}
 			},
 			error : function() {
@@ -75,18 +77,26 @@
 			user_num 	= $("#user_num" 	+ index).val();
 			user_nick 	= $("#nick" 		+ index).val();
 			user_img 	= $("#user_img" 	+ index).val();
-//			user_level 	= $("#user_level" 	+ index).val();
-//			user_exp 	= $("#user_exp" 	+ index).val();
-//			percentage 	= $("#percentage" 	+ index).val();
-//			icon 		= $("#icon" 		+ index).val();
-		} else { // tap == '소세지들'
+			user_level 	= $("#user_level" 	+ index).val();
+			user_exp 	= $("#user_exp" 	+ index).val();
+			percentage 	= $("#percentage" 	+ index).val();
+			icon 		= $("#icon" 		+ index).val();
+		} else if(tap == '소세지들') { 
 			user_num 	= $("#ssjUserNum" 	+ index).val();
 			user_nick 	= $("#ssjNick" 		+ index).val();
 			user_img 	= $("#ssjImg" 		+ index).val();
-//			user_level 	= $("#ssjLevel" 	+ index).val();
-//			user_exp 	= $("#ssjExp" 		+ index).val();
-//			percentage 	= $("#ssjPercentage"+ index).val();
-//			icon 		= $("#ssjIcon" 		+ index).val();
+			user_level 	= $("#ssjUserLevel" + index).val();
+			user_exp 	= $("#ssjUserExp" 	+ index).val();
+			percentage 	= $("#ssjPercentage"+ index).val();
+			icon 		= $("#ssjIcon" 		+ index).val();
+		} else {	// tap == '후기'
+			user_num 	= $("#reviewUserNum" 	+ index).val();
+			user_nick 	= $("#reviewNick" 		+ index).val();
+			user_img 	= $("#reviewImg" 		+ index).val();
+			user_level 	= $("#reviewUserLevel"  + index).val();
+			user_exp 	= $("#reviewUserExp" 	+ index).val();
+			percentage 	= $("#reviewPercentage" + index).val();
+			icon 		= $("#reviewIcon" 		+ index).val();
 		}
 		
 		// DB에 있는지 존재 유무 체크
@@ -115,9 +125,8 @@
 		// userShowModal 모달 안의 태그 -> 화면 출력용  <span> <p> -> text
 		$('#displayUserNick').text(user_nick);
 		$('#displayUserImg').attr('src', '${pageContext.request.contextPath}/upload/' + user_img);
-//		$('#displayUserLevel').attr('title', 'Lv.' + user_level + ' | exp.' + user_exp + '(' + percentage + '%)')
-//							  .attr('src', '/images/level/' + icon + '.gif');
-			
+		$('#displayUserLevel').attr('title', 'Lv.' + user_level + ' | exp.' + user_exp + '(' + percentage + '%)').attr('src', '/images/level/' + icon + '.gif');
+		
 		// userShowModal 모달 안의 태그 input Tag -> Form 전달용		<input> -> <val>
 		$('#inputUserNum1').val(user_num);	// following()
 		$('#inputUserNum2').val(user_num);	// sendMessage()
@@ -702,9 +711,6 @@
 
                     <!-- Item -->
            		    <c:choose>
-					    <c:when test="${empty chg.thumb || chg.thumb == null}">
-							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
-					    </c:when>
 					    <c:when test="${chg.thumb == 'assets/img/chgDfaultImg.png'}">
 							<img src="assets/img/chgDfaultImg.png" alt="챌린지 썸네일" class="card-img-top" >
 					    </c:when>
@@ -914,7 +920,7 @@
             <!-- Nav -->
             <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
               <a class="nav-link active" id="descriptionNav" data-bs-toggle="tab" href="#descriptionTab">
-               	 챌린지 소개
+               	 챌린지 정보
               </a>
               <a class="nav-link" id="certNav" data-bs-toggle="tab" href="#certBoardTab" >
                              인증 게시판
@@ -933,23 +939,47 @@
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
                 <div class="row justify-content-center py-9">
-                  <div class="col-12 col-lg-10 col-xl-8">
-                    <div class="row">
-                      <div class="col-12">
+                <div class="col-12 col-lg-10 col-xl-8">
+                <!-- 챌린지 소개 수정 -->
+                 <div class="card mb-7">
 
-                        <!-- Text -->
-                        <p class="text-gray-500">
-                        <!-- 유저닉은 로그인 유지 되는지 확인하기 위한 것 나중에 삭제 예정 -->
-                        	${user.nick} <p>
-							${chg.chg_conts }<p>
-							인증방법 : ${chg.upload }<p>
-							<img alt="인증예시" src="${sample_img }">
-                        </p>
-
-                      </div>
-                      
-                    </div>
-                  </div>
+	            
+	
+	                <!-- Heading -->
+	                <div class="mt-1 mb-4">
+	                	<h5>챌린지 소개</h5>
+	                </div>
+	                
+	                <div>
+		                <!-- Text -->
+		                <p class="mb-8 text-gray-500">
+		                 		${chg.chg_conts }
+		                </p>
+	                </div>
+	                
+		              <!-- Image -->
+		              <img class="card-img-top mb-7" src="${pageContext.request.contextPath}/upload/${chg.sample_img }" alt="인증예시">
+		
+		              <!-- Body -->
+		              <div class="card-body px-0">
+		
+	
+	                <!-- Text -->
+			        <div class="mt-1 mb-4">
+	                	<h5>인증방법</h5>
+	                </div>
+              		 
+	                <p class="mb-0 text-gray-500">
+	                 		 ${chg.upload }
+	                </p>
+	
+	                
+					</div>
+	              </div>
+	
+	            </div>
+                
+                 
                 </div>
               </div>
               
@@ -2066,6 +2096,10 @@
 													<input type="hidden" id="ssjImg${status.index}" 		value="${ssj.img}">
 													<input type="hidden" id="ssjNick${status.index}" 		value="${ssj.nick}">
 													<input type="hidden" id="ssjUserNum${status.index}" 	value="${ssj.user_num}">
+													<input type="hidden" id="ssjUserLevel${status.index}" 	value="${ssj.user_level}">
+													<input type="hidden" id="ssjUserExp${status.index}" 	value="${ssj.user_exp}">
+													<input type="hidden" id="ssjPercentage${status.index}" 	value="${ssj.percentage}">
+													<input type="hidden" id="ssjIcon${status.index}" 		value="${ssj.icon}">
 													
 													<!-- profile & nick -->
 															<!-- profile -->
@@ -2234,50 +2268,6 @@
 				
 				</div>
 
-			  	<!-- nick 클릭 시 나타나는 modal -->
-				<!-- 인증게시판, 소세지들 사용 -->
-				<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-body">
-								<div class="col-12 col-md-auto">
-									<div class="avatar avatar-xxl mb-6 mb-md-0">
-										<span class="avatar-title rounded-circle">
-											<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
-										</span>
-									</div>
-								</div>
-								
-								<div class="col-12">
-									<p id="displayUserNick"></p>
-								</div>
-								
-								<div class="text-end">
-										<button type="button" class="btn btn-danger btn-xs" name="user_num" onclick="following(${status.index})"
-											id="follow">팔로우</button>
-										
-										<!-- 
-											<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
-											<form id="sendMessageForm">
-												<input type="hidden" id="inputUserNum2" name="user_num">
-											</form>
-										 -->
-										 
-										<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-										
-										<form id="followingForm">
-											<input type="hidden" id="inputUserNum1" name="user_num">
-										</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				
-            
-            
             <!-- jh 후기글   -->
             <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${tap}">  
             <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
@@ -2303,7 +2293,7 @@
 							
 							              </div>
 							              
-			   				              <div class="col-12 col-md-auto">
+			   				              <div class="col-12 col-md-auto mb-1">
 							
 							                <!-- Button -->
 							                <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#reviewForm">
@@ -2356,14 +2346,14 @@
 												  <label class="input-group-text" for="inputGroupFile">이미지 업로드</label>
 											  </div>
 							                  
-							                  <div class="col-12 text-center">
+							                  <div class="col-12 text-center mb-5">
 							
 							                    <!-- Button -->
 							                    <button class="btn btn-outline-dark" type="submit">
 							                      	등록
 							                    </button>
 							                    <button class="btn btn-outline-secondary" type="reset">
-							                      	취소
+							                      	다시쓰기
 							                    </button>
 							
 							                  </div>
@@ -2465,7 +2455,7 @@
 							
 							                    <!-- Button -->
 							                    <button class="btn btn-outline-dark" type="submit" disabled>
-							                      Post Review
+							                      	등록
 							                    </button>
 							
 							                  </div>
@@ -2490,13 +2480,22 @@
 									         </tr>
 									       </thead>
 									       <tbody>
-									         <c:forEach var="review" items="${chgReviewList}">
+									         <c:forEach var="review" items="${chgReviewList}" varStatus="status">
+									         <input type="hidden" id="reviewImg${status.index}" 		value="${review.user_img}">
+											 <input type="hidden" id="reviewNick${status.index}" 		value="${review.nick}">
+											 <input type="hidden" id="reviewUserNum${status.index}" 	value="${review.user_num}">
+									         <input type="hidden" id="reviewUserLevel${status.index}" 	value="${review.user_level}">
+											 <input type="hidden" id="reviewUserExp${status.index}" 	value="${review.user_exp}">
+											 <input type="hidden" id="reviewPercentage${status.index}" 	value="${review.percentage}">
+											 <input type="hidden" id="reviewIcon${status.index}" 		value="${review.icon}">
 									          <tr>
 									            <td>${num }</td>
 									            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
 									            <td>
-									            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
-													${review.nick }
+									            	<a href="#" data-bs-toggle="modal" onclick="userInfoModal('후기', ${status.index})" class="col-2">
+										            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
+										            	<span style="color: black;">${review.nick }</span>
+													</a>
 												</td>
 									            <td>${review.view_cnt }</td>
 									            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
@@ -2508,7 +2507,7 @@
 		                    	</div>
 		                    	
 	   		            		<!-- Pagination -->
-								<nav class="d-flex justify-content-center mt-9">
+								<nav class="d-flex justify-content-center mt-3">
 								  <ul class="pagination pagination-sm text-gray-400">
 								  <c:if test="${reviewPage.startPage > reviewPage.pageBlock}">
 								    <li class="page-item">
@@ -2569,6 +2568,47 @@
             	</c:otherwise>
             </c:choose>
             
+            <!-- yr 작성 -->
+            <!-- nick 클릭 시 나타나는 modal -->
+			<!-- 인증게시판, 소세지들, 후기게시판 사용 -->
+			<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="col-12 col-md-auto">
+								<div class="avatar avatar-xxl mb-6 mb-md-0">
+									<span class="avatar-title rounded-circle">
+										<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+									</span>
+								</div>
+							</div>
+							
+							<div class="col-12">
+								<img title="" src="" id="displayUserLevel">
+								<span id="displayUserNick"></span>
+							</div>
+							
+							<div class="text-end">
+									<button type="button" class="btn btn-danger btn-xs" name="user_num" onclick="following(${status.index})"
+										id="follow">팔로우</button>
+									
+									<!-- 
+										<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
+										<form id="sendMessageForm">
+											<input type="hidden" id="inputUserNum2" name="user_num">
+										</form>
+									 -->
+									 
+									<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+									
+									<form id="followingForm">
+										<input type="hidden" id="inputUserNum1" name="user_num">
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 					
             </div>
 

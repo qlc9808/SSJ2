@@ -66,14 +66,20 @@
 
       <div class="col-md-9 profile-form">
         <!-- Nav -->
-        <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
-          <a class="nav-link active" data-bs-toggle="tab" href="#followingList">
-            팔로잉
-          </a>
-          <a class="nav-link" data-bs-toggle="tab" href="#followerList">
-            팔로워
-          </a>
-        </div>
+        <div class="container text-center" style="margin-top: 20px;">
+	    	<h3>My Page</h3>
+	    </div>
+	    
+	    
+        <div class="container mt-7">
+	        <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
+	          <a class="nav-link active" data-bs-toggle="tab" href="#followingList">
+	            팔로잉
+	          </a>
+	          <a class="nav-link" data-bs-toggle="tab" href="#followerList">
+	            팔로워
+	          </a>
+	        </div>
   
         <div class="tab-content">
           <!-- followingList -->
@@ -198,6 +204,7 @@
   
   
   
+          </div>
         </div>
       </div>
     </div>
