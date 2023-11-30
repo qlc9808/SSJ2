@@ -51,63 +51,68 @@
 <body>
 <section class="section-mt">	
 	<div class="container">
-		<form action="noticeUpdate" method="post" enctype="multipart/form-data">
-			<div id="qbd-main" class="qbd-main" style="height: auto;">
-				<div class="qbd-mainbody" style="height: auto;">
-					<div id="qbd-title" class="qbd-title" style="height: 80px;">
-						<div class="qbd-title-content">
-							<div class="col-8">						
-								<span class="title-text">제목:<input type="text" name="title" value="${noticeConts.title }"></span>
-								<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
-								<input type="hidden" value="${noticeConts.user_num  }" name="user_num">
-								<input type="hidden" value="${noticeConts.brd_md}" name="brd_md">
-							</div>													
-						</div>							
+		<div class="col-12 text-center">
+			<c:if test="${noticeConts.brd_md == 105 }"><h3 class="mb-10">공지사항</h3></c:if>
+			<c:if test="${noticeConts.brd_md == 106 }"><h3 class="mb-10">이벤트</h3></c:if>								
+		</div>
+		<div class="row">
+			<div class="col-3">
+			
+				<nav class="mb-10 mb-md-0">
+					<div class="list-group list-group-sm list-group-strong list-group-flush-x">
+						<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지</a>
+						<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=106">이벤트</a>							
 					</div>
-					
-					<div class="qbd-line">
-						<div class="qbd-line-box">
-							<span class="qbd-line-box-text">작성자: ${noticeConts.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;
-							<span class="qbd-line-box-text">작성일: <fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
-							<span class="qbd-line-box-text">카테고리: ${noticeConts.category }</span>
-						</div>
-						<!-- <div class="qbd-line-li"></div> -->
-					</div>
-					<hr class="custom-hr">
-					<div class="container">
-		    			<div class="row border" style="height: auto;">
-		    				<div class="col-8 p-4 mt-4" >
-								<div class="qbd-content">
-									<div class="qbd-content text"  id="test">													
-										<span>
-											<textarea rows="20" cols="50" name="conts">${noticeConts.conts }</textarea>
-										</span>
-										<div id="imgContanier">
-											<c:if test="${not empty noticeConts.img }">
-												<img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" id="Img" style="max-width: 800px"><p>
-												<input type="hidden" name="img" value="${noticeConts.img}">											
-											</c:if>	
-										</div>
-									</div>						
-								</div>						
-								<input type="file" name="file1" style="display: none;" id="fileInput">
-								<c:if test="${not empty noticeConts.img }"><span id="imgOroot">${pageContext.request.contextPath}/upload/${noticeConts.img}</span></c:if><p>
-								<button type="button" onclick="fileUpdate()" id="chgBtn">사진 첨부</button>											
-								<c:if test="${not empty noticeConts.img }">
-									<button type="button" onclick="fileDelete()" id="delBtn">파일 삭제</button>
-									<input type="hidden" name="delStatus" id="delStatus" value="0">				
-								</c:if>	
-							</div>   			
-						</div>
-					</div>
-					<div class="col-4">
-						<input type="submit" value="수정" class="btn-danger btn-xxs">									
-						<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'" class="btn-danger btn-xxs">
-					</div>	
-					<hr class="custom-hr">				
-				</div>
+				</nav>			
+				
 			</div>
-		</form>
+			<div class="col-9">
+				<form action="noticeUpdate" method="post" enctype="multipart/form-data">
+						<div class="qbd-mainbody" style="height: auto;">
+										<span class="title-text text-start">제목:<input type="text" name="title" value="${noticeConts.title }"></span>
+										<input type="hidden" value="${noticeConts.brd_num  }" name="brd_num">
+										<input type="hidden" value="${noticeConts.user_num  }" name="user_num">
+										<input type="hidden" value="${noticeConts.brd_md}" name="brd_md">
+							
+							<div class="qbd-line-box">
+							&nbsp;&nbsp;<span class="qbd-line-box-text">작성자: ${noticeConts.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;
+								<span class="qbd-line-box-text">작성일: <fmt:formatDate value="${noticeConts.reg_date }" pattern="yyyy-MM-dd"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
+								
+							</div>
+								<!-- <div class="qbd-line-li"></div> -->
+							<hr class="custom-hr">
+							<div class="container">
+				    			<div class="row border" style="height: auto;">
+									<div id="imgContanier">
+										<img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" id="Img" style="max-width: 100%"><p>
+										
+										<c:if test="${not empty noticeConts.img }">
+											<input type="hidden" name="img" value="${noticeConts.img}">											
+										</c:if>
+										<span>
+											<textarea rows="20" cols="92" name="conts">${noticeConts.conts }</textarea>
+										</span>	
+									</div>
+									
+									<input type="file" name="file1" style="display: none;" id="fileInput">
+									<c:if test="${not empty noticeConts.img }"><span id="imgOroot">${pageContext.request.contextPath}/upload/${noticeConts.img}</span></c:if><p>
+									<button type="button" onclick="fileUpdate()" id="chgBtn">사진 첨부</button>											
+									<c:if test="${not empty noticeConts.img }">
+										<button type="button" onclick="fileDelete()" id="delBtn">파일 삭제</button>
+										<input type="hidden" name="delStatus" id="delStatus" value="0">				
+									</c:if>	
+								</div>
+							</div>
+							<div class="col-12 text-center">
+								<input type="submit" value="완료" class="btn-danger btn-xxs">									
+								<input type="button" value="목록" onclick="location.href='notice?brd_md=${noticeConts.brd_md}'" class="btn-danger btn-xxs">
+							</div>	
+							<hr class="custom-hr">				
+						</div>
+				</form>
+			</div>
+			
+		</div>
 	</div>
 </section>	
 </body>

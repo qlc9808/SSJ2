@@ -145,6 +145,7 @@
 							            <button class="btn btn-xs" type="button" data-toggle="collapse" 
 							                    data-target="#collapse-${status.index}" aria-expanded="false" 
 							                    aria-controls="collapse-${status.index}" data-bs-index="${status.index}" 
+							                     data-bs-page="${myJoinSharingPaging.currentPage}"
 							                    style=" background-color: #E56D90; color:#FFFFFF; padding-left: 10px;   padding-right: 10px; padding-top: 5px; padding-bottom: 5px">
 							                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart" viewBox="0 0 16 16">
   											<path d="M6.5 4.482c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
@@ -210,13 +211,18 @@
 										                var targetId = 'collapse-' + targetIndex;
 										                var target = document.getElementById(targetId);
 										                var isExpanded = target.classList.contains('show');
-										
+														
 										                target.classList.toggle('show', !isExpanded);
-										                							                
+										                
+										                var currentPage = button.getAttribute('data-bs-page');
+										                fetchDataFromServer(currentPage);
 										                }
 										            });
 										        });
 										    });
+										    
+
+										    
 										</script>					                    
 					                				                    
 					                </td>
@@ -243,6 +249,8 @@
 			                <a class="page-link" href="sharingManagement?currentPage=${i}">${i}</a>
 			            </li>
 			        </c:forEach>
+
+
 			
 			        <c:if test="${ myJoinSharingPaging.endPage <  myJoinSharingPaging.totalPage}">
 			            <li class="page-item">

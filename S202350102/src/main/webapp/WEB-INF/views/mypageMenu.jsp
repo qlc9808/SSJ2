@@ -437,7 +437,7 @@ Down
 <!-------------------------------- 모달창  ------------------------------------------------------------------------>
 		<div id="modal">
 			<div class="hidden" id="modalContainer">
-				<div id="modalContent">
+				<div id="modalContent" style="max-height: calc(100vh - 200px); overflow-x: hidden; overflow-y: auto;">
 					<button id="modalCloseBtn">X</button>
 					<div class="user_info">
 						<div class="userInfoBox1">
@@ -486,6 +486,26 @@ Down
 					            </tbody>
 					        </c:forEach>
 					    </table>
+					    <div class="mt-10 container">
+						    <h6 class="text-center">레벨 올리는 방법</h6>
+						    <ul class="list-group list-group-flush">
+			                  <li class="list-group-item active">
+								챌린지
+								<ul class="list-group list-group-flush">
+				                  <li class="list-group-item">챌린지 생성 : 50점</li>
+				                  <li class="list-group-item">챌린지 참가 : 25점</li>
+				                  <li class="list-group-item">챌린지 인증글 작성 : 5점</li>
+				                  <li class="list-group-item">챌린지 후기글 작성 : 15점</li>
+								</ul>
+			                  </li>
+			                  <li class="list-group-item">커뮤니티
+			                  	<ul class="list-group list-group-flush">
+				                  <li class="list-group-item">게시글 작성 : 5점</li>
+			                  	</ul>
+			                  </li>
+			                  <li class="list-group-item">구독자일 경우 X3배</li>
+			                </ul>
+					    </div>
 					</div>
 
 				</div>
