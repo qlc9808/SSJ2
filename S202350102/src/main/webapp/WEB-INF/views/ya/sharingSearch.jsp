@@ -74,7 +74,7 @@
                 <a  id="options" class="list-group-item list-group-item-action dropend-toggle " href="/myLikeSharing">
                  	찜한 쉐어링
                 </a>
-                <a  id="options" class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
+                <a  id="option2" class="list-group-item list-group-item-action dropend-toggle " href="/mySharing">
                  	내가 쓴 글
                 </a>
                <a class="btn w-100 btn-dark mb-2"  id="options" href="sharingUserDetail" style=" margin-top: 50px;">게시글 작성하기
@@ -116,7 +116,7 @@
     });
 </script>
 
-            
+ <div id="searchResults" style=" margin-top: 20px;"></div>           
             <div class="d-flex justify-content-end mb-3">
 			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption"  onchange="applySortOption()">
 			    <option value="reg_date" ${sortOption == 'reg_date' ? 'selected' : ''}>최근 게시물</option>

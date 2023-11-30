@@ -212,6 +212,7 @@
 										                var isExpanded = target.classList.contains('show');
 										
 										                target.classList.toggle('show', !isExpanded);
+										                							                
 										                }
 										            });
 										        });
