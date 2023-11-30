@@ -141,7 +141,7 @@ public class YaController {
 		return"ya/detailCommunity";
 	}
 	
-	// 커뮤니티 게시글 작성폼으로 이동 (************************************진기)
+	// 커뮤니티 게시글 작성폼으로 이동 (************************************진기 파일업로드)
 	@RequestMapping(value="/writeFormCommunity")
 	public String writeFormCommunity(Board board, HttpSession session, Model model ) {
 		System.out.println("YaController writeFormCommunity Start... ");
@@ -160,7 +160,8 @@ public class YaController {
 
 	 // 게시글 작성
 		@PostMapping(value="/writeCommunity") 
-		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session, @RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
+		public String insertCommunity(Board board, HttpServletRequest request, HttpSession session,
+				@RequestParam(value = "file", required = false) MultipartFile file1) throws IOException {
 				System.out.println("YaController start insertCommunity... "); 
 				
 				int user_num = 0;
