@@ -106,15 +106,15 @@
                     
 
                       <!-- 비밀번호 -->
-                    <div class="col-10"> 
-                      <div class="form-group">
-                        <div class="form-floating mb-3">																									
-                        	<input class="form-control form-control-xs" type="password" id="user_pswd" name="user_pswd" placeholder="비밀번호 *" onchange="checkPwd()" required="required">
-                        	<label for="floatingInput">비밀번호 8자 이상 영문,숫자,특수기호 조합</label>
-                        	<font color ="red" id = "failpwd" style = "display:none" size="2 rem">8자 이상 영문,숫자,특수기호를 조합해 입력해주세요 </font>
-                        </div>	
-                      </div>
-                    </div>
+<!--                     <div class="col-10">  -->
+<!--                       <div class="form-group"> -->
+<!--                         <div class="form-floating mb-3">																									 -->
+<!--                         	<input class="form-control form-control-xs" type="password" id="user_pswd" name="user_pswd" placeholder="비밀번호 *" onchange="checkPwd()" required="required"> -->
+<!--                         	<label for="floatingInput">비밀번호 8자 이상 영문,숫자,특수기호 조합</label> -->
+<!--                         	<font color ="red" id = "failpwd" style = "display:none" size="2 rem">8자 이상 영문,숫자,특수기호를 조합해 입력해주세요 </font> -->
+<!--                         </div>	 -->
+<!--                       </div> -->
+<!--                     </div> -->
                     
                     
 						<!-- 비밀번호 확인 -->
