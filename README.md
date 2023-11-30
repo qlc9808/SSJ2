@@ -104,7 +104,7 @@
 
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ac483e96-782e-4d04-b41b-0520b93231d6"/>
-    <img width="30%" height="200px" src="hhttps://github.com/qlc9808/SSJ2/assets/137845430/7d3be61e-6529-47ea-ace5-795e286f4bda"/>
+    <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/7d3be61e-6529-47ea-ace5-795e286f4bda"/>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/ef3ccc30-a31a-4ad5-a72e-a7826515c2a2"/>
 </div>
 
