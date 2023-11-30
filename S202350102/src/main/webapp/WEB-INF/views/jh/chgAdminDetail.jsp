@@ -382,17 +382,17 @@
 				<button class="btn btn-sm btn-dark mx-1" onclick="chgAdminList()">목록</button>
 				<c:choose>
 					<c:when test="${chg.state_md == 100 }">
-						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
-						<button class="btn btn-sm btn-dark mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
+						<button class="btn btn-sm btn-info mx-1" onclick="approvReturnFn(1)" id="approval"  >승인</button>
+						<button class="btn btn-sm btn-danger mx-1" onclick="approvReturnFn(0)" id="return" >반려</button>
 					</c:when>
 					<c:when test="${chg.state_md == 102 }">
 						<button class="btn btn-sm btn-info mx-1" onclick="location.href='/chgAdminDetail?chg_id=${chg.chg_id}&state_md=${state_md}&chgUpdateMode=1'">수정</button>
 					</c:when>
 					<c:when test="${chg.state_md == 104}">
-						<button class="btn btn-sm btn-dark mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>
+						<button class="btn btn-sm btn-danger mx-1" onclick="chgDeleteFn()" id="chgDelete">삭제</button>
 					</c:when>
 					<c:when test="${chg.state_md == 103}">
-						<button class="btn btn-sm btn-dark mx-1" onclick="chgReviewAdminFn()" id="chgReviewAdmin">후기 관리하기</button>
+						<button class="btn btn-sm btn-outline-dark mx-1" onclick="chgReviewAdminFn()" id="chgReviewAdmin">후기 관리하기</button>
 					</c:when>
 				</c:choose>
 			</c:when>

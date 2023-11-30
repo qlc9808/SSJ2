@@ -296,7 +296,7 @@
 	   				<input type="hidden" name="brd_num" value="${reviewContent.brd_num}">
 	   				<input type="hidden" name="user_num" value="${user.user_num}">
 	   				<%-- <input class="form-control form-control-sm" id="reviewReply" name="conts" type="text"  maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!"> --%>
-	   				<textarea class="form-control form-control-sm" id="reviewReply" rows="3" name="conts" maxlength="100" required placeholder="${user.nick }님 댓글을 남겨주세요!"></textarea>
+	   				<textarea class="form-control form-control-sm" id="reviewReply" rows="3" name="conts" maxlength="100" placeholder="${user.nick }님 댓글을 남겨주세요!"></textarea>
 	   				
 	 			</div>
 	 			
