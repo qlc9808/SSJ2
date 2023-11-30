@@ -126,7 +126,7 @@
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/c3f17ee6-e3da-45eb-9e30-09216f37bfb1"/>
 </div>
 
-<div align=center>
+<div align=left>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/98826523-1024-4dde-b2f5-f1acd1d8ded3"/>
 </div>
 
