@@ -10,7 +10,7 @@
 <title>noticeWriteForm공지 및 이벤트 글 작성 </title>
 </head>
 <body>
-		
+<section class="section-mt">	
 	<div class="container">
 		<div class="row text-center">
 			<c:if test="${brd_md == 105 }"><h3>공지</h3></c:if>
@@ -21,18 +21,16 @@
 				<div class="qbd-mainbody" style="height: auto;">
 					<div id="qbd-title" class="qbd-title" style="height: 80px;">
 						<div class="qbd-title-content">
-							<div class="col-8">						
+							<div class="col-12">						
 								<span class="title-text">제목:<input type="text" name="title"></span>								
 								<input type="hidden" value="${user1.user_num  }" name="user_num">
 								<input type="hidden" value="${brd_md}" name="brd_md">
 							</div>												
 						</div>
-						
-							
 					</div>
 					<div class="qbd-line">
 						<div class="qbd-line-box">
-							<span class="qbd-line-box-text">작성자: ${user1.nick }</span>&nbsp;&nbsp;&nbsp;&nbsp;							
+							<span class="qbd-line-box-text">작성자: ${user1.nick }</span>						
 						</div>
 						<!-- <div class="qbd-line-li"></div> -->
 					</div>
@@ -43,7 +41,7 @@
 								<div class="qbd-content">
 									<div class="qbd-content text"  id="test">													
 										<span>
-											<textarea rows="20" cols="50" name="conts"></textarea>
+											<textarea rows="20" cols="130" name="conts"></textarea>
 										</span>
 									</div>						
 								</div>						
@@ -60,7 +58,7 @@
 			</div>
 		</form>
 	</div>	
-
+</section>	
 </body>
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </html>

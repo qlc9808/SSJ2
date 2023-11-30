@@ -32,7 +32,7 @@
 					
 						<nav class="mb-10 mb-md-0">
 							<div class="list-group list-group-sm list-group-strong list-group-flush-x">
-								<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지사항</a>
+								<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=105">공지</a>
 								<a class="list-group-item list-group-item-action dropend-toggle " href="notice?brd_md=106">이벤트</a>							
 							</div>
 						</nav>			
@@ -63,15 +63,10 @@
 							</div>
 							<hr class="custom-hr">
 							<div class="container">
-				    			<div class="row border">
+				    			<div class="row border" style="height: auto;">
 				    				<div class="col-12" >
-										<div class="qbd-content">
-										<div class="qbd-content text col-12"  id="test" style="word-break:break-all">
-											<c:if test="${not empty noticeConts.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" style="max-width: 400px"><p></c:if>				
-											<span>${noticeConts.conts }</span>
-										</div>
-										
-										</div>
+										<c:if test="${not empty noticeConts.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" style="max-width: 100%"><p></c:if>
+										<span>${noticeConts.conts }</span>
 									</div>   			
 								</div>
 							</div>
