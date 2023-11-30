@@ -34,7 +34,7 @@
 	      	</div>
 	      	<div class="qe_write_box">
 		        <c:if test="${user1.user_id != null }">
-					<a href="qBoardWriteForm"><span>글작성</span></a>
+					<a href="qBoardWriteForm"><span>문의하기</span></a>
 				</c:if>	      	
 	      	</div>
 

@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../header4.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +35,17 @@
             }
         });
     }
+    
+    
+	 $(document).ready(function() {
+		 $("#keyword").keypress(function(e){	
+		 	if(e.keyCode && e.keyCode == 13){
+		 		$("#searchButton").trigger("click");
+		 		return false;
+		 	}
+		 });
+		  });
+    
 </script>
 
 </head>
@@ -112,6 +121,7 @@
 			    <option value="view_cnt" ${sortOption == 'view_cnt' ? 'selected' : ''}>조회수 높은 순</option>
 			</select>
             </div>
+            
 <script>
     function applySortOption() {
         // 선택한 정렬 옵션 가져오기
