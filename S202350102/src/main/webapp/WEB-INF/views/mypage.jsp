@@ -402,13 +402,23 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
       	<div class="col-md-9 profile-form">
 			<!-- 필수!! -->
 		
+	            <div class="container text-center" style="margin-top: 20px;">
+	                <h3>My Page</h3>
+	            </div>
+	        
 		 <!-- CATEGORIES -->
+        <div class="page-title mt-7">
+            <div class="container">
+                <h6>챌린지 관리</h6>
+               
+                <hr class="my6">
+            </div>
+        </div>
 
 		<div class="container">
 	        <div class="row">
 	        	<div class="col-12">	
 	            	<!-- Heading -->
-	            	<h5 class="mb-4">챌린지 목록</h5>
 	            
 		            <!-- Nav -->
 		            <div class="nav justify-content-center mb-10">
@@ -484,12 +494,19 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
 		</div> <!-- container -->
 
 	
-	
-        <div class="row" style="margin-top: 60px;">
+            <!-- Heading -->
+            <div class="page-title mt-10">
+	            <div class="container">
+	                <h6>내가 쓴 글</h6>
+	               
+	                <hr class="my6">
+	            </div>
+	        </div>
+	<div class="container">
+        <div class="row">
           <div class="col-12">
 
-            <!-- Heading -->
-            <h5 class="mb-4">내가 쓴 글 </h5>
+        
             <!-- Nav -->
             <nav class="nav justify-content-center mb-10">
               <a class="nav-link px-100 active" href="#myCert-list" data-bs-toggle="tab">인증글</a>
@@ -725,6 +742,7 @@ a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, t
             </div>     <!-- tab-content -->               
 	     </div><!-- col-12 -->	    
 	    </div> <!-- row -->
+	    </div> <!-- container -->
     	</div>	
     </div>
 </div>

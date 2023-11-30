@@ -22,6 +22,10 @@
     <div class="col-md-9 profile-form">
 <!-- 필수!! -->
 
+	<div class="container text-center" style="margin-top: 20px;">
+    	<h3>My Page</h3>
+    </div>
+
 <!--내가 개설한 쉐어링 제목 누르면  brd_num으로 해당하는 상세페이지로 이동시키게 설정하기-------------------------------------------------------->
     <section class="myUploadSharing" style="width: 900px; height: 500px; margin-top: 30px;">
         <div class="page-title">
