@@ -429,4 +429,5 @@
 
 
 </body>
+<%@ include file="../footer.jsp" %>
 </html>

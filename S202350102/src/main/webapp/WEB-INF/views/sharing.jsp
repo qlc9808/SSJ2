@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="header4.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -12,16 +11,19 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
+
+/* jk 아작스 필터  일단 주석처리  */
+ $(document).ready(function() {
 $("#keyword").keypress(function(e){	
 	if(e.keyCode && e.keyCode == 13){
 		$("#searchButton").trigger("click");
 		return false;
 	}
 });
-
+ });
+/* jk 아작스 필터  일단 주석처리  */
 //Select 변경 시
-function renderTable(data) {
+/*function renderTable(data) {
     if (data && data.length > 0) {
         var tableHTML = ''; // 초기화된 테이블 시작
         for (var i = 0; i < data.length; i++) {
@@ -79,7 +81,7 @@ $("#sortOption").change(function() {
         }
     });
 });
-});
+}); */
 
     // yr 작성
 	// 찜하기 기능
@@ -149,6 +151,8 @@ $("#sortOption").change(function() {
             <div class="d-flex justify-content-between mb-3">
                 공간을 벌리기 위해 클래스 추가
             </div> -->
+            
+            <!--ya 추가-------------------------------------- -->
 				<div class="container d-flex justify-content-center my-5">
 				    <div class="d-flex justify-content-center">
 				        <div class="input-group input-group-merge">
@@ -164,22 +168,6 @@ $("#sortOption").change(function() {
 				    </div>
 				</div>            
               
-<%--                 <!-- 게시판 검색 (옵션 제목, 작성자) Ya추가 수정----------- -->
-			<div class="container d-flex justify-content-left" style="padding-bottom: 0px;">
-			    <div class="d-flex justify-content-center">
-			        <div class="input-group input-group-merge">
-			            <input class="form-control form-control-xs" id="keyword" type="search" placeholder="구매할 제품을 검색해주세요!" value="${keyword}" >
-						<div class="input-group-append">
-						    <button class="btn btn-outline-border btn-search" id="searchButton" style= "height: 40px;"
-						     onclick="location.href='sharingSearchResult?keyword=${keyword}'" > 						    
-						        <i class="fe fe-search"></i>
-						    </button>
-						</div>
-			
-			        </div>
-			    </div>
-			</div> --%>
-
 <script>
     // 검색 버튼 클릭 시
     document.getElementById('searchButton').addEventListener('click', function() {
@@ -191,17 +179,39 @@ $("#sortOption").change(function() {
     });
 </script>
 
-
+<!--ya 추가-------------------------------------- ------->
 <div id="searchResults" style=" margin-top: 20px;"></div>
-            
-            <div class="d-flex justify-content-end mb-3">
+  
+  <!--jk 필터 작성 일단 주석처리 ----------------- -->    
+      
+<!--             <div class="d-flex justify-content-end mb-3">
 			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption">
 			    <option value="reg_date">최근 게시물</option>
 			    <option value="view_cnt">조회수 높은 순</option>
 			</select>
-			
-
+           </div> -->
+           
+           
+           
+             <div class="d-flex justify-content-end mb-3">
+			<select class="form-select form-select-xxs w-auto" id ="sortOption"name="sortOption"  onchange="applySortOption()">
+			    <option value="reg_date" ${sortOption == 'reg_date' ? 'selected' : ''}>최근 게시물</option>
+			    <option value="view_cnt" ${sortOption == 'view_cnt' ? 'selected' : ''}>조회수 높은 순</option>
+			</select>
             </div>
+ <script>
+    function applySortOption() {
+        // 선택한 정렬 옵션 가져오기
+        var sortOption = document.getElementById('sortOption').value;
+
+        // 현재 검색어 값 가져오기
+        var keywordValue = document.getElementById('keyword').value;
+
+        // URL에 검색어와 정렬 옵션 추가하고 페이지 다시로드
+        window.location.href = 'sharingSearchResult?keyword=' + keywordValue + '&sortOption=' + sortOption;
+    }
+</script>            
+                    
             </div>
   <div class="row" id="boardtable">
     <c:forEach var="board" items="${sharing}">
@@ -305,8 +315,6 @@ $("#sortOption").change(function() {
     </ul>
 </div> 
 
-
-
           </div>
         </div>
       </div>
@@ -347,12 +355,7 @@ $("#sortOption").change(function() {
     });
 </script>  
   
-  
-  
-  
-  
-  
-  
+ 
    
 </body>
 

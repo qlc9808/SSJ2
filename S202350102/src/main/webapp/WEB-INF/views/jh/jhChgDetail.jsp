@@ -909,7 +909,7 @@
             <!-- Nav -->
             <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
               <a class="nav-link active" id="descriptionNav" data-bs-toggle="tab" href="#descriptionTab">
-               	 챌린지 소개
+               	 챌린지 정보
               </a>
               <a class="nav-link" id="certNav" data-bs-toggle="tab" href="#certBoardTab" >
                              인증 게시판
@@ -928,7 +928,7 @@
             <div class="tab-content">
               <div class="tab-pane fade show active" id="descriptionTab">
                 <div class="row justify-content-center py-9">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-lg-10 col-xl-8">
                 <!-- 챌린지 소개 수정 -->
                  <div class="card mb-7">
 
@@ -936,7 +936,7 @@
 	
 	                <!-- Heading -->
 	                <div class="mt-1 mb-4">
-	                	<h5>챌린지 정보</h5>
+	                	<h5>챌린지 소개</h5>
 	                </div>
 	                
 	                <div>
@@ -954,8 +954,12 @@
 		
 	
 	                <!-- Text -->
+			        <div class="mt-1 mb-4">
+	                	<h5>인증방법</h5>
+	                </div>
+              		 
 	                <p class="mb-0 text-gray-500">
-	                 		인증방법 : ${chg.upload }
+	                 		 ${chg.upload }
 	                </p>
 	
 	                
@@ -2481,7 +2485,7 @@
 							
 							                    <!-- Button -->
 							                    <button class="btn btn-outline-dark" type="submit" disabled>
-							                      Post Review
+							                      	등록
 							                    </button>
 							
 							                  </div>
@@ -2524,7 +2528,7 @@
 		                    	</div>
 		                    	
 	   		            		<!-- Pagination -->
-								<nav class="d-flex justify-content-center mt-9">
+								<nav class="d-flex justify-content-center mt-3">
 								  <ul class="pagination pagination-sm text-gray-400">
 								  <c:if test="${reviewPage.startPage > reviewPage.pageBlock}">
 								    <li class="page-item">
