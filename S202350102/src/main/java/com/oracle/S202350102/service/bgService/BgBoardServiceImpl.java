@@ -68,7 +68,14 @@ public class BgBoardServiceImpl implements BgBoardService {
 	@Override
 	public int deleteCertBrd(Board board) {
 		int result = bBoardD.deleteCertBrd(board);
-		System.out.println("BgServiceImpl delete Start...");
+		System.out.println("BgServiceImpl deleteCertBrd Start...");
+		return result;
+	}
+	
+	@Override
+	public int deleteCertCmt(Board board) {
+		int result = bBoardD.deleteCertCmt(board);
+		System.out.println("BgServiceImpl deleteCertCmt Start...");
 		return result;
 	}
 
@@ -107,6 +114,9 @@ public class BgBoardServiceImpl implements BgBoardService {
 		System.out.println("BgServiceImpl searchCrtBd crtBdSearch.size()  -> "+crtBdSearch.size());
 		return crtBdSearch;
 	}
+
+
+	
 
 
 

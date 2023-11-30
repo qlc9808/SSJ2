@@ -72,17 +72,52 @@
 	</update>
 	
 	
+	<delete id="bgDeleteBrdLike" parameterType="int">
+		Delete 
+		From	board_like
+		Where	brd_num 
+		        IN 
+		            (SELECT brd_num 
+		             FROM board 
+		             <choose>
+		             	<when test="brd_num == brd_group">
+				             WHERE brd_group = #{brd_num})
+		             	</when>
+		             	<when test="brd_num != brd_group">
+				             WHERE brd_num = #{brd_num})
+		             	</when>
+		             </choose>
+	</delete>
+	
+	<delete id="bgDeleteReport" parameterType="int">
+		Delete 
+		From	report
+		Where	brd_num 
+				IN 
+		            (SELECT brd_num 
+		             FROM board 
+		              <choose>
+		             	<when test="brd_num == brd_group">
+				             WHERE brd_group = #{brd_num})
+		             	</when>
+		             	<when test="brd_num != brd_group">
+				             WHERE brd_num = #{brd_num})
+		             	</when>
+		             </choose>
+	</delete>
+	
+	
 	<delete id="deleteCertBrd" parameterType="Board">
-		Delete From	board
- 		<choose>
- 			<when test="#{brd_num} == #{brd_group}">
-                Where	brd_group = #{brd_num}  
-  			</when>
-            <otherwise>
-  				Where	brd_num = #{brd_num}	
-	  			And    	brd_group = #{brd_group}           
-	  		</otherwise>
-		</choose>
+		Delete 
+		From	board
+		 <choose>
+           	<when test="brd_num == brd_group">
+             	WHERE brd_group = #{brd_num}
+           	</when>
+           	<when test="brd_num != brd_group">
+             	WHERE brd_num = #{brd_num}
+           	</when>
+          </choose>
 	</delete>
 	
 	
