@@ -5,7 +5,6 @@
 <html>
 <head>
 <!-- CSS -->
-<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Insert title here</title>
