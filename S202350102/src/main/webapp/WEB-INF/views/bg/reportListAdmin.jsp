@@ -476,4 +476,5 @@
 				    </div>
 	
 	</body>
+<%@ include file="/WEB-INF/views/footer.jsp" %> <!-- 이렇게해야 푸터가 꽉차게 들어감 -->	
 </html>
