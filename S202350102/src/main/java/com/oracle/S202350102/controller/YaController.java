@@ -644,7 +644,7 @@ public class YaController {
 					
 				
 				   
-					//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------				
+					//myJoinSharingList 게시글 총 수 -----------------------------------------------------------------------------				
 					int totalJoinSharing = 0;
 					totalJoinSharing = ycs.totalJoinSharing(user_num);		
 					System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
@@ -665,18 +665,20 @@ public class YaController {
 					System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
 					model.addAttribute("myJoinSharingList", myJoinSharingList);
 					
-				
+					
+					currentPage=request.getParameter(currentPage);
+								
+					
 					//myConfirmSharingList 게시글 총 수 -----------------------------------------------------------------------------
 					int totalConfirmSharing = 0;
 					 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
 					System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
 					
-				
+						
 					//페이징처리 
 					Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage, 3);
 					
-					 currentPage = request.getParameter(currentPage);				
-					 System.out.println("currentPage?"+currentPage);
+
 					
 					board.setUser_num((int) session.getAttribute("user_num"));
 					board.setStart(myConfirmSharingPaging.getStart());
@@ -685,7 +687,9 @@ public class YaController {
 					System.out.println("YaController myConfirmSharingPaging start?"+myConfirmSharingPaging.getStart());
 					System.out.println(" YaControlloer myConfirmSharingPaging total?"+myConfirmSharingPaging.getTotal());
 					System.out.println("myConfirmSharingPaging End?"+myConfirmSharingPaging.getEnd());
-										
+					
+				
+					
 					//myConfirmSharingList 조회 
 					List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(board);
 					System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());
