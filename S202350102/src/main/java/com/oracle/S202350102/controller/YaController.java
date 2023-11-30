@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import javax.mail.Session;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
@@ -608,7 +609,7 @@ public class YaController {
 		  
 			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing), 내가 참가한 쉐어링(myJoinSharing)  		
 			@RequestMapping(value="/sharingManagement")
-			public String SharingManagement(HttpSession session, Board board, SharingList sharingList,  Model model,
+			public String SharingManagement(HttpSession session, Board board, SharingList sharingList, ServletRequest request, Model model,
 					@RequestParam(name = "currentPage", defaultValue = "1") String currentPage) {
 				
 				System.out.println("YaController myUploadSharingList start...");
@@ -670,8 +671,13 @@ public class YaController {
 					 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
 					System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
 					
+				
 					//페이징처리 
 					Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage, 3);
+					
+					 currentPage = request.getParameter(currentPage);				
+					 System.out.println("currentPage?"+currentPage);
+					
 					board.setUser_num((int) session.getAttribute("user_num"));
 					board.setStart(myConfirmSharingPaging.getStart());
 					board.setEnd(myConfirmSharingPaging.getEnd());

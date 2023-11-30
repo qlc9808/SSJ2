@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/topBar.jsp" %>
-<html>
-<head>
-    <meta charset="UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="css/level.css">
-<title>Insert title here</title>
-</head>
 <script>
 $(document).ready(function () {
     // mypageMenu 엔드포인트로 AJAX 요청
@@ -572,4 +567,3 @@ levelInfoBtn.addEventListener('click', () => {
 
 
 </body>
-</html>

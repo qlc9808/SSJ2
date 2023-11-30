@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.Challenge;
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class BgBoardDaoImpl implements BgBoardDao {
 	
 	private final SqlSession session;
+	private final PlatformTransactionManager transactionManager;
 	
 	// 챌린지 정보 조회
 	@Override
@@ -86,19 +90,68 @@ public class BgBoardDaoImpl implements BgBoardDao {
 		return updateCount;
 	}
 
+	// 트랜젝션 1. 인증 게시판 원글 지우기
 	@Override
 	public int deleteCertBrd(Board board) {
 		System.out.println("BgDaoImpl delete Start...");
 		System.out.println("BgDaoImpl delete getBrd_num -> "+board.getBrd_num());
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		int result = 0;
 		try {
+			// 좋아요 게시판 게시판에서 로우 삭제
+			result = session.delete("bgDeleteBrdLike", board);
+			System.out.println("보경 좋아요삭제 결과 --> " + result);
+			
+			// 신고 게시판 행 삭제
+			result = session.delete("bgDeleteReport", board);
+			System.out.println("보경 신고삭제 결과 --> " + result);
+
+			// 보드게시판 댓글 삭제
 			result = session.delete("deleteCertBrd", board);
 			System.out.println("BgDaoImpl delete result -> "+result);
+			
+			// 3개 수행 완료 후 커밋
+			transactionManager.commit(txStatus);
 		} catch (Exception e) {
-			System.out.println("BgDaoImpl delete Exception -> "+e.getMessage());
+			System.out.println("BgDaoImpl deleteCertBrd Exception -> "+e.getMessage());
+			// 3개 수행 실패 후 롤백
+			transactionManager.rollback(txStatus);
 		}
 		return result;
 	}
+	
+	
+	// 트랜젝션 2. 인증 게시판 댓글 지우기
+	@Override
+	public int deleteCertCmt(Board board) {
+		System.out.println("BgDaoImpl deleteCertCmt Start...");
+		System.out.println("BgDaoImpl deleteCertCmt getBrd_num -> "+board.getBrd_num());
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		int result = 0;
+		try {
+			// 좋아요 게시판 게시판에서 로우 삭제
+			result = session.delete("bgDeleteBrdLike", board);
+			System.out.println("보경 좋아요삭제 결과 --> " + result);
+			
+			// 신고 게시판 행 삭제
+			result = session.delete("bgDeleteReport", board);
+			System.out.println("보경 신고삭제 결과 --> " + result);
+
+			// 보드게시판 댓글 삭제
+			result = session.delete("deleteCertBrd", board);
+			System.out.println("BgDaoImpl delete result -> "+result);
+			
+			// 3개 수행 완료 후 커밋
+			transactionManager.commit(txStatus);
+		} catch (Exception e) {
+			System.out.println("BgDaoImpl deleteCertCmt Exception -> "+e.getMessage());
+			// 3개 수행 실패 후 롤백
+			transactionManager.rollback(txStatus);
+		}
+		return result;
+	}
+	
+	
 
 	@Override
 	public int certTotal(int chg_id) {
@@ -157,6 +210,9 @@ public class BgBoardDaoImpl implements BgBoardDao {
 		}
 		return crtBdSearch;
 	}
+
+
+	
 
 
 	
