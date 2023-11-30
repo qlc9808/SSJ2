@@ -36,6 +36,10 @@
   <img src="https://img.shields.io/badge/mybatis-251C1D?style=for-the-badge&logo=mybatis&logoColor=white">
 </div>
 
+<div align=left><h3>📘 Cloud Service</h3></div>
+<div>
+  <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
+</div>
 
 
 <div align=left><h2>🔥 프로젝트 팀원 소개 및 역할 분담 🔥</h2></div>
