@@ -79,7 +79,7 @@
 			user_exp 	= $("#user_exp" 	+ index).val();
 			percentage 	= $("#percentage" 	+ index).val();
 			icon 		= $("#icon" 		+ index).val();
-		} else { // tap == '소세지들'
+		} else if(tap == '소세지들') { 
 			user_num 	= $("#ssjUserNum" 	+ index).val();
 			user_nick 	= $("#ssjNick" 		+ index).val();
 			user_img 	= $("#ssjImg" 		+ index).val();
@@ -87,6 +87,14 @@
 			user_exp 	= $("#ssjUserExp" 	+ index).val();
 			percentage 	= $("#ssjPercentage"+ index).val();
 			icon 		= $("#ssjIcon" 		+ index).val();
+		} else {	// tap == '후기'
+			user_num 	= $("#reviewUserNum" 	+ index).val();
+			user_nick 	= $("#reviewNick" 		+ index).val();
+			user_img 	= $("#reviewImg" 		+ index).val();
+			user_level 	= $("#reviewUserLevel"  + index).val();
+			user_exp 	= $("#reviewUserExp" 	+ index).val();
+			percentage 	= $("#reviewPercentage" + index).val();
+			icon 		= $("#reviewIcon" 		+ index).val();
 		}
 		
 		// DB에 있는지 존재 유무 체크
@@ -2253,51 +2261,6 @@
 				
 				</div>
 
-			  	<!-- nick 클릭 시 나타나는 modal -->
-				<!-- 인증게시판, 소세지들 사용 -->
-				<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-body">
-								<div class="col-12 col-md-auto">
-									<div class="avatar avatar-xxl mb-6 mb-md-0">
-										<span class="avatar-title rounded-circle">
-											<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
-										</span>
-									</div>
-								</div>
-								
-								<div class="col-12">
-									<img title="" src="" id="displayUserLevel">
-									<span id="displayUserNick"></span>
-								</div>
-								
-								<div class="text-end">
-										<button type="button" class="btn btn-danger btn-xs" name="user_num" onclick="following(${status.index})"
-											id="follow">팔로우</button>
-										
-										<!-- 
-											<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
-											<form id="sendMessageForm">
-												<input type="hidden" id="inputUserNum2" name="user_num">
-											</form>
-										 -->
-										 
-										<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
-										
-										<form id="followingForm">
-											<input type="hidden" id="inputUserNum1" name="user_num">
-										</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				
-            
-            
             <!-- jh 후기글   -->
             <input type="hidden" name="reviewCurrentPage" id="reviewCurrentPage" value="${tap}">  
             <!-- stateCtn 대신 그냥 공통 코드 103으로 해도 될듯 -->
@@ -2510,13 +2473,22 @@
 									         </tr>
 									       </thead>
 									       <tbody>
-									         <c:forEach var="review" items="${chgReviewList}">
+									         <c:forEach var="review" items="${chgReviewList}" varStatus="status">
+									         <input type="hidden" id="reviewImg${status.index}" 		value="${review.user_img}">
+											 <input type="hidden" id="reviewNick${status.index}" 		value="${review.nick}">
+											 <input type="hidden" id="reviewUserNum${status.index}" 	value="${review.user_num}">
+									         <input type="hidden" id="reviewUserLevel${status.index}" 	value="${review.user_level}">
+											 <input type="hidden" id="reviewUserExp${status.index}" 	value="${review.user_exp}">
+											 <input type="hidden" id="reviewPercentage${status.index}" 	value="${review.percentage}">
+											 <input type="hidden" id="reviewIcon${status.index}" 		value="${review.icon}">
 									          <tr>
 									            <td>${num }</td>
 									            <td><a href="/reviewContent?brd_num=${review.brd_num}&chg_id=${chg.chg_id}">${review.title } [${review.replyCount }]</a></td>
 									            <td>
-									            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
-													${review.nick }
+									            	<a href="#" data-bs-toggle="modal" onclick="userInfoModal('후기', ${status.index})" class="col-2">
+										            	<img title="Lv.${review.user_level } | exp.${review.user_exp}(${review.percentage }%)" src="/images/level/${review.icon}.gif">
+										            	<span style="color: black;">${review.nick }</span>
+													</a>
 												</td>
 									            <td>${review.view_cnt }</td>
 									            <td><fmt:formatDate value="${review.reg_date }" pattern="yyyy-MM-dd"/></td>
@@ -2589,6 +2561,47 @@
             	</c:otherwise>
             </c:choose>
             
+            <!-- yr 작성 -->
+            <!-- nick 클릭 시 나타나는 modal -->
+			<!-- 인증게시판, 소세지들, 후기게시판 사용 -->
+			<div class="modal fade" id="userShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="col-12 col-md-auto">
+								<div class="avatar avatar-xxl mb-6 mb-md-0">
+									<span class="avatar-title rounded-circle">
+										<img src="" alt="profile" class="avatar-title rounded-circle" id="displayUserImg">
+									</span>
+								</div>
+							</div>
+							
+							<div class="col-12">
+								<img title="" src="" id="displayUserLevel">
+								<span id="displayUserNick"></span>
+							</div>
+							
+							<div class="text-end">
+									<button type="button" class="btn btn-danger btn-xs" name="user_num" onclick="following(${status.index})"
+										id="follow">팔로우</button>
+									
+									<!-- 
+										<button type="button" class="btn btn-info" onclick="sendMessage(${status.index})">쪽지보내기</button>
+										<form id="sendMessageForm">
+											<input type="hidden" id="inputUserNum2" name="user_num">
+										</form>
+									 -->
+									 
+									<button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+									
+									<form id="followingForm">
+										<input type="hidden" id="inputUserNum1" name="user_num">
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 					
             </div>
 
