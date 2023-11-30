@@ -62,9 +62,13 @@ public class YrController {
 		int chgrParti = ycs.selectChgrParti(chgr.getChg_id());
 		System.out.println("챌린지 참여 인원 -> " + chgrParti);
 		
+//		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
+//		System.out.println("YrController chgDetail chgrJoinYN -> " + chgrJoinYN);
+		
 		Map<String, Object> joinResult = new HashMap<>();
 		joinResult.put("chgJoin", insertResult);
 		joinResult.put("nowChgParti", chgrParti);
+//		joinResult.put("chgrYN", chgrJoinYN);
 		
 		return joinResult;
 	}

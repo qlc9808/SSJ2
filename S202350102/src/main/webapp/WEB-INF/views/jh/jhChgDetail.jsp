@@ -58,6 +58,8 @@
 					$('#joinBtn').text("참여완료").removeClass("btn-danger").addClass("btn-secondary");
 					// 참여 완료 modal
 					document.getElementById('chgResultModalClick').click();
+					// var chgrYN = joinResult.chgrYN;
+					// alert("chgrYN -> " + chgrYN);
 				}
 			},
 			error : function() {
