@@ -125,7 +125,7 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	public void commentWrite(Board board) {
 		System.out.println("YaCommunityServiceImpl commentWrite start..");
 		ybd.commentWrite(board);
-		chd.alarmchk(board.getBrd_num());
+		chd.commentAlarm(board.getBrd_num());
 	}
 
 
