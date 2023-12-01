@@ -64,78 +64,6 @@ public class JhController {
 	
 	private final Level1Service ls;
 	
-	//private final ChChallengeService	chChallengeService;
-	
-	//챌린지 기본 화면은 진행준 챌린지 최신순 정렬 -> 미완
-//	@RequestMapping(value = "challengeList")
-//	public String challengeList(HttpSession session
-//			  					, Model model 
-//			  					, String currentPage
-//			  					, Challenge challenge
-//			  					, int state_md
-//			  					) {
-//		System.out.println("JhController challengeList Start...");
-//		
-//
-//		//진행중 총 챌린지 수
-//		int chgListTotal = jhCService.chgListTotal(state_md);
-//		
-//		//페이지네이션
-//		Paging chgListPage = new Paging(chgListTotal, currentPage);
-//		challenge.setStart(chgListPage.getStart());
-//		challenge.setEnd(chgListPage.getEnd());
-//		
-//		////진행중 챌린지///
-//		//최신순
-//		List<Challenge> chgRecList = jhCService.ingChgRecentList(challenge);
-//		
-//		//찜순
-//		List<Challenge> ingChgPicList = jhCService.ingChgPickList(challenge);
-//		
-//		
-//		model.addAttribute("chgListPage",chgListPage);
-//		model.addAttribute("ingRecList", ingChgRecList);
-//		model.addAttribute("ingPicList", ingChgPicList);
-//		model.addAttribute("ingListTotal", ingChgListTotal);
-//		
-//		
-//		return "jh/jhChgList";
-//	}
-	
-//	//종료된 챌린지 기본화면 최근 종료순
-//	@RequestMapping(value = "endChallengeList")
-//	public String endChallengeList(HttpSession session
-//			, Model model 
-//			, String currentPage
-//			, Challenge challenge
-//			) {
-//		System.out.println("JhController challengeList Start...");
-//		
-//		
-//		//진행중 총 챌린지 수
-//		int endChgListTotal = jhCService.endChgListTotal();
-//		
-//		//페이지네이션
-//		Paging endchgListPage = new Paging(endChgListTotal, currentPage);
-//		challenge.setStart(endchgListPage.getStart());
-//		challenge.setEnd(endchgListPage.getEnd());
-//		
-//		////종료된 챌린지///
-//		//최신순
-//		List<Challenge> endChgRecList = jhCService.endChgRecentList();
-//		
-//		//찜순
-//		List<Challenge> endChgPicList = jhCService.endChgPickList();
-//		
-//		
-//		model.addAttribute("endchgListPage",endchgListPage);
-//		model.addAttribute("endRecList", endChgRecList);
-//		model.addAttribute("endPicList", endChgPicList);
-//		model.addAttribute("endListTotal", endChgListTotal);
-//		
-//		
-//		return "jh/jhEndChgList";
-//	}
 	
 	//HttpServletRequest request 안쓰고 HttpSession session만 해도 되는건가?
 	////////챌린지 상세정보 조회/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,25 +262,113 @@ public class JhController {
 		return "jh/jhChgDetail";
 	}
 	
+//	
+//	//챌린지 후기글 내용 조회(수정중)
+//	@RequestMapping(value = "reviewContent")
+//	public String reviewContent(
+//			//board에 brd_num 있기 때문에 따로 파라미터 없어도 됨, 페이지네이션 하려고 board를 파라미터로 받음
+////								@RequestParam int brd_num 
+////								@RequestParam int chg_id 
+////								,String 	   rep_brd_num	//댓글 번호(수정 후 그 글번호로 화면 이동하기 위함)
+////								,String 	   result		//댓글 수정/삭제 성공여부 전달
+//								HttpSession   session 
+//								,Model 		   model 
+//								,String 	   currentPage	//페이지네이션 위함
+//								,Board		   board 		//페이지네이션 위함
+//								) {
+//		System.out.println("JhController reviewContent Start...");
+////		System.out.println("JhController reviewContent chg_id -> " + chg_id);
+//
+//			
+//		//세션에서 회원번호 가져옴
+//		int userNum = 0;
+//		if(session.getAttribute("user_num") != null) {
+//			userNum = (int) session.getAttribute("user_num");
+//			System.out.println("JhController reviewContent userNum -> " + userNum);
+//		}
+//		
+//		//유저 정보(회원번호) 조회 -> 일단 유저 dto로 모델에 저장 특정 정보만 필요할 경우 나중에 수정 예정
+//		User1 user = userService.userSelect(userNum);
+//		System.out.println("JhController reviewContent userNum -> " + user);
+//		model.addAttribute("user", user);
+//		
+//		//원글 번호
+//		int brd_num = board.getBrd_num();
+//		System.out.println("JhController reviewContent brd_num -> " + brd_num);
+//		//후기 글 조회수 +1
+//		jhBrdService.viewCntUp(brd_num);
+//		
+//		//챌린지 후기글 내용 조회
+//		Board reviewContent = jhBrdService.reviewContent(brd_num);
+//		
+//		//후기글 총 댓글 수
+//		int replyCount = reviewContent.getReplyCount();
+//		
+//		//페이지네이션
+//		Paging replyPage = new Paging(replyCount, currentPage);
+//		board.setStart(replyPage.getStart());
+//		board.setEnd(replyPage.getEnd());
+//		model.addAttribute("replyPage",replyPage);
+//		System.out.println("JhController reviewContent  replyPage.getStart() -> "+ replyPage.getStart());
+//		System.out.println("JhController reviewContent  replyPage.getTotal() -> "+ replyPage.getTotal());
+//		System.out.println("JhController reviewContent  board.getChg_id() -> "+ board.getChg_id());
+//		
+//		//챌린지 해당 글에 대한 댓글 조회
+//		List<Board> reviewReplyList = jhBrdService.reviewReplyList(board);
+//		reviewReplyList = userService.boardWriterLevelInfo(reviewReplyList);
+//		
+//		// challenger 참여 유무 판단용
+//		Challenger chgr = new Challenger();
+//		chgr.setUser_num(userNum);
+////		chgr.setChg_id(chg_id);
+//		int chgrJoinYN = ycs.selectChgrJoinYN(chgr);
+//		System.out.println("JhController chgDetail chgrJoinYN -> " + chgrJoinYN);
+//		model.addAttribute("chgrYN", chgrJoinYN);
+//		
+//		
+//		System.out.println("JhController reviewContent reviewContent -> " + reviewContent);
+//		System.out.println("JhController reviewContent reviewReply -> " + reviewReplyList);
+//		model.addAttribute("reviewContent", reviewContent);
+//		model.addAttribute("reviewReply", reviewReplyList);
+////		model.addAttribute("chg_id", chg_id);
+//		
+////		//댓글 수정
+////		if ( rep_brd_num != null ) {
+////			String flag = "flag";
+////			model.addAttribute("flag", flag);
+////			model.addAttribute("rep_brd_num", rep_brd_num);
+////			System.out.println("JhController reviewContent flag -> " + flag);
+////			System.out.println("JhController reviewContent rep_brd_num -> " + rep_brd_num);
+////		}
+////		
+//		
+//		//댓글 삭제/업데이트 결과정보 전달
+////		model.addAttribute("result", result);
+////		System.out.println("JhController reviewContent result -> " + result);
+//		
+//		return "jh/jhReviewContent";
+//	}
 	
-	//댓글 페이지네이션!!!!!!!!!
+	
+	
+	
 	//챌린지 후기글 내용 조회
 	@RequestMapping(value = "reviewContent")
 	public String reviewContent(
 			//board에 brd_num 있기 때문에 따로 파라미터 없어도 됨, 페이지네이션 하려고 board를 파라미터로 받음
 //								@RequestParam int brd_num 
-								@RequestParam int chg_id 
-								,HttpSession   session 
-								,Model 		   model 
-								,String 	   rep_brd_num	//댓글 번호(수정 후 그 글번호로 화면 이동하기 위함)
-								,String 	   result		//댓글 수정/삭제 성공여부 전달
-								,String 	   currentPage	//페이지네이션 위함
-								,Board		   board 		//페이지네이션 위함
-								) {
+			@RequestParam int chg_id 
+			,HttpSession   session 
+			,Model 		   model 
+			,String 	   rep_brd_num	//댓글 번호(수정 후 그 글번호로 화면 이동하기 위함)
+			,String 	   result		//댓글 수정/삭제 성공여부 전달
+			,String 	   currentPage	//페이지네이션 위함
+			,Board		   board 		//페이지네이션 위함
+			) {
 		System.out.println("JhController reviewContent Start...");
 		System.out.println("JhController reviewContent chg_id -> " + chg_id);
-
-			
+		
+		
 		//세션에서 회원번호 가져옴
 		int userNum = 0;
 		if(session.getAttribute("user_num") != null) {
