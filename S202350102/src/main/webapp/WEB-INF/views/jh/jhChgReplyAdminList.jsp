@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>챌린지 댓글 관리</title>
 <script type="text/javascript">
 	/* 후기 댓글 삭제 */
 	function chgReplyAdminDelete(ori_brd_num, rep_brd_num, chg_id) {

@@ -63,10 +63,15 @@
 							</div>
 							<hr class="custom-hr">
 							<div class="container">
-				    			<div class="row border" style="height: auto;">
+				    			<div class="row border">
 				    				<div class="col-12" >
-										<c:if test="${not empty noticeConts.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" style="max-width: 100%"><p></c:if>
-										<span>${noticeConts.conts }</span>
+										<div class="qbd-content">
+										<div class="qbd-content text col-12"  id="test" style="word-break:break-all">
+											<c:if test="${not empty noticeConts.img }"><img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${noticeConts.img}" style="max-width: 400px"><p></c:if>				
+											<span>${noticeConts.conts }</span>
+										</div>
+										
+										</div>
 									</div>   			
 								</div>
 							</div>

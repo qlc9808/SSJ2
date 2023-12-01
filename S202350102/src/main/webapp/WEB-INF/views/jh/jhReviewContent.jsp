@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>챌린지 후기</title>
 <style>
   /* 테이블을 가운데 정렬하고 화면 너비의 80%를 차지하도록 설정합니다. */
   .card {

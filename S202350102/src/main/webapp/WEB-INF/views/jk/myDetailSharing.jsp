@@ -5,6 +5,7 @@
 <html>
 <head>
 <!-- CSS -->
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -72,33 +73,33 @@
                         
                         <!--  신청내용 -->
                         <p class="mb-4 fs-sm fw-bold">
-                        <a class="text-body" href="#">작성자</a> <br>
+                        <a class="text-body" href="product.html">작성자</a> <br>
 	                      <span class="text-muted">${board.nick}</span>
 	                    </p>
 	                    <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="#">작성일</a> <br>
+	                      <a class="text-body" href="product.html">작성일</a> <br>
 	                      <span class="text-muted">
 						    <fmt:formatDate value="${board.reg_date}" pattern="yyyy-MM-dd"/>
 						</span>
 	                    </p>
 	                    
 	                    <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="#">모집인원</a> <br>
+	                      <a class="text-body" href="product.html">모집인원</a> <br>
 	                      <span class="text-muted">${board.applicants}명</span>
 	                    </p>
                         
                         <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="#">참여인원</a> <br>
+	                      <a class="text-body" href="product.html">참여인원</a> <br>
 	                      <span class="text-muted">${board.participants}명</span>
 	                    </p>
                         
                         <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="#">거래지역</a> <br>
+	                      <a class="text-body" href="product.html">거래지역</a> <br>
 	                      <span class="text-muted">${board.addr}</span>
 	                    </p>
                         
                         <p class="mb-4 fs-sm fw-bold">
-	                      <a class="text-body" href="#">내용</a> <br>
+	                      <a class="text-body" href="product.html">내용</a> <br>
 	                      <span class="text-muted">${board.conts}</span>
 	                    </p>
                         <form>

@@ -336,11 +336,8 @@
 				success : function(data) {
 					if (data == 'wrongValue') {
 						alert('아이디 또는 비밀번호가 틀립니다');
-						$('#user_pswd').val('');
 					} else if (data == 'delId') {
 						alert('탈퇴한 회원입니다')
-						$('#user_id').val('');
-						$('#user_pswd').val('');
 					} else {
 // 						alert('로그인 되었습니다 메인페이지로 이동합니다')
 						location.href = '/'

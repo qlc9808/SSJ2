@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>관리자 챌린지 후기 관리</title>
+<title>챌린지 후기 관리</title>
 <script type="text/javascript">
 /* 	function chgReviewAdminDelete(pBrdNum, pChgId, pImg){
 		var admin = 1;

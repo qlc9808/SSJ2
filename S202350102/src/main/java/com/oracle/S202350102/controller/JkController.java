@@ -631,8 +631,7 @@ public class JkController {
 
 		// 회원정보 수정
 		@PostMapping("/updateUser1")
-		public String updateUser(User1 user1, Model model, @RequestParam("birth_year") String birth_year, @RequestParam("birth_month") String birth_month, @RequestParam("birth_date") String birth_date
-								 ,HttpSession session) {
+		public String updateUser(User1 user1, Model model, @RequestParam("birth_year") String birth_year, @RequestParam("birth_month") String birth_month, @RequestParam("birth_date") String birth_date) {
 		    System.out.println("JkController updateUser start...");
 
 		    // 생년월일을 문자열로 합침
@@ -651,14 +650,11 @@ public class JkController {
 			
 		     int updateResult = jus.updateUser1(user1);
 		     model.addAttribute("updateResult", updateResult);
-		     int user_num = (int)session.getAttribute("user_num");
-		     User1 user2 = us.userSelect(user_num);
 		     if (updateResult > 0) {
-		    	 session.setAttribute("nick", user2.getNick());
-		         return "jk/updateResult"; // 업데이트 성공 시의 뷰 페이지로 이동
+		         return "forward:/jk/updateResult.jsp"; // 업데이트 성공 시의 뷰 페이지로 이동
 		     } else {
 		         model.addAttribute("msg", "수정 실패 확인해 보세요");
-		         return "mypage"; // 업데이트 실패 시의 뷰 페이지로 이동
+		         return "forward:/jk/mypage.jsp"; // 업데이트 실패 시의 뷰 페이지로 이동
 		     }
 		 }
 	

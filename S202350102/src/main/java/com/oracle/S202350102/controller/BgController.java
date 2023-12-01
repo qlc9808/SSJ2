@@ -329,8 +329,6 @@ public class BgController {
 		System.out.println("BgController brdNumDelete getBrd_group -> "+board.getBrd_group());
 		
 		int delStatus = bBoardS.deleteCertBrd(board);
-			
-		
 		
 		if (delStatus > 0 && board.getImg() != null ) {
 			

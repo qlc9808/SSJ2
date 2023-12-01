@@ -1,19 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-
+<%@ include file="../header4.jsp" %>
+<%@ include file="/WEB-INF/views/topBar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript">
-		function updateSuccess(){
-			alert('회원정보 수정 성공');
-			location.href ="/userDetail";
-		}
-</script>
 <meta charset="UTF-8">
-<title>수정 성공</title>
+<title>Insert title here</title>
 </head>
-<body onload="updateSuccess()">
+<body>
+<h1>수정 성공</h1>
 </body>
+<%@ include file="../footer.jsp" %>
 </html>

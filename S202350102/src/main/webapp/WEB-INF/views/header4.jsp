@@ -289,7 +289,7 @@
 							break;
 							/* 후기 */
 						case(101):
-							window.location.href = 'reviewContent?brd_num=' + brd_num + '&chg_id=' + chg_id;
+							window.location.href = 'eviewContent?brd_num=' + brd_num + '&chg_id=' + chg_id;
 							break;
 							/* 쉐어링 */
 						case(102):

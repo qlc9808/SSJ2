@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.mail.Session;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
@@ -609,7 +608,7 @@ public class YaController {
 		  
 			//마이페이지 쉐어링 관리 - 내가 올린 쉐어링(myuploadSharing), 내가 참가한 쉐어링(myJoinSharing)  		
 			@RequestMapping(value="/sharingManagement")
-			public String SharingManagement(HttpSession session, Board board, SharingList sharingList, ServletRequest request, Model model,
+			public String SharingManagement(HttpSession session, Board board, SharingList sharingList,  Model model,
 					@RequestParam(name = "currentPage", defaultValue = "1") String currentPage) {
 				
 				System.out.println("YaController myUploadSharingList start...");
@@ -644,7 +643,7 @@ public class YaController {
 					
 				
 				   
-					//myJoinSharingList 게시글 총 수 -----------------------------------------------------------------------------				
+					//myJoinSharingListt 게시글 총 수 -----------------------------------------------------------------------------				
 					int totalJoinSharing = 0;
 					totalJoinSharing = ycs.totalJoinSharing(user_num);		
 					System.out.println("YaController totalJoinSharing->"+totalJoinSharing);
@@ -665,21 +664,14 @@ public class YaController {
 					System.out.println("YaController myJoinSharingList.size()?"+myJoinSharingList.size());
 					model.addAttribute("myJoinSharingList", myJoinSharingList);
 					
-					
-					currentPage=request.getParameter(currentPage);
-								
-					
+				
 					//myConfirmSharingList 게시글 총 수 -----------------------------------------------------------------------------
 					int totalConfirmSharing = 0;
 					 totalConfirmSharing = ycs.totalConfirmSharing(user_num);		
 					System.out.println("YaController totalConfirmSharing->"+totalConfirmSharing);
 					
-						
 					//페이징처리 
 					Paging myConfirmSharingPaging = new Paging(totalConfirmSharing, currentPage, 3);
-					
-
-					
 					board.setUser_num((int) session.getAttribute("user_num"));
 					board.setStart(myConfirmSharingPaging.getStart());
 					board.setEnd(myConfirmSharingPaging.getEnd());
@@ -687,9 +679,7 @@ public class YaController {
 					System.out.println("YaController myConfirmSharingPaging start?"+myConfirmSharingPaging.getStart());
 					System.out.println(" YaControlloer myConfirmSharingPaging total?"+myConfirmSharingPaging.getTotal());
 					System.out.println("myConfirmSharingPaging End?"+myConfirmSharingPaging.getEnd());
-					
-				
-					
+										
 					//myConfirmSharingList 조회 
 					List<Board>	 myConfirmSharingList = ycs.myConfirmSharingList(board);
 					System.out.println("YaController myConfirmSharingList.size()?"+myConfirmSharingList.size());

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>챌린지 관리자 수정</title>
+<title>챌린지 수정 관리자</title>
 <script type="text/javascript">
 	// 페이지 로딩 시 실행되는 함수
     $(document).ready(function () {

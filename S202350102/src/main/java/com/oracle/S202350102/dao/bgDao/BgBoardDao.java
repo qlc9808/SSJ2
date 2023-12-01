@@ -17,6 +17,5 @@ public interface BgBoardDao {
 	void        commentInsert(Board board);
 	int			srchCrtBdCnt(Board board);
 	List<Board> searchCrtBd(Board board);
-	int         deleteCertCmt(Board board);
 
 }

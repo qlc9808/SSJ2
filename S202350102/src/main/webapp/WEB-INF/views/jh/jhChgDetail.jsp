@@ -58,8 +58,6 @@
 					$('#joinBtn').text("참여완료").removeClass("btn-danger").addClass("btn-secondary");
 					// 참여 완료 modal
 					document.getElementById('chgResultModalClick').click();
-					// var chgrYN = joinResult.chgrYN;
-					// alert("chgrYN -> " + chgrYN);
 				}
 			},
 			error : function() {
@@ -391,7 +389,6 @@
 	    	arr.push({brd_num:"${item.brd_num }"
 	    		     ,brd_group:"${item.brd_group}"
 	    		     ,idx: idx
-	    		     
 	    	});
 	    	idx ++ ;
 		</c:forEach>
@@ -1427,9 +1424,7 @@
 																	<img title="Lv.${certBoard.user_level } | exp.${certBoard.user_exp}(${certBoard.percentage }%)" src="/images/level/${certBoard.icon}.gif">
 																	<span style="color: black;">${certBoard.nick}</span>
 																</a>
-																<fmt:formatDate var="date" value="${certBoard.reg_date }"
-														pattern="yyyy.MM.dd" />
-																<span>${date }</span>
+																<time datetime="2019-07-25">${certBoard.reg_date }</time>
 															</span>
 								                        </div>
 								                      </div>
@@ -1601,9 +1596,7 @@
 															</span>
 														</a>
 
-														<fmt:formatDate var="date" value="${certBoard.reg_date }"
-				                                          pattern="yyyy.MM.dd" />
-				                                                <span>${date }</span>
+														<time datetime="2019-07-25">${certBoard.reg_date }</time>
 							                          </span>
 							                        </div>
 							                      </div>

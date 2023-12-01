@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>챌린지 관리자 페이지</title>
+<title>챌린지 목록 관리자</title>
 <script type="text/javascript">
 
 	//필터 선택시 페이지 이동

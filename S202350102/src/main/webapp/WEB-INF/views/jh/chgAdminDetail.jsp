@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>챌린지 상세 조회 관리자</title>
 <style>
 	/* 왜 적용 안됨? */
 	th {

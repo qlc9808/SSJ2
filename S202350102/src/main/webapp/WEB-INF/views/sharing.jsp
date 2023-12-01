@@ -12,7 +12,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-
+/* jk 아작스 필터  일단 주석처리  */
  $(document).ready(function() {
 $("#keyword").keypress(function(e){	
 	if(e.keyCode && e.keyCode == 13){
