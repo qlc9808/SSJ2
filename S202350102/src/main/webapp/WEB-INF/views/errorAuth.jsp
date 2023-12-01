@@ -4,12 +4,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <title>로그인 에러</title>
-    <script>
-    function adminAlert(){
-        alert("접근 권한이 없습니다");
-        self.location = "/";
-    }
+    <title>권한 에러</title>
+    <script type="text/javascript">
+        function adminAlert() {
+            alert("접근 권한이 없습니다");
+            redirectToHomePage();
+        }
+
+        function redirectToHomePage() {
+            window.location.href = "/"; // 페이지 이동 코드
+        }
     </script>
 </head>
 <body onload="adminAlert()">

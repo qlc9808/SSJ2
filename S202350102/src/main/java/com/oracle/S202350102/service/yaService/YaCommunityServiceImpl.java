@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.oracle.S202350102.dao.chDao.ChBoardDao;
 import com.oracle.S202350102.dao.yaDao.YaBoardDao;
 import com.oracle.S202350102.dto.Board;
 import com.oracle.S202350102.dto.SharingList;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class YaCommunityServiceImpl implements YaCommunityService {
 	
 	private final YaBoardDao ybd;
+	private final ChBoardDao chd;
 	
 	@Override
 	public List<Board> listCommunity(Board board) {
@@ -123,6 +125,7 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 	public void commentWrite(Board board) {
 		System.out.println("YaCommunityServiceImpl commentWrite start..");
 		ybd.commentWrite(board);
+		chd.commentAlarm(board.getBrd_num());
 	}
 
 

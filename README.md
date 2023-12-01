@@ -17,6 +17,7 @@
 <div>
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
   <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+  <img src="https://img.shields.io/badge/kakaotalk-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=white">
 </div>
 
 <div align=left><h3>📗 Development</h3></div>
@@ -34,6 +35,7 @@
   <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
   <img src="https://img.shields.io/badge/jsp-E6700C?style=for-the-badge&logo=jsp&logoColor=white">
   <img src="https://img.shields.io/badge/mybatis-251C1D?style=for-the-badge&logo=mybatis&logoColor=white">
+  <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
 </div>
 
 <div align=left><h3>📘 Cloud Service</h3></div>
@@ -141,7 +143,18 @@
 
 ### ㅇ
 ### 상세조회(문의)
-- 문의글은 글 작성자와 
+- 문의게시판의 글은 글 **작성자와 관리자 이 외**에는 **열람할 수 없다.**
+- 회원인 유저는 문의 게시판 작성, 검색, 카테고리 별 분류, 읽기, 수정, 삭제를 할 수 있다.
+- 사용자가 게시글 **검색** 또는 **카테고리 변경**을 **요청**하면 **값을 유지한 채로 페이징 처리**가 진행되어 AJAX 방식으로 조회한다.
+- **게시글 작성 또는 수정** 시, **이미지파일**을 올릴 수 있으며 **이미지파일 미리보기 기능**이 있다.
+- 게시글 작성날짜가 **오늘이 아니면 '년.월.일'로 표기**, **오늘이라면 '시.분' 으로 표기**된다.
+- AJAX 방식을 이용하여 **댓글**을 조회하고 댓글 작성, 수정, 삭제가 가능하다.
+### 레벨시스템
+- 레벨 시스템은 **사이트 유저가 얼마나 많은 활동을 했는지**를 한 눈에 알아볼 수 있도록 **시각화한 지표**이다.
+- **유저의 활동**(챌린지 신청, 인증, 후기작성, 커뮤니티활동)에 따라 해당 유저의 **경험치가 쌓이고** 일정량 쌓이게되면 **해당 유저는 레벨이 자동으로 오른다.**
+- 거의 모든 페이지에 게시판 유저에 대한 레벨을 **아이콘 이미지** 형태로 출력해 **사용자에게 보여준다.**
+- **레벨 아이콘에 마우스를 갖다대면** 그 유저의 현재레벨, 경험치, 레벨업까지 남은 경험치(%) 를 알려주는 **상태창이 표시**된다.
+- 로그인한 유저는 **마이페이지**에서 경험치정보를 클릭하면 **자신의 현재 레벨, 경험치를 그래프와 수치로 정확하게** 알 수 있고, **레벨표보기** 클릭시 **전체 레벨에 대한 정보**를 볼 수 있다.
 ### ㅇ
 ### ㅇ
 ### ㅇ
