@@ -104,21 +104,22 @@ public class ThController {
 	
 	@ResponseBody
 	@PostMapping(value = "/login")							// 로그인 유지를 위한 세션 필요
-	public String login(@ModelAttribute User1 user1, HttpSession session, HttpServletRequest request, Model model) {
+	public String login(User1 user1, HttpSession session, HttpServletRequest request, Model model) {
 		System.out.println("ThController login start... ");
 		System.out.println("ThController login user1.getUser_id() --> " + user1.getUser_id());
 		System.out.println("ThController login user1.getUser_pswd() --> " + user1.getUser_pswd());
 		User1 loginResult = us1.login(user1);
 		System.out.println("ThController loginResult -->" + loginResult);
+		
 		// 회원정보가 존재 하는경우
 		if (loginResult != null) {
-			// 탈퇴처리가 되지 않은 회원의경우 세션처리
+			// 정상 회원의경우 로그인처리
 			if(loginResult.getDelete_yn().equals("N")) {
 				session = request.getSession();
 				session.setAttribute("user_num", loginResult.getUser_num());
-				session.setAttribute("status_md", loginResult.getStatus_md());
 				session.setAttribute("nick", loginResult.getNick());
-		         int user_num = (int) session.getAttribute("user_num");
+				session.setAttribute("status_md", loginResult.getStatus_md());
+				int user_num = (int) session.getAttribute("user_num");
 		         
 		         
 		         ls.userLevelCheck(user_num);
@@ -126,9 +127,9 @@ public class ThController {
 		         //로그인 성공시 마지막 로그인 날짜 SYSDATE로 업데이트
 		         int updateResult = us1.updateUserLoginDate(user_num);
 		         System.out.println("Thcontroller login updateResult --> " + updateResult);
-		         
 				 System.out.println("session.getAttribute(\"user_num\") -->" + session.getAttribute("user_num"));
 				return "loginSuccess";
+				
 			// 탈퇴처리된 아이디 인경우		
 			} else {
 				return "delId";
@@ -139,7 +140,15 @@ public class ThController {
 			return "wrongValue";
 		}
 	}
+	// 내일 해야할 곳
+	@GetMapping("/loginSuc") 
+	public void loginSuc(User1 user1, HttpSession session, HttpServletRequest request, Model model ) {
+		System.out.println("thController loginSuc Start...");
+		User1 login = mus.userSelect(user1);
 		
+		model.addAttribute("user1", login);
+	}
+	
 	@RequestMapping(value = "/logoutForm")
 	public String logoutForm() {
 		System.out.println("ThController logoutForm start...");
@@ -570,5 +579,5 @@ public class ThController {
 		System.out.println("thController errorAuth Start...");
 		return "errorAuth";
 	}
-	
+		
 }

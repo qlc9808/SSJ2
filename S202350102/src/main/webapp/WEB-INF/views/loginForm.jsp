@@ -340,7 +340,7 @@
 						alert('탈퇴한 회원입니다')
 					} else {
 // 						alert('로그인 되었습니다 메인페이지로 이동합니다')
-						location.href = '/'
+						location.href = '/loginSuc?user_id='+user_id;
 					}
 				}
 			});

@@ -6,8 +6,7 @@
 
 	<update id="updateUser1" parameterType="User1">
 	    UPDATE user1
-	    SET user_pswd = #{user_pswd},
-	        nick = #{nick},
+	    SET nick = #{nick},
 	        user_name = #{user_name},
 	        email = #{email},
 	        birth = #{birth}, 

@@ -13,4 +13,6 @@ public interface UserService {
 	List<UserLevel> userLevelInfoList();
 	List<Board> 		boardWriterLevelInfo(List<Board> boardList);
 	List<User1>  		userLevelList(List<User1> userInfoList);
+	User1 				userSelect(User1 user1); // user_id로 user조회
+	
 }

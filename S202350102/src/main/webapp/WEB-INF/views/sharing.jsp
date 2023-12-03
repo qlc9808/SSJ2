@@ -322,22 +322,23 @@ $("#sortOption").change(function() {
   
   
   <!--ya 비로그인 자가 글작성, 내가쓴글 확인  시도시 알람창 띄우면서 로그인 페이지로 넘겨버리기  ---------->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    	  const form = document.getElementById('options');
-          form.addEventListener('click', function (event) {
-            // 세션의 user_num 값 확인
-            const userNum = <%= session.getAttribute("user_num") %>;
+  <!-- 태현- 해당부분 인터셉트 이용해서 구현하고 주석처리했습니다 -->
+<!-- <script> -->
+//     document.addEventListener('DOMContentLoaded', function () {
+//     	  const form = document.getElementById('options');
+//           form.addEventListener('click', function (event) {
+//             // 세션의 user_num 값 확인
+<%--             const userNum = <%= session.getAttribute("user_num") %>; --%>
 
-            // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
-            if (userNum === null) {
-                alert('로그인 후 이용해주세요!');
-                event.preventDefault(); // 폼 전송을 막음
-                window.location.href = '/loginForm'; // 로그인 페이지로 이동
-            }
-        });
-    });
-</script>
+//             // user_num이 null인 경우 알림창 띄우고 로그인 페이지로 이동
+//             if (userNum === null) {
+//                 alert('로그인 후 이용해주세요!');
+//                 event.preventDefault(); // 폼 전송을 막음
+//                 window.location.href = '/loginForm'; // 로그인 페이지로 이동
+//             }
+//         });
+//     });
+<!-- </script> -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     	  const form = document.getElementById('option2');

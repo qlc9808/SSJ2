@@ -178,6 +178,13 @@ public class UserServiceImpl implements UserService {
 		
 		return userInfoList;
 	}
+
+	@Override
+	public User1 userSelect(User1 user1) {
+		System.out.println("UserServiceImpl userSelect start...");
+		User1 userResult = ud.userSelect(user1);
+		return userResult;
+	}
 	
 	
 	
