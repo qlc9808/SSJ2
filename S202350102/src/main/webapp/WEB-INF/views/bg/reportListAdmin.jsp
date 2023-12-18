@@ -22,8 +22,15 @@
 		    }
 		    
 		    #report_dateSearchInput {
-  visibility: hidden;
-}
+			  visibility: hidden;
+			}
+			
+			
+			.pink-link:hover {
+			    color: pink; /* 마우스를 가져갔을 때 텍스트 색상을 핑크로 변경하세요. */
+			    text-decoration: underline; /* 밑줄을 추가하세요. */
+			    cursor: pointer; /* 마우스 커서를 손가락으로 변경하세요. */
+			  }
 		    
 		    
 		    
@@ -329,7 +336,7 @@
 							                <td>${listReport.reported_id }</td>
 							                <td>${listReport.brd_num }</td>
 							                <td>
-							                	<a onclick="modalCall(${status.index})" onmouseover="bold">${listReport.title }</a>
+							                	<a class="pink-link" onclick="modalCall(${status.index})" onmouseover="bold">${listReport.title }</a>
 							                </td>
 							                <td>${listReport.cnt }</td>
 										</tr>
