@@ -65,7 +65,7 @@
 
 
 <div align=left><h2>💻 화면 구성</h2></div>
-
+<iframe width="930" height="523" src="https://www.youtube.com/embed/PxN0MuCSu3A" title="밥한공기‘s 줄줄이 소세지" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/a5da8d56-8025-42fc-9993-5997527b8a2a"/>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/d0e3f4ed-0185-425c-9b28-9de7aeb2043e"/>
