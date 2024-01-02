@@ -66,7 +66,7 @@
 
 <div align=left><h2>💻 화면 구성</h2></div>
 
-[![Video Label](http://img.youtube.com/vi/PxN0MuCSu3A/0.jpg)](https://youtu.be/PxN0MuCSu3A)
+[![Video Label](http://img.youtube.com/vi/0zNMtAckWVM/0.jpg)](https://youtu.be/PxN0MuCSu3A)
 
 <div align=center>
     <img width="30%" height="200px" src="https://github.com/qlc9808/SSJ2/assets/137845430/a5da8d56-8025-42fc-9993-5997527b8a2a"/>
