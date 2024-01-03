@@ -364,6 +364,14 @@ public class YaCommunityServiceImpl implements YaCommunityService {
 		return  deleteResult;
 	}
 
+	@Override
+	public List<Board> myConfirmSharingList(int start, int end) {
+		System.out.println("ycs customerSeart start...");
+		 List<Board> customerSearch = null;
+		customerSearch =  ybd.myConfirmSharingList(start, end);
+		return customerSearch;
+	}
+
 
 	
 	

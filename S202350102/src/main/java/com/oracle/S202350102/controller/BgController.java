@@ -44,6 +44,7 @@ import com.oracle.S202350102.service.hbService.Paging;
 import com.oracle.S202350102.service.main.Level1Service;
 import com.oracle.S202350102.service.main.UserService;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

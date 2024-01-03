@@ -194,7 +194,7 @@
   		WHERE brd_num=#{brd_num}
   	</update>
 	
-	<select id="YaMyConfirmSharingList" parameterType="Board" resultType="Board">
+	<select id="YaMyConfirmSharingList" parameterType="map" resultType="Board">
 		SELECT *
 		FROM (
 		    SELECT ROWNUM AS r, b.*

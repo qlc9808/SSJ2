@@ -549,6 +549,7 @@ public class YaBoardDaoImpl implements YaBoardDao {
 		        Map<String, Object> paramMap = new HashMap<>();
 		        paramMap.put("keyword", keyword);
 		        paramMap.put("b_user_num", board.getB_user_num());
+		       
 		        paramMap.put("currentPage", currentPage);
 		        paramMap.put("start", boardPage.getStart());
 		        paramMap.put("sortOption", sortOption);
@@ -594,6 +595,24 @@ public class YaBoardDaoImpl implements YaBoardDao {
 			System.out.println("YaBoardDaoImpl deleteJoinSharing  e.getmssage?"+e.getMessage());
 		}
 		return deleteJoinSharing;
+	}
+
+
+	//쉐어링 승인자 조회
+	@Override
+	public List<Board> myConfirmSharingList(int start, int end) {
+		List<Board> myConfirmSharingList=null;
+		System.out.println("ybd myConfirmSharingList start...");
+		try {
+	        Map<String, Object> parameters = new HashMap<>();
+	        parameters.put("start", start);
+	        parameters.put("end", end);
+	        myConfirmSharingList = session.selectList("YaMyConfirmSharingList", parameters);
+		} catch (Exception e) {
+			System.out.println("YaCustomerDaoImpl  myConfirmSharingList e.getMessage()?"+e.getMessage());
+		}
+		
+		return myConfirmSharingList;
 	}
 	
 

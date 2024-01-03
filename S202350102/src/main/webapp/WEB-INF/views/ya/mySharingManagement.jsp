@@ -170,7 +170,7 @@
 					            <tr>
 					                <td colspan="6" class="p-0">
 					                	
-					                    <div class="collapse" id="collapse-${status.index}" data-bs-parent="#boardTable">
+				                   <div class="collapse" id="collapse-${status.index}" data-bs-parent="#boardTable">
 					                        <form class="p-0">
 					                            <input type="hidden" name="brd_num" value="${sharingList.brd_num}" id=" ">
 								                <table class="table table-bordered table-sm mb-0" id="boardTable">
@@ -200,23 +200,28 @@
 							                	</table>					                       
 					                        </form>
 					                    </div>
+					        
 					                    
-										<script>
-										    document.addEventListener('DOMContentLoaded', function () {
-										        var buttons = document.querySelectorAll('[data-toggle="collapse"]');
-										        buttons.forEach(function (button) {
-										            button.addEventListener('click', function () {
-										                var targetIndex = button.getAttribute('data-bs-index');
-										                var targetId = 'collapse-' + targetIndex;
-										                var target = document.getElementById(targetId);
-										                var isExpanded = target.classList.contains('show');
-										
-										                target.classList.toggle('show', !isExpanded);
-										                }
-										            });
-										        });
-										    });
-										</script>					                    
+						<script>
+						    function showConfirmation(index, currentPage) {
+						        var collapseId = "collapse-" + index;
+						
+						        // AJAX 요청
+						        $.ajax({
+						            url: '/myConfirmSharingList', 
+						            type: 'GET',
+						            data: {currentPage: currentPage },
+						            success: function (response) {
+						                // collapse 요소 내용을 업데이트
+						                $("#" + collapseId).html(response);
+						                $("#" + collapseId).collapse('toggle'); // 토글하여 내용을 보여줌
+						            },
+						            error: function (error) {
+						                console.error('데이터를 가져오는 동안 오류 발생:', error);
+						            }
+						        });
+						    }
+						</script>				                    
 					                				                    
 					                </td>
 					            </tr>

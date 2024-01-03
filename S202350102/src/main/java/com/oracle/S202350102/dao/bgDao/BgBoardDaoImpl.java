@@ -3,6 +3,7 @@ package com.oracle.S202350102.dao.bgDao;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.S202350102.dto.Board;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BgBoardDaoImpl implements BgBoardDao {
 	
+	@Autowired
 	private final SqlSession session;
 	
 	// 챌린지 정보 조회

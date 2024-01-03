@@ -62,6 +62,7 @@ public interface YaBoardDao {
 	
 	List<SharingList>  			sharingChk(int brd_num);
 	int deleteJoinSharing(int user_num);
+	List<Board> myConfirmSharingList(int start, int end);
 
 	
 	
