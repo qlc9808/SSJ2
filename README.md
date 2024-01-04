@@ -25,14 +25,14 @@
 
 
 <div>
-  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
-  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/11-515151?style=for-the-badge">
+  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"><img src="https://img.shields.io/badge/2.7.17-515151?style=for-the-badge">
+  <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"><img src="https://img.shields.io/badge/8.3-515151?style=for-the-badge">
   <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
   <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
   <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
   <img src="https://img.shields.io/badge/jquery-0769AD?style=for-the-badge&logo=jquery&logoColor=white">
   <img src="https://img.shields.io/badge/oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white">
-  <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
   <img src="https://img.shields.io/badge/jsp-E6700C?style=for-the-badge&logo=jsp&logoColor=white">
   <img src="https://img.shields.io/badge/mybatis-251C1D?style=for-the-badge&logo=mybatis&logoColor=white">
   <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
@@ -143,10 +143,6 @@
 2) 팔로우, 좋아요, 댓글 기능을 할 수 있다.
 3) 인증게시판을 클릭하면 해당하는 챌린지 화면으로 넘어간다.
 
-### 회원가입 및 로그인 기능
--
--
-
 ### 좋아요 기능
 - 챌린지 인증게시판에 좋아요를 남길 수 있다.
 - 로그인을 안 한 상태에서는 좋아요를 남길 수 없다. 만약 로그인을 안 한 유저인 경우, 좋아요를 누르면 로그인 페이지로 넘어간다.
@@ -189,8 +185,6 @@
 2) 이미 챌린지를 참여한 유저인 경우, '참여완료'로 나타난다.
 3) 참여 정원과 현재 참가중인 인원이 같은 경우, '참여마감'으로 나타난다.
 4) 위의 모든 경우가 아닌 경우, '참여하기' 버튼을 클릭하면 참여를 묻는 modal창이 나타난다. 여기서도 '참여하기'를 클릭하면 참여가 완료되었다는 modal창을 띄운다.
-   
-- 인증게시판:
   
 - 소세지들
 1) 챌린지 참여자 리스트를 출력한다.
@@ -203,9 +197,6 @@
 2) 챌린지에 참가했던 참여자만 글작성 및 댓글 작성잉 가능하다. (미참감자 disabled되어 작성불가, 미로그인 시 인터셉터되어 로그인 화면으로 이동) 
 3) 이미지업로드가 가능한 게시판이며 사용자가 이미지를 등록하지 않으면 게시판 자체의 기본 이미지가 등록되어 글이 게시된다.
 4) 수정 버튼 클릭시 modal창으로 글 수정이 가능하며 이미지 수정 및 삭제가 가능하다.
-
-### 챌린지 관리
-- 
 
 ### 커뮤니티(쉐어링)
 - 회원/비회원인 사용자는 쉐어링게시판 조회, 검색, 필터별 검색을 할 수 있다.
@@ -241,14 +232,6 @@
 - 게시글 작성날짜가 **오늘이 아니면 '년.월.일'로 표기**, **오늘이라면 '시.분' 으로 표기**된다.
 - AJAX 방식을 이용하여 **댓글**을 조회하고 댓글 작성, 수정, 삭제가 가능하다.
 
-### ㅇ
-### ㅇ
-### ㅇ
-
-
-
-
-
 <div align=left><h2>❗ 프로젝트 회고</h2></div>
 
 ### ✨ Keep
@@ -257,8 +240,5 @@
 - 사이트 회원의 유저번호라는 값만 세션에 저장하여 외부에서 유저의 정보를 최대한 알 수 없도록 하기 위해 보안에 신경을 쓰며 코드를 짰다.
 
 ### 💔 Problem
-- AWS를 사용하면 INSERT문에 sysdate를 입력 시, 한국표준시가 아닌 UTC를 기준으로 잡혀버려서 그로인해 발생하는 오류들을 수정하느라 시간을 허비했었다.
+- AWS를 사용하면 INSERT문에 sysdate를 입력 시, 한국표준시가 아닌 UTC를 기준으로 잡혀서 생기는 오류가 있었다.
 
-
-
-<div align=left><h2></h2></div>
